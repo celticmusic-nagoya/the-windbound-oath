@@ -1,0 +1,501 @@
+{
+  "schema_version": 1,
+  "source_commit": "f3e60c5d7cab782adf6330b6c8e0354e6503e77d",
+  "source_run": 44679568515,
+  "source_artifact": 14602858760,
+  "source_size_px": [
+    384,
+    1024
+  ],
+  "coordinate_system": "Pixel centers in original unmirrored view, origin top left, x right, y down.",
+  "measurement": "Manual 2D annotation. Uncertainty is an estimated pixel radius, not a calibrated statistical interval.",
+  "registration": "Horizontal anchor is an estimated stance/foot center per image; vertical anchor and uniform scale use the alpha bounds. Registered coordinates are provisional 2D diagnostics.",
+  "views": {
+    "front": {
+      "image": "7809.png",
+      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "stance_center_x_px": 213,
+      "landmarks": {
+        "crown": {
+          "xy_px": [
+            208,
+            18
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "fringe_tip": {
+          "xy_px": [
+            200,
+            116
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "eye_image_left": {
+          "xy_px": [
+            188,
+            125
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "eye_image_right": {
+          "xy_px": [
+            240,
+            124
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "nose_tip": {
+          "xy_px": [
+            214,
+            143
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "mouth_center": {
+          "xy_px": [
+            214,
+            159
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "chin": {
+          "xy_px": [
+            214,
+            180
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "ear_image_left": {
+          "xy_px": [
+            171,
+            144
+          ],
+          "uncertainty_px": 6,
+          "visibility": "partial"
+        },
+        "ear_image_right": {
+          "xy_px": [
+            256,
+            143
+          ],
+          "uncertainty_px": 6,
+          "visibility": "partial"
+        },
+        "hair_hem_image_left": {
+          "xy_px": [
+            148,
+            190
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "hair_hem_image_right": {
+          "xy_px": [
+            277,
+            189
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "neck_base": {
+          "xy_px": [
+            213,
+            211
+          ],
+          "uncertainty_px": 7,
+          "visibility": "estimated"
+        },
+        "shoulder_image_left": {
+          "xy_px": [
+            136,
+            222
+          ],
+          "uncertainty_px": 8,
+          "visibility": "estimated"
+        },
+        "shoulder_image_right": {
+          "xy_px": [
+            292,
+            222
+          ],
+          "uncertainty_px": 8,
+          "visibility": "estimated"
+        },
+        "upper_strap_buckle": {
+          "xy_px": [
+            159,
+            443
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "lower_strap_buckle": {
+          "xy_px": [
+            163,
+            564
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "hairline": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "covered by fringe"
+        }
+      }
+    },
+    "right": {
+      "image": "7807.png",
+      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "stance_center_x_px": 202,
+      "landmarks": {
+        "crown": {
+          "xy_px": [
+            196,
+            16
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "fringe_tip": {
+          "xy_px": [
+            265,
+            112
+          ],
+          "uncertainty_px": 5,
+          "visibility": "visible"
+        },
+        "eye_visible": {
+          "xy_px": [
+            248,
+            122
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "nose_tip": {
+          "xy_px": [
+            274,
+            137
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "mouth_center": {
+          "xy_px": [
+            266,
+            155
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "chin": {
+          "xy_px": [
+            252,
+            177
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "ear_visible": {
+          "xy_px": [
+            195,
+            125
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "nape_hair_hem": {
+          "xy_px": [
+            151,
+            191
+          ],
+          "uncertainty_px": 5,
+          "visibility": "visible"
+        },
+        "neck_base": {
+          "xy_px": [
+            218,
+            202
+          ],
+          "uncertainty_px": 7,
+          "visibility": "estimated"
+        },
+        "shoulder_visible": {
+          "xy_px": [
+            196,
+            213
+          ],
+          "uncertainty_px": 7,
+          "visibility": "estimated"
+        },
+        "upper_strap_buckle": {
+          "xy_px": [
+            260,
+            447
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "lower_strap_buckle": {
+          "xy_px": [
+            258,
+            571
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "far_eye": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "hidden by profile"
+        },
+        "far_ear": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "hidden by profile"
+        },
+        "hairline": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "covered by fringe"
+        }
+      }
+    },
+    "back": {
+      "image": "7810.png",
+      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "stance_center_x_px": 171,
+      "landmarks": {
+        "crown": {
+          "xy_px": [
+            181,
+            16
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "nape_hair_hem": {
+          "xy_px": [
+            170,
+            198
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "neck_base": {
+          "xy_px": [
+            171,
+            202
+          ],
+          "uncertainty_px": 8,
+          "visibility": "partial"
+        },
+        "shoulder_image_left": {
+          "xy_px": [
+            90,
+            222
+          ],
+          "uncertainty_px": 8,
+          "visibility": "estimated"
+        },
+        "shoulder_image_right": {
+          "xy_px": [
+            252,
+            222
+          ],
+          "uncertainty_px": 8,
+          "visibility": "estimated"
+        },
+        "back_clasp": {
+          "xy_px": [
+            173,
+            305
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "upper_strap_buckle": {
+          "xy_px": [
+            233,
+            445
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "lower_strap_buckle": {
+          "xy_px": [
+            233,
+            565
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "eyes": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        },
+        "nose": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        },
+        "mouth": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        },
+        "chin": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        },
+        "ears": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        },
+        "hairline": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "rear view or hair occlusion"
+        }
+      }
+    },
+    "left": {
+      "image": "7808.png",
+      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "stance_center_x_px": 198,
+      "landmarks": {
+        "crown": {
+          "xy_px": [
+            181,
+            16
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "fringe_tip": {
+          "xy_px": [
+            120,
+            109
+          ],
+          "uncertainty_px": 5,
+          "visibility": "visible"
+        },
+        "eye_visible": {
+          "xy_px": [
+            126,
+            122
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "nose_tip": {
+          "xy_px": [
+            100,
+            137
+          ],
+          "uncertainty_px": 2,
+          "visibility": "visible"
+        },
+        "mouth_center": {
+          "xy_px": [
+            114,
+            157
+          ],
+          "uncertainty_px": 4,
+          "visibility": "visible"
+        },
+        "chin": {
+          "xy_px": [
+            125,
+            177
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "ear_visible": {
+          "xy_px": [
+            183,
+            125
+          ],
+          "uncertainty_px": 3,
+          "visibility": "visible"
+        },
+        "nape_hair_hem": {
+          "xy_px": [
+            245,
+            189
+          ],
+          "uncertainty_px": 5,
+          "visibility": "visible"
+        },
+        "neck_base": {
+          "xy_px": [
+            166,
+            205
+          ],
+          "uncertainty_px": 7,
+          "visibility": "estimated"
+        },
+        "shoulder_visible": {
+          "xy_px": [
+            184,
+            214
+          ],
+          "uncertainty_px": 7,
+          "visibility": "estimated"
+        },
+        "far_eye": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "hidden by profile"
+        },
+        "far_ear": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "hidden by profile"
+        },
+        "hairline": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "covered by fringe"
+        },
+        "upper_strap_buckle": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "far side"
+        },
+        "lower_strap_buckle": {
+          "xy_px": null,
+          "uncertainty_px": null,
+          "visibility": "occluded",
+          "reason": "far side"
+        }
+      }
+    }
+  }
+}
