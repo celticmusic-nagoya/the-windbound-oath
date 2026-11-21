@@ -88,3 +88,6 @@ All AI follow the latest AGENTS.md visual evidence policy: unrestricted useful c
 
 ## Recoverable save failures — 2026-11-21
 All AI follow AGENTS.md recoverable save failure policy. Preserve originals, retry based on observed state, switch methods when appropriate, verify saved bytes and reopen, retain evidence, continue safe work. Initial #427 implementation cc486266b895c21fae6e93535053a8faa6e76c7e; run 44826202327 pending verification. No unfinished asset adoption.
+
+## Director-approved shared Morwen blueprint publication — 2026-11-21
+All AI agents read main `tools/morwen_authored_sculpt/precision_blueprint_v2.json`, `layer0_landmarks_v1.json`, and [blueprint handoff](MORWEN_LAYER0_PRECISION_BLUEPRINT_CODEX_HANDOFF_20261120.md) before character authoring. Director explicitly authorizes main merges of current and future blueprint-only data, diagrams, reproducible analysis scripts and QA documentation after scope/provenance review. Share via a dedicated blueprint-only PR; no unfinished mesh, VRoid workflow, canon change or asset adoption is authorized. Preserve candidate/estimated/NOT_RUN labels; sync updates from owning PR #427 without overwriting newer work. Local-only images and rig data must be registered when their exact bytes are available. Continue VRoid recovery independently.
