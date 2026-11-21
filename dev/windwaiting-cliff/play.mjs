@@ -15,8 +15,9 @@ const headland = query.get('headland') === '1';
 const blueprintCliff = query.get('cliff-blueprint') === '1';
 const cliffV2 = query.get('cliff-v2') === '1';
 const cliffV3 = query.get('cliff-v3') === '1';
+const cliffV4 = query.get('cliff-v4') === '1';
 const cliffV3D = query.get('cliff-v3d') === '1';
-const composition = cliffV3D || cliffV3 || cliffV2 || blueprintCliff || headland || heroCliff || query.get('composition') === '1';
+const composition = cliffV4 || cliffV3D || cliffV3 || cliffV2 || blueprintCliff || headland || heroCliff || query.get('composition') === '1';
 const compositionRoot = new URL('composition-v1/', asset);
 const ecoRoot = new URL('eco-v2/', asset);
 const ray = new T.Raycaster();
@@ -105,13 +106,14 @@ async function play() {
   scene.add(gltf.scene);
   const nodes = new Map();
   gltf.scene.traverse((object) => { if (object.userData.name) nodes.set(object.userData.name, object); });
-  if (cliffV3D || cliffV3 || cliffV2 || blueprintCliff || headland || heroCliff) {
+  if (cliffV4 || cliffV3D || cliffV3 || cliffV2 || blueprintCliff || headland || heroCliff) {
     let path = 'hero-cliff-v1/hero-cliff.glb';
     if (headland) path = 'headland-v1/headland.glb';
     if (blueprintCliff) path = 'blueprint-v1/cliff-blueprint.glb';
     if (cliffV2) path = 'cliff-v2/cliff-blueprint.glb';
     if (cliffV3) path = 'cliff-v3/cliff-v3.glb';
     if (cliffV3D) path = 'cliff-v3d/cliff-v3d.glb';
+    if (cliffV4) path = 'cliff-v4/cliff-v4.glb';
     const url = new URL(path, asset);
     const candidate = await loader.loadAsync(url.href);
     const carrier = nodes.get(data.ground[0]);

@@ -28,8 +28,9 @@ def run(browser, url, out, mode):
     cliff_v2 = int(mode == "cliff-v2")
     cliff_v3 = int(mode == "cliff-v3")
     cliff_v3d = int(mode == "cliff-v3d")
+    cliff_v4 = int(mode == "cliff-v4")
     composition = int(mode not in ("baseline", "vertex-color-off"))
-    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}&cliff-blueprint={blueprint}&cliff-v2={cliff_v2}&cliff-v3={cliff_v3}&cliff-v3d={cliff_v3d}"
+    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}&cliff-blueprint={blueprint}&cliff-v2={cliff_v2}&cliff-v3={cliff_v3}&cliff-v3d={cliff_v3d}&cliff-v4={cliff_v4}"
     page.goto(f"{url}/dev/windwaiting-cliff/?qa&fixed-water&wind=0&photo=1&vista=1&{mode_query}",
               wait_until="domcontentloaded")
     try:
@@ -80,14 +81,18 @@ def main():
     parser.add_argument("base_url")
     parser.add_argument("output", type=Path)
     parser.add_argument("--chromium", default="/usr/bin/chromium")
+    parser.add_argument("--include-v4", action="store_true", help="check the V4 draft against the previous triangle budget")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
+    modes = ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland",
+             "blueprint", "cliff-v2", "cliff-v3", "cliff-v3d")
+    if args.include_v4:
+        modes += ("cliff-v4",)
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(executable_path=args.chromium, args=[
             "--disable-dev-shm-usage", "--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--no-sandbox",
         ])
-        results = {mode: run(browser, args.base_url, args.output, mode)
-                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland", "blueprint", "cliff-v2", "cliff-v3", "cliff-v3d")}
+        results = {mode: run(browser, args.base_url, args.output, mode) for mode in modes}
         browser.close()
     for key in ("position", "camera", "groundHeight"):
         assert len({json.dumps(result[key]) for result in results.values()}) == 1, key
@@ -101,6 +106,8 @@ def main():
     assert results["cliff-v3"]["triangles"] <= results["cliff-v2"]["triangles"] + 3000
     assert results["cliff-v3d"]["triangles"] <= results["cliff-v3"]["triangles"] + 3000
     (args.output / "webgl-photo-qa.json").write_text(json.dumps(results, indent=2) + "\n")
+    if args.include_v4:
+        assert results["cliff-v4"]["triangles"] <= results["cliff-v3d"]["triangles"] + 3000
 
 
 if __name__ == "__main__":
