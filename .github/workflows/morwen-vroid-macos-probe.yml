@@ -121,7 +121,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               model = archive.read(item)
               assert sha256(model).hexdigest() == "6999703a198714c35a416d2a74e5a0f1a179eb64d464301b7932d6e2258aa23c"
-              (temp / "M04-face.vroid").write_bytes(model)
+              (temp / "Face.vroid").write_bytes(model)
               for name in ("face-edits.txt", "nose-saved-value.txt", "mouth-saved-value.txt", "chin-saved-value.txt"):
                   assert archive.getinfo(name).file_size < 4096
                   Path("evidence", name).write_bytes(archive.read(name))
@@ -375,12 +375,12 @@ jobs:
           sleep 2
           capture_views before
           working="$HOME/Documents/Morwen-resume.vroid"
-          saved="$HOME/Documents/M04-face.vroid"
+          saved="$HOME/Documents/Face.vroid"
           test ! -e "$saved"
           chin_pattern='^Jaw Position[[:space:]]*\(Y\)$'
-          if [ -s "$RUNNER_TEMP/M04-face.vroid" ]; then
-            try_saved_copy "$RUNNER_TEMP/M04-face.vroid"
-            cp "$RUNNER_TEMP/M04-face.vroid" evidence/model.vroid
+          if [ -s "$RUNNER_TEMP/Face.vroid" ]; then
+            try_saved_copy "$RUNNER_TEMP/Face.vroid"
+            cp "$RUNNER_TEMP/Face.vroid" evidence/model.vroid
             nose_ok=true
             mouth_ok=true
             chin_ok=true
@@ -433,15 +433,23 @@ jobs:
           sleep 6
           reopen_native
           capture_state checkpoint-open-dialog
-          "$gui" click-label evidence/checkpoint-open-dialog.png "${saved##*/}" 'Cancel'
+          dialog_visible checkpoint-open-dialog
+          grep -Fqi Documents evidence/checkpoint-open-dialog.txt
+          # The verified chooser shows the Face.vroid copy before Morwen-resume.vroid.
+          # OCR can insert spaces into filenames, so use its observed file row as a fallback.
+          if ! "$gui" click-label evidence/checkpoint-open-dialog.png "${saved##*/}" 'Cancel'; then
+            grep -Eiq 'Face[[:space:]]*\.[[:space:]]*vroid.*Morwen-resume' evidence/checkpoint-open-dialog.txt
+            test "$(find "$HOME/Documents" -maxdepth 1 -name '*.vroid' | wc -l | tr -d ' ')" = 2
+            "$gui" click 0.340 0.286
+          fi
           sleep 2
           capture_state checkpoint-open-selected
           dialog_visible checkpoint-open-selected
-          grep -Fq "${saved##*/}" evidence/checkpoint-open-selected.txt
+          grep -Eiq 'Face[[:space:]]*\.[[:space:]]*vroid' evidence/checkpoint-open-selected.txt
           "$gui" key 36
           sleep 30
           capture_state checkpoint-reopened
-          grep -Fq "${saved##*/}" evidence/checkpoint-reopened.txt
+          grep -Eiq 'VRoid Studio.*Face[[:space:]]*\.[[:space:]]*vroid' evidence/checkpoint-reopened.txt
           grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/checkpoint-reopened.txt
           cmp "$saved" evidence/model.vroid
           "$gui" zoom 0.50 0.50 25 0
