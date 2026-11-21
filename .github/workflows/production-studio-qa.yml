@@ -31,3 +31,17 @@ jobs:
           name: studio-browser-qa
           path: tools/production-studio/qa-output/
           if-no-files-found: warn
+      - name: Stage isolated browser distribution
+        run: |
+          mkdir -p dist/node_modules/three
+          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js README.md dist/
+          cp -r node_modules/three/build node_modules/three/examples dist/node_modules/three/
+          cp node_modules/three/LICENSE dist/node_modules/three/
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > distribution-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-browser-distribution
+          path: |
+            tools/production-studio/dist/
+            tools/production-studio/distribution-sha256.txt
+          if-no-files-found: error
