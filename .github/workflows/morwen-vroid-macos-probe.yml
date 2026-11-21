@@ -1,6 +1,5 @@
 name: Morwen VRoid macOS compatibility probe
 on:
-  workflow_dispatch:
   push:
     branches: [feature/morwen-artdirected-sculpt-20261119]
     paths: ['.github/workflows/morwen-vroid-macos-probe.yml']
@@ -40,8 +39,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14689515736/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "242f46d4f8e245c5670813b51fe0c843d0757c3d4261c31ba0deb1a2a933d7be  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14690913144/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "35aad310b29acf4275ed781037d8fc1f26f345dee1dc076bdf122544d79a52d2  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +49,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="e9e36e411f5bdd63f248f0a6c0aac3e814d651c1bd66b56787255f1c7abcfd4e"
+              assert hashlib.sha256(data).hexdigest()==expected=="57e8dc139333dbbe353bdf07f36eab70cfffa02a22271b4a17cc013ea2f40616"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -91,8 +90,6 @@ jobs:
           sleep 30
           # Finder-only startup is not an editor failure; bounded activation recovery.
           if ! osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' | grep -qi VRoid; then
-            open -a "$app"
-            sleep 45
             osascript -e 'tell application id "net.pixiv.vroid.macosx" to activate' || true
             sleep 20
           fi
@@ -204,185 +201,208 @@ jobs:
             fi
           fi
           screencapture -x evidence/final-recovery-screen.png || true
-          # Restore latest saved candidate; do not repeat previous edits unless observed old values remain.
-          # Continuous authoring on a verified copy; retain evidence even if save is blocked.
-          if grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
-            "$gui" vroid-shortcut face
-            sleep 3
-            capture_state face-before
-            if grep -Fq 'Eye Size X' evidence/face-before.txt && grep -Fq '0.634' evidence/face-before.txt; then
-              "$gui" slider 0.919 0.236 0.899 0.236 0.6
-              sleep 2
-              capture_state face-authored
-            fi
-            "$gui" vroid-shortcut hair
-            sleep 3
-            capture_state hair-before
-            if grep -Fq 'Main Color' evidence/hair-before.txt && grep -Fq '#825A46' evidence/hair-before.txt; then
-              # Observed swatch at x759,y158 on 1024x768; inspect actual popup before typing.
-              "$gui" click 0.742 0.206
-              sleep 2
-              capture_state hair-color-control
-              # Actual popup from run 44835557221, 1024x768. Hue ring center 687,270 radius 95;
-              # SV square 628..745 x 212..329. Target provisional HSV 300deg, .383, .420.
-              if [ "$(grep -o '#825A46' evidence/hair-color-control.txt | wc -l | tr -d ' ')" -ge 2 ]; then
-                "$gui" click 0.591 0.290
-                sleep 2
-                capture_state hair-hue-selected
-                "$gui" click 0.657 0.365
-                sleep 2
-                capture_state hair-sv-selected
-                "$gui" click 0.43 0.18
-                sleep 2
-                capture_state hair-color-closed
-                python3 - <<'PY'
-          import re,colorsys,pathlib,json
-          s=pathlib.Path("evidence/hair-color-closed.txt").read_text()
-          colors=re.findall(r"#[0-9a-fA-F]{6}",s)
-          target=(107,66,107)
-          rgb=[tuple(bytes.fromhex(x[1:])) for x in colors]
-          ok=any(max(abs(a-b) for a,b in zip(v,target))<=18 and abs(v[0]-v[2])<=18 and v[1]<min(v[0],v[2]) for v in rgb)
-          pathlib.Path("evidence/hair-color-status.txt").write_text("PURPLE_APPROX_REVIEW_REQUIRED\n" if ok else "COLOR_CHANGE_NOT_VERIFIED\n")
-          pathlib.Path("evidence/hair-color-qa.json").write_text(json.dumps(dict(observed=colors,target="#6B426B",approximate_match=ok)))
-          PY
-              fi
-              capture_state hair-authored
-            fi
-            # Preserve proven purple before further authoring; candidate only.
-            capture_state purple-reopened
-            if ! grep -Fiq '#6A426A' evidence/purple-reopened.txt; then
-              echo BLOCKED_PURPLE_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt
-              exit 1
-            fi
-            "$gui" vroid-shortcut face
-            sleep 3
-            capture_state face-refinement-before
-            # Observed 1024x768 face controls; small reversible candidate adjustments.
-            if grep -Fq 'Eye Size X' evidence/face-refinement-before.txt && grep -Fq '0.467' evidence/face-refinement-before.txt && grep -Fq '0.361' evidence/face-refinement-before.txt; then
-              "$gui" slider 0.901 0.236 0.888 0.236 0.6
-              "$gui" slider 0.889 0.327 0.877 0.327 0.6
-              sleep 2
-              capture_state face-eye-refined
-            fi
-            # Actual sidebar icons from run 44844321107.
-            for spec in 'eyes 0.232' 'nose 0.732' 'mouth 0.857' 'outline 0.795'; do
-              read -r category y <<< "$spec"
-              "$gui" click 0.023 "$y"
-              sleep 2
-              capture_state "face-category-$category"
-            done
-            "$gui" vroid-shortcut hair
-            sleep 3
-            capture_state hair-category-start
-            # Hairstyle Sets has no strand editor. Select observed front-hair category icon.
-            if grep -Fq 'Hairstyle Sets' evidence/hair-category-start.txt; then
-              "$gui" click 0.023 0.229
-              sleep 3
-              capture_state hair-front-category
-              if grep -Eiq 'Edit Hairstyle|Edit Hair' evidence/hair-front-category.txt; then
-                "$gui" click 0.855 0.214
-                sleep 4
-                capture_state hair-strand-editor
-              fi
-            fi
-            # Run 44852919743: Edit Preset is a modal authoring context; normal save shortcuts do not exit it.
-            capture_state hair-mode-check
-            if grep -Fq 'Edit Preset' evidence/hair-mode-check.txt && grep -Fq 'Hair Groups' evidence/hair-mode-check.txt; then
-              "$gui" click 0.023 0.100
-              sleep 4
-              capture_state hair-exit-result
-              if grep -Fq 'Close Hairstyle Editor' evidence/hair-exit-result.txt && grep -Fq 'Save as new item' evidence/hair-exit-result.txt; then
-                "$gui" click-label evidence/hair-exit-result.png 'Save as new item' 'Close Hairstyle Editor'
-                sleep 5
-                capture_state hair-custom-save-result
-                cp evidence/hair-custom-save-result.txt evidence/hair-exit-result.txt
-              fi
-              if grep -Fq 'Edit Preset' evidence/hair-exit-result.txt || grep -Eiq 'Cancel|Discard|Delete|Save Changes' evidence/hair-exit-result.txt; then
-                echo BLOCKED_HAIR_EXIT_REVIEW_REQUIRED > evidence/authoring-status.txt
-                exit 1
-              fi
-              if ! grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/hair-exit-result.txt; then
-                echo BLOCKED_MAIN_EDITOR_NOT_VERIFIED > evidence/authoring-status.txt
-                exit 1
-              fi
-            fi
-            for tab in body outfit; do
-              if [ "$tab" = body ]; then "$gui" click 0.295 0.099; else "$gui" click 0.384 0.099; fi
-              sleep 3
-              capture_state "authoring-$tab"
-            done
-            # Preserve the saved clothing candidate; do not reapply preset.
-            if grep -Fq 'Whole Sets' evidence/authoring-outfit.txt; then
-              "$gui" click 0.023 0.232
-              sleep 3
-              capture_state outfit-top-category
-            fi
+          # OCR the parameter row and its numeric field in the right-hand panel.
+          cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
+          import Foundation
+          import Vision
+          let request = VNRecognizeTextRequest()
+          request.recognitionLevel = .accurate
+          request.usesLanguageCorrection = false
+          let args = CommandLine.arguments
+          try VNImageRequestHandler(url: URL(fileURLWithPath: args[1])).perform([request])
+          let rows = request.results ?? []
+          let labels = rows.filter {
+              $0.boundingBox.minX > 0.71 && $0.boundingBox.midX < 0.91
+                  && $0.topCandidates(1).first?.string
+                      .trimmingCharacters(in: .whitespacesAndNewlines)
+                      .range(of: args[2], options: [.regularExpression, .caseInsensitive]) != nil
+          }
+          guard labels.count == 1, let label = labels.first else { exit(2) }
+          let fields = rows.filter {
+              $0.boundingBox.midX > 0.92
+                  && abs($0.boundingBox.midY - label.boundingBox.midY) < 0.018
+                  && $0.topCandidates(1).first?.string.range(
+                      of: #"^[−-]?\d+\.\d{3}$"#, options: .regularExpression
+                  ) != nil
+          }
+          guard fields.count == 1, let field = fields.first,
+                let value = field.topCandidates(1).first?.string else { exit(2) }
+          print(field.boundingBox.midX, 1 - field.boundingBox.midY,
+                value.replacingOccurrences(of: "−", with: "-"))
+          SWIFT
+          swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
+          row="$RUNNER_TEMP/face-row"
+          select_face_panel() {
             "$gui" click 0.095 0.099
-            sleep 3
-            capture_state pre-save
-            # The Documents file is a disposable working copy, not the immutable input.
-            recover_saved_copy() {
-              local candidate
-              for candidate in "$HOME/Documents/Morwen-resume.vroid" "$HOME/Documents/Morwen-M03-authoring.vroid"; do
-                if [ -s "$candidate" ] && ! cmp -s "$candidate" evidence/input-model.vroid; then
-                  cp "$candidate" evidence/model.vroid
-                  shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
-                  echo NATIVE_CANDIDATE_SAVED_REOPEN_REQUIRED > evidence/authoring-status.txt
-                  return 0
-                fi
-              done
-              return 1
-            }
-            # A context-only navigation does not constitute a changed native model.
-            # Save to a unique path via the native Save As dialog, with verified context.
-            for attempt in 1 2 3; do
-              if recover_saved_copy; then break; fi
-              capture_state "save-before-$attempt"
-              if grep -Eiq 'Cancel' "evidence/save-before-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-before-$attempt.txt"; then
-                :
-              elif grep -Fqi 'Morwen-resume' "evidence/save-before-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Cancel' "evidence/save-before-$attempt.txt"; then
-                # Actual screenshot run 44856646403: Save row (32,112), Save As (46,146), display 1024x768.
-                if ! grep -Fq 'Back to model selection' "evidence/save-before-$attempt.txt"; then
-                  "$gui" click 0.027 0.100
-                  sleep 2
-                fi
-                capture_state "save-menu-$attempt"
-                if grep -Fq 'Back to model selection' "evidence/save-menu-$attempt.txt" && grep -Fq 'Save As' "evidence/save-menu-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite|Close Hairstyle Editor' "evidence/save-menu-$attempt.txt"; then
-                  if [ "$attempt" -eq 1 ]; then
-                    "$gui" click 0.03125 0.14583
-                  else
-                    "$gui" click 0.04492 0.19010
-                  fi
-                else
-                  echo "SAVE_MENU_NOT_VERIFIED attempt=$attempt" >> evidence/save-retry.txt
-                fi
-                sleep 3
-              else
-                echo "SAVE_CONTEXT_UNVERIFIED attempt=$attempt" >> evidence/save-retry.txt
-                break
+            "$gui" click 0.023 "$1"
+            sleep 1
+          }
+          locate_row() {
+            local tag="$1" pattern="$2" attempt hit
+            for attempt in 0 1 2 3 4 5 6 7 8; do
+              capture_state "$tag-$attempt"
+              grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' "evidence/$tag-$attempt.txt" || return 1
+              if hit=$("$row" "evidence/$tag-$attempt.png" "$pattern"); then
+                printf '%s %s\n' "$attempt" "$hit"
+                return 0
               fi
-              capture_state "save-dialog-$attempt"
-              if grep -Eiq 'Cancel' "evidence/save-dialog-$attempt.txt" && grep -Eiq 'Save As|Save' "evidence/save-dialog-$attempt.txt" && ! grep -Eiq 'Replace|Overwrite' "evidence/save-dialog-$attempt.txt"; then
-                if grep -Fqi 'Documents' "evidence/save-dialog-$attempt.txt" && [ ! -e "$HOME/Documents/Morwen-M03-authoring.vroid" ]; then
-                  "$gui" key 0 cmd
-                  "$gui" text Morwen-M03-authoring
-                  sleep 2
-                  capture_state "save-name-$attempt"
-                  if grep -Fqi 'Morwen-M03-authoring' "evidence/save-name-$attempt.txt"; then
-                    "$gui" key 36
-                  fi
-                fi
-              fi
-              sleep 8
-              capture_state "save-after-$attempt"
-              if recover_saved_copy; then break; fi
-              echo "SAVE_FILE_UNCHANGED attempt=$attempt" >> evidence/save-retry.txt
+              "$gui" scroll 0.89 0.68 -7 0
+              sleep 1
             done
-            if ! recover_saved_copy; then
-              echo AUTHORING_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
+            return 1
+          }
+          edit_row() {
+            local tag="$1" pattern="$2" target="$3" hit attempt x y before after
+            local correction="${4:-}"
+            if ! hit=$(locate_row "$tag-before" "$pattern"); then
+              echo "$tag CONTROL_NOT_VERIFIED" >> evidence/face-edits.txt
+              return 1
             fi
+            read -r attempt x y before <<< "$hit"
+            "$gui" double-click "$x" "$y"
+            "$gui" key 0 cmd
+            "$gui" text "$target"
+            "$gui" key 36
+            sleep 1
+            capture_state "$tag-after"
+            if ! after=$("$row" "evidence/$tag-after.png" "$pattern"); then
+              echo "$tag VALUE_NOT_VERIFIED" >> evidence/face-edits.txt
+              return 1
+            fi
+            read -r x y after <<< "$after"
+            printf '%s %s %s %s\n' "$tag" "$before" "$target" "$after" >> evidence/face-edits.txt
+            [ "$before" != "$after" ] && [ "$target" = "$after" ] || return 1
+            if [ -n "$correction" ]; then
+              # Keep the observed first pass and its comparison image, then refine the delta.
+              capture_views midpoint
+              "$gui" double-click "$x" "$y"
+              "$gui" key 0 cmd
+              "$gui" text "$correction"
+              "$gui" key 36
+              sleep 1
+              capture_state "$tag-corrected"
+              after=$("$row" "evidence/$tag-corrected.png" "$pattern") || return 1
+              read -r x y after <<< "$after"
+              printf '%s-corrected %s %s %s\n' "$tag" "$target" "$correction" "$after" >> evidence/face-edits.txt
+              [ "$correction" = "$after" ] || return 1
+            fi
+          }
+          capture_views() {
+            local stage="$1"
+            "$gui" vroid-shortcut front
+            sleep 1
+            capture_state "face-$stage-front"
+            "$gui" vroid-shortcut turn-left
+            sleep 1
+            capture_state "face-$stage-left"
+            "$gui" vroid-shortcut turn-right
+            sleep 1
+            capture_state "face-$stage-right"
+            "$gui" vroid-shortcut front
+            sleep 1
+          }
+          check_row() {
+            local tag="$1" pattern="$2" value="$3" hit
+            hit=$(locate_row "$tag-reopened" "$pattern") || return 1
+            [ "${hit##* }" = "$value" ]
+          }
+          try_saved_copy() {
+            local candidate="$1"
+            [ -s "$candidate" ] || return 1
+            # A ZIP timestamp or thumbnail change alone does not establish edited model data.
+            python3 - "$candidate" <<'PY'
+          import sys, zipfile
+          with zipfile.ZipFile("evidence/input-model.vroid") as source, zipfile.ZipFile(sys.argv[1]) as result:
+              if result.testzip() is not None or result.read("v1model/data.bin") == source.read("v1model/data.bin"):
+                  sys.exit(1)
+          PY
+          }
+          if ! grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
+            echo BLOCKED_SOURCE_REOPEN > evidence/authoring-status.txt
+            exit 1
+          fi
+          "$gui" vroid-shortcut face
+          sleep 2
+          "$gui" zoom 0.50 0.50 12 0
+          sleep 2
+          capture_views before
+          # Projected Layer 0 targets: mouth/iris span 16/51, chin 21 px below mouth,
+          # profile nose extends ~10 px beyond mouth. Slider values are provisional.
+          select_face_panel 0.732
+          nose_ok=false
+          edit_row nose '^Nose Size$' 0.080 && nose_ok=true
+          select_face_panel 0.795
+          mouth_ok=false
+          edit_row mouth '^Mouth Width$' -0.120 -0.080 && mouth_ok=true
+          select_face_panel 0.232
+          select_face_panel 0.169
+          chin_pattern='^(Chin (Height|Position( \(Y\))?|Length|Size)|Jaw Height)$'
+          chin_ok=false
+          edit_row chin "$chin_pattern" 0.060 && chin_ok=true
+          capture_views after
+          if ! ( "$nose_ok" || "$mouth_ok" || "$chin_ok" ); then
+            echo BLOCKED_NO_VERIFIED_FACE_EDITS > evidence/authoring-status.txt
+            exit 1
+          fi
+          working="$HOME/Documents/Morwen-resume.vroid"
+          saved="$HOME/Documents/Morwen-face-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.vroid"
+          test ! -e "$saved"
+          capture_state save-before
+          grep -Fqi 'Morwen-resume' evidence/save-before.txt
+          "$gui" key 1 cmd
+          sleep 5
+          capture_state save-shortcut
+          if ! try_saved_copy "$working"; then
+            "$gui" click 0.027 0.100
+            sleep 2
+            capture_state save-menu
+            grep -Fq 'Back to model selection' evidence/save-menu.txt
+            grep -Fq 'Save As' evidence/save-menu.txt
+            "$gui" click 0.03125 0.14583
+            sleep 6
+            capture_state save-menu-result
+          fi
+          if ! try_saved_copy "$working"; then
+            echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
+            exit 1
+          fi
+          cp "$working" evidence/model.vroid
+          shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+          echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
+          cp evidence/model.vroid "$saved"
+          "$gui" click 0.027 0.100
+          sleep 2
+          capture_state reopen-menu
+          "$gui" click-label evidence/reopen-menu.png 'Back to model selection' 'Save As'
+          sleep 6
+          reopen_native
+          capture_state checkpoint-open-dialog
+          "$gui" click-label evidence/checkpoint-open-dialog.png "${saved##*/}" 'Cancel'
+          sleep 2
+          capture_state checkpoint-open-selected
+          dialog_visible checkpoint-open-selected
+          "$gui" key 36
+          sleep 30
+          capture_state checkpoint-reopened
+          grep -Fq "${saved##*/}" evidence/checkpoint-reopened.txt
+          grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/checkpoint-reopened.txt
+          cmp "$saved" evidence/model.vroid
+          "$gui" zoom 0.50 0.50 12 0
+          sleep 2
+          capture_views reopened
+          select_face_panel 0.732
+          if "$nose_ok" && check_row nose '^Nose Size$' 0.080; then echo NOSE_REOPEN_VERIFIED >> evidence/face-edits.txt; else nose_ok=false; fi
+          select_face_panel 0.795
+          if "$mouth_ok" && check_row mouth '^Mouth Width$' -0.080; then echo MOUTH_REOPEN_VERIFIED >> evidence/face-edits.txt; else mouth_ok=false; fi
+          select_face_panel 0.232
+          select_face_panel 0.169
+          if "$chin_ok" && check_row chin "$chin_pattern" 0.060; then echo CHIN_REOPEN_VERIFIED >> evidence/face-edits.txt; else chin_ok=false; fi
+          echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
+          if "$nose_ok" && "$mouth_ok" && "$chin_ok"; then
+            echo NATIVE_FACE_CONTROLS_REOPEN_VERIFIED_VISUAL_REVIEW_REQUIRED > evidence/authoring-status.txt
           else
-            echo BLOCKED_NATIVE_REOPEN > evidence/authoring-status.txt
+            echo NATIVE_REOPENED_FACE_CONTROLS_PARTIAL > evidence/authoring-status.txt
+            exit 1
           fi
           # Native editor checkpoint only; VRM export deferred until director-approved art gate.
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
