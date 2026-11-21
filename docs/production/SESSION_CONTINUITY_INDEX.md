@@ -1,5 +1,8 @@
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
 
+## Director decision — common blueprint-first production (2026-11-21)
+All AI agents apply the mandatory blueprint-first / target-backward section in [Production OS](../policy/TWO_PRODUCTION_OS_V1.md); complete the relevant precision blueprint before modeling its module. Existing owners and independent work continue. No asset adoption or merge implied.
+
 ## Director decision — mandatory Morwen VRoid-first sequence (2026-11-21)
 Read [VRoid-first authoring](../policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). #427 retains ownership; maximize native fidelity before export/Blender, complete blueprint in parallel. Standalone hair GLBs are reference-only at this stage. Prioritize qualified HairHarpy v2.0.0 for hair beyond native VRoid capabilities before Blender hair sculpting. No premature method switch without director approval. Supersedes conflicting historical next-step pointers.
 
