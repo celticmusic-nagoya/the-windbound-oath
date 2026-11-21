@@ -356,7 +356,12 @@ jobs:
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
           MORWEN_SESSION_MODE=phase1
           # shellcheck source=/dev/null
-          source tools/production_qa/morwen_vroid_session.sh
+          # Load qualified helpers without executing the diagnostic mode.
+          sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
+          bash -n "$RUNNER_TEMP/session-helpers.sh"
+          bash -n tools/production_qa/morwen_phase1_author.sh
+          source "$RUNNER_TEMP/session-helpers.sh"
+          source tools/production_qa/morwen_phase1_author.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
