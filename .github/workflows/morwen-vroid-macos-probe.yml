@@ -89,9 +89,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Claude lease: resume batch-2 candidate (run 44874797940).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14695966979/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "490c39909a5ed98e954622ed15788e40a5f37ba73ef1f45d8a39839bd583fd67  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          # Claude lease: resume batch-3 candidate (run 44875972332).
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14696650765/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "9fb186d6c5c24e72029b7b0433db3b942d40bdcd3900e5d01419d796a69d2619  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -99,7 +99,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="01a3a638de719959fcd2cc452a7165e79b3d55d64c626084aa900a668c63f6d0"
+              assert hashlib.sha256(data).hexdigest()=="2ac3bc51ff8f2a1c19be76bd2e50e416d0b35faaad0812b3b475b6592602a519"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -346,7 +346,7 @@ jobs:
             exit 1
           fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          MORWEN_SESSION_MODE=edit
+          MORWEN_SESSION_MODE=survey
           # shellcheck source=/dev/null
           source tools/production_qa/morwen_vroid_session.sh
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
