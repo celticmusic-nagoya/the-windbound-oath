@@ -1,5 +1,8 @@
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
 
+## Shared wardrobe research (2026-11-21)
+Read [character wardrobe research](CHARACTER_WARDROBE_RESEARCH_20261121.md) before garment work; VRoid native layers/texture first, pattern-based and XWear candidates require qualification. Research only; owner #427 and existing adoption gates unchanged.
+
 ## Director decision — common blueprint-first production (2026-11-21)
 All AI agents apply the mandatory blueprint-first / target-backward section in [Production OS](../policy/TWO_PRODUCTION_OS_V1.md); complete the relevant precision blueprint before modeling its module. Existing owners and independent work continue. No asset adoption or merge implied.
 
