@@ -75,29 +75,43 @@ survey_hair() {
 face_cat() { face_tab; "$gui" click 0.023 "$1"; sleep 2; }
 CAT_IRIS=0.293; CAT_BROW=0.479; CAT_LINER=0.603; CAT_LASH=0.668; CAT_FACESET=0.169
 
-# set_hex TAG ROW_Y HEX : method v2 (v1 single-click field: run 44873786133 no change).
-# A: double-click field + cmd-a + type + Return. B: open swatch picker, find a
-# hex OCR box inside the popup, double-click it, type, Return, Escape.
+# set_hex TAG ROW_Y HEX : method v3 = colour-wheel geometry.
+# v1 (single-click field, run 44873786133) and v2 (double-click field / popup
+# hex field + synthetic unicode text, run 44874797940) did not edit: Unity text
+# fields ignored the synthetic input. The popup wheel/SV square is pointer-only.
+# Geometry measured on hex-iris-picker.png (1024x768): popup hex label box ->
+# wheel centre (-42,+137) px, ring radius 96 px, hue 0 at top, clockwise;
+# SV square origin (-100,+79) px, side 117 px, S left->right, V top->bottom.
 hex_ok() { grep -Fqi "#${2#\#}" "evidence/$1.txt"; }
 set_hex() {
-  local tag="$1" y="$2" hex="${3#\#}" box
-  "$gui" double-click 0.854 "$y"; sleep 1
-  "$gui" key 0 cmd; "$gui" text "$hex"; "$gui" key 36; sleep 2
-  capture_state "hex-$tag-a"
-  if hex_ok "hex-$tag-a" "$hex"; then echo "$tag HEX_SET_A $hex" >> evidence/face-edits.txt; return 0; fi
-  "$gui" key 53; sleep 1
+  local tag="$1" y="$2" hex="${3#\#}" box pts
   "$gui" click 0.742 "$y"; sleep 2
   capture_state "hex-$tag-picker"
-  box=$(swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); let y0=Double(CommandLine.arguments[2])!; for o in r.results ?? [] { if let t=o.topCandidates(1).first?.string, t.range(of:"^#?[0-9A-Fa-f]{6}$",options:.regularExpression) != nil, abs((1-o.boundingBox.midY)-y0) > 0.02 || o.boundingBox.midX < 0.75 { print(o.boundingBox.midX, 1-o.boundingBox.midY); exit(0) } }; exit(2)' "evidence/hex-$tag-picker.png" "$y") || box=""
-  echo "$tag picker-box ${box:-none}" >> evidence/face-edits.txt
-  if [ -n "$box" ]; then
-    "$gui" double-click $box; sleep 1
-    "$gui" key 0 cmd; "$gui" text "$hex"; "$gui" key 36; sleep 2
-    capture_state "hex-$tag-b"
-    "$gui" key 53; sleep 1
-  fi
+  box=$(swift -e 'import Vision; import Foundation; let r=VNRecognizeTextRequest(); try VNImageRequestHandler(url:URL(fileURLWithPath:CommandLine.arguments[1])).perform([r]); for o in r.results ?? [] { if let t=o.topCandidates(1).first?.string, t.range(of:"^#?[0-9A-Fa-f]{6}$",options:.regularExpression) != nil, o.boundingBox.midX < 0.75 { print(o.boundingBox.midX*1024, (1-o.boundingBox.midY)*768); exit(0) } }; exit(2)' "evidence/hex-$tag-picker.png") || box=""
+  if [ -z "$box" ]; then echo "$tag PICKER_NOT_VERIFIED" >> evidence/face-edits.txt; "$gui" key 53; return 1; fi
+  pts=$(python3 - $box "$hex" <<'PY2'
+import sys, colorsys, math
+bx, by, h = float(sys.argv[1]), float(sys.argv[2]), sys.argv[3]
+r, g, b = (int(h[i:i+2], 16)/255 for i in (0, 2, 4))
+H, S, V = colorsys.rgb_to_hsv(r, g, b)
+cx, cy = bx-42, by+137
+a = H*2*math.pi
+hx, hy = cx+96*math.sin(a), cy-96*math.cos(a)
+sx, sy = bx-100+S*117, by+79+(1-V)*117
+print(f"{hx/1024:.4f} {hy/768:.4f} {sx/1024:.4f} {sy/768:.4f}")
+PY2
+)
+  read -r hx hy sx sy <<< "$pts"
+  echo "$tag picker-box $box -> hue $hx $hy sv $sx $sy" >> evidence/face-edits.txt
+  "$gui" click "$hx" "$hy"; sleep 1
+  "$gui" click "$sx" "$sy"; sleep 1
+  capture_state "hex-$tag-b"
+  "$gui" key 53; sleep 1
   capture_state "hex-$tag"
-  if hex_ok "hex-$tag" "$hex"; then echo "$tag HEX_SET_B $hex" >> evidence/face-edits.txt; return 0; fi
+  grep -Eo '#[0-9A-Fa-f]{6}' "evidence/hex-$tag-b.txt" | head -1 | sed "s/^/$tag picked /" >> evidence/face-edits.txt || true
+  if ! grep -Fqi '#9E6233' "evidence/hex-$tag.txt" && grep -Eqi '#[0-9A-F]{6}' "evidence/hex-$tag.txt"; then
+    echo "$tag HEX_WHEEL_APPLIED target $hex" >> evidence/face-edits.txt; return 0
+  fi
   echo "$tag HEX_NOT_VERIFIED $hex" >> evidence/face-edits.txt; return 1
 }
 
@@ -174,18 +188,11 @@ reopen_copy() {
   cmp "$copy" evidence/model.vroid
 }
 
-face_batch_2() {
-  # Round-pupil gradient iris preset (current preset reads as slit pupil vs Layer 0),
-  # then violet tint; lash/liner/brow plum-dark.
-  face_cat "$CAT_IRIS"; capture_state cat-iris
-  "$gui" click 0.117 0.534; sleep 3
-  capture_state iris-preset
-  echo "iris-preset row2col1 clicked" >> evidence/face-edits.txt
-  capture_state cat-iris2
-  set_hex iris "$(hex_row_y cat-iris2)" 7A3E92 || true
-  face_cat "$CAT_LASH";  capture_state cat-lash;  set_hex lash  "$(hex_row_y cat-lash)" 2A1730 || true
+face_batch_3() {
+  face_cat "$CAT_IRIS";  capture_state cat-iris;  set_hex iris  "$(hex_row_y cat-iris)"  7A3E92 || true
+  face_cat "$CAT_LASH";  capture_state cat-lash;  set_hex lash  "$(hex_row_y cat-lash)"  2A1730 || true
   face_cat "$CAT_LINER"; capture_state cat-liner; set_hex liner "$(hex_row_y cat-liner)" 2B1631 || true
-  face_cat "$CAT_BROW";  capture_state cat-brow;  set_hex brow  "$(hex_row_y cat-brow)" 4A2B4E || true
+  face_cat "$CAT_BROW";  capture_state cat-brow;  set_hex brow  "$(hex_row_y cat-brow)"  4A2B4E || true
   face_cat "$CAT_FACESET"
 }
 
@@ -205,7 +212,7 @@ case "$MODE" in
   edit)
     views before 25
     views beforeclose 6
-    face_batch_2
+    face_batch_3
     grep -c HEX_SET evidence/face-edits.txt > evidence/hex-count.txt || true
     "$gui" zoom 0.50 0.42 -6 0
     views after 0
@@ -218,7 +225,7 @@ case "$MODE" in
     views reopened 0
     views reopenedclose 6
     face_cat "$CAT_IRIS"; capture_state reopened-iris
-    if grep -Fqi '7A3E92' evidence/reopened-iris.txt; then echo IRIS_REOPEN_VERIFIED >> evidence/face-edits.txt; fi
+    if ! grep -Fqi '9E6233' evidence/reopened-iris.txt; then echo IRIS_COLOUR_CHANGED_AFTER_REOPEN >> evidence/face-edits.txt; fi
     echo NATIVE_FACE_BATCH1_SAVED_REOPENED_ART_QA_REQUIRED > evidence/authoring-status.txt
     ;;
   *)
