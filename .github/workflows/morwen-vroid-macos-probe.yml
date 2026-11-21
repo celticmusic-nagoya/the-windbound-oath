@@ -205,6 +205,7 @@ jobs:
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
+          import AppKit
           let request = VNRecognizeTextRequest()
           request.recognitionLevel = .accurate
           request.usesLanguageCorrection = false
@@ -227,8 +228,27 @@ jobs:
           }
           guard fields.count == 1, let field = fields.first,
                 let value = field.topCandidates(1).first?.string else { exit(2) }
-          print(field.boundingBox.midX, 1 - field.boundingBox.midY,
-                value.replacingOccurrences(of: "−", with: "-"))
+          let image = NSBitmapImageRep(contentsOfFile: args[1])!
+          let w = image.pixelsWide, h = image.pixelsHigh
+          let fieldY = 1 - field.boundingBox.midY
+          let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
+          guard expectedY + 9 < h else { exit(2) }
+          var xs: [Int] = [], ys: [Int] = []
+          for y in (expectedY - 9)...(expectedY + 9) {
+              for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
+                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+                  if c.blueComponent > 0.78 && c.redComponent < 0.22
+                      && c.greenComponent > 0.30 && c.greenComponent < 0.82 {
+                      xs.append(x)
+                      ys.append(y)
+                  }
+              }
+          }
+          guard let minX = xs.min(), let maxX = xs.max(), maxX - minX <= 35,
+                let minY = ys.min(), let maxY = ys.max() else { exit(2) }
+          print(value.replacingOccurrences(of: "−", with: "-"),
+                Double(minX + maxX) / (2 * Double(w)),
+                Double(minY + maxY) / (2 * Double(h)))
           SWIFT
           swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
           row="$RUNNER_TEMP/face-row"
@@ -239,72 +259,75 @@ jobs:
           }
           locate_row() {
             local tag="$1" pattern="$2" attempt hit
-            for attempt in 0 1 2 3 4 5 6 7 8; do
+            local limit=2
+            if [[ "$tag" == chin-* ]]; then limit=21; fi
+            for ((attempt=0; attempt<=limit; attempt++)); do
               capture_state "$tag-$attempt"
               grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' "evidence/$tag-$attempt.txt" || return 1
               if hit=$("$row" "evidence/$tag-$attempt.png" "$pattern"); then
                 printf '%s %s\n' "$attempt" "$hit"
                 return 0
               fi
-              "$gui" scroll 0.89 0.68 -7 0
+              "$gui" scroll 0.89 0.68 -9 0
               sleep 1
             done
             return 1
           }
+          drag_row() {
+            local x="$1" y="$2" delta="$3" destination
+            destination=$(awk -v x="$x" -v n="$delta" 'BEGIN { print x+n }')
+            "$gui" slider "$x" "$y" "$destination" "$y" 0.5
+            sleep 1
+          }
           edit_row() {
-            local tag="$1" pattern="$2" target="$3" hit attempt x y before after
+            local tag="$1" pattern="$2" delta="$3" hit attempt x y before after previous
             local correction="${4:-}"
             if ! hit=$(locate_row "$tag-before" "$pattern"); then
               echo "$tag CONTROL_NOT_VERIFIED" >> evidence/face-edits.txt
               return 1
             fi
-            read -r attempt x y before <<< "$hit"
-            "$gui" double-click "$x" "$y"
-            "$gui" key 0 cmd
-            "$gui" text "$target"
-            "$gui" key 36
-            sleep 1
+            read -r attempt before x y <<< "$hit"
+            drag_row "$x" "$y" "$delta"
             capture_state "$tag-after"
-            if ! after=$("$row" "evidence/$tag-after.png" "$pattern"); then
+            if ! hit=$("$row" "evidence/$tag-after.png" "$pattern"); then
               echo "$tag VALUE_NOT_VERIFIED" >> evidence/face-edits.txt
               return 1
             fi
-            read -r x y after <<< "$after"
-            printf '%s %s %s %s\n' "$tag" "$before" "$target" "$after" >> evidence/face-edits.txt
-            [ "$before" != "$after" ] && [ "$target" = "$after" ] || return 1
+            read -r after x y <<< "$hit"
+            printf '%s %s %s\n' "$tag" "$before" "$after" >> evidence/face-edits.txt
+            [ "$before" != "$after" ] || return 1
             if [ -n "$correction" ]; then
-              # Keep the observed first pass and its comparison image, then refine the delta.
+              previous="$after"
               capture_views midpoint
-              "$gui" double-click "$x" "$y"
-              "$gui" key 0 cmd
-              "$gui" text "$correction"
-              "$gui" key 36
-              sleep 1
+              drag_row "$x" "$y" "$correction"
               capture_state "$tag-corrected"
-              after=$("$row" "evidence/$tag-corrected.png" "$pattern") || return 1
-              read -r x y after <<< "$after"
-              printf '%s-corrected %s %s %s\n' "$tag" "$target" "$correction" "$after" >> evidence/face-edits.txt
-              [ "$correction" = "$after" ] || return 1
+              hit=$("$row" "evidence/$tag-corrected.png" "$pattern") || return 1
+              read -r after x y <<< "$hit"
+              printf '%s-corrected %s %s\n' "$tag" "$previous" "$after" >> evidence/face-edits.txt
+              [ "$previous" != "$after" ] || return 1
             fi
+            printf '%s\n' "$after" > "evidence/$tag-saved-value.txt"
           }
           capture_views() {
-            local stage="$1"
+            local stage="$1" n
             "$gui" vroid-shortcut front
             sleep 1
             capture_state "face-$stage-front"
-            "$gui" vroid-shortcut turn-left
+            for n in 1 2 3 4 5 6; do "$gui" vroid-shortcut turn-left; done
             sleep 1
             capture_state "face-$stage-left"
-            "$gui" vroid-shortcut turn-right
+            "$gui" vroid-shortcut front
+            for n in 1 2 3 4 5 6; do "$gui" vroid-shortcut turn-right; done
             sleep 1
             capture_state "face-$stage-right"
             "$gui" vroid-shortcut front
             sleep 1
           }
           check_row() {
-            local tag="$1" pattern="$2" value="$3" hit
+            local tag="$1" pattern="$2" hit attempt value x y
             hit=$(locate_row "$tag-reopened" "$pattern") || return 1
-            [ "${hit##* }" = "$value" ]
+            read -r attempt value x y <<< "$hit"
+            [ "$value" = "$(cat "evidence/$tag-saved-value.txt")" ]
           }
           try_saved_copy() {
             local candidate="$1"
@@ -323,22 +346,23 @@ jobs:
           fi
           "$gui" vroid-shortcut face
           sleep 2
-          "$gui" zoom 0.50 0.50 12 0
+          "$gui" zoom 0.50 0.50 30 0
+          "$gui" zoom 0.50 0.50 30 0
           sleep 2
           capture_views before
           # Projected Layer 0 targets: mouth/iris span 16/51, chin 21 px below mouth,
           # profile nose extends ~10 px beyond mouth. Slider values are provisional.
           select_face_panel 0.732
           nose_ok=false
-          edit_row nose '^Nose Size$' 0.080 && nose_ok=true
+          edit_row nose '^Nose Size$' 0.012 && nose_ok=true
           select_face_panel 0.795
           mouth_ok=false
-          edit_row mouth '^Mouth Width$' -0.120 -0.080 && mouth_ok=true
+          edit_row mouth '^Mouth Width$' -0.018 0.006 && mouth_ok=true
           select_face_panel 0.232
           select_face_panel 0.169
-          chin_pattern='^(Chin (Height|Position( \(Y\))?|Length|Size)|Jaw Height)$'
+          chin_pattern='^((Chin|Jaw|Jawbone) (Height|Position( \(Y\))?|Length|Size|Width)|Move Chin (Up|Down)|Chin)$'
           chin_ok=false
-          edit_row chin "$chin_pattern" 0.060 && chin_ok=true
+          edit_row chin "$chin_pattern" 0.009 && chin_ok=true
           capture_views after
           if ! ( "$nose_ok" || "$mouth_ok" || "$chin_ok" ); then
             echo BLOCKED_NO_VERIFIED_FACE_EDITS > evidence/authoring-status.txt
@@ -387,16 +411,17 @@ jobs:
           grep -Fq "${saved##*/}" evidence/checkpoint-reopened.txt
           grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/checkpoint-reopened.txt
           cmp "$saved" evidence/model.vroid
-          "$gui" zoom 0.50 0.50 12 0
+          "$gui" zoom 0.50 0.50 30 0
+          "$gui" zoom 0.50 0.50 30 0
           sleep 2
           capture_views reopened
           select_face_panel 0.732
-          if "$nose_ok" && check_row nose '^Nose Size$' 0.080; then echo NOSE_REOPEN_VERIFIED >> evidence/face-edits.txt; else nose_ok=false; fi
+          if "$nose_ok" && check_row nose '^Nose Size$'; then echo NOSE_REOPEN_VERIFIED >> evidence/face-edits.txt; else nose_ok=false; fi
           select_face_panel 0.795
-          if "$mouth_ok" && check_row mouth '^Mouth Width$' -0.080; then echo MOUTH_REOPEN_VERIFIED >> evidence/face-edits.txt; else mouth_ok=false; fi
+          if "$mouth_ok" && check_row mouth '^Mouth Width$'; then echo MOUTH_REOPEN_VERIFIED >> evidence/face-edits.txt; else mouth_ok=false; fi
           select_face_panel 0.232
           select_face_panel 0.169
-          if "$chin_ok" && check_row chin "$chin_pattern" 0.060; then echo CHIN_REOPEN_VERIFIED >> evidence/face-edits.txt; else chin_ok=false; fi
+          if "$chin_ok" && check_row chin "$chin_pattern"; then echo CHIN_REOPEN_VERIFIED >> evidence/face-edits.txt; else chin_ok=false; fi
           echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
           if "$nose_ok" && "$mouth_ok" && "$chin_ok"; then
             echo NATIVE_FACE_CONTROLS_REOPEN_VERIFIED_VISUAL_REVIEW_REQUIRED > evidence/authoring-status.txt
