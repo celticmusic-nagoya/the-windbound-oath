@@ -130,17 +130,17 @@ def cross_section(record):
             (x,max(crown+2.7,-1.60),-.52)]
 
 
-def build_rock(image):
+def build_rock(image, stations=STATIONS, section=cross_section):
     rings=[]
-    for j,(a,b) in enumerate(zip(STATIONS,STATIONS[1:])):
-        rings.append(cross_section(a))
+    for j,(a,b) in enumerate(zip(stations,stations[1:])):
+        rings.append(section(a))
         for k in range(1,7):
             t=k/7
-            profile=cross_section([u+(v-u)*t for u,v in zip(a,b)])
+            profile=section([u+(v-u)*t for u,v in zip(a,b)])
             rings.append([(x,y+.13*sin(4.1*x+r*.7)*sin(t*3.14159),
                            z+(.115*sin(5.7*x+r*.82)*sin(t*3.14159) if 1<=r<=9 else 0))
                           for r,(x,y,z) in enumerate(profile)])
-    rings.append(cross_section(STATIONS[-1]))
+    rings.append(section(stations[-1]))
     width=len(rings[0])
     faces=[]
     slots=[]

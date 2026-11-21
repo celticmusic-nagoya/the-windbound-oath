@@ -24,8 +24,9 @@ def run(browser, url, out, mode):
 
     hero = int(mode == "hero-cliff")
     headland = int(mode == "headland")
-    composition = int(mode in ("candidate", "hero-cliff", "headland"))
-    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}"
+    blueprint = int(mode == "blueprint")
+    composition = int(mode in ("candidate", "hero-cliff", "headland", "blueprint"))
+    mode_query = f"composition={composition}&hero-cliff={hero}&headland={headland}&cliff-blueprint={blueprint}"
     page.goto(f"{url}/dev/windwaiting-cliff/?qa&fixed-water&wind=0&photo=1&vista=1&{mode_query}",
               wait_until="domcontentloaded")
     try:
@@ -83,7 +84,7 @@ def main():
             "--disable-dev-shm-usage", "--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--no-sandbox",
         ])
         results = {mode: run(browser, args.base_url, args.output, mode)
-                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland")}
+                   for mode in ("baseline", "vertex-color-off", "candidate", "hero-cliff", "headland", "blueprint")}
         browser.close()
     for key in ("position", "camera", "groundHeight"):
         assert len({json.dumps(result[key]) for result in results.values()}) == 1, key
@@ -92,6 +93,7 @@ def main():
     assert results["candidate"]["triangles"] <= results["baseline"]["triangles"]
     assert results["hero-cliff"]["triangles"] == results["candidate"]["triangles"]
     assert 0 < results["headland"]["triangles"] - results["hero-cliff"]["triangles"] < 1000
+    assert results["blueprint"]["triangles"] <= results["headland"]["triangles"] + 1000
     (args.output / "webgl-photo-qa.json").write_text(json.dumps(results, indent=2) + "\n")
 
 
