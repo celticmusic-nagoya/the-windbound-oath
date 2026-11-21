@@ -1,0 +1,38 @@
+name: Archive Aidan measured blueprint evidence
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/archive-aidan-blueprint.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: archive-aidan-blueprint
+  cancel-in-progress: false
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/lind-village-world-integration-plan-01
+      - name: Preserve exact artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          d=assets/candidates/LIND-HOME-01/blueprint-measured-20261121
+          mkdir -p "$d"
+          gh api repos/${{ github.repository }}/actions/artifacts/14684514477/zip > "$d/evidence.zip"
+          echo "0407a16bbd9d6ab0ff4904cdbd7db08bb14db14bc7fbaa7d90d8d999a2539c98  $d/evidence.zip" | sha256sum -c -
+          unzip -q "$d/evidence.zip" -d /tmp/aidan-evidence
+          (cd /tmp/aidan-evidence && sha256sum -c SHA256SUMS)
+          printf '%s\n' 'Measured candidate evidence; archive approved 2026-11-21. Not final model adoption. G1 provenance mismatch remains. Source run 44850191454; artifact 14684514477. ZIP includes seven views, sections and geometry JSON. Separate locally authored PDFs not included.' > "$d/README.md"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$d"
+          git diff --cached --quiet && exit 0
+          git commit -m 'Archive verified Aidan blueprint evidence without model adoption'
+          git push origin HEAD:feature/lind-village-world-integration-plan-01
