@@ -1,7 +1,7 @@
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
 
 ## Director decision — multi-stage production batches (2026-11-22)
-Apply [shared batch policy](../policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md) to all character and environment owners. Policy approved; adapter/runtime verification pending. Viewport-first editing, dynamic batches, selective QA and checkpoint resume required; authenticated live review bridge NOT_RUN. Long productive free-runner sessions, durable incremental checkpoints and snapshot-based QA approved; actual adapters NOT_RUN. Existing ownership and adoption gates unchanged.
+Apply [shared batch policy](../policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md) to all character and environment owners. Policy approved; adapter/runtime verification pending. Viewport-first editing, dynamic batches, selective QA and checkpoint resume required; authenticated live review bridge NOT_RUN. Long productive free-runner sessions, durable incremental checkpoints and snapshot-based QA approved; actual adapters NOT_RUN. Deliverable-driven area/character/NPC factory targets and P0/P1 priorities approved; production-bearing vertical slice required. Existing ownership and adoption gates unchanged.
 
 ## Shared wardrobe research (2026-11-21)
 Read [character wardrobe research](CHARACTER_WARDROBE_RESEARCH_20261121.md) before garment work; VRoid native layers/texture first, pattern-based and XWear candidates require qualification. Research only; owner #427 and existing adoption gates unchanged.
