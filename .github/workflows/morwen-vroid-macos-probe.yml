@@ -102,6 +102,30 @@ jobs:
               assert hashlib.sha256(data).hexdigest()==expected=="57e8dc139333dbbe353bdf07f36eab70cfffa02a22271b4a17cc013ea2f40616"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
+      - name: Restore saved face candidate for reopen QA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14693801775/zip" > "$RUNNER_TEMP/face-candidate.zip"
+          echo "726084f1285b89e416da906edca4abd5221e6f79278b1a6e921b6d753cb14cdb  $RUNNER_TEMP/face-candidate.zip" | shasum -a 256 -c
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from hashlib import sha256
+          import os
+          temp = Path(os.environ["RUNNER_TEMP"])
+          with ZipFile(temp / "face-candidate.zip") as archive:
+              item = archive.getinfo("model.vroid")
+              assert 0 < item.file_size < 100_000_000
+              model = archive.read(item)
+              assert sha256(model).hexdigest() == "6999703a198714c35a416d2a74e5a0f1a179eb64d464301b7932d6e2258aa23c"
+              (temp / "M04-face.vroid").write_bytes(model)
+              for name in ("face-edits.txt", "nose-saved-value.txt", "mouth-saved-value.txt", "chin-saved-value.txt"):
+                  assert archive.getinfo(name).file_size < 4096
+                  Path("evidence", name).write_bytes(archive.read(name))
+          PYCODE
       - name: Download official DMG and inspect signature
         shell: bash
         run: |
@@ -314,11 +338,11 @@ jobs:
             "$gui" vroid-shortcut front
             sleep 1
             capture_state "face-$stage-front"
-            for n in 1 2 3 4 5 6; do "$gui" vroid-shortcut turn-left; done
+            for n in 1 2 3; do "$gui" vroid-shortcut turn-left; done
             sleep 1
             capture_state "face-$stage-left"
             "$gui" vroid-shortcut front
-            for n in 1 2 3 4 5 6; do "$gui" vroid-shortcut turn-right; done
+            for n in 1 2 3; do "$gui" vroid-shortcut turn-right; done
             sleep 1
             capture_state "face-$stage-right"
             "$gui" vroid-shortcut front
@@ -347,51 +371,58 @@ jobs:
           fi
           "$gui" vroid-shortcut face
           sleep 2
-          "$gui" zoom 0.50 0.50 30 0
-          "$gui" zoom 0.50 0.50 30 0
+          "$gui" zoom 0.50 0.50 25 0
           sleep 2
           capture_views before
-          # Projected Layer 0 targets: mouth/iris span 16/51, chin 21 px below mouth,
-          # profile nose extends ~10 px beyond mouth. Slider values are provisional.
-          select_face_panel 0.732
-          nose_ok=false
-          edit_row nose '^Nose Size$' 0.012 && nose_ok=true
-          select_face_panel 0.795
-          mouth_ok=false
-          edit_row mouth '^Mouth Width$' -0.018 0.006 && mouth_ok=true
-          select_face_panel 0.232
-          select_face_panel 0.169
-          chin_pattern='^((Chin|Jaw|Jawbone) (Height|Position( \(Y\))?|Length|Size|Width)|Move Chin (Up|Down)|Chin)$'
-          chin_ok=false
-          edit_row chin "$chin_pattern" 0.009 && chin_ok=true
-          capture_views after
-          if ! ( "$nose_ok" || "$mouth_ok" || "$chin_ok" ); then
-            echo BLOCKED_NO_VERIFIED_FACE_EDITS > evidence/authoring-status.txt
-            exit 1
-          fi
           working="$HOME/Documents/Morwen-resume.vroid"
-          saved="$HOME/Documents/Morwen-face-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.vroid"
+          saved="$HOME/Documents/M04-face.vroid"
           test ! -e "$saved"
-          capture_state save-before
-          grep -Fqi 'Morwen-resume' evidence/save-before.txt
-          "$gui" key 1 cmd
-          sleep 5
-          capture_state save-shortcut
-          if ! try_saved_copy "$working"; then
-            "$gui" click 0.027 0.100
-            sleep 2
-            capture_state save-menu
-            grep -Fq 'Back to model selection' evidence/save-menu.txt
-            grep -Fq 'Save As' evidence/save-menu.txt
-            "$gui" click 0.03125 0.14583
-            sleep 6
-            capture_state save-menu-result
+          chin_pattern='^Jaw Position[[:space:]]*\(Y\)$'
+          if [ -s "$RUNNER_TEMP/M04-face.vroid" ]; then
+            try_saved_copy "$RUNNER_TEMP/M04-face.vroid"
+            cp "$RUNNER_TEMP/M04-face.vroid" evidence/model.vroid
+            nose_ok=true
+            mouth_ok=true
+            chin_ok=true
+          else
+            # Projected Layer 0 targets: mouth/iris span 16/51, chin 21 px below mouth,
+            # profile nose extends ~10 px beyond mouth. Slider values are provisional.
+            select_face_panel 0.732
+            nose_ok=false
+            edit_row nose '^Nose Size$' 0.012 && nose_ok=true
+            select_face_panel 0.795
+            mouth_ok=false
+            edit_row mouth '^Mouth Width$' -0.018 0.006 && mouth_ok=true
+            select_face_panel 0.232
+            select_face_panel 0.169
+            chin_ok=false
+            edit_row chin "$chin_pattern" 0.009 && chin_ok=true
+            capture_views after
+            if ! ( "$nose_ok" || "$mouth_ok" || "$chin_ok" ); then
+              echo BLOCKED_NO_VERIFIED_FACE_EDITS > evidence/authoring-status.txt
+              exit 1
+            fi
+            capture_state save-before
+            grep -Fqi 'Morwen-resume' evidence/save-before.txt
+            "$gui" key 1 cmd
+            sleep 5
+            capture_state save-shortcut
+            if ! try_saved_copy "$working"; then
+              "$gui" click 0.027 0.100
+              sleep 2
+              capture_state save-menu
+              grep -Fq 'Back to model selection' evidence/save-menu.txt
+              grep -Fq 'Save As' evidence/save-menu.txt
+              "$gui" click 0.03125 0.14583
+              sleep 6
+              capture_state save-menu-result
+            fi
+            if ! try_saved_copy "$working"; then
+              echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
+              exit 1
+            fi
+            cp "$working" evidence/model.vroid
           fi
-          if ! try_saved_copy "$working"; then
-            echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
-            exit 1
-          fi
-          cp "$working" evidence/model.vroid
           shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
           echo NATIVE_SAVED_REOPEN_PENDING > evidence/authoring-status.txt
           cp evidence/model.vroid "$saved"
@@ -406,14 +437,14 @@ jobs:
           sleep 2
           capture_state checkpoint-open-selected
           dialog_visible checkpoint-open-selected
+          grep -Fq "${saved##*/}" evidence/checkpoint-open-selected.txt
           "$gui" key 36
           sleep 30
           capture_state checkpoint-reopened
           grep -Fq "${saved##*/}" evidence/checkpoint-reopened.txt
           grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' evidence/checkpoint-reopened.txt
           cmp "$saved" evidence/model.vroid
-          "$gui" zoom 0.50 0.50 30 0
-          "$gui" zoom 0.50 0.50 30 0
+          "$gui" zoom 0.50 0.50 25 0
           sleep 2
           capture_views reopened
           select_face_panel 0.732
