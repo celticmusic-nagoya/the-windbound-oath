@@ -104,7 +104,12 @@ jobs:
           mod.harden_normals=True
           changes=[]
           for name in ('MAT_LINEN_A','MAT_FABRIC_WOOL_GREEN_A'):
-              mat=bpy.data.materials[name]
+              original=bpy.data.materials[name]
+              mat=original.copy()
+              mat.name=name+'_INTERIOR_C03'
+              for ob in (furniture,bpy.data.objects['GEO_AIDANHOUSE_INT_SOFT']):
+                  for slot in ob.material_slots:
+                      if slot.material==original:slot.material=mat
               nodes=mat.node_tree.nodes
               links=mat.node_tree.links
               bs=next(n for n in nodes if n.type=='BSDF_PRINCIPLED')
@@ -117,11 +122,39 @@ jobs:
               links.new(tex.outputs['Fac'],bump.inputs['Height'])
               links.new(bump.outputs['Normal'],normal)
               changes.append(name)
+          # Add joinery within existing cupboard footprint and table leg envelope.
+          import math,random
+          rng=random.Random(923)
+          z=H.FFL
+          yi=H.D/2-H.T
+          mb=H.MB('GEO_AIDANHOUSE_INT_JOINERY_C03')
+          W='MAT_TIMBER_OAK_WEATHERED_A'
+          I='MAT_IRON_WROUGHT_A'
+          # Raised timber frame and inset panel relief, forged strap hinges.
+          for x0,x1 in [(-1.53,-1.15),(-1.10,-.72)]:
+              for xx in (x0,x1-.045):
+                  mb.aabb((xx,yi-.485,z+.16),(xx+.045,yi-.449,z+1.68),W,.8,rng=rng)
+              for zz in (z+.16,z+.85,z+1.635):
+                  mb.aabb((x0,yi-.485,zz),(x1,yi-.449,zz+.045),W,.8,rng=rng)
+              for zz in (z+.38,z+1.42):
+                  mb.aabb((x0+.01,yi-.491,zz),(x0+.14,yi-.484,zz+.028),I,.3,rng=rng)
+          for x in (-1.19,-1.06):
+              mb.cylinder((x,yi-.495,z+1.0),(0,-1,0),.023,.035,12,I,.3)
+          # Table's three radial lower stretchers join existing leg centres.
+          from mathutils import Vector
+          for a in range(3):
+              ang=a*2*math.pi/3+.3
+              start=Vector((.4,-.2,z+.23))
+              end=Vector((.4+.29*math.cos(ang),-.2+.29*math.sin(ang),z+.23))
+              d=end-start
+              mb.cylinder(start,d.normalized(),.025,d.length,10,W,.8,rand=.45)
+          detail=mb.build({m.name:m for m in bpy.data.materials},furniture.users_collection[0])
+          assert bpy.data.objects.get('GEO_AIDANHOUSE_INT_JOINERY_C03')
           assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
           assert all([list(x) for x in bpy.data.objects[n].matrix_world]==m for n,m in anchors.items())
           render('candidate')
           assert all(im.packed_file for im in bpy.data.images if im.source=='FILE')
-          path=out/'aidan_interior_c02.blend'
+          path=out/'aidan_interior_c03.blend'
           bpy.ops.wm.save_as_mainfile(filepath=str(path),compress=True)
           bpy.ops.wm.open_mainfile(filepath=str(path))
           assert bpy.data.objects[furniture.name if False else 'GEO_AIDANHOUSE_INT_FURNITURE'].modifiers.get('Interior furniture softened joinery')
@@ -135,6 +168,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: aidan-interior-c02
+          name: aidan-interior-c03
           path: /tmp/blueprint
           retention-days: 7
