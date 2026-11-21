@@ -1,8 +1,12 @@
 name: TWO Actions orchestration offline unit QA
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths: ['.github/workflows/two-actions-orchestration-offline-qa.yml']
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: two-actions-offline-qa-${{ github.ref }}
   cancel-in-progress: false
@@ -23,3 +27,24 @@ jobs:
           for name in classify_actions_jobs audit_actions_ledger collect_actions_snapshot reconcile_actions_snapshot verify_actions_artifact inspect_actions_artifact_metadata download_actions_artifact reserve_actions_job_ref assess_actions_reservation_recovery review_actions_reservation_snapshot; do
             python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
           done
+  authenticated-observation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Observe actual repository runs without writes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-observation
+          python3 tools/production_qa/collect_actions_snapshot.py --repo "$GITHUB_REPOSITORY" --pages 2 > /tmp/two-observation/snapshot.json
+          python3 -c 'import json,os; p=json.load(open("/tmp/two-observation/snapshot.json")); assert any(r["run_id"]==int(os.environ["GITHUB_RUN_ID"]) for r in p["runs"]), "current run not observed"; print("AUTHENTICATED_OBSERVATION_PASS",len(p["runs"]))'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-authenticated-observation-${{ github.run_id }}
+          path: /tmp/two-observation/
+          retention-days: 7
