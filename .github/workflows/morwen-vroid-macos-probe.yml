@@ -377,7 +377,7 @@ jobs:
           working="$HOME/Documents/Morwen-resume.vroid"
           saved="$HOME/Documents/Face.vroid"
           test ! -e "$saved"
-          chin_pattern='^Jaw Position[[:space:]]*\(Y\)$'
+          chin_pattern='^Jaw Position\s*\(Y\)\s*\|?$'
           if [ -s "$RUNNER_TEMP/Face.vroid" ]; then
             try_saved_copy "$RUNNER_TEMP/Face.vroid"
             cp "$RUNNER_TEMP/Face.vroid" evidence/model.vroid
