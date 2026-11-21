@@ -1,0 +1,173 @@
+name: Aidan house interior refinement
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/aidan-interior-candidate.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aidan-interior-candidate
+  cancel-in-progress: false
+jobs:
+  blueprint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d477176179af046db7ef86f3bdf8bbe92e47b1d2
+          persist-credentials: false
+      - name: Install verified Blender
+        run: |
+          set -eu
+          base=https://mirror.blender.org/release/Blender5.3
+          archive=blender-5.3.0-linux-x64.tar.xz
+          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
+          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
+          grep "$archive" sums | sha256sum -c -
+          mkdir -p /tmp/blender /tmp/blueprint
+          tar -xJf "$archive" -C /tmp/blender --strip-components=1
+      - name: Restore nine pinned CC0 maps
+        run: |
+          set -eu
+          mkdir -p /tmp/home-pbr
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_diff_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_diff_1k.jpg"
+          echo '20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c  /tmp/home-pbr/rock_boulder_dry_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_nor_gl_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_nor_gl_1k.jpg"
+          echo '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  /tmp/home-pbr/rock_boulder_dry_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_rough_1k.jpg' -o "/tmp/home-pbr/rock_boulder_dry_rough_1k.jpg"
+          echo 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  /tmp/home-pbr/rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_diff_1k.jpg' -o "/tmp/home-pbr/rough_wood_diff_1k.jpg"
+          echo 'abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98  /tmp/home-pbr/rough_wood_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_nor_gl_1k.jpg' -o "/tmp/home-pbr/rough_wood_nor_gl_1k.jpg"
+          echo '3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011  /tmp/home-pbr/rough_wood_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_rough_1k.jpg' -o "/tmp/home-pbr/rough_wood_rough_1k.jpg"
+          echo '4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09  /tmp/home-pbr/rough_wood_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_diff_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_diff_1k.jpg"
+          echo '94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29  /tmp/home-pbr/weathered_brown_planks_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_nor_gl_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_nor_gl_1k.jpg"
+          echo '8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393  /tmp/home-pbr/weathered_brown_planks_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --retry 2 --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_rough_1k.jpg' -o "/tmp/home-pbr/weathered_brown_planks_rough_1k.jpg"
+          echo 'b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9  /tmp/home-pbr/weathered_brown_planks_rough_1k.jpg' | sha256sum -c -
+          sha256sum /tmp/home-pbr/*.jpg > /tmp/blueprint/texture.sha256
+      - name: Refine furniture and textile detail on isolated native copy
+        run: |
+          set -eu
+          source=assets/candidates/LIND-HOME-01/aidan_house_f9_c01/aidan_house_f9_c01.blend
+          test "$(git hash-object "$source")" = "0b10bcb3a317b9265631eca84e36b29d7faad6b2"
+          sha256sum "$source" > /tmp/blueprint/source.sha256
+          cat >/tmp/refine.py <<'PY'
+          import bpy,sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,str(Path.cwd()/'tools/map_blender/lind/home'))
+          import build_aidan_house as H
+          out=Path('/tmp/blueprint')
+          scene=bpy.context.scene
+          def signature(o):
+              return hashlib.sha256(repr(([[float(x) for x in v.co] for v in o.data.vertices],[list(p.vertices) for p in o.data.polygons], [list(x) for x in o.matrix_world])).encode()).hexdigest()
+          furniture=bpy.data.objects['GEO_AIDANHOUSE_INT_FURNITURE']
+          protected={o.name:signature(o) for o in scene.objects if o.type=='MESH' and o!=furniture}
+          anchors={o.name:[list(x) for x in o.matrix_world] for o in scene.objects if o.type=='EMPTY'}
+          def render(name):
+              H.set_camera(scene,'interior_bedside')
+              scene.render.engine='CYCLES'
+              scene.cycles.device='CPU'
+              scene.cycles.samples=24
+              scene.cycles.seed=0
+              scene.cycles.use_denoising=True
+              scene.view_settings.view_transform='AgX'
+              scene.view_settings.exposure=.6
+              scene.render.resolution_percentage=75
+              scene.render.image_settings.file_format='PNG'
+              scene.render.filepath=str(out/(name+'.png'))
+              bpy.ops.render.render(write_still=True)
+          restored=[]
+          for im in bpy.data.images:
+              if im.source!='FILE' or im.packed_file: continue
+              target=Path('/tmp/home-pbr')/Path(im.filepath).name
+              assert target.is_file(), im.filepath
+              im.filepath=str(target)
+              im.reload()
+              assert im.size[0]>0 and im.size[1]>0, im.name
+              im.pack()
+              restored.append(im.name)
+          assert len(restored)==9, restored
+          render('baseline')
+          # Non-destructive micro-bevel: preserve silhouette, floor placement and collision.
+          mod=furniture.modifiers.new('Interior furniture softened joinery','BEVEL')
+          mod.width=.006
+          mod.segments=3
+          mod.limit_method='ANGLE'
+          mod.angle_limit=.65
+          mod.use_clamp_overlap=True
+          mod.harden_normals=True
+          changes=[]
+          for name in ('MAT_LINEN_A','MAT_FABRIC_WOOL_GREEN_A'):
+              original=bpy.data.materials[name]
+              mat=original.copy()
+              mat.name=name+'_INTERIOR_C03'
+              for ob in (furniture,bpy.data.objects['GEO_AIDANHOUSE_INT_SOFT']):
+                  for slot in ob.material_slots:
+                      if slot.material==original:slot.material=mat
+              nodes=mat.node_tree.nodes
+              links=mat.node_tree.links
+              bs=next(n for n in nodes if n.type=='BSDF_PRINCIPLED')
+              tex=nodes.new('ShaderNodeTexNoise');tex.label='Fine textile fibre microstructure';tex.inputs['Scale'].default_value=180;tex.inputs['Detail'].default_value=2
+              coord=nodes.new('ShaderNodeTexCoord')
+              links.new(coord.outputs['Object'],tex.inputs['Vector'])
+              bump=nodes.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.23;bump.inputs['Distance'].default_value=.003
+              normal=bs.inputs['Normal']
+              if normal.is_linked:links.new(normal.links[0].from_socket,bump.inputs['Normal'])
+              links.new(tex.outputs['Fac'],bump.inputs['Height'])
+              links.new(bump.outputs['Normal'],normal)
+              changes.append(name)
+          # Add joinery within existing cupboard footprint and table leg envelope.
+          import math,random
+          rng=random.Random(923)
+          z=H.FFL
+          yi=H.D/2-H.T
+          mb=H.MB('GEO_AIDANHOUSE_INT_JOINERY_C03')
+          W='MAT_TIMBER_OAK_WEATHERED_A'
+          I='MAT_IRON_WROUGHT_A'
+          # Raised timber frame and inset panel relief, forged strap hinges.
+          for x0,x1 in [(-1.53,-1.15),(-1.10,-.72)]:
+              for xx in (x0,x1-.045):
+                  mb.aabb((xx,yi-.485,z+.16),(xx+.045,yi-.449,z+1.68),W,.8,rng=rng)
+              for zz in (z+.16,z+.85,z+1.635):
+                  mb.aabb((x0,yi-.485,zz),(x1,yi-.449,zz+.045),W,.8,rng=rng)
+              for zz in (z+.38,z+1.42):
+                  mb.aabb((x0+.01,yi-.491,zz),(x0+.14,yi-.484,zz+.028),I,.3,rng=rng)
+          for x in (-1.19,-1.06):
+              mb.cylinder((x,yi-.495,z+1.0),(0,-1,0),.023,.035,12,I,.3)
+          # Table's three radial lower stretchers join existing leg centres.
+          from mathutils import Vector
+          for a in range(3):
+              ang=a*2*math.pi/3+.3
+              start=Vector((.4,-.2,z+.23))
+              end=Vector((.4+.29*math.cos(ang),-.2+.29*math.sin(ang),z+.23))
+              d=end-start
+              mb.cylinder(start,d.normalized(),.025,d.length,10,W,.8,rand=.45)
+          detail=mb.build({m.name:m for m in bpy.data.materials},furniture.users_collection[0])
+          assert bpy.data.objects.get('GEO_AIDANHOUSE_INT_JOINERY_C03')
+          assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
+          assert all([list(x) for x in bpy.data.objects[n].matrix_world]==m for n,m in anchors.items())
+          render('candidate')
+          assert all(im.packed_file for im in bpy.data.images if im.source=='FILE')
+          path=out/'aidan_interior_c03.blend'
+          bpy.ops.wm.save_as_mainfile(filepath=str(path),compress=True)
+          bpy.ops.wm.open_mainfile(filepath=str(path))
+          assert bpy.data.objects[furniture.name if False else 'GEO_AIDANHOUSE_INT_FURNITURE'].modifiers.get('Interior furniture softened joinery')
+          assert all(signature(bpy.data.objects[n])==h for n,h in protected.items())
+          (out/'qa.json').write_text(json.dumps(dict(status='CANDIDATE',G1='BLOCKED',G2='NOT_RUN',G3='NOT_RUN',G4='NOT_RUN',native_reopen=True,protected_meshes=len(protected),anchors_preserved=len(anchors),textile_materials=changes,joinery='cupboard frames, strap hinges, knobs, table stretchers',bevel_BU=.006,restored_maps=restored,source_provenance='Historical QA SHA mismatch remains unresolved'),indent=2))
+          PY
+          /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/refine.py
+          sha256sum -c /tmp/blueprint/source.sha256
+          cd /tmp/blueprint
+          sha256sum *.png *.blend *.json source.sha256 texture.sha256 > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aidan-interior-c03
+          path: /tmp/blueprint
+          retention-days: 7

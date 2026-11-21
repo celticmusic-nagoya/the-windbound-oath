@@ -1,0 +1,154 @@
+name: Aidan house measured blueprint
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/aidan-measured-blueprint.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aidan-measured-blueprint
+  cancel-in-progress: false
+jobs:
+  blueprint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d477176179af046db7ef86f3bdf8bbe92e47b1d2
+          persist-credentials: false
+      - name: Install verified Blender
+        run: |
+          set -eu
+          base=https://mirror.blender.org/release/Blender5.3
+          archive=blender-5.3.0-linux-x64.tar.xz
+          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
+          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
+          grep "$archive" sums | sha256sum -c -
+          mkdir -p /tmp/blender /tmp/blueprint
+          tar -xJf "$archive" -C /tmp/blender --strip-components=1
+      - name: Extract exact mesh coordinates and measured drawings
+        run: |
+          source=assets/candidates/LIND-HOME-01/aidan_house_f9_c01/aidan_house_f9_c01.blend
+          test "$(git hash-object "$source")" = "0b10bcb3a317b9265631eca84e36b29d7faad6b2"
+          sha256sum "$source" | tee /tmp/blueprint/source.sha256
+          export SOURCE_SHA="$(sha256sum "$source" | cut -d' ' -f1)"
+          printf '%s\n' 'Previous QA SHA mismatch; pinned Git blob verified; candidate provenance discrepancy requires review.' > /tmp/blueprint/provenance-warning.txt
+          cat >/tmp/measure.py <<'PY'
+          import bpy,json,math,html,gzip,os
+          from pathlib import Path
+          from mathutils import Vector
+          assert tuple(bpy.app.version)==(5,3,0)
+          out=Path('/tmp/blueprint')
+          def xyz(v): return [round(float(x),6) for x in v]
+          rows=[]
+          anchors=[]
+          meshes=[]
+          for o in sorted(bpy.context.scene.objects,key=lambda a:a.name):
+              if o.type=='EMPTY':
+                  anchors.append(dict(name=o.name,transform=[list(x) for x in o.matrix_world]))
+              if o.type!='MESH': continue
+              m=o.data
+              vs=[xyz(o.matrix_world@v.co) for v in m.vertices]
+              if not vs: continue
+              lo=[min(v[i] for v in vs) for i in range(3)]
+              hi=[max(v[i] for v in vs) for i in range(3)]
+              m.calc_loop_triangles()
+              row=dict(name=o.name,collections=[c.name for c in o.users_collection],bounds=[lo,hi],size=[round(b-a,6) for a,b in zip(lo,hi)],vertices=len(vs),faces=len(m.polygons),triangles=len(m.loop_triangles),materials=[x.name if x else None for x in m.materials],hidden_render=o.hide_render)
+              rows.append(row)
+              meshes.append(dict(**row,coordinates=vs,polygons=[list(p.vertices) for p in m.polygons],material_indices=[p.material_index for p in m.polygons]))
+          assert rows and anchors
+          with gzip.open(out/'mesh-coordinates.json.gz','wt') as f:json.dump(meshes,f,separators=(',',':'))
+          (out/'measurements.json').write_text(json.dumps(dict(status='MEASURED_CANDIDATE_NOT_CANON',source_commit='d477176179af046db7ef86f3bdf8bbe92e47b1d2',source_sha256=os.environ['SOURCE_SHA'],previous_qa_sha256='3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9',provenance='G1_BLOCKED_QA_HASH_MISMATCH',units='provisional BU',objects=rows,anchors=anchors),indent=2))
+          # Exact face-plane intersections; no inferred hidden geometry or bounding-box floor plan.
+          geo=[m for m in meshes if m['name'].startswith('GEO_') and not m['hidden_render']]
+          assert geo
+          for name,axis,level,u,v in [('floor-cut',2,1.0,0,1),('longitudinal-section',1,0.0,0,2),('transverse-section',0,0.0,1,2)]:
+              seg=[]
+              for m in geo:
+                  for p in m['polygons']:
+                      pts=[]
+                      for i,j in zip(p,p[1:]+p[:1]):
+                          a,b=m['coordinates'][i],m['coordinates'][j]
+                          if (a[axis]<=level<b[axis]) or (b[axis]<=level<a[axis]):
+                              t=(level-a[axis])/(b[axis]-a[axis])
+                              pts.append((a[u]+t*(b[u]-a[u]),a[v]+t*(b[v]-a[v])))
+                      for a,b in zip(pts[::2],pts[1::2]):seg.append((a,b))
+              assert seg,name
+              xs=[p[0] for pair in seg for p in pair];ys=[p[1] for pair in seg for p in pair]
+              xmin,xmax,ymin,ymax=min(xs),max(xs),min(ys),max(ys)
+              k=min(1000/max(xmax-xmin,.1),650/max(ymax-ymin,.1))
+              def pt(a):return (100+(a[0]-xmin)*k,100+(ymax-a[1])*k)
+              lines=['<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850"><rect width="1200" height="850" fill="#f8fafc"/>',f'<text x="50" y="35" font-size="22">{name} | measured candidate | plane {axis}={level} BU</text>']
+              for a,b in seg:
+                  x,y=pt(a);X,Y=pt(b)
+                  lines.append(f'<path d="M{x:.3f} {y:.3f} L{X:.3f} {Y:.3f}" fill="none" stroke="#243c55" stroke-width="0.65"/>')
+              lines.append(f'<path d="M100 790 h{k}" stroke="black" stroke-width="3"/><text x="100" y="820" font-size="14">1 BU | section span {xmax-xmin:.3f} x {ymax-ymin:.3f} BU</text></svg>')
+              (out/(name+'.svg')).write_text(''.join(lines))
+          # Orthographic architectural views from exact pinned native geometry.
+          scene=bpy.context.scene
+          cam=bpy.data.objects.new('BLUEPRINT_CAMERA',bpy.data.cameras.new('BLUEPRINT_CAMERA'))
+          scene.collection.objects.link(cam)
+          scene.camera=cam
+          cam.data.type='ORTHO'
+          cam.data.ortho_scale=15
+          scene.render.engine='CYCLES'
+          scene.cycles.device='CPU'
+          scene.cycles.samples=12
+          scene.cycles.use_denoising=True
+          scene.render.threads_mode='FIXED'
+          scene.render.threads=2
+          # Override materials for technical clay views; no external texture dependence.
+          clay=bpy.data.materials.new('BLUEPRINT_CLAY')
+          clay.diffuse_color=(.65,.68,.72,1)
+          scene.view_layers[0].material_override=clay
+          scene.world=bpy.data.worlds.new('BLUEPRINT_WORLD')
+          scene.world.use_nodes=True
+          scene.world.node_tree.nodes['Background'].inputs[0].default_value=(.5,.5,.5,1)
+          scene.world.node_tree.nodes['Background'].inputs[1].default_value=.7
+          for ob in scene.objects:
+              if ob.type=='LIGHT':ob.hide_render=True
+          for pos,power in [((4,-6,12),2200),((-7,5,10),1600)]:
+              ld=bpy.data.lights.new('BLUEPRINT_AREA','AREA')
+              ld.energy=power
+              ld.shape='DISK'
+              ld.size=8
+              lo=bpy.data.objects.new(ld.name,ld)
+              scene.collection.objects.link(lo)
+              lo.location=pos
+              lo.rotation_euler=(-lo.location).to_track_quat('-Z','Y').to_euler()
+          scene.render.resolution_x=1200
+          scene.render.resolution_y=900
+          scene.render.resolution_percentage=100
+          scene.render.image_settings.file_format='PNG'
+          original={o.name:o.hide_render for o in scene.objects}
+          for o in scene.objects:
+              if o.type=='MESH' and not o.name.startswith('GEO_'): o.hide_render=True
+          def view(name,pos,target,scale):
+              cam.location=pos
+              cam.rotation_euler=(Vector(target)-cam.location).to_track_quat('-Z','Y').to_euler()
+              cam.data.ortho_scale=scale
+              scene.render.filepath=str(out/(name+'.png'))
+              bpy.ops.render.render(write_still=True)
+          for name,pos in [('exterior-front',(0,-25,3)),('exterior-rear',(0,25,3)),('exterior-left',(-25,0,3)),('exterior-right',(25,0,3)),('exterior-roof',(0,0,25))]:
+              view(name,pos,(0,0,3),15)
+          # Interior furniture and floor only: isolated module, not a complete wall cutaway.
+          for o in scene.objects:
+              if o.type=='MESH': o.hide_render=not (o.name.startswith('GEO_AIDANHOUSE_INT_') and 'CEILING' not in o.name)
+          view('interior-floor-furniture',(0,0,25),(0,0,0),10)
+          view('interior-axonometric',(12,-15,18),(0,0,0),12)
+          for o in scene.objects:
+              if o.name in original:o.hide_render=original[o.name]
+          print('MEASURED_BLUEPRINT_CREATED',len(rows),len(anchors))
+          PY
+          /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/measure.py
+          sha256sum -c /tmp/blueprint/source.sha256
+          cd /tmp/blueprint
+          sha256sum *.png *.svg *.json *.gz source.sha256 provenance-warning.txt > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aidan-measured-blueprint
+          path: /tmp/blueprint
+          retention-days: 7
