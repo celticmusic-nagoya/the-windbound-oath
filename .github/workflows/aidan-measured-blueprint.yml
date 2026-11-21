@@ -31,9 +31,12 @@ jobs:
       - name: Extract exact mesh coordinates and measured drawings
         run: |
           source=assets/candidates/LIND-HOME-01/aidan_house_f9_c01/aidan_house_f9_c01.blend
-          echo "3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9  $source" | sha256sum -c -
+          test "$(git hash-object "$source")" = "0b10bcb3a317b9265631eca84e36b29d7faad6b2"
+          sha256sum "$source" | tee /tmp/blueprint/source.sha256
+          export SOURCE_SHA="$(sha256sum "$source" | cut -d' ' -f1)"
+          printf '%s\n' 'Previous QA SHA mismatch; pinned Git blob verified; candidate provenance discrepancy requires review.' > /tmp/blueprint/provenance-warning.txt
           cat >/tmp/measure.py <<'PY'
-          import bpy,json,math,html,gzip
+          import bpy,json,math,html,gzip,os
           from pathlib import Path
           from mathutils import Vector
           assert tuple(bpy.app.version)==(5,3,0)
@@ -57,7 +60,7 @@ jobs:
               meshes.append(dict(**row,coordinates=vs,polygons=[list(p.vertices) for p in m.polygons],material_indices=[p.material_index for p in m.polygons]))
           assert rows and anchors
           with gzip.open(out/'mesh-coordinates.json.gz','wt') as f:json.dump(meshes,f,separators=(',',':'))
-          (out/'measurements.json').write_text(json.dumps(dict(status='MEASURED_CANDIDATE_NOT_CANON',source_commit='d477176179af046db7ef86f3bdf8bbe92e47b1d2',source_sha256='3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9',units='provisional BU',objects=rows,anchors=anchors),indent=2))
+          (out/'measurements.json').write_text(json.dumps(dict(status='MEASURED_CANDIDATE_NOT_CANON',source_commit='d477176179af046db7ef86f3bdf8bbe92e47b1d2',source_sha256=os.environ['SOURCE_SHA'],previous_qa_sha256='3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9',provenance='G1_BLOCKED_QA_HASH_MISMATCH',units='provisional BU',objects=rows,anchors=anchors),indent=2))
           # Exact face-plane intersections; no inferred hidden geometry or bounding-box floor plan.
           geo=[m for m in meshes if m['name'].startswith('GEO_') and not m['hidden_render']]
           assert geo
@@ -86,9 +89,9 @@ jobs:
           print('MEASURED_BLUEPRINT_CREATED',len(rows),len(anchors))
           PY
           /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python /tmp/measure.py
-          echo "3a18c72842a5e998881d4b8cf39860499a48f3d87dad4f7ce99bb0ef026fb4e9  $source" | sha256sum -c -
+          sha256sum -c /tmp/blueprint/source.sha256
           cd /tmp/blueprint
-          sha256sum *.svg *.json *.gz > SHA256SUMS
+          sha256sum *.svg *.json *.gz source.sha256 provenance-warning.txt > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
