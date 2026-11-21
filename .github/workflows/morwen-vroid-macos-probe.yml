@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14675018048/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "4abfd75b517e7b12cf693bf8aa81e02f9e208a2930ab07726927b3a0f194aac6  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14679101433/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "0c34affa1b58f997afb3b1df9af514c0b6f200994002f4d6ecb4aed0583794e6  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="4b64322f84fb58748e417b338e619e763ce7b647476dd33f349c511ffb3673cf"
+              assert hashlib.sha256(data).hexdigest()==expected=="dfb71cead8d82ee51a273988633a715b2c577423a06b151fa1d9cfbf41ab523c"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -215,22 +215,28 @@ jobs:
               "$gui" click 0.742 0.206
               sleep 2
               capture_state hair-color-control
-              # Popup geometry verified from run 44827943572: inner hex field x727 y135.
+              # Actual popup from run 44835557221, 1024x768. Hue ring center 687,270 radius 95;
+              # SV square 628..745 x 212..329. Target provisional HSV 300deg, .383, .420.
               if [ "$(grep -o '#825A46' evidence/hair-color-control.txt | wc -l | tr -d ' ')" -ge 2 ]; then
-                "$gui" click 0.710 0.176
-                "$gui" key 0 cmd
-                "$gui" text '#6B426B'
-                "$gui" key 36
+                "$gui" click 0.591 0.290
                 sleep 2
-                capture_state hair-color-entered
+                capture_state hair-hue-selected
+                "$gui" click 0.657 0.365
+                sleep 2
+                capture_state hair-sv-selected
                 "$gui" click 0.43 0.18
                 sleep 2
                 capture_state hair-color-closed
-                if grep -Fiq '#6B426B' evidence/hair-color-closed.txt; then
-                  echo COLOR_VALUE_CHANGED_REVIEW_REQUIRED > evidence/hair-color-status.txt
-                else
-                  echo COLOR_CHANGE_NOT_VERIFIED > evidence/hair-color-status.txt
-                fi
+                python3 - <<'PY'
+          import re,colorsys,pathlib,json
+          s=pathlib.Path("evidence/hair-color-closed.txt").read_text()
+          colors=re.findall(r"#[0-9a-fA-F]{6}",s)
+          target=(107,66,107)
+          rgb=[tuple(bytes.fromhex(x[1:])) for x in colors]
+          ok=any(max(abs(a-b) for a,b in zip(v,target))<=18 and abs(v[0]-v[2])<=18 and v[1]<min(v[0],v[2]) for v in rgb)
+          pathlib.Path("evidence/hair-color-status.txt").write_text("PURPLE_APPROX_REVIEW_REQUIRED\n" if ok else "COLOR_CHANGE_NOT_VERIFIED\n")
+          pathlib.Path("evidence/hair-color-qa.json").write_text(json.dumps(dict(observed=colors,target="#6B426B",approximate_match=ok)))
+          PY
               fi
               capture_state hair-authored
             fi
