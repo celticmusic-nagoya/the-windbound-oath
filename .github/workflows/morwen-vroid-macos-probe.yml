@@ -21,6 +21,56 @@ jobs:
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
           "$RUNNER_TEMP/two-gui" screenshot evidence/gui-compile-screen.png
           "$RUNNER_TEMP/two-gui" ocr evidence/gui-compile-screen.png > evidence/gui-compile-ocr.txt
+          cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
+          import Foundation
+          import Vision
+          import AppKit
+          let request = VNRecognizeTextRequest()
+          request.recognitionLevel = .accurate
+          request.usesLanguageCorrection = false
+          let args = CommandLine.arguments
+          try VNImageRequestHandler(url: URL(fileURLWithPath: args[1])).perform([request])
+          let rows = request.results ?? []
+          let labels = rows.filter {
+              $0.boundingBox.minX > 0.71 && $0.boundingBox.midX < 0.91
+                  && $0.topCandidates(1).first?.string
+                      .trimmingCharacters(in: .whitespacesAndNewlines)
+                      .range(of: args[2], options: [.regularExpression, .caseInsensitive]) != nil
+          }
+          guard labels.count == 1, let label = labels.first else { exit(2) }
+          let fields = rows.filter {
+              $0.boundingBox.midX > 0.92
+                  && abs($0.boundingBox.midY - label.boundingBox.midY) < 0.018
+                  && $0.topCandidates(1).first?.string.range(
+                      of: #"^[−-]?\d+\.\d{3}$"#, options: .regularExpression
+                  ) != nil
+          }
+          guard fields.count == 1, let field = fields.first,
+                let value = field.topCandidates(1).first?.string else { exit(2) }
+          let png = try Data(contentsOf: URL(fileURLWithPath: args[1]))
+          guard let image = NSBitmapImageRep(data: png) else { exit(2) }
+          let w = image.pixelsWide, h = image.pixelsHigh
+          let fieldY = 1 - field.boundingBox.midY
+          let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
+          guard expectedY + 9 < h else { exit(2) }
+          var xs: [Int] = [], ys: [Int] = []
+          for y in (expectedY - 9)...(expectedY + 9) {
+              for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
+                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(NSColorSpace.deviceRGB) else { continue }
+                  if c.blueComponent > 0.78 && c.redComponent < 0.22
+                      && c.greenComponent > 0.30 && c.greenComponent < 0.82 {
+                      xs.append(x)
+                      ys.append(y)
+                  }
+              }
+          }
+          guard let minX = xs.min(), let maxX = xs.max(), maxX - minX <= 35,
+                let minY = ys.min(), let maxY = ys.max() else { exit(2) }
+          print(value.replacingOccurrences(of: "−", with: "-"),
+                Double(minX + maxX) / (2 * Double(w)),
+                Double(minY + maxY) / (2 * Double(h)))
+          SWIFT
+          swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
       - name: Environment
         run: |
           mkdir -p evidence
@@ -202,55 +252,6 @@ jobs:
           fi
           screencapture -x evidence/final-recovery-screen.png || true
           # OCR the parameter row and its numeric field in the right-hand panel.
-          cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
-          import Foundation
-          import Vision
-          import AppKit
-          let request = VNRecognizeTextRequest()
-          request.recognitionLevel = .accurate
-          request.usesLanguageCorrection = false
-          let args = CommandLine.arguments
-          try VNImageRequestHandler(url: URL(fileURLWithPath: args[1])).perform([request])
-          let rows = request.results ?? []
-          let labels = rows.filter {
-              $0.boundingBox.minX > 0.71 && $0.boundingBox.midX < 0.91
-                  && $0.topCandidates(1).first?.string
-                      .trimmingCharacters(in: .whitespacesAndNewlines)
-                      .range(of: args[2], options: [.regularExpression, .caseInsensitive]) != nil
-          }
-          guard labels.count == 1, let label = labels.first else { exit(2) }
-          let fields = rows.filter {
-              $0.boundingBox.midX > 0.92
-                  && abs($0.boundingBox.midY - label.boundingBox.midY) < 0.018
-                  && $0.topCandidates(1).first?.string.range(
-                      of: #"^[−-]?\d+\.\d{3}$"#, options: .regularExpression
-                  ) != nil
-          }
-          guard fields.count == 1, let field = fields.first,
-                let value = field.topCandidates(1).first?.string else { exit(2) }
-          let image = NSBitmapImageRep(contentsOfFile: args[1])!
-          let w = image.pixelsWide, h = image.pixelsHigh
-          let fieldY = 1 - field.boundingBox.midY
-          let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
-          guard expectedY + 9 < h else { exit(2) }
-          var xs: [Int] = [], ys: [Int] = []
-          for y in (expectedY - 9)...(expectedY + 9) {
-              for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
-                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
-                  if c.blueComponent > 0.78 && c.redComponent < 0.22
-                      && c.greenComponent > 0.30 && c.greenComponent < 0.82 {
-                      xs.append(x)
-                      ys.append(y)
-                  }
-              }
-          }
-          guard let minX = xs.min(), let maxX = xs.max(), maxX - minX <= 35,
-                let minY = ys.min(), let maxY = ys.max() else { exit(2) }
-          print(value.replacingOccurrences(of: "−", with: "-"),
-                Double(minX + maxX) / (2 * Double(w)),
-                Double(minY + maxY) / (2 * Double(h)))
-          SWIFT
-          swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
           row="$RUNNER_TEMP/face-row"
           select_face_panel() {
             "$gui" click 0.095 0.099
