@@ -40,8 +40,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14679101433/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "0c34affa1b58f997afb3b1df9af514c0b6f200994002f4d6ecb4aed0583794e6  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14681343932/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "b308744a97702158109fd42bfff05ab0b0a31e2369adc836358a0dd0e4593860  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -50,7 +50,7 @@ jobs:
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
               expected=z.read("model-sha256.txt").decode().split()[0]
-              assert hashlib.sha256(data).hexdigest()==expected=="dfb71cead8d82ee51a273988633a715b2c577423a06b151fa1d9cfbf41ab523c"
+              assert hashlib.sha256(data).hexdigest()==expected=="b68621fcfc9d50b045192a0fc2db7e1cbdeb2c191d97283f8ff8e4a30f0fa9b6"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -240,11 +240,36 @@ jobs:
               fi
               capture_state hair-authored
             fi
+            # Preserve proven purple before further authoring; candidate only.
+            capture_state purple-reopened
+            if ! grep -Fiq '#6A426A' evidence/purple-reopened.txt; then
+              echo BLOCKED_PURPLE_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt
+              exit 1
+            fi
+            "$gui" vroid-shortcut face
+            sleep 3
+            capture_state face-refinement-before
+            if grep -Fq 'Rotate Eye Socket' evidence/face-refinement-before.txt && grep -Fq -- '-0.749' evidence/face-refinement-before.txt; then
+              "$gui" slider 0.766 0.600 0.825 0.600 0.6
+              sleep 2
+              capture_state face-socket-refined
+              if grep -Fq 'Eye Size Y' evidence/face-socket-refined.txt && grep -Fq '0.361' evidence/face-socket-refined.txt; then
+                "$gui" slider 0.889 0.327 0.875 0.327 0.6
+                sleep 2
+                capture_state face-refined
+              fi
+            fi
             for tab in body outfit; do
               if [ "$tab" = body ]; then "$gui" click 0.295 0.099; else "$gui" click 0.384 0.099; fi
               sleep 3
               capture_state "authoring-$tab"
             done
+            # Reversible clothing base candidate, not official uniform.
+            if grep -Fq 'Whole Sets' evidence/authoring-outfit.txt; then
+              "$gui" click 0.118 0.535
+              sleep 4
+              capture_state outfit-tailored-base
+            fi
             "$gui" click 0.095 0.099
             sleep 3
             capture_state pre-save
