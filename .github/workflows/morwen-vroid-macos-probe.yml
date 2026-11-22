@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: feature/morwen-artdirected-sculpt-20261119
+          ref: ${{ github.event_name == 'push' && github.sha || 'feature/morwen-artdirected-sculpt-20261119' }}
           persist-credentials: false
       - name: Exact checkout preflight
         run: |
@@ -35,7 +35,7 @@ jobs:
           bash -n tools/production_qa/morwen_vroid_session.sh
           bash -n tools/production_qa/morwen_phase1_author.sh
           python3 -m py_compile tools/production_qa/morwen_blueprint_engine.py
-          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-targets.json
+          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-targets.json --diagnostic-face tools/morwen_authored_sculpt/native_face_observation_trial_v1.json
           shasum -a 256 tools/production_qa/morwen_phase1_author.sh > evidence/author-script-sha256.txt
       - name: Compile shared GUI controls
         run: |
