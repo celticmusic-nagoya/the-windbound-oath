@@ -36,6 +36,22 @@ try{
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:/モルウェン/}).click();
  if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('公開用成果物はまだ同期されていません。').isVisible());
+ if(morwen.length>=2){
+ await page.getByRole('button',{name:'画像比較',exact:true}).click();
+ const dialog=page.locator('dialog');
+ await dialog.getByRole('combobox',{name:'比較A'}).selectOption('0');
+ await dialog.getByRole('combobox',{name:'比較B'}).selectOption('1');
+ const imgs=dialog.locator('img');
+ assert.equal(await imgs.count(),2);
+ for(const img of await imgs.all())await img.evaluate(e=>e.decode());
+ assert.notEqual(await imgs.nth(0).getAttribute('src'),await imgs.nth(1).getAttribute('src'));
+ const a=await imgs.nth(0).boundingBox(),b=await imgs.nth(1).boundingBox();
+ assert.ok(a.x+a.width<=b.x+1);
+ assert.ok(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+ await dialog.screenshot({path:'gallery-qa/compare-mobile.png'});
+ await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
+ assert.equal(await page.locator('dialog').count(),0);
+ }
  assert.deepEqual(errors,[]);
  console.log('PASS: production images decoded; SHA-256 verified; mobile width.');
 }finally{await browser?.close();server.kill();}
