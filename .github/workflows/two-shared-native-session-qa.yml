@@ -45,6 +45,27 @@ jobs:
           assert time.monotonic()-started<5
           print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
           PY
+      - name: Recovery preflight negative cases
+        run: |
+          PYTHONPATH=tools/production_qa python3 - <<'PY'
+          from shared_recovery_preflight import recovery_preflight
+          token="a"*40
+          record=dict(token=token,run_id=123,run_attempt=2,head="b"*40)
+          run=dict(id=123,run_attempt=2,head_sha="b"*40,status="completed",conclusion="failure")
+          assert recovery_preflight(record,token,run,True,True)["decision"]=="REVIEW_REQUIRED"
+          cases=[(record,"c"*40,run,True,True),
+                 (record,token,{**run,"status":"in_progress"},True,True),
+                 (record,token,{**run,"run_attempt":1},True,True),
+                 (record,token,{**run,"head_sha":"c"*40},True,True),
+                 (record,token,{**run,"id":124},True,True),
+                 (record,token,run,False,True),
+                 (record,token,run,True,False)]
+          for args in cases:
+              try: recovery_preflight(*args)
+              except RuntimeError: pass
+              else: raise AssertionError("unsafe recovery accepted")
+          print("RECOVERY_PREFLIGHT_PASS")
+          PY
       - name: Publish result
         if: always()
         env:
