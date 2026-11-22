@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  actions: read
   statuses: write
 concurrency:
   group: two-shared-native-session-qualification
@@ -18,52 +19,109 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Qualify dynamic controller with remote durable checkpoints
+      - name: Verify runner and restore immutable checkpoint
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test "$(gh api repos/$GITHUB_REPOSITORY --jq .visibility)" = public
           test "$RUNNER_ENVIRONMENT" = github-hosted
+          for status in in_progress queued waiting pending requested; do
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?per_page=100&status=$status" --jq '.workflow_runs[] | [.id,.name,.head_branch] | @tsv'
+          done > /tmp/active
+          if awk -F '\t' -v self="$GITHUB_RUN_ID" '$1!=self && ($2 ~ /Aidan|Rilde|LIND.*HOME|HOME cross-run/ || $3=="feature/lind-village-world-integration-plan-01"){found=1} END{exit !found}' /tmp/active; then exit 1; fi
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14742392508/zip" > /tmp/home.zip
+          echo '42e2f9c6ee3d7da2047301015d65c05c5a670947e28490a09befc1a76c81bac9  /tmp/home.zip' | sha256sum -c -
+          mkdir -p /tmp/restored /tmp/evidence
+          unzip -q /tmp/home.zip -d /tmp/restored
+          (cd /tmp/restored && sha256sum -c SHA256SUMS)
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          echo LIBGL_ALWAYS_SOFTWARE=1 >> "$GITHUB_ENV"
+          echo EGL_PLATFORM=surfaceless >> "$GITHUB_ENV"
+      - name: Install verified Blender
+        run: |
+          set -eu
+          base=https://mirror.blender.org/release/Blender5.3
+          archive=blender-5.3.0-linux-x64.tar.xz
+          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
+          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
+          grep "$archive" sums | sha256sum -c -
+          mkdir -p /tmp/blender /tmp/blueprint
+          tar -xJf "$archive" -C /tmp/blender --strip-components=1
+          /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Native checkpoint production under shared lease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
           gh auth setup-git
+          cat >/tmp/native.py <<'PY'
+          import bpy,sys,json
+          from pathlib import Path
+          args=sys.argv[sys.argv.index('--')+1:]
+          stage,target=args
+          s=bpy.context.scene
+          if stage=='lighting':
+              # Reversible candidate-only exposure adjustment.
+              s.view_settings.exposure += 0.35
+          elif stage=='material':
+              # Preserve geometry and materials; set preview sampling only.
+              s.cycles.samples=32
+              s.cycles.use_denoising=True
+          else:raise RuntimeError(stage)
+          bpy.ops.wm.save_as_mainfile(filepath=target)
+          bpy.ops.wm.open_mainfile(filepath=target)
+          assert len(bpy.data.objects)>0
+          if stage=='material':assert bpy.context.scene.cycles.samples==32
+          PY
           python3 - <<'PY'
-          import os,sys,tempfile,json,hashlib,subprocess,base64
+          import sys,os,subprocess,hashlib,json
           from pathlib import Path
           sys.path.insert(0,'tools/production_qa')
           from shared_session_controller import run
           from shared_asset_lease import assert_owned
           from session_plan import sha
-          repo=os.environ['GITHUB_REPOSITORY']; head=os.environ['GITHUB_SHA']
-          asset='QA-DAG-'+os.environ['GITHUB_RUN_ID']+'-'+os.environ['GITHUB_RUN_ATTEMPT']
-          stages=[dict(id=k,deps=d,qualified=True,seconds=60,fingerprint=hashlib.sha256((head+k).encode()).hexdigest()) for k,d in [('geometry',[]),('material',['geometry']),('qa',['material'])]]
-          with tempfile.TemporaryDirectory() as d:
-              root=Path(d);done={};calls=[]
-              def execute(stage,token):
-                  assert_owned('origin',asset,token)
-                  p=root/(stage['id']+'.json')
-                  p.write_text(json.dumps({'id':stage['id'],'deps':stage['deps']}))
-                  assert json.loads(p.read_text())['id']==stage['id']
-                  calls.append(stage['id'])
-                  return dict(path=p.name,reopened=True,sha256=sha(p),fingerprint=stage['fingerprint'])
-              def persist(state,token):
-                  assert_owned('origin',asset,token)
-                  payload=json.dumps({'state':state,'files':{k:base64.b64encode((root/v['path']).read_bytes()).decode() for k,v in state.items()}},sort_keys=True)
-                  obj=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/blobs','-f','encoding=utf-8','-f','content='+payload],text=True))['sha']
-                  actual=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/{obj}'],text=True))
-                  assert base64.b64decode(actual['content']).decode()==payload
-                  # Pin checkpoint in a Git commit.
-                  # A Git blob alone is not durable: pin checkpoint in a tree and commit.
-                  tree=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input','-'],input=json.dumps({'tree':[{'path':'checkpoint.json','mode':'100644','type':'blob','sha':obj}]}),text=True))['sha']
-                  commit=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/commits','-f','message=QA synthetic checkpoint '+str(__import__('uuid').uuid4()),'-f','tree='+tree],text=True))['sha']
-                  ref='refs/tags/two-session-qa/'+asset+'/'+commit
-                  subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/refs','-f','ref='+ref,'-f','sha='+commit],text=True)
-                  assert json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/ref/'+ref[5:]],text=True))['object']['sha']==commit
-                  return True
-              assert run('origin',asset,head,root,stages,done,execute,persist)==['geometry','material','qa']
-              assert run('origin',asset,head,root,stages,done,execute,persist)==[]
-              assert calls==['geometry','material','qa']
-              print('DYNAMIC_DAG_REMOTE_CHECKPOINT_PASS',calls)
+          root=Path('/tmp/evidence'); source=Path('/tmp/restored/home_furniture_candidate.blend')
+          head=os.environ['GITHUB_SHA']; asset='QA-HOME-NATIVE-'+os.environ['GITHUB_RUN_ID']
+          fp=hashlib.sha256((sha(source)+sha(Path('/tmp/native.py'))+head+'Blender5.3.0').encode()).hexdigest()
+          stages=[dict(id=k,deps=d,qualified=True,seconds=900,fingerprint=hashlib.sha256((fp+k).encode()).hexdigest()) for k,d in [('lighting',[]),('material',['lighting'])]]
+          done={}
+          def execute(stage,token):
+              k=stage['id']; target=root/(k+'.blend')
+              src=source if k=='lighting' else root/'lighting.blend'
+              subprocess.run(['/tmp/blender/blender','-b','--disable-autoexec',str(src),'--python-exit-code','1','--python','/tmp/native.py','--',k,str(target)],check=True,timeout=600)
+              return dict(path=target.name,reopened=True,sha256=sha(target),fingerprint=stage['fingerprint'])
+          def persist(state,token):
+              # Native pilot uses immutable Git checkpoint commits in QA namespace,
+              # not main or asset branch; only synthetic qualification owner.
+              assert_owned('origin',asset,token)
+              env={**os.environ,'GIT_INDEX_FILE':'/tmp/two-native-index'}
+              def g(*args,stdin=None):
+                  return subprocess.check_output(['git',*args],input=stdin,text=True,env=env).strip()
+              g('read-tree','--empty')
+              for k,v in state.items():
+                  oid=g('hash-object','-w',str(root/v['path']))
+                  g('update-index','--add','--cacheinfo','100644',oid,v['path'])
+              ledger=root/'ledger.json';ledger.write_text(json.dumps(state,sort_keys=True))
+              oid=g('hash-object','-w',str(ledger))
+              g('update-index','--add','--cacheinfo','100644',oid,'ledger.json')
+              tree=g('write-tree')
+              commit=g('-c','user.name=TWO QA','-c','user.email=qa@invalid','commit-tree',tree,'-m','Native QA checkpoint '+str(__import__('uuid').uuid4()))
+              ref='refs/tags/two-session-qa/'+asset+'/'+commit
+              g('push','origin',commit+':'+ref)
+              assert g('ls-remote','--refs','origin',ref)==commit+'\t'+ref
+              return True
+          assert run('origin',asset,head,root,stages,done,execute,persist)==['lighting','material']
+          assert run('origin',asset,head,root,stages,done,execute,persist)==[]
+          print('NATIVE_DYNAMIC_CHECKPOINT_PASS',done)
           PY
+          cd /tmp/evidence
+          sha256sum *.blend *.json > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shared-native-pilot-${{ github.run_id }}
+          path: /tmp/evidence
       - name: Publish result
         if: always()
         env:
