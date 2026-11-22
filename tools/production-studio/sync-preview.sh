@@ -8,13 +8,15 @@ import json, subprocess, os
 from pathlib import Path
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
 assert len(selection)<=20
+active=[]
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
     assert type(a)==int and type(run)==int and min(a,run)>0
     repo=os.environ['GITHUB_REPOSITORY']
     meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}']))
     if meta['expired']:
-        raise RuntimeError(f'Artifact {a} expired; use preserved gallery copy before resync')
+        print(f'Artifact {a} expired; retaining previously published copy if available')
+        continue
     assert meta['workflow_run']['id']==run and meta['workflow_run']['head_sha']==x['head']
     assert 0 < meta['size_in_bytes'] <= 128*1024*1024
     x['created_at']=meta['created_at']
@@ -26,7 +28,8 @@ for x in selection:
     digest=meta.get('digest','')
     assert digest.startswith('sha256:') and hashlib.file_digest(target.open('rb'),'sha256').hexdigest()==digest[7:]
     assert target.stat().st_size <= 128*1024*1024
-(Path(os.environ['RUNNER_TEMP'])/'studio-selection.json').write_text(json.dumps(selection))
+    active.append(x)
+(Path(os.environ['RUNNER_TEMP'])/'studio-selection.json').write_text(json.dumps(active))
 PY
 python artifact-sync.py "$RUNNER_TEMP/studio-selection.json" "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site/published"
 npm install --ignore-scripts --no-audit --no-fund
