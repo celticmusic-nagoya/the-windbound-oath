@@ -19,6 +19,17 @@ mkdir -p evidence/checkpoints
 cp evidence/input-model.vroid evidence/checkpoints/00-input.vroid
 shasum -a 256 evidence/checkpoints/00-input.vroid > evidence/checkpoints/00-input.sha256
 views phase1-before 25
+# Read-only close-up evidence, separate from full-body and registered projections.
+# Relative zoom restored before continuing the existing native survey.
+for zoom_step in 6 12 18; do
+  "$gui" zoom 0.50 0.42 6 0
+  sleep 2
+  capture_state "face-measure-close-${zoom_step}" || { record face BLOCKED_CLOSE_CAPTURE; break; }
+done
+"$gui" zoom 0.50 0.42 -"${zoom_step}" 0
+sleep 2
+capture_state face-measure-restored
+record face CLOSEUP_CAPTURE_REVIEW_REQUIRED
 # Provisional small reversible trials: strengthen nose relief and widen mouth.
 # The exact native slider-to-projection mapping is not yet calibrated.
 record nose-size PRESERVED_PRIOR_CHECKPOINT
