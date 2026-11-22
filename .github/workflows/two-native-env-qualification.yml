@@ -44,6 +44,22 @@ jobs:
           bash -n tools/native_env/hairharpy_runtime.sh
           bash -n tools/native_env/hairharpy_gui_roundtrip.sh
           python3 -c "import yaml,sys; yaml.safe_load(open('.github/workflows/two-native-env-qualification.yml'))"
+      - name: Pinned #468 planner (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 5c067e518d4d764dc1499920fe4a2513340c96b9
+          path: engine468
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: Pinned #427 VRoid checkpoint publisher (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 340c693b70d8ed7cf26cd2df1ad04fa1ad25a4d0
+          path: owner427
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: VRoid checkpoint -> planner contract test (synthetic file, no VRoid run)
+        run: python3 tools/native_env/test_vroid_checkpoint_bridge.py engine468/tools/production_qa owner427/tools/production_qa
   blender-session:
     needs: mode
     if: needs.mode.outputs.session == 'run'
