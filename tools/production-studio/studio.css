@@ -4,3 +4,13 @@
 #published-gallery { grid-template-columns: repeat(auto-fit,minmax(min(100%,240px),1fr)); }
 #published-gallery .tile { min-width:0; overflow-wrap:anywhere; }
 #published-gallery img { display:block; width:100%; max-width:100%; height:auto; object-fit:contain; }
+
+#published-gallery.category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.category-card{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:0;padding:8px;overflow:hidden}
+#published-gallery .category-card img,.category-placeholder{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:8px}
+.category-placeholder{display:grid;place-items:center;background:#252b38;color:#b9c2d0}
+.category-back{grid-column:1/-1;justify-self:start}
+.gallery-image-button{display:block;padding:0;width:100%;border:0;background:transparent}
+.gallery-lightbox{max-width:96vw;max-height:94dvh;padding:8px;background:#141923;color:white;border:1px solid #566078;border-radius:12px}
+.gallery-lightbox img{display:block;max-width:90vw;max-height:78dvh;object-fit:contain;margin:auto}
+.gallery-lightbox::backdrop{background:#000b}
