@@ -71,6 +71,15 @@ jobs:
           ref: main
           path: shared-main
           persist-credentials: false
+      - name: Provision headless EGL and Mesa runtime
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          ldconfig -p | grep 'libEGL.so.1'
+          echo "LIBGL_ALWAYS_SOFTWARE=1" >> "$GITHUB_ENV"
+          echo "EGL_PLATFORM=surfaceless" >> "$GITHUB_ENV"
       - name: Install SHA-verified Blender 5.2.4
         timeout-minutes: 12
         run: |
