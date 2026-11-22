@@ -21,6 +21,6 @@ def ready(stages, completed, root, remaining, reserve):
     while pending:
         batch=[s for s in pending if not (set(s['deps']) & {x['id'] for x in pending})]
         for s in batch:
-            pending.remove(s); c=completed.get(s['id'],{}); p=root/c.get('path','')
-            if set(s['deps'])<=valid and c.get('fingerprint')==s['fingerprint'] and c.get('reopened') is True and p.is_file() and sha(p)==c.get('sha256'): valid.add(s['id'])
+            pending.remove(s); c=completed.get(s['id'],{}); p=(root/c.get('path','')).resolve()
+            if set(s['deps'])<=valid and c.get('fingerprint')==s['fingerprint'] and c.get('reopened') is True and p.is_relative_to(root.resolve()) and p.is_file() and sha(p)==c.get('sha256'): valid.add(s['id'])
     return [s['id'] for s in stages if s['id'] not in valid and set(s['deps'])<=valid and s.get('qualified') is True and 0<s['seconds']<=remaining-reserve]
