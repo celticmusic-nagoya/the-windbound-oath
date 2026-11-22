@@ -2,6 +2,14 @@ name: Morwen VRoid macOS compatibility probe
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    branches:
+      - feature/morwen-artdirected-sculpt-20261119
+    paths:
+      - tools/production_qa/morwen_phase1_author.sh
+      - tools/production_qa/morwen_vroid_session.sh
+      - tools/production_qa/macos_gui.swift
+      - .github/workflows/morwen-vroid-macos-probe.yml
 permissions:
   contents: read
   actions: read
