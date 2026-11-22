@@ -1,0 +1,120 @@
+name: C11 constrained boundary sculpt trial
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths: ['.github/workflows/lind-cliff-c11-boundary-sculpt-trial.yml']
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+concurrency:
+  group: lind-cliff-c11-blender-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      EGL_PLATFORM: surfaceless
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Reuse exact native model and existing baseline
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/diag
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14737506262/zip > /tmp/source.zip
+          echo '91d8424bc8c57d140dd37f370ecd0d31ee646c2708ab32d27fbbed028e99ee2a  /tmp/source.zip' | sha256sum -c -
+          unzip -q /tmp/source.zip -d /tmp/source
+          cd /tmp/source
+          sha256sum -c SHA256SUMS
+          echo 'e944606663507581dea6d65ca35de6f6779aed164b36e7273ca361be09a61c26  c11_method_e_block_sculpt_UNAPPROVED.blend' | sha256sum -c -
+      - name: Install qualified runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          test "$(git hash-object tools/production_qa/install_blender_530.sh)" = 4f49728f62b2f2e4d9b3a8f3cc1a5b27b79962ed
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender53
+      - name: Measure actual repair perimeter against exact Method C
+        run: |
+          set -euo pipefail
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14606190629/zip > /tmp/c.zip
+          unzip -p /tmp/c.zip c11_recess_patch_UNAPPROVED.blend > /tmp/c.blend
+          echo 'd0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545  /tmp/c.blend' | sha256sum -c -
+          cat > /tmp/measure.py <<'PY'
+          import bpy,bmesh,sys,json,math,statistics
+          from pathlib import Path
+          sys.path.insert(0,str(Path.cwd()/'tools/production_qa/lind_blueprint'))
+          import c11_method_d4_joint_facets as d4
+          target="Cliff C8 B | joinable coastal segment"
+          bpy.ops.wm.open_mainfile(filepath='/tmp/c.blend')
+          m=bpy.data.objects[target].data
+          original={d4.fkey([m.vertices[i].co for i in p.vertices]) for p in m.polygons}
+          bpy.ops.wm.open_mainfile(filepath='/tmp/source/c11_method_e_block_sculpt_UNAPPROVED.blend')
+          obj=bpy.data.objects[target]
+          bm=bmesh.new(); bm.from_mesh(obj.data); bm.normal_update()
+          bm.verts.index_update(); bm.edges.index_update()
+          repair={f for f in bm.faces if d4.fkey([v.co for v in f.verts]) not in original}
+          perimeter=[e for e in bm.edges if len(e.link_faces)==2 and sum(f in repair for f in e.link_faces)==1]
+          assert repair and perimeter
+          rows=[]
+          for e in perimeter:
+              rows.append(dict(edge=e.index,vertices=[v.index for v in e.verts],midpoint=list((e.verts[0].co+e.verts[1].co)/2),length=e.calc_length(),angle_deg=math.degrees(e.calc_face_angle()),sharp=not e.smooth))
+          rows.sort(key=lambda r:r['angle_deg'],reverse=True)
+          protected={v for f in bm.faces if f not in repair for v in f.verts}
+          movable={v for f in repair for v in f.verts if v not in protected and all(e.smooth for e in v.link_edges)}
+          result=dict(repair_faces=len(repair),perimeter_edges=len(rows),protected_vertices=len(protected),smooth_interior_vertices=len(movable),angle_median_deg=statistics.median(r['angle_deg'] for r in rows),angle_max_deg=rows[0]['angle_deg'],edges=rows,G2='FAIL')
+          Path('/tmp/diag/boundary.json').write_text(json.dumps(result,indent=2))
+          print({k:v for k,v in result.items() if k!='edges'})
+          # Trial: move only unprotected smooth interior vertices adjacent to
+          # extreme perimeter folds, along depth; retain the authored sharp tags.
+          import numpy as np
+          from mathutils import Vector
+          extreme=[e for e in perimeter if e.calc_face_angle()>math.radians(120)]
+          targets={v for e in extreme for f in e.link_faces if f in repair for v in f.verts if v in movable}
+          affected={e for v in targets for f in v.link_faces for e in f.edges if len(e.link_faces)==2}
+          def score():
+              bm.normal_update()
+              return sum(max(0,e.calc_face_angle()-math.radians(120))**2 for e in extreme)
+          base=score()
+          initial={v:v.co.copy() for v in targets}
+          for step in (0.025,0.0125,0.00625):
+              for v in sorted(targets,key=lambda v:v.index):
+                  old=v.co.copy(); best=score(); chosen=old.copy()
+                  for sign in (-1,1):
+                      v.co=old+Vector((0,sign*step,0))
+                      if (v.co-initial[v]).length>0.05: continue
+                      val=score()
+                      if val<best: best=val; chosen=v.co.copy()
+                  v.co=chosen
+          end=score()
+          result['trial']={'eligible':len(targets),'changed':sum((v.co-initial[v]).length>1e-7 for v in targets),'score_before':base,'score_after':end,'max_displacement':max(((v.co-initial[v]).length for v in targets),default=0)}
+          Path('/tmp/diag/boundary.json').write_text(json.dumps(result,indent=2))
+          # Do not promote a weak candidate or overwrite input.
+          assert base>0 and end<base*0.9, 'Insufficient improvement; STOP'
+          before=d4.topology(obj)
+          contacts=d4.local_self_contacts(obj,-9.6,-4.0)
+          bm.to_mesh(obj.data); bm.free(); obj.data.update()
+          after=d4.topology(obj)
+          assert before==after, (before,after)
+          assert d4.local_self_contacts(obj,-9.6,-4.0)<=contacts
+          bpy.context.scene['candidate']='C11_BOUNDARY_SCULPT_TRIAL_UNAPPROVED'
+          bpy.ops.wm.save_as_mainfile(filepath='/tmp/diag/c11_boundary_trial_UNAPPROVED.blend',compress=True,copy=True)
+          PY
+          timeout 600 /tmp/two-blender53/blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python /tmp/measure.py
+          timeout 1200 /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/production_qa/lind_blueprint/c11_clay_closeup_review.py -- /tmp/diag/c11_boundary_trial_UNAPPROVED.blend /tmp/diag/review trial
+          (cd /tmp/diag && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c11-boundary-sculpt-trial-${{ github.run_id }}
+          path: /tmp/diag/
+      - name: Publish diagnostic execution result
+        if: always()
+        run: |
+          state=failure
+          if [[ "${{ job.status }}" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/c11-boundary-sculpt-trial -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
