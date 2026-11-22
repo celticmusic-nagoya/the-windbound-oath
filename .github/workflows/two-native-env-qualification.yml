@@ -25,6 +25,7 @@ jobs:
       session: ${{ steps.m.outputs.session }}
       hhgui: ${{ steps.m.outputs.hhgui }}
       realasset: ${{ steps.m.outputs.realasset }}
+      hhbp: ${{ steps.m.outputs.hhbp }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,11 +39,15 @@ jobs:
           if [ -f tools/native_env/native_session_evidence.json ]; then echo session=reuse >> "$GITHUB_OUTPUT"; else echo session=run >> "$GITHUB_OUTPUT"; fi
           if [ -f tools/native_env/hairharpy_gui_evidence.json ]; then echo hhgui=reuse >> "$GITHUB_OUTPUT"; else echo hhgui=run >> "$GITHUB_OUTPUT"; fi
           if [ -f tools/native_env/real_asset_request.json ] && [ ! -f tools/native_env/real_asset_evidence.json ]; then echo realasset=run >> "$GITHUB_OUTPUT"; else echo realasset=skip >> "$GITHUB_OUTPUT"; fi
+          B=tools/native_env/hairharpy_bp
+          if [ -f $B/hh_bp_evidence.json ]; then echo hhbp=skip >> "$GITHUB_OUTPUT"; elif [ -f $B/hh_bp_restore_request.json ]; then echo hhbp=run2 >> "$GITHUB_OUTPUT"; else echo hhbp=run1 >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
           python3 -m py_compile tools/native_env/*.py
           bash -n tools/native_env/hairharpy_runtime.sh
           bash -n tools/native_env/hairharpy_gui_roundtrip.sh
+          bash -n tools/native_env/hairharpy_bp/hh_bp_ci.sh
+          python3 -m py_compile tools/native_env/hairharpy_bp/*.py
           python3 -c "import yaml,sys; yaml.safe_load(open('.github/workflows/two-native-env-qualification.yml'))"
       - name: Pinned #468 planner (read-only)
         uses: actions/checkout@v4
@@ -177,5 +182,36 @@ jobs:
         with:
           name: two-real-asset-pbr-gn-copy
           path: /tmp/ra/out/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-blueprint-session:
+    needs: mode
+    if: needs.mode.outputs.hhbp == 'run1' || needs.mode.outputs.hhbp == 'run2'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 shared session controller / factory / contract (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 41b5c1529a2aec3f5afab1a3101d9fb9b99d4439
+          path: engine468
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy x blueprint x #468 session (isolated fencing remote)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh ${{ needs.mode.outputs.hhbp }} /tmp/hhbp
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-blueprint-${{ needs.mode.outputs.hhbp }}
+          path: /tmp/hhbp/
           if-no-files-found: error
           retention-days: 30
