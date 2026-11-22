@@ -47,18 +47,25 @@ def main():
             if time.monotonic()>=deadline: return False
             p=work/"ledger.json"
             p.write_text(json.dumps(records,sort_keys=True))
-            run_operation(["git","add","ledger.json"],deadline,cwd=work,grace=1)
+            run_operation(["git","add","ledger.json",*[v["path"] for v in records.values()]],deadline,cwd=work,grace=1)
             if git("status","--porcelain","ledger.json"):
                 run_operation(["git","commit","-m","fixture ledger"],deadline,cwd=work,grace=1)
                 run_operation(["git","push",str(remote),"HEAD:refs/heads/fixture"],deadline,cwd=work,grace=1)
             observed=subprocess.check_output(["git","--git-dir",str(remote),"show","refs/heads/fixture:ledger.json"])
-            return observed==p.read_bytes()
+            if observed!=p.read_bytes(): return False
+            import hashlib
+            for record in records.values():
+                data=subprocess.check_output(["git","--git-dir",str(remote),"show","refs/heads/fixture:"+record["path"]],timeout=max(0.01,deadline-time.monotonic()))
+                if hashlib.sha256(data).hexdigest()!=record["sha256"]: return False
+            return True
         completed={}
         previous=Path.cwd()
         os.chdir(work)
-        assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==["fixture"]
-        assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==[]
-        os.chdir(previous)
+        try:
+            assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==["fixture"]
+            assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==[]
+        finally:
+            os.chdir(previous)
         print("ISOLATED_CONTRACT_PASS; NATIVE_AND_OFF_RUNNER_NOT_RUN")
 
 if __name__=="__main__":
