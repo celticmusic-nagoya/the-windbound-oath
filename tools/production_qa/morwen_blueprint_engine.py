@@ -233,11 +233,27 @@ def validate_batch_plan(plan, root):
                  mutation="BLOCKED_UNQUALIFIED_ADAPTER",survey_allowed=s["id"] in plan["independent_surveys"])
             for s in stages]
 
+def verify_observation_files(data, root):
+    """Measurements must refer to actual immutable evidence in the run directory."""
+    root=root.resolve()
+    for obs in data["observations"].values():
+        path=(root/obs["evidence_path"]).resolve()
+        if not path.is_relative_to(root) or not path.is_file():
+            raise ValueError("missing or unsafe measurement evidence")
+        if sha(path)!=obs["evidence_sha256"]:
+            raise ValueError("measurement evidence digest mismatch")
+        model=(root/obs["model_path"]).resolve()
+        if not model.is_relative_to(root) or not model.is_file():
+            raise ValueError("missing native measurement checkpoint")
+        if sha(model)!=obs["model_sha256"]:
+            raise ValueError("measurement checkpoint digest mismatch")
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("blueprint",type=Path)
     p.add_argument("output",type=Path)
     p.add_argument("--observations",type=Path)
+    p.add_argument("--evidence-root",type=Path)
     p.add_argument("--diagnostic-face",type=Path)
     p.add_argument("--stages",type=Path)
     p.add_argument("--batch-plan",type=Path)
@@ -249,6 +265,9 @@ def main():
         data=json.loads(a.observations.read_text())
         if data["blueprint_sha256"]!=fingerprint:
             raise ValueError("stale blueprint")
+        if not a.evidence_root:
+            raise ValueError("evidence root required for observations")
+        verify_observation_files(data,a.evidence_root)
         compare(rows,data["observations"])
     diagnostics=[]
     if a.diagnostic_face:
