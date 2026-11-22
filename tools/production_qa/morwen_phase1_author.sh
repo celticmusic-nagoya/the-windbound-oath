@@ -149,7 +149,31 @@ garment_trial() {
   fi
 }
 record top-volume PRIOR_CALIBRATION_VERIFIED_NOT_PROMOTED
-garment_trial skirt-width 0.294 Bottoms '^Skirt [(]Wider[)]$' 0.025 || record skirt-width BLOCKED_CONTROL
+record skirt-width PRIOR_CALIBRATION_VERIFIED_NOT_PROMOTED
+# Inspect accessory creation choices before any item is selected.
+if inspect_panel equipment-create Accessories Outfit 'Add Accessories' && grep -Fq 'Create New' evidence/equipment-create-top.txt; then
+  if "$gui" click-label evidence/equipment-create-top.png 'Create New' 'Import as Custom Item' && sleep 2 && capture_state equipment-create-options; then
+    record equipment CREATE_OPTIONS_CAPTURED_REVIEW_REQUIRED
+    # Only dismiss a recognized cancel control; never choose a creation preset.
+    if grep -Fq Cancel evidence/equipment-create-options.txt; then
+      "$gui" click-label evidence/equipment-create-options.png Cancel 'Create New' || true
+      sleep 2
+    fi
+  fi
+fi
+# Body response calibration on the disposable runner copy, not a design target.
+if inspect_panel body-trial Body Outfit 'Whole Body' && grep -Fq 'Fem Height' evidence/body-trial-top.txt && "$row" evidence/body-trial-top.png '^Fem Height$' >/dev/null; then
+  record body-height MUTATION_ATTEMPTED
+  if slider_by body-height '^Fem Height$' 0.005; then
+    record body-height EDITED_REVIEW_REQUIRED
+  else
+    record body-height MUTATION_UNVERIFIED
+    echo BLOCKED_AMBIGUOUS_MUTATION > evidence/authoring-status.txt
+    exit 1
+  fi
+else
+  record body-height BLOCKED_CONTROL
+fi
 if ! recover_editor final-editor; then
   echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
   exit 1
@@ -197,6 +221,14 @@ for entry in 'top-volume:0.232:Tops:^Volume$' 'skirt-width:0.294:Bottoms:^Skirt 
   fi
   if [ -n "$expected" ] && [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
 done
+if grep -q '^body-height[[:space:]]EDITED_REVIEW_REQUIRED' evidence/phase1-stages.tsv; then
+  expected=$(awk '$1=="body-height" {print $3}' evidence/face-edits.txt)
+  actual=UNKNOWN
+  if inspect_panel body-height-reopen Body Outfit 'Whole Body'; then
+    actual=$("$row" evidence/body-height-reopen-top.png '^Fem Height$' | awk '{print $1}') || actual=UNKNOWN
+  fi
+  if [ -n "$expected" ] && [ "$actual" = "$expected" ]; then record body-height REOPEN_VALUE_MATCH; else record body-height REOPEN_VALUE_MISMATCH; fi
+fi
 views phase1-reopened 25
 if ! grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then
   record checkpoint REOPEN_VALUES_VERIFIED
