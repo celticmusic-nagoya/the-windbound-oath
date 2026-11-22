@@ -361,7 +361,12 @@ jobs:
           bash -n "$RUNNER_TEMP/session-helpers.sh"
           bash -n tools/production_qa/morwen_phase1_author.sh
           source "$RUNNER_TEMP/session-helpers.sh"
-          source tools/production_qa/morwen_phase1_author.sh
+          # Isolate phase exit so diagnostics still run; preserve its actual result.
+          set +e
+          ( set -e; source tools/production_qa/morwen_phase1_author.sh )
+          phase_rc=$?
+          set -e
+          printf "%s\n" "$phase_rc" > evidence/phase-exit-code.txt
           echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
           pid="$(pgrep -x "$exe" | head -n 1 || true)"
           if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
@@ -388,6 +393,7 @@ jobs:
           fi
           test -s evidence/screen.png
           test -s evidence/model.vroid
+          exit "$phase_rc"
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v4
