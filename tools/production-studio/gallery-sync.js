@@ -47,6 +47,28 @@ async function loadPublishedGallery(){
  area.replaceChildren();area.classList.remove("category-grid");
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=()=>home();area.append(back);
  const entries=groups.get(id);status.textContent=title+" / "+entries.length+" 件 / 公開用候補";
+ const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
+ if(photos.length>=2){
+ const compare=document.createElement("button");compare.type="button";compare.className="category-back";compare.textContent="画像比較";area.append(compare);
+ compare.onclick=()=>{
+ const dialog=document.createElement("dialog");dialog.className="gallery-lightbox";
+ const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();dialog.append(close);
+ const note=document.createElement("p");note.textContent="表示比較のみ。同一カメラ・縮尺・照明は未保証。";dialog.append(note);
+ const pair=document.createElement("div");pair.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%";
+ const controls=[];
+ for(let i=0;i<2;i++){
+ const panel=document.createElement("div");panel.style.minWidth="0";
+ const select=document.createElement("select");select.style.width="100%";select.setAttribute("aria-label",i?"比較B":"比較A");
+ photos.forEach((e,j)=>{const o=document.createElement("option");o.value=String(j);o.textContent=(e.stage||"未分類")+" / "+e.name;select.append(o);});
+ const img=document.createElement("img");img.style.cssText="width:100%;height:clamp(160px,38vh,480px);object-fit:contain";
+ const info=document.createElement("p");info.style.overflowWrap="anywhere";
+ select.value=String(i===0?0:Math.max(1,photos.findIndex(e=>e.name===photos[0].name&&e.artifact_id!==photos[0].artifact_id)));
+ const update=()=>{const e=photos[Number(select.value)];img.src=base+e.path;img.alt=e.name;info.textContent=(e.stage||"未分類")+" / "+(e.created_at||"日時不明")+" / QA: "+e.qa;};
+ select.onchange=update;update();controls.push(select);panel.append(select,img,info);pair.append(panel);
+ }
+ dialog.append(pair);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();
+ };
+ }
  const stages=[...new Set(entries.map(e=>e.stage||"未分類"))];
  const filter=document.createElement("select");filter.className="category-back";filter.setAttribute("aria-label","制作段階");for(const name of ["すべて",...stages]){const opt=document.createElement("option");opt.value=name;opt.textContent=name;filter.append(opt);}area.append(filter);
  for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=base+e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
