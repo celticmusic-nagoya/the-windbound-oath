@@ -1,6 +1,11 @@
 name: TWO Actions orchestration offline unit QA
 on:
   workflow_dispatch:
+    inputs:
+      blender_pilot:
+        description: Run isolated Blender technical pilot after QA
+        type: boolean
+        default: true
   push:
     branches: [feature/lind-cliff-rock-art-study-20261118]
     paths: ['.github/workflows/two-actions-orchestration-offline-qa.yml']
@@ -50,7 +55,7 @@ jobs:
           retention-days: 7
   technical-render:
     needs: [offline-unit-tests, authenticated-observation]
-    if: github.ref == 'refs/heads/feature/lind-cliff-rock-art-study-20261118' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/feature/lind-cliff-rock-art-study-20261118' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.blender_pilot))
     concurrency:
       group: lind-blender-integration-refs/heads/feature/lind-cliff-rock-art-study-20261118
       cancel-in-progress: false
@@ -75,7 +80,7 @@ jobs:
       - name: Generate isolated technical fixture
         run: |
           mkdir -p /tmp/lind-ai-technical
-          /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python tools/map_blender/ai_guard/create_fixture.py -- --out /tmp/lind-ai-technical/fixture.blend
+          /tmp/two-blender/app/blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/ai_guard/create_fixture.py -- --out /tmp/lind-ai-technical/fixture.blend
           sha256sum /tmp/lind-ai-technical/fixture.blend | tee /tmp/lind-ai-technical/source-before.sha256
       - name: Prepare allowlisted feedback
         run: |
