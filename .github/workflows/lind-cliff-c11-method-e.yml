@@ -20,11 +20,27 @@ concurrency:
 jobs:
   method-e:
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Check concurrent cliff runs before consuming production inputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c11-e
+          for state in in_progress queued waiting pending requested; do
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?status=$state&per_page=100" --jq '.workflow_runs[] | [.id,.head_branch,.name] | @tsv' >> /tmp/c11-e/active-runs.tsv
+          done
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          rows = [l.split('\t',2) for l in Path('/tmp/c11-e/active-runs.tsv').read_text().splitlines()]
+          conflicts = [r for r in rows if r[0] != os.environ['GITHUB_RUN_ID'] and ('cliff' in r[2].lower() or 'c11' in r[2].lower() or r[1] == os.environ['GITHUB_REF_NAME'])]
+          assert not conflicts, conflicts
+          PY
       - name: Download SHA-pinned D4 candidate and Method C reference
         env:
           GH_TOKEN: ${{ github.token }}
@@ -38,20 +54,18 @@ jobs:
           printf '%s  %s\n%s  %s\n' \
             0e560afc031f2356ade277e7b4f89eb01a2e62acdcda780c1c366112b90d99ff /tmp/in/d4.blend \
             d0e91ae7543f2995b70c2a3f2d59e625d7cc828e6328ccc90c9224d060b0b545 /tmp/in/c.blend | sha256sum -c -
-      - name: Install SHA-verified official Blender 5.3.0
+      - name: Provision verified headless runtime
         run: |
           set -euo pipefail
-          work="$(mktemp -d)"
-          base="https://mirror.blender.org/release/Blender5.3"
-          name="blender-5.3.0-linux-x64.tar.xz"
-          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
-          grep -F "$name" "$work/checksums" | awk '{print $1"  '"$name"'"}' > "$work/expected.sha256"
-          test "$(wc -l < "$work/expected.sha256")" -eq 1
-          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
-          (cd "$work" && sha256sum -c expected.sha256)
-          mkdir -p /tmp/two-blender53
-          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
-          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          echo "LIBGL_ALWAYS_SOFTWARE=1" >> "$GITHUB_ENV"
+          echo "EGL_PLATFORM=surfaceless" >> "$GITHUB_ENV"
+      - name: Install SHA-verified Blender 5.3.0
+        run: |
+          set -euo pipefail
+          test "$(git hash-object tools/production_qa/install_blender_530.sh)" = 4f49728f62b2f2e4d9b3a8f3cc1a5b27b79962ed
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender53
       - name: Run Method E (fail-closed geometry + UV checks)
         run: |
           set -euo pipefail
@@ -68,6 +82,15 @@ jobs:
           json.dump(ci, open('/tmp/c11-e/c11_method_e_report.json', 'w'), indent=2)
           print('REPRO', ci['reproduces_claude_local_geometry'], ci['reproduces_claude_local_uv_audit'])
           PY
+      - name: Preserve native checkpoint before rendering
+        uses: actions/upload-artifact@v4
+        with:
+          name: c11-native-checkpoint-${{ github.run_id }}
+          path: /tmp/c11-e/
+          retention-days: 30
+      - name: Verify native reopen
+        run: |
+          /tmp/two-blender53/blender -b /tmp/c11-e/c11_method_e_block_sculpt_UNAPPROVED.blend --disable-autoexec --python-exit-code 1 --python-expr 'import bpy; assert any(o.type=="MESH" for o in bpy.context.scene.objects); print("C11_NATIVE_REOPEN_PASS")'
       - name: Fixed-camera review, clay, close-ups, UV checker, sections
         run: |
           set -euo pipefail
