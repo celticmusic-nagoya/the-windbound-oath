@@ -11,6 +11,8 @@ on:
       - tools/production_qa/macos_gui.swift
       - tools/production_qa/morwen_blueprint_engine.py
       - tools/morwen_authored_sculpt/precision_blueprint_v2.json
+      - tools/morwen_authored_sculpt/native_batch_plan_v1.json
+      - tools/morwen_authored_sculpt/wardrobe_construction_supplement_v1.json
       - .github/workflows/morwen-vroid-macos-probe.yml
 permissions:
   contents: read
@@ -35,7 +37,7 @@ jobs:
           bash -n tools/production_qa/morwen_vroid_session.sh
           bash -n tools/production_qa/morwen_phase1_author.sh
           python3 -m py_compile tools/production_qa/morwen_blueprint_engine.py
-          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-targets.json --diagnostic-face tools/morwen_authored_sculpt/native_face_observation_trial_v1.json
+          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-targets.json --batch-plan tools/morwen_authored_sculpt/native_batch_plan_v1.json --diagnostic-face tools/morwen_authored_sculpt/native_face_observation_trial_v1.json
           shasum -a 256 tools/production_qa/morwen_phase1_author.sh > evidence/author-script-sha256.txt
       - name: Compile shared GUI controls
         run: |
@@ -415,7 +417,7 @@ jobs:
         shell: bash
         run: |
           test -s evidence/blueprint-targets.json
-          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-closure.json --diagnostic-face tools/morwen_authored_sculpt/native_face_observation_trial_v1.json --stages evidence/phase1-stages.tsv
+          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-closure.json --batch-plan tools/morwen_authored_sculpt/native_batch_plan_v1.json --diagnostic-face tools/morwen_authored_sculpt/native_face_observation_trial_v1.json --stages evidence/phase1-stages.tsv
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v4
