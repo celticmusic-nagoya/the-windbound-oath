@@ -25,18 +25,21 @@ jobs:
       - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
       - run: npx playwright install --with-deps chromium
       - run: node studio-smoke.mjs
+      - name: Verify committed Pages files
+        run: STUDIO_ROOT="$PWD" node gallery-smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: studio-browser-qa
-          path: tools/production-studio/qa-output/
+          path: |
+            tools/production-studio/qa-output/
+            tools/production-studio/gallery-qa/
           if-no-files-found: warn
       - name: Stage isolated browser distribution
         run: |
-          mkdir -p dist/node_modules/three
-          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js README.md dist/
-          cp -r node_modules/three/build node_modules/three/examples dist/node_modules/three/
-          cp node_modules/three/LICENSE dist/node_modules/three/
+          mkdir -p dist
+          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js gallery-manifest.json README.md dist/
+          cp -r vendor published dist/
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > distribution-sha256.txt
       - uses: actions/upload-artifact@v4
         with:
