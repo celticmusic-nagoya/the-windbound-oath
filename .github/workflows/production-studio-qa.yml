@@ -29,14 +29,14 @@ jobs:
           import os, subprocess
           paths=subprocess.check_output(['git','diff','--name-only','-z',os.environ['BASE_SHA']+'...'+os.environ['HEAD_SHA']]).decode().split('\0')
           paths=[p for p in paths if p]
-          allowed={'.github/workflows/production-studio-qa.yml','.github/workflows/production-studio-sync-preview.yml','.github/workflows/production-studio-prepare-pages.yml'}
+          allowed={'.github/workflows/production-studio-qa.yml','.github/workflows/production-studio-sync-preview.yml','.github/workflows/production-studio-prepare-pages.yml','.github/workflows/production-studio-publish.yml'}
           bad=[p for p in paths if not (p.startswith('tools/production-studio/') or p in allowed)]
           assert not bad,bad
           print('PASS: complete PR scope',len(paths),'files')
           PY
       - name: Retention and Python preflight
         run: |
-          python -m py_compile artifact-sync.py retention.py test_retention.py
+          python -m py_compile artifact-sync.py retention.py test_retention.py discover-gallery.py merge-gallery.py
           python -m unittest -v test_retention
       - uses: actions/setup-node@v4
         with:
