@@ -26,13 +26,25 @@ views phase1-after 0
 # Separate category from hairstyle sets; capture evidence without replacing any preset.
 "$gui" click 0.023 0.231; sleep 2
 capture_state phase2-hair-category
-record hair BLOCKED_STRAND_EDITOR_UNQUALIFIED
+if grep -Fq 'Edit Hairstyle' evidence/phase2-hair-category.txt && grep -Fq 'Front' evidence/phase2-hair-category.txt; then
+  record hair BLOCKED_STRAND_EDITOR_UNQUALIFIED
+else
+  record hair BLOCKED_WRONG_PANEL
+fi
 capture_state phase2-before-body
-"$gui" click-label evidence/phase2-before-body.png Body Outfit; sleep 2
-# Scroll inside the parameter region, not the color section.
-"$gui" scroll 0.89 0.81 -12 0; sleep 2
-capture_state phase2-body-parameters
-record body BLOCKED_PROJECTION_AND_CONTROLS_UNQUALIFIED
+if "$gui" click-label evidence/phase2-before-body.png Body Outfit; then
+  sleep 2
+  capture_state phase2-body-top
+  if grep -Fq 'Whole Body' evidence/phase2-body-top.txt; then
+    "$gui" scroll 0.89 0.81 -12 0; sleep 2
+    capture_state phase2-body-parameters
+    record body BLOCKED_PROJECTION_AND_CONTROLS_UNQUALIFIED
+  else
+    record body BLOCKED_WRONG_PANEL
+  fi
+else
+  record body BLOCKED_TAB_NOT_FOUND
+fi
 if ! grep -q EDITED_REVIEW_REQUIRED evidence/phase1-stages.tsv; then
   cp evidence/input-model.vroid evidence/model.vroid
   shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
