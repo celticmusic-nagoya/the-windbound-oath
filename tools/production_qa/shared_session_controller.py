@@ -31,9 +31,17 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         assert_owned(remote,asset,token)
         p=(root/result['path']).resolve()
         if not p.is_relative_to(root.resolve()) or result.get('reopened') is not True or sha(p)!=result.get('sha256') or result.get('fingerprint')!=stage['fingerprint']:raise RuntimeError('invalid checkpoint')
-        updated={**completed,stage['id']:result}
+        # Invalidate descendants even if an upstream stage reused its nominal fingerprint.
+        invalid={stage['id']}
+        while True:
+            expanded=invalid | {s['id'] for s in stages if set(s['deps']) & invalid}
+            if expanded==invalid:break
+            invalid=expanded
+        updated={k:v for k,v in completed.items() if k not in invalid}
+        updated[stage['id']]=result
         # Must confirm durable off-runner persistence before advancing.
         durable(updated,token)
+        completed.clear()
         completed.update(updated)
         executed.append(stage['id'])
     durable(completed,token)
