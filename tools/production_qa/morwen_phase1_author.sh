@@ -61,17 +61,18 @@ inspect_panel() {
   capture_state "$tag-top" && grep -Eiq "$signature" "evidence/$tag-top.txt" && ! dialog_visible "$tag-top"
 }
 if inspect_panel body Body Outfit 'Whole Body'; then
+  body_capture_ok=1
   for page in 1 2 3; do
     if ! "$gui" scroll 0.89 0.81 -12 0 || ! sleep 2 || ! capture_state "body-page-$page"; then
-      record body BLOCKED_CAPTURE; break
+      record body BLOCKED_CAPTURE; body_capture_ok=0; break
     fi
   done
-  record body PARAMETERS_CAPTURED_PROJECTION_NOT_QUALIFIED
+  if [ "$body_capture_ok" = 1 ]; then record body PARAMETERS_CAPTURED_PROJECTION_NOT_QUALIFIED; fi
 else
   record body BLOCKED_PANEL_OR_RECOVERY
 fi
 # Wardrobe template survey is independent of body fitting; do not alter garments.
-if inspect_panel wardrobe Outfit Body 'Outfit|Tops|Customize'; then
+if inspect_panel wardrobe Outfit Body 'Tops|Bottoms|Whole Set|Shoes'; then
   record wardrobe PANEL_CAPTURED_TEMPLATE_NOT_QUALIFIED
   for page in 1 2; do
     if ! "$gui" scroll 0.89 0.60 -9 0 || ! sleep 1 || ! capture_state "wardrobe-page-$page"; then
