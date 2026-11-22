@@ -75,3 +75,42 @@ jobs:
           state=failure
           if [[ "$RESULT" == success ]]; then state=success; fi
           gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/shared-session-qa -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+  windows-deadline:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned Windows dependency
+        run: python -m pip install pywin32==311
+      - name: Verify job object deadline and child cleanup
+        shell: pwsh
+        run: |
+          $env:PYTHONPATH = "tools/production_qa"
+          @'
+          import sys,time,tempfile
+          from pathlib import Path
+          from bounded_windows_operation import run_operation
+          run_operation([sys.executable,"-c","pass"],time.monotonic()+15)
+          with tempfile.TemporaryDirectory() as d:
+              marker=Path(d)/"child-survived"
+              ready=Path(d)/"child-started"
+              child="import time; from pathlib import Path; Path("+repr(str(ready))+").touch(); time.sleep(6); Path("+repr(str(marker))+").touch()"
+              parent="import subprocess,sys,time; subprocess.Popen([sys.executable,'-c',"+repr(child)+"]); time.sleep(60)"
+              try:
+                  run_operation([sys.executable,"-c",parent],time.monotonic()+4)
+              except TimeoutError: pass
+              else: raise AssertionError("deadline not enforced")
+              assert ready.exists(), "child never started"
+              time.sleep(7)
+              assert not marker.exists(), "child survived deadline"
+          print("WINDOWS_JOB_DEADLINE_PASS")
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
