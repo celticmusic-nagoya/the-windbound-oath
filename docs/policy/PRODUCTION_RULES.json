@@ -37,7 +37,30 @@
       "unchanged_failed_revision_retry": false,
       "preserve_checkpoint": true,
       "continue_safe_work_without_routine_approval": true,
-      "verify_execution_and_outputs": true
+      "verify_execution_and_outputs": true,
+      "gui": {
+        "required": true,
+        "scope": "all_game_development",
+        "methods": [
+          "native_api",
+          "keyboard",
+          "mouse_click",
+          "drag",
+          "scroll",
+          "menu",
+          "accessibility"
+        ],
+        "verify_pre_and_post_state": true,
+        "calibrated_coordinates": true,
+        "diagnose_in_session": true,
+        "evidence_based_alternate_operation": true,
+        "bounded_attempts": true,
+        "quarantine_ambiguous_mutation": true,
+        "verify_undo_or_reopen": true,
+        "continue_independent_stages": true,
+        "unknown_dialog_confirmation": false,
+        "status": "POLICY_APPROVED_RUNTIME_QUALIFICATION_REQUIRED"
+      }
     }
   },
   "ownership": {
