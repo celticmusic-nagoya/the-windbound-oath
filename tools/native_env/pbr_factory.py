@@ -152,3 +152,68 @@ def scatter_stats(source, name="CAL-hair_scatter"):
     if stats["faces"] == 0:
         raise RuntimeError("GN_SCATTER_EMPTY")
     return stats
+
+
+HAIR_NPR = "TWO_HAIR_NPR"
+
+
+def build_hair_npr(name, base_srgb8, shadow_srgb8, highlight_srgb8, band_v=0.28, band_w=0.06, uv_map="StrandUV"):
+    """Shared NPR hair material (Cycles/EEVEE): facing-ramp shadow->base colour, anisotropic specular along the strand
+    (tangent from the strand UV), and a broken highlight band at strand-V `band_v` ("angel ring") as emission."""
+    lin = lambda c: [srgb_to_linear(v) for v in c] + [1.0]
+    mat = bpy.data.materials.get(name) or bpy.data.materials.new(name)
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    n, l = nt.nodes, nt.links
+    uv = n.new("ShaderNodeUVMap")
+    uv.uv_map = uv_map
+    sep = n.new("ShaderNodeSeparateXYZ")
+    l.new(uv.outputs["UV"], sep.inputs["Vector"])
+    sub = n.new("ShaderNodeMath")
+    sub.operation = "SUBTRACT"
+    sub.inputs[1].default_value = band_v
+    l.new(sep.outputs["Y"], sub.inputs[0])
+    ab = n.new("ShaderNodeMath")
+    ab.operation = "ABSOLUTE"
+    l.new(sub.outputs[0], ab.inputs[0])
+    band = n.new("ShaderNodeMapRange")
+    band.interpolation_type = "SMOOTHSTEP"
+    band.inputs["From Min"].default_value, band.inputs["From Max"].default_value = 0.0, band_w
+    band.inputs["To Min"].default_value, band.inputs["To Max"].default_value = 1.0, 0.0
+    l.new(ab.outputs[0], band.inputs["Value"])
+    mp = n.new("ShaderNodeMapping")
+    mp.inputs["Scale"].default_value = (14.0, 2.0, 1.0)
+    l.new(uv.outputs["UV"], mp.inputs["Vector"])
+    noise = n.new("ShaderNodeTexNoise")
+    noise.inputs["Scale"].default_value = 3.0
+    l.new(mp.outputs["Vector"], noise.inputs["Vector"])
+    brk = n.new("ShaderNodeMapRange")
+    brk.inputs["From Min"].default_value, brk.inputs["From Max"].default_value = 0.35, 0.65
+    l.new(noise.outputs["Fac"], brk.inputs["Value"])
+    hi = n.new("ShaderNodeMath")
+    hi.operation = "MULTIPLY"
+    l.new(band.outputs["Result"], hi.inputs[0])
+    l.new(brk.outputs["Result"], hi.inputs[1])
+    lw = n.new("ShaderNodeLayerWeight")
+    lw.inputs["Blend"].default_value = 0.45
+    ramp = n.new("ShaderNodeValToRGB")
+    ramp.color_ramp.interpolation = "CONSTANT"  # stepped (toon) transition
+    ramp.color_ramp.elements[0].position, ramp.color_ramp.elements[1].position = 0.0, 0.55
+    ramp.color_ramp.elements[0].color = lin(base_srgb8)
+    ramp.color_ramp.elements[1].color = lin(shadow_srgb8)
+    l.new(lw.outputs["Facing"], ramp.inputs["Fac"])
+    tan = n.new("ShaderNodeTangent")
+    tan.direction_type = "UV_MAP"
+    tan.uv_map = uv_map
+    bsdf = n.new("ShaderNodeBsdfPrincipled")
+    l.new(ramp.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.42
+    bsdf.inputs["Anisotropic"].default_value = 0.75
+    l.new(tan.outputs["Tangent"], bsdf.inputs["Tangent"])
+    bsdf.inputs["Emission Color"].default_value = lin(highlight_srgb8)
+    l.new(hi.outputs[0], bsdf.inputs["Emission Strength"])
+    out = n.new("ShaderNodeOutputMaterial")
+    l.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+    mat["two_material"] = HAIR_NPR
+    return mat

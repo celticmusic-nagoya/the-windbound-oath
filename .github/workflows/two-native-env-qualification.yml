@@ -26,6 +26,7 @@ jobs:
       hhgui: ${{ steps.m.outputs.hhgui }}
       realasset: ${{ steps.m.outputs.realasset }}
       hhbp: ${{ steps.m.outputs.hhbp }}
+      hhv: ${{ steps.m.outputs.hhv }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,6 +41,7 @@ jobs:
           if [ -f tools/native_env/hairharpy_gui_evidence.json ]; then echo hhgui=reuse >> "$GITHUB_OUTPUT"; else echo hhgui=run >> "$GITHUB_OUTPUT"; fi
           if [ -f tools/native_env/real_asset_request.json ] && [ ! -f tools/native_env/real_asset_evidence.json ]; then echo realasset=run >> "$GITHUB_OUTPUT"; else echo realasset=skip >> "$GITHUB_OUTPUT"; fi
           B=tools/native_env/hairharpy_bp
+          if [ -f $B/hhv_evidence.json ]; then echo hhv=skip >> "$GITHUB_OUTPUT"; else echo hhv=run >> "$GITHUB_OUTPUT"; fi
           if [ -f $B/hh_bp_evidence.json ]; then echo hhbp=skip >> "$GITHUB_OUTPUT"; elif [ -f $B/hh_bp_restore_request.json ]; then echo hhbp=run2 >> "$GITHUB_OUTPUT"; else echo hhbp=run1 >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
@@ -213,5 +215,34 @@ jobs:
         with:
           name: two-hairharpy-blueprint-${{ needs.mode.outputs.hhbp }}
           path: /tmp/hhbp/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-volume-v2:
+    needs: mode
+    if: needs.mode.outputs.hhv == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 latest contract (8c1d5ae, read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 8c1d5ae84b2783cd5475154d45409916ecebc4da
+          path: engine468v
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy volumetric hair v2 session (isolated fencing remote)
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh v2 /tmp/hhv
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-volume-v2
+          path: /tmp/hhv/
           if-no-files-found: error
           retention-days: 30

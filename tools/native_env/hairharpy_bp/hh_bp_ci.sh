@@ -25,7 +25,11 @@ Xvfb :91 -screen 0 1600x1000x24 >/dev/null 2>&1 &
 sleep 2
 args=(--engine "$repo/engine468/tools/production_qa" --blueprint "$here/qual_hair_blueprint_v1.json" --blender /tmp/b530/blender
       --display :91 --hh-sha "$asset_sha" --blender-version 5.3.0)
-if [ "$mode" = run1 ]; then
+if [ "$mode" = v2 ]; then
+  /tmp/b530/blender -b --factory-startup --python "$here/mk_qual_head.py" -- /tmp/qual_head.obj > /dev/null 2>&1
+  python3 "$here/hh_volume_session.py" --root "$out/session/root" --head /tmp/qual_head.obj --engine "$repo/engine468v/tools/production_qa" \
+    --blueprint "$here/qual_hair_blueprint_v2.json" --blender /tmp/b530/blender --display :91 --hh-sha "$asset_sha" --blender-version 5.3.0
+elif [ "$mode" = run1 ]; then
   /tmp/b530/blender -b --factory-startup --python "$here/mk_qual_head.py" -- /tmp/qual_head.obj > /dev/null 2>&1
   python3 "$here/hh_session.py" --root "$out/session/root" --mode run1 --head /tmp/qual_head.obj "${args[@]}"
 else
@@ -36,7 +40,8 @@ fi
 tar -czf "$out/session.tgz" -C "$out/session" root
 sha256sum "$out/session.tgz" > "$out/session.tgz.sha256"
 mkdir -p "$out/evidence"
-cp "$out"/session/hh_session_summary_*.json "$out/evidence/" 2>/dev/null || true
+cp "$out"/session/hh_session_summary_*.json "$out"/session/hhv_session_summary.json "$out/evidence/" 2>/dev/null || true
+cp "$out"/session/root/ckpt/*.json "$out/evidence/" 2>/dev/null || true
 cp "$out/restore/restore_provenance.json" "$out/evidence/" 2>/dev/null || true
 for d in "$out"/session/root/factory-*/; do
   [ -d "$d/renders" ] && cp -r "$d/renders" "$out/evidence/renders_$(basename "$d")" || true
