@@ -26,6 +26,15 @@ class ClassifierTests(unittest.TestCase):
         self.assertEqual(classify(BASE, [good])["decision"], "REUSE_SUCCESS")
         self.assertEqual(classify(BASE, [{**good, "artifact_accessible": False}])["decision"], "REVIEW_REQUIRED")
 
+    def test_active_conflict_precedes_reuse(self):
+        good = {**BASE, "status": "SUCCESS", "artifact_sha256_verified": True,
+                "artifact_accessible": True, "output_contract_verified": True}
+        for status in ("QUEUED", "IN_PROGRESS"):
+            conflict = {**BASE, "script_sha256": "e"*64, "status": status}
+            for ledger in ([good, conflict], [conflict, good],
+                           [{**BASE, "status": "IN_PROGRESS"}, conflict]):
+                self.assertEqual(classify(BASE, ledger)["decision"], "REVIEW_REQUIRED")
+
     def test_semantic_overlap(self):
         other = {**BASE, "script_sha256": "e"*64, "status": "SUCCESS"}
         self.assertEqual(classify(BASE, [other])["decision"], "REVIEW_REQUIRED")
