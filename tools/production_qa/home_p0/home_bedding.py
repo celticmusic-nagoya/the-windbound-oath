@@ -8,6 +8,7 @@ import sys
 import bmesh
 import bpy
 from mathutils import Vector
+from mathutils.bvhtree import BVHTree
 
 
 SOURCE = "dff3a32df533c8786f3122e07cf681c18f4805bd913d750f04ce15b321b10fed"
@@ -122,10 +123,17 @@ def measure(obj, target):
     assert overhang <= target["side_overhang_max"]
     clearance = min(v.co.z for v in data.vertices if abs(v.co.y - 2.2) <= .44) - thickness - .85
     assert clearance >= 0
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    surface = BVHTree.FromObject(obj, depsgraph)
+    collisions = {
+        name: len(surface.overlap(BVHTree.FromObject(bpy.data.objects[name], depsgraph)))
+        for name in (HOST, "GEO_AIDANHOUSE_INT_FURNITURE")
+    }
+    assert not any(collisions.values())
     return dict(source_endpoint_residual_m=list(obj["source_endpoint_residual_m"]),
                 residual_m=residuals, thickness_m=thickness, hem_above_ffl_m=hem,
                 overhang_m=overhang, conservative_mattress_clearance_m=clearance,
-                vertices=len(data.vertices), quads=len(data.polygons))
+                collision_pairs=collisions, vertices=len(data.vertices), quads=len(data.polygons))
 
 
 def render_preview(path):
@@ -162,7 +170,7 @@ def main():
     source, bed, architecture, output = map(Path, (source_path, bed, architecture, output))
     assert bpy.app.version == (5, 3, 0)
     assert sha(bed) == BED_SHA and sha(architecture) == ARCH_SHA
-    assert sha(source) == expected
+    assert sha(source) == expected, "P0_NATIVE_SHA_MISMATCH"
     output.mkdir(parents=True, exist_ok=True)
     target = json.loads(bed.read_text())["target"]["blanket"]
     bpy.ops.wm.open_mainfile(filepath=str(source))

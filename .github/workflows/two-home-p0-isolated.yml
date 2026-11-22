@@ -73,6 +73,9 @@ jobs:
               /tmp/home-output "$3"
           }
           if [[ "$mode" == restore ]]; then
+            if edit 1m restore "$(printf '%064d' 0)" > /tmp/home-sha-negative.log 2>&1; then exit 1; fi
+            grep -q 'AssertionError: P0_NATIVE_SHA_MISMATCH' /tmp/home-sha-negative.log
+            test ! -e /tmp/home-output/home-p0.blend
             if edit 1m interrupt "$expected" > /tmp/home-interruption.log 2>&1; then exit 1; fi
             grep -q 'RuntimeError: P0_INTENTIONAL_INTERRUPTION_BEFORE_WRITE' /tmp/home-interruption.log
             test ! -e /tmp/home-output/home-p0.blend
