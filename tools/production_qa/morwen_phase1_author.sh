@@ -128,6 +128,28 @@ if inspect_panel accessory-learning Accessories Outfit 'Accessories|Glasses|Add'
 else
   record equipment BLOCKED_PANEL
 fi
+# Calibration on the runner's disposable working copy; baseline remains immutable.
+# These are control-response trials, not approved garment design values.
+garment_trial() {
+  local tag="$1" y="$2" category="$3" pattern="$4" delta="$5"
+  inspect_panel "$tag-nav" Outfit Body 'Whole Sets|Tops|Bottoms|Shoes' || return 1
+  "$gui" click 0.023 "$y" || return 1
+  sleep 2
+  capture_state "$tag-panel" || return 1
+  grep -Fq "$category" "evidence/$tag-panel.txt" || return 1
+  "$row" "evidence/$tag-panel.png" "$pattern" >/dev/null || return 1
+  record "$tag" MUTATION_ATTEMPTED
+  if slider_by "$tag" "$pattern" "$delta"; then
+    record "$tag" EDITED_REVIEW_REQUIRED
+  else
+    record "$tag" MUTATION_UNVERIFIED
+    cp "$HOME/Documents/Morwen-resume.vroid" evidence/checkpoints/quarantine-on-disk.vroid
+    echo BLOCKED_AMBIGUOUS_MUTATION > evidence/authoring-status.txt
+    exit 1
+  fi
+}
+garment_trial top-volume 0.232 Tops '^Volume$' 0.025 || record top-volume BLOCKED_CONTROL
+garment_trial skirt-width 0.294 Bottoms '^Skirt \\(Wider\\)$' 0.025 || record skirt-width BLOCKED_CONTROL
 if ! recover_editor final-editor; then
   echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
   exit 1
@@ -163,6 +185,17 @@ for axis in x y; do
   case "$axis" in x) pattern='^Iris Size \(X\)$'; expected=0.141;; y) pattern='^Iris Size \(Y\)$'; expected=0.194;; esac
   actual=$("$row" evidence/phase1-reopen-iris.png "$pattern" | awk '{print $1}') || actual=UNKNOWN
   if [ "$actual" = "$expected" ]; then record "iris-$axis" PRESERVED; else record "iris-$axis" REOPEN_VALUE_MISMATCH; fi
+done
+# Verify only trials actually performed; require the same numeric response after reopening.
+for entry in 'top-volume:0.232:Tops:^Volume$' 'skirt-width:0.294:Bottoms:^Skirt \\(Wider\\)$'; do
+  IFS=: read -r tag y category pattern <<< "$entry"
+  grep -q "^$tag[[:space:]]EDITED_REVIEW_REQUIRED" evidence/phase1-stages.tsv || continue
+  expected=$(awk -v t="$tag" '$1==t {print $3}' evidence/face-edits.txt)
+  actual=UNKNOWN
+  if inspect_panel "$tag-reopen-nav" Outfit Body 'Whole Sets|Tops|Bottoms|Shoes' && "$gui" click 0.023 "$y" && sleep 2 && capture_state "$tag-reopened" && grep -Fq "$category" "evidence/$tag-reopened.txt"; then
+    actual=$("$row" "evidence/$tag-reopened.png" "$pattern" | awk '{print $1}') || actual=UNKNOWN
+  fi
+  if [ -n "$expected" ] && [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
 done
 views phase1-reopened 25
 if ! grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then
