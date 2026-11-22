@@ -1,5 +1,6 @@
 """Isolated integration only; no production lease or native mutation."""
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -35,7 +36,7 @@ def main():
         git("push",str(remote),"HEAD:refs/heads/fixture")
         hashes=verified_file_hashes(work,{"input":sha(work/"input")})
         fields={k:hashes for k in FIELDS}
-        stages=[dict(id="fixture",deps=[],seconds=30,fingerprint=fingerprint(ASSET,"fixture",fields))]
+        stages=[dict(id="fixture",deps=[],qualified=True,seconds=30,fingerprint=fingerprint(ASSET,"fixture",fields))]
         def execute(stage,token,deadline):
             p=work/"fixture.txt"
             run_operation([sys.executable,"-c","from pathlib import Path; Path('fixture.txt').write_text('synthetic')"],deadline,cwd=work,grace=1)
@@ -53,8 +54,11 @@ def main():
             observed=subprocess.check_output(["git","--git-dir",str(remote),"show","refs/heads/fixture:ledger.json"])
             return observed==p.read_bytes()
         completed={}
+        previous=Path.cwd()
+        os.chdir(work)
         assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==["fixture"]
         assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==[]
+        os.chdir(previous)
         print("ISOLATED_CONTRACT_PASS; NATIVE_AND_OFF_RUNNER_NOT_RUN")
 
 if __name__=="__main__":
