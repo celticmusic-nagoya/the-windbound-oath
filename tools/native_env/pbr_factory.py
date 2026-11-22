@@ -95,7 +95,7 @@ def set_modifier_input(mod, identifier, value):
         mod[identifier] = value
 
 
-def add_scatter(source):
+def add_scatter(source, density=60.0, radius=0.012, depth=0.05, seed=7, name="CAL-hair_scatter"):
     ng = bpy.data.node_groups.get(SCATTER)
     if ng is None:
         ng = bpy.data.node_groups.new(SCATTER, "GeometryNodeTree")
@@ -112,8 +112,10 @@ def add_scatter(source):
         dist = n.new("GeometryNodeDistributePointsOnFaces")
         cone = n.new("GeometryNodeMeshCone")
         cone.inputs["Vertices"].default_value = 6
-        cone.inputs["Radius Bottom"].default_value = 0.012
-        cone.inputs["Depth"].default_value = 0.05
+        ng.interface.new_socket("Radius", in_out="INPUT", socket_type="NodeSocketFloat")
+        ng.interface.new_socket("Depth", in_out="INPUT", socket_type="NodeSocketFloat")
+        l.new(gi.outputs["Radius"], cone.inputs["Radius Bottom"])
+        l.new(gi.outputs["Depth"], cone.inputs["Depth"])
         inst = n.new("GeometryNodeInstanceOnPoints")
         real = n.new("GeometryNodeRealizeInstances")
         l.new(gi.outputs["Source"], info.inputs["Object"])
@@ -128,20 +130,21 @@ def add_scatter(source):
         l.new(real.outputs["Geometry"], setm.inputs["Geometry"])
         l.new(gi.outputs["Material"], setm.inputs["Material"])
         l.new(setm.outputs["Geometry"], go.inputs["Geometry"])
-    me = bpy.data.meshes.new("CAL-hair_scatter")
-    ob = bpy.data.objects.new("CAL-hair_scatter", me)
+    me = bpy.data.meshes.new(name)
+    ob = bpy.data.objects.new(name, me)
     bpy.context.collection.objects.link(ob)
     mod = ob.modifiers.new("Scatter", "NODES")
     mod.node_group = ng
     ids = {s.name: s.identifier for s in ng.interface.items_tree if getattr(s, "in_out", None) == "INPUT"}
-    for key, value in (("Source", source), ("Density", 60.0), ("Seed", 7), ("Material", source.data.materials[0])):
+    for key, value in (("Source", source), ("Density", density), ("Seed", seed), ("Material", source.data.materials[0]),
+                       ("Radius", radius), ("Depth", depth)):
         set_modifier_input(mod, ids[key], value)
     bpy.context.view_layer.update()
     return ob
 
 
-def scatter_stats(source):
-    ob = bpy.data.objects["CAL-hair_scatter"]
+def scatter_stats(source, name="CAL-hair_scatter"):
+    ob = bpy.data.objects[name]
     ev = ob.evaluated_get(bpy.context.evaluated_depsgraph_get())
     me = ev.to_mesh()
     stats = {"vertices": len(me.vertices), "faces": len(me.polygons), "instances_est": len(me.polygons) // 8}

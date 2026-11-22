@@ -105,7 +105,7 @@ def _cycles(scene, spp, res):
     scene.render.resolution_percentage = 100
 
 
-def render(scene, mode, outdir, names):
+def render(scene, mode, outdir, names, keep=("CAL-hair_scatter",)):
     cfg = MODES[mode]
     outdir.mkdir(parents=True, exist_ok=True)
     center, size = _bounds(names)
@@ -115,7 +115,7 @@ def render(scene, mode, outdir, names):
     scene.view_settings.view_transform = "AgX"
     shown = {o.name: o.hide_render for o in scene.objects if not o.name.startswith("TWO_RIG_")}
     for o in scene.objects:
-        if o.type == "MESH" and o.name not in names and o.name != "CAL-hair_scatter":
+        if o.type == "MESH" and o.name not in names and o.name not in keep:
             o.hide_render = True
     out = []
     try:

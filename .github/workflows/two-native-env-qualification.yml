@@ -24,6 +24,7 @@ jobs:
       hairharpy: ${{ steps.m.outputs.hairharpy }}
       session: ${{ steps.m.outputs.session }}
       hhgui: ${{ steps.m.outputs.hhgui }}
+      realasset: ${{ steps.m.outputs.realasset }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,6 +37,7 @@ jobs:
           # approved evidence is reused; successful tests are not repeated
           if [ -f tools/native_env/native_session_evidence.json ]; then echo session=reuse >> "$GITHUB_OUTPUT"; else echo session=run >> "$GITHUB_OUTPUT"; fi
           if [ -f tools/native_env/hairharpy_gui_evidence.json ]; then echo hhgui=reuse >> "$GITHUB_OUTPUT"; else echo hhgui=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f tools/native_env/real_asset_request.json ] && [ ! -f tools/native_env/real_asset_evidence.json ]; then echo realasset=run >> "$GITHUB_OUTPUT"; else echo realasset=skip >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
           python3 -m py_compile tools/native_env/*.py
@@ -127,5 +129,37 @@ jobs:
         with:
           name: two-hairharpy-gui-roundtrip
           path: /tmp/hh-rt/
+          if-no-files-found: error
+          retention-days: 30
+  real-asset-pbr-gn:
+    needs: mode
+    if: needs.mode.outputs.realasset == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Disposable copy of owner native (digest + native SHA), shared PBR/GN/render, separate-process reopen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q >/dev/null
+          sudo apt-get install -y -q libegl1 libgl1-mesa-dri libglx-mesa0 libgles2 >/dev/null
+          bash tools/production_qa/install_blender_530.sh /tmp/b530 > /dev/null
+          python3 tools/native_env/fetch_real_asset.py tools/native_env/real_asset_request.json /tmp/ra
+          T=$(python3 -c "import json;print(json.load(open('tools/native_env/real_asset_request.json'))['target'])")
+          mkdir -p /tmp/ra/out
+          /tmp/b530/blender -b /tmp/ra/copy/home-p0.COPY.blend --factory-startup --python-exit-code 3 --python tools/native_env/real_asset_pbr_gn_check.py -- run "$T" /tmp/ra/out/real_asset_test_COPY.blend /tmp/ra/out/report.json /tmp/ra/out/renders > /tmp/ra/out/run.log 2>&1
+          /tmp/b530/blender -b /tmp/ra/out/real_asset_test_COPY.blend --factory-startup --python-exit-code 3 --python tools/native_env/real_asset_pbr_gn_check.py -- verify "$T" /tmp/ra/out/report.json /tmp/ra/out/verify.json > /tmp/ra/out/verify.log 2>&1
+          grep -h "TWO_REAL_ASSET" /tmp/ra/out/run.log /tmp/ra/out/verify.log
+          python3 -c "import json;a=json.load(open('/tmp/ra/out/report.json'));b=json.load(open('/tmp/ra/out/verify.json'));assert a['result']=='PASS' and b['result']=='PASS'"
+      - name: Upload evidence (test copy is not a candidate)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-real-asset-pbr-gn-copy
+          path: /tmp/ra/out/
           if-no-files-found: error
           retention-days: 30
