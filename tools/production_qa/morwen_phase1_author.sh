@@ -31,6 +31,14 @@ if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && gre
     # Inspect native strand editor without modifying presets or strand geometry.
     if "$gui" click-label evidence/phase2-hair-category.png 'Edit Hairstyle' 'Edit Hair Bounce' && sleep 3 && capture_state phase2-strand-editor; then
       record hair STRAND_EDITOR_CAPTURED_REVIEW_REQUIRED
+      # Expand only the observed first group disclosure triangle, not its visibility or geometry.
+      if grep -Fq "Freehand Group 1" evidence/phase2-strand-editor.txt && grep -Fq "Hair Groups" evidence/phase2-strand-editor.txt; then
+        if "$gui" click 0.0713 0.3997 && sleep 2 && capture_state phase2-first-group; then
+          record hair GROUP_DISCLOSURE_CAPTURED_REVIEW_REQUIRED
+        else
+          record hair BLOCKED_GROUP_CAPTURE
+        fi
+      fi
       # Observed in run 44969840792: Edit Preset close X at (24,76) / 1024x768.
       if grep -Fq "Edit Preset" evidence/phase2-strand-editor.txt && grep -Fq "Hair Groups" evidence/phase2-strand-editor.txt; then
         "$gui" click 0.0234 0.0990 || true
@@ -49,11 +57,13 @@ fi
 # Read-only qualification: never select a new preset or confirm an unknown dialog.
 recover_editor() {
   local tag="$1"
-  if capture_state "$tag-initial" && grep -Fq Body "evidence/$tag-initial.txt" && grep -Fq Outfit "evidence/$tag-initial.txt" && ! dialog_visible "$tag-initial"; then return 0; fi
+  capture_state "$tag-initial" || return 1
+  if grep -Fq Body "evidence/$tag-initial.txt" && grep -Fq Outfit "evidence/$tag-initial.txt" && ! dialog_visible "$tag-initial"; then return 0; fi
   if grep -Fq "Edit Preset" "evidence/$tag-initial.txt" && grep -Fq "Hair Groups" "evidence/$tag-initial.txt"; then
     "$gui" click 0.0234 0.0990 || return 1
   else
-    "$gui" key 53 || return 1
+    # Unknown panel/modal: preserve checkpoint instead of speculative interaction.
+    return 1
   fi
   sleep 2
   capture_state "$tag-recovered" && grep -Fq Body "evidence/$tag-recovered.txt" && grep -Fq Outfit "evidence/$tag-recovered.txt" && ! dialog_visible "$tag-recovered"
@@ -110,7 +120,7 @@ fi
 verify_trial() {
   local tag="$1" cat="$2" label="$3" actual expected
   expected=$(awk -v t="$tag" '$1==t {print $3}' evidence/face-edits.txt)
-  if [ -z "$expected" ]; then return 0; fi
+  if [ -z "$expected" ]; then record "$tag" REOPEN_VALUE_MISMATCH; return 0; fi
   face_cat "$cat"; if [ "$tag" = brow-arch ]; then "$gui" scroll 0.89 0.60 -12 0; sleep 1; fi; capture_state "phase1-reopen-$tag"
   actual=$("$row" "evidence/phase1-reopen-$tag.png" "$label" | awk '{print $1}') || actual=UNKNOWN
   if [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
