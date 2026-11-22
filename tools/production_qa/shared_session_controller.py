@@ -1,5 +1,6 @@
 """Budget-aware sequential controller using the shared planner.
-Adapter callbacks must verify native reopen and return checkpoint metadata.
+Adapter callbacks must enforce the supplied monotonic deadline (bounded_operation
+on POSIX), verify native reopen and return checkpoint metadata.
 No automatic takeover; retain lease on failure until reconciled.
 """
 import time
@@ -16,7 +17,9 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         available=ready(stages,completed,root,budget-(time.monotonic()-started),reserve)
         if not available:break
         stage=next(s for s in stages if s['id']==available[0])
-        result=execute(stage,token)
+        deadline=min(started+budget-reserve,time.monotonic()+stage['seconds'])
+        result=execute(stage,token,deadline)
+        if time.monotonic()>deadline:raise TimeoutError('stage deadline exceeded; reconcile retained lease')
         assert_owned(remote,asset,token)
         p=(root/result['path']).resolve()
         if not p.is_relative_to(root.resolve()) or result.get('reopened') is not True or sha(p)!=result.get('sha256') or result.get('fingerprint')!=stage['fingerprint']:raise RuntimeError('invalid checkpoint')
