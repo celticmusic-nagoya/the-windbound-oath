@@ -2,11 +2,23 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from asset_library_eligibility import assess_reuse
+from asset_library_eligibility import assess_reuse, select_reuse
 from session_plan import sha
 
 
 class LibraryEligibilityTests(unittest.TestCase):
+    def test_select_rejects_missing_ambiguous_and_inconsistent_pin(self):
+        entry = dict(asset_id="asset", native_sha256="a"*64, native_path="mesh",
+                     manifest={"files": {"mesh": "b"*64}})
+        def decision(entries, native="a"*64):
+            return select_reuse(".", entries, asset_id="asset", native_sha256=native,
+                                usage="preview", dependency_fingerprint="c"*64,
+                                output_contract="mesh")["decision"]
+
+        self.assertEqual(decision([entry], native="b"*64), "BLOCKED_UNAVAILABLE_PIN")
+        self.assertEqual(decision([entry, entry]), "BLOCKED_AMBIGUOUS_PIN")
+        self.assertEqual(decision([entry]), "BLOCKED_ASSET_MANIFEST")
+
     def test_requires_current_licensed_bytes_and_dependencies(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)
