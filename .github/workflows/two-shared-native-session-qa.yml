@@ -45,6 +45,8 @@ jobs:
           assert time.monotonic()-started<5
           print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
           PY
+      - name: Controller safety regression
+        run: python3 tools/production_qa/shared_controller_regression.py
       - name: Isolated multi-writer integration
         run: python3 tools/production_qa/shared_lease_integration_test.py
       - name: Recovery preflight negative cases
