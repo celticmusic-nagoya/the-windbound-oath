@@ -10,12 +10,13 @@ def stage():
     data=json.loads(manifest.read_text())
     total=0
     for pr,head,base,stage_name,names in SOURCES:
+        subprocess.run(["git","fetch","--no-tags","--depth=1","origin",head],check=True)
         for i,name in enumerate(names):
             path=base+"/"+name
             endpoint=f"repos/{REPO}/contents/{path}?ref={head}"
             meta=json.loads(subprocess.check_output(["gh","api",endpoint]))
             assert meta["type"]=="file" and 0<meta["size"]<=8*1024*1024
-            raw=subprocess.check_output(["gh","api","-H","Accept: application/vnd.github.raw+json",endpoint])
+            raw=subprocess.check_output(["git","show",head+":"+path])
             assert len(raw)==meta["size"] and raw.startswith(b"\x89PNG\r\n\x1a\n")
             assert hashlib.sha1(f"blob {len(raw)}\0".encode()+raw).hexdigest()==meta["sha"]
             total+=len(raw)
