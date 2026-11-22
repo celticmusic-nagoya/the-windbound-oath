@@ -18,6 +18,22 @@ jobs:
         working-directory: tools/production-studio
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify complete PR scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import os, subprocess
+          paths=subprocess.check_output(['git','diff','--name-only','-z',os.environ['BASE_SHA']+'...'+os.environ['HEAD_SHA']]).decode().split('\0')
+          paths=[p for p in paths if p]
+          allowed={'.github/workflows/production-studio-qa.yml','.github/workflows/production-studio-sync-preview.yml','.github/workflows/production-studio-prepare-pages.yml'}
+          bad=[p for p in paths if not (p.startswith('tools/production-studio/') or p in allowed)]
+          assert not bad,bad
+          print('PASS: complete PR scope',len(paths),'files')
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -25,18 +41,21 @@ jobs:
       - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
       - run: npx playwright install --with-deps chromium
       - run: node studio-smoke.mjs
+      - name: Verify committed Pages files
+        run: STUDIO_ROOT="$PWD" node gallery-smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: studio-browser-qa
-          path: tools/production-studio/qa-output/
+          path: |
+            tools/production-studio/qa-output/
+            tools/production-studio/gallery-qa/
           if-no-files-found: warn
       - name: Stage isolated browser distribution
         run: |
-          mkdir -p dist/node_modules/three
-          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js README.md dist/
-          cp -r node_modules/three/build node_modules/three/examples dist/node_modules/three/
-          cp node_modules/three/LICENSE dist/node_modules/three/
+          mkdir -p dist
+          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js gallery-manifest.json README.md dist/
+          cp -r vendor published dist/
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > distribution-sha256.txt
       - uses: actions/upload-artifact@v4
         with:
