@@ -98,8 +98,8 @@ jobs:
         run: |
           set -euo pipefail
           # ChatGPT lease: resume verified batch-5 candidate (run 44950148004).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14727533115/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "884af385b9ae10fd2f5544baab6089905c0b452b4de7dc96ffd60c96c7bc1f69  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14729674867/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "08cd55927436dc25d8bfb3ec01c620a43b19976bb577f0d4433fb483121241dc  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -107,7 +107,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="ef10e454474dcd3f9713d088d2fd0bfc777cd663865f34edf9a3eaac87a76238"
+              assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
