@@ -137,12 +137,60 @@ def ratio_diagnostics(reference, actual):
                            residual=observed-target,status="REVIEW_ONLY"))
     return result
 
+def correction_loop(target, tolerance, samples, measure_and_apply, rollback,
+                    max_step, limits, deadline, clock, max_attempts=8):
+    """Adapter contract: verified native checkpoint, mutation, matched observation.
+    Never retry an ambiguous mutation; rollback must verify restored state.
+    """
+    history=[]
+    failures=0
+    if tolerance is None:
+        return {"status":"BLOCKED_TOLERANCE","history":history}
+    for _ in range(max_attempts):
+        if clock()>=deadline:
+            return {"status":"BLOCKED_TIME_BUDGET","history":history}
+        current=samples[-1]["control"]
+        proposal=bounded_correction(target,tolerance,samples,current,max_step,limits)
+        if proposal["status"]!="PROPOSED_REVIEW_REQUIRED":
+            return {"status":proposal["status"],"history":history}
+        prior=samples[-1]
+        try:
+            observed=measure_and_apply(proposal["control"])
+            if (not observed.get("registration_verified") or not observed.get("evidence_sha256")
+                or observed.get("context_sha256")!=prior["context_sha256"]
+                or observed.get("control_id")!=prior["control_id"]
+                or not math.isfinite(observed["actual"])
+                or not math.isfinite(observed["control"])
+                or abs(observed["control"]-proposal["control"])>0.001):
+                raise ValueError("ambiguous mutation or observation")
+        except Exception:
+            restored=rollback(prior)
+            return {"status":"BLOCKED_AMBIGUOUS_MUTATION" if restored else "BLOCKED_ROLLBACK",
+                    "history":history}
+        improved=abs(target-observed["actual"])<abs(target-prior["actual"])
+        history.append({"proposal":proposal,"observed":observed,"improved":improved})
+        if improved:
+            samples=[prior,observed]
+            failures=0
+            if abs(target-observed["actual"])<=tolerance:
+                return {"status":"WITHIN_TOLERANCE","history":history}
+        else:
+            if not rollback(prior):
+                return {"status":"BLOCKED_ROLLBACK","history":history}
+            failures+=1
+            if failures>=2:
+                return {"status":"BLOCKED_CAUSAL_REASSESSMENT","history":history}
+            max_step/=2
+    return {"status":"BLOCKED_ATTEMPT_BUDGET","history":history}
+
 def self_test():
     reg=register_points([[0,0],[10,0],[0,10]],[[5,5],[10,5],[5,10]],0.01)
     assert reg['registration_verified'] and reg['scale']==2
     assert not register_points([[0,0],[10,0],[0,10]],[[5,5],[10,5],[5,15]],0.01)['registration_verified']
     a=dict(control_id="test",context_sha256="fixture",registration_verified=True,evidence_sha256="fixture",control=0.,actual=10.)
     b=dict(a,control=1.,actual=12.)
+    result=correction_loop(13,0.01,[a,b],lambda c:dict(b,control=c,actual=10+2*c),lambda prior:True,0.25,(-2,2),100,lambda:0)
+    assert result["status"]=="WITHIN_TOLERANCE" and len(result["history"])==2
     assert bounded_correction(16,0.5,[a,b],1,0.25,(-2,2))["control"]==1.25
     assert bounded_correction(12,0.5,[a,b],1,0.25,(-2,2))["status"]=="WITHIN_TOLERANCE"
     assert bounded_correction(16,0.5,[a,dict(b,actual=10)],1,0.25,(-2,2))["status"]=="BLOCKED_NO_RESPONSE"
