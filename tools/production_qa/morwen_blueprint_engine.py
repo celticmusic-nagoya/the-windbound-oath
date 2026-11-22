@@ -153,12 +153,25 @@ def self_test():
     else:
         raise AssertionError("stale context accepted")
 
+def batch_summary(rows, stages):
+    modules={}
+    for name in ("face","body","hair","wardrobe","equipment"):
+        subset=[r for r in rows if r["module"]==name]
+        counts={k:sum(r["status"]==k for r in subset) for k in ("PASS","FAIL","BLOCKED","NOT_RUN")}
+        events=[v for k,v in stages if k==name or k.startswith(name+"-")]
+        modules[name]=dict(counts=counts,events=events,
+            status="BLOCKED" if counts["BLOCKED"] or any(v.startswith("BLOCKED") for v in events)
+            else "FAIL" if counts["FAIL"] else "NOT_RUN" if counts["NOT_RUN"]
+            else "MEASUREMENT_PASS_NOT_ADOPTED")
+    return modules
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("blueprint",type=Path)
     p.add_argument("output",type=Path)
     p.add_argument("--observations",type=Path)
     p.add_argument("--diagnostic-face",type=Path)
+    p.add_argument("--stages",type=Path)
     a=p.parse_args()
     self_test()
     fingerprint=sha(a.blueprint)
@@ -175,8 +188,11 @@ def main():
         if trial["reference_sha256"]!=bp["face_front_review"]["source_sha256"]:
             raise ValueError("wrong diagnostic reference")
         diagnostics=ratio_diagnostics(bp["face_front_review"]["projected_metrics_px"],trial["raw_metrics"])
+    stages=[]
+    if a.stages and a.stages.exists():
+        stages=[tuple(line.split("\t",1)) for line in a.stages.read_text().splitlines()[1:] if "\t" in line]
     a.output.parent.mkdir(parents=True,exist_ok=True)
-    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,face_ratio_diagnostics=diagnostics,
+    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,face_ratio_diagnostics=diagnostics,modules=batch_summary(rows,stages),
         status="MEASUREMENT_LEDGER_NOT_ART_QA",
         gaps=["matched camera registration","native control calibration","body tolerance",
               "hidden geometry","equipment attachment and clearance","UV rig deformation runtime"]),indent=2)+"\n")
