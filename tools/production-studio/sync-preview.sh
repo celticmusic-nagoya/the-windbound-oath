@@ -32,6 +32,7 @@ for x in selection:
 (Path(os.environ['RUNNER_TEMP'])/'studio-selection.json').write_text(json.dumps(active))
 PY
 python artifact-sync.py "$RUNNER_TEMP/studio-selection.json" "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site/published"
+python stage-village.py
 npm install --ignore-scripts --no-audit --no-fund
 cp -t "$RUNNER_TEMP/studio-site" index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js
 mkdir -p "$RUNNER_TEMP/studio-site/vendor/three"
