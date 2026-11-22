@@ -1,0 +1,50 @@
+name: Production Studio prepare Pages files
+on:
+  push:
+    branches: [feature/two-production-studio-sync-02]
+    paths: ['.github/workflows/production-studio-prepare-pages.yml']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: studio-prepare-pages
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/feature/two-production-studio-sync-02'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reuse verified distribution
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14733715805/zip > "$RUNNER_TEMP/studio.zip"
+          echo '00ec22389e706c42f61c14a8066fc58a855e92be6cf93bc27419e99140dce882  '"$RUNNER_TEMP/studio.zip" | sha256sum -c -
+          python - <<'PY'
+          import zipfile, pathlib, stat
+          root=pathlib.Path('tools/production-studio')
+          with zipfile.ZipFile(pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'studio.zip') as z:
+              total=0
+              for i in z.infolist():
+                  p=pathlib.PurePosixPath(i.filename)
+                  if p.is_absolute() or '..' in p.parts or '\\' in i.filename or stat.S_ISLNK(i.external_attr>>16):
+                      raise ValueError('unsafe archive')
+                  if i.is_dir(): continue
+                  if not (i.filename=='gallery-manifest.json' or i.filename.startswith(('published/','vendor/three/'))): continue
+                  total+=i.file_size
+                  if total>128*1024*1024: raise ValueError('budget')
+                  target=root/p
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(z.read(i))
+          PY
+          sed -i 's@./node_modules/three/@./vendor/three/@g' tools/production-studio/index.html
+          git add tools/production-studio/index.html tools/production-studio/gallery-manifest.json tools/production-studio/published tools/production-studio/vendor
+          git diff --cached --stat
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Stage verified Studio Pages distribution on existing PR'
+          git push origin HEAD:refs/heads/feature/two-production-studio-sync-02
