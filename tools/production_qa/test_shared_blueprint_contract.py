@@ -1,6 +1,7 @@
 from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
@@ -96,6 +97,76 @@ class BlueprintContractTests(unittest.TestCase):
                 run("isolated", "LIND-HOME", "1"*40, Path(directory), [stage], {}, execute,
                     Mock(), budget=10, reserve=2)
         execute.assert_not_called()
+
+    def test_factory_corrects_reopens_and_skips_verified_stage_on_resume(self):
+        with TemporaryDirectory() as directory, patch(
+            "shared_session_controller.acquire", return_value="2"*40
+        ), patch("shared_session_controller.assert_owned"), patch("shared_session_controller.release"):
+            root = Path(directory)
+            source = root / "input.blend"
+            source.write_text("1.06")
+            target = {**self.target, "source_sha256": sha(source)}
+            request = {**self.req, "source_sha256": sha(source), "asset_id": "LIND-HOME",
+                       "stage": "edit", "head_sha": "1"*40}
+            baseline = dict(id="input", deps=[], qualified=True, seconds=2, fingerprint="input")
+            stage = dict(id="edit", deps=["input"], qualified=True, seconds=2, fingerprint="factory",
+                         requires_blueprint=True)
+            calls = []
+
+            def observe(native):
+                value = float(native.read_text())
+                return {**self.observation, "target_contract_sha256": digest_record(target),
+                        "source_sha256": sha(source), "native_sha256": sha(native),
+                        "actual": {"span": value}, "residuals": {"span": value - 1.0}}
+
+            def edit(native, target, *, deadline):
+                calls.append("edit")
+                native.write_text("1.05")
+
+            def measure(native, target, *, deadline):
+                calls.append("measure")
+                return observe(native)
+
+            def correct(native, target, evidence, *, deadline):
+                calls.append("correct")
+                self.assertGreater(evidence["residuals"]["span"], .02)
+                native.write_text("1.01")
+
+            def finish(native, target, *, deadline):
+                calls.append("finish")
+
+            def reopen(native, target, *, deadline):
+                calls.append("reopen")
+                return observe(native)
+
+            adapter = SimpleNamespace(edit=edit, measure=measure, correct=correct, finish=finish, reopen=reopen)
+            state = {"input": dict(path=source.name, sha256=sha(source), reopened=True, fingerprint="input")}
+            persist = Mock(return_value=True)
+
+            def worker():
+                return run("isolated", "LIND-HOME", "1"*40, root, [baseline, stage], state, Mock(), persist,
+                           budget=10, reserve=2, blueprint_targets={"edit": (target, request)},
+                           factory_stages={"edit": (None, adapter)})
+
+            self.assertEqual(worker(), ["edit"])
+            self.assertEqual(calls, ["edit", "measure", "correct", "measure", "finish", "reopen"])
+            self.assertEqual(state["edit"]["dependency_checkpoints"], {"input": sha(source)})
+            self.assertEqual(source.read_text(), "1.06")
+            self.assertEqual(worker(), [])
+            self.assertEqual(calls.count("edit"), 1)
+            target["operation"] = {**target["operation"], "evidence_sha256": "9"*64}
+            self.assertEqual(worker(), ["edit"])
+            self.assertEqual(calls.count("edit"), 2)
+
+            adapter.measure = lambda native, target, deadline: {
+                **observe(native), "uncertainty": {"span": .06}}
+            target["operation"] = {**target["operation"], "evidence_sha256": "8"*64}
+            persist.reset_mock()
+            with self.assertRaisesRegex(RuntimeError, "tolerance:span"):
+                worker()
+            persist.assert_not_called()
+            self.assertEqual(calls.count("correct"), 2)
+            self.assertEqual(len(list((root / "quarantine").iterdir())), 1)
 
 
 if __name__ == "__main__":

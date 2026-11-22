@@ -6,23 +6,29 @@ No automatic takeover; retain lease on failure until reconciled.
 import time
 from session_plan import ready,sha
 from shared_asset_lease import acquire,assert_owned,claim_reservation,release
-from shared_blueprint_contract import measurement_issues, target_issues
+from shared_blueprint_contract import digest_record, measurement_issues, target_issues
+from shared_factory_stage import execute_factory_stage
 from shared_session_contract import asset_key
 
 def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800,
-        *, reservation=None, fenced=False, blueprint_targets=None):
+        *, reservation=None, fenced=False, blueprint_targets=None, factory_stages=None):
     """Carry a dispatch reservation into the worker and use the returned fence at each stage.
 
     In fenced mode, persist must atomically publish a changed ledger and return
     its new lease token. It must also confirm an unchanged ledger when no stage
     was executed by returning the current token after verifying durability.
     Stages declaring requires_blueprint need a validated target before editing.
+    A factory entry is (source_path, adapter); a None source selects its
+    sole dependency's verified checkpoint without changing the blueprint SHA.
     """
     if not 0<reserve<budget<=21600: raise ValueError('invalid budget')
     asset_key(asset)
     targets = blueprint_targets or {}
+    factories = factory_stages or {}
     if set(targets) - {stage["id"] for stage in stages}:
         raise ValueError("blueprint target references an unknown session stage")
+    if set(factories) - targets.keys():
+        raise ValueError("precision factory stage requires a supplied blueprint target")
     started=time.monotonic()
     end=started+budget
     def durable(records,token,changed):
@@ -46,7 +52,17 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
     executed=[]
     while True:
         assert_owned(remote,asset,token)
-        available=ready(stages,completed,root,budget-(time.monotonic()-started),reserve)
+        reusable = dict(completed)
+        for stage in stages:
+            stage_id = stage["id"]
+            if stage_id not in factories or stage_id not in reusable:
+                continue
+            record = reusable[stage_id]
+            dependency_shas = {dep: completed.get(dep, {}).get("sha256") for dep in stage["deps"]}
+            if (record.get("target_contract_sha256") != digest_record(targets[stage_id][0])
+                    or record.get("dependency_checkpoints") != dependency_shas):
+                reusable.pop(stage_id)
+        available=ready(stages,reusable,root,budget-(time.monotonic()-started),reserve)
         if not available:break
         stage=next(s for s in stages if s['id']==available[0])
         blueprint = targets.get(stage["id"])
@@ -60,7 +76,19 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
             if issues:
                 raise ValueError("blueprint target blocked: " + ", ".join(issues))
         deadline=min(started+budget-reserve,time.monotonic()+stage['seconds'])
-        result=execute(stage,token,deadline)
+        factory = factories.get(stage["id"])
+        if factory is None:
+            result=execute(stage,token,deadline)
+        else:
+            source, adapter = factory
+            if source is None:
+                if len(stage["deps"]) != 1:
+                    raise ValueError("factory source requires exactly one checkpoint dependency")
+                source = root / completed[stage["deps"][0]]["path"]
+            result = execute_factory_stage(root, source, stage, target, request, adapter, deadline,
+                                           lambda: assert_owned(remote, asset, token))
+            result["target_contract_sha256"] = digest_record(target)
+            result["dependency_checkpoints"] = {dep: completed[dep]["sha256"] for dep in stage["deps"]}
         if time.monotonic()>deadline:raise TimeoutError('stage deadline exceeded; reconcile retained lease')
         assert_owned(remote,asset,token)
         p=(root/result['path']).resolve()
