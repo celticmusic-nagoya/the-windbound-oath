@@ -52,7 +52,13 @@ def compare(rows, observations):
         if not isinstance(actual,(float,int)) or not math.isfinite(actual):
             raise ValueError("invalid actual")
         row.update(actual=actual,residual=actual-row["target"],evidence_sha256=obs["evidence_sha256"])
-        row["status"]="BLOCKED" if row["tolerance"] is None else ("PASS" if abs(row["residual"])<=row["tolerance"] else "FAIL")
+        uncertainty=obs.get("uncertainty_px")
+        if uncertainty is None or not math.isfinite(uncertainty) or uncertainty<0 or row["tolerance"] is None:
+            row["status"]="BLOCKED"
+        else:
+            row["uncertainty_px"]=uncertainty
+            error=abs(row["residual"])
+            row["status"]="PASS" if error+uncertainty<=row["tolerance"] else "FAIL" if error-uncertainty>row["tolerance"] else "BLOCKED"
     return rows
 
 def bounded_correction(target, tolerance, samples, current, max_step, limits):
@@ -262,12 +268,19 @@ def measured_face_observations(bp, packet, root):
         raise ValueError("unqualified projection")
     reg=register_points(packet["reference_anchors"],packet["actual_anchors"],3)
     metrics=project_face_metrics(packet["points"],reg)
-    uncertainty=packet["uncertainty_px"]*reg["scale"]
+    uncertainty=2*packet["uncertainty_px"]*reg["scale"]+2*reg["max_error"]
     if not math.isfinite(uncertainty) or not 0<=uncertainty<=3:
         raise ValueError("insufficient landmark precision")
     return {"face.front."+k:dict(packet,actual=v,observable="matched_source_px",
         registration_verified=True,registration=reg,uncertainty_px=uncertainty)
         for k,v in metrics.items()}
+
+def test_measurement_gate():
+    row=dict(id="fixture",target=10,tolerance=6,observable="matched_source_px")
+    obs=dict(actual=15,observable="matched_source_px",registration_verified=True,evidence_sha256="fixture",uncertainty_px=2)
+    for actual,expected in [(13,"PASS"),(15,"BLOCKED"),(19,"FAIL")]:
+        assert compare([dict(row)],{"fixture":dict(obs,actual=actual)})[0]["status"]==expected
+    assert compare([dict(row)],{"fixture":dict(obs,uncertainty_px=None)})[0]["status"]=="BLOCKED"
 
 def main():
     p=argparse.ArgumentParser()
@@ -281,6 +294,7 @@ def main():
     p.add_argument("--batch-plan",type=Path)
     a=p.parse_args()
     self_test()
+    test_measurement_gate()
     fingerprint=sha(a.blueprint)
     rows=compile_targets(json.loads(a.blueprint.read_text()))
     if a.observations:
