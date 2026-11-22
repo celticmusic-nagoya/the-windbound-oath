@@ -248,11 +248,33 @@ def verify_observation_files(data, root):
         if sha(model)!=obs["model_sha256"]:
             raise ValueError("measurement checkpoint digest mismatch")
 
+def measured_face_observations(bp, packet, root):
+    """Convert independently annotated original-pixel points to measured targets.
+    Registration must use separate reviewed anchors; no self-asserted PASS.
+    """
+    ref=bp["face_front_review"]
+    if packet["reference_sha256"]!=ref["source_sha256"]:
+        raise ValueError("wrong reference")
+    if packet.get("annotation_status")!="INDEPENDENTLY_REVIEWED":
+        raise ValueError("unreviewed landmarks")
+    verify_observation_files({"observations":{"face":packet}},root)
+    if packet.get("view")!="front" or packet.get("projection_review")!="MATCHED":
+        raise ValueError("unqualified projection")
+    reg=register_points(packet["reference_anchors"],packet["actual_anchors"],3)
+    metrics=project_face_metrics(packet["points"],reg)
+    uncertainty=packet["uncertainty_px"]*reg["scale"]
+    if not math.isfinite(uncertainty) or not 0<=uncertainty<=3:
+        raise ValueError("insufficient landmark precision")
+    return {"face.front."+k:dict(packet,actual=v,observable="matched_source_px",
+        registration_verified=True,registration=reg,uncertainty_px=uncertainty)
+        for k,v in metrics.items()}
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("blueprint",type=Path)
     p.add_argument("output",type=Path)
     p.add_argument("--observations",type=Path)
+    p.add_argument("--face-packet",type=Path)
     p.add_argument("--evidence-root",type=Path)
     p.add_argument("--diagnostic-face",type=Path)
     p.add_argument("--stages",type=Path)
@@ -269,6 +291,10 @@ def main():
             raise ValueError("evidence root required for observations")
         verify_observation_files(data,a.evidence_root)
         compare(rows,data["observations"])
+    if a.face_packet:
+        if not a.evidence_root or a.observations:
+            raise ValueError("face packet needs evidence root and exclusive input")
+        compare(rows,measured_face_observations(json.loads(a.blueprint.read_text()),json.loads(a.face_packet.read_text()),a.evidence_root))
     diagnostics=[]
     if a.diagnostic_face:
         trial=json.loads(a.diagnostic_face.read_text())
