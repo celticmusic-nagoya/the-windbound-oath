@@ -1,0 +1,61 @@
+{
+  "status": "MANUAL_ESTIMATE_REGISTRATION_BLOCKED",
+  "run": 44984079505,
+  "artifact": 14739730068,
+  "path": "view-phase1-before-front.png",
+  "sha256": "f7c13eceb13ddc39794c860d728f37a3d74ceb874c47156b1553e16a4bb01be9",
+  "reference_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+  "points": {
+    "left_outer_eye": [
+      477,
+      375
+    ],
+    "left_inner_eye": [
+      499,
+      377
+    ],
+    "right_inner_eye": [
+      525,
+      377
+    ],
+    "right_outer_eye": [
+      550,
+      375
+    ],
+    "left_iris_center": [
+      489,
+      378
+    ],
+    "right_iris_center": [
+      534,
+      378
+    ],
+    "mouth_left": [
+      505,
+      409
+    ],
+    "mouth_right": [
+      519,
+      409
+    ],
+    "nose_tip": [
+      512,
+      392
+    ],
+    "chin": [
+      512,
+      427
+    ]
+  },
+  "raw_metrics": {
+    "eye_width_left": 22,
+    "eye_width_right": 25,
+    "iris_center_distance": 45,
+    "inner_eye_gap": 26,
+    "mouth_width": 14,
+    "nose_to_chin_vertical": 35
+  },
+  "uncertainty_px": 3,
+  "registration_verified": false,
+  "reason": "Unmatched scale and projection; face landmarks themselves cannot be independent registration anchors for their own correction. Need calibrated camera or independently qualified normalization. No mutation authorized by these observations."
+}
