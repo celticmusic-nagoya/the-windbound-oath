@@ -10,7 +10,13 @@ remote, asset, state, mode = sys.argv[1:]
 state = Path(state)
 if mode == "open":
     subprocess.run(["git", "init", "--bare", remote], check=True, capture_output=True)
-    head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    tree = subprocess.check_output(["git", "mktree"], input="", text=True).strip()
+    head = subprocess.check_output(
+        ["git", "-c", "user.name=HOME isolated QA", "-c", "user.email=qa@invalid",
+         "commit-tree", tree, "-m", "HOME isolated writer for " + revision],
+        text=True,
+    ).strip()
     stale = acquire(remote, asset, head)
     release(remote, asset, stale)
     token = acquire(remote, asset, head)
@@ -21,7 +27,7 @@ if mode == "open":
             pass
         else:
             raise RuntimeError("invalid writer was accepted")
-    state.write_text(json.dumps({"token": token, "head": head}))
+    state.write_text(json.dumps({"token": token, "head": head, "revision": revision}))
 else:
     token = json.loads(state.read_text())["token"]
     assert_owned(remote, asset, token)

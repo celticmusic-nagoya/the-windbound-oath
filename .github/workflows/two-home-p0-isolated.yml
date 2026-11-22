@@ -65,7 +65,21 @@ jobs:
           esac
           fence=tools/production_qa/home_p0/isolated_fence.py
           python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json open
-          timeout -k 20s 12m /tmp/home-blender/blender -b -noaudio --disable-autoexec             --python-exit-code 9 --python tools/production_qa/home_p0/home_bedding.py --             "$mode" "$source" owner-design/docs/production/lind/home/interior-bed-target.v1.json             owner-design/docs/production/LIND_INTEGRATED_ARCHITECTURE_BLUEPRINT_20261121.md             /tmp/home-output "$expected"
+          edit() {
+            timeout -k 20s "$1" /tmp/home-blender/blender -b -noaudio --disable-autoexec \
+              --python-exit-code 9 --python tools/production_qa/home_p0/home_bedding.py -- \
+              "$2" "$source" owner-design/docs/production/lind/home/interior-bed-target.v1.json \
+              owner-design/docs/production/LIND_INTEGRATED_ARCHITECTURE_BLUEPRINT_20261121.md \
+              /tmp/home-output "$3"
+          }
+          if [[ "$mode" == restore ]]; then
+            if edit 1m interrupt "$expected" > /tmp/home-interruption.log 2>&1; then exit 1; fi
+            grep -q 'RuntimeError: P0_INTENTIONAL_INTERRUPTION_BEFORE_WRITE' /tmp/home-interruption.log
+            test ! -e /tmp/home-output/home-p0.blend
+            python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json owned
+            echo "P0_INTERRUPTED_RESTORE_RETAINED_FENCE"
+          fi
+          edit 12m "$mode" "$expected"
           python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json owned
           (cd /tmp/home-output && sha256sum home-p0.blend preview.png qa.json > SHA256SUMS)
           cat /tmp/home-output/qa.json

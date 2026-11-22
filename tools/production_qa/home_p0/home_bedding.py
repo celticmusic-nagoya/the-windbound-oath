@@ -166,6 +166,9 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     target = json.loads(bed.read_text())["target"]["blanket"]
     bpy.ops.wm.open_mainfile(filepath=str(source))
+    if mode == "interrupt":
+        measure(bpy.data.objects[TARGET], target)
+        raise RuntimeError("P0_INTENTIONAL_INTERRUPTION_BEFORE_WRITE")
     if mode == "create":
         assert expected == SOURCE
         protected = record_mesh(True)
