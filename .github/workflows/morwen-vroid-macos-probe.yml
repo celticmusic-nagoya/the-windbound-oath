@@ -9,6 +9,8 @@ on:
       - tools/production_qa/morwen_phase1_author.sh
       - tools/production_qa/morwen_vroid_session.sh
       - tools/production_qa/macos_gui.swift
+      - tools/production_qa/morwen_blueprint_engine.py
+      - tools/morwen_authored_sculpt/precision_blueprint_v2.json
       - .github/workflows/morwen-vroid-macos-probe.yml
 permissions:
   contents: read
@@ -19,7 +21,7 @@ concurrency:
 jobs:
   probe:
     runs-on: macos-15
-    timeout-minutes: 90
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,6 +34,8 @@ jobs:
           shasum -a 256 tools/production_qa/morwen_vroid_session.sh | tee evidence/session-script-sha256.txt
           bash -n tools/production_qa/morwen_vroid_session.sh
           bash -n tools/production_qa/morwen_phase1_author.sh
+          python3 -m py_compile tools/production_qa/morwen_blueprint_engine.py
+          python3 tools/production_qa/morwen_blueprint_engine.py tools/morwen_authored_sculpt/precision_blueprint_v2.json evidence/blueprint-targets.json
           shasum -a 256 tools/production_qa/morwen_phase1_author.sh > evidence/author-script-sha256.txt
       - name: Compile shared GUI controls
         run: |
@@ -141,7 +145,7 @@ jobs:
           ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
           hdiutil detach "$RUNNER_TEMP/vroid-mount"
       - name: Launch signed application and collect evidence
-        timeout-minutes: 55
+        timeout-minutes: 300
         shell: bash
         run: |
           set -euo pipefail
