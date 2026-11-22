@@ -173,19 +173,13 @@ if inspect_panel equipment-create Accessories Outfit 'Add Accessories' && grep -
     fi
   fi
 fi
-# Body response calibration on the disposable runner copy, not a design target.
-if inspect_panel body-trial Body Outfit 'Whole Body' && grep -Fq 'Fem Height' evidence/body-trial-top.txt && "$row" evidence/body-trial-top.png '^Fem Height$' >/dev/null; then
-  record body-height MUTATION_ATTEMPTED
-  if slider_by body-height '^Fem Height$' 0.005; then
-    record body-height EDITED_REVIEW_REQUIRED
-  else
-    record body-height MUTATION_UNVERIFIED
-    echo BLOCKED_AMBIGUOUS_MUTATION > evidence/authoring-status.txt
-    exit 1
-  fi
-else
-  record body-height BLOCKED_CONTROL
-fi
+# Prior disposable response persisted (run 44984079505); do not repeat or promote.
+record body-height PRIOR_CALIBRATION_VERIFIED_NOT_PROMOTED
+record body BLOCKED_MATCHED_PROJECTION_REQUIRED
+record face BLOCKED_MATCHED_PROJECTION_REQUIRED
+record wardrobe BLOCKED_TARGET_CONTROL_MAPPING
+record equipment BLOCKED_ATTACHMENT_MAPPING
+record hair BLOCKED_GUIDE_RESPONSE_MAPPING
 if ! recover_editor final-editor; then
   echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
   exit 1
