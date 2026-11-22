@@ -321,5 +321,16 @@
       "status": "POLICY_APPROVED_RUNTIME_NOT_RUN",
       "policy": "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md"
     }
+  },
+  "continuity_readiness": {
+    "policy": "docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md",
+    "owner_sync_required": true,
+    "all_event_pagination_required": true,
+    "unknown_state": "SYNC_UNVERIFIED",
+    "stale_candidate_recovery": false,
+    "affected_scope_only": true,
+    "production_verified_requires_actual_native_edit_cross_run_restore_and_qa": true,
+    "policy_is_runtime_pass": false,
+    "track_open_dependencies_to_closure": true
   }
 }

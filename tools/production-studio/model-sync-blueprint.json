@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "scope": "preview-only model synchronization; publication requires explicit approval",
+  "sources": {
+    "discover-gallery.py": "aacfec206f3d28192a17a9d2599eaf0241e71ded",
+    "artifact-sync.py": "d8f18e9acbd56705e2387f2d4366e1edc7565020",
+    "gallery-smoke.mjs": "9fd0874fee56de46b60d47e60c06cd2aa30765a5"
+  },
+  "targets": [
+    {
+      "id": "M01",
+      "target": "approved owning branch, successful run, unique model under export/models paths; maximum one model per archive, 32 MiB",
+      "test": "discovery unit test",
+      "checkpoint": "selection JSON"
+    },
+    {
+      "id": "M02",
+      "target": "GLB2, embedded resources only, SHA exact, no unsupported required extensions",
+      "test": "staging validation",
+      "checkpoint": "manifest"
+    },
+    {
+      "id": "M03",
+      "target": "390px viewport no overflow; verified gallery model opens via existing viewer",
+      "test": "browser fixture and actual model when available",
+      "checkpoint": "QA screenshot"
+    },
+    {
+      "id": "M04",
+      "target": "no production model published without approval",
+      "test": "preview-only environment opt-in; publish workflow unchanged",
+      "checkpoint": "PR review"
+    }
+  ],
+  "unknowns": [
+    "actual eligible model availability",
+    "Android device",
+    "full VRM shading and physics",
+    "asset publication permission"
+  ]
+}

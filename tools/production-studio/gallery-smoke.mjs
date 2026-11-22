@@ -8,6 +8,7 @@ const root=process.env.STUDIO_ROOT || join(process.env.RUNNER_TEMP,'studio-site'
 const manifest=JSON.parse(await readFile(join(root,'gallery-manifest.json')));
 assert.ok(manifest.entries.length>=5);
 const isCliff=e=>e.category==='cliff'||e.run_id===44708204132;
+const photo=e=>/\.(png|jpe?g)$/.test(e.path);
 const morwen=manifest.entries.filter(e=>e.category==='morwen');
 for(const e of manifest.entries){const data=await readFile(join(root,e.path));assert.equal(data.length,e.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),e.sha256);}
 await mkdir('gallery-qa',{recursive:true});
@@ -22,11 +23,11 @@ try{
  await page.goto('http://127.0.0.1:8766/');
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  assert.equal(await page.locator('.category-card').count(),4);
- assert.equal(await page.locator('#published-gallery img').count(),new Set(manifest.entries.map(e=>isCliff(e)?'cliff':e.category||'other')).size);
+ assert.equal(await page.locator('#published-gallery img').count(),new Set(manifest.entries.filter(photo).map(e=>isCliff(e)?'cliff':e.category||'other')).size);
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
- assert.equal(await images.count(),manifest.entries.filter(isCliff).length);
+ assert.equal(await images.count(),manifest.entries.filter(e=>isCliff(e)&&photo(e)).length);
  for(const img of await images.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert.ok(await img.evaluate(e=>e.naturalWidth>0&&e.naturalHeight>0));}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/actual-gallery.png'});
@@ -35,8 +36,8 @@ try{
  await page.getByRole('button',{name:'閉じる',exact:true}).click();
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:/モルウェン/}).click();
- if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('公開用成果物はまだ同期されていません。').isVisible());
- if(morwen.length>=2){
+ if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.filter(photo).length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('公開用成果物はまだ同期されていません。').isVisible());
+ if(morwen.filter(photo).length>=2){
  await page.getByRole('button',{name:'画像比較',exact:true}).click();
  const dialog=page.locator('dialog');
  await dialog.getByRole('combobox',{name:'比較A'}).selectOption('0');
@@ -51,6 +52,17 @@ try{
  await dialog.screenshot({path:'gallery-qa/compare-mobile.png'});
  await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
  await dialog.waitFor({state:'detached',timeout:5000});
+ }
+ for(const [category,label] of [['cliff','風待ちの崖'],['morwen','モルウェン'],['village','リルド村'],['other','その他']]){
+ const models=manifest.entries.filter(e=>(isCliff(e)?'cliff':e.category||'other')===category&&!photo(e));
+ if(!models.length)continue;
+ await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
+ await page.getByRole('button',{name:new RegExp(label)}).click();
+ const buttons=page.locator('#published-gallery').getByRole('button',{name:'3D表示'});
+ assert.equal(await buttons.count(),models.length);
+ await buttons.first().click();
+ await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
+ await page.screenshot({path:'gallery-qa/model-'+category+'.png'});
  }
  assert.deepEqual(errors,[]);
  console.log('PASS: production images decoded; SHA-256 verified; mobile width.');

@@ -1,5 +1,8 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## Mandatory continuity and readiness (2026-11-23)
+Read [docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md](docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md). Owner/live evidence synchronization, stale-candidate rejection and scoped production readiness gates are mandatory for all agents and automations. Historical pointers are not work orders; incomplete infrastructure is tracked to actual verification. Existing qualified independent production continues.
+
 - Mandatory multi-stage batches: [shared policy](docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md). Character face/hair/body then wardrobe/equipment; world geometry/interfaces then materials/scene then runtime QA. Combine safe ready stages in one session; preserve checkpoints and independent QA. Viewport-first in-session correction, selective QA and verified checkpoint resume are mandatory; live review bridge is optional and unverified. 60–120 minutes is a planning heuristic, not a stop cap; verified free standard public runners may use productive long sessions within actual limits with checkpoint reserve and genuine bounded review waits.
 
 - Mandatory Morwen VRoid-first sequence: read [director-approved policy](docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md). Continue native authoring to achievable reference fidelity before VRM/Blender; blueprint in parallel. Prioritize qualified HairHarpy v2.0.0 for hair beyond native VRoid capabilities before Blender hair sculpting. No premature method switch without explicit director approval.
@@ -37,3 +40,5 @@ When a control is not recognized, automatically capture the current panel and in
 
 ## Mandatory executable blueprint and full-deliverable closure (director approved 2026-11-22)
 Follow docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md (latest closure section) across all workstreams. Audit and complete the target blueprint inventory, including missing information and resolution tasks, before affected precision work. Executable target IDs, source hashes, tolerances, qualified operations, matched measured residuals and preflight are mandatory; a registered JSON is not runtime integration. Continue all ready modules in a single delivery-sized session up to the verified free 360-minute job limit including reserve, with in-session measurement/correction, checkpoint/reopen and causal recovery. One operation or progress report is not a stop condition. Scope blockers, preserve evidence and resume remaining work without duplication. No automatic adoption, canon change, paid resources or main merge beyond explicit approval. Runtime adapters require actual verification.
+
+- Apply [precision measurement and correction playbook](docs/policy/PRECISION_MEASUREMENT_PLAYBOOK_20261122.md) for original-pixel evidence, registration, measured control response and bounded correction across production.
