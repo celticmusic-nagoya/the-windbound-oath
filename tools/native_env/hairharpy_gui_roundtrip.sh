@@ -15,7 +15,7 @@ bridge_sha=fd6954293c8258a01a3dc5c2aa107771f3427d0c0037b3c527ee70cac3b7a57a
 B=${BLENDER530:-/tmp/b530/blender}
 if [ "${SKIP_SETUP:-0}" != 1 ]; then
   sudo apt-get update -q >/dev/null
-  sudo apt-get install -y -q xvfb xdotool imagemagick tesseract-ocr mesa-vulkan-drivers libvulkan1 libopengl0 libegl1 \
+  sudo apt-get install -y -q xvfb xdotool imagemagick tesseract-ocr fonts-inter mesa-vulkan-drivers libvulkan1 libopengl0 libegl1 \
     libgl1-mesa-dri libglx-mesa0 libgles2 libfontconfig1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 \
     libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxcb-image0 >/dev/null
   curl -fsSL --retry 2 "https://github.com/Rackta/HairHarpy/releases/download/v2.0.0/$asset" -o "$bin/$asset"
@@ -27,6 +27,17 @@ echo "$bridge_sha  /tmp/hh-src/resources/bridge/hmc_bridge_blender.py" | sha256s
 rm -rf "$bin/app"; mkdir -p "$bin/app"; tar -xzf "$bin/$asset" -C "$bin/app"
 app="$bin/app/HairHarpy-2.0.0/AppRun"
 export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.json QT_QPA_PLATFORM=xcb
+# Deterministic UI layout: HairHarpy asks for "Segoe UI"; pin its fallback to Inter on every runner
+# (run 45045591478: runner fallback font changed layout and OCR; calibration was made with Inter)
+mkdir -p /tmp/hh-fc
+cat > /tmp/hh-fc/fonts.conf <<'FC'
+<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig><include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+<alias binding="strong"><family>Segoe UI</family><prefer><family>Inter</family></prefer></alias>
+<alias binding="strong"><family>sans-serif</family><prefer><family>Inter</family></prefer></alias></fontconfig>
+FC
+export FONTCONFIG_FILE=/tmp/hh-fc/fonts.conf
+fc-match "Segoe UI" | tee "$out/font_check.txt" | grep -q Inter
 
 # neutral qualification head (ellipsoid, metres, Y-up OBJ)
 cat > /tmp/hh_mkhead.py <<'PY'
