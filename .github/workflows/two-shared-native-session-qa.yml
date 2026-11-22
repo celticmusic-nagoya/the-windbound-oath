@@ -1,0 +1,62 @@
+name: Shared native session qualification
+on:
+  push:
+    branches: [infra/shared-native-session-20261122]
+    paths: ['.github/workflows/two-shared-native-session-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  statuses: write
+concurrency:
+  group: two-shared-native-session-qualification
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify public runner and competing reservations
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/$GITHUB_REPOSITORY --jq .visibility)" = public
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          python3 - <<'PY'
+          import os,sys,concurrent.futures,tempfile,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'tools/production_qa')
+          from shared_asset_reservation import acquire,inspect,ref_for
+          from session_plan import ready,sha
+          r=os.environ['GITHUB_REPOSITORY']; h=os.environ['GITHUB_SHA']
+          a='QA-SESSION-'+os.environ['GITHUB_RUN_ID']+'-'+os.environ['GITHUB_RUN_ATTEMPT']
+          def attempt(i):
+              try: acquire(r,a,h);return True
+              except RuntimeError:return False
+          with concurrent.futures.ThreadPoolExecutor(2) as p: outcomes=list(p.map(attempt,range(2)))
+          assert sum(outcomes)==1,outcomes
+          assert inspect(r,a)['object']['sha']==h
+          assert ref_for(a)!=ref_for(a+'-OTHER')
+          # Synthetic test ref intentionally retained as evidence; unique test namespace.
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d); p=root/'checkpoint';p.write_bytes(b'fixture')
+              stages=[dict(id='a',deps=[],fingerprint='a',qualified=True,seconds=120),dict(id='b',deps=['a'],fingerprint='b',qualified=True,seconds=120)]
+              done={'a':dict(path=p.name,fingerprint='a',reopened=True,sha256=sha(p))}
+              assert ready(stages,done,root,19800,1800)==['b']
+              assert ready(stages,done,root,1850,1800)==[]
+              p.write_bytes(b'corrupt')
+              assert ready(stages,done,root,19800,1800)==['a']
+          print('ATOMIC_RESERVATION_AND_PLAN_PASS',outcomes,ref_for(a))
+          PY
+      - name: Publish result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [[ "$RESULT" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/shared-session-qa -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
