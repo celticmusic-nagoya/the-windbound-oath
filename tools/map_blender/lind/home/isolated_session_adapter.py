@@ -21,7 +21,9 @@ def main():
     with tempfile.TemporaryDirectory() as d:
         remote=str(Path(d)/'isolated.git')
         subprocess.run(['git','init','--bare',remote],check=True)
-        commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+        production_head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+        tree=subprocess.check_output(['git','mktree'],input='',text=True).strip()
+        commit=subprocess.check_output(['git','-c','user.name=QA','-c','user.email=qa@invalid','commit-tree',tree,'-m','Isolated pilot for '+production_head],text=True).strip()
         subprocess.run(['git','push',remote,commit+':refs/heads/pilot'],check=True)
         records={}
         stages=[]
