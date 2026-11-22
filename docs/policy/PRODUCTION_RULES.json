@@ -59,7 +59,31 @@
         "verify_undo_or_reopen": true,
         "continue_independent_stages": true,
         "unknown_dialog_confirmation": false,
-        "status": "POLICY_APPROVED_RUNTIME_QUALIFICATION_REQUIRED"
+        "status": "POLICY_APPROVED_RUNTIME_QUALIFICATION_REQUIRED",
+        "control_recognition": {
+          "required": true,
+          "diagnostics": [
+            "label_variants",
+            "ocr_segmentation",
+            "scroll_position",
+            "focus",
+            "viewport_scaling",
+            "accessibility"
+          ],
+          "alternate_locators": [
+            "exact_label",
+            "normalized_label",
+            "accessibility",
+            "bounded_scroll",
+            "calibrated_anchor_relative"
+          ],
+          "unique_target_and_postcondition": true,
+          "disposable_response_calibration": true,
+          "distinguish_recognition_and_mutation_failure": true,
+          "persist_versioned_evidence": true,
+          "continue_independent_modules": true,
+          "never_promote_calibration": true
+        }
       }
     }
   },
