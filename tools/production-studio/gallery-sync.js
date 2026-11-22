@@ -41,8 +41,11 @@ async function loadPublishedGallery(){
  area.replaceChildren();area.classList.remove("category-grid");
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=()=>home();area.append(back);
  const entries=groups.get(id);status.textContent=title+" / "+entries.length+" 件 / 公開用候補";
- for(const e of entries){const tile=renderEntry(e);const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
- if(!entries.length){const p=document.createElement("p");p.textContent="公開用成果物はまだ同期されていません。";area.append(p);}
+ const stages=[...new Set(entries.map(e=>e.stage||"未分類"))];
+ const filter=document.createElement("select");filter.className="category-back";filter.setAttribute("aria-label","制作段階");for(const name of ["すべて",...stages]){const opt=document.createElement("option");opt.value=name;opt.textContent=name;filter.append(opt);}area.append(filter);
+ for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
+ filter.onchange=()=>{for(const tile of area.querySelectorAll("article"))tile.hidden=filter.value!=="すべて"&&tile.dataset.stage!==filter.value;};
+ if(!entries.length){filter.hidden=true;const p=document.createElement("p");p.textContent="公開用成果物はまだ同期されていません。";area.append(p);}
  }
  home();
  }catch(e){status.textContent="同期一覧未取得: "+e.message;}
