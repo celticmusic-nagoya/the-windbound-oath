@@ -25,3 +25,21 @@ def fingerprint(asset, stage, hashes):
                 raise ValueError("invalid component digest")
     payload = dict(version=1, asset=asset, stage=stage, hashes=hashes)
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
+
+def verified_file_hashes(root, manifest):
+    """Verify declared relative files against actual bytes, rejecting escapes."""
+    from pathlib import Path
+    from session_plan import sha
+    root=Path(root).resolve()
+    if not isinstance(manifest,dict) or not manifest:
+        raise ValueError("empty file manifest")
+    for name, expected in manifest.items():
+        rel=Path(name)
+        if rel.is_absolute() or ".." in rel.parts:
+            raise ValueError("unsafe input path")
+        p=(root/rel).resolve()
+        if not p.is_relative_to(root) or not p.is_file():
+            raise ValueError("input outside root or missing")
+        if sha(p)!=expected:
+            raise ValueError("input digest mismatch: "+name)
+    return dict(manifest)
