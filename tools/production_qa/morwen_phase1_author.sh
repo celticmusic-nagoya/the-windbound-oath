@@ -35,6 +35,14 @@ if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && gre
       if grep -Fq "Freehand Group 1" evidence/phase2-strand-editor.txt && grep -Fq "Hair Groups" evidence/phase2-strand-editor.txt; then
         if "$gui" click 0.0713 0.3997 && sleep 2 && capture_state phase2-first-group; then
           record hair GROUP_DISCLOSURE_CAPTURED_REVIEW_REQUIRED
+          # Archived 2.16.0 screenshot confirms Hair 3 is the first visible strand.
+          if grep -Fq 'Hair 3' evidence/phase2-first-group.txt && grep -Fq 'Freehand Guides' evidence/phase2-first-group.txt; then
+            if "$gui" click-label evidence/phase2-first-group.png 'Hair 3' 'Freehand Guides' && sleep 2 && capture_state phase2-selected-strand; then
+              record hair STRAND_SELECTION_CAPTURED_REVIEW_REQUIRED
+            else
+              record hair BLOCKED_STRAND_SELECTION
+            fi
+          fi
         else
           record hair BLOCKED_GROUP_CAPTURE
         fi
