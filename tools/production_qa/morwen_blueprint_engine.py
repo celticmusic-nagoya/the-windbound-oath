@@ -55,12 +55,56 @@ def compare(rows, observations):
         row["status"]="BLOCKED" if row["tolerance"] is None else ("PASS" if abs(row["residual"])<=row["tolerance"] else "FAIL")
     return rows
 
+def bounded_correction(target, tolerance, samples, current, max_step, limits):
+    """Local secant response; only matched same-control observations qualify."""
+    if len(samples)!=2 or tolerance is None or max_step<=0:
+        raise ValueError("unqualified response")
+    a,b=samples
+    if not all(v.get("registration_verified") and v.get("evidence_sha256") for v in samples):
+        raise ValueError("unregistered response")
+    if a.get("control_id")!=b.get("control_id") or not a.get("control_id"):
+        raise ValueError("mixed controls")
+    if a.get("context_sha256")!=b.get("context_sha256") or not a.get("context_sha256"):
+        raise ValueError("mixed camera or model context")
+    if current!=b["control"] or a["control"]==b["control"]:
+        raise ValueError("stale or zero control response")
+    if not all(math.isfinite(v) for v in (target,tolerance,current,max_step,a["actual"],b["actual"],a["control"],b["control"],*limits)):
+        raise ValueError("nonfinite")
+    if tolerance<0 or not limits[0]<=current<=limits[1]:
+        raise ValueError("invalid limits")
+    residual=target-b["actual"]
+    if abs(residual)<=tolerance:
+        return dict(status="WITHIN_TOLERANCE",delta=0)
+    slope=(b["actual"]-a["actual"])/(b["control"]-a["control"])
+    if abs(slope)<1e-9:
+        return dict(status="BLOCKED_NO_RESPONSE")
+    delta=max(-max_step,min(max_step,residual/slope))
+    proposed=max(limits[0],min(limits[1],current+delta))
+    if proposed==current:
+        return dict(status="BLOCKED_CONTROL_LIMIT")
+    return dict(status="PROPOSED_REVIEW_REQUIRED",delta=proposed-current,control=proposed,
+                predicted_residual=residual-slope*(proposed-current))
+
+def self_test():
+    a=dict(control_id="test",context_sha256="fixture",registration_verified=True,evidence_sha256="fixture",control=0.,actual=10.)
+    b=dict(a,control=1.,actual=12.)
+    assert bounded_correction(16,0.5,[a,b],1,0.25,(-2,2))["control"]==1.25
+    assert bounded_correction(12,0.5,[a,b],1,0.25,(-2,2))["status"]=="WITHIN_TOLERANCE"
+    assert bounded_correction(16,0.5,[a,dict(b,actual=10)],1,0.25,(-2,2))["status"]=="BLOCKED_NO_RESPONSE"
+    try:
+        bounded_correction(16,0.5,[a,dict(b,context_sha256="stale")],1,0.25,(-2,2))
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("stale context accepted")
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("blueprint",type=Path)
     p.add_argument("output",type=Path)
     p.add_argument("--observations",type=Path)
     a=p.parse_args()
+    self_test()
     fingerprint=sha(a.blueprint)
     rows=compile_targets(json.loads(a.blueprint.read_text()))
     if a.observations:
