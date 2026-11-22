@@ -1,4 +1,4 @@
-name: HOME furniture native continuation
+name: HOME furniture visual review
 on:
   push:
     branches: [feature/lind-village-world-integration-plan-01]
@@ -31,8 +31,8 @@ jobs:
             gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?per_page=100&status=$status" --jq '.workflow_runs[] | [.id,.name,.head_branch] | @tsv'
           done > /tmp/active
           if awk -F '\t' -v self="$GITHUB_RUN_ID" '$1!=self && ($2 ~ /Aidan|Rilde|LIND.*HOME|HOME cross-run/ || $3=="feature/lind-village-world-integration-plan-01"){found=1} END{exit !found}' /tmp/active; then exit 1; fi
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14741951418/zip" > /tmp/home.zip
-          echo '297d5cc1a555f509a1059fcf7554ea8d3bba81a425f8822e23d683540882919b  /tmp/home.zip' | sha256sum -c -
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14742392508/zip" > /tmp/home.zip
+          echo '42e2f9c6ee3d7da2047301015d65c05c5a670947e28490a09befc1a76c81bac9  /tmp/home.zip' | sha256sum -c -
           mkdir -p /tmp/restored /tmp/evidence
           unzip -q /tmp/home.zip -d /tmp/restored
           (cd /tmp/restored && sha256sum -c SHA256SUMS)
@@ -51,70 +51,26 @@ jobs:
           mkdir -p /tmp/blender /tmp/blueprint
           tar -xJf "$archive" -C /tmp/blender --strip-components=1
           /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
-      - name: Qualified furniture isolation and native correction
+      - name: Render only changed interior for independent visual QA
         run: |
           set -euo pipefail
-          cat >/tmp/furniture.py <<'PY'
-          import bpy,json,hashlib,math
+          cat >/tmp/review.py <<'PY'
+          import bpy,sys,json
           from pathlib import Path
-          from mathutils import Vector
+          sys.path.insert(0,str(Path.cwd()/'tools/map_blender/lind/home'))
+          import build_aidan_house as H
           out=Path('/tmp/evidence')
-          o=bpy.data.objects['GEO_AIDANHOUSE_INT_FURNITURE']
-          assert o.matrix_world.is_identity
-          # Author source: chest primitives precede cupboard; identify connected islands by exact source bounds.
-          adj=[[] for v in o.data.vertices]
-          for e in o.data.edges:
-              a,b=e.vertices;adj[a].append(b);adj[b].append(a)
-          seen=set(); groups=[]
-          for v in o.data.vertices:
-              if v.index in seen:continue
-              stack=[v.index];seen.add(v.index);g=[]
-              while stack:
-                  n=stack.pop();g.append(n)
-                  for k in adj[n]:
-                      if k not in seen:seen.add(k);stack.append(k)
-              groups.append(g)
-          def bounds(g):
-              p=[o.data.vertices[i].co for i in g]
-              return [[min(v[k] for v in p) for k in range(3)],[max(v[k] for v in p) for k in range(3)]]
-          # Source chest base x=-1.85..-1.15, lid -1.86..-1.14; y=2.16..2.71.
-          candidates=[]
-          for g in groups:
-              a,b=bounds(g)
-              if a[0]>=-1.861 and b[0]<=-1.139 and a[1]>=2.14 and b[1]<=2.712 and a[2]>=.249 and b[2]<=.91:
-                  candidates.append(g)
-          evidence=[bounds(g) for g in candidates]
-          (out/'isolation.json').write_text(json.dumps(dict(groups=len(groups),candidate_bounds=evidence),indent=2))
-          assert len(candidates)==6, 'Chest island identification ambiguous; no mutation'
-          assert any(abs(a[0]+1.85)<.001 and abs(b[0]+1.15)<.001 and abs(a[2]-.25)<.001 for a,b in evidence)
-          ids={n for g in candidates for n in g}
-          before=[tuple(v.co) for v in o.data.vertices]
-          # Move chest and candle together to free rear wall segment; preserve cupboard and all anchors.
-          dx=1.4
-          for n in ids:o.data.vertices[n].co.x+=dx
-          o.data.update()
-          proxy=bpy.data.objects['COL_AIDANHOUSE_chest']
-          proxy.location.x+=dx
-          bpy.context.view_layer.update()
-          def box(obj):
-              p=[obj.matrix_world@v.co for v in obj.data.vertices]
-              return [[min(v[k] for v in p) for k in range(3)],[max(v[k] for v in p) for k in range(3)]]
-          a,b=box(proxy)
-          for other in bpy.context.scene.objects:
-              if other==proxy or other.type!='MESH' or not other.name.startswith('COL_AIDANHOUSE_'):continue
-              c,d=box(other)
-              assert not all(min(b[k],d[k])-max(a[k],c[k])>1e-5 for k in (0,1,2)),other.name
-          assert all(tuple(v.co)==before[v.index] for v in o.data.vertices if v.index not in ids)
-          path=out/'home_furniture_candidate.blend'
-          bpy.ops.wm.save_as_mainfile(filepath=str(path),compress=True)
-          with path.open('rb') as f:h=hashlib.file_digest(f,'sha256').hexdigest()
-          bpy.ops.wm.open_mainfile(filepath=str(path))
-          assert box(bpy.data.objects['COL_AIDANHOUSE_chest'])==[a,b]
-          (out/'correction.json').write_text(json.dumps(dict(native_sha256=h,delta_x=dx,isolated_vertices=len(ids),reopened=True,proxy_overlap='PASS',G1='BLOCKED',G2='NOT_RUN',G3='PARTIAL',G4='NOT_RUN'),indent=2))
+          s=bpy.context.scene
+          H.set_camera(s,'interior_bedside')
+          s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.cycles.use_denoising=True
+          s.render.resolution_percentage=60
+          s.render.image_settings.file_format='PNG';s.render.filepath=str(out/'interior_bedside.png')
+          bpy.ops.render.render(write_still=True)
+          (out/'review.json').write_text(json.dumps(dict(source_artifact=14742392508,source_sha256='dff3a32df533c8786f3122e07cf681c18f4805bd913d750f04ce15b321b10fed',view='interior_bedside',samples=24,G2='NOT_RUN',G4='NOT_RUN',repeated_model_edits=0)))
           PY
-          timeout 1800 /tmp/blender/blender -b --disable-autoexec /tmp/restored/home_portal_checkpoint.blend --python-exit-code 1 --python /tmp/furniture.py
+          timeout 1800 /tmp/blender/blender -b --disable-autoexec /tmp/restored/home_furniture_candidate.blend --python-exit-code 1 --python /tmp/review.py
           cd /tmp/evidence
-          sha256sum *.json *.blend > SHA256SUMS
+          sha256sum *.json *.png > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
