@@ -140,3 +140,20 @@ jobs:
           state=failure
           if [[ "$QA_RESULT" == success && "$OBS_RESULT" == success ]]; then state=success; fi
           gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/actions-observation -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -f description="Read-only snapshot and offline QA; not a production lease"
+
+      - name: Locate exact C11 production run and publish its observed state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: cf0443ad1085d27f90127854ed48c9b168d87195
+        run: |
+          set -euo pipefail
+          result="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/lind-cliff-c11-method-e.yml/runs?head_sha=$TARGET_SHA&per_page=20" --jq '.workflow_runs | sort_by(.created_at) | last // empty')"
+          if [[ -z "$result" ]]; then echo "C11_RUN_NOT_FOUND"; exit 0; fi
+          echo "$result" | jq '{id,status,conclusion,head_sha,html_url}'
+          test "$(jq -r .head_sha <<< "$result")" = "$TARGET_SHA"
+          state=pending
+          if [[ "$(jq -r .status <<< "$result")" == completed ]]; then
+            state=failure
+            if [[ "$(jq -r .conclusion <<< "$result")" == success ]]; then state=success; fi
+          fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$TARGET_SHA" -f state="$state" -f context=two/c11-production-observed -f target_url="$(jq -r .html_url <<< "$result")" -f description="Observed C11 workflow result; asset QA separate"
