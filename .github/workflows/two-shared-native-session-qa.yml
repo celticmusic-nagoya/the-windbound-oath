@@ -45,6 +45,8 @@ jobs:
           assert time.monotonic()-started<5
           print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
           PY
+      - name: Dispatch preflight regression
+        run: python3 tools/production_qa/shared_dispatch_preflight.py
       - name: Controller safety regression
         run: python3 tools/production_qa/shared_controller_regression.py
       - name: Isolated multi-writer integration
