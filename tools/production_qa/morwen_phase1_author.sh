@@ -31,8 +31,10 @@ if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && gre
     # Inspect native strand editor without modifying presets or strand geometry.
     if "$gui" click-label evidence/phase2-hair-category.png 'Edit Hairstyle' 'Edit Hair Bounce' && sleep 3 && capture_state phase2-strand-editor; then
       record hair STRAND_EDITOR_CAPTURED_REVIEW_REQUIRED
-      # Escape only; if return cannot be verified, avoid further blind clicks.
-      "$gui" key 53 || true
+      # Observed in run 44969840792: Edit Preset close X at (24,76) / 1024x768.
+      if grep -Fq "Edit Preset" evidence/phase2-strand-editor.txt && grep -Fq "Hair Groups" evidence/phase2-strand-editor.txt; then
+        "$gui" click 0.0234 0.0990 || true
+      fi
       sleep 2
       capture_state phase2-strand-return || true
     else
@@ -48,7 +50,11 @@ fi
 recover_editor() {
   local tag="$1"
   if capture_state "$tag-initial" && grep -Fq Body "evidence/$tag-initial.txt" && grep -Fq Outfit "evidence/$tag-initial.txt" && ! dialog_visible "$tag-initial"; then return 0; fi
-  "$gui" key 53 || return 1
+  if grep -Fq "Edit Preset" "evidence/$tag-initial.txt" && grep -Fq "Hair Groups" "evidence/$tag-initial.txt"; then
+    "$gui" click 0.0234 0.0990 || return 1
+  else
+    "$gui" key 53 || return 1
+  fi
   sleep 2
   capture_state "$tag-recovered" && grep -Fq Body "evidence/$tag-recovered.txt" && grep -Fq Outfit "evidence/$tag-recovered.txt" && ! dialog_visible "$tag-recovered"
 }
