@@ -22,7 +22,7 @@ jobs:
       - name: Validate model discovery and exact script syntax
         working-directory: tools/production-studio
         run: |
-          python -m py_compile discover-gallery.py artifact-sync.py
+          python -m py_compile discover-gallery.py artifact-sync.py stage-village.py
           node --check gallery-smoke.mjs
           bash -n sync-preview.sh
           python - <<'PY'
