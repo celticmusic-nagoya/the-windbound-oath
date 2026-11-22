@@ -85,7 +85,46 @@ def bounded_correction(target, tolerance, samples, current, max_step, limits):
     return dict(status="PROPOSED_REVIEW_REQUIRED",delta=proposed-current,control=proposed,
                 predicted_residual=residual-slope*(proposed-current))
 
+def register_points(reference_anchors, actual_anchors, max_error):
+    """Fit uniform scale and translation only; reject view/pose mismatch."""
+    if len(reference_anchors)!=len(actual_anchors) or len(reference_anchors)<3 or max_error<=0:
+        raise ValueError("insufficient registration anchors")
+    if not all(len(p)==2 and all(math.isfinite(v) for v in p)
+               for p in reference_anchors+actual_anchors):
+        raise ValueError("invalid anchor")
+    n=len(reference_anchors)
+    rx,ry=(sum(p[i] for p in reference_anchors)/n for i in (0,1))
+    ax,ay=(sum(p[i] for p in actual_anchors)/n for i in (0,1))
+    den=sum((p[0]-ax)**2+(p[1]-ay)**2 for p in actual_anchors)
+    if den<=0:
+        raise ValueError("degenerate anchors")
+    scale=sum((p[0]-ax)*(q[0]-rx)+(p[1]-ay)*(q[1]-ry)
+              for p,q in zip(actual_anchors,reference_anchors))/den
+    if scale<=0:
+        raise ValueError("mirrored or invalid view")
+    tx,ty=rx-scale*ax,ry-scale*ay
+    errors=[math.hypot(scale*p[0]+tx-q[0],scale*p[1]+ty-q[1])
+            for p,q in zip(actual_anchors,reference_anchors)]
+    return dict(scale=scale,translation=[tx,ty],max_error=max(errors),
+                registration_verified=max(errors)<=max_error)
+
+def project_face_metrics(points, registration):
+    if not registration["registration_verified"]:
+        raise ValueError("unqualified camera registration")
+    scale=registration["scale"]
+    def dx(a,b):
+        return abs(points[a][0]-points[b][0])*scale
+    return dict(eye_width_left=dx("left_outer_eye","left_inner_eye"),
+                eye_width_right=dx("right_inner_eye","right_outer_eye"),
+                iris_center_distance=dx("left_iris_center","right_iris_center"),
+                inner_eye_gap=dx("left_inner_eye","right_inner_eye"),
+                mouth_width=dx("mouth_left","mouth_right"),
+                nose_to_chin_vertical=abs(points["nose_tip"][1]-points["chin"][1])*scale)
+
 def self_test():
+    reg=register_points([[0,0],[10,0],[0,10]],[[5,5],[10,5],[5,10]],0.01)
+    assert reg['registration_verified'] and reg['scale']==2
+    assert not register_points([[0,0],[10,0],[0,10]],[[5,5],[10,5],[5,15]],0.01)['registration_verified']
     a=dict(control_id="test",context_sha256="fixture",registration_verified=True,evidence_sha256="fixture",control=0.,actual=10.)
     b=dict(a,control=1.,actual=12.)
     assert bounded_correction(16,0.5,[a,b],1,0.25,(-2,2))["control"]==1.25
