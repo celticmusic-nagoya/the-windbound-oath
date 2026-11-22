@@ -1,0 +1,86 @@
+{
+  "status": "PROVISIONAL_EXECUTION_PLAN_NOT_QUALIFIED",
+  "blueprint": {
+    "path": "tools/morwen_authored_sculpt/precision_blueprint_v2.json",
+    "blob": "ea55e2bcaf5cddc4af3b012e738d075a83ae66b1",
+    "revision_policy": "append measured control response and matched projection evidence; do not change canon or infer hidden dimensions"
+  },
+  "wardrobe": {
+    "path": "tools/morwen_authored_sculpt/wardrobe_construction_supplement_v1.json",
+    "blob": "502c8a743ace9f0a1d5d508ccdba7ce50856eaf8"
+  },
+  "checkpoint": {
+    "artifact": 14729674867,
+    "sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+  },
+  "stages": [
+    {
+      "id": "face",
+      "depends": [],
+      "status": "PARTIAL_REOPEN_VERIFIED_ART_QA_REQUIRED",
+      "accept": [
+        "matched landmark comparison",
+        "preserve verified values"
+      ]
+    },
+    {
+      "id": "hair",
+      "depends": [
+        "face"
+      ],
+      "status": "EDITOR_ENTRY_VERIFIED_EXIT_PENDING",
+      "accept": [
+        "guide selection and response",
+        "asymmetric four-view silhouette",
+        "native save reopen"
+      ]
+    },
+    {
+      "id": "body",
+      "depends": [
+        "face"
+      ],
+      "status": "CONTROL_MAPPING_PENDING",
+      "accept": [
+        "matched normalized projection",
+        "parameter response",
+        "native save reopen"
+      ]
+    },
+    {
+      "id": "wardrobe",
+      "depends": [
+        "body"
+      ],
+      "status": "TEMPLATE_QUALIFICATION_PENDING",
+      "accept": [
+        "template ID",
+        "UV mapping",
+        "layer overlap",
+        "deformation"
+      ]
+    },
+    {
+      "id": "equipment",
+      "depends": [
+        "body",
+        "wardrobe"
+      ],
+      "status": "ATTACHMENT_QUALIFICATION_PENDING",
+      "accept": [
+        "asymmetric placement",
+        "attachment transform",
+        "clearance",
+        "native capability"
+      ]
+    }
+  ],
+  "independent_surveys": [
+    "hair",
+    "body",
+    "wardrobe",
+    "equipment"
+  ],
+  "mutation_policy": "only qualified controls and measured target; record attempt before input, quarantine ambiguous mutation, verify reopen",
+  "completion": "all applicable gates plus director adoption; not survey or CI success"
+}
