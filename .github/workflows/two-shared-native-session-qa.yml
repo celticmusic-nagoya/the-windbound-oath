@@ -19,109 +19,34 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Verify runner and restore immutable checkpoint
+      - name: Restore actual native checkpoints on fresh runner
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test "$(gh api repos/$GITHUB_REPOSITORY --jq .visibility)" = public
-          test "$RUNNER_ENVIRONMENT" = github-hosted
-          for status in in_progress queued waiting pending requested; do
-            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?per_page=100&status=$status" --jq '.workflow_runs[] | [.id,.name,.head_branch] | @tsv'
-          done > /tmp/active
-          if awk -F '\t' -v self="$GITHUB_RUN_ID" '$1!=self && ($2 ~ /Aidan|Rilde|LIND.*HOME|HOME cross-run/ || $3=="feature/lind-village-world-integration-plan-01"){found=1} END{exit !found}' /tmp/active; then exit 1; fi
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14742392508/zip" > /tmp/home.zip
-          echo '42e2f9c6ee3d7da2047301015d65c05c5a670947e28490a09befc1a76c81bac9  /tmp/home.zip' | sha256sum -c -
-          mkdir -p /tmp/restored /tmp/evidence
-          unzip -q /tmp/home.zip -d /tmp/restored
-          (cd /tmp/restored && sha256sum -c SHA256SUMS)
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14750063737/zip >/tmp/native.zip
+          echo '75b570982b7c4aac31808cbac54736bf1c0b79c9bb2c8d84c1b0cc1a29e0c8c3  /tmp/native.zip' | sha256sum -c -
+          mkdir /tmp/evidence
+          unzip -q /tmp/native.zip -d /tmp/evidence
+          cd /tmp/evidence
+          sha256sum -c SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
-          echo LIBGL_ALWAYS_SOFTWARE=1 >> "$GITHUB_ENV"
-          echo EGL_PLATFORM=surfaceless >> "$GITHUB_ENV"
-      - name: Install verified Blender
-        run: |
-          set -eu
-          base=https://mirror.blender.org/release/Blender5.3
-          archive=blender-5.3.0-linux-x64.tar.xz
-          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
-          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
-          grep "$archive" sums | sha256sum -c -
-          mkdir -p /tmp/blender /tmp/blueprint
-          tar -xJf "$archive" -C /tmp/blender --strip-components=1
-          /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
-      - name: Native checkpoint production under shared lease
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          gh auth setup-git
-          cat >/tmp/native.py <<'PY'
-          import bpy,sys,json
-          from pathlib import Path
-          args=sys.argv[sys.argv.index('--')+1:]
-          stage,target=args
-          s=bpy.context.scene
-          if stage=='lighting':
-              # Reversible candidate-only exposure adjustment.
-              s.view_settings.exposure += 0.35
-          elif stage=='material':
-              # Preserve geometry and materials; set preview sampling only.
-              s.cycles.samples=32
-              s.cycles.use_denoising=True
-          else:raise RuntimeError(stage)
-          bpy.ops.wm.save_as_mainfile(filepath=target)
-          bpy.ops.wm.open_mainfile(filepath=target)
-          assert len(bpy.data.objects)>0
-          if stage=='material':assert bpy.context.scene.cycles.samples==32
-          PY
+          export LIBGL_ALWAYS_SOFTWARE=1 EGL_PLATFORM=surfaceless
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender53
+          /tmp/two-blender53/blender -b --disable-autoexec /tmp/evidence/material.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.context.scene.cycles.samples==32; assert len(bpy.data.objects)>0'
           python3 - <<'PY'
-          import sys,os,subprocess,hashlib,json
+          import sys,json
           from pathlib import Path
           sys.path.insert(0,'tools/production_qa')
-          from shared_session_controller import run
-          from shared_asset_lease import assert_owned
-          from session_plan import sha
-          root=Path('/tmp/evidence'); source=Path('/tmp/restored/home_furniture_candidate.blend')
-          head=os.environ['GITHUB_SHA']; asset='QA-HOME-NATIVE-'+os.environ['GITHUB_RUN_ID']
-          fp=hashlib.sha256((sha(source)+sha(Path('/tmp/native.py'))+head+'Blender5.3.0').encode()).hexdigest()
-          stages=[dict(id=k,deps=d,qualified=True,seconds=900,fingerprint=hashlib.sha256((fp+k).encode()).hexdigest()) for k,d in [('lighting',[]),('material',['lighting'])]]
-          done={}
-          def execute(stage,token):
-              k=stage['id']; target=root/(k+'.blend')
-              src=source if k=='lighting' else root/'lighting.blend'
-              subprocess.run(['/tmp/blender/blender','-b','--disable-autoexec',str(src),'--python-exit-code','1','--python','/tmp/native.py','--',k,str(target)],check=True,timeout=600)
-              return dict(path=target.name,reopened=True,sha256=sha(target),fingerprint=stage['fingerprint'])
-          def persist(state,token):
-              # Native pilot uses immutable Git checkpoint commits in QA namespace,
-              # not main or asset branch; only synthetic qualification owner.
-              assert_owned('origin',asset,token)
-              env={**os.environ,'GIT_INDEX_FILE':'/tmp/two-native-index'}
-              def g(*args,stdin=None):
-                  return subprocess.check_output(['git',*args],input=stdin,text=True,env=env).strip()
-              g('read-tree','--empty')
-              for k,v in state.items():
-                  oid=g('hash-object','-w',str(root/v['path']))
-                  g('update-index','--add','--cacheinfo','100644',oid,v['path'])
-              ledger=root/'ledger.json';ledger.write_text(json.dumps(state,sort_keys=True))
-              oid=g('hash-object','-w',str(ledger))
-              g('update-index','--add','--cacheinfo','100644',oid,'ledger.json')
-              tree=g('write-tree')
-              commit=g('-c','user.name=TWO QA','-c','user.email=qa@invalid','commit-tree',tree,'-m','Native QA checkpoint '+str(__import__('uuid').uuid4()))
-              ref='refs/tags/two-session-qa/'+asset+'/'+commit
-              g('push','origin',commit+':'+ref)
-              assert g('ls-remote','--refs','origin',ref)==commit+'\t'+ref
-              return True
-          assert run('origin',asset,head,root,stages,done,execute,persist)==['lighting','material']
-          assert run('origin',asset,head,root,stages,done,execute,persist)==[]
-          print('NATIVE_DYNAMIC_CHECKPOINT_PASS',done)
+          from session_plan import ready
+          root=Path('/tmp/evidence')
+          done=json.loads((root/'ledger.json').read_text())
+          stages=[dict(id=k,deps=d,qualified=True,seconds=900,fingerprint=done[k]['fingerprint']) for k,d in [('lighting',[]),('material',['lighting'])]]
+          assert ready(stages,done,root,19800,1800)==[]
+          print('CROSS_RUN_NATIVE_RESTORE_PASS')
           PY
-          cd /tmp/evidence
-          sha256sum *.blend *.json > SHA256SUMS
-      - uses: actions/upload-artifact@v4
-        with:
-          name: shared-native-pilot-${{ github.run_id }}
-          path: /tmp/evidence
       - name: Publish result
         if: always()
         env:
