@@ -51,6 +51,32 @@ jobs:
           mkdir -p /tmp/blender /tmp/blueprint
           tar -xJf "$archive" -C /tmp/blender --strip-components=1
           /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Verify shared Production OS planner from character owner
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/session_plan.py?ref=d7b03b39b2d96aed08ec05555a9ade28a6261f63" > /tmp/planner.json
+          python3 - <<'PY'
+          import json,base64,hashlib,sys
+          from pathlib import Path
+          x=json.loads(Path('/tmp/planner.json').read_text())
+          s=base64.b64decode(x['content'])
+          assert hashlib.sha1(b'blob '+str(len(s)).encode()+b'\0'+s).hexdigest()=='4e62a4d611ee4800318c3640d1f4e5482d5e905d'
+          Path('/tmp/session_plan.py').write_bytes(s)
+          sys.path.insert(0,'/tmp')
+          from session_plan import ready,sha
+          root=Path('/tmp/restored')
+          q=json.loads((root/'checkpoint.json').read_text())
+          fp=q['blueprint_sha256']
+          stages=[dict(id='portal',deps=[],fingerprint=fp,qualified=True,seconds=1800),dict(id='interior_collision',deps=['portal'],fingerprint=fp,qualified=True,seconds=1200)]
+          done=dict(portal=dict(path='home_portal_checkpoint.blend',fingerprint=fp,reopened=q['reopened'],sha256=q['native_sha256']))
+          assert ready(stages,done,root,19800,1800)==['interior_collision']
+          assert ready(stages,done,root,2000,1800)==[]
+          assert ready(stages,dict(portal=dict(done['portal'],sha256='0'*64)),root,19800,1800)==['portal']
+          assert ready(stages,dict(portal=dict(done['portal'],fingerprint='0'*64)),root,19800,1800)==['portal']
+          Path('/tmp/evidence/planner.json').write_text(json.dumps(dict(status='PASS',shared_blob=x['sha'],selected=['interior_collision'],budget_rejection=True,corrupt_hash_rejection=True,stale_fingerprint_rejection=True)))
+          PY
       - name: Continue collision and traversal QA without repeating edits or renders
         run: |
           set -euo pipefail
@@ -72,12 +98,20 @@ jobs:
               return min(math.hypot(max(b[0][0]-x,0,x-b[1][0]),max(b[0][1]-y,0,y-b[1][1])) for n,b in walls)
           samples=[clearance(0,start+i*(end-start)/140) for i in range(141)]
           report=dict(source_artifact=14741951418,source_sha256=h,reopened=True,repeated_edits=0,repeated_renders=0,minimum_clearance_m=min(samples),sample_spacing_m=.025,provisional_radius_tests={str(r):min(samples)>=r for r in (.25,.35,.45)},collision_boxes=boxes,G4='NOT_RUN',scope='local straight-line XY proxy clearance; not runtime navigation or stairs')
+          import itertools
+          furniture=[(n,b) for n,b in boxes.items() if n.rsplit('_',1)[-1] in ('bed','chest','cupboard','shelf','table','fireplace')]
+          overlaps=[]
+          for (n,a),(m,b) in itertools.combinations(furniture,2):
+              dx=min(a[1][0],b[1][0])-max(a[0][0],b[0][0]);dy=min(a[1][1],b[1][1])-max(a[0][1],b[0][1])
+              if dx>1e-5 and dy>1e-5:overlaps.append(dict(a=n,b=m,area_m2=dx*dy))
+          report['furniture_overlap']=overlaps
+          report['interior_proxy_status']='FAIL' if overlaps else 'PASS'
           Path('/tmp/evidence/traversal.json').write_text(json.dumps(report,indent=2))
           assert report['provisional_radius_tests']['0.35']
           PY
           timeout 1200 /tmp/blender/blender -b --disable-autoexec /tmp/restored/home_portal_checkpoint.blend --python-exit-code 1 --python /tmp/continue.py
           cd /tmp/evidence
-          sha256sum traversal.json > SHA256SUMS
+          sha256sum traversal.json planner.json > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
