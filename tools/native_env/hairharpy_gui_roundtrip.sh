@@ -52,22 +52,25 @@ hh=$!
 sleep 10
 G="python3 $here/gui_locate.py"
 C="--display $D --ledger $out/gui_steps.jsonl --shots $out/shots"
-RP=1248,290,1500,740   # right panel
-$G click $C --name 01_crown_tool --at 1388,157 --expect "Create" --expect-region $RP
+RP=1240,280,1600,740   # right panel (x varies with runner fonts: no raw coordinates, labels/anchors only)
+TB=0,0,900,28          # top toolbar
+POP=340,28,900,330     # Bridge popup
+# Crown tool icon has no text: anchor-relative to the "Curves" section label (4th icon, calibrated 2026-11-23)
+$G step  $C --name 01_crown_tool --label "Curves" --region 1240,110,1600,145 --offset 112,26 --expect "Create" --expect-region $RP
 $G step  $C --name 02_continuation --label "With a continuation" --region $RP
 $G step  $C --name 03_create --label "Create" --region $RP --expect "continuation" --expect-region 212,50,520,740
 $G step  $C --name 04_select_crown --label "Crown 1" --region 0,150,212,320 --expect "Vertical loops" --expect-region $RP
-$G step  $C --name 05_convert --label "Convert" --line-exact --region 1248,520,1500,740 --scroll-at 1370,650 \
+$G step  $C --name 05_convert --label "Convert" --line-exact --region 1240,450,1600,740 --scroll-at 1390,650 \
            --expect "Crown 1 mesh" --expect-region 0,50,212,320
 $G step  $C --name 06_select_mesh --label "Crown 1 mesh" --region 0,50,212,320 --expect "Vertices" --expect-region $RP
-$G step  $C --name 07_bridge --label "Bridge" --region 340,0,440,28 --expect "Program" --expect-region 350,28,740,280
-$G step  $C --name 08_program --label "choose" --region 420,30,740,60 --expect "Blender (live)" --expect-region 420,30,740,140
-$G step  $C --name 09_blender_live --label "Blender (live)" --region 420,55,740,140 --expect "Send now" --expect-region 350,28,740,280
-$G step  $C --name 10_send --label "Send now" --region 350,240,740,280 --expect "sent 1" --expect-region 350,170,740,200 --timeout 40
+$G step  $C --name 07_bridge --label "Bridge" --region $TB --expect "Program" --expect-region $POP
+$G step  $C --name 08_program --label "Program" --region $POP --offset 157,0 --expect "Blender (live)" --expect-region $POP
+$G step  $C --name 09_blender_live --label "Blender (live)" --region $POP --expect "Send now" --expect-region $POP
+$G step  $C --name 10_send --label "Send now" --region $POP --expect "sent 1" --expect-region $POP --timeout 40
 DISPLAY=$D xdotool key Escape
-$G step  $C --name 11_export --label "Export" --region 280,0,350,28 --expect "Format" --expect-region 540,290,1060,720
-$G step  $C --name 12_path --label "Path" --region 540,295,600,325 --offset 200,0 --type "$out/hh_gui_crown.obj"
-$G step  $C --name 13_export_go --label "Export" --region 980,670,1060,705 --expect-file "$out/hh_gui_crown.obj"
+$G step  $C --name 11_export --label "Export" --region $TB --expect "Format" --expect-region 300,150,1300,800
+$G step  $C --name 12_path --label "Path" --line-excludes Browse --region 300,150,1300,400 --offset 200,0 --type "$out/hh_gui_crown.obj"
+$G step  $C --name 13_export_go --label "Export" --region 300,500,1300,800 --expect-file "$out/hh_gui_crown.obj"
 wait $rcv || true
 kill $hh 2>/dev/null || true; sleep 1
 DISPLAY=$D import -window root "$out/shots/session1_final_screen.png" || true
@@ -91,7 +94,7 @@ r, m, rc = (json.loads((o / n).read_text()) for n in ("roundtrip.json", "reopen.
 a = r["bridge_mesh_after"]
 same = all(m[k] == a[k] for k in ("vertices", "faces", "quads", "uv_layers", "materials", "dimensions", "uv_coverage", "uv_overlap_samples"))
 steps = [json.loads(l) for l in (o / "gui_steps.jsonl").read_text().splitlines()]
-s = {"gui_steps": {x["name"]: x["result"] for x in steps}, "uv_session": (o / "hh_crown_uv.obj.txt").exists() or None,
+s = {"gui_steps": {x["name"]: x["result"] for x in steps}, "uv_session_log": (o / "session2.log").exists(),
      "receiver": rc["result"], "received": rc["received_payloads"], "roundtrip": r["result"], "checks": r["checks"],
      "reopen_equal": same and m["material_group"] == "TWO_PBR_Factory" and m["source_sha256"] == r["output_blend_sha256"],
      "files": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(o.glob("*")) if p.suffix in (".blend", ".obj", ".fbx", ".hairmesh")},
