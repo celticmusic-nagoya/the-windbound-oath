@@ -19,11 +19,21 @@ try{
  await page.route('https://api.github.com/**',r=>r.fulfill({json:r.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)}}:{workflow_runs:[]}}));
  await page.goto('http://127.0.0.1:8766/');
  await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('5 件'));
+ assert.equal(await page.locator('.category-card').count(),4);
+ assert.equal(await page.locator('#published-gallery img').count(),1);
+ await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
+ await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
  assert.equal(await images.count(),5);
  for(const img of await images.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert.ok(await img.evaluate(e=>e.naturalWidth>0&&e.naturalHeight>0));}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/actual-gallery.png'});
+ await page.locator('.gallery-image-button').first().click();
+ await page.locator('dialog img').evaluate(e=>e.decode());
+ await page.getByRole('button',{name:'閉じる',exact:true}).click();
+ await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
+ await page.getByRole('button',{name:/モルウェン/}).click();
+ assert.ok(await page.getByText('公開用成果物はまだ同期されていません。').isVisible());
  assert.deepEqual(errors,[]);
  console.log('PASS: five production images decoded; SHA-256 verified; mobile width.');
 }finally{await browser?.close();server.kill();}
