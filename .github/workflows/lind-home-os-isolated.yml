@@ -1,0 +1,76 @@
+name: LIND HOME isolated OS qualification
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/lind-home-os-isolated.yml']
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+concurrency:
+  group: lind-home-os-isolated
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: b163511dcc5a6951bceb69c196578af3930db281
+          path: shared-os
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - uses: actions/checkout@v4
+        with:
+          ref: 081f10204796d4e19aa2e573b880bb65106aec90
+          path: runtime
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: Restore immutable V2 and install Blender
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          mkdir -p /tmp/source /tmp/evidence
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14756099327/zip" > /tmp/source.zip
+          echo 'a341f266fef75ebc0e7c686ac4c9bb6af0f49a3caf9c6bdfb6237c267bc636ed  /tmp/source.zip' | sha256sum -c
+          unzip -q /tmp/source.zip -d /tmp/source
+          (cd /tmp/source && sha256sum -c SHA256SUMS)
+          sudo apt-get update -qq
+          sudo apt-get install -y libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          bash runtime/tools/production_qa/install_blender_530.sh /tmp/blender
+      - name: Qualify adapter
+        env:
+          PYTHONPATH: ${{ github.workspace }}/shared-os/tools/production_qa
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          EGL_PLATFORM: surfaceless
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          def group(root,paths):
+              root=Path(root).resolve()
+              return dict(root=str(root),files={p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths})
+          spec=dict(blueprint=group('.', ['docs/production/lind/home/interior-bed-target.v1.json']), inputs=group('/tmp/source',['drape.blend']),code=group('.', ['tools/map_blender/lind/home/isolated_session_adapter.py']),environment=group('/tmp/blender',['blender']),dependencies=group('shared-os/tools/production_qa',['shared_session_controller.py','shared_session_contract.py','shared_asset_lease.py','shared_asset_reservation.py','session_plan.py','bounded_operation.py']),qa=group('/tmp/source',['qa.json']))
+          Path('/tmp/evidence/input-manifest.json').write_text(json.dumps(spec,indent=2))
+          PY
+          python tools/map_blender/lind/home/isolated_session_adapter.py /tmp/evidence /tmp/source/drape.blend /tmp/blender/blender /tmp/evidence/input-manifest.json
+          (cd /tmp/evidence && sha256sum *.blend *.json > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lind-home-os-isolated-${{ github.run_id }}
+          path: /tmp/evidence
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [[ "$RESULT" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/lind-home-os-isolated -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
