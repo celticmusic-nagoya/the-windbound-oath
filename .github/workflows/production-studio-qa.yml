@@ -18,6 +18,22 @@ jobs:
         working-directory: tools/production-studio
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify complete PR scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import os, subprocess
+          paths=subprocess.check_output(['git','diff','--name-only','-z',os.environ['BASE_SHA']+'...'+os.environ['HEAD_SHA']]).decode().split('\0')
+          paths=[p for p in paths if p]
+          allowed={'.github/workflows/production-studio-qa.yml','.github/workflows/production-studio-sync-preview.yml','.github/workflows/production-studio-prepare-pages.yml'}
+          bad=[p for p in paths if not (p.startswith('tools/production-studio/') or p in allowed)]
+          assert not bad,bad
+          print('PASS: complete PR scope',len(paths),'files')
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
