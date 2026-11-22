@@ -48,7 +48,7 @@ def main():
             p=work/"ledger.json"
             p.write_text(json.dumps(records,sort_keys=True))
             run_operation(["git","add","ledger.json",*[v["path"] for v in records.values()]],deadline,cwd=work,grace=1)
-            if git("status","--porcelain","ledger.json"):
+            if git("diff","--cached","--name-only"):
                 run_operation(["git","commit","-m","fixture ledger"],deadline,cwd=work,grace=1)
                 run_operation(["git","push",str(remote),"HEAD:refs/heads/fixture"],deadline,cwd=work,grace=1)
             observed=subprocess.check_output(["git","--git-dir",str(remote),"show","refs/heads/fixture:ledger.json"])
@@ -63,10 +63,19 @@ def main():
         os.chdir(work)
         try:
             assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==["fixture"]
-            assert run(str(remote),ASSET,head,work,stages,completed,execute,persist,budget=120,reserve=30)==[]
+            restored=root/"restored"
+            subprocess.check_call(["git","clone","--branch","fixture",str(remote),str(restored)])
+            os.chdir(restored)
+            work=restored
+            completed=json.loads((work/"ledger.json").read_text())
+            for record in completed.values():
+                assert sha(work/record["path"])==record["sha256"]
+            def unexpected_execute(*args):
+                raise AssertionError("restored stage unexpectedly executed")
+            assert run(str(remote),ASSET,head,work,stages,completed,unexpected_execute,persist,budget=120,reserve=30)==[]
         finally:
             os.chdir(previous)
-        print("ISOLATED_CONTRACT_PASS; NATIVE_AND_OFF_RUNNER_NOT_RUN")
+        print("ISOLATED_FRESH_CLONE_CONTRACT_PASS; NATIVE_AND_OFF_RUNNER_NOT_RUN")
 
 if __name__=="__main__":
     main()
