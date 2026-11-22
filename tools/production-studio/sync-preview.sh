@@ -12,7 +12,9 @@ for x in selection:
     assert type(a)==int and type(run)==int and min(a,run)>0
     repo=os.environ['GITHUB_REPOSITORY']
     meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}']))
-    assert not meta['expired'] and meta['workflow_run']['id']==run and meta['workflow_run']['head_sha']==x['head']
+    if meta['expired']:
+        raise RuntimeError(f'Artifact {a} expired; use preserved gallery copy before resync')
+    assert meta['workflow_run']['id']==run and meta['workflow_run']['head_sha']==x['head']
     assert 0 < meta['size_in_bytes'] <= 128*1024*1024
     x['created_at']=meta['created_at']
     target=Path(os.environ['RUNNER_TEMP'])/'studio-zips'/f'{a}.zip'
