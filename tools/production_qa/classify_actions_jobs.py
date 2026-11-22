@@ -32,6 +32,9 @@ def classify(request, ledger):
             same.append(old)
         elif old["asset_id"] == asset and old["stage"] == stage:
             overlapping.append(old)
+    if any(x["status"] in ("QUEUED", "IN_PROGRESS") for x in overlapping):
+        return {"decision": "REVIEW_REQUIRED", "fingerprint": key,
+                "reason": "conflicting active job for same asset/stage"}
     active = [x for x in same if x["status"] in ("QUEUED", "IN_PROGRESS")]
     if active:
         return {"decision": "REUSE_ACTIVE", "fingerprint": key,
