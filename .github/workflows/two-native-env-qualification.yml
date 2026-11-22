@@ -21,6 +21,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       mode: ${{ steps.m.outputs.mode }}
+      hairharpy: ${{ steps.m.outputs.hairharpy }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,6 +29,8 @@ jobs:
       - id: m
         run: |
           if [ -f tools/native_env/restore_request.json ]; then echo mode=run2 >> "$GITHUB_OUTPUT"; else echo mode=run1 >> "$GITHUB_OUTPUT"; fi
+          # reuse verified HairHarpy evidence instead of re-running it (record in hairharpy_evidence.json)
+          if [ -f tools/native_env/hairharpy_evidence.json ]; then echo hairharpy=reuse >> "$GITHUB_OUTPUT"; else echo hairharpy=run >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
           python3 -m py_compile tools/native_env/*.py
@@ -51,6 +54,9 @@ jobs:
       - name: Install Blender 5.3.0 and 5.2.4 with official SHA-256 (main installers)
         run: |
           set -euo pipefail
+          # headless Workbench/EEVEE need EGL + Mesa (run 45039748645: libEGL.so.1 missing at s5)
+          sudo apt-get update -q >/dev/null
+          sudo apt-get install -y -q libegl1 libgl1-mesa-dri libglx-mesa0 libgles2 mesa-vulkan-drivers >/dev/null
           mkdir -p /tmp/two-work
           bash tools/production_qa/install_blender_530.sh /tmp/b530 | tee /tmp/two-work/install_530.txt
           if [ "${{ needs.mode.outputs.mode }}" = run1 ]; then bash tools/production_qa/install_blender_524.sh /tmp/b524 | tee /tmp/two-work/install_524.txt; fi
@@ -78,7 +84,7 @@ jobs:
           retention-days: 30
   hairharpy:
     needs: mode
-    if: needs.mode.outputs.mode == 'run1'
+    if: needs.mode.outputs.mode == 'run1' && needs.mode.outputs.hairharpy == 'run'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
