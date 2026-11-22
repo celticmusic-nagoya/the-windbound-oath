@@ -22,6 +22,8 @@ jobs:
     outputs:
       mode: ${{ steps.m.outputs.mode }}
       hairharpy: ${{ steps.m.outputs.hairharpy }}
+      session: ${{ steps.m.outputs.session }}
+      hhgui: ${{ steps.m.outputs.hhgui }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,13 +33,18 @@ jobs:
           if [ -f tools/native_env/restore_request.json ]; then echo mode=run2 >> "$GITHUB_OUTPUT"; else echo mode=run1 >> "$GITHUB_OUTPUT"; fi
           # reuse verified HairHarpy evidence instead of re-running it (record in hairharpy_evidence.json)
           if [ -f tools/native_env/hairharpy_evidence.json ]; then echo hairharpy=reuse >> "$GITHUB_OUTPUT"; else echo hairharpy=run >> "$GITHUB_OUTPUT"; fi
+          # approved evidence is reused; successful tests are not repeated
+          if [ -f tools/native_env/native_session_evidence.json ]; then echo session=reuse >> "$GITHUB_OUTPUT"; else echo session=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f tools/native_env/hairharpy_gui_evidence.json ]; then echo hhgui=reuse >> "$GITHUB_OUTPUT"; else echo hhgui=run >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
           python3 -m py_compile tools/native_env/*.py
           bash -n tools/native_env/hairharpy_runtime.sh
+          bash -n tools/native_env/hairharpy_gui_roundtrip.sh
           python3 -c "import yaml,sys; yaml.safe_load(open('.github/workflows/two-native-env-qualification.yml'))"
   blender-session:
     needs: mode
+    if: needs.mode.outputs.session == 'run'
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     steps:
@@ -101,5 +108,24 @@ jobs:
         with:
           name: two-hairharpy-qualification
           path: /tmp/hh-out/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-gui-roundtrip:
+    needs: mode
+    if: needs.mode.outputs.hhgui == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: HairHarpy authoring, GUI Send, Blender 5.3.0 save/reopen, shape/UV/material QA
+        run: bash tools/native_env/hairharpy_gui_roundtrip.sh /tmp/hh-rt
+      - name: Upload outputs and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-gui-roundtrip
+          path: /tmp/hh-rt/
           if-no-files-found: error
           retention-days: 30
