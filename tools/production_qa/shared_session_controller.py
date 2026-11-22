@@ -16,9 +16,13 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
     In fenced mode, persist must atomically publish a changed ledger and return
     its new lease token. It must also confirm an unchanged ledger when no stage
     was executed by returning the current token after verifying durability.
+    Stages declaring requires_blueprint need a validated target before editing.
     """
     if not 0<reserve<budget<=21600: raise ValueError('invalid budget')
     asset_key(asset)
+    targets = blueprint_targets or {}
+    if set(targets) - {stage["id"] for stage in stages}:
+        raise ValueError("blueprint target references an unknown session stage")
     started=time.monotonic()
     end=started+budget
     def durable(records,token,changed):
@@ -45,7 +49,9 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         available=ready(stages,completed,root,budget-(time.monotonic()-started),reserve)
         if not available:break
         stage=next(s for s in stages if s['id']==available[0])
-        blueprint = (blueprint_targets or {}).get(stage["id"])
+        blueprint = targets.get(stage["id"])
+        if stage.get("requires_blueprint") is True and blueprint is None:
+            raise ValueError("blueprint target required for precision stage")
         if blueprint is not None:
             target, request = blueprint
             if request.get("asset_id") != asset or request.get("head_sha") != commit or request.get("stage") != stage["id"]:

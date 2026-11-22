@@ -85,6 +85,18 @@ class BlueprintContractTests(unittest.TestCase):
                         blueprint_targets={"edit": (self.target, request)})
             persist.assert_not_called()
 
+    def test_precision_stage_without_target_does_not_edit(self):
+        stage = dict(id="edit", deps=[], qualified=True, seconds=2, fingerprint="fixture",
+                     requires_blueprint=True)
+        execute = Mock()
+        with TemporaryDirectory() as directory, patch(
+            "shared_session_controller.acquire", return_value="2"*40
+        ), patch("shared_session_controller.assert_owned"):
+            with self.assertRaisesRegex(ValueError, "target required"):
+                run("isolated", "LIND-HOME", "1"*40, Path(directory), [stage], {}, execute,
+                    Mock(), budget=10, reserve=2)
+        execute.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
