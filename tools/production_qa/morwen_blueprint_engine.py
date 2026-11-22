@@ -213,6 +213,26 @@ def batch_summary(rows, stages):
             else "MEASUREMENT_PASS_NOT_ADOPTED")
     return modules
 
+def validate_batch_plan(plan, root):
+    for key in ("blueprint","wardrobe"):
+        entry=plan[key]
+        path=root/entry["path"]
+        data=path.read_bytes()
+        blob=hashlib.sha1(b"blob "+str(len(data)).encode()+b"\x00"+data).hexdigest()
+        if blob!=entry["blob"]:
+            raise ValueError("stale batch dependency: "+key)
+    stages=plan["stages"]
+    seen=set()
+    for stage in stages:
+        if stage["id"] in seen or not set(stage["depends"])<=seen or not stage["accept"]:
+            raise ValueError("invalid stage dependency graph")
+        seen.add(stage["id"])
+    if seen!={"face","hair","body","wardrobe","equipment"}:
+        raise ValueError("incomplete stage inventory")
+    return [dict(id=s["id"],depends=s["depends"],accept=s["accept"],
+                 mutation="BLOCKED_UNQUALIFIED_ADAPTER",survey_allowed=s["id"] in plan["independent_surveys"])
+            for s in stages]
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("blueprint",type=Path)
@@ -220,6 +240,7 @@ def main():
     p.add_argument("--observations",type=Path)
     p.add_argument("--diagnostic-face",type=Path)
     p.add_argument("--stages",type=Path)
+    p.add_argument("--batch-plan",type=Path)
     a=p.parse_args()
     self_test()
     fingerprint=sha(a.blueprint)
@@ -236,11 +257,14 @@ def main():
         if trial["reference_sha256"]!=bp["face_front_review"]["source_sha256"]:
             raise ValueError("wrong diagnostic reference")
         diagnostics=ratio_diagnostics(bp["face_front_review"]["projected_metrics_px"],trial["raw_metrics"])
+    plan=[]
+    if a.batch_plan:
+        plan=validate_batch_plan(json.loads(a.batch_plan.read_text()),Path.cwd())
     stages=[]
     if a.stages and a.stages.exists():
         stages=[tuple(line.split("\t",1)) for line in a.stages.read_text().splitlines()[1:] if "\t" in line]
     a.output.parent.mkdir(parents=True,exist_ok=True)
-    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,face_ratio_diagnostics=diagnostics,modules=batch_summary(rows,stages),
+    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,face_ratio_diagnostics=diagnostics,modules=batch_summary(rows,stages),execution_plan=plan,
         status="MEASUREMENT_LEDGER_NOT_ART_QA",
         gaps=["matched camera registration","native control calibration","body tolerance",
               "hidden geometry","equipment attachment and clearance","UV rig deformation runtime"]),indent=2)+"\n")
