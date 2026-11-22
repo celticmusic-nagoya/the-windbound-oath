@@ -44,18 +44,46 @@ if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && gre
 else
   record hair BLOCKED_TAB_OR_CAPTURE
 fi
-if capture_state phase2-before-body && grep -Fq Outfit evidence/phase2-before-body.txt && "$gui" click-label evidence/phase2-before-body.png Body Outfit; then
+# Read-only qualification: never select a new preset or confirm an unknown dialog.
+recover_editor() {
+  local tag="$1"
+  if capture_state "$tag-initial" && grep -Fq Body "evidence/$tag-initial.txt" && grep -Fq Outfit "evidence/$tag-initial.txt" && ! dialog_visible "$tag-initial"; then return 0; fi
+  "$gui" key 53 || return 1
   sleep 2
-  capture_state phase2-body-top
-  if grep -Fq 'Whole Body' evidence/phase2-body-top.txt; then
-    "$gui" scroll 0.89 0.81 -12 0; sleep 2
-    capture_state phase2-body-parameters
-    record body BLOCKED_PROJECTION_AND_CONTROLS_UNQUALIFIED
-  else
-    record body BLOCKED_WRONG_PANEL
-  fi
+  capture_state "$tag-recovered" && grep -Fq Body "evidence/$tag-recovered.txt" && grep -Fq Outfit "evidence/$tag-recovered.txt" && ! dialog_visible "$tag-recovered"
+}
+inspect_panel() {
+  local tag="$1" tab="$2" anchor="$3" signature="$4"
+  recover_editor "$tag-recovery" || return 1
+  capture_state "$tag-nav" || return 1
+  "$gui" click-label "evidence/$tag-nav.png" "$tab" "$anchor" || return 1
+  sleep 2
+  capture_state "$tag-top" && grep -Eiq "$signature" "evidence/$tag-top.txt" && ! dialog_visible "$tag-top"
+}
+if inspect_panel body Body Outfit 'Whole Body'; then
+  for page in 1 2 3; do
+    if ! "$gui" scroll 0.89 0.81 -12 0 || ! sleep 2 || ! capture_state "body-page-$page"; then
+      record body BLOCKED_CAPTURE; break
+    fi
+  done
+  record body PARAMETERS_CAPTURED_PROJECTION_NOT_QUALIFIED
 else
-  record body BLOCKED_TAB_NOT_FOUND
+  record body BLOCKED_PANEL_OR_RECOVERY
+fi
+# Wardrobe template survey is independent of body fitting; do not alter garments.
+if inspect_panel wardrobe Outfit Body 'Outfit|Tops|Customize'; then
+  record wardrobe PANEL_CAPTURED_TEMPLATE_NOT_QUALIFIED
+  for page in 1 2; do
+    if ! "$gui" scroll 0.89 0.60 -9 0 || ! sleep 1 || ! capture_state "wardrobe-page-$page"; then
+      record wardrobe BLOCKED_CAPTURE; break
+    fi
+  done
+else
+  record wardrobe BLOCKED_PANEL_OR_RECOVERY
+fi
+if ! recover_editor final-editor; then
+  echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
+  exit 1
 fi
 if ! grep -q EDITED_REVIEW_REQUIRED evidence/phase1-stages.tsv; then
   cp evidence/input-model.vroid evidence/model.vroid
@@ -93,7 +121,7 @@ views phase1-reopened 25
 if ! grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then
   record checkpoint REOPEN_VALUES_VERIFIED
 fi
-echo PARTIAL_NATIVE_FACE_CANDIDATE_ART_QA_REQUIRED_HAIR_BODY_BLOCKED > evidence/authoring-status.txt
+echo PARTIAL_NATIVE_FACE_CANDIDATE_HAIR_BODY_WARDROBE_QUALIFICATION_REQUIRED > evidence/authoring-status.txt
 if grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then exit 1; fi
 # Partial production must not be reported as a complete phase.
 exit 2
