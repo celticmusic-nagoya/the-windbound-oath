@@ -27,13 +27,17 @@ def main():
         subprocess.run(['git','push',remote,commit+':refs/heads/pilot'],check=True)
         records={}
         stages=[]
-        for k,deps in [('native_reopen',[]),('native_save',['native_reopen'])]:
+        for k,deps in [('native_reopen',[]),('contact_edit',['native_reopen']),('contact_qa',['contact_edit'])]:
             stages.append(dict(id=k,deps=deps,seconds=180,qualified=True,fingerprint=fingerprint(asset,k,hashes)))
         def execute(stage,token,deadline):
             assert_owned(remote,asset,token)
             k=stage['id']; target=root/(k+'.blend')
-            src=source if not stage['deps'] else root/'native_reopen.blend'
+            src=source if not stage['deps'] else root/(stage['deps'][0]+'.blend')
             expr="import bpy; assert 'BED_DRAPE_CANDIDATE' in bpy.data.objects; bpy.ops.wm.save_as_mainfile(filepath="+repr(str(target))+"); bpy.ops.wm.open_mainfile(filepath="+repr(str(target))+"); assert len(bpy.data.objects['BED_DRAPE_CANDIDATE'].data.vertices)==2665"
+            if k=='contact_edit':
+                expr="import bpy; o=bpy.data.objects['BED_DRAPE_CANDIDATE']; exec("+repr("for v in o.data.vertices:\n    y=abs(v.co.y)\n    if y<=.44: v.co.z=max(v.co.z,.614)\n    else: v.co.z=max(v.co.z,.41)\no.data.update()") +"); "+expr
+            if k=='contact_qa':
+                expr="import bpy; o=bpy.data.objects['BED_DRAPE_CANDIDATE']; assert min(v.co.z for v in o.data.vertices if abs(v.co.y)<=.44)>=.6139; assert min(v.co.z for v in o.data.vertices)>=.4099; "+expr
             run_operation([str(blender),'-b','--disable-autoexec',str(src),'--python-exit-code','1','--python-expr',expr],deadline)
             return dict(path=target.name,reopened=True,sha256=sha(target),fingerprint=stage['fingerprint'])
         def persist(state,token,deadline):
@@ -58,7 +62,7 @@ def main():
         persist.parent=commit
         # Checkpoint branch advances without overwriting prior evidence.
         # Each commit must have the previous checkpoint as parent.
-        assert run(remote,asset,commit,root,stages,records,execute,persist,budget=900,reserve=180)==['native_reopen','native_save']
+        assert run(remote,asset,commit,root,stages,records,execute,persist,budget=900,reserve=180)==['native_reopen','contact_edit','contact_qa']
         print('ISOLATED_HOME_NATIVE_PASS')
 
 if __name__=='__main__':main()
