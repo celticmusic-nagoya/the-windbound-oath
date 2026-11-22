@@ -52,7 +52,9 @@ jobs:
       - name: Controller safety regression
         run: python3 tools/production_qa/shared_controller_regression.py
       - name: Isolated multi-writer integration
-        run: python3 tools/production_qa/shared_lease_integration_test.py
+        run: |
+          python3 tools/production_qa/shared_lease_integration_test.py
+          python3 tools/production_qa/test_shared_fenced_checkpoint.py
       - name: Recovery preflight negative cases
         run: |
           PYTHONPATH=tools/production_qa python3 - <<'PY'
