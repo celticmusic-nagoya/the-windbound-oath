@@ -46,7 +46,9 @@ jobs:
           print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
           PY
       - name: Dispatch preflight regression
-        run: python3 tools/production_qa/shared_dispatch_preflight.py
+        run: |
+          python3 tools/production_qa/shared_dispatch_preflight.py
+          python3 tools/production_qa/test_shared_dispatch_reservation.py
       - name: Controller safety regression
         run: python3 tools/production_qa/shared_controller_regression.py
       - name: Isolated multi-writer integration

@@ -73,6 +73,7 @@ def inspect(repo, run_id, artifact_name, token, get=get_json):
         "artifact_name": artifact_name,
         "size_in_bytes": artifact["size_in_bytes"],
         "expired": False,
+        "expires_at": artifact.get("expires_at"),
         "metadata_accessible": True,
         "artifact_bytes_verified": False,
         "output_contract_verified": False,
