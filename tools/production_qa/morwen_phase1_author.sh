@@ -148,8 +148,8 @@ garment_trial() {
     exit 1
   fi
 }
-garment_trial top-volume 0.232 Tops '^Volume$' 0.025 || record top-volume BLOCKED_CONTROL
-garment_trial skirt-width 0.294 Bottoms '^Skirt \\(Wider\\)$' 0.025 || record skirt-width BLOCKED_CONTROL
+record top-volume PRIOR_CALIBRATION_VERIFIED_NOT_PROMOTED
+garment_trial skirt-width 0.294 Bottoms '^Skirt [(]Wider[)]$' 0.025 || record skirt-width BLOCKED_CONTROL
 if ! recover_editor final-editor; then
   echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
   exit 1
@@ -187,7 +187,7 @@ for axis in x y; do
   if [ "$actual" = "$expected" ]; then record "iris-$axis" PRESERVED; else record "iris-$axis" REOPEN_VALUE_MISMATCH; fi
 done
 # Verify only trials actually performed; require the same numeric response after reopening.
-for entry in 'top-volume:0.232:Tops:^Volume$' 'skirt-width:0.294:Bottoms:^Skirt \\(Wider\\)$'; do
+for entry in 'top-volume:0.232:Tops:^Volume$' 'skirt-width:0.294:Bottoms:^Skirt [(]Wider[)]$'; do
   IFS=: read -r tag y category pattern <<< "$entry"
   grep -q "^$tag[[:space:]]EDITED_REVIEW_REQUIRED" evidence/phase1-stages.tsv || continue
   expected=$(awk -v t="$tag" '$1==t {print $3}' evidence/face-edits.txt)
