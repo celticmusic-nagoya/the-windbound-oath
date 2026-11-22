@@ -4,7 +4,7 @@ import {mkdir,readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {join} from 'node:path';
-const root=join(process.env.RUNNER_TEMP,'studio-site');
+const root=process.env.STUDIO_ROOT || join(process.env.RUNNER_TEMP,'studio-site');
 const manifest=JSON.parse(await readFile(join(root,'gallery-manifest.json')));
 assert.equal(manifest.entries.length,5);
 for(const e of manifest.entries){const data=await readFile(join(root,e.path));assert.equal(data.length,e.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),e.sha256);}
