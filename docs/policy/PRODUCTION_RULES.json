@@ -293,6 +293,33 @@
     "matched_preview_qa": true,
     "independent_modules_may_continue": true,
     "policy": "docs/policy/TWO_PRODUCTION_OS_V1.md",
-    "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION",
+    "executable_contract": {
+      "required": true,
+      "scope": "all_workstreams",
+      "inventory_missing_information": true,
+      "target_ids": true,
+      "source_hash_binding": true,
+      "qualified_operations": true,
+      "preflight_exact_bytes": true,
+      "matched_measurement_residuals": true,
+      "full_deliverable_batch": true,
+      "character_modules": [
+        "face",
+        "body",
+        "hair",
+        "wardrobe",
+        "equipment"
+      ],
+      "max_standard_free_job_minutes": 360,
+      "reserve_checkpoint_upload": true,
+      "continue_independent_stages": true,
+      "causal_recovery": true,
+      "verified_auto_launch": true,
+      "stop_on_single_operation": false,
+      "formal_adoption_separate": true,
+      "status": "POLICY_APPROVED_RUNTIME_NOT_RUN",
+      "policy": "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md"
+    }
   }
 }
