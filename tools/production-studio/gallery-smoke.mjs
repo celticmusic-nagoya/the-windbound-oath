@@ -50,7 +50,7 @@ try{
  assert.ok(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
  await dialog.screenshot({path:'gallery-qa/compare-mobile.png'});
  await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
- assert.equal(await page.locator('dialog').count(),0);
+ await dialog.waitFor({state:'detached',timeout:5000});
  }
  assert.deepEqual(errors,[]);
  console.log('PASS: production images decoded; SHA-256 verified; mobile width.');
