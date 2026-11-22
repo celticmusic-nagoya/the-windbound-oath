@@ -61,7 +61,9 @@ def reserve(repo, remote, request, ledger, writer_paths, token,
                 continue
             if (run["head_sha"] != request["head_sha"]
                     or run["head_branch"] != request["branch"]
-                    or run["path"] != request["workflow_path"]):
+                    or run["path"] != request["workflow_path"]
+                    or record.get("target_id") != request["target_id"]
+                    or record.get("dependency_hashes") != request["dependency_hashes"]):
                 return {"decision": "REVIEW_REQUIRED"}
             if verify_artifact(repo, token, record["artifact"], run,
                                request["output_contract"]) is not True:

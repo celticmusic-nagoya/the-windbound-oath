@@ -111,6 +111,11 @@ class ReservationTests(unittest.TestCase):
         self.assertEqual(self.reserve([old], writers_migrated=True,
                                       verify_artifact=lambda *args: True)["decision"],
                          "REUSE_SUCCESS")
+        for changed in ({"target_id": "different"}, {"dependency_hashes": {"native": "c" * 64}}):
+            with self.subTest(changed=changed):
+                self.assertEqual(self.reserve([{**old, **changed}], writers_migrated=True,
+                                              verify_artifact=lambda *args: True)["decision"],
+                                 "REVIEW_REQUIRED")
         self.assertFalse(self.git("ls-remote", "--refs", "remote.git"))
 
 
