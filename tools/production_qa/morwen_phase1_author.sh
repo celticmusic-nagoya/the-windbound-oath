@@ -33,7 +33,11 @@ capture_state phase2-before-body
 "$gui" scroll 0.89 0.81 -12 0; sleep 2
 capture_state phase2-body-parameters
 record body BLOCKED_PROJECTION_AND_CONTROLS_UNQUALIFIED
-if ! native_save; then
+if ! grep -q EDITED_REVIEW_REQUIRED evidence/phase1-stages.tsv; then
+  cp evidence/input-model.vroid evidence/model.vroid
+  shasum -a 256 evidence/model.vroid > evidence/model-sha256.txt
+  record checkpoint UNCHANGED_INPUT_REUSED
+elif ! native_save; then
   echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
   exit 1
 fi
