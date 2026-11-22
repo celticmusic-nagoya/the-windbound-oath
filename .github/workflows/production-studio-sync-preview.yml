@@ -22,6 +22,36 @@ jobs:
       - run: bash tools/production-studio/sync-preview.sh
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Inventory existing character artifacts (read-only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import os, json, subprocess, pathlib, zipfile, hashlib
+          root=pathlib.Path(os.environ["RUNNER_TEMP"])/"studio-inventory"
+          root.mkdir(exist_ok=True)
+          repo=os.environ["GITHUB_REPOSITORY"]
+          report=[]
+          for aid in (14703052245,14698129505,14683737147):
+              meta=json.loads(subprocess.check_output(["gh","api",f"repos/{repo}/actions/artifacts/{aid}"]))
+              if meta["expired"] or not 0<meta["size_in_bytes"]<=64*1024*1024:
+                  continue
+              archive=root/f"{aid}.zip"
+              with archive.open("wb") as out:
+                  subprocess.run(["gh","api",f"repos/{repo}/actions/artifacts/{aid}/zip"],stdout=out,check=True)
+              with archive.open("rb") as stream:
+                  assert "sha256:"+hashlib.file_digest(stream,"sha256").hexdigest()==meta["digest"]
+              with zipfile.ZipFile(archive) as z:
+                  images=[{"path":i.filename,"bytes":i.file_size} for i in z.infolist() if pathlib.PurePosixPath(i.filename).suffix.lower() in (".png",".jpg",".jpeg")][:200]
+              report.append({"id":aid,"run":meta["workflow_run"]["id"],"head":meta["workflow_run"]["head_sha"],"images":images})
+              archive.unlink()
+          (root/"inventory.json").write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-source-inventory
+          path: ${{ runner.temp }}/studio-inventory/inventory.json
       - name: Verify actual gallery in mobile browser
         working-directory: tools/production-studio
         run: |
