@@ -2,7 +2,7 @@ name: Shared native session qualification
 on:
   push:
     branches: [infra/shared-native-session-20261122]
-    paths: ['.github/workflows/two-shared-native-session-qa.yml']
+    paths: ['.github/workflows/two-shared-native-session-qa.yml', 'tools/production_qa/shared_*.py', 'tools/production_qa/bounded*.py', 'tools/production_qa/session_plan.py']
   workflow_dispatch:
 permissions:
   contents: write
@@ -66,15 +66,6 @@ jobs:
               else: raise AssertionError("unsafe recovery accepted")
           print("RECOVERY_PREFLIGHT_PASS")
           PY
-      - name: Publish result
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RESULT: ${{ job.status }}
-        run: |
-          state=failure
-          if [[ "$RESULT" == success ]]; then state=success; fi
-          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/shared-session-qa -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   windows-deadline:
     runs-on: windows-2025
     timeout-minutes: 10
@@ -114,3 +105,22 @@ jobs:
           print("WINDOWS_JOB_DEADLINE_PASS")
           '@ | python -
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  aggregate:
+    if: always()
+    needs: [qualify, windows-deadline]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Publish result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LINUX: ${{ needs.qualify.result }}
+          WINDOWS: ${{ needs.windows-deadline.result }}
+        run: |
+          state=failure
+          if [[ "$LINUX" == success && "$WINDOWS" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/shared-session-qa -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          [[ "$state" == success ]]
