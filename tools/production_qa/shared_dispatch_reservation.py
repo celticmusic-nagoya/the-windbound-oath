@@ -10,17 +10,22 @@ from collect_actions_snapshot import collect, get_json
 from reconcile_actions_snapshot import reconcile
 from shared_artifact_reuse import verify_reuse
 from shared_asset_lease import acquire, assert_owned, release
+from shared_production_readiness import handoff_digest, readiness_issues
 from shared_session_contract import asset_key
 
 
 def reserve(repo, remote, request, ledger, writer_paths, token,
-            *, writers_migrated, get=get_json, verify_artifact=verify_reuse):
+            *, writers_migrated, handoff=None, get=get_json, verify_artifact=verify_reuse):
     """Return a decision and, only on eligibility, an owned fencing token."""
     asset = asset_key(request["asset_id"])
     if writers_migrated is not True or not writer_paths:
         return {"decision": "BLOCKED_WRITER_MIGRATION"}
     if request["workflow_path"] not in writer_paths:
         raise ValueError("requested workflow is absent from the writer inventory")
+    issues = readiness_issues(request, handoff, writer_paths)
+    if issues:
+        return {"decision": "BLOCKED_PRODUCTION_READINESS", "missing_or_mismatched": issues}
+    evidence = handoff_digest(handoff)
     branch = quote(request["branch"], safe="")
     branch_url = f"https://api.github.com/repos/{repo}/branches/{branch}"
 
@@ -82,4 +87,4 @@ def reserve(repo, remote, request, ledger, writer_paths, token,
         return {"decision": "BLOCKED_SNAPSHOT_CHANGED"}
     assert_owned(remote, asset, lease)
     return {"decision": "RESERVED", "token": lease,
-            "fingerprint": decision["fingerprint"]}
+            "fingerprint": decision["fingerprint"], "handoff_sha256": evidence}
