@@ -65,12 +65,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Fetch shared Blender installer from main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          path: shared-main
-          persist-credentials: false
       - name: Provision headless EGL and Mesa runtime
         timeout-minutes: 8
         run: |
@@ -80,11 +74,11 @@ jobs:
           ldconfig -p | grep 'libEGL.so.1'
           echo "LIBGL_ALWAYS_SOFTWARE=1" >> "$GITHUB_ENV"
           echo "EGL_PLATFORM=surfaceless" >> "$GITHUB_ENV"
-      - name: Install SHA-verified Blender 5.2.4
+      - name: Install SHA-verified Blender 5.3.0
         timeout-minutes: 12
         run: |
-          test "$(git -C shared-main hash-object tools/production_qa/install_blender_524.sh)" = ef35cadf85a9d6210232627d86c95650a594219f
-          bash shared-main/tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+          test "$(git hash-object tools/production_qa/install_blender_530.sh)" = 4f49728f62b2f2e4d9b3a8f3cc1a5b27b79962ed
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender/app
           /tmp/two-blender/app/blender --version | head -n 3
       - name: Generate isolated technical fixture
         run: |
