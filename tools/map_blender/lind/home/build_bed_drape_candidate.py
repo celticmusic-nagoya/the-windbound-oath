@@ -11,11 +11,18 @@ for i in range(nx):
     x=.70+1.15*u
     for j in range(ny):
         v=j/(ny-1); t=2*v-1
-        y=.51*t
+        y=.51*t + .012*math.sin(5*u+1.7*t)*abs(t)**5
         edge=max(0,(abs(t)-.76)/.24)
-        z=.62-.21*edge**1.6
-        z+=(.012+.023*edge)*math.sin(19*u+3*t+1.2*math.sin(8*u))*math.sin(math.pi*(.12+.76*u))
-        verts.append((x,y,z));uv.append((1.15*u,1.02*v))
+        z=.625-.19*edge**1.6
+        # Nonperiodic tension ridges from distinct fold origins; no sinusoidal hem.
+        for center,slope,width,amp in ((.18,.23,.055,.025),(.46,-.31,.085,.019),(.78,.19,.045,.034)):
+            d=u-center-slope*t-.045*t*t
+            z+=amp*math.exp(-(d/width)**2)*(.45+.55*abs(t))
+            z-=.009*math.exp(-((d-.065)/(.8*width))**2)
+        z=max(z,.611 if abs(t)<=.76 else .40)
+        # Soft raised hem within the same continuous surface.
+        z+=.003*math.exp(-((abs(t)-.965)/.022)**2)
+        verts.append((x,y,z));uv.append((1.15*u,1.12*v))
 faces=[(i*ny+j,(i+1)*ny+j,(i+1)*ny+j+1,i*ny+j+1) for i in range(nx-1) for j in range(ny-1)]
 mesh=bpy.data.meshes.new("BED_DRAPE_GRID");mesh.from_pydata(verts,[],faces);mesh.update()
 assert not mesh.validate()
