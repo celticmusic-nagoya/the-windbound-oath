@@ -1,0 +1,94 @@
+name: HOME cross-run checkpoint continuation
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/lind-home-checkpoint-resume.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+concurrency:
+  group: aidan-interior-candidate
+  cancel-in-progress: false
+jobs:
+  resume:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d477176179af046db7ef86f3bdf8bbe92e47b1d2
+          persist-credentials: false
+      - name: Verify runner and restore immutable checkpoint
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/$GITHUB_REPOSITORY --jq .visibility)" = public
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          for status in in_progress queued waiting pending requested; do
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?per_page=100&status=$status" --jq '.workflow_runs[] | [.id,.name,.head_branch] | @tsv'
+          done > /tmp/active
+          if awk -F '\t' -v self="$GITHUB_RUN_ID" '$1!=self && ($2 ~ /Aidan|Rilde|LIND.*HOME|HOME cross-run/ || $3=="feature/lind-village-world-integration-plan-01"){found=1} END{exit !found}' /tmp/active; then exit 1; fi
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14741951418/zip" > /tmp/home.zip
+          echo '297d5cc1a555f509a1059fcf7554ea8d3bba81a425f8822e23d683540882919b  /tmp/home.zip' | sha256sum -c -
+          mkdir -p /tmp/restored /tmp/evidence
+          unzip -q /tmp/home.zip -d /tmp/restored
+          (cd /tmp/restored && sha256sum -c SHA256SUMS)
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          echo LIBGL_ALWAYS_SOFTWARE=1 >> "$GITHUB_ENV"
+          echo EGL_PLATFORM=surfaceless >> "$GITHUB_ENV"
+      - name: Install verified Blender
+        run: |
+          set -eu
+          base=https://mirror.blender.org/release/Blender5.3
+          archive=blender-5.3.0-linux-x64.tar.xz
+          curl -fsSL --max-time 90 "$base/blender-5.3.0.sha256" -o sums
+          curl -fsSL --max-time 540 "$base/$archive" -o "$archive"
+          grep "$archive" sums | sha256sum -c -
+          mkdir -p /tmp/blender /tmp/blueprint
+          tar -xJf "$archive" -C /tmp/blender --strip-components=1
+          /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+      - name: Continue collision and traversal QA without repeating edits or renders
+        run: |
+          set -euo pipefail
+          cat >/tmp/continue.py <<'PY'
+          import bpy,json,hashlib,math
+          from pathlib import Path
+          root=Path('/tmp/restored')
+          q=json.loads((root/'checkpoint.json').read_text())
+          with (root/'home_portal_checkpoint.blend').open('rb') as f: h=hashlib.file_digest(f,'sha256').hexdigest()
+          assert h==q['native_sha256'] and q['reopened']
+          def box(o):
+              a=[o.matrix_world@v.co for v in o.data.vertices]
+              return [[min(v[i] for v in a) for i in range(3)],[max(v[i] for v in a) for i in range(3)]]
+          boxes={o.name:box(o) for o in bpy.context.scene.objects if o.type=='MESH' and o.name.startswith('COL_AIDANHOUSE_')}
+          # Straight entry path clearance against actual collision boxes, XY only.
+          start=-5.5; end=-2.0
+          walls=[(n,b) for n,b in boxes.items() if b[0][1]<=end and b[1][1]>=start]
+          def clearance(x,y):
+              return min(math.hypot(max(b[0][0]-x,0,x-b[1][0]),max(b[0][1]-y,0,y-b[1][1])) for n,b in walls)
+          samples=[clearance(0,start+i*(end-start)/140) for i in range(141)]
+          report=dict(source_artifact=14741951418,source_sha256=h,reopened=True,repeated_edits=0,repeated_renders=0,minimum_clearance_m=min(samples),sample_spacing_m=.025,provisional_radius_tests={str(r):min(samples)>=r for r in (.25,.35,.45)},collision_boxes=boxes,G4='NOT_RUN',scope='local straight-line XY proxy clearance; not runtime navigation or stairs')
+          Path('/tmp/evidence/traversal.json').write_text(json.dumps(report,indent=2))
+          assert report['provisional_radius_tests']['0.35']
+          PY
+          timeout 1200 /tmp/blender/blender -b --disable-autoexec /tmp/restored/home_portal_checkpoint.blend --python-exit-code 1 --python /tmp/continue.py
+          cd /tmp/evidence
+          sha256sum traversal.json > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: home-cross-run-qa-${{ github.run_id }}
+          path: /tmp/evidence
+      - name: Publish status
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [[ "$RESULT" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/home-cross-run -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
