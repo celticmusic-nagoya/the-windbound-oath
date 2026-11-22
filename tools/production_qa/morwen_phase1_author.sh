@@ -229,19 +229,7 @@ if grep -q '^body-height[[:space:]]EDITED_REVIEW_REQUIRED' evidence/phase1-stage
   expected=$(awk '$1=="body-height" {print $3}' evidence/face-edits.txt)
   actual=UNKNOWN
   if inspect_panel body-height-reopen Body Outfit 'Whole Body'; then
-    actual=$("$row" evidence/body-height-reopen-top.png '^Fem Height
-  fi
-  if [ -n "$expected" ] && [ "$actual" = "$expected" ]; then record body-height REOPEN_VALUE_MATCH; else record body-height REOPEN_VALUE_MISMATCH; fi
-fi
-views phase1-reopened 25
-if ! grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then
-  record checkpoint REOPEN_VALUES_VERIFIED
-fi
-echo PARTIAL_NATIVE_FACE_CANDIDATE_HAIR_BODY_WARDROBE_QUALIFICATION_REQUIRED > evidence/authoring-status.txt
-if grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then exit 1; fi
-# Partial production must not be reported as a complete phase.
-exit 2
- | awk '{print $1}') || actual=UNKNOWN
+    actual=$("$row" evidence/body-height-reopen-top.png '^Fem Height$' | awk '{print $1}') || actual=UNKNOWN
     if [ "$actual" = UNKNOWN ] || [ -z "$actual" ]; then
       actual=$(awk -F ' \\| ' '{for(i=1;i<NF;i++) if($i=="Fem Height" && $(i+1) ~ /^-?[0-9]+[.][0-9]+$/){v=$(i+1);n++}} END{if(n==1)print v;else print "UNKNOWN"}' evidence/body-height-reopen-top.txt)
     fi
