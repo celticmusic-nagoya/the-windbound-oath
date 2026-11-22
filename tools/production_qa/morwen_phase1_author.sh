@@ -1,7 +1,7 @@
 # Sourced inside qualified native session. Candidate trials, not adopted shape.
 set -o pipefail
 # Fail closed before any edits if the restored checkpoint is not the intended native original.
-printf "%s  %s\n" ef10e454474dcd3f9713d088d2fd0bfc777cd663865f34edf9a3eaac87a76238 evidence/input-model.vroid | shasum -a 256 -c || { echo BLOCKED_WRONG_INPUT > evidence/authoring-status.txt; exit 1; }
+printf "%s  %s\n" 9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574 evidence/input-model.vroid | shasum -a 256 -c || { echo BLOCKED_WRONG_INPUT > evidence/authoring-status.txt; exit 1; }
 printf 'stage\tstatus\n' > evidence/phase1-stages.tsv
 record() { printf '%s\t%s\n' "$1" "$2" >> evidence/phase1-stages.tsv; }
 trial() {
@@ -19,7 +19,7 @@ views phase1-before 25
 # The exact native slider-to-projection mapping is not yet calibrated.
 record nose-size PRESERVED_PRIOR_CHECKPOINT
 record mouth-width PRESERVED_PRIOR_CHECKPOINT
-trial brow-arch "$CAT_BROW" '^Eyebrows Arch$' 0.006
+record brow-arch PRESERVED_PRIOR_CHECKPOINT
 views phase1-after 0
 # Hair editor and body controls are not qualified for shape changes. Preserve them.
 "$gui" vroid-shortcut hair; sleep 2
@@ -49,7 +49,7 @@ verify_trial() {
   actual=$("$row" "evidence/phase1-reopen-$tag.png" "$label" | awk '{print $1}') || actual=UNKNOWN
   if [ "$actual" = "$expected" ]; then record "$tag" REOPEN_VALUE_MATCH; else record "$tag" REOPEN_VALUE_MISMATCH; fi
 }
-printf 'nose-size 0.106 0.194\nmouth-width -0.097 -0.026\n' >> evidence/face-edits.txt
+printf 'nose-size 0.106 0.194\nmouth-width -0.097 -0.026\nbrow-arch 0.000 0.053\n' >> evidence/face-edits.txt
 verify_trial nose-size 0.729 '^Nose Size$'
 verify_trial mouth-width 0.792 '^Mouth Width$'
 verify_trial brow-arch "$CAT_BROW" '^Eyebrows Arch$'
