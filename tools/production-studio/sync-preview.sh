@@ -2,10 +2,11 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site"
+python discover-gallery.py
 python - <<'PY'
 import json, subprocess, os
 from pathlib import Path
-selection=json.load(open('sync-selection.json'))
+selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
 assert len(selection)<=20
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
@@ -18,7 +19,9 @@ for x in selection:
     assert 0 < meta['size_in_bytes'] <= 128*1024*1024
     x['created_at']=meta['created_at']
     target=Path(os.environ['RUNNER_TEMP'])/'studio-zips'/f'{a}.zip'
-    subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a}/zip'],stdout=target.open('wb'),check=True)
+    if not target.exists():
+        with target.open('wb') as out:
+            subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a}/zip'],stdout=out,check=True)
     import hashlib
     digest=meta.get('digest','')
     assert digest.startswith('sha256:') and hashlib.file_digest(target.open('rb'),'sha256').hexdigest()==digest[7:]
