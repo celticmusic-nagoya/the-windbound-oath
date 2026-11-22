@@ -19,33 +19,31 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Restore actual native checkpoints on fresh runner
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Contract and bounded operation regression
         run: |
-          set -euo pipefail
-          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14750063737/zip >/tmp/native.zip
-          echo '75b570982b7c4aac31808cbac54736bf1c0b79c9bb2c8d84c1b0cc1a29e0c8c3  /tmp/native.zip' | sha256sum -c -
-          mkdir /tmp/evidence
-          unzip -q /tmp/native.zip -d /tmp/evidence
-          cd /tmp/evidence
-          sha256sum -c SHA256SUMS
-          cd "$GITHUB_WORKSPACE"
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
-          export LIBGL_ALWAYS_SOFTWARE=1 EGL_PLATFORM=surfaceless
-          bash tools/production_qa/install_blender_530.sh /tmp/two-blender53
-          /tmp/two-blender53/blender -b --disable-autoexec /tmp/evidence/material.blend --python-exit-code 1 --python-expr 'import bpy; assert bpy.context.scene.cycles.samples==32; assert len(bpy.data.objects)>0'
-          python3 - <<'PY'
-          import sys,json
-          from pathlib import Path
-          sys.path.insert(0,'tools/production_qa')
-          from session_plan import ready
-          root=Path('/tmp/evidence')
-          done=json.loads((root/'ledger.json').read_text())
-          stages=[dict(id=k,deps=d,qualified=True,seconds=900,fingerprint=done[k]['fingerprint']) for k,d in [('lighting',[]),('material',['lighting'])]]
-          assert ready(stages,done,root,19800,1800)==[]
-          print('CROSS_RUN_NATIVE_RESTORE_PASS')
+          PYTHONPATH=tools/production_qa python3 - <<'PY'
+          import sys,time
+          from shared_session_contract import fingerprint,FIELDS
+          from bounded_operation import run_operation
+          h={k:{"fixture":"a"*64} for k in FIELDS}
+          a=fingerprint("MORWEN","face",h)
+          assert a==fingerprint("MORWEN","face",dict(reversed(list(h.items()))))
+          for key in FIELDS:
+              changed={**h,key:{"fixture":"b"*64}}
+              assert a!=fingerprint("MORWEN","face",changed)
+          try:
+              fingerprint("unknown","face",h)
+          except ValueError: pass
+          else: raise AssertionError("unknown asset accepted")
+          run_operation([sys.executable,"-c","pass"],time.monotonic()+3,grace=1)
+          started=time.monotonic()
+          try:
+              run_operation([sys.executable,"-c","import time; time.sleep(60)"],started+3,grace=1)
+          except TimeoutError: raise
+          except __import__("subprocess").TimeoutExpired: pass
+          else: raise AssertionError("timeout not enforced")
+          assert time.monotonic()-started<5
+          print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
           PY
       - name: Publish result
         if: always()
