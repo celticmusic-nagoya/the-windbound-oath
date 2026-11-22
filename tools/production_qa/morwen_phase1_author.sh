@@ -14,6 +14,10 @@ trial() {
     record "$tag" BLOCKED_CONTROL_OR_RESPONSE
   fi
 }
+## Preserve a recoverable baseline before touching the GUI.
+mkdir -p evidence/checkpoints
+cp evidence/input-model.vroid evidence/checkpoints/00-input.vroid
+shasum -a 256 evidence/checkpoints/00-input.vroid > evidence/checkpoints/00-input.sha256
 views phase1-before 25
 # Provisional small reversible trials: strengthen nose relief and widen mouth.
 # The exact native slider-to-projection mapping is not yet calibrated.
@@ -53,6 +57,8 @@ elif ! native_save; then
   echo BLOCKED_NATIVE_SAVE_NOT_VERIFIED > evidence/authoring-status.txt
   exit 1
 fi
+cp evidence/model.vroid evidence/checkpoints/01-candidate.vroid
+shasum -a 256 evidence/checkpoints/01-candidate.vroid > evidence/checkpoints/01-candidate.sha256
 if ! reopen_copy; then
   echo BLOCKED_NATIVE_REOPEN_NOT_VERIFIED > evidence/authoring-status.txt
   exit 1
@@ -76,6 +82,9 @@ for axis in x y; do
   if [ "$actual" = "$expected" ]; then record "iris-$axis" PRESERVED; else record "iris-$axis" REOPEN_VALUE_MISMATCH; fi
 done
 views phase1-reopened 25
+if ! grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then
+  record checkpoint REOPEN_VALUES_VERIFIED
+fi
 echo PARTIAL_NATIVE_FACE_CANDIDATE_ART_QA_REQUIRED_HAIR_BODY_BLOCKED > evidence/authoring-status.txt
 if grep -q REOPEN_VALUE_MISMATCH evidence/phase1-stages.tsv; then exit 1; fi
 # Partial production must not be reported as a complete phase.
