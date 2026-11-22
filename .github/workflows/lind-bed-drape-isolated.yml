@@ -15,6 +15,13 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: 081f10204796d4e19aa2e573b880bb65106aec90
+          path: shared-runtime
+          persist-credentials: false
+          sparse-checkout: tools/production_qa/install_blender_530.sh
+          sparse-checkout-cone-mode: false
       - name: Verified Blender
         run: |
           sudo apt-get update -qq
@@ -22,7 +29,7 @@ jobs:
           echo LIBGL_ALWAYS_SOFTWARE=1 >> "$GITHUB_ENV"
           echo EGL_PLATFORM=surfaceless >> "$GITHUB_ENV"
           test "$RUNNER_ENVIRONMENT" = github-hosted
-          bash tools/production_qa/install_blender_530.sh /tmp/blender
+          bash shared-runtime/tools/production_qa/install_blender_530.sh /tmp/blender
       - name: Generate and examine isolated mesh
         run: |
           mkdir -p /tmp/bed
