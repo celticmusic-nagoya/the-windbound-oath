@@ -111,6 +111,23 @@ if inspect_panel wardrobe Outfit Body 'Tops|Bottoms|Whole Set|Shoes'; then
 else
   record wardrobe BLOCKED_PANEL_OR_RECOVERY
 fi
+# Explore observed outfit category icons without choosing or replacing any preset.
+if inspect_panel outfit-learning Outfit Body 'Whole Sets'; then
+  for entry in tops:0.232 bottoms:0.294 dresses:0.357 neckwear:0.419 socks:0.669 shoes:0.732; do
+    name=${entry%:*}; y=${entry#*:}
+    if "$gui" click 0.023 "$y" && sleep 2 && capture_state "learn-outfit-$name"; then
+      record "learn-outfit-$name" CAPTURED_LABEL_REVIEW_REQUIRED
+    else
+      record "learn-outfit-$name" BLOCKED_CAPTURE
+    fi
+  done
+fi
+# Accessories tab: inspect only; never add/delete an item on the protected candidate.
+if inspect_panel accessory-learning Accessories Outfit 'Accessories|Glasses|Add'; then
+  record equipment PANEL_CAPTURED_REVIEW_REQUIRED
+else
+  record equipment BLOCKED_PANEL
+fi
 if ! recover_editor final-editor; then
   echo BLOCKED_EDITOR_RECOVERY_INPUT_PRESERVED > evidence/authoring-status.txt
   exit 1
