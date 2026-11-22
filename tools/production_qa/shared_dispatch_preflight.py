@@ -15,11 +15,11 @@ def plan(request, branch_head, runs, workflow_on_default, lease_free):
         raise ValueError("workflow not allowlisted")
     if not lease_free:
         return "BLOCKED_LEASE"
-    for run in runs:
-        if run["status"]!="completed":
-            return "BLOCKED_ACTIVE_RUN"
-        if run["head_sha"]==request["head"] and run["conclusion"]=="success":
-            return "REUSE_SUCCESS"
+    relevant=[run for run in runs if run.get("path")==".github/workflows/"+request["workflow"] and run.get("head_branch")==request["branch"]]
+    if any(run["status"]!="completed" for run in relevant):
+        return "BLOCKED_ACTIVE_RUN"
+    if any(run["head_sha"]==request["head"] and run["conclusion"]=="success" for run in relevant):
+        return "REUSE_SUCCESS"
     if not workflow_on_default:
         return "BLOCKED_DEFAULT_REGISTRATION"
     return "READY_FOR_AUTHORIZED_DISPATCH"
@@ -29,8 +29,13 @@ if __name__=="__main__":
     assert plan(q,q["head"],[],True,True)=="READY_FOR_AUTHORIZED_DISPATCH"
     assert plan(q,q["head"],[],False,True)=="BLOCKED_DEFAULT_REGISTRATION"
     assert plan(q,q["head"],[],True,False)=="BLOCKED_LEASE"
-    assert plan(q,q["head"],[dict(status="queued")],True,True)=="BLOCKED_ACTIVE_RUN"
-    assert plan(q,q["head"],[dict(status="completed",head_sha=q["head"],conclusion="success")],False,True)=="REUSE_SUCCESS"
+    fixture=dict(path=".github/workflows/"+q["workflow"],head_branch=q["branch"])
+    active=dict(fixture,status="queued")
+    success=dict(fixture,status="completed",head_sha=q["head"],conclusion="success")
+    assert plan(q,q["head"],[active],True,True)=="BLOCKED_ACTIVE_RUN"
+    assert plan(q,q["head"],[success,active],True,True)=="BLOCKED_ACTIVE_RUN"
+    assert plan(q,q["head"],[{**success,"path":"unrelated.yml"}],True,True)=="READY_FOR_AUTHORIZED_DISPATCH"
+    assert plan(q,q["head"],[success],False,True)=="REUSE_SUCCESS"
     try: plan(q,"b"*40,[],True,True)
     except ValueError: pass
     else: raise AssertionError("stale head accepted")
