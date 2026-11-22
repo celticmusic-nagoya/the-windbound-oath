@@ -11,7 +11,7 @@ from shared_factory_stage import execute_factory_stage
 from shared_session_contract import asset_key
 
 def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800,
-        *, reservation=None, fenced=False, blueprint_targets=None, factory_stages=None):
+        *, reservation=None, fenced=False, blueprint_targets=None, factory_stages=None, verify_g2=None):
     """Carry a dispatch reservation into the worker and use the returned fence at each stage.
 
     In fenced mode, persist must atomically publish a changed ledger and return
@@ -20,6 +20,8 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
     Stages declaring requires_blueprint need a validated target before editing.
     A factory entry is (source_path, adapter); a None source selects its
     sole dependency's verified checkpoint without changing the blueprint SHA.
+    The optional requires_g2_from names a dependency. verify_g2 authenticates
+    its independent review against the dependency's exact native SHA.
     """
     if not 0<reserve<budget<=21600: raise ValueError('invalid budget')
     asset_key(asset)
@@ -29,6 +31,11 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         raise ValueError("blueprint target references an unknown session stage")
     if set(factories) - targets.keys():
         raise ValueError("precision factory stage requires a supplied blueprint target")
+    review_dependencies = {stage["id"]: stage["requires_g2_from"]
+                           for stage in stages if "requires_g2_from" in stage}
+    if any(review_dependencies[stage["id"]] not in stage["deps"]
+           for stage in stages if stage["id"] in review_dependencies):
+        raise ValueError("G2 gate must reference a stage dependency")
     started=time.monotonic()
     end=started+budget
     def durable(records,token,changed):
@@ -53,6 +60,12 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
     while True:
         assert_owned(remote,asset,token)
         reusable = dict(completed)
+        blocked = set()
+        for stage_id, dependency in review_dependencies.items():
+            native_sha = completed.get(dependency, {}).get("sha256")
+            if not native_sha or verify_g2 is None or verify_g2(dependency, native_sha) is not True:
+                blocked.add(stage_id)
+                reusable.pop(stage_id, None)
         for stage in stages:
             stage_id = stage["id"]
             if stage_id not in factories or stage_id not in reusable:
@@ -63,6 +76,7 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
                     or record.get("dependency_checkpoints") != dependency_shas):
                 reusable.pop(stage_id)
         available=ready(stages,reusable,root,budget-(time.monotonic()-started),reserve)
+        available = [stage_id for stage_id in available if stage_id not in blocked]
         if not available:break
         stage=next(s for s in stages if s['id']==available[0])
         blueprint = targets.get(stage["id"])

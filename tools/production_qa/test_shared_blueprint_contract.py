@@ -134,6 +134,9 @@ class BlueprintContractTests(unittest.TestCase):
 
             def finish(native, target, *, deadline):
                 calls.append("finish")
+                report = native.with_name("preview.json")
+                report.write_text("{}")
+                return {report.name: sha(report)}
 
             def reopen(native, target, *, deadline):
                 calls.append("reopen")
@@ -151,6 +154,7 @@ class BlueprintContractTests(unittest.TestCase):
             self.assertEqual(worker(), ["edit"])
             self.assertEqual(calls, ["edit", "measure", "correct", "measure", "finish", "reopen"])
             self.assertEqual(state["edit"]["dependency_checkpoints"], {"input": sha(source)})
+            self.assertEqual(len(state["edit"]["files"]), 1)
             self.assertEqual(source.read_text(), "1.06")
             self.assertEqual(worker(), [])
             self.assertEqual(calls.count("edit"), 1)

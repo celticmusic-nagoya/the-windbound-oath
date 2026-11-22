@@ -2,11 +2,15 @@
 Unique annotated tag object prevents ABA even when reacquiring same commit.
 Requires authenticated git remote and canonical asset ID.
 """
-import subprocess,uuid,re
+import subprocess,uuid,re,time
 from shared_asset_reservation import ref_for
 
-def git(*args,stdin=None):
-    return subprocess.run(['git',*args],input=stdin,text=True,capture_output=True,check=True).stdout.strip()
+def git(*args,stdin=None,deadline=None):
+    timeout = None if deadline is None else deadline - time.monotonic()
+    if timeout is not None and timeout <= 0:
+        raise TimeoutError("checkpoint Git deadline exhausted")
+    return subprocess.run(['git',*args],input=stdin,text=True,capture_output=True,check=True,
+                          timeout=timeout).stdout.strip()
 
 def acquire(remote,asset,commit):
     if not re.fullmatch(r'[0-9a-f]{40}',commit):raise ValueError('commit SHA required')
@@ -16,14 +20,14 @@ def acquire(remote,asset,commit):
     assert_owned(remote,asset,obj)
     return obj
 
-def lease_object(commit):
+def lease_object(commit, *, deadline=None):
     nonce=uuid.uuid4().hex
-    return git('mktag',stdin=f'object {commit}\ntype commit\ntag two-lease-{nonce}\ntagger TWO lease <lease@invalid> 1700000000 +0000\n\n{nonce}\n')
+    return git('mktag',stdin=f'object {commit}\ntype commit\ntag two-lease-{nonce}\ntagger TWO lease <lease@invalid> 1700000000 +0000\n\n{nonce}\n',deadline=deadline)
 
-def assert_owned(remote,asset,obj):
+def assert_owned(remote,asset,obj,*,deadline=None):
     if not re.fullmatch(r'[0-9a-f]{40}',obj):raise ValueError('lease object required')
     ref=ref_for(asset)
-    if git('ls-remote','--refs',remote,ref)!=f'{obj}\t{ref}':raise RuntimeError('lease lost')
+    if git('ls-remote','--refs',remote,ref,deadline=deadline)!=f'{obj}\t{ref}':raise RuntimeError('lease lost')
 
 def assert_reservation(remote, asset, token, commit):
     """Bind the dispatch-time reservation to the exact revision being executed."""
@@ -48,7 +52,10 @@ def release(remote,asset,obj):
     ref=ref_for(asset)
     git('push','--porcelain',f'--force-with-lease={ref}:{obj}',remote,f':{ref}')
 
-def publish_checkpoint(remote, asset, token, checkpoint, previous=None):
+def checkpoint_ref(asset):
+    return 'refs/heads/two-checkpoint/v1/' + ref_for(asset).rsplit('/', 1)[1]
+
+def publish_checkpoint(remote, asset, token, checkpoint, previous=None, *, deadline=None):
     """Publish and rotate the fencing token in the same server-side transaction.
 
     The owning adapter must save and verify the native outputs before creating
@@ -59,16 +66,16 @@ def publish_checkpoint(remote, asset, token, checkpoint, previous=None):
     if previous is not None:
         if not re.fullmatch(r'[0-9a-f]{40}', previous) or checkpoint == previous:
             raise ValueError('previous checkpoint must be a distinct commit SHA')
-        git('merge-base', '--is-ancestor', previous, checkpoint)
+        git('merge-base', '--is-ancestor', previous, checkpoint, deadline=deadline)
     lock = ref_for(asset)
-    output = 'refs/heads/two-checkpoint/v1/' + lock.rsplit('/', 1)[1]
-    assert_owned(remote, asset, token)
-    successor = lease_object(checkpoint)
+    output = checkpoint_ref(asset)
+    assert_owned(remote, asset, token, deadline=deadline)
+    successor = lease_object(checkpoint, deadline=deadline)
     git('push', '--atomic', '--porcelain',
         f'--force-with-lease={lock}:{token}',
         f'--force-with-lease={output}:{previous or ""}',
-        remote, f'{successor}:{lock}', f'{checkpoint}:{output}')
-    assert_owned(remote, asset, successor)
-    if git('ls-remote', '--refs', remote, output) != f'{checkpoint}\t{output}':
+        remote, f'{successor}:{lock}', f'{checkpoint}:{output}', deadline=deadline)
+    assert_owned(remote, asset, successor, deadline=deadline)
+    if git('ls-remote', '--refs', remote, output, deadline=deadline) != f'{checkpoint}\t{output}':
         raise RuntimeError('published checkpoint not confirmed')
     return successor

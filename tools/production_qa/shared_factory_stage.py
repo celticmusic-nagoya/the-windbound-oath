@@ -58,7 +58,18 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
         require_pass(issues)
         # The owner adapter performs material/preview and technical QA here.
         # Independent G2 remains on the owning review path.
-        perform(adapter.finish, native, target)
+        evidence = perform(adapter.finish, native, target)
+        files = {}
+        if evidence is not None:
+            if not isinstance(evidence, dict):
+                raise ValueError("factory evidence must map relative paths to SHA-256")
+            for name, expected in evidence.items():
+                if not isinstance(name, str) or Path(name).is_absolute():
+                    raise ValueError("factory evidence path must be relative")
+                path = (attempt / name).resolve()
+                if not path.is_relative_to(attempt) or not path.is_file() or sha(path) != expected:
+                    raise ValueError("factory evidence missing, outside attempt or SHA mismatched")
+                files[path.relative_to(root).as_posix()] = expected
         saved_sha = sha(native)
         reopened, issues = observe(adapter.reopen)
         if sha(native) != saved_sha:
@@ -70,6 +81,7 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
             "reopened": True,
             "fingerprint": stage["fingerprint"],
             "observation": reopened,
+            "files": files,
         }
     except BaseException:
         quarantine = root / "quarantine"
