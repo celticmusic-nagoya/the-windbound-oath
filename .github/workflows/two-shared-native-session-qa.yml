@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Qualify remote CAS release and ABA rejection
+      - name: Qualify dynamic controller with remote durable checkpoints
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -27,32 +27,42 @@ jobs:
           test "$RUNNER_ENVIRONMENT" = github-hosted
           gh auth setup-git
           python3 - <<'PY'
-          import sys,os,subprocess,concurrent.futures
+          import os,sys,tempfile,json,hashlib,subprocess,base64
+          from pathlib import Path
           sys.path.insert(0,'tools/production_qa')
-          from shared_asset_lease import acquire,release,assert_owned
-          from shared_asset_reservation import ref_for
-          a='QA-CAS-'+os.environ['GITHUB_RUN_ID']+'-'+os.environ['GITHUB_RUN_ATTEMPT']
-          h=os.environ['GITHUB_SHA']
-          def claim(_):
-              try:return acquire('origin',a,h)
-              except subprocess.CalledProcessError:return None
-          with concurrent.futures.ThreadPoolExecutor(2) as p: outcomes=list(p.map(claim,range(2)))
-          assert sum(x is not None for x in outcomes)==1,outcomes
-          old=next(x for x in outcomes if x)
-          release('origin',a,old)
-          new=acquire('origin',a,h)
-          assert old!=new
-          try:release('origin',a,old)
-          except RuntimeError:pass
-          else:raise AssertionError('stale release accepted')
-          # Bypass preliminary ownership check to test server-side CAS itself.
-          ref=ref_for(a)
-          p=subprocess.run(['git','push',f'--force-with-lease={ref}:{old}','origin',':'+ref],capture_output=True)
-          assert p.returncode!=0,'stale CAS accepted'
-          assert_owned('origin',a,new)
-          release('origin',a,new)
-          assert not subprocess.check_output(['git','ls-remote','--refs','origin',ref],text=True).strip()
-          print('REMOTE_CAS_RELEASE_ABA_PASS',old,new)
+          from shared_session_controller import run
+          from shared_asset_lease import assert_owned
+          from session_plan import sha
+          repo=os.environ['GITHUB_REPOSITORY']; head=os.environ['GITHUB_SHA']
+          asset='QA-DAG-'+os.environ['GITHUB_RUN_ID']+'-'+os.environ['GITHUB_RUN_ATTEMPT']
+          stages=[dict(id=k,deps=d,qualified=True,seconds=60,fingerprint=hashlib.sha256((head+k).encode()).hexdigest()) for k,d in [('geometry',[]),('material',['geometry']),('qa',['material'])]]
+          with tempfile.TemporaryDirectory() as d:
+              root=Path(d);done={};calls=[]
+              def execute(stage,token):
+                  assert_owned('origin',asset,token)
+                  p=root/(stage['id']+'.json')
+                  p.write_text(json.dumps({'id':stage['id'],'deps':stage['deps']}))
+                  assert json.loads(p.read_text())['id']==stage['id']
+                  calls.append(stage['id'])
+                  return dict(path=p.name,reopened=True,sha256=sha(p),fingerprint=stage['fingerprint'])
+              def persist(state,token):
+                  assert_owned('origin',asset,token)
+                  payload=json.dumps({'state':state,'files':{k:base64.b64encode((root/v['path']).read_bytes()).decode() for k,v in state.items()}},sort_keys=True)
+                  obj=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/blobs','-f','encoding=utf-8','-f','content='+payload],text=True))['sha']
+                  actual=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/blobs/{obj}'],text=True))
+                  assert base64.b64decode(actual['content']).decode()==payload
+                  # Pin checkpoint in a Git commit.
+                  # A Git blob alone is not durable: pin checkpoint in a tree and commit.
+                  tree=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/trees','--input','-'],input=json.dumps({'tree':[{'path':'checkpoint.json','mode':'100644','type':'blob','sha':obj}]}),text=True))['sha']
+                  commit=json.loads(subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/commits','-f','message=QA synthetic checkpoint '+str(__import__('uuid').uuid4()),'-f','tree='+tree],text=True))['sha']
+                  ref='refs/tags/two-session-qa/'+asset+'/'+commit
+                  subprocess.check_output(['gh','api','--method','POST',f'repos/{repo}/git/refs','-f','ref='+ref,'-f','sha='+commit],text=True)
+                  assert json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/git/ref/'+ref[5:]],text=True))['object']['sha']==commit
+                  return True
+              assert run('origin',asset,head,root,stages,done,execute,persist)==['geometry','material','qa']
+              assert run('origin',asset,head,root,stages,done,execute,persist)==[]
+              assert calls==['geometry','material','qa']
+              print('DYNAMIC_DAG_REMOTE_CHECKPOINT_PASS',calls)
           PY
       - name: Publish result
         if: always()
