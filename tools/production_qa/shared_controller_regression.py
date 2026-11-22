@@ -34,5 +34,11 @@ def main():
             except RuntimeError: pass
             else: raise AssertionError("unconfirmed persistence accepted")
             release.assert_not_called()
+        child=dict(id="hair",deps=["face"],fingerprint="fixture",qualified=True,seconds=5)
+        grand=dict(id="export",deps=["hair"],fingerprint="fixture",qualified=True,seconds=5)
+        stale={"hair":dict(record),"export":dict(record)}
+        with patch.object(c,"acquire",return_value="token"), patch.object(c,"assert_owned"), patch.object(c,"release"):
+            assert c.run("local","MORWEN","head",root,[stage,child,grand],stale,execute,persist,30,2)==["face","hair","export"]
         print("CONTROLLER_SAFETY_PASS")
+        print("TRANSITIVE_INVALIDATION_PASS")
 if __name__=="__main__": main()
