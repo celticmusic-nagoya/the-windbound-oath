@@ -1,0 +1,75 @@
+name: HOME isolated cross-run Git restore
+on:
+  push:
+    branches: [infra/shared-native-session-20261122]
+    paths:
+      - tools/production_qa/home_p0/git_actions_phase.json
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-home-git-restore-qa
+  cancel-in-progress: false
+jobs:
+  checkpoint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: tools/production_qa
+      PULSE_SERVER: unix:/tmp/two-no-pulse-socket
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - uses: actions/checkout@v4
+        with:
+          ref: 133cdf7e76417e1127d88129deb900939901e220
+          path: owner-design
+          persist-credentials: false
+          sparse-checkout: docs/production
+      - name: Verify artifact provenance and exercise Git checkpoint transport
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
+          root=/tmp/two-home-git
+          mkdir -p "$root/input" "$root/evidence"
+          download() {
+            local id="$1" run="$2" expected="$3" destination="$4"
+            local metadata
+            metadata="$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id" --jq '[.workflow_run.id,.expired,.digest]|@tsv')"
+            test "$metadata" = "$(printf '%s\tfalse\tsha256:%s' "$run" "$expected")"
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$destination" 2>/dev/null
+            echo "$expected  $destination" | sha256sum -c
+          }
+          phase=tools/production_qa/home_p0/git_actions_phase.json
+          mode="$(jq -er .mode "$phase")"
+          if [[ "$mode" == package ]]; then
+            download 14742392508 44992209613 42e2f9c6ee3d7da2047301015d65c05c5a670947e28490a09befc1a76c81bac9 "$root/owner.zip"
+            download 14762310485 45042246246 972df0b18850162de3d762104a13ac20570ddbd4de5cbb0a7f0830cf3be5af65 "$root/isolated.zip"
+            unzip -p "$root/owner.zip" home_furniture_candidate.blend > "$root/input/owner.blend"
+            unzip -p "$root/isolated.zip" home-p0.blend > "$root/input/isolated.blend"
+          else
+            test "$mode" = restore
+            download "$(jq -er .artifact "$phase")" "$(jq -er .run "$phase")" "$(jq -er .sha256 "$phase")" "$root/incoming.zip"
+            unzip -p "$root/incoming.zip" checkpoint.bundle > "$root/checkpoint.bundle"
+            unzip -p "$root/incoming.zip" bundle.json > "$root/bundle.json"
+          fi
+          python3 tools/production_qa/home_p0/git_actions_checkpoint.py "$mode" "$root" owner-design
+          cp "$root/bundle.json" "$root/evidence/"
+          if [[ "$mode" == package ]]; then
+            cp "$root/checkpoint.bundle" "$root/evidence/"
+          else
+            bash tools/production_qa/install_blender_530.sh /tmp/two-home-blender
+            timeout -k 10s 3m /tmp/two-home-blender/blender -t 2 -b -noaudio --disable-autoexec "$root/restored/owner.blend" --python-exit-code 9 --python tools/production_qa/home_p0/audit_native.py -- "$root/evidence/home-audit.json"
+            timeout -k 10s 3m /tmp/two-home-blender/blender -t 2 -b -noaudio --disable-autoexec "$root/restored/isolated.blend" --python-exit-code 9 --python-expr 'import bpy; assert bpy.data.objects["LIND-HOME_BEDDING_BLANKET_P0"]; print("ISOLATED_CHECKPOINT_REOPEN_PASS")'
+            cp "$root/restored/ledger.json" "$root/evidence/"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-home-git-restore-${{ github.run_id }}
+          path: /tmp/two-home-git/evidence
+          if-no-files-found: error
