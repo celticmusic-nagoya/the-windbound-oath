@@ -13,6 +13,11 @@ import urllib.parse
 import urllib.request
 
 REPO_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
+PAGE_SIZE = 100
+RUN_FIELDS = (
+    "name", "workflow_id", "head_branch", "head_sha", "path", "event",
+    "status", "conclusion", "created_at", "updated_at", "html_url", "run_attempt",
+)
 
 
 def get_json(url, token):
@@ -26,13 +31,15 @@ def get_json(url, token):
         return json.load(response)
 
 
-def collect(repo, token, pages=2, get=get_json):
+def collect(repo, token, pages=2, get=get_json, *, complete=False):
     if not isinstance(repo, str) or not REPO_PATTERN.fullmatch(repo) or any(
         part in (".", "..") for part in repo.split("/")
     ):
         raise ValueError("invalid owner/repository")
     if not token:
         raise ValueError("GH_TOKEN is required; do not use unauthenticated polling")
+    if complete:
+        return collect_complete(repo, token, get)
     if not 1 <= pages <= 5:
         raise ValueError("pages must be between 1 and 5")
     result = []
@@ -68,13 +75,67 @@ def collect(repo, token, pages=2, get=get_json):
             "note": "Run snapshot is not an atomic deduplication lock or verified artifact cache"}
 
 
+def collect_complete(repo, token, get):
+    """Require two matching unfiltered traversals before returning observations."""
+    def traverse():
+        runs = []
+        seen = set()
+        page = 1
+        total = None
+        while True:
+            query = urllib.parse.urlencode({"per_page": PAGE_SIZE, "page": page})
+            payload = get(f"https://api.github.com/repos/{repo}/actions/runs?{query}", token)
+            if not isinstance(payload, dict):
+                raise ValueError("invalid Actions response")
+            count = payload.get("total_count")
+            batch = payload.get("workflow_runs")
+            if type(count) is not int or count < 0 or not isinstance(batch, list):
+                raise ValueError("invalid Actions count or run list")
+            if total is None:
+                total = count
+            expected = min(PAGE_SIZE, total - len(runs))
+            if count != total or len(batch) != expected:
+                raise ValueError(f"Actions pagination changed or is incomplete at page {page}")
+            if not batch:
+                return runs
+            for run in batch:
+                if not isinstance(run, dict):
+                    raise ValueError("invalid Actions run")
+                run_id = run.get("id")
+                if type(run_id) is not int or run_id <= 0 or run_id in seen:
+                    raise ValueError("invalid or duplicate Actions run ID")
+                if any(not isinstance(run.get(field), str) or not run[field]
+                       for field in ("event", "status", "head_sha", "path")):
+                    raise ValueError("missing Actions run identity or status")
+                if run["status"] == "completed" and not run.get("conclusion"):
+                    raise ValueError("completed Actions run is missing its conclusion")
+                seen.add(run_id)
+                runs.append({"run_id": run_id, **{key: run.get(key) for key in RUN_FIELDS}})
+            page += 1
+
+    first = traverse()
+    second = traverse()
+    if first != second:
+        raise ValueError("Actions observations changed between traversals")
+    return {"repository": repo, "read_only": True, "complete": True,
+            "scope": "repository_all_events", "runs": second,
+            "note": "Matching observations do not reserve a writer or verify an artifact"}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", required=True)
-    parser.add_argument("--pages", type=int, default=2)
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--pages", type=int, help="legacy bounded audit (1–5 pages)")
+    scope.add_argument("--complete", action="store_true", help="complete all-event scan (default)")
     args = parser.parse_args()
-    print(json.dumps(collect(args.repo, os.environ.get("GH_TOKEN", ""), args.pages),
-                     ensure_ascii=False, sort_keys=True))
+    try:
+        pages = 2 if args.pages is None else args.pages
+        snapshot = collect(args.repo, os.environ.get("GH_TOKEN", ""), pages,
+                           complete=args.complete or args.pages is None)
+    except (OSError, ValueError) as exc:
+        parser.exit(1, f"BLOCKED_ACTIONS_SNAPSHOT: {exc}\n")
+    print(json.dumps(snapshot, ensure_ascii=False, sort_keys=True))
 
 
 if __name__ == "__main__":
