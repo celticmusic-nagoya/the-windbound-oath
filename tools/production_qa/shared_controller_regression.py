@@ -41,4 +41,11 @@ def main():
             assert c.run("local","MORWEN","head",root,[stage,child,grand],stale,execute,persist,30,2)==["face","hair","export"]
         print("CONTROLLER_SAFETY_PASS")
         print("TRANSITIVE_INVALIDATION_PASS")
+        from shared_session_contract import verified_file_hashes
+        assert verified_file_hashes(root,{"native":sha(native)})=={"native":sha(native)}
+        for manifest in ({"native":"0"*64},{"../outside":sha(outside)},{"missing":"0"*64}):
+            try: verified_file_hashes(root,manifest)
+            except ValueError: pass
+            else: raise AssertionError("unsafe manifest accepted")
+        print("INPUT_BYTES_PASS")
 if __name__=="__main__": main()
