@@ -1,0 +1,89 @@
+name: C11 isolated normal diagnostic
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths: ['.github/workflows/lind-cliff-c11-normal-diagnostic.yml']
+permissions:
+  contents: read
+  actions: read
+  statuses: write
+concurrency:
+  group: lind-cliff-c11-blender-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      EGL_PLATFORM: surfaceless
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Reuse exact native model and existing baseline
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/diag
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/14737506262/zip > /tmp/source.zip
+          echo '91d8424bc8c57d140dd37f370ecd0d31ee646c2708ab32d27fbbed028e99ee2a  /tmp/source.zip' | sha256sum -c -
+          unzip -q /tmp/source.zip -d /tmp/source
+          cd /tmp/source
+          sha256sum -c SHA256SUMS
+          echo 'e944606663507581dea6d65ca35de6f6779aed164b36e7273ca361be09a61c26  c11_method_e_block_sculpt_UNAPPROVED.blend' | sha256sum -c -
+      - name: Install qualified runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          test "$(git hash-object tools/production_qa/install_blender_530.sh)" = 4f49728f62b2f2e4d9b3a8f3cc1a5b27b79962ed
+          bash tools/production_qa/install_blender_530.sh /tmp/two-blender53
+      - name: Isolate custom normals without touching geometry or UV
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tools/production_qa/lind_blueprint/c11_clay_closeup_review.py')
+          s=p.read_text()
+          marker='scene = bpy.context.scene'
+          inject="""
+          import struct, math, statistics
+          m=obj.data
+          def fingerprint():
+              h=hashlib.sha256()
+              for v in m.vertices: h.update(struct.pack('<3f',*v.co))
+              for p in m.polygons:
+                  h.update(repr((tuple(p.vertices),p.use_smooth)).encode())
+              for e in m.edges: h.update(repr((tuple(e.vertices),e.use_edge_sharp)).encode())
+              for layer in m.uv_layers:
+                  for d in layer.data: h.update(struct.pack('<2f',*d.uv))
+              return h.hexdigest()
+          before=fingerprint()
+          old=[n.vector.copy() for n in m.corner_normals]
+          assert m.has_custom_normals, 'No custom normals to ablate'
+          bpy.context.view_layer.objects.active=obj
+          bpy.ops.mesh.customdata_custom_splitnormals_clear()
+          m.update()
+          assert not m.has_custom_normals and fingerprint()==before
+          angles=[math.degrees(a.angle(b.vector,0)) for a,b in zip(old,m.corner_normals)]
+          (out/'diagnostic.json').write_text(json.dumps(dict(fingerprint=before,median_deg=statistics.median(angles),max_deg=max(angles),baseline_artifact=14737506262,G2='NOT_RUN')))
+          """
+          assert s.count(marker)==1
+          s=s.replace(marker,inject+'\n'+marker)
+          s=s.replace('records = {"material": render_all("mat", {"close_west", "close_central"})}','records = {}')
+          s=s.replace('{s[0] for s in shots}', '{"close_west", "close_central"}')
+          s=s.split('# UV checker pass')[0]+'\nassert fingerprint()==before\n'
+          Path('/tmp/diagnose.py').write_text(s)
+          PY
+          timeout 1200 /tmp/two-blender53/blender -b --factory-startup --disable-autoexec --python-exit-code 1 --python /tmp/diagnose.py -- /tmp/source/c11_method_e_block_sculpt_UNAPPROVED.blend /tmp/diag auto
+          (cd /tmp/diag && sha256sum *.png diagnostic.json > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c11-normal-diagnostic-${{ github.run_id }}
+          path: /tmp/diag/
+      - name: Publish diagnostic execution result
+        if: always()
+        run: |
+          state=failure
+          if [[ "${{ job.status }}" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/c11-normal-diagnostic -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
