@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from classify_actions_jobs import FIELDS
 from shared_asset_lease import assert_owned, release
+from shared_blueprint_contract import digest_record
 from shared_dispatch_reservation import reserve
 
 
@@ -37,7 +38,13 @@ class ReservationTests(unittest.TestCase):
             stopped_writers={self.path: "workflow-ack", "desktop": "desktop-ack"},
             writer_inventory_verified=True,
             design={"sha256": self.request["reference_sha256"], "target_id": "blanket",
-                    "tolerances": {"displacement": 0.0}},
+                    "source_sha256": self.request["source_sha256"],
+                    "coordinate_system": "bed-local", "units": "m", "projection": "native-3d",
+                    "measurement_id": "edge-bounds", "values": {"displacement": 0.0},
+                    "tolerances": {"displacement": 0.0}, "uncertainty": {"displacement": 0.0},
+                    "operation": {"id": "adjust", "qualified": True, "evidence_sha256": "c" * 64},
+                    "protection": {"scope_id": "frame", "baseline_sha256": "d" * 64},
+                    "dependency_fingerprint": digest_record(self.request["dependency_hashes"])},
         )
         self.runs = []
 
@@ -102,6 +109,7 @@ class ReservationTests(unittest.TestCase):
                               head_branch="branch/qa", event="push",
                               status="completed", conclusion="success"))
         old = dict(self.request, status="SUCCESS", run_id=10, artifact={},
+                   target_contract_sha256=digest_record(self.handoff["design"]),
                    artifact_accessible=True, artifact_sha256_verified=True,
                    output_contract_verified=True)
         self.assertEqual(self.reserve(writers_migrated=True)["decision"], "REVIEW_REQUIRED")

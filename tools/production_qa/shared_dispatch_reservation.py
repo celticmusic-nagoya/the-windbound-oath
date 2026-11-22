@@ -10,6 +10,7 @@ from collect_actions_snapshot import collect, get_json
 from reconcile_actions_snapshot import reconcile
 from shared_artifact_reuse import verify_reuse
 from shared_asset_lease import acquire, assert_owned, release
+from shared_blueprint_contract import digest_record
 from shared_production_readiness import handoff_digest, readiness_issues
 from shared_session_contract import asset_key
 
@@ -26,6 +27,7 @@ def reserve(repo, remote, request, ledger, writer_paths, token,
     if issues:
         return {"decision": "BLOCKED_PRODUCTION_READINESS", "missing_or_mismatched": issues}
     evidence = handoff_digest(handoff)
+    target_contract = digest_record(handoff["design"])
     branch = quote(request["branch"], safe="")
     branch_url = f"https://api.github.com/repos/{repo}/branches/{branch}"
 
@@ -63,6 +65,7 @@ def reserve(repo, remote, request, ledger, writer_paths, token,
                     or run["head_branch"] != request["branch"]
                     or run["path"] != request["workflow_path"]
                     or record.get("target_id") != request["target_id"]
+                    or record.get("target_contract_sha256") != target_contract
                     or record.get("dependency_hashes") != request["dependency_hashes"]):
                 return {"decision": "REVIEW_REQUIRED"}
             if verify_artifact(repo, token, record["artifact"], run,
@@ -89,4 +92,5 @@ def reserve(repo, remote, request, ledger, writer_paths, token,
         return {"decision": "BLOCKED_SNAPSHOT_CHANGED"}
     assert_owned(remote, asset, lease)
     return {"decision": "RESERVED", "token": lease,
-            "fingerprint": decision["fingerprint"], "handoff_sha256": evidence}
+            "fingerprint": decision["fingerprint"], "handoff_sha256": evidence,
+            "target_contract_sha256": target_contract}

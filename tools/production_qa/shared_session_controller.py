@@ -6,10 +6,11 @@ No automatic takeover; retain lease on failure until reconciled.
 import time
 from session_plan import ready,sha
 from shared_asset_lease import acquire,assert_owned,claim_reservation,release
+from shared_blueprint_contract import measurement_issues, target_issues
 from shared_session_contract import asset_key
 
 def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800,
-        *, reservation=None, fenced=False):
+        *, reservation=None, fenced=False, blueprint_targets=None):
     """Carry a dispatch reservation into the worker and use the returned fence at each stage.
 
     In fenced mode, persist must atomically publish a changed ledger and return
@@ -44,12 +45,25 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         available=ready(stages,completed,root,budget-(time.monotonic()-started),reserve)
         if not available:break
         stage=next(s for s in stages if s['id']==available[0])
+        blueprint = (blueprint_targets or {}).get(stage["id"])
+        if blueprint is not None:
+            target, request = blueprint
+            if request.get("asset_id") != asset or request.get("head_sha") != commit or request.get("stage") != stage["id"]:
+                raise ValueError("blueprint request does not match the session stage")
+            issues = target_issues(target, request)
+            if issues:
+                raise ValueError("blueprint target blocked: " + ", ".join(issues))
         deadline=min(started+budget-reserve,time.monotonic()+stage['seconds'])
         result=execute(stage,token,deadline)
         if time.monotonic()>deadline:raise TimeoutError('stage deadline exceeded; reconcile retained lease')
         assert_owned(remote,asset,token)
         p=(root/result['path']).resolve()
         if not p.is_relative_to(root.resolve()) or result.get('reopened') is not True or sha(p)!=result.get('sha256') or result.get('fingerprint')!=stage['fingerprint']:raise RuntimeError('invalid checkpoint')
+        if blueprint is not None:
+            observation = result.get("observation")
+            issues = measurement_issues(target, request, observation)
+            if issues or observation["native_sha256"] != result["sha256"]:
+                raise RuntimeError("blueprint checkpoint blocked: " + ", ".join(issues or ["native_sha256"]))
         # Invalidate descendants even if an upstream stage reused its nominal fingerprint.
         invalid={stage['id']}
         while True:
