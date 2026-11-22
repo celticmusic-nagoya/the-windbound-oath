@@ -121,6 +121,22 @@ def project_face_metrics(points, registration):
                 mouth_width=dx("mouth_left","mouth_right"),
                 nose_to_chin_vertical=abs(points["nose_tip"][1]-points["chin"][1])*scale)
 
+def ratio_diagnostics(reference, actual):
+    """Scale-independent exploratory ratios; not proof of camera match."""
+    pairs=[("eye_width_left","eye_width_right"),
+           ("mouth_width","iris_center_distance"),
+           ("inner_eye_gap","iris_center_distance"),
+           ("nose_to_chin_vertical","iris_center_distance")]
+    result=[]
+    for n,d in pairs:
+        if reference[d]<=0 or actual[d]<=0:
+            raise ValueError("invalid ratio denominator")
+        target=reference[n]/reference[d]
+        observed=actual[n]/actual[d]
+        result.append(dict(id=n+"_over_"+d,target=target,actual=observed,
+                           residual=observed-target,status="REVIEW_ONLY"))
+    return result
+
 def self_test():
     reg=register_points([[0,0],[10,0],[0,10]],[[5,5],[10,5],[5,10]],0.01)
     assert reg['registration_verified'] and reg['scale']==2
@@ -142,6 +158,7 @@ def main():
     p.add_argument("blueprint",type=Path)
     p.add_argument("output",type=Path)
     p.add_argument("--observations",type=Path)
+    p.add_argument("--diagnostic-face",type=Path)
     a=p.parse_args()
     self_test()
     fingerprint=sha(a.blueprint)
@@ -151,8 +168,15 @@ def main():
         if data["blueprint_sha256"]!=fingerprint:
             raise ValueError("stale blueprint")
         compare(rows,data["observations"])
+    diagnostics=[]
+    if a.diagnostic_face:
+        trial=json.loads(a.diagnostic_face.read_text())
+        bp=json.loads(a.blueprint.read_text())
+        if trial["reference_sha256"]!=bp["face_front_review"]["source_sha256"]:
+            raise ValueError("wrong diagnostic reference")
+        diagnostics=ratio_diagnostics(bp["face_front_review"]["projected_metrics_px"],trial["raw_metrics"])
     a.output.parent.mkdir(parents=True,exist_ok=True)
-    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,
+    a.output.write_text(json.dumps(dict(blueprint_sha256=fingerprint,targets=rows,face_ratio_diagnostics=diagnostics,
         status="MEASUREMENT_LEDGER_NOT_ART_QA",
         gaps=["matched camera registration","native control calibration","body tolerance",
               "hidden geometry","equipment attachment and clearance","UV rig deformation runtime"]),indent=2)+"\n")
