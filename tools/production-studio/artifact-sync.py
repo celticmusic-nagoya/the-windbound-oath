@@ -52,6 +52,8 @@ def stage(spec, source, dest):
                     if n>8*1024*1024 or n+20>len(data) or data[16:20]!=b"JSON":
                         raise ValueError("GLB JSON chunk")
                     meta=json.loads(data[20:20+n])
+                    if meta.get("extensionsRequired") and any(x in {"KHR_draco_mesh_compression","EXT_meshopt_compression","KHR_texture_basisu"} for x in meta["extensionsRequired"]):
+                        raise ValueError("unsupported required model extension")
                     if any("uri" in x for k in ("buffers","images") for x in meta.get(k,[])):
                         raise ValueError("external model resources")
                 digest=hashlib.sha256(data).hexdigest()

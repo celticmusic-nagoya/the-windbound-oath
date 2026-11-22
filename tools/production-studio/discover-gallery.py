@@ -10,6 +10,9 @@ def allowed(name,cat):
     if p.is_absolute() or ".." in p.parts or chr(92) in name:return False
     if cat=="morwen":return bool(re.fullmatch(r"view-reopened(?:close)?-(front|back|left|right)\.png",p.name))
     return bool(re.fullmatch(r"(?:[\w-]+/)*(?:review|renders|render|previews)/[\w.-]+\.(?:png|jpg|jpeg)",name,re.I))
+def model_allowed(name):
+    p=pathlib.PurePosixPath(name)
+    return not p.is_absolute() and ".." not in p.parts and chr(92) not in name and bool(re.fullmatch(r"(?:[\w-]+/)*(?:export|exports|models)/[\w.-]+\.(?:glb|vrm)",name,re.I))
 def discover():
     selection=json.loads(pathlib.Path(__file__).with_name("sync-selection.json").read_text())
     known={x["artifact_id"] for x in selection}
@@ -28,8 +31,11 @@ def discover():
                     if "sha256:"+hashlib.file_digest(stream,"sha256").hexdigest()!=a.get("digest"):raise ValueError("archive digest mismatch")
                 with zipfile.ZipFile(target) as z:
                     entries=[i.filename for i in z.infolist() if 0<i.file_size<=8*1024*1024 and allowed(i.filename,cat)][:8]
+                    if os.environ.get("STUDIO_PREVIEW_MODELS")=="1":
+                        models=[i.filename for i in z.infolist() if 0<i.file_size<=32*1024*1024 and model_allowed(i.filename)]
+                        entries.extend(models[:1])
                 if entries:
-                    selection.append(dict(run_id=run["id"],artifact_id=a["id"],head=run["head_sha"],category=cat,stage=a["name"][:80],cover=entries[0],entries=entries))
+                    selection.append(dict(run_id=run["id"],artifact_id=a["id"],head=run["head_sha"],category=cat,stage=a["name"][:80],cover=next((n for n in entries if allowed(n,cat)),None),entries=entries))
                     known.add(a["id"]);found=True;break
                 target.unlink()
             if found:break
