@@ -23,6 +23,8 @@ jobs:
           git rev-parse HEAD | tee evidence/checkout-sha.txt
           shasum -a 256 tools/production_qa/morwen_vroid_session.sh | tee evidence/session-script-sha256.txt
           bash -n tools/production_qa/morwen_vroid_session.sh
+          bash -n tools/production_qa/morwen_phase1_author.sh
+          shasum -a 256 tools/production_qa/morwen_phase1_author.sh > evidence/author-script-sha256.txt
       - name: Compile shared GUI controls
         run: |
           mkdir -p evidence
@@ -60,7 +62,7 @@ jobs:
           let w = image.pixelsWide, h = image.pixelsHigh
           let fieldY = 1 - field.boundingBox.midY
           let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
-          guard expectedY + 9 < h else { exit(2) }
+          guard expectedY >= 9, expectedY + 9 < h else { exit(2) }
           var xs: [Int] = [], ys: [Int] = []
           for y in (expectedY - 9)...(expectedY + 9) {
               for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
@@ -97,7 +99,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # ChatGPT lease: resume verified batch-5 candidate (run 44950148004).
+          # Resume the indexed face checkpoint; fail closed on unavailable or expired artifact.
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14729674867" --jq 'select(.expired == false) | .id' | grep -qx 14729674867
           gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14729674867/zip" > "$RUNNER_TEMP/checkpoint.zip"
           echo "08cd55927436dc25d8bfb3ec01c620a43b19976bb577f0d4433fb483121241dc  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
@@ -130,6 +133,7 @@ jobs:
           ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
           hdiutil detach "$RUNNER_TEMP/vroid-mount"
       - name: Launch signed application and collect evidence
+        timeout-minutes: 55
         shell: bash
         run: |
           set -euo pipefail
