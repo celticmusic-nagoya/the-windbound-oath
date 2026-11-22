@@ -39,12 +39,20 @@ if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && gre
           record hair BLOCKED_GROUP_CAPTURE
         fi
       fi
-      # Observed in run 44969840792: Edit Preset close X at (24,76) / 1024x768.
+      # Read-only survey: close without saving only on the exact observed modal.
       if grep -Fq "Edit Preset" evidence/phase2-strand-editor.txt && grep -Fq "Hair Groups" evidence/phase2-strand-editor.txt; then
         "$gui" click 0.0234 0.0990 || true
+        sleep 2
+        if capture_state phase2-strand-dialog && grep -Fq 'Close Hairstyle Editor' evidence/phase2-strand-dialog.txt && grep -Fq 'Close without saving' evidence/phase2-strand-dialog.txt && ! grep -q EDITED_REVIEW_REQUIRED evidence/phase1-stages.tsv; then
+          "$gui" click-label evidence/phase2-strand-dialog.png 'Close without saving' 'Overwrite' || true
+          sleep 2
+        fi
       fi
-      sleep 2
-      capture_state phase2-strand-return || true
+      if capture_state phase2-strand-return && grep -Fq Body evidence/phase2-strand-return.txt && grep -Fq Outfit evidence/phase2-strand-return.txt && ! grep -Fq 'Close Hairstyle Editor' evidence/phase2-strand-return.txt; then
+        record hair READ_ONLY_EXIT_VERIFIED
+      else
+        record hair BLOCKED_RETURN
+      fi
     else
       record hair BLOCKED_STRAND_EDITOR_ENTRY
     fi
@@ -59,7 +67,11 @@ recover_editor() {
   local tag="$1"
   capture_state "$tag-initial" || return 1
   if grep -Fq Body "evidence/$tag-initial.txt" && grep -Fq Outfit "evidence/$tag-initial.txt" && ! dialog_visible "$tag-initial"; then return 0; fi
-  if grep -Fq "Edit Preset" "evidence/$tag-initial.txt" && grep -Fq "Hair Groups" "evidence/$tag-initial.txt"; then
+  if grep -Fq "Close Hairstyle Editor" "evidence/$tag-initial.txt"; then
+    if grep -Fq "Close without saving" "evidence/$tag-initial.txt" && ! grep -q EDITED_REVIEW_REQUIRED evidence/phase1-stages.tsv; then
+      "$gui" click-label "evidence/$tag-initial.png" "Close without saving" "Overwrite" || return 1
+    else return 1; fi
+  elif grep -Fq "Edit Preset" "evidence/$tag-initial.txt" && grep -Fq "Hair Groups" "evidence/$tag-initial.txt"; then
     "$gui" click 0.0234 0.0990 || return 1
   else
     # Unknown panel/modal: preserve checkpoint instead of speculative interaction.
