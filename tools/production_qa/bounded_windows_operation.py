@@ -9,7 +9,7 @@ def run_operation(argv, deadline, *, cwd=None, env=None):
     import win32api, win32con, win32event, win32job, win32process
     remaining=deadline-time.monotonic()
     if remaining<=0: raise TimeoutError("no operation budget")
-    job=win32job.CreateJobObject(None,None)
+    job=win32job.CreateJobObject(None,"")
     process=thread=None
     assigned=False
     try:
@@ -21,7 +21,7 @@ def run_operation(argv, deadline, *, cwd=None, env=None):
         assigned=True
         win32process.ResumeThread(thread)
         ms=max(0,min(0xfffffffe,int((deadline-time.monotonic())*1000)))
-        if win32event.WaitForSingleObject(process,ms)!=win32con.WAIT_OBJECT_0:
+        if win32event.WaitForSingleObject(process,ms)!=win32event.WAIT_OBJECT_0:
             raise TimeoutError("Windows operation deadline exceeded")
         code=win32process.GetExitCodeProcess(process)
         if code: raise subprocess.CalledProcessError(code,argv)
