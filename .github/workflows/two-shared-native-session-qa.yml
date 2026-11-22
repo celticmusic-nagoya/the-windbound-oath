@@ -55,6 +55,7 @@ jobs:
         run: |
           python3 tools/production_qa/shared_lease_integration_test.py
           python3 tools/production_qa/test_shared_fenced_checkpoint.py
+          python3 tools/production_qa/test_shared_fenced_session.py
       - name: Recovery preflight negative cases
         run: |
           PYTHONPATH=tools/production_qa python3 - <<'PY'

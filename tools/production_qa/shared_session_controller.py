@@ -5,20 +5,39 @@ No automatic takeover; retain lease on failure until reconciled.
 """
 import time
 from session_plan import ready,sha
-from shared_asset_lease import acquire,assert_owned,release
+from shared_asset_lease import acquire,assert_owned,claim_reservation,release
 from shared_session_contract import asset_key
 
-def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800):
+def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800,
+        *, reservation=None, fenced=False):
+    """Carry a dispatch reservation into the worker and use the returned fence at each stage.
+
+    In fenced mode, persist must atomically publish a changed ledger and return
+    its new lease token. It must also confirm an unchanged ledger when no stage
+    was executed by returning the current token after verifying durability.
+    """
     if not 0<reserve<budget<=21600: raise ValueError('invalid budget')
     asset_key(asset)
     started=time.monotonic()
     end=started+budget
-    def durable(records,token):
+    def durable(records,token,changed):
         if time.monotonic()>=end:raise TimeoutError('handoff budget exhausted')
-        if persist(records,token,end) is not True:raise RuntimeError('durability unconfirmed')
+        confirmation = persist(records,token,end)
+        if fenced:
+            if not isinstance(confirmation, str) or (changed and confirmation == token):
+                raise RuntimeError('atomic checkpoint publication unconfirmed')
+            token = confirmation
+        elif confirmation is not True:
+            raise RuntimeError('durability unconfirmed')
         if time.monotonic()>=end:raise TimeoutError('handoff deadline exceeded')
         assert_owned(remote,asset,token)
-    token=acquire(remote,asset,commit)
+        return token
+    if reservation is None:
+        token=acquire(remote,asset,commit)
+    else:
+        if not fenced:
+            raise ValueError('dispatch reservations require fenced publication')
+        token=claim_reservation(remote,asset,reservation,commit)
     executed=[]
     while True:
         assert_owned(remote,asset,token)
@@ -40,10 +59,11 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         updated={k:v for k,v in completed.items() if k not in invalid}
         updated[stage['id']]=result
         # Must confirm durable off-runner persistence before advancing.
-        durable(updated,token)
+        token=durable(updated,token,changed=True)
         completed.clear()
         completed.update(updated)
         executed.append(stage['id'])
-    durable(completed,token)
+    if not fenced or not executed:
+        token=durable(completed,token,changed=False)
     release(remote,asset,token)
     return executed

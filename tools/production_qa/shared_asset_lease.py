@@ -25,6 +25,24 @@ def assert_owned(remote,asset,obj):
     ref=ref_for(asset)
     if git('ls-remote','--refs',remote,ref)!=f'{obj}\t{ref}':raise RuntimeError('lease lost')
 
+def assert_reservation(remote, asset, token, commit):
+    """Bind the dispatch-time reservation to the exact revision being executed."""
+    assert_owned(remote, asset, token)
+    peeled = ref_for(asset) + '^{}'
+    if git('ls-remote', remote, peeled) != f'{commit}\t{peeled}':
+        raise RuntimeError('lease revision mismatch')
+    assert_owned(remote, asset, token)
+
+def claim_reservation(remote, asset, token, commit):
+    """Consume a dispatch token exactly once, before any worker can edit."""
+    assert_reservation(remote, asset, token, commit)
+    ref = ref_for(asset)
+    successor = lease_object(commit)
+    git('push', '--porcelain', f'--force-with-lease={ref}:{token}',
+        remote, f'{successor}:{ref}')
+    assert_owned(remote, asset, successor)
+    return successor
+
 def release(remote,asset,obj):
     assert_owned(remote,asset,obj)
     ref=ref_for(asset)
