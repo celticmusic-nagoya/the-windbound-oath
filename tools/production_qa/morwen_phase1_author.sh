@@ -28,14 +28,23 @@ views phase1-after 0
 # Hair editor and body controls are not qualified for shape changes. Preserve them.
 if "$gui" vroid-shortcut hair && sleep 2 && capture_state phase2-hair-tab && grep -Fq 'Hairstyle Sets' evidence/phase2-hair-tab.txt; then
   if "$gui" click 0.023 0.231 && sleep 2 && capture_state phase2-hair-category && grep -Fq 'Edit Hairstyle' evidence/phase2-hair-category.txt && grep -Fq 'Front' evidence/phase2-hair-category.txt; then
-    record hair BLOCKED_STRAND_EDITOR_UNQUALIFIED
+    # Inspect native strand editor without modifying presets or strand geometry.
+    if "$gui" click-label evidence/phase2-hair-category.png 'Edit Hairstyle' 'Edit Hair Bounce' && sleep 3 && capture_state phase2-strand-editor; then
+      record hair STRAND_EDITOR_CAPTURED_REVIEW_REQUIRED
+      # Escape only; if return cannot be verified, avoid further blind clicks.
+      "$gui" key 53 || true
+      sleep 2
+      capture_state phase2-strand-return || true
+    else
+      record hair BLOCKED_STRAND_EDITOR_ENTRY
+    fi
   else
     record hair BLOCKED_WRONG_PANEL
   fi
 else
   record hair BLOCKED_TAB_OR_CAPTURE
 fi
-if capture_state phase2-before-body && "$gui" click-label evidence/phase2-before-body.png Body Outfit; then
+if capture_state phase2-before-body && grep -Fq Outfit evidence/phase2-before-body.txt && "$gui" click-label evidence/phase2-before-body.png Body Outfit; then
   sleep 2
   capture_state phase2-body-top
   if grep -Fq 'Whole Body' evidence/phase2-body-top.txt; then
