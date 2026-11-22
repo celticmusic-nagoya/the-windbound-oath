@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "scope": "public production images only; never secrets, private handoff, or unrelated archive contents",
+  "recent_days": 90,
+  "soft_gallery_budget_bytes": 268435456,
+  "order": "newest first per category",
+  "deduplicate": "sha256",
+  "retain_milestones": true,
+  "retain_adopted_and_blueprints": true,
+  "large_native_sources": "authenticated artifact references only",
+  "prune_scope": "gallery copies and index only; never delete source assets, QA evidence, artifacts or git history",
+  "publication": "trusted workflow with verified provenance, recognized production paths and safe content validation; no uncontrolled ZIP extraction",
+  "status": "policy recorded; automatic synchronization and retention enforcement not yet implemented"
+}
