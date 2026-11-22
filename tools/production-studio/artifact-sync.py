@@ -12,6 +12,10 @@ def stage(spec, source, dest):
         head = item["head"]
         if not re.fullmatch(r"[0-9a-f]{40}", head):
             raise ValueError("invalid source commit")
+        category = item.get("category", "cliff" if run == 44708204132 else "other")
+        stage_name = item.get("stage", "未分類")
+        if category not in {"cliff", "morwen", "village", "other"} or not isinstance(stage_name, str) or not 1 <= len(stage_name) <= 80:
+            raise ValueError("invalid gallery classification")
         archive = source / f"{artifact}.zip"
         with zipfile.ZipFile(archive) as z:
             for name in item["entries"]:
@@ -52,7 +56,7 @@ def stage(spec, source, dest):
                 filename=digest+ext
                 (dest/filename).write_bytes(data)
                 total+=len(data)
-                records.append(dict(name=info.filename,path="published/"+filename,sha256=digest,bytes=len(data),run_id=run,artifact_id=artifact,head=head,qa="NOT_RUN",adoption="UNDETERMINED"))
+                records.append(dict(name=info.filename,path="published/"+filename,sha256=digest,bytes=len(data),run_id=run,artifact_id=artifact,head=head,category=category,stage=stage_name,cover=name==item.get("cover"),qa="NOT_RUN",adoption="UNDETERMINED"))
     (dest.parent/"gallery-manifest.json").write_text(json.dumps({"version":1,"entries":records},ensure_ascii=False,indent=2),encoding="utf-8")
 if __name__=="__main__":
     p=argparse.ArgumentParser()
