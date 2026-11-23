@@ -1,5 +1,7 @@
 "use strict";
+let publishedGalleryGeneration=0;
 async function loadPublishedGallery(){
+ const generation=++publishedGalleryGeneration;
  const area=document.getElementById("published-gallery"), status=document.getElementById("published-status");
  area.replaceChildren();
  try{
@@ -12,6 +14,7 @@ async function loadPublishedGallery(){
  if(!response?.ok)response=await fetch("./gallery-manifest.json",{cache:"no-store",credentials:"omit"});
  if(!response.ok)throw Error("HTTP "+response.status);
  const manifest=await response.json();
+ if(generation!==publishedGalleryGeneration)return;
  if(manifest.version!==1||!Array.isArray(manifest.entries)||manifest.entries.length>500)throw Error("一覧形式不正");
  const valid=[];
  for(const e of manifest.entries){
@@ -106,7 +109,7 @@ async function loadPublishedGallery(){
  if(!entries.length){filter.hidden=true;search.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
  home();
- }catch(e){status.textContent="同期一覧未取得: "+e.message;}
+ }catch(e){if(generation===publishedGalleryGeneration)status.textContent="同期一覧未取得: "+e.message;}
 }
 document.getElementById("refresh-published").addEventListener("click",loadPublishedGallery);
 loadPublishedGallery();
