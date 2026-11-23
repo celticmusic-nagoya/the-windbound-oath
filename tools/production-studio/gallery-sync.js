@@ -26,7 +26,7 @@ async function loadPublishedGallery(){
  else {const button=document.createElement("button");button.textContent="3D表示";button.onclick=async()=>{button.disabled=true;try{const res=await fetch(base+e.path,{credentials:"omit"});if(!res.ok)throw Error("HTTP "+res.status);const reader=res.body.getReader();let size=0;const parts=[];try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>e.bytes)throw Error("容量不一致");parts.push(value);}}finally{await reader.cancel();}const blob=new Blob(parts);const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer())),x=>x.toString(16).padStart(2,"0")).join("");if(size!==e.bytes||hash!==e.sha256)throw Error("SHA不一致");const input=document.getElementById("model-file"),dt=new DataTransfer();const panel=input.closest("details");if(panel)panel.open=true;dt.items.add(new File([blob],e.path.split("/").pop()));input.files=dt.files;input.dispatchEvent(new Event("change"));document.getElementById("model-view").scrollIntoView({block:"center"});}catch(err){status.textContent="モデル取得失敗: "+err.message;}finally{button.disabled=false;}};tile.append(button);}
  return tile;
  }
- const categories=[["cliff","風待ちの崖"],["morwen","モルウェン"],["village","リルド村"],["other","その他"]];
+ const categories=[["cliff","風待ちの崖"],["morwen","モルウェン"],["village","リルド村"],["blueprint","設計図"],["map","地図・配置図"],["other","その他"]];
  const subcategories={morwen:[["hair","ヘアアセット"],["body","身体・顔"],["wardrobe","衣装・装備"],["general","全体・その他"]],village:[["aidan","エイダンの家"],["inn","宿屋"],["buildings","その他の建築"],["general","村全体・その他"]]};
  // Prefer explicit, publisher-provided subcategory. Legacy manifests may only carry a top-level category.
  const classify=e=>{
@@ -36,7 +36,9 @@ async function loadPublishedGallery(){
   const hair=/hairharpy|hair[-_ ]asset|ヘアアセット/i.test(raw);
   const aidan=/aidan|エイダン/.test(raw);
   const inn=/(?:^|[^a-z])inn(?:$|[^a-z])|宿屋/.test(raw);
-  const root=top==="other"?(hair?"morwen":aidan||inn?"village":"other"):top;
+  const blueprint=/blueprint|design[-_ ]?sheet|設計図|四面図|寸法図|断面図/.test(raw);
+  const map=/\bmap\b|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw);
+  const root=top==="other"?(blueprint?"blueprint":map?"map":hair?"morwen":aidan||inn?"village":"other"):top;
   const allowed=subcategories[root]||[];
   let sub=allowed.some(([id])=>id===explicit)?explicit:"";
   if(!sub&&root==="morwen")sub=hair?"hair":/face|body|顔|身体/.test(raw)?"body":/wardrobe|outfit|衣装|装備/.test(raw)?"wardrobe":"general";
