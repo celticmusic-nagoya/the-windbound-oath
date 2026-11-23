@@ -1,0 +1,43 @@
+{
+  "schema": "two.region.c02_c03.design_sheet.v1",
+  "id": "RILDE_C02_C03_SECTION_HYDROLOGY_V01",
+  "stage": "DESIGN_CANDIDATE",
+  "source_basis": "approved regional directional canon, not metric data",
+  "coordinate_contract": {
+    "X": "east",
+    "Y": "north",
+    "Z": "up",
+    "unit": "m",
+    "sea_level_Z_m": 0,
+    "region_origin": null
+  },
+  "C02": {
+    "sea_cliff_top_Z_m": null,
+    "sea_cliff_foot_Z_m": null,
+    "plateau_slope_deg": null,
+    "contour_interval_m": null,
+    "dem_source": null,
+    "section_shape": "ILLUSTRATIVE_ONLY"
+  },
+  "C03": {
+    "flow_direction": "north_to_south",
+    "channel_width_m": null,
+    "bed_elevation_m": null,
+    "gradient": null,
+    "river_mouth": null,
+    "riverbank_cliff_distinct_from_sea_cliff": true,
+    "bridge_span_m": null
+  },
+  "constraints": [
+    "SVG strokes are schematic, not measurements",
+    "Sea level Z=0 is a design convention, not surveyed vertical datum",
+    "No elevation, catchment, or collision claims"
+  ],
+  "qa": {
+    "svg_parse": "PASS_LOCAL_PRIOR",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}
