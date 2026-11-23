@@ -1,0 +1,60 @@
+{
+  "schema": "two.world.c01.locator_source_qa.v1",
+  "status": "PARTIAL_QA_NOT_DESIGN_APPROVAL",
+  "input": {
+    "path": "docs/production/region_master/ALVERIA_W02_C01_COASTLINE_CANDIDATE_V01.json",
+    "git_blob_sha": "72e1e488bbe4c92fc5d473139d8eb1d00d07b084"
+  },
+  "local_tests": {
+    "all_six_locator_points_inside_candidate_coast": {
+      "result": "PASS",
+      "count": 6,
+      "method": "even_odd_point_in_polygon",
+      "limitation": "topological only; not canon or measured geography"
+    },
+    "north_positive_coordinate": {
+      "result": "PASS",
+      "evidence": "northern cultural sphere y76 > southern y23"
+    },
+    "polygon_closure": {
+      "result": "PASS",
+      "evidence": "first/last vertex equal"
+    },
+    "no_self_intersection": {
+      "result": "PASS",
+      "evidence": "previous C01 geometric test reported zero crossings"
+    }
+  },
+  "source_readiness": {
+    "irish_dem_raster_bytes": "NOT_VERIFIED",
+    "irish_coastline_vector_bytes": "NOT_VERIFIED",
+    "irish_source_license": "NOT_VERIFIED",
+    "irish_crs": "NOT_VERIFIED",
+    "irish_vertical_datum": "NOT_VERIFIED",
+    "irish_source_sha256": "NOT_VERIFIED",
+    "approved_2d_world_orthographic": "NOT_AVAILABLE",
+    "private_canon_blob": "5a3cd66e4131a34de363782a2af8f0e4bb145464"
+  },
+  "important_limitation": "All point-in-polygon checks are for invented candidate geometry. They do not establish physical Irish terrain reuse or a finished country/area blueprint.",
+  "prework": {
+    "owner_pr": 482,
+    "owner_issue_state": "OPEN",
+    "owner_comments_checked": 2,
+    "owner_lease": "SYNC_UNVERIFIED",
+    "other_owner_writes": false
+  },
+  "gates": {
+    "W01": "PARTIAL",
+    "W02": "PARTIAL",
+    "D0": "PARTIAL",
+    "D1": "BLOCKED",
+    "D2": "NOT_RUN",
+    "D3": "NOT_RUN",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Obtain verified Ireland coastline/terrain source bytes and compare geometry; do not progress to W03 as complete"
+}
