@@ -10,6 +10,8 @@ Scope: `tools/production-studio/handoff-readiness.js` in Draft PR #484. This is 
 - A successful PR fetch, HEAD or recent `updated_at` cannot change **SYNC_UNVERIFIED** to PASS or authorize a backup writer.
 - A failed PR request is displayed without erasing other successfully fetched cards. GitHub 403/429 is identified as API limitation or access refusal, not as owner failure.
 - A stale refresh response must not overwrite a newer refresh result.
+- #468/#485 cards may display the 2026-11-23 PR #468 report as **ISOLATED_PASS** with a direct evidence link. They must keep P0-A **BLOCKED / SYNC_UNVERIFIED**, P0-B–E and G1–G4 **NOT_RUN**, and Release upload **HTTP 401 / 未完了**. The reported tests are not independent Studio QA or production acceptance.
+- The report snapshot is dated and source-attributed; newer PR metadata alone must never silently promote or overwrite its QA classification.
 - Mobile view supports narrow screens and keyboard focus; no HTML injection from GitHub data (use `textContent`).
 
 ## Browser / device acceptance (NOT_RUN)
