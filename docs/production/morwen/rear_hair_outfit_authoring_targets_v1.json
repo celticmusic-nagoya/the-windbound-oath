@@ -1,0 +1,104 @@
+{
+  "schema": "morwen-rear-blueprint-authoring-plan-v1",
+  "status": "PROVISIONAL_DESIGN_NO_NATIVE_MUTATION",
+  "asset_id": "MORWEN",
+  "source": {
+    "official_artifact": 14602858760,
+    "official_back_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+    "landmarks": "tools/morwen_authored_sculpt/layer0_landmarks_v1.json",
+    "precision": "tools/morwen_authored_sculpt/precision_blueprint_v2.json",
+    "candidate_artifact": 14798806949,
+    "candidate_native_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+  },
+  "coordinate_system": "official Layer0 image pixels, top-left origin, 384x1024; no inferred 3D depths",
+  "targets": [
+    {
+      "part_id": "rear_hair",
+      "target_id": "hair_nape_hem",
+      "target": {
+        "xy_px": [
+          170,
+          198
+        ],
+        "uncertainty_px": 4,
+        "source": "official_CG_measurement"
+      },
+      "measurement": null,
+      "operation": "Measure candidate rear hair hem in calibrated full-body capture before VRoid native adjustment",
+      "tolerance_px": null,
+      "uncertainty_px": 4,
+      "status": "BLOCKED_CAMERA_AND_CROP"
+    },
+    {
+      "part_id": "rear_outfit",
+      "target_id": "back_clasp",
+      "target": {
+        "xy_px": [
+          173,
+          305
+        ],
+        "uncertainty_px": 3,
+        "source": "official_CG_measurement"
+      },
+      "measurement": null,
+      "operation": "Separate garment parts; preserve exposed-back silhouette and clasp; measure native garment constraints",
+      "tolerance_px": null,
+      "uncertainty_px": 3,
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "part_id": "rear_outfit",
+      "target_id": "upper_strap_buckle",
+      "target": {
+        "xy_px": [
+          233,
+          445
+        ],
+        "uncertainty_px": 4,
+        "source": "official_CG_measurement"
+      },
+      "measurement": null,
+      "operation": "Determine VRoid feasibility for asymmetrical strap and buckle; do not infer hidden fasteners",
+      "tolerance_px": null,
+      "uncertainty_px": 4,
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "part_id": "rear_outfit",
+      "target_id": "lower_strap_buckle",
+      "target": {
+        "xy_px": [
+          233,
+          565
+        ],
+        "uncertainty_px": 3,
+        "source": "official_CG_measurement"
+      },
+      "measurement": null,
+      "operation": "Determine independent strap and buckle authoring method",
+      "tolerance_px": null,
+      "uncertainty_px": 3,
+      "status": "DESIGN_ONLY"
+    }
+  ],
+  "protected": [
+    "native original",
+    "face",
+    "ears",
+    "existing authored hair",
+    "official design",
+    "source SHA"
+  ],
+  "quality": {
+    "G1": "BLOCKED",
+    "G2": "FAIL_PRELIMINARY_VISIBLE_DIFFERENCES",
+    "G3": "PARTIAL_PASS_READONLY",
+    "G4": "NOT_RUN"
+  },
+  "dependencies": [
+    "verify owner lease fencing before native editing",
+    "obtain aligned full-body orthographic candidate views",
+    "use shared Blueprint Engine contract; do not create duplicate engine"
+  ],
+  "next": "Native feasibility survey, then isolated reversible authoring with checkpoint and readback after lease verification"
+}
