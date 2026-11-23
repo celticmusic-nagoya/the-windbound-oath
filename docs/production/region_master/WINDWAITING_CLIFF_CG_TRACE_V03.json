@@ -1,0 +1,308 @@
+{
+  "schema": "two.cliff.cg.image_space_trace.v03",
+  "source": {
+    "path": "assets/approved/game/cliff/sunset_background.png",
+    "sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "width_px": 1672,
+    "height_px": 941
+  },
+  "features": [
+    {
+      "id": "primary_headland_upper_rim",
+      "points_xy_px": [
+        [
+          450,
+          564
+        ],
+        [
+          544,
+          548
+        ],
+        [
+          645,
+          526
+        ],
+        [
+          740,
+          510
+        ],
+        [
+          836,
+          499
+        ],
+        [
+          918,
+          505
+        ],
+        [
+          1005,
+          523
+        ],
+        [
+          1048,
+          539
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "near_cliff_upper_rim",
+      "points_xy_px": [
+        [
+          565,
+          585
+        ],
+        [
+          655,
+          580
+        ],
+        [
+          739,
+          577
+        ],
+        [
+          823,
+          570
+        ],
+        [
+          878,
+          583
+        ],
+        [
+          900,
+          616
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "headland_face_visible_outer_edge",
+      "points_xy_px": [
+        [
+          1048,
+          539
+        ],
+        [
+          1056,
+          574
+        ],
+        [
+          1073,
+          614
+        ],
+        [
+          1080,
+          662
+        ],
+        [
+          1097,
+          724
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "near_cliff_face_outer_edge",
+      "points_xy_px": [
+        [
+          900,
+          616
+        ],
+        [
+          925,
+          653
+        ],
+        [
+          942,
+          702
+        ],
+        [
+          955,
+          750
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "foreground_meadow_rock_boundary",
+      "points_xy_px": [
+        [
+          155,
+          590
+        ],
+        [
+          294,
+          594
+        ],
+        [
+          424,
+          622
+        ],
+        [
+          534,
+          648
+        ],
+        [
+          617,
+          680
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "distant_land_skyline",
+      "points_xy_px": [
+        [
+          172,
+          509
+        ],
+        [
+          235,
+          504
+        ],
+        [
+          319,
+          513
+        ],
+        [
+          417,
+          514
+        ],
+        [
+          515,
+          502
+        ],
+        [
+          645,
+          488
+        ],
+        [
+          752,
+          496
+        ],
+        [
+          862,
+          496
+        ],
+        [
+          969,
+          487
+        ],
+        [
+          1092,
+          510
+        ],
+        [
+          1227,
+          514
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    },
+    {
+      "id": "visible_rocky_shore",
+      "points_xy_px": [
+        [
+          1089,
+          724
+        ],
+        [
+          1160,
+          742
+        ],
+        [
+          1233,
+          733
+        ],
+        [
+          1300,
+          706
+        ],
+        [
+          1365,
+          698
+        ],
+        [
+          1433,
+          748
+        ]
+      ],
+      "method": "manual_visual_trace",
+      "uncertainty_px": {
+        "range": [
+          8,
+          40
+        ],
+        "calibration": "NOT_MEASURED"
+      },
+      "world_xyz_m": null
+    }
+  ],
+  "camera": {
+    "projection": null,
+    "pose": null,
+    "focal_length_mm": null
+  },
+  "qa": {
+    "source_sha": "PASS_LOCAL",
+    "pixel_bounds": "PASS_LOCAL",
+    "independent_accuracy": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Image only; no unique 3D depth or world heights",
+    "Trace points are visual approximations; no calibrated tolerances",
+    "Approved CG original not rehosted"
+  ]
+}
