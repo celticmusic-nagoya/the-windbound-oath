@@ -14,6 +14,16 @@ async function loadAreaBlueprints(){
  const area=byId("area-blueprints"),status=byId("area-blueprints-status");
  if(!area||!status)return;
  area.replaceChildren();status.textContent="担当PRを検索中";
+ const designBranch="docs/ireland-world-source-grounded-plan-20261123";
+ const designFiles=[
+ ["物語接続図 v0.4（SVG・地理実測ではない）","docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg"],
+ ["国土図面・入力資料契約 v0.4","docs/production/region_master/IRELAND_COUNTRY_DRAWING_SOURCE_CONTRACT_V04.md"],
+ ["国土・エリア設計継続資料 v0.1","docs/production/region_master/IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md"],
+ ["Studio設計図候補インベントリ","docs/production/region_master/PRODUCTION_STUDIO_BLUEPRINT_CANDIDATES_V01.json"]
+ ];
+ const design=tile(area,"アイルランド国土・エリア設計（専用ブランチ）",["制作中 / 設計候補 / G1 BLOCKED","正式地形・完成図面ではありません"],[]);
+ for(const [label,path] of designFiles){const link=node("a",label);link.href="https://github.com/"+repo+"/blob/"+designBranch+"/"+path;link.rel="noopener noreferrer";design.append(link);}
+
  try{
   const found=new Map();
   for(let page=1;page<=3;page++){
