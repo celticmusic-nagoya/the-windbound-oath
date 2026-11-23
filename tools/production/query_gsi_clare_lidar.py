@@ -45,9 +45,13 @@ def main():
                 continue
             desired = [x for x in ("OBJECTID","DATA_URL","DATA_NAME","LICENCE","RESOLUTION","DATECAPTUR","LOCATION","COUNTY","OWNER","RMS_ERROR") if x in fields]
             oid = meta.get("objectIdField") or "OBJECTID"
-            if oid not in desired and oid in fields: desired.append(oid)
+            if oid not in fields:
+                report["errors"].append({"layer_id":lid,"error":"OBJECT_ID_FIELD_MISSING"})
+                continue
+            if oid not in desired: desired.append(oid)
             params = {"f":"json","where":f"{county} LIKE '%Clare%'","outFields":",".join(desired),
-                      "returnGeometry":"false","resultRecordCount":min(args.limit,1000)}
+                      "returnGeometry":"false","resultRecordCount":min(args.limit,1000),
+                      "orderByFields":f"{oid} ASC"}
             if args.bbox_itm:
                 params.update({"geometry":",".join(map(str,args.bbox_itm)),"geometryType":"esriGeometryEnvelope",
                                "inSR":"2157","spatialRel":"esriSpatialRelIntersects"})
