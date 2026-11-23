@@ -1175,7 +1175,7 @@
    "head_sha": "961728d31cb4941c2d85b03f7f10a96e992f45cd",
    "artifact_digest": "sha256:164002d0c4005f224c9501bff8a79cc83fe6900655d3afc675c381c54146dc78",
    "content": "HairHarpy volume v3: top cover, shells, crown fix, matched/top/face",
-   "qa": "G1/G3 ISOLATED_PASS (0 penetration, 0 boundary/non-manifold, reopen); G2 SUBMITTED (independent QA pending)",
+   "qa": "G1/G3 ISOLATED_PASS; superseded by v4 (r5 self-findings fixed)",
    "images": [
     {
      "path": "evidence/renders_factory-ak_m4zy1/face/face_cycles_front.png",
@@ -1226,6 +1226,92 @@
      "path": "evidence/renders_factory-ak_m4zy1/top/top_cycles_top.png",
      "sha256": "4dd7a47231626f1a1358b37373c481562809843548aef57343d1df24594ada77",
      "bytes": 581824
+    }
+   ]
+  },
+  {
+   "artifact_id": 14783679154,
+   "name": "two-hairharpy-volume-v4",
+   "run_id": 45097145790,
+   "head_sha": "285db7c824f0c04e9afe489663ac411f45a4f422",
+   "artifact_digest": "sha256:c0d7b0c6d21d1d883e21593f67340ba5d398c8d26d2cd6987a95d097796f3e81",
+   "content": "HairHarpy volume v4: whorl, widened locks, Cycles 128 spp five views + top + face",
+   "qa": "G1/G3 ISOLATED_PASS; G2 SUBMITTED (independent QA pending)",
+   "images": [
+    {
+     "path": "evidence/renders_factory-wj_lfj46/face/face_cycles_front.png",
+     "sha256": "cffb0d20b917a56401c7aba7c81cfda026c1ad4c53d2a6dc6a1e82a80dbe4e37",
+     "bytes": 689554
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/face/face_cycles_three_quarter.png",
+     "sha256": "6e59afe289836dcd659bf6b36e7aba3f2e124f74b7fbf22589e90a9db6de2ea5",
+     "bytes": 680034
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_clay_wire_back.png",
+     "sha256": "38fd68e49e85b56db1b91b960b027648202338eba690e64144320bc5eebdd472",
+     "bytes": 283785
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_clay_wire_front.png",
+     "sha256": "fc54a69056804fb1bd6e45636fb087ea7dec92fbe1a516b54e137c08eb90c7e4",
+     "bytes": 290534
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_clay_wire_left.png",
+     "sha256": "80fad448740d40f8b866238a64bca5ff3de28370061cd100b2396bc7d2080b95",
+     "bytes": 281087
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_clay_wire_right.png",
+     "sha256": "b64294b1dc18e86630465a4760a9df89bbd82f6a492895a22c4be208c7e0b9fc",
+     "bytes": 277208
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_clay_wire_three_quarter.png",
+     "sha256": "b93f3b9763ee61e00244872a63116efca5cb14e5f1ea527e9a04da80d7db3e54",
+     "bytes": 283942
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_cycles_front.png",
+     "sha256": "950195e5ebab9f6a25de738486ecafb71511db9d815b17fc318e443986835385",
+     "bytes": 186389
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/matched/preview_cycles_three_quarter.png",
+     "sha256": "3f27a22b3ea76c1fcdc1ea3d8c966454e798919db66248c9ca0ce9e4fbd454cb",
+     "bytes": 180610
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/top/top_cycles_top.png",
+     "sha256": "d0438e35a27e1e6b5e3c6083ac32c675548c0a99ff69c62582f985a509fd9a90",
+     "bytes": 623224
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/views/views_cycles_back.png",
+     "sha256": "6d828e91b9037f79fb14c740309b16dae01e32771c64e49f387ebb9ec5777f1d",
+     "bytes": 599015
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/views/views_cycles_front.png",
+     "sha256": "61768bf9244e4927ce7bf0b92f554b834aacb2459d1611287b08459a6b430509",
+     "bytes": 625198
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/views/views_cycles_left.png",
+     "sha256": "dd2b05fb04abc40a81cc067a6b09a5adb23cd3a11db5d92e9a5602ee71b5b467",
+     "bytes": 609160
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/views/views_cycles_right.png",
+     "sha256": "acf6c1fadcf9aa3f3e7ccd276ad998d475ffe01f7bbd226adbd6da6c598e9e8a",
+     "bytes": 611273
+    },
+    {
+     "path": "evidence/renders_factory-wj_lfj46/views/views_cycles_three_quarter.png",
+     "sha256": "52c98c441c9bf6c3b07b59a1d8e35ce85e67a36c4bcff17bdc759a376d6ecafd",
+     "bytes": 617681
     }
    ]
   }
