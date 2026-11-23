@@ -22,6 +22,27 @@ try{
  await page.route('https://api.github.com/**',r=>r.fulfill({json:r.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)}}:{workflow_runs:[]}}));
  await page.goto('http://127.0.0.1:8766/');
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+
+ // Race regression: the first refresh is delayed and carries a stale, shorter manifest.
+ // The second refresh must win, even if the older response arrives last.
+ let refreshCount=0;
+ await page.route('**/gallery-manifest.json',async route=>{
+  const request=++refreshCount;
+  if(request===1){
+   await new Promise(resolve=>setTimeout(resolve,500));
+   await route.fulfill({json:{...manifest,entries:manifest.entries.slice(0,-1)}});
+  }else{
+   await route.fulfill({json:manifest});
+  }
+ });
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(()=>document.querySelector('#published-status').textContent==='取得中').catch(()=>{});
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+ await page.waitForTimeout(600);
+ assert.ok((await page.locator('#published-status').innerText()).startsWith(manifest.entries.length+' 件'),'stale gallery response overwrote refresh');
+ assert.equal(refreshCount,2,'expected two refresh requests');
+ await page.unroute('**/gallery-manifest.json');
  assert.equal(await page.locator('.category-card').count(),6);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
  assert.ok(await page.locator('#published-gallery img').count()<=6);
