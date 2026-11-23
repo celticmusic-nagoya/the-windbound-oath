@@ -96,7 +96,12 @@ class Blueprint:
     def add_group(self, *, target_id, measurement_id, coordinate_system, units, projection,
                   metrics, operation_id, protection_scope_id, tolerance_basis, corrections=None,
                   intersection_limit=None, notes=None):
-        """metrics: {key: dict(element, select, value, tolerance, uncertainty, evidence)}"""
+        """metrics: {key: dict(element, select, value, tolerance, uncertainty, evidence[, bound])}
+
+        bound="lower": value is the lower bound L, tolerance must be 0 (one-sided,
+        r = x - L; PASS iff r - u >= 0). No other bound kinds are accepted; an
+        upper end is never invented.
+        """
         if target_id in self.data["groups"]:
             raise BlueprintError(f"duplicate target {target_id}")
         if not metrics:
@@ -110,6 +115,13 @@ class Blueprint:
             for field in ("value", "tolerance", "uncertainty"):
                 if not finite(metric.get(field)) or (field != "value" and metric[field] < 0):
                     raise BlueprintError(f"{target_id}.{key}: invalid {field}")
+            bound = metric.get("bound")
+            if bound not in (None, "lower"):
+                raise BlueprintError(f"{target_id}.{key}: unsupported bound {bound!r}")
+            if bound == "lower" and metric["tolerance"] != 0:
+                raise BlueprintError(f"{target_id}.{key}: lower bound requires tolerance 0")
+            if bound == "lower" and corrections and key in corrections:
+                raise BlueprintError(f"{target_id}.{key}: lower-bound metric cannot be auto-corrected")
             if element["coordinate_system"] != coordinate_system or element["units"] != units:
                 raise BlueprintError(f"{target_id}.{key}: element context differs from group")
         self.data["groups"][target_id] = dict(

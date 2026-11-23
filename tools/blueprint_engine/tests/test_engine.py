@@ -431,3 +431,86 @@ class EyelineTests(unittest.TestCase):
             self.assertEqual((r["left"], r["right"], r["width"]), (12, 43, 32))
             self.assertEqual(r["ambiguous"], [])
             self.assertEqual(r["width_u"], 1.0)                           # sweep 0 + 2 x 0.5 px
+
+
+class LowerBoundEngineTests(unittest.TestCase):
+    def bp(self, src, bound="lower", tolerance=0.0, corrections=None):
+        bp = Blueprint(blueprint_id="lb", asset_id="T", stage="s", status="TEST", canon_status="TEST")
+        bp.add_source(register_source(src, source_id="img", role="OFFICIAL_CANON",
+                                      projection="image-2d-uncalibrated", coordinate_system="px",
+                                      units="px", provenance="t", license="t"))
+        bp.add_element(element_id="w", kind="dimension", module="m", sources=["img"],
+                       evidence=PROVISIONAL_DESIGN, coordinate_system="px", units="px", dims=1,
+                       value=12.0, uncertainty=0.0)
+        bp.add_group(target_id="g", measurement_id="alpha", coordinate_system="px", units="px",
+                     projection="image-2d-uncalibrated", operation_id="m",
+                     protection_scope_id="img.file", tolerance_basis="t", corrections=corrections,
+                     intersection_limit=0 if corrections else None,
+                     metrics={"x0": dict(element="w", value=8.0, tolerance=tolerance,
+                                         uncertainty=0.0, evidence=PROVISIONAL_DESIGN,
+                                         bound=bound)})
+        return bp
+
+    def test_invalid_bound_specifications_are_refused(self):
+        with TemporaryDirectory() as d:
+            src = png(Path(d) / "a.png")
+            for kwargs in (dict(bound="upper"), dict(bound="both"), dict(tolerance=1.0),
+                           dict(corrections={"x0": dict(operation_id="m", max_delta=1.0,
+                                                        affects=["x0"], requires_pass=[])})):
+                with self.subTest(**{k: str(v) for k, v in kwargs.items()}), \
+                        self.assertRaises(BlueprintError):
+                    self.bp(src, **kwargs)
+
+    def test_lower_bound_compiles_and_is_refused_until_468_supports_it(self):
+        from blueprint_engine.bounds import CONTRACT_SUPPORTS_LOWER_BOUND
+        with TemporaryDirectory() as d:
+            src = png(Path(d) / "a.png")
+            sha = file_sha256(src)
+            target, request, issues = compile_target(
+                self.bp(src), "g", registry(), native_sha256=sha, protected_baseline_sha256=sha,
+                dependency_hashes={"d": "2" * 64})
+            self.assertEqual(target["lower_bound"], {"x0": 8.0})
+            self.assertEqual(target["tolerances"]["x0"], 0.0)
+            gate = handoff(target, request, issues)
+            self.assertEqual(gate["factory_ready"], CONTRACT_SUPPORTS_LOWER_BOUND)
+            if not CONTRACT_SUPPORTS_LOWER_BOUND:
+                self.assertIn("contract_extension_required:lower_bound", gate["issues"])
+            # measured x0 = 10 (alpha bbox) above L = 8: PASS, deficit 0
+            obs = ImageAlphaAdapter({"x0": ("bbox", 0)}, "img.file").measure(src, target)
+            row = evaluate(target, obs)["metrics"]["x0"]
+            self.assertEqual((row["kind"], row["state"], row["deficit"], row["margin"]),
+                             ("lower_bound", "PASS", 0.0, 2.0))
+
+    def test_two_sided_targets_carry_no_lower_bound_field(self):
+        with TemporaryDirectory() as d:
+            src = png(Path(d) / "a.png")
+            sha = file_sha256(src)
+            target, _, _ = compile_target(image_blueprint(src), "g", registry(), native_sha256=sha,
+                                          protected_baseline_sha256=sha,
+                                          dependency_hashes={"d": "2" * 64})
+            self.assertNotIn("lower_bound", target)
+
+    def test_reference_matches_patched_468_when_available(self):
+        """Parity: engine reference == #468 functions with proposals/468-lower-bound.patch."""
+        import os
+        patched = os.environ.get("TWO_PATCHED_468_DIR")
+        if not patched:
+            self.skipTest("set TWO_PATCHED_468_DIR to a #468 checkout with the patch applied")
+        code = (
+            "import itertools, sys; sys.path.insert(0, sys.argv[1]);"
+            "import shared_blueprint_contract as c;"
+            "sys.path.insert(0, sys.argv[2]);"
+            "from blueprint_engine.bounds import REFERENCE as R, CONTRACT_SUPPORTS_LOWER_BOUND as S;"
+            "assert S;"
+            "g=(-.5,-.25,-.125,0,.125,.25,.5);"
+            "ts=[{'lower_bound':{'k':1.0},'tolerances':{'k':0},'values':{'k':1.0}},"
+            "    {'tolerances':{'k':.25},'values':{'k':1.0}}];"
+            "bad=sum(c.constrained_state(t,'k',r,u)!=R['constrained_state'](t,'k',r,u)"
+            "        or c.deficit(t,'k',r)!=R['deficit'](t,'k',r)"
+            "        for t in ts for r,u in itertools.product(g,(0,.125,.25)));"
+            "print(bad); sys.exit(1 if bad else 0)")
+        env = {**os.environ, "TWO_PRODUCTION_QA_DIR": patched}
+        proc = subprocess.run([sys.executable, "-c", code, patched,
+                               str(Path(__file__).resolve().parents[2])],
+                              capture_output=True, text=True, env=env)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)

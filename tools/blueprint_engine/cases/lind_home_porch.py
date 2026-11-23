@@ -14,10 +14,15 @@ import json
 from pathlib import Path
 import shutil
 
+from ..contract import OperationRegistry, compile_target, handoff
+from ..evidence import NATIVE_MEASURED, PROVISIONAL_DESIGN
 from ..export import write_json
-from ..measure import BLENDER_SCRIPT, BlenderAdapter
-from ..sources import file_sha256
-from .lind_home import DESIGN_SHA, NATIVE_SHA
+from ..geometry import Blueprint
+from ..measure import BLENDER_SCRIPT, BlenderAdapter, baseline_protected_sha
+from ..residual import evaluate
+from ..sources import file_sha256, register_source
+from ._run import engine_dependencies
+from .lind_home import CS, DESIGN_SHA, NATIVE_SHA
 
 OWNER_CHECKPOINT_SHA = "61ab8543b220d000fa4bb730eb16449c366a0aac25396cd4d9366ab565f147d8"
 EPS = 1e-4
@@ -150,8 +155,113 @@ def run(design_path, native_path, owner_checkpoint, out, python=None):
         measure_blender_py=file_sha256(BLENDER_SCRIPT),
         measure_py=file_sha256(Path(__file__).resolve().parents[1] / "measure.py"),
         this_case=file_sha256(Path(__file__)))
+    record["connections"] = connections(parts)
+    record["proposal_target"] = proposal(design_path, native_path, owner_checkpoint, owner,
+                                         out, python)
     write_json(out / "porch_correspondence.json", record)
     return record
+
+
+def connections(parts):
+    """Plinth -> post -> lintel contacts measured on the visual islands."""
+    rows = []
+    lintel = parts["lintels"][0]
+    for post in parts["posts"]:
+        plinth = min(parts["plinths"], key=lambda p: abs(p["bbox_min"][0] - post["bbox_min"][0]))
+        rows.append(dict(
+            post_x=[post["bbox_min"][0], post["bbox_max"][0]],
+            post_on_plinth_dz=post["bbox_min"][2] - plinth["bbox_max"][2],
+            post_inside_plinth_xy=all(plinth["bbox_min"][i] <= post["bbox_min"][i]
+                                      and post["bbox_max"][i] <= plinth["bbox_max"][i]
+                                      for i in range(2)),
+            lintel_on_post_dz=lintel["bbox_min"][2] - post["bbox_max"][2],
+            lintel_spans_post_x=lintel["bbox_min"][0] <= post["bbox_min"][0]
+            and post["bbox_max"][0] <= lintel["bbox_max"][0]))
+    for row in rows:
+        row["connected"] = (abs(row["post_on_plinth_dz"]) <= EPS and row["post_inside_plinth_xy"]
+                            and abs(row["lintel_on_post_dz"]) <= EPS and row["lintel_spans_post_x"])
+    return dict(evidence="NATIVE_MEASURED (visual islands)", posts=rows,
+                all_connected=all(r["connected"] for r in rows))
+
+
+def proposal(design_path, native_path, owner_checkpoint, owner, out, python):
+    """Porch re-issue PROPOSAL: opening clearance >= owner minimum (lower bound only).
+
+    Not an official target. Compiled to the #468 envelope with `lower_bound`; the
+    hand-off stays BLOCKED until (1) the owner re-issues the porch target with this
+    measurement definition and (2) #468 supports lower_bound. No upper end is added.
+    """
+    west, east = "COL_AIDANHOUSE_porch_post_west", "COL_AIDANHOUSE_porch_post_east"
+    bp = Blueprint(blueprint_id="LIND-HOME-01.porch-reissue-proposal.v1", asset_id="LIND-HOME-01",
+                   stage="porch-collision", status="PROPOSAL_PENDING_OWNER_REISSUE",
+                   canon_status="owner requirement (checkpoint.json porch_target_min); not adopted")
+    bp.add_source(register_source(owner_checkpoint, source_id="owner.checkpoint", role="CANDIDATE",
+                                  projection="data", coordinate_system=CS, units="BU",
+                                  expected_sha256=OWNER_CHECKPOINT_SHA,
+                                  provenance="artifact 14741418957 checkpoint.json (owner run "
+                                             "44990707649)", license="project-original"))
+    bp.add_source(register_source(native_path, source_id="native.checkpoint",
+                                  role="NATIVE_WORKING", projection="native-3d",
+                                  coordinate_system=CS, units="BU", expected_sha256=NATIVE_SHA,
+                                  provenance="home_portal_checkpoint.blend, artifact 14741418957",
+                                  license="project-original"))
+    lower = owner["after"]["porch_target_min"]
+    bp.add_element(element_id="porch.opening_clearance_x", kind="dimension", module="collision",
+                   sources=["owner.checkpoint"], evidence=PROVISIONAL_DESIGN,
+                   coordinate_system=CS, units="BU", dims=1, value=lower, uncertainty=0.0,
+                   notes=f"owner minimum walk opening; measured as {east}.bbox_min.x - "
+                         f"{west}.bbox_max.x (world, pre-modifier mesh)")
+    bp.add_group(target_id="lind-home.porch.opening", measurement_id="bpy-gap.porch-posts.x",
+                 coordinate_system=CS, units="BU", projection="native-3d",
+                 metrics={"opening_clearance_x": dict(element="porch.opening_clearance_x",
+                                                      value=lower, tolerance=0.0,
+                                                      uncertainty=0.0, evidence=PROVISIONAL_DESIGN,
+                                                      bound="lower")},
+                 operation_id="blueprint_engine.measure.blender_bbox.v1",
+                 protection_scope_id="LIND-HOME.scene-all",
+                 tolerance_basis="one-sided owner minimum; no upper bound designated")
+    bp.add_question("owner-reissue", "Owner re-issues the porch target with this measurement "
+                    "definition (object IDs, axis, unit) and retires the single-proxy target.",
+                    ["lind-home.porch.opening"])
+    work = out / "proposal-work"
+    work.mkdir(exist_ok=True)
+    copy_path = work / "native.blend"
+    shutil.copyfile(native_path, copy_path)
+    adapter = BlenderAdapter({"opening_clearance_x": ("gap", west, east, 0)},
+                             "LIND-HOME.scene-all", python=python)
+    first, second = adapter.raw(copy_path), adapter.raw(copy_path)
+    qual = dict(operation="blueprint_engine.measure.blender_bbox.v1", kind="read_only_measure",
+                native_sha256=NATIVE_SHA, repeat_identical=first == second,
+                script_sha256=file_sha256(BLENDER_SCRIPT), bpy=first["bpy_version"])
+    qual["qualified"] = qual["repeat_identical"]
+    write_json(out / "proposal_qualification.json", qual)
+    registry = OperationRegistry()
+    registry.register("blueprint_engine.measure.blender_bbox.v1", kind="read_only_measure",
+                      qualified=qual["qualified"],
+                      evidence_sha256=file_sha256(out / "proposal_qualification.json"))
+    baseline = adapter.protected(copy_path, first)
+    deps = {"owner_checkpoint": OWNER_CHECKPOINT_SHA, "blueprint": bp.digest(),
+            "measure_blender.py": file_sha256(BLENDER_SCRIPT), **engine_dependencies()}
+    target, request, issues = compile_target(bp, "lind-home.porch.opening", registry,
+                                             native_sha256=NATIVE_SHA,
+                                             protected_baseline_sha256=baseline,
+                                             dependency_hashes=deps)
+    issues.append("owner_reissue_required")
+    gate = handoff(target, request, issues, current_dependency_hashes=deps,
+                   current_protected_sha256=baseline)
+    observation = adapter.build_observation(copy_path, target, first, "proposal")
+    report = evaluate(target, observation)
+    shutil.rmtree(work)
+    write_json(out / "proposal" / "blueprint.json", bp.to_dict())
+    write_json(out / "proposal" / "target.json", dict(target=target, request=request))
+    write_json(out / "proposal" / "handoff.json", gate)
+    write_json(out / "proposal" / "residual.json", report)
+    return dict(status="PROPOSAL_NOT_OFFICIAL", application="BLOCKED",
+                target_contract_sha256=gate["target_contract_sha256"],
+                factory_ready=gate["factory_ready"], issues=gate["issues"], unblock=gate["unblock"]
+                + ["owner re-issues the porch target with this measurement definition"],
+                measured=report["metrics"]["opening_clearance_x"],
+                existing_target="lind-home.porch UNCHANGED (OUTSIDE/BLOCKED)")
 
 
 U_DESIGN = 5e-7            # measurements.json stores 6 decimals

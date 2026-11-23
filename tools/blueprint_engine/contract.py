@@ -4,6 +4,7 @@ The Factory (Codex, #468) executes; this module only decides whether a target
 may be handed over and records why not. Nothing here edits a native file.
 """
 from . import digest_record, matches_digest, target_issues
+from .bounds import CONTRACT_SUPPORTS_LOWER_BOUND, lower_bound_issues
 from .evidence import TARGET_ELIGIBLE
 
 
@@ -59,6 +60,9 @@ def compile_target(blueprint, target_id, registry, *, native_sha256, protected_b
                         baseline_sha256=protected_baseline_sha256),
         dependency_fingerprint=digest_record(dependency_hashes),
     )
+    lower = {k: m["value"] for k, m in group["metrics"].items() if m.get("bound") == "lower"}
+    if lower:                                  # absent for two-sided targets: SHA unchanged
+        target["lower_bound"] = lower
     if group.get("corrections"):
         corrections = {}
         for metric, rule in group["corrections"].items():
@@ -83,6 +87,10 @@ def handoff(target, request, engine_issues, *, current_dependency_hashes=None,
             current_protected_sha256=None):
     """Decide Factory eligibility. Any mismatch -> factory_ready False (no edit)."""
     issues = list(engine_issues) + target_issues(target, request)
+    if "lower_bound" in target:
+        issues += [i for i in lower_bound_issues(target) if i not in issues]
+        if not CONTRACT_SUPPORTS_LOWER_BOUND:
+            issues.append("contract_extension_required:lower_bound")
     if current_dependency_hashes is not None and (
             digest_record(current_dependency_hashes) != target["dependency_fingerprint"]):
         issues.append("dependency_changed")
@@ -93,6 +101,10 @@ def handoff(target, request, engine_issues, *, current_dependency_hashes=None,
     if "operation_qualification" in issues:
         unblock.append(f"qualify operation {target['operation']['id']} with a real, SHA-recorded "
                        "calibration on a disposable native copy")
+    if "contract_extension_required:lower_bound" in issues:
+        unblock.append("#468 owner applies the lower_bound contract extension "
+                       "(proposals/468-lower-bound.patch or equivalent) so the observation "
+                       "check and Factory use the same one-sided judgement")
     if any(i.startswith("correction_unqualified") for i in issues):
         unblock.append("qualify the named correction operations (measured response, bounds, "
                        "interference) before Factory correction")

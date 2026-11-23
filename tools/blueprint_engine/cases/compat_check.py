@@ -13,7 +13,8 @@ import argparse
 import json
 from pathlib import Path
 
-from .. import digest_record, metric_state, target_issues
+from .. import digest_record, target_issues
+from ..bounds import constrained_state
 
 DESIGN_FIELDS = ("values", "tolerances", "uncertainty", "coordinate_system", "units",
                  "projection", "measurement_id", "target_id")
@@ -35,7 +36,7 @@ def check(baseline, candidate):
         if residual.is_file():
             rec = json.loads(residual.read_text())
             mism = [k for k, m in rec["metrics"].items()
-                    if metric_state(m["residual"], m["tolerance"], m["u"]) != m["state"]]
+                    if constrained_state(old["target"], k, m["residual"], m["u"]) != m["state"]]
             row["residual_law_stable"] = not mism
             row["residual_mismatch"] = mism
         new_path = candidate / rel
