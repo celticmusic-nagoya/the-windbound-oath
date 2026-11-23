@@ -70,7 +70,35 @@ class CoverageQueryTests(unittest.TestCase):
     def test_full_page_is_partial(self):
         result,calls=self.run_query(["--limit","1"])
         self.assertEqual(result["status"],"PARTIAL")
-        self.assertTrue(result["records"][0]["page_full"])
+        self.assertTrue(result["records"][0]["incomplete"])
+
+    def test_pagination_two_pages(self):
+        calls = []
+        def fake(url, params=None):
+            calls.append((url, dict(params or {})))
+            if url == mod.ROOT:
+                return {"layers":[{"id":12,"name":"LiDAR Coverage DTM"}]}
+            if url.endswith("/12"):
+                return {"objectIdField":"OBJECTID","fields":[{"name":"OBJECTID"},{"name":"COUNTY"}]}
+            if url.endswith("/12/query"):
+                offset = params["resultOffset"]
+                if offset == 0:
+                    return {"features":[{"attributes":{"OBJECTID":1,"COUNTY":"Clare"}}],
+                            "exceededTransferLimit":True}
+                if offset == 1:
+                    return {"features":[{"attributes":{"OBJECTID":2,"COUNTY":"Clare"}}],
+                            "exceededTransferLimit":False}
+                return {"features":[]}
+            raise AssertionError(url)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = str(pathlib.Path(tmp)/"paged.json")
+            with patch.object(mod,"get_json",side_effect=fake),patch.object(sys,"argv",["gsi","--output",out,"--limit","1"]),contextlib.redirect_stdout(io.StringIO()):
+                mod.main()
+            data=json.loads(pathlib.Path(out).read_text())
+            self.assertEqual(data["status"],"COMPLETE_QUERY_ONLY")
+            self.assertEqual(data["record_count"],2)
+            self.assertEqual(data["records"][0]["pages"],2)
+            self.assertFalse(data["records"][0]["incomplete"])
 
     def test_invalid_limit_rejected(self):
         with patch.object(sys,"argv",["gsi","--output","unused.json","--limit","0"]),contextlib.redirect_stderr(io.StringIO()):
