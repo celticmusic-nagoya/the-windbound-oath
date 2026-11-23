@@ -1,0 +1,67 @@
+name: Blueprint Engine QA (Claude)
+on:
+  push:
+    branches: [infra/blueprint-engine-20261123]
+    paths: ['.github/workflows/two-blueprint-engine-qa.yml', 'tools/blueprint_engine/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-blueprint-engine-qa
+  cancel-in-progress: false
+jobs:
+  engine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Runtime (bpy 5.3.0 = Blender 5.3.0 build 02f0899d78e3)
+        run: |
+          python -m pip install --quiet bpy==5.3.0 pillow==12.3.0
+          python -c "import bpy,PIL; print(bpy.app.version_string, bpy.app.build_hash, PIL.__version__)"
+      - name: Preflight
+        run: python -m py_compile tools/blueprint_engine/*.py tools/blueprint_engine/cases/*.py tools/blueprint_engine/tests/*.py
+      - name: Engine unit and #468 contract tests
+        working-directory: tools
+        run: |
+          python -m unittest discover -s blueprint_engine/tests -t . -v
+          cd production_qa && python -m unittest test_shared_blueprint_contract test_shared_item_correction test_studio_checkpoint_export
+      - name: Fetch real inputs (SHA enforced by the cases)
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/in/layer0" "$RUNNER_TEMP/in/home" "$RUNNER_TEMP/in/vroid" "$RUNNER_TEMP/in/design"
+          fetch() { gh api "repos/$REPO/actions/artifacts/$1/zip" > "$RUNNER_TEMP/in/$1.zip"; unzip -qo "$RUNNER_TEMP/in/$1.zip" -d "$2" $3; }
+          fetch 14602858760 "$RUNNER_TEMP/in/layer0" ""
+          fetch 14741418957 "$RUNNER_TEMP/in/home" "home_portal_checkpoint.blend"
+          fetch 14754066570 "$RUNNER_TEMP/in/vroid" "model.vroid"
+          git fetch --depth=1 https://github.com/$REPO feature/lind-village-world-integration-plan-01
+          git show FETCH_HEAD:assets/candidates/LIND-HOME-01/blueprint-measured-20261121/evidence.zip > "$RUNNER_TEMP/in/design/e.zip"
+          unzip -qo "$RUNNER_TEMP/in/design/e.zip" measurements.json -d "$RUNNER_TEMP/in/design"
+      - name: Map case LIND-HOME (native Blender, #468 Factory read-only stages)
+        working-directory: tools
+        run: python -m blueprint_engine.cases.lind_home --design "$RUNNER_TEMP/in/design/measurements.json" --native "$RUNNER_TEMP/in/home/home_portal_checkpoint.blend" --out "$RUNNER_TEMP/out/lind_home"
+      - name: Character case Morwen Layer0 + VRoid native
+        working-directory: tools
+        run: python -m blueprint_engine.cases.morwen_layer0 --layer0 "$RUNNER_TEMP/in/layer0" --silhouette "$RUNNER_TEMP/in/layer0/reference_silhouette_landmarks.json" --precision morwen_authored_sculpt/precision_blueprint_v2.json --vroid "$RUNNER_TEMP/in/vroid/model.vroid" --out "$RUNNER_TEMP/out/morwen"
+      - name: Deterministic output digest (cross-run comparison)
+        run: |
+          cd "$RUNNER_TEMP/out"
+          find lind_home morwen -path '*/factory/*' -prune -o -type f \( -path '*/residual/*' -o -path '*/targets/*' -o -path '*/handoff/*' -o -name blueprint.json \) -print | sort | xargs sha256sum | tee deterministic.sha256
+          sha256sum deterministic.sha256
+          # no native or official source bytes leave the runner
+          find . -path '*/factory/*' \( -name 'native.*' \) -delete
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blueprint-engine-qa-${{ github.run_id }}
+          path: ${{ runner.temp }}/out
+          retention-days: 14
+          if-no-files-found: error
