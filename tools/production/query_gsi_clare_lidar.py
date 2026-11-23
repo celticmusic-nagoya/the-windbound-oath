@@ -59,8 +59,9 @@ def main():
             seen_ids = set()
             incomplete = False
             pages = 0
+            offset = 0
             while pages < 100:
-                params["resultOffset"] = pages * args.limit
+                params["resultOffset"] = offset
                 data = get_json(f"{ROOT}/{lid}/query", params)
                 if "error" in data:
                     raise ValueError(data["error"])
@@ -73,6 +74,7 @@ def main():
                     break
                 seen_ids.update(new_ids)
                 features.extend(page)
+                offset += len(page)
                 pages += 1
                 if not data.get("exceededTransferLimit", False) and len(page) < args.limit:
                     break
