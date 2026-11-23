@@ -1361,16 +1361,20 @@
      "class": "observed_2d",
      "points_px": [
       [
-       165,
-       30
+       160,
+       28
       ],
       [
-       132,
-       48
+       118,
+       42
       ],
       [
-       114,
-       78
+       92,
+       72
+      ],
+      [
+       96,
+       96
       ],
       [
        120,
@@ -1381,25 +1385,25 @@
      "width_mid_px": null,
      "width_class": "undetermined",
      "metrics": {
-      "arc_px": 105.0745,
-      "chord_px": 90.9175,
-      "sag_ratio": 0.1347,
-      "kappa_25": -1.8665,
-      "kappa_50": -2.3322,
-      "kappa_75": -5.2072,
-      "tip_dx_px": -45.0,
-      "tip_dy_px": 79.0,
-      "arc_hh": 0.6486
+      "arc_px": 137.6261,
+      "chord_px": 90.3383,
+      "sag_ratio": 0.3436,
+      "kappa_25": -2.0998,
+      "kappa_50": -1.9845,
+      "kappa_75": -6.4824,
+      "tip_dx_px": -40.0,
+      "tip_dy_px": 81.0,
+      "arc_hh": 0.8495
      },
      "metrics_sd": {
-      "arc_px": 4.0721,
-      "chord_px": 3.3119,
-      "sag_ratio": 0.0285,
-      "kappa_25": 0.9562,
-      "kappa_50": 0.8543,
-      "kappa_75": 1.9822,
-      "tip_dx_px": 3.7498,
-      "tip_dy_px": 3.2847
+      "arc_px": 4.7962,
+      "chord_px": 3.4114,
+      "sag_ratio": 0.0303,
+      "kappa_25": 0.8095,
+      "kappa_50": 0.6459,
+      "kappa_75": 2.4688,
+      "tip_dx_px": 3.4908,
+      "tip_dy_px": 3.376
      }
     }
    },
@@ -1579,43 +1583,43 @@
      "class": "observed_2d",
      "points_px": [
       [
-       160,
+       165,
        62
       ],
       [
-       154,
+       162,
        100
       ],
       [
-       147,
+       156,
        140
       ],
       [
-       136,
+       145,
        190
       ]
      ],
      "unc_px": 4,
-     "width_mid_px": 20,
+     "width_mid_px": 24,
      "width_class": "observed_2d",
      "metrics": {
-      "arc_px": 130.2779,
-      "chord_px": 130.2306,
-      "sag_ratio": 0.0004,
-      "kappa_25": 0.0812,
-      "kappa_50": 0.2091,
-      "kappa_75": 0.081,
-      "tip_dx_px": -24.0,
+      "arc_px": 129.7768,
+      "chord_px": 129.5531,
+      "sag_ratio": 0.0017,
+      "kappa_25": 0.3988,
+      "kappa_50": 0.3201,
+      "kappa_75": 0.1248,
+      "tip_dx_px": -20.0,
       "tip_dy_px": 128.0,
-      "arc_hh": 0.8042
+      "arc_hh": 0.8011
      },
      "metrics_sd": {
-      "arc_px": 2.6023,
-      "chord_px": 2.6085,
-      "sag_ratio": 0.0023,
-      "kappa_25": 0.7639,
-      "kappa_50": 0.5532,
-      "kappa_75": 0.2299,
+      "arc_px": 2.6221,
+      "chord_px": 2.6093,
+      "sag_ratio": 0.0031,
+      "kappa_25": 0.7851,
+      "kappa_50": 0.5664,
+      "kappa_75": 0.2279,
       "tip_dx_px": 2.9999,
       "tip_dy_px": 2.6278
      }
@@ -1834,6 +1838,262 @@
       "kappa_25": 0.1823,
       "kappa_50": 0.487,
       "kappa_75": 0.9525,
+      "tip_dx_px": 3.7498,
+      "tip_dy_px": 3.2847
+     }
+    }
+   },
+   "estimated": {
+    "section": "lens (flattened ellipse), thicker on the outer side",
+    "thickness_over_width_mid": {
+     "value": 0.45,
+     "uncertainty": 0.15
+    },
+    "taper_tip_over_mid": {
+     "value": 0.45,
+     "uncertainty": 0.15
+    },
+    "layer_rank": 2,
+    "class": "estimated",
+    "basis": "not visible in 2D; anime-bob convention + silhouette offset; verify with VRoid/HairHarpy native section"
+   }
+  },
+  "TS_CR": {
+   "region": "temple",
+   "views": {
+    "right": {
+     "class": "observed_2d",
+     "points_px": [
+      [
+       232,
+       24
+      ],
+      [
+       245,
+       55
+      ],
+      [
+       252,
+       85
+      ],
+      [
+       250,
+       108
+      ]
+     ],
+     "unc_px": 5,
+     "width_mid_px": null,
+     "width_class": "undetermined",
+     "metrics": {
+      "arc_px": 87.6401,
+      "chord_px": 85.9069,
+      "sag_ratio": 0.0198,
+      "kappa_25": 0.5867,
+      "kappa_50": 0.8519,
+      "kappa_75": 3.1614,
+      "tip_dx_px": 18.0,
+      "tip_dy_px": 84.0,
+      "arc_hh": 0.541
+     },
+     "metrics_sd": {
+      "arc_px": 3.5514,
+      "chord_px": 3.3462,
+      "sag_ratio": 0.0168,
+      "kappa_25": 0.7731,
+      "kappa_50": 1.1314,
+      "kappa_75": 2.6191,
+      "tip_dx_px": 3.7498,
+      "tip_dy_px": 3.2847
+     }
+    }
+   },
+   "estimated": {
+    "section": "lens (flattened ellipse), thicker on the outer side",
+    "thickness_over_width_mid": {
+     "value": 0.35,
+     "uncertainty": 0.12
+    },
+    "taper_tip_over_mid": {
+     "value": 0.4,
+     "uncertainty": 0.15
+    },
+    "layer_rank": 3,
+    "class": "estimated",
+    "basis": "not visible in 2D; anime-bob convention + silhouette offset; verify with VRoid/HairHarpy native section"
+   }
+  },
+  "TS_CL": {
+   "region": "temple",
+   "views": {
+    "left": {
+     "class": "observed_2d",
+     "points_px": [
+      [
+       150,
+       30
+      ],
+      [
+       140,
+       55
+      ],
+      [
+       135,
+       80
+      ],
+      [
+       140,
+       103
+      ]
+     ],
+     "unc_px": 5,
+     "width_mid_px": null,
+     "width_class": "undetermined",
+     "metrics": {
+      "arc_px": 76.1333,
+      "chord_px": 73.6817,
+      "sag_ratio": 0.0322,
+      "kappa_25": -0.981,
+      "kappa_50": -1.4626,
+      "kappa_75": -3.7387,
+      "tip_dx_px": -10.0,
+      "tip_dy_px": 73.0,
+      "arc_hh": 0.47
+     },
+     "metrics_sd": {
+      "arc_px": 3.4782,
+      "chord_px": 3.2577,
+      "sag_ratio": 0.0228,
+      "kappa_25": 1.5602,
+      "kappa_50": 1.5937,
+      "kappa_75": 2.9522,
+      "tip_dx_px": 3.7498,
+      "tip_dy_px": 3.2847
+     }
+    }
+   },
+   "estimated": {
+    "section": "lens (flattened ellipse), thicker on the outer side",
+    "thickness_over_width_mid": {
+     "value": 0.35,
+     "uncertainty": 0.12
+    },
+    "taper_tip_over_mid": {
+     "value": 0.4,
+     "uncertainty": 0.15
+    },
+    "layer_rank": 3,
+    "class": "estimated",
+    "basis": "not visible in 2D; anime-bob convention + silhouette offset; verify with VRoid/HairHarpy native section"
+   }
+  },
+  "SB_CR": {
+   "region": "side",
+   "views": {
+    "right": {
+     "class": "observed_2d",
+     "points_px": [
+      [
+       185,
+       25
+      ],
+      [
+       165,
+       80
+      ],
+      [
+       160,
+       140
+      ],
+      [
+       170,
+       188
+      ]
+     ],
+     "unc_px": 5,
+     "width_mid_px": null,
+     "width_class": "undetermined",
+     "metrics": {
+      "arc_px": 168.0779,
+      "chord_px": 163.6887,
+      "sag_ratio": 0.0261,
+      "kappa_25": -0.7261,
+      "kappa_50": -0.6288,
+      "kappa_75": -1.3638,
+      "tip_dx_px": -15.0,
+      "tip_dy_px": 163.0,
+      "arc_hh": 1.0375
+     },
+     "metrics_sd": {
+      "arc_px": 3.4119,
+      "chord_px": 3.2669,
+      "sag_ratio": 0.0089,
+      "kappa_25": 0.3168,
+      "kappa_50": 0.1935,
+      "kappa_75": 0.6293,
+      "tip_dx_px": 3.7498,
+      "tip_dy_px": 3.2847
+     }
+    }
+   },
+   "estimated": {
+    "section": "lens (flattened ellipse), thicker on the outer side",
+    "thickness_over_width_mid": {
+     "value": 0.45,
+     "uncertainty": 0.15
+    },
+    "taper_tip_over_mid": {
+     "value": 0.45,
+     "uncertainty": 0.15
+    },
+    "layer_rank": 2,
+    "class": "estimated",
+    "basis": "not visible in 2D; anime-bob convention + silhouette offset; verify with VRoid/HairHarpy native section"
+   }
+  },
+  "SB_CL": {
+   "region": "side",
+   "views": {
+    "left": {
+     "class": "observed_2d",
+     "points_px": [
+      [
+       200,
+       25
+      ],
+      [
+       225,
+       80
+      ],
+      [
+       232,
+       140
+      ],
+      [
+       222,
+       188
+      ]
+     ],
+     "unc_px": 5,
+     "width_mid_px": null,
+     "width_class": "undetermined",
+     "metrics": {
+      "arc_px": 170.2659,
+      "chord_px": 164.478,
+      "sag_ratio": 0.034,
+      "kappa_25": 0.766,
+      "kappa_50": 0.742,
+      "kappa_75": 1.5205,
+      "tip_dx_px": 22.0,
+      "tip_dy_px": 163.0,
+      "arc_hh": 1.051
+     },
+     "metrics_sd": {
+      "arc_px": 3.6444,
+      "chord_px": 3.3192,
+      "sag_ratio": 0.01,
+      "kappa_25": 0.3027,
+      "kappa_50": 0.215,
+      "kappa_75": 0.6373,
       "tip_dx_px": 3.7498,
       "tip_dy_px": 3.2847
      }
@@ -3003,6 +3263,54 @@
    "class": "estimated"
   },
   {
+   "a": "TS_CR",
+   "rel": "over",
+   "b": "FF_CR",
+   "class": "observed_2d"
+  },
+  {
+   "a": "TS_CL",
+   "rel": "over",
+   "b": "FF_CL",
+   "class": "observed_2d"
+  },
+  {
+   "a": "BG_CR2",
+   "rel": "over",
+   "b": "TS_CR",
+   "class": "observed_2d"
+  },
+  {
+   "a": "BG_CL2",
+   "rel": "over",
+   "b": "TS_CL",
+   "class": "observed_2d"
+  },
+  {
+   "a": "SD_CR",
+   "rel": "over",
+   "b": "SB_CR",
+   "class": "estimated"
+  },
+  {
+   "a": "SD_CL",
+   "rel": "over",
+   "b": "SB_CL",
+   "class": "estimated"
+  },
+  {
+   "a": "SB_CR",
+   "rel": "over",
+   "b": "BK_CR3",
+   "class": "estimated"
+  },
+  {
+   "a": "SB_CL",
+   "rel": "over",
+   "b": "BK_CL3",
+   "class": "estimated"
+  },
+  {
    "a": "FL_CR",
    "rel": "outside_of",
    "b": "SD_CR",
@@ -3052,8 +3360,12 @@
    "members": [
     "FF_CR",
     "FF_CL",
+    "TS_CR",
+    "TS_CL",
     "SD_CR",
-    "SD_CL"
+    "SD_CL",
+    "SB_CR",
+    "SB_CL"
    ],
    "class": "estimated (hairline hidden)"
   },
@@ -3152,5 +3464,16 @@
   "sections": "ESTIMATED per region (see locks.*.estimated)",
   "verification": "VRoid native top/section renders + native lock measurement after #427 supply"
  },
- "not_carried_over": "neutral-head 24 locks, 1 mm penetration threshold, root zone 0.15, 30 % curvature tolerance"
+ "not_carried_over": "neutral-head 24 locks, 1 mm penetration threshold, root zone 0.15, 30 % curvature tolerance",
+ "self_check": {
+  "uncovered_mask_fraction_gt14px": {
+   "front": 0.0641,
+   "right": 0.0496,
+   "back": 0.0172,
+   "left": 0.0867
+  },
+  "criterion": "<= 0.10 per view",
+  "pass": true,
+  "note": "completeness of the lock registry against the observed silhouette; not an art judgement"
+ }
 }

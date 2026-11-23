@@ -170,13 +170,17 @@ def main(src, out):
            ("BK_CR1", "over", "BK_CR2", "observed_2d"), ("BK_CL1", "over", "BK_CL2", "observed_2d"),
            ("BK_CR2", "over", "BK_CR3", "observed_2d"), ("BK_CL2", "over", "BK_CL3", "observed_2d"),
            ("BK_CR3", "over", "NP_CR", "estimated"), ("BK_CL3", "over", "NP_CL", "estimated"),
+           ("TS_CR", "over", "FF_CR", "observed_2d"), ("TS_CL", "over", "FF_CL", "observed_2d"),
+           ("BG_CR2", "over", "TS_CR", "observed_2d"), ("BG_CL2", "over", "TS_CL", "observed_2d"),
+           ("SD_CR", "over", "SB_CR", "estimated"), ("SD_CL", "over", "SB_CL", "estimated"),
+           ("SB_CR", "over", "BK_CR3", "estimated"), ("SB_CL", "over", "BK_CL3", "estimated"),
            ("FL_CR", "outside_of", "SD_CR", "observed_2d"), ("FL_CL", "outside_of", "SD_CL", "observed_2d"),
            ("BK_C_CL", "meets", "BK_C_CR", "observed_2d")]
     roots = {"parting_point": {"members": ["BG_C", "BG_C2", "BG_CR1", "BG_CR2", "BG_CL1", "BG_CL2"],
                                "anchor": "parting_point_front", "class": "observed_2d (front); 3D position estimated"},
              "crown_whorl": {"members": ["BK_C_CL", "BK_C_CR", "BK_CR1", "BK_CR2", "BK_CR3", "BK_CL1", "BK_CL2", "BK_CL3"],
                              "anchor": "whorl_back", "class": "observed_2d (back); 3D position estimated"},
-             "temple_line": {"members": ["FF_CR", "FF_CL", "SD_CR", "SD_CL"], "class": "estimated (hairline hidden)"},
+             "temple_line": {"members": ["FF_CR", "FF_CL", "TS_CR", "TS_CL", "SD_CR", "SD_CL", "SB_CR", "SB_CL"], "class": "estimated (hairline hidden)"},
              "nape_line": {"members": ["NP_CR", "NP_CL", "BK_C_CL", "BK_C_CR"], "class": "estimated"}}
     asym = [
         {"id": "fringe_centre_lean", "observed": "BG_C tip (203,116) is 10 px to image-left (character right) of the "
@@ -231,6 +235,20 @@ def main(src, out):
                               "sections": "ESTIMATED per region (see locks.*.estimated)",
                               "verification": "VRoid native top/section renders + native lock measurement after #427 supply"},
           "not_carried_over": "neutral-head 24 locks, 1 mm penetration threshold, root zone 0.15, 30 % curvature tolerance"}
+    # design-completeness self-check: share of the hair mask farther than 14 px from every lock centreline
+    from scipy.ndimage import distance_transform_edt
+    cov = {}
+    for v, m in masks.items():
+        lines = np.zeros(m.shape, bool)
+        for L in locks.values():
+            if v in L["views"]:
+                for x, y in catmull([tuple(p) for p in L["views"][v]["points_px"]], 40):
+                    lines[int(round(y)), int(round(x))] = True
+        un = m & (distance_transform_edt(~lines) > 14)
+        cov[v] = round(float(un.sum() / m.sum()), 4)
+    bp["self_check"] = {"uncovered_mask_fraction_gt14px": cov, "criterion": "<= 0.10 per view",
+                        "pass": all(x <= 0.10 for x in cov.values()),
+                        "note": "completeness of the lock registry against the observed silhouette; not an art judgement"}
     (HERE / "morwen_hair_l0_blueprint_v1.json").write_text(json.dumps(bp, indent=1, ensure_ascii=False) + "\n")
     draw(src, out, masks, bp)
     print(len(locks), "locks", sum(len(l["views"]) for l in locks.values()), "view observations")
@@ -294,7 +312,7 @@ def draw(src, out, masks, bp):
         az = {"BG_C": -90, "BG_C2": -80, "BG_CR1": -105, "BG_CR2": -125, "BG_CL1": -70, "BG_CL2": -55, "FF_CR": -150,
               "FF_CL": -30, "SD_CR": 180, "SD_CL": 0, "FL_CR": 160, "FL_CL": 20, "BK_C_CL": 92, "BK_C_CR": 88,
               "BK_CR1": 105, "BK_CR2": 125, "BK_CR3": 145, "BK_CL1": 75, "BK_CL2": 55, "BK_CL3": 35, "NP_CR": 115,
-              "NP_CL": 65}[lid]
+              "NP_CL": 65, "TS_CR": -140, "TS_CL": -40, "SB_CR": 165, "SB_CL": 15}[lid]
         o = part if reg == "fringe" else whorl if reg in ("back", "nape") else (cx, cy - 20)
         t = math.radians(az)
         tip = (cx + R * 1.05 * math.cos(t), cy + R * 1.2 * math.sin(t))

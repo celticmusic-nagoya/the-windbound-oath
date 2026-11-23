@@ -19,17 +19,24 @@ LOCKS = {
                        "right": ([(228, 30), (262, 48), (282, 78), (264, 113)], 5, None)}),
  "BG_CL1": ("fringe", {"front": ([(222, 36), (232, 60), (236, 85), (232, 104)], 3, 12)}),
  "BG_CL2": ("fringe", {"front": ([(229, 38), (246, 58), (254, 85), (258, 112)], 4, 16),
-                       "left": ([(165, 30), (132, 48), (114, 78), (120, 109)], 5, None)}),
+                       "left": ([(160, 28), (118, 42), (92, 72), (96, 96), (120, 109)], 5, None)}),
  # face-framing locks in front of the ear
  "FF_CR":  ("temple", {"front": ([(170, 62), (160, 100), (162, 140), (178, 184)], 4, 16),
                        "right": ([(220, 62), (212, 110), (213, 150), (228, 190)], 4, 20)}),
  "FF_CL":  ("temple", {"front": ([(254, 62), (264, 100), (262, 140), (248, 178)], 4, 16),
-                       "left": ([(160, 62), (154, 100), (147, 140), (136, 190)], 4, 20)}),
+                       "left": ([(165, 62), (162, 100), (156, 140), (145, 190)], 4, 24)}),
  # side mass behind the ear (outer contour in the front view)
  "SD_CR":  ("side", {"front": ([(180, 28), (146, 75), (128, 130), (134, 182)], 6, None),
                      "right": ([(200, 40), (188, 100), (186, 150), (196, 190)], 5, None)}),
  "SD_CL":  ("side", {"front": ([(240, 28), (274, 75), (292, 130), (288, 182)], 6, None),
                      "left": ([(180, 40), (190, 100), (192, 150), (186, 190)], 5, None)}),
+ # upper temple-side locks between the fringe profile and the temple lock (side views only; front correspondence
+ # undetermined - they read as part of the fringe/temple mass in the front view)
+ "TS_CR":  ("temple", {"right": ([(232, 24), (245, 55), (252, 85), (250, 108)], 5, None)}),
+ "TS_CL":  ("temple", {"left": ([(150, 30), (140, 55), (135, 80), (140, 103)], 5, None)}),
+ # side-back locks between the behind-ear side mass and the rear contour (side views only)
+ "SB_CR":  ("side", {"right": ([(185, 25), (165, 80), (160, 140), (170, 188)], 5, None)}),
+ "SB_CL":  ("side", {"left": ([(200, 25), (225, 80), (232, 140), (222, 188)], 5, None)}),
  # loose outer strands / hem flicks (correspondence across views is probable, not certain)
  "FL_CR":  ("flick", {"front": ([(122, 100), (116, 150), (124, 175)], 4, 4),
                       "right": ([(110, 110), (96, 150), (100, 182)], 5, 5),
