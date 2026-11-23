@@ -13,10 +13,10 @@ try {
  const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',route=>route.fulfill({json:route.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)},updated_at:'2026-11-22'}:{workflow_runs:[]}}));
+ await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
  // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
- await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  const blueprint=page.locator('#area-blueprints .blueprint-preview img');
  await blueprint.waitFor({state:'visible'});
  await blueprint.evaluate(e=>e.decode());
