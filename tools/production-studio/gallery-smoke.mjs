@@ -35,8 +35,9 @@ try{
    await route.fulfill({json:manifest});
   }
  });
+ const firstRefresh=page.waitForRequest(req=>req.url().includes('/gallery-manifest.json'));
  await page.locator('#refresh-published').click();
- await page.waitForFunction(()=>document.querySelector('#published-status').textContent==='取得中').catch(()=>{});
+ await firstRefresh;
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  await page.waitForTimeout(600);
