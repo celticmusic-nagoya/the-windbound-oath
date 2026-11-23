@@ -27,6 +27,7 @@ jobs:
       realasset: ${{ steps.m.outputs.realasset }}
       hhbp: ${{ steps.m.outputs.hhbp }}
       hhv: ${{ steps.m.outputs.hhv }}
+      hhv3: ${{ steps.m.outputs.hhv3 }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,6 +43,7 @@ jobs:
           if [ -f tools/native_env/real_asset_request.json ] && [ ! -f tools/native_env/real_asset_evidence.json ]; then echo realasset=run >> "$GITHUB_OUTPUT"; else echo realasset=skip >> "$GITHUB_OUTPUT"; fi
           B=tools/native_env/hairharpy_bp
           if [ -f $B/hhv_evidence.json ]; then echo hhv=skip >> "$GITHUB_OUTPUT"; else echo hhv=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f $B/hhv3_evidence.json ]; then echo hhv3=skip >> "$GITHUB_OUTPUT"; else echo hhv3=run >> "$GITHUB_OUTPUT"; fi
           if [ -f $B/hh_bp_evidence.json ]; then echo hhbp=skip >> "$GITHUB_OUTPUT"; elif [ -f $B/hh_bp_restore_request.json ]; then echo hhbp=run2 >> "$GITHUB_OUTPUT"; else echo hhbp=run1 >> "$GITHUB_OUTPUT"; fi
       - name: Preflight exact bytes
         run: |
@@ -244,5 +246,34 @@ jobs:
         with:
           name: two-hairharpy-volume-v2
           path: /tmp/hhv/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-volume-v3:
+    needs: mode
+    if: needs.mode.outputs.hhv3 == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 latest contract (8c1d5ae, read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 8c1d5ae84b2783cd5475154d45409916ecebc4da
+          path: engine468v
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy volume v3 session (top cover, shells, registry, guarded correction) (isolated fencing remote)
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh v3 /tmp/hhv3
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-volume-v3
+          path: /tmp/hhv3/
           if-no-files-found: error
           retention-days: 30

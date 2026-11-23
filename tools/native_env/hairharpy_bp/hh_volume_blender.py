@@ -140,6 +140,24 @@ def pca_extents(pts):
     return ext  # [width, thickness]
 
 
+def curvature(p0, p1, p2):
+    a, b, c = math.dist(p0, p1), math.dist(p1, p2), math.dist(p0, p2)
+    s = (a + b + c) / 2
+    area = math.sqrt(max(0.0, s * (s - a) * (s - b) * (s - c)))
+    return 0.0 if a * b * c == 0 else 4 * area / (a * b * c)
+
+
+def centre_at(C, frac):
+    frac = min(1.0, max(0.0, frac))
+    cl = [0.0]
+    for a, b in zip(C, C[1:]):
+        cl.append(cl[-1] + math.dist(a, b))
+    s = frac * cl[-1]
+    i = max(1, min(len(cl) - 1, next((k for k, v in enumerate(cl) if v >= s), len(cl) - 1)))
+    t = (s - cl[i - 1]) / ((cl[i] - cl[i - 1]) or 1e-9)
+    return [C[i - 1][k] + (C[i][k] - C[i - 1][k]) * t for k in range(3)]
+
+
 def ring_at(R, cents, frac):
     cl = [0.0]
     for a, b in zip(cents, cents[1:]):
@@ -165,14 +183,21 @@ def measure_objs(objs, bp):
         L2 = sum(math.dist(a, b) for a, b in zip(C2, C2[1:]))
         w, t = pca_extents(ring_at(R, C, 0.5))
         w0, t0 = pca_extents(ring_at(R, C, 0.1))
+        w85, t85 = pca_extents(ring_at(R, C, 0.85))
+        kap = {}
+        for uu in (0.25, 0.5, 0.75):
+            pa, pb, pc = (centre_at(C, uu + du) for du in (-0.06, 0.0, 0.06))
+            kap[f"kappa_{int(uu * 100):02d}"] = curvature(pa, pb, pc)
         chord = [C[-1][c] - C[0][c] for c in range(3)]
         cn = math.sqrt(sum(x * x for x in chord)) or 1e-9
         bend = max(math.sqrt(max(0.0, sum((p[c] - C[0][c]) ** 2 for c in range(3))
                                  - (sum((p[c] - C[0][c]) * chord[c] for c in range(3)) / cn) ** 2)) for p in C)
         pts = [to_hh(ob.matrix_world @ v.co) for v in ob.data.vertices]
         per[k] = {"length": L, "width_mid": w, "thickness_mid": t, "width_root": w0, "thickness_root": t0,
+                  "width_tip": w85, "thickness_tip": t85, "taper_085": w85 / w if w else 0.0, **kap,
                   "bend_offset": bend, "tip_y": min(p[1] for p in pts), "min_clearance": min(clearance(p, ax) for p in pts),
-                  "u_length": abs(L2 - L) + 0.0005, "u_section": 0.0004}
+                  "u_length": abs(L2 - L) + 0.0005, "u_section": 0.0004,
+                  "u_kappa": 0.1 * kap["kappa_50"] + 0.3, "u_taper": 0.02}
     return per
 
 
@@ -197,6 +222,57 @@ def structure(objs):
     return res
 
 
+def penetration(objs, threshold=0.001, root_zone=0.15):
+    """Every vertex of lock A inside closed lock B (ray parity on B's BVH) -> depth = distance to B's surface.
+    contact: all depths <= threshold, or only inside B within B's/A's root zone (layering under the crown edge);
+    penetration: any vertex deeper than threshold outside the root zones."""
+    trees, uvv = {}, {}
+    for k, o in objs.items():
+        bm = bmesh.new()
+        bm.from_mesh(o.data)
+        trees[k] = BVHTree.FromBMesh(bm)
+        uvl = o.data.uv_layers["StrandUV"].data
+        vv = [0.0] * len(o.data.vertices)
+        for l in o.data.loops:
+            vv[l.vertex_index] = max(vv[l.vertex_index], uvl[l.index].uv.y)
+        uvv[k] = vv
+        bm.free()
+    dirs = [Vector((1, 0.13, 0.07)).normalized(), Vector((-0.11, 1, 0.05)).normalized(), Vector((0.03, -0.09, 1)).normalized()]
+    pairs = []
+    for a, oa in objs.items():
+        for b, tb in trees.items():
+            if a == b:
+                continue
+            ins = []
+            for v in oa.data.vertices:
+                p = v.co
+                if not tb.ray_cast(p, dirs[0])[0] and not tb.ray_cast(p, -dirs[0])[0]:
+                    continue
+                votes = 0
+                for d in dirs:  # parity along 3 skew directions, majority vote
+                    n, q = 0, p.copy()
+                    for _ in range(64):
+                        hit = tb.ray_cast(q, d)
+                        if hit[0] is None:
+                            break
+                        n += 1
+                        q = hit[0] + d * 1e-6
+                    votes += n % 2
+                if votes >= 2:
+                    ins.append((tb.find_nearest(p)[3], uvv[a][v.index]))
+            if ins:
+                deep = [x for x in ins if x[0] > threshold]
+                outside_root = [x for x in deep if x[1] > root_zone]
+                pairs.append({"a": a, "b": b, "inside_vertices": len(ins), "max_depth": max(x[0] for x in ins),
+                              "deep_vertices": len(deep), "deep_outside_root_zone": len(outside_root),
+                              "u_range": [round(min(x[1] for x in ins), 3), round(max(x[1] for x in ins), 3)],
+                              "class": "penetration" if outside_root else "contact"})
+    pen = [p for p in pairs if p["class"] == "penetration"]
+    return {"pairs": pairs, "contact_pairs": len(pairs) - len(pen), "penetration_pairs": len(pen),
+            "max_penetration_depth": max((p["max_depth"] for p in pen), default=0.0), "threshold": threshold,
+            "root_zone_v": root_zone}
+
+
 def silhouettes(objs):
     pts = [to_hh(o.matrix_world @ v.co) for o in objs.values() for v in o.data.vertices]
     xs, ys, zs = ([p[i] for p in pts] for i in range(3))
@@ -210,12 +286,38 @@ def MEASURE(native, bp_path, out):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     objs = build(d, bp)
     res = {"locks": measure_objs(objs, bp), "structure": structure(objs), "silhouette": silhouettes(objs),
+           "penetration": penetration(objs),
            "missing_locks": sorted({lk["id"] for lk in bp["locks"]} - set(objs)), "blender": bpy.app.version_string,
            "mesh_generator": "loft of HairHarpy modconv lock curves (Catmull-Rom x%d, root cap)" % SUB}
-    res["global"] = {"min_head_clearance": min(v["min_clearance"] for v in res["locks"].values())}
+    res["global"] = {"min_head_clearance": min(v["min_clearance"] for v in res["locks"].values()),
+                     "max_penetration_depth": res["penetration"]["max_penetration_depth"]}
     Path(out).write_text(json.dumps(res, indent=1, sort_keys=True))
     print("TWO_HHV_MEASURE", json.dumps({k: [round(v["length"], 4), round(v["width_mid"], 4), round(v["thickness_mid"], 4)]
                                          for k, v in res["locks"].items()}), json.dumps(res["structure"]))
+
+
+def fix_crown(o, lift=0.0015):
+    """HairHarpy crown cap (run 45084619143 inspection: no UV, 38/392 faces inward, dipping 0.6 % into the scalp):
+    per-face outward orientation, a 1.5 mm lift along the head normal, and a radial StrandUV (V from the crown centre)
+    so the NPR tangent/highlight are defined."""
+    bm = bmesh.new()
+    bm.from_mesh(o.data)
+    bm.transform(o.matrix_world)
+    inward = [f for f in bm.faces if f.calc_center_median().dot(f.normal) < 0]
+    bmesh.ops.reverse_faces(bm, faces=inward)
+    for v in bm.verts:
+        v.co += v.co.normalized() * lift
+    top = max(bm.verts, key=lambda v: v.co.z).co.copy()
+    uv = bm.loops.layers.uv.new("StrandUV")
+    dmax = max((v.co - top).length for v in bm.verts) or 1e-9
+    for f in bm.faces:
+        for lp in f.loops:
+            p = lp.vert.co
+            lp[uv].uv = ((math.atan2(p.y, p.x) / (2 * math.pi)) % 1.0, (p - top).length / dmax)
+    o.matrix_world = o.matrix_world.Identity(4)
+    bm.to_mesh(o.data)
+    bm.free()
+    return {"crown_faces_reoriented": len(inward), "crown_lift_m": lift, "crown_uv": "radial StrandUV"}
 
 
 def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
@@ -227,7 +329,7 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
     for o in objs.values():
         o.data.materials.append(mat)
         o.data.polygons.foreach_set("use_smooth", [True] * len(o.data.polygons))
-    extra = []
+    extra, crown_fix = [], {}
     for path, name, col in ((head_obj, "QUAL_head", [196, 178, 164]), (crown_obj, "HH_crown", None)):
         if not path or not Path(path).exists():
             continue
@@ -238,19 +340,15 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
             o.data.materials.clear()
             o.data.materials.append(mat if col is None else pbr_factory.build_material("TWO_QUAL_skin", col))
             o.data.polygons.foreach_set("use_smooth", [True] * len(o.data.polygons))
-            if col is None:  # HairHarpy crown cap: consistent outward normals (was rendered black from the inside)
-                bm = bmesh.new()
-                bm.from_mesh(o.data)
-                bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-                c = sum((v.co for v in bm.verts), Vector()) / max(1, len(bm.verts))
-                if sum((f.calc_center_median() - c).dot(f.normal) for f in bm.faces) < 0:
-                    bmesh.ops.reverse_faces(bm, faces=bm.faces)
-                bm.to_mesh(o.data)
-                bm.free()
+            if col is None:
+                crown_fix.update(fix_crown(o))
             extra.append(o.name)
     names = sorted(o.name for o in objs.values()) + extra
     stats = render_views.render(bpy.context.scene, "preview", Path(renders) / "matched", names, keep=())
     bangs = [objs[lk["id"]].name for lk in bp["locks"] if lk["role"] in ("bang", "face_frame") and lk["id"] in objs]
+    render_views.VIEWS.setdefault("top", (0.0, 0.0001, 1.0))
+    render_views.MODES["top"] = {"res": 768, "clay": False, "cycles_spp": 32, "cycles_views": ("top",), "cycles_res": 768}
+    top = render_views.render(bpy.context.scene, "top", Path(renders) / "top", names, keep=())
     render_views.MODES["face"] = {"res": 768, "clay": False, "cycles_spp": 32, "cycles_views": ("front", "three_quarter"),
                                   "cycles_res": 768}
     face = render_views.render(bpy.context.scene, "face", Path(renders) / "face", bangs + [n for n in extra if n == "QUAL_head"],
@@ -263,7 +361,7 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
     bpy.context.scene["two_hh_finish"] = bp["blueprint_id"]
     bpy.ops.wm.save_as_mainfile(filepath=out_blend, compress=False)
     res = {"uv": uvc, "uv_ok": all(v["inside_unit"] for v in uvc.values()), "material": mat.name,
-           "renders_matched": stats, "renders_face": face, "objects": names}
+           "renders_matched": stats, "renders_face": face, "renders_top": top, "objects": names, "crown_fix": crown_fix}
     Path(out).write_text(json.dumps(res, indent=1, sort_keys=True))
     print("TWO_HHV_FINISH", res["uv_ok"], len(stats), len(face))
 

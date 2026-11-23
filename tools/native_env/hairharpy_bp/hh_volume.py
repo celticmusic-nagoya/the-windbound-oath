@@ -47,9 +47,10 @@ def profile(vals, u):
 
 
 def spine(ax, lk, ctl):
-    """Stations (u in [0,1]) along the designed path; returns [(point_on_scalp_or_hang, outward_normal)]."""
-    e0, a0 = lk["root"]["elev"], lk["root"]["az"]
-    e1, a1 = lk["tip"]["elev"], lk["tip"]["az"]
+    """Stations (u in [0,1]) along the designed path; returns [(point_on_scalp_or_hang, outward_normal)].
+    Placement controls: root (deg, root elevation offset), lat (deg, azimuth offset of the whole lock)."""
+    e0, a0 = lk["root"]["elev"] + ctl.get("root", 0.0), lk["root"]["az"] + ctl.get("lat", 0.0)
+    e1, a1 = lk["tip"]["elev"], lk["tip"]["az"] + ctl.get("lat", 0.0)
     hang = lk.get("hang_to_y")
     if hang is None:
         # scalp lock (bangs): a quadratic Bezier root -> tip over the scalp, its middle lifted by the scalp's own
@@ -142,18 +143,19 @@ def author(d, bp, controls):
         ids = []
         for s, n, u in sp:
             k = new_id()
-            off = lk["clear"] + profile(lk["thickness"], u) * c["t"] / 2
+            off = lk["clear"] + c.get("layer", 0.0) + profile(lk["thickness"], u) * c["t"] / 2  # layer: radial offset
             d["anchors"].append({"id": k, "p": [float(v) for v in add(s, n, off)], "s": 1})
             ids.append(k)
         gid, cid, tid = new_id(), new_id(), new_id()
         d["items"].append({"anchors": ids, "fair": 0.5, "id": cid, "name": f"{lk['id']}_spine", "ovr": [], "parent": gid,
                            "round": 0.6, "seg": True, "type": "curve", "visible": True})
         w = [v * c["w"] for v in lk["width"]]
+        w[2] *= c.get("tipw", 1.0)  # tip-radius control (taper)
         t = [v * c["t"] for v in lk["thickness"]]
         profs = [lens(t[i] / w[i]) for i in range(3)]
         d["items"].append({"id": tid, "name": f"Modifier ({lk['id']}_spine)", "parent": gid, "profile": profs[1], "profs": profs,
                            "p": {"collapse": True, "r0": w[0] / 2, "r1": w[1] / 2, "r2": w[2] / 2, "rRef": w[1] / 2,
-                                 "rot0": 0, "rot1": 0, "rot2": 0, "tipLen": 0.25},
+                                 "rot0": 0, "rot1": 0, "rot2": 0, "tipLen": c.get("tiplen", 0.25)},
                            "src": cid, "type": "tube", "visible": True})
         g = {k: v for k, v in cont.items() if k not in ("children", "id", "name", "parent", "gpivot", "cont")}
         g.update({"children": [cid, tid], "id": gid, "name": lk["id"], "parent": cont["id"], "cont": False,
@@ -176,7 +178,8 @@ def events(d, bp, extra):
 
 
 def default_controls(bp):
-    return {lk["id"]: {"len": 0.0, "w": 1.0, "t": 1.0, "bend": lk["bend"]} for lk in bp["locks"]}
+    return {lk["id"]: {"len": 0.0, "w": 1.0, "t": 1.0, "bend": lk["bend"], "lat": 0.0, "root": 0.0,
+                       "layer": lk.get("layer", 0.0), "tipw": 1.0, "tiplen": 0.10} for lk in bp["locks"]}
 
 
 def resample(pts, n):
