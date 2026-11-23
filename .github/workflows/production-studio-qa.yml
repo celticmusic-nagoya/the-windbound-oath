@@ -58,7 +58,7 @@ jobs:
       - name: Stage isolated browser distribution
         run: |
           mkdir -p dist
-          cp index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js gallery-manifest.json README.md dist/
+          cp index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js gallery-manifest.json README.md dist/
           cp -r vendor published dist/
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > distribution-sha256.txt
       - uses: actions/upload-artifact@v4

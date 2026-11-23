@@ -73,12 +73,21 @@ try{
   if(hasImage)assert.equal(await categoryCards.nth(i).locator('img').count(),1,'missing category cover: '+id);
  }
 
+ // UX regression: bundled stylesheet, breadcrumbs, 390px layout and QA metadata.
+ const uxCss=await page.request.get('http://127.0.0.1:8766/studio-ux.css');
+ assert.equal(uxCss.status(),200,'UX stylesheet missing from published bundle');
+ assert.equal(await page.locator('.gallery-breadcrumb').count(),1,'root breadcrumb missing');
+ await page.setViewportSize({width:390,height:844});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'390px gallery overflow');
+ await page.setViewportSize({width:360,height:780});
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
  assert.equal(await images.count(),manifest.entries.filter(e=>isCliff(e)&&photo(e)).length);
  // Public gallery presence does not prove preservation of the source ZIP.
  const cliffEntries=manifest.entries.filter(e=>isCliff(e));
+ assert.equal(await page.locator('#published-gallery article .gallery-meta').count(),cliffEntries.length,'QA/adoption chips missing');
+ assert.ok(await page.locator('.gallery-breadcrumb').innerText().then(t=>t.includes('制作領域')&&t.includes('風待ちの崖')),'detail breadcrumb missing');
  const preservationLabels=page.locator('#published-gallery article .gallery-preservation');
  assert.equal(await preservationLabels.count(),cliffEntries.length);
  // The gallery includes non-entry controls; only article tiles are counted.

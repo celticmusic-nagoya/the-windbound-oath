@@ -27,7 +27,8 @@ async function loadPublishedGallery(){
  }
  function renderEntry(e){
  const tile=document.createElement("article");tile.className="tile";
- const label=document.createElement("p");label.textContent=e.name+" / QA: "+e.qa+" / 採用: "+e.adoption;tile.append(label);
+ const label=document.createElement("h3");label.textContent=e.name;tile.append(label);
+ const meta=document.createElement("div");meta.className="gallery-meta";for(const [key,value] of [["QA",e.qa],["採用",e.adoption]]){const chip=document.createElement("span");chip.className="gallery-chip";chip.textContent=key+": "+value;meta.append(chip);}tile.append(meta);
  const preservation=document.createElement("p");preservation.className="gallery-preservation";preservation.textContent="原Artifact保全: "+(e.preservation_status==="PRESERVED_AND_READBACK_VERIFIED"?"manifest申告：再取得SHA検証済み（独立未検証）":e.preservation_status==="PRESERVATION_BLOCKED"?"権利確認待ち・未保全":"未検証（公開画像と原ZIPの保全は別）");tile.append(preservation);
  const source=document.createElement("a");source.href="https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/"+Number(e.run_id)+"/artifacts/"+Number(e.artifact_id);source.textContent="生成元 Artifact";if(e.source_type==="git"&&/^[a-f0-9]{40}$/.test(e.head)&&/^assets\/candidates\/LIND-(HOME|BUILD)-01\/[\w./-]+\.png$/.test(e.source_path)&&!e.source_path.split("/").includes("..")){source.href="https://github.com/celticmusic-nagoya/the-windbound-oath/blob/"+e.head+"/"+e.source_path;source.textContent="生成元 Git成果物";}tile.append(source);
  if(/\.(png|jpe?g)$/.test(e.path)){const img=document.createElement("img");img.src=base+e.path;img.loading="lazy";img.alt=e.name;tile.prepend(img);}
@@ -64,13 +65,16 @@ async function loadPublishedGallery(){
   const count=document.createElement("small");count.textContent=entries.length+" 件";button.append(count);
   button.onclick=click;area.append(button);
  }
+ function navigation(items){const nav=document.createElement("nav");nav.className="gallery-breadcrumb";nav.setAttribute("aria-label","成果物の階層");items.forEach((item,i)=>{if(i){const sep=document.createElement("span");sep.textContent=" / ";sep.setAttribute("aria-hidden","true");nav.append(sep);}if(item.action){const b=document.createElement("button");b.type="button";b.textContent=item.label;b.onclick=item.action;nav.append(b);}else{const current=document.createElement("strong");current.textContent=item.label;current.setAttribute("aria-current","page");nav.append(current);}});area.append(nav);}
  function home(){
   area.replaceChildren();area.classList.add("category-grid");
+  navigation([{label:"制作領域"}]);
   status.textContent=valid.length+" 件 / カテゴリから閲覧";
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
  function subhome(id,title){
   area.replaceChildren();area.classList.add("category-grid");
+  navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
   status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
@@ -81,6 +85,7 @@ async function loadPublishedGallery(){
  }
  function detail(id,title,goBack=home,subset=null){
  area.replaceChildren();area.classList.remove("category-grid");
+ navigation([{label:"制作領域",action:home},{label:title}]);
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
  const entries=[...(subset||groups.get(id))].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
  const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
@@ -109,7 +114,7 @@ async function loadPublishedGallery(){
  const filter=document.createElement("select");filter.className="category-back";filter.setAttribute("aria-label","制作段階");for(const name of ["すべて",...stages]){const opt=document.createElement("option");opt.value=name;opt.textContent=name;filter.append(opt);}area.append(filter);
  const search=document.createElement("input");search.type="search";search.placeholder="画像名・制作段階・QAで検索";search.setAttribute("aria-label","成果物検索");search.className="gallery-search";area.append(search);
  for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";tile.dataset.search=[e.name,e.stage,e.qa,e.adoption,e.head,e.run_id,e.artifact_id].join(" ").toLowerCase();const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=base+e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
- const apply=()=>{let count=0;const q=search.value.trim().toLowerCase();for(const tile of area.querySelectorAll("article")){tile.hidden=(filter.value!=="すべて"&&tile.dataset.stage!==filter.value)||!tile.dataset.search.includes(q);if(!tile.hidden)count++;}status.textContent=title+" / "+count+" / "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;
+ const apply=()=>{let count=0;const q=search.value.trim().toLowerCase();for(const tile of area.querySelectorAll("article")){tile.hidden=(filter.value!=="すべて"&&tile.dataset.stage!==filter.value)||!tile.dataset.search.includes(q);if(!tile.hidden)count++;}status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;
  if(!entries.length){filter.hidden=true;search.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
  home();
