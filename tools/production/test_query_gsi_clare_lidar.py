@@ -67,6 +67,16 @@ class CoverageQueryTests(unittest.TestCase):
             self.assertEqual(data["status"],"PARTIAL")
             self.assertEqual(data["record_count"],0)
 
+    def test_full_page_is_partial(self):
+        result,calls=self.run_query(["--limit","1"])
+        self.assertEqual(result["status"],"PARTIAL")
+        self.assertTrue(result["records"][0]["page_full"])
+
+    def test_invalid_limit_rejected(self):
+        with patch.object(sys,"argv",["gsi","--output","unused.json","--limit","0"]),contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as cm: mod.main()
+        self.assertEqual(cm.exception.code,2)
+
     def test_invalid_bbox_rejected(self):
         with patch.object(sys,"argv",["gsi","--output","unused.json","--bbox-itm","10","20","9","30"]),contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as cm: mod.main()
