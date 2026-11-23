@@ -26,6 +26,10 @@ for x in selection:
             subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a}/zip'],stdout=out,check=True)
     import hashlib
     digest=meta.get('digest','')
+    expected=x.get('artifact_digest')
+    if expected is not None:
+        assert isinstance(expected,str) and len(expected)==71 and expected.startswith('sha256:'), 'invalid pinned archive digest'
+        assert digest==expected, f'archive digest changed: {a}'
     assert digest.startswith('sha256:') and hashlib.file_digest(target.open('rb'),'sha256').hexdigest()==digest[7:]
     assert target.stat().st_size <= 128*1024*1024
     active.append(x)

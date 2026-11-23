@@ -36,8 +36,8 @@ jobs:
           PY
       - name: Retention and Python preflight
         run: |
-          python -m py_compile artifact-sync.py retention.py test_retention.py discover-gallery.py merge-gallery.py
-          python -m unittest -v test_retention
+          python -m py_compile artifact-sync.py retention.py test_retention.py test_selection_pins.py discover-gallery.py merge-gallery.py
+          python -m unittest -v test_retention test_selection_pins
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

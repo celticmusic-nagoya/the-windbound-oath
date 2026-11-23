@@ -57,10 +57,13 @@ def stage(spec, source, dest):
                     if any("uri" in x for k in ("buffers","images") for x in meta.get(k,[])):
                         raise ValueError("external model resources")
                 digest=hashlib.sha256(data).hexdigest()
+                expected=item.get("entry_sha256",{}).get(name)
+                if expected is not None and digest != expected:
+                    raise ValueError(f"pinned image SHA mismatch: {name}")
                 filename=digest+ext
                 (dest/filename).write_bytes(data)
                 total+=len(data)
-                records.append(dict(name=info.filename,path="published/"+filename,sha256=digest,bytes=len(data),run_id=run,artifact_id=artifact,head=head,category=category,stage=stage_name,created_at=item.get("created_at",""),cover=name==item.get("cover"),qa="NOT_RUN",adoption="UNDETERMINED"))
+                records.append(dict(name=info.filename,path="published/"+filename,sha256=digest,bytes=len(data),run_id=run,artifact_id=artifact,head=head,category=category,stage=stage_name,created_at=item.get("created_at",""),cover=name==item.get("cover"),qa="NOT_RUN",adoption="UNDETERMINED",expires_at=item.get("expires_at",""),review_ref=item.get("review_ref",""),entry_pin_verified=expected is not None))
     policy=json.loads(pathlib.Path(__file__).with_name("retention-policy.json").read_text())
     selected=select(records,datetime.now(timezone.utc),policy["soft_gallery_budget_bytes"],policy["recent_days"])
     (dest.parent/"gallery-manifest.json").write_text(json.dumps({"version":1,"entries":selected["entries"]},ensure_ascii=False,indent=2),encoding="utf-8")
