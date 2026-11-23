@@ -58,7 +58,6 @@ try{
  const hair=manifest.entries.filter(e=>photo(e)&&/HairHarpy v[34]/.test(e.stage||''));
  if(hair.some(e=>e.stage.includes('v3'))&&hair.some(e=>e.stage.includes('v4'))){
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
- await page.getByRole('button',{name:/モルウェン/}).click();
  await page.getByRole('button',{name:/ヘアアセット/}).click();
  await page.getByRole('button',{name:'画像比較',exact:true}).click();
  const dialog=page.locator('dialog');
