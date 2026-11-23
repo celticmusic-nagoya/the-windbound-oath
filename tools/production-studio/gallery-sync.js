@@ -50,7 +50,7 @@ async function loadPublishedGallery(){
  const groups=new Map(categories.map(([id])=>[id,assigned.filter(x=>x.root===id).map(x=>x.entry)]));
  function categoryButton(title,entries,click){
   const button=document.createElement("button");button.className="category-card";button.type="button";
-  const cover=entries.find(e=>e.cover===true&&/\\.(png|jpe?g)$/.test(e.path))||entries.find(e=>/\\.(png|jpe?g)$/.test(e.path));
+  const cover=entries.find(e=>e.cover===true&&/\.(png|jpe?g)$/.test(e.path))||entries.find(e=>/\.(png|jpe?g)$/.test(e.path));
   if(cover){const img=document.createElement("img");img.src=base+cover.path;img.alt="";img.loading="lazy";button.append(img);}
   else {const placeholder=document.createElement("span");placeholder.className="category-placeholder";placeholder.textContent="未同期";button.append(placeholder);}
   const label=document.createElement("strong");label.textContent=title;button.append(label);
