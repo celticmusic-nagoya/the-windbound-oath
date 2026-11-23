@@ -83,6 +83,7 @@ def target_issues(target, request):
         else:
             for metric, rule in corrections.items():
                 if (not isinstance(rule, dict) or not present(rule.get("operation_id"))
+                        or rule.get("qualified") is not True
                         or not matches_digest(rule.get("evidence_sha256"))
                         or not finite(rule.get("max_delta")) or rule["max_delta"] <= 0
                         or not isinstance(rule.get("affects"), list)

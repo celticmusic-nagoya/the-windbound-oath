@@ -31,7 +31,7 @@ class ItemCorrectionTests(unittest.TestCase):
             protection=dict(scope_id="scalp", baseline_sha256="d"*64),
             dependency_fingerprint=digest_record(dep),
             corrections={"length": dict(operation_id="adjust-length", evidence_sha256="e"*64,
-                                       max_delta=.6, affects=["length"], requires_pass=[])},
+                                       qualified=True, max_delta=.6, affects=["length"], requires_pass=[])},
         )
         self.stage = dict(id="lock", qualified=True, deps=[], seconds=5, fingerprint="fixture")
         self.request = dict(target_id="lock", asset_id="MORWEN", stage="lock",
@@ -117,6 +117,13 @@ class ItemCorrectionTests(unittest.TestCase):
             self.execute()
         self.assertNotIn("length", self.calls)
         self.assertEqual(self.journal()["events"][-1]["blocked"]["length"], "interference_or_dependency")
+
+    def test_unqualified_rule_is_rejected_before_any_native_callback(self):
+        self.target["corrections"]["length"]["qualified"] = False
+        with self.assertRaisesRegex(ValueError, "correction_qualification:length"):
+            self.execute()
+        self.assertEqual(self.calls, [])
+        self.assertFalse(list(self.root.glob("factory-*")))
 
     def test_protection_and_dependency_mismatch_never_reach_correction(self):
         self.protected = "0"*64

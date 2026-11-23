@@ -11,7 +11,7 @@ from tempfile import mkdtemp
 import time
 
 from session_plan import sha
-from shared_blueprint_contract import finite, measurement_issues, metric_state
+from shared_blueprint_contract import finite, measurement_issues, metric_state, target_issues
 
 
 def correction_states(target, observation):
@@ -96,6 +96,9 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
     """Run one protected precision stage and return a controller checkpoint."""
     root = Path(root).resolve()
     source = Path(source)
+    issues = target_issues(target, request)
+    if issues:
+        raise ValueError("factory blueprint blocked: " + ", ".join(issues))
     if sha(source) != request["source_sha256"]:
         raise ValueError("factory source SHA mismatch")
     attempt = Path(mkdtemp(prefix="factory-", dir=root))
