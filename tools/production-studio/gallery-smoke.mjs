@@ -9,7 +9,7 @@ const manifest=JSON.parse(await readFile(join(root,'gallery-manifest.json')));
 assert.ok(manifest.entries.length>=5);
 const isCliff=e=>e.category==='cliff'||e.run_id===44708204132;
 const photo=e=>/\.(png|jpe?g)$/.test(e.path);
-const morwen=manifest.entries.filter(e=>e.category==='morwen');
+const morwen=manifest.entries.filter(e=>e.category==='morwen'||/hairharpy|ヘアアセット/i.test([e.name,e.stage,e.asset_id].join(' ')));
 for(const e of manifest.entries){const data=await readFile(join(root,e.path));assert.equal(data.length,e.bytes);assert.equal(createHash('sha256').update(data).digest('hex'),e.sha256);}
 await mkdir('gallery-qa',{recursive:true});
 const server=spawn('python3',['-m','http.server','8766','--bind','127.0.0.1','--directory',root],{stdio:'ignore'});
@@ -80,6 +80,7 @@ try{
  if(!models.length)continue;
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:new RegExp(label)}).click();
+ if(category==='morwen'||category==='village')await page.getByRole('button',{name:/全件/}).click();
  const buttons=page.locator('#published-gallery').getByRole('button',{name:'3D表示'});
  assert.equal(await buttons.count(),models.length);
  await buttons.first().click();
