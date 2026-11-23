@@ -320,6 +320,9 @@ def fix_crown(o, lift=0.0015):
     return {"crown_faces_reoriented": len(inward), "crown_lift_m": lift, "crown_uv": "radial StrandUV"}
 
 
+FINISH_SPP = 128  # r5 finding: 32 spp left tip noise; 128 spp enables OIDN in render_views
+
+
 def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
     bp = json.loads(Path(bp_path).read_text())
     d = json.loads(Path(native).read_text())
@@ -338,7 +341,9 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
         for o in set(bpy.data.objects) - before:
             o.name = name
             o.data.materials.clear()
-            o.data.materials.append(mat if col is None else pbr_factory.build_material("TWO_QUAL_skin", col))
+            crown_mat = pbr_factory.build_hair_npr("TWO_HAIR_NPR_CROWN", [58, 44, 66], [24, 18, 34], [214, 196, 232],
+                                                   band_v=5.0)  # scalp fill: no angel-ring band (radial UV drew a ring)
+            o.data.materials.append(crown_mat if col is None else pbr_factory.build_material("TWO_QUAL_skin", col))
             o.data.polygons.foreach_set("use_smooth", [True] * len(o.data.polygons))
             if col is None:
                 crown_fix.update(fix_crown(o))
@@ -346,10 +351,13 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
     names = sorted(o.name for o in objs.values()) + extra
     stats = render_views.render(bpy.context.scene, "preview", Path(renders) / "matched", names, keep=())
     bangs = [objs[lk["id"]].name for lk in bp["locks"] if lk["role"] in ("bang", "face_frame") and lk["id"] in objs]
+    render_views.MODES["views"] = {"res": 768, "clay": False, "cycles_spp": FINISH_SPP,
+                                   "cycles_views": ("front", "right", "back", "left", "three_quarter"), "cycles_res": 768}
+    views = render_views.render(bpy.context.scene, "views", Path(renders) / "views", names, keep=())
     render_views.VIEWS.setdefault("top", (0.0, 0.0001, 1.0))
-    render_views.MODES["top"] = {"res": 768, "clay": False, "cycles_spp": 32, "cycles_views": ("top",), "cycles_res": 768}
+    render_views.MODES["top"] = {"res": 768, "clay": False, "cycles_spp": FINISH_SPP, "cycles_views": ("top",), "cycles_res": 768}
     top = render_views.render(bpy.context.scene, "top", Path(renders) / "top", names, keep=())
-    render_views.MODES["face"] = {"res": 768, "clay": False, "cycles_spp": 32, "cycles_views": ("front", "three_quarter"),
+    render_views.MODES["face"] = {"res": 768, "clay": False, "cycles_spp": FINISH_SPP, "cycles_views": ("front", "three_quarter"),
                                   "cycles_res": 768}
     face = render_views.render(bpy.context.scene, "face", Path(renders) / "face", bangs + [n for n in extra if n == "QUAL_head"],
                                keep=tuple(names))
@@ -361,7 +369,7 @@ def FINISH(native, bp_path, out, out_blend, renders, head_obj, crown_obj=None):
     bpy.context.scene["two_hh_finish"] = bp["blueprint_id"]
     bpy.ops.wm.save_as_mainfile(filepath=out_blend, compress=False)
     res = {"uv": uvc, "uv_ok": all(v["inside_unit"] for v in uvc.values()), "material": mat.name,
-           "renders_matched": stats, "renders_face": face, "renders_top": top, "objects": names, "crown_fix": crown_fix}
+           "renders_matched": stats, "renders_face": face, "renders_top": top, "renders_views": views, "objects": names, "crown_fix": crown_fix}
     Path(out).write_text(json.dumps(res, indent=1, sort_keys=True))
     print("TWO_HHV_FINISH", res["uv_ok"], len(stats), len(face))
 

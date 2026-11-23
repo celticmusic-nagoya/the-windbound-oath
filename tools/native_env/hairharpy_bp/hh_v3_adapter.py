@@ -14,7 +14,8 @@ MEASURE_ID = "hh_volume_lock_metrics_v3"
 OPERATION_ID = "hh_native_spine_profile_layer_controls_v3"
 CORRECTED = (("length", "len", "u_length"), ("width_mid", "w", "u_section"), ("thickness_mid", "t", "u_section"),
              ("kappa_50", "bend", "u_kappa"), ("taper_085", "tipw", "u_taper"))
-PHASES = (("separation", ()), ("shape", ("len", "w", "t", "tipw")), ("curvature", ("bend",)), ("shape_recheck", ("len",)))
+PHASES = (("separation", ()), ("shape", ("len", "w", "t", "tipw")), ("separation_b", ()), ("curvature", ("bend",)),
+          ("shape_recheck", ("len",)), ("curvature_recheck", ("bend",)), ("separation_c", ()))
 RANK = {"top": 0, "back": 1, "side": 1, "face_frame": 2, "bang": 3}
 DAMP = {"len": 0.9, "w": 0.9, "t": 0.9, "tipw": 0.8, "bend": 0.5}
 CHECKED = (("width_root", "u_section"), ("thickness_root", "u_section"))
@@ -86,12 +87,12 @@ class V3Adapter(VolumeAdapter):
         role = {lk["id"]: lk["role"] for lk in self.bp["locks"]}
         shell = {lk["id"]: 1 if lk.get("shell") == "outer" else 0 for lk in self.bp["locks"]}
         obs = observed
-        before, frozen = observed, set()
+        before, frozen, halved = observed, set(), set()
         self.frozen = frozen
         for phase, controls in PHASES:
-            for it in range(max_iter + 2 if phase == "separation" else max_iter):
+            for it in range(max_iter + 2 if phase.startswith("separation") else max_iter):
                 moved, prev = {}, {}
-                if phase == "separation":
+                if phase.startswith("separation"):
                     seen = set()
                     for p in obs.get("penetration_pairs", []):
                         a, b = p["a"], p["b"]
@@ -143,21 +144,45 @@ class V3Adapter(VolumeAdapter):
                         g = (y1 - y0) / (x1 - x0)
                         if g * gain[lid][c] > 0 and 0.2 < abs(g / gain[lid][c]) < 5:
                             gain[lid][c] = g
-                # protected-scope guard: a shape/curvature step may not push a lock into a neighbour
-                guard = []
-                if phase != "separation":
-                    d0, d1 = lock_depth(before), lock_depth(obs)
-                    for (lid, c, key), (x0, _) in prev.items():
-                        if d1.get(lid, 0.0) > max(d0.get(lid, 0.0) + 0.0003, 0.001):
-                            ctl[lid][c] = x0
-                            frozen.add((lid, c))
-                            guard.append(f"{lid}:{c}")
+                # protected-scope guard: a shape/curvature step may not push a lock into a neighbour nor break another
+                # in-tolerance metric of the same lock (coupling). First trip keeps half the step (Causal Retry: smaller
+                # step, same qualified op) and is re-verified; a second trip restores the last safe value and freezes.
                 self.history.append({"phase": f"{phase}{it}", "moved": moved, "residuals": obs["residuals"],
-                                     "penetration": obs["penetration"], "structure": obs["structure"],
-                                     "guard_reverted": guard})
-                if guard:
-                    self.apply(native, ctl, deadline, f"{phase}{it}g")
-                    m, ev = self.measure_raw(native, deadline, f"{phase}{it}g_m")
-                    obs = self.observation(native, target, m, ev)
+                                     "penetration": obs["penetration"], "structure": obs["structure"]})
+                if not phase.startswith("separation"):
+                    def ok(o, k):
+                        return abs(o["residuals"][k]) + o["uncertainty"][k] + target["uncertainty"][k] <= tol[k]
+                    check = dict(prev)
+                    for rnd in range(2):
+                        # pairs the separation phases can resolve (different design rank or shell) are left to them
+                        same = lambda p: RANK[role[p["a"]]] == RANK[role[p["b"]]] and shell[p["a"]] == shell[p["b"]]
+                        d0 = lock_depth({"penetration_pairs": [p for p in before.get("penetration_pairs", []) if same(p)]})
+                        d1 = lock_depth({"penetration_pairs": [p for p in obs.get("penetration_pairs", []) if same(p)]})
+                        guard, nxt = [], {}
+                        for (lid, c, key), (x0, y0) in check.items():
+                            pushed = d1.get(lid, 0.0) > max(d0.get(lid, 0.0) + 0.0003, 0.001)
+                            broke = [f"{lid}_{m2}" for m2, c2, _ in CORRECTED if c2 != c
+                                     and ok(before, f"{lid}_{m2}") and not ok(obs, f"{lid}_{m2}")]
+                            if not (pushed or broke):
+                                continue
+                            if rnd == 0 and (lid, c) not in halved:
+                                ctl[lid][c] = x0 + 0.5 * (ctl[lid][c] - x0)
+                                halved.add((lid, c))
+                                nxt[(lid, c, key)] = (x0, y0)
+                                action = "half_step"
+                            else:
+                                ctl[lid][c] = x0
+                                frozen.add((lid, c))
+                                action = "frozen"
+                            guard.append({"control": f"{lid}:{c}", "pushed_into_neighbour": pushed, "broke": broke,
+                                          "action": action})
+                        if not guard:
+                            break
+                        self.apply(native, ctl, deadline, f"{phase}{it}g{rnd}")
+                        m, ev = self.measure_raw(native, deadline, f"{phase}{it}g{rnd}_m")
+                        obs = self.observation(native, target, m, ev)
+                        self.history.append({"phase": f"{phase}{it}_guard{rnd}", "guard": guard, "residuals": obs["residuals"],
+                                             "penetration": obs["penetration"], "structure": obs["structure"]})
+                        check = nxt
                 before = obs
         return obs

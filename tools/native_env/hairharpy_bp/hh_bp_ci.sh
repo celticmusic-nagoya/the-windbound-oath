@@ -29,10 +29,10 @@ if [ "$mode" = v2 ]; then
   /tmp/b530/blender -b --factory-startup --python "$here/mk_qual_head.py" -- /tmp/qual_head.obj > /dev/null 2>&1
   python3 "$here/hh_volume_session.py" --root "$out/session/root" --head /tmp/qual_head.obj --engine "$repo/engine468v/tools/production_qa" \
     --blueprint "$here/qual_hair_blueprint_v2.json" --blender /tmp/b530/blender --display :91 --hh-sha "$asset_sha" --blender-version 5.3.0
-elif [ "$mode" = v3 ]; then
+elif [ "$mode" = v3 ] || [ "$mode" = v4 ]; then
   /tmp/b530/blender -b --factory-startup --python "$here/mk_qual_head.py" -- /tmp/qual_head.obj > /dev/null 2>&1
   python3 "$here/hh_v3_session.py" --root "$out/session/root" --head /tmp/qual_head.obj --engine "$repo/engine468v/tools/production_qa" \
-    --blueprint "$here/qual_hair_blueprint_v3.json" --blender /tmp/b530/blender --display :91 --hh-sha "$asset_sha" --blender-version 5.3.0
+    --blueprint "$here/qual_hair_blueprint_$mode.json" --blender /tmp/b530/blender --display :91 --hh-sha "$asset_sha" --blender-version 5.3.0
 elif [ "$mode" = run1 ]; then
   /tmp/b530/blender -b --factory-startup --python "$here/mk_qual_head.py" -- /tmp/qual_head.obj > /dev/null 2>&1
   python3 "$here/hh_session.py" --root "$out/session/root" --mode run1 --head /tmp/qual_head.obj "${args[@]}"
