@@ -35,7 +35,7 @@ try{
  assert.equal(await preservationLabels.count(),cliffEntries.length);
  for(let i=0;i<cliffEntries.length;i++){
   const e=[...cliffEntries].sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')))[i];
-  const expected=e.preservation_status==='PRESERVED_AND_READBACK_VERIFIED'?'再取得SHA検証済み':e.preservation_status==='PRESERVATION_BLOCKED'?'権利確認待ち・未保全':'未検証';
+  const expected=e.preservation_status==='PRESERVED_AND_READBACK_VERIFIED'?'manifest申告：再取得SHA検証済み（独立未検証）':e.preservation_status==='PRESERVATION_BLOCKED'?'権利確認待ち・未保全':'未検証';
   assert.ok((await preservationLabels.nth(i).innerText()).includes(expected));
  }
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'360px gallery overflow');
