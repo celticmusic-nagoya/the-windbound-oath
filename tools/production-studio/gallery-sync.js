@@ -46,7 +46,7 @@ async function loadPublishedGallery(){
  function detail(id,title){
  area.replaceChildren();area.classList.remove("category-grid");
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=()=>home();area.append(back);
- const entries=groups.get(id);status.textContent=title+" / "+entries.length+" 件 / 公開用候補";
+ const entries=[...groups.get(id)].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 公開用候補";
  const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
  if(photos.length>=2){
  const compare=document.createElement("button");compare.type="button";compare.className="category-back";compare.textContent="画像比較";area.append(compare);
@@ -71,9 +71,10 @@ async function loadPublishedGallery(){
  }
  const stages=[...new Set(entries.map(e=>e.stage||"未分類"))];
  const filter=document.createElement("select");filter.className="category-back";filter.setAttribute("aria-label","制作段階");for(const name of ["すべて",...stages]){const opt=document.createElement("option");opt.value=name;opt.textContent=name;filter.append(opt);}area.append(filter);
- for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=base+e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
- filter.onchange=()=>{for(const tile of area.querySelectorAll("article"))tile.hidden=filter.value!=="すべて"&&tile.dataset.stage!==filter.value;};
- if(!entries.length){filter.hidden=true;const p=document.createElement("p");p.textContent="公開用成果物はまだ同期されていません。";area.append(p);}
+ const search=document.createElement("input");search.type="search";search.placeholder="画像名・制作段階・QAで検索";search.setAttribute("aria-label","成果物検索");search.className="gallery-search";area.append(search);
+ for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";tile.dataset.search=[e.name,e.stage,e.qa,e.adoption,e.head,e.run_id,e.artifact_id].join(" ").toLowerCase();const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{const dialog=document.createElement("dialog");const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();const full=document.createElement("img");full.src=base+e.path;full.alt=e.name;dialog.className="gallery-lightbox";dialog.append(close,full);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();};}area.append(tile);}
+ const apply=()=>{let count=0;const q=search.value.trim().toLowerCase();for(const tile of area.querySelectorAll("article")){tile.hidden=(filter.value!=="すべて"&&tile.dataset.stage!==filter.value)||!tile.dataset.search.includes(q);if(!tile.hidden)count++;}status.textContent=title+" / "+count+" / "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;
+ if(!entries.length){filter.hidden=true;search.hidden=true;const p=document.createElement("p");p.textContent="公開用成果物はまだ同期されていません。";area.append(p);}
  }
  home();
  }catch(e){status.textContent="同期一覧未取得: "+e.message;}
