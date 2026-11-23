@@ -17,6 +17,10 @@ try {
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
+ assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
+ await page.locator('#local-title summary').click();
+ assert.equal(await page.locator('#local-title').evaluate(e=>e.open),true);
  const fixture=Buffer.from('diagnostic only');
  await page.locator('#artifact-zip').setInputFiles({name:'diagnostic.zip',mimeType:'application/zip',buffer:fixture});
  await page.locator('#artifact-digest').fill(createHash('sha256').update(fixture).digest('hex'));
