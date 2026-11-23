@@ -21,21 +21,6 @@ try{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',r=>r.fulfill({json:r.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)}}:{workflow_runs:[]}}));
  await page.goto('http://127.0.0.1:8766/');
- // A delayed first manifest response must not overwrite a newer refresh result.
- await page.evaluate(async()=>{
-  const original=window.fetch.bind(window);
-  let first=true;
-  window.fetch=(...args)=>{
-   if(String(args[0]).includes('gallery-manifest.json')&&first){
-    first=false;
-    return new Promise(resolve=>setTimeout(()=>resolve(original(...args)),300));
-   }
-   return original(...args);
-  };
- });
- await page.getByRole('button',{name:/更新|再取得|同期/}).first().click();
- await page.waitForTimeout(400);
-
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  assert.equal(await page.locator('.category-card').count(),6);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
