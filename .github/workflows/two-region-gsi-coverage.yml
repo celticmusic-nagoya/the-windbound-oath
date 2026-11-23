@@ -1,0 +1,41 @@
+name: TWO Ireland region GSI coverage probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/map_blueprint/gsi_coverage_probe.py
+      - tests/test_gsi_coverage_probe.py
+      - .github/workflows/two-region-gsi-coverage.yml
+permissions:
+  contents: read
+concurrency:
+  group: two-region-gsi-coverage-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit tests
+        run: python -m unittest discover -s tests -p test_gsi_coverage_probe.py -v
+      - name: Query GSI point coverage
+        id: probe
+        continue-on-error: true
+        run: |
+          python tools/map_blueprint/gsi_coverage_probe.py --out "$RUNNER_TEMP/gsi_coverage_result.json"
+      - name: Save evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsi-coverage-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/gsi_coverage_result.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Report state
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/gsi_coverage_result.json" ]; then
+            python -c 'import json,os; d=json.load(open(os.environ["RUNNER_TEMP"]+"/gsi_coverage_result.json")); print("GSI COVERAGE:",d["coverage"],"ERROR:",d["error"]); assert d["coverage"] in ("INTERSECTS","NO_INTERSECTION"), "Coverage unverified (nonfatal for production)"' || true
+          fi
