@@ -17,7 +17,10 @@
  const el=(tag,content)=>{const n=document.createElement(tag);n.textContent=content;return n;};
  async function get(path){
   const response=await fetch(api+path,{headers:{Accept:"application/vnd.github+json"},credentials:"omit",cache:"no-store"});
-  if(!response.ok)throw new Error("HTTP "+response.status);
+  if(!response.ok){
+   const limited=response.status===403||response.status===429;
+   throw new Error(limited?"GitHub API制限またはアクセス拒否 (HTTP "+response.status+")":"HTTP "+response.status);
+  }
   return response.json();
  }
  function addCard(owner,result){
@@ -29,6 +32,7 @@
     el("p","HEAD: "+(p.head?.sha||"UNKNOWN")),
     el("p","PR更新: "+(p.updated_at||"UNKNOWN")));
   }else card.append(el("p","PR取得失敗: "+String(result.reason?.message||result.reason)));
+  card.append(el("p","注意: PR更新時刻は担当の停止・応答・lease更新を証明しません。"));
   const link=el("a","担当PR・最新指示を確認");link.href="https://github.com/"+repo+"/pull/"+owner.id;link.rel="noopener noreferrer";card.append(link);
   const checklist=el("dl","");
   const fields=[
