@@ -60,6 +60,7 @@ def main():
             incomplete = False
             pages = 0
             offset = 0
+            expected_more = False
             while pages < 100:
                 params["resultOffset"] = offset
                 data = get_json(f"{ROOT}/{lid}/query", params)
@@ -67,6 +68,8 @@ def main():
                     raise ValueError(data["error"])
                 page = [x.get("attributes", {}) for x in data.get("features", [])]
                 if not page:
+                    if expected_more:
+                        incomplete = True
                     break
                 new_ids = [x.get(oid) for x in page]
                 if any(v is None or v in seen_ids for v in new_ids) or len(set(new_ids)) != len(new_ids):
@@ -76,6 +79,7 @@ def main():
                 features.extend(page)
                 offset += len(page)
                 pages += 1
+                expected_more = bool(data.get("exceededTransferLimit", False))
                 if not data.get("exceededTransferLimit", False) and len(page) < args.limit:
                     break
             else:
