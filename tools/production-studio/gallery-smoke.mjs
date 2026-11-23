@@ -45,10 +45,10 @@ try{
  assert.equal(refreshCount,2,'expected two refresh requests');
  await page.unroute('**/gallery-manifest.json');
  // Malformed manifest entries are ignored without losing valid gallery entries.
- await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:[null,...manifest.entries]}}));
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:[null,{...manifest.entries[0],name:{unexpected:"object"}},{...manifest.entries[0],stage:[]},...manifest.entries]}}));
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
- assert.equal(await page.locator('.category-card').count(),6,'null entry crashed gallery');
+ assert.equal(await page.locator('.category-card').count(),6,'malformed metadata crashed gallery');
  await page.unroute('**/gallery-manifest.json');
  assert.equal(await page.locator('.category-card').count(),6);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
