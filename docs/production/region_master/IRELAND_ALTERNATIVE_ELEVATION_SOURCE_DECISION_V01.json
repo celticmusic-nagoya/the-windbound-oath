@@ -1,0 +1,87 @@
+{
+  "schema": "two.world.alternative_elevation_source_decision.v1",
+  "status": "PROVISIONAL_SOURCE_SELECTION_NOT_CANON",
+  "date": "2026-11-24",
+  "purpose": "Unblock W03 source selection without conflating Ireland reference terrain and fictional world geometry",
+  "selection_policy": {
+    "primary": "Publicly accessible DEM with explicit redistribution/derivative-game-use rights, measured resolution, CRS, vertical datum, provenance, checksums",
+    "fallback": "Procedural provisional macro-relief with uncertainty explicitly recorded; no invented native measurements claimed",
+    "forbidden": "Google Earth imagery/3D extraction into game geometry or textures without separate explicit rights",
+    "existing_gsi_status": "NOT_VERIFIED_DNS_FAILURE",
+    "avoid_repeated_dns_retries": true
+  },
+  "candidates": [
+    {
+      "id": "ALT01",
+      "provider": "Copernicus DEM",
+      "url": "https://dataspace.copernicus.eu/",
+      "role": "regional elevation reference",
+      "priority": 1,
+      "verification": "PENDING_PRODUCT_LICENSE_COVERAGE_RESOLUTION_VERTICAL_DATUM_AND_SHA",
+      "note": "Copernicus DEM product terms and download entitlement must be checked for the exact product; website alone is not license proof"
+    },
+    {
+      "id": "ALT02",
+      "provider": "OpenTopography",
+      "url": "https://opentopography.org/",
+      "role": "catalog/discovery for source DEM datasets",
+      "priority": 2,
+      "verification": "PENDING_PER_DATASET_LICENSE_AND_PROVENANCE",
+      "note": "Portal is an aggregator; each underlying dataset requires separate licensing and access checks"
+    },
+    {
+      "id": "ALT03",
+      "provider": "GEBCO",
+      "url": "https://www.gebco.net/",
+      "role": "offshore bathymetry and coastal context only",
+      "priority": 3,
+      "verification": "PENDING_PRODUCT_LICENSE_VERTICAL_DATUM_AND_RESOLUTION",
+      "note": "Do not treat bathymetry as high-resolution terrestrial cliff DEM"
+    },
+    {
+      "id": "ALT04",
+      "provider": "OpenStreetMap",
+      "url": "https://www.openstreetmap.org/",
+      "role": "roads/rivers/settlement topology reference",
+      "priority": 4,
+      "verification": "PENDING_ODBL_DERIVED_DATABASE_OBLIGATIONS",
+      "note": "Not an elevation raster; avoid merging ODbL geometry into unreviewed proprietary game database"
+    },
+    {
+      "id": "ALT05",
+      "provider": "Google Earth",
+      "url": "https://earth.google.com/web/",
+      "role": "visual observation only",
+      "priority": 5,
+      "verification": "VISUAL_REFERENCE_ONLY",
+      "note": "No scraping, imagery extraction, 3D mesh extraction or use as game texture without specific permission"
+    }
+  ],
+  "art_direction": {
+    "source_terrain": "REFERENCE_ONLY",
+    "fictional_world": "ALVERIA_NON_CANONICAL_COORDINATES",
+    "cliff": "Individual sculpted rock masses, joints, fissures and overhangs must follow approved cliff CG, not coarse DEM",
+    "gentle_terrain": "DEM-informed heightfield permitted after geodata provenance review",
+    "interfaces": "Keep official XYZ, sea-level transform and region/cliff seams unresolved until independent QA"
+  },
+  "acceptance": {
+    "source_dataset_identified": false,
+    "exact_license_checked": false,
+    "downloaded_bytes_sha256": null,
+    "crs": null,
+    "vertical_datum": null,
+    "coverage_qa": "NOT_RUN",
+    "raster_geometry_qa": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "ownership": {
+    "design_pr": 482,
+    "cliff_pr": 421,
+    "region_pr": 364,
+    "no_native_mutations": true,
+    "no_canon_adoption": true
+  }
+}
