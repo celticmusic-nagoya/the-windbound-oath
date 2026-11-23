@@ -21,4 +21,20 @@ done
 test "$(shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png | cut -d ' ' -f1 | sort -u | wc -l | tr -d ' ')" = 4 || return 1
 shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png > evidence/reopen-view-sha256.txt || return 1
 printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
-printf '%s\n' 'CAPTURED_REVIEW_REQUIRED' > evidence/readonly-reopen-status.txt
+# Diagnostic only: measure rear orientation without overwriting existing captures.
+# The shortcut's angle per press has not been calibrated.
+for steps in 5 6 7 8; do
+  "$gui" vroid-shortcut front || return 1
+  sleep 1
+  for ((i=0; i<steps; i++)); do
+    "$gui" vroid-shortcut turn-left || return 1
+  done
+  sleep 1
+  test ! -e "evidence/rear-calibration-$steps.png" || return 1
+  capture_state "rear-calibration-$steps" || return 1
+  test -s "evidence/rear-calibration-$steps.png" || return 1
+done
+"$gui" vroid-shortcut front || return 1
+shasum -a 256 evidence/rear-calibration-{5,6,7,8}.png > evidence/rear-calibration-sha256.txt || return 1
+printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+printf '%s\n' 'CAPTURED_REVIEW_REQUIRED_REAR_SWEEP_NOT_YET_CALIBRATED' > evidence/readonly-reopen-status.txt
