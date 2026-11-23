@@ -5,7 +5,7 @@ Scope: `tools/production-studio/handoff-readiness.js` in Draft PR #484. This is 
 ## Static acceptance
 
 - The HTML has exactly one `handoff-cards`, `handoff-status`, `handoff-refresh`, and loads `handoff-readiness.js` once.
-- The view fetches PR metadata for #468, #427, #421, #364, #484 with GET only; it does not write GitHub state.
+- The view fetches PR metadata for #468, #485, #427, #421, #364, #484 with GET only; it does not write GitHub state.
 - Unknown STOP_ACK, CAS/lease/fencing, checkpoint bytes/independent restore, all-event Actions, G1–G4 must remain explicitly **未検証**.
 - A successful PR fetch, HEAD or recent `updated_at` cannot change **SYNC_UNVERIFIED** to PASS or authorize a backup writer.
 - A failed PR request is displayed without erasing other successfully fetched cards. GitHub 403/429 is identified as API limitation or access refusal, not as owner failure.
@@ -14,7 +14,7 @@ Scope: `tools/production-studio/handoff-readiness.js` in Draft PR #484. This is 
 
 ## Browser / device acceptance (NOT_RUN)
 
-1. Open the branch's Studio page in a local preview; confirm five cards, status text, links and refresh.
+1. Open the branch's Studio page in a local preview; confirm six cards, status text, links and refresh.
 2. Simulate one 404, one 403 and one delayed response; confirm partial failure, API warning and stale-response protection.
 3. Test 360px Android viewport and keyboard focus; verify no horizontal overflow.
 4. Confirm published gallery, ZIP verification, image selection and GLB/VRM viewer have no regressions.
