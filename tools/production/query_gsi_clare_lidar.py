@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Read-only GSI LiDAR coverage discovery. No raster downloads or writes to canon."""
 import argparse
-import hashlib
 import json
 import pathlib
 import urllib.parse
@@ -55,7 +54,9 @@ def main():
                 "exceeded_transfer_limit":data.get("exceededTransferLimit",False)})
         except Exception as e:
             report["errors"].append({"layer_id":lid,"error":str(e)})
-    report["status"] = "PARTIAL" if report["errors"] or any(x["exceeded_transfer_limit"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
+    report["status"] = "PARTIAL" if report["errors"] or not report["records"] or any(x["exceeded_transfer_limit"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
+    report["record_count"] = sum(len(x["features"]) for x in report["records"])
+    report["status"] = "PARTIAL" if report["record_count"] == 0 else report["status"]
     report["raster_downloaded"] = False
     report["raster_sha256"] = None
     pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
