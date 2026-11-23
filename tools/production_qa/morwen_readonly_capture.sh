@@ -52,6 +52,7 @@ for steps in 5 6 7 8; do
   test ! -e "evidence/rear-calibration-$steps.png" || return 1
   capture_state "rear-calibration-$steps" || return 1
   test -s "evidence/rear-calibration-$steps.png" || return 1
+  printf '%s  %s\\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
 done
 "$gui" vroid-shortcut front || return 1
 shasum -a 256 evidence/rear-calibration-{5,6,7,8}.png > evidence/rear-calibration-sha256.txt || return 1
