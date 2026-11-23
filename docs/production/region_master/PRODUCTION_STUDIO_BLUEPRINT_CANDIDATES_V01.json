@@ -156,6 +156,17 @@
       "privacy": "PUBLIC_SAFE",
       "basis": "approved CG traced pixel coordinates v03",
       "note": "23 source-camera pixel landmarks, not orthographic elevation or world geometry"
+    },
+    {
+      "id": "windwaiting-cliff-cg-trace-geometry-audit-v01",
+      "name": "崖CG輪郭 画像座標QA v0.1",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_GEOMETRY_AUDIT_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "45 pixel landmarks in approved CG trace v03",
+      "note": "Computed image-space lengths and bounds; no matched-camera render comparison"
     }
   ],
   "not_included": [
