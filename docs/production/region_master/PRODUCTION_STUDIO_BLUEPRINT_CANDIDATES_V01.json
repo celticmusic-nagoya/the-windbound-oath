@@ -1,0 +1,59 @@
+{
+  "schema": "two.production-studio.blueprint-candidates.v1",
+  "status": "STAGING_ONLY_NOT_DEPLOYED",
+  "source_branch": "docs/ireland-world-source-grounded-plan-20261123",
+  "entries": [
+    {
+      "id": "ireland-story-topology-v04",
+      "name": "物語接続図 v0.4",
+      "path": "docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-region-master-json",
+      "note": "Narrative topology only; not measured geography"
+    },
+    {
+      "id": "ireland-country-source-contract-v04",
+      "name": "国土図面・入力資料契約 v0.4",
+      "path": "docs/production/region_master/IRELAND_COUNTRY_DRAWING_SOURCE_CONTRACT_V04.md",
+      "mime": "text/markdown",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-repository-source",
+      "note": "Specification, not rendered terrain"
+    },
+    {
+      "id": "ireland-continuity-v01",
+      "name": "国土・エリア設計継続資料 v0.1",
+      "path": "docs/production/region_master/IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md",
+      "mime": "text/markdown",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-repository-source",
+      "note": "Already on main"
+    }
+  ],
+  "not_included": [
+    "private handoff source files",
+    "private-source-derived local area sheets",
+    "native Blender assets",
+    "unverified rendered terrain"
+  ],
+  "integration_contract": {
+    "gallery_current_formats": [
+      "png",
+      "jpg",
+      "jpeg",
+      "glb",
+      "vrm"
+    ],
+    "blueprint_svg_requires": "explicit new viewer path or approved raster conversion with source SHA",
+    "markdown_requires": "safe text renderer or GitHub link",
+    "publisher_owner": "Production Studio owning PR; coordinate before integration",
+    "publication": "requires separate authorized publisher and eligibility QA"
+  }
+}
