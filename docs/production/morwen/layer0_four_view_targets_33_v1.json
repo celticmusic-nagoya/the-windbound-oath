@@ -1,0 +1,644 @@
+{
+  "schema": "morwen-layer0-four-view-targets-v1",
+  "status": "PROVISIONAL_2D_TARGETS_NOT_NATIVE_MEASURED",
+  "source_landmarks_blob_sha": "93eefba2426f33b5033d07ba7d7c751a99a12292",
+  "source_artifact": 14602858760,
+  "source_run": 44679568515,
+  "coordinate_system": "Pixel centers in original unmirrored view, origin top left, x right, y down.",
+  "source_size_px": [
+    384,
+    1024
+  ],
+  "source_images": {
+    "front": {
+      "image": "7809.png",
+      "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+    },
+    "right": {
+      "image": "7807.png",
+      "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737"
+    },
+    "back": {
+      "image": "7810.png",
+      "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"
+    },
+    "left": {
+      "image": "7808.png",
+      "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"
+    }
+  },
+  "target_counts": {
+    "front": 9,
+    "right": 8,
+    "left": 8,
+    "back": 8
+  },
+  "targets": [
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "front",
+      "target_id": "crown",
+      "source_landmark_id": "crown",
+      "xy_px": [
+        208,
+        18
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "front",
+      "target_id": "fringe_tip",
+      "source_landmark_id": "fringe_tip",
+      "xy_px": [
+        200,
+        116
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "front",
+      "target_id": "eye_L",
+      "source_landmark_id": "eye_image_left",
+      "xy_px": [
+        188,
+        125
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "front",
+      "target_id": "eye_R",
+      "source_landmark_id": "eye_image_right",
+      "xy_px": [
+        240,
+        124
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "front",
+      "target_id": "nose",
+      "source_landmark_id": "nose_tip",
+      "xy_px": [
+        214,
+        143
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "front",
+      "target_id": "mouth",
+      "source_landmark_id": "mouth_center",
+      "xy_px": [
+        214,
+        159
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "front",
+      "target_id": "chin",
+      "source_landmark_id": "chin",
+      "xy_px": [
+        214,
+        180
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "front",
+      "target_id": "hair_hem_L",
+      "source_landmark_id": "hair_hem_image_left",
+      "xy_px": [
+        148,
+        190
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "front",
+      "target_id": "hair_hem_R",
+      "source_landmark_id": "hair_hem_image_right",
+      "xy_px": [
+        277,
+        189
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "right",
+      "target_id": "crown",
+      "source_landmark_id": "crown",
+      "xy_px": [
+        196,
+        16
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "right",
+      "target_id": "fringe_tip",
+      "source_landmark_id": "fringe_tip",
+      "xy_px": [
+        265,
+        112
+      ],
+      "uncertainty_px": 5,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "right",
+      "target_id": "eye",
+      "source_landmark_id": "eye_visible",
+      "xy_px": [
+        248,
+        122
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "right",
+      "target_id": "nose",
+      "source_landmark_id": "nose_tip",
+      "xy_px": [
+        274,
+        137
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "right",
+      "target_id": "mouth",
+      "source_landmark_id": "mouth_center",
+      "xy_px": [
+        266,
+        155
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "right",
+      "target_id": "chin",
+      "source_landmark_id": "chin",
+      "xy_px": [
+        252,
+        177
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "right",
+      "target_id": "ear",
+      "source_landmark_id": "ear_visible",
+      "xy_px": [
+        195,
+        125
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "right",
+      "target_id": "nape_hem",
+      "source_landmark_id": "nape_hair_hem",
+      "xy_px": [
+        151,
+        191
+      ],
+      "uncertainty_px": 5,
+      "visibility": "visible",
+      "source_sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "left",
+      "target_id": "crown",
+      "source_landmark_id": "crown",
+      "xy_px": [
+        181,
+        16
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "left",
+      "target_id": "fringe_tip",
+      "source_landmark_id": "fringe_tip",
+      "xy_px": [
+        120,
+        109
+      ],
+      "uncertainty_px": 5,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "left",
+      "target_id": "eye",
+      "source_landmark_id": "eye_visible",
+      "xy_px": [
+        126,
+        122
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "left",
+      "target_id": "nose",
+      "source_landmark_id": "nose_tip",
+      "xy_px": [
+        100,
+        137
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "left",
+      "target_id": "mouth",
+      "source_landmark_id": "mouth_center",
+      "xy_px": [
+        114,
+        157
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "left",
+      "target_id": "chin",
+      "source_landmark_id": "chin",
+      "xy_px": [
+        125,
+        177
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "face",
+      "view": "left",
+      "target_id": "ear",
+      "source_landmark_id": "ear_visible",
+      "xy_px": [
+        183,
+        125
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "left",
+      "target_id": "nape_hem",
+      "source_landmark_id": "nape_hair_hem",
+      "xy_px": [
+        245,
+        189
+      ],
+      "uncertainty_px": 5,
+      "visibility": "visible",
+      "source_sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "back",
+      "target_id": "crown",
+      "source_landmark_id": "crown",
+      "xy_px": [
+        181,
+        16
+      ],
+      "uncertainty_px": 2,
+      "visibility": "visible",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "hair",
+      "view": "back",
+      "target_id": "nape_hair_hem",
+      "source_landmark_id": "nape_hair_hem",
+      "xy_px": [
+        170,
+        198
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "body",
+      "view": "back",
+      "target_id": "neck_base",
+      "source_landmark_id": "neck_base",
+      "xy_px": [
+        171,
+        202
+      ],
+      "uncertainty_px": 8,
+      "visibility": "partial",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "body",
+      "view": "back",
+      "target_id": "shoulder_image_left",
+      "source_landmark_id": "shoulder_image_left",
+      "xy_px": [
+        90,
+        222
+      ],
+      "uncertainty_px": 8,
+      "visibility": "estimated",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "body",
+      "view": "back",
+      "target_id": "shoulder_image_right",
+      "source_landmark_id": "shoulder_image_right",
+      "xy_px": [
+        252,
+        222
+      ],
+      "uncertainty_px": 8,
+      "visibility": "estimated",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "outfit",
+      "view": "back",
+      "target_id": "back_clasp",
+      "source_landmark_id": "back_clasp",
+      "xy_px": [
+        173,
+        305
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "outfit",
+      "view": "back",
+      "target_id": "upper_strap_buckle",
+      "source_landmark_id": "upper_strap_buckle",
+      "xy_px": [
+        233,
+        445
+      ],
+      "uncertainty_px": 4,
+      "visibility": "visible",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    },
+    {
+      "asset_id": "MORWEN",
+      "part_id": "outfit",
+      "view": "back",
+      "target_id": "lower_strap_buckle",
+      "source_landmark_id": "lower_strap_buckle",
+      "xy_px": [
+        233,
+        565
+      ],
+      "uncertainty_px": 3,
+      "visibility": "visible",
+      "source_sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "measurement": null,
+      "tolerance_px": null,
+      "operation": null,
+      "qa": "TARGET_ONLY"
+    }
+  ],
+  "qa": {
+    "schema_consistency": "PASS_LOCAL_CONSTRUCTION",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limits": [
+    "2D manual measurements; no 3D depth",
+    "no aligned VRoid native capture",
+    "no lease/fencing verification; no editing"
+  ]
+}
