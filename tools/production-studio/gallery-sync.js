@@ -11,7 +11,7 @@ async function loadPublishedGallery(){
  const remote="https://raw.githubusercontent.com/celticmusic-nagoya/the-windbound-oath/studio-published/";
  try{response=await fetch(remote+"gallery-manifest.json",{cache:"no-store",credentials:"omit",signal:AbortSignal.timeout(8000)});if(response.ok)base=remote;}catch{}
  }
- if(!response?.ok)response=await fetch("./gallery-manifest.json",{cache:"no-store",credentials:"omit"});
+ if(!response?.ok)response=await fetch("./gallery-manifest.json",{cache:"no-store",credentials:"omit",signal:AbortSignal.timeout(8000)});
  if(!response.ok)throw Error("HTTP "+response.status);
  const manifest=await response.json();
  if(generation!==publishedGalleryGeneration)return;
