@@ -33,6 +33,29 @@ async function loadAreaBlueprints(){
  image.addEventListener("error",()=>{image.remove();preview.append(node("p","SVGプレビュー取得不可。上記の原本リンクから確認してください。"));});
  preview.append(image,node("figcaption","物語接続図 v0.4 / G1 BLOCKED / 設計候補（地理・寸法の実測図ではありません）"));
  design.append(preview);
+ // Inventory mirrors the source-grounded continuity contract, not verified terrain.
+ const areas=[
+ ["RILDE_VILLAGE","リルド村","港・集落・河岸・建築接地","#364"],
+ ["WINDWAITING_CLIFF","風待ちの崖","崖面・台地・地層・崩落・登攀","#421"],
+ ["COASTAL_MEADOW","海岸草原","緩斜面・農地・生垣・排水","ECO/WORLD"],
+ ["RIVER_CORRIDOR","河川回廊","縦断河床・流域・橋・護岸","WORLD/ROUTE"],
+ ["MOSS_FOREST_A1","モスの森 A1","林縁・入口・探索経路","ECO/WORLD"],
+ ["MOSS_FOREST_A2","モスの森 A2","谷・小川・林冠・障害物","ECO/WORLD"],
+ ["MOSS_FOREST_A3","モスの森 A3","岩場・渓谷・砦への遷移","ECO/WORLD"],
+ ["DUNVAR_FORTRESS","ドゥンヴァル砦","高地・進入路・基礎・排水","BUILD/WORLD"]
+ ];
+ const inventory=tile(area,"8エリア設計図インベントリ",["設計候補8件 / G1 BLOCKED / D1〜D4未完了","座標・標高・エリア境界・物理的な接続は未確定。物語接続と歩行可能経路は別管理。"],[]);
+ const inventoryList=node("ul","");
+ inventoryList.className="area-inventory";
+ for(const [id,name,focus,owner] of areas){
+  const item=node("li","");
+  item.append(node("strong",name+" ("+id+")"),node("span","対象: "+focus+" / 担当調整: "+owner+" / 図面・実測: 未検証"));
+  inventoryList.append(item);
+ }
+ inventory.append(inventoryList);
+ const contract=node("a","エリア別設計図の要求仕様・未確定項目を確認");
+ contract.href="https://github.com/"+repo+"/blob/"+designBranch+"/docs/production/region_master/IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md";
+ contract.rel="noopener noreferrer";inventory.append(contract);
 
  try{
   const found=new Map();
