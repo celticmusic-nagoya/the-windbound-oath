@@ -53,6 +53,26 @@ try{
  await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
  await dialog.waitFor({state:'detached',timeout:5000});
  }
+ // Verify the pinned HairHarpy v3/v4 history can be compared in the same category.
+ const hair=manifest.entries.filter(e=>e.category==='other'&&photo(e)&&/HairHarpy v[34]/.test(e.stage||''));
+ if(hair.some(e=>e.stage.includes('v3'))&&hair.some(e=>e.stage.includes('v4'))){
+ await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
+ await page.getByRole('button',{name:/その他/}).click();
+ await page.getByRole('button',{name:'画像比較',exact:true}).click();
+ const dialog=page.locator('dialog');
+ const options=await dialog.getByRole('combobox',{name:'比較A'}).locator('option').allTextContents();
+ const v3=options.findIndex(s=>s.includes('HairHarpy v3'));
+ const v4=options.findIndex(s=>s.includes('HairHarpy v4'));
+ assert.ok(v3>=0&&v4>=0,'v3/v4 compare options absent');
+ await dialog.getByRole('combobox',{name:'比較A'}).selectOption(String(v3));
+ await dialog.getByRole('combobox',{name:'比較B'}).selectOption(String(v4));
+ for(const img of await dialog.locator('img').all())await img.evaluate(e=>e.decode());
+ assert.notEqual(await dialog.locator('img').nth(0).getAttribute('src'),await dialog.locator('img').nth(1).getAttribute('src'));
+ assert.ok(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth+1),'hair compare overflow');
+ await dialog.screenshot({path:'gallery-qa/hairharpy-v3-v4-compare-mobile.png'});
+ await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
+ await dialog.waitFor({state:'detached',timeout:5000});
+ }
  for(const [category,label] of [['cliff','風待ちの崖'],['morwen','モルウェン'],['village','リルド村'],['other','その他']]){
  const models=manifest.entries.filter(e=>(isCliff(e)?'cliff':e.category||'other')===category&&!photo(e));
  if(!models.length)continue;
