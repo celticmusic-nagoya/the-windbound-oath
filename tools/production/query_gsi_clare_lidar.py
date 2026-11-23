@@ -26,6 +26,8 @@ def main():
     if args.bbox_itm and not (args.bbox_itm[0] < args.bbox_itm[2] and args.bbox_itm[1] < args.bbox_itm[3]):
         ap.error("bbox must have increasing min/max coordinates")
     service = get_json(ROOT, {"f":"json"})
+    if "error" in service:
+        raise RuntimeError(f"GSI service error: {service['error']}")
     layers = service.get("layers", [])
     candidates = [x for x in layers if "DTM" in x.get("name","").upper() or "COVERAGE" in x.get("name","").upper()]
     if not candidates:
@@ -39,6 +41,7 @@ def main():
             fields = {x["name"] for x in meta.get("fields", [])}
             county = next((x for x in fields if x.upper()=="COUNTY"),None)
             if not county:
+                report["errors"].append({"layer_id":lid,"error":"COUNTY_FIELD_MISSING"})
                 continue
             desired = [x for x in ("OBJECTID","DATA_URL","DATA_NAME","LICENCE","RESOLUTION","DATECAPTUR","LOCATION","COUNTY","OWNER","RMS_ERROR") if x in fields]
             oid = meta.get("objectIdField") or "OBJECTID"
@@ -60,6 +63,7 @@ def main():
     report["status"] = "PARTIAL" if report["errors"] or not report["records"] or any(x["exceeded_transfer_limit"] or x["page_full"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
     report["record_count"] = sum(len(x["features"]) for x in report["records"])
     report["status"] = "PARTIAL" if report["record_count"] == 0 else report["status"]
+    report["status"] = "PARTIAL" if any(not x.get("features") for x in report["records"]) else report["status"]
     report["raster_downloaded"] = False
     report["raster_sha256"] = None
     pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
