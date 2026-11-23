@@ -36,6 +36,7 @@ try{
  await page.getByRole('button',{name:'閉じる',exact:true}).click();
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:/モルウェン/}).click();
+ await page.getByRole('button',{name:/モルウェン \/ 全件/}).click();
  if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.filter(photo).length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('成果物はまだ同期されていません。').isVisible());
  if(morwen.filter(photo).length>=2){
  await page.getByRole('button',{name:'画像比較',exact:true}).click();
@@ -53,11 +54,12 @@ try{
  await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
  await dialog.waitFor({state:'detached',timeout:5000});
  }
- // Verify the pinned HairHarpy v3/v4 history can be compared in the same category.
- const hair=manifest.entries.filter(e=>e.category==='other'&&photo(e)&&/HairHarpy v[34]/.test(e.stage||''));
+ // Verify pinned HairHarpy v3/v4 history in Morwen / Hair assets.
+ const hair=manifest.entries.filter(e=>photo(e)&&/HairHarpy v[34]/.test(e.stage||''));
  if(hair.some(e=>e.stage.includes('v3'))&&hair.some(e=>e.stage.includes('v4'))){
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
- await page.getByRole('button',{name:/その他/}).click();
+ await page.getByRole('button',{name:/モルウェン/}).click();
+ await page.getByRole('button',{name:/ヘアアセット/}).click();
  await page.getByRole('button',{name:'画像比較',exact:true}).click();
  const dialog=page.locator('dialog');
  const options=await dialog.getByRole('combobox',{name:'比較A'}).locator('option').allTextContents();
