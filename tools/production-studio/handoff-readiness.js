@@ -7,7 +7,8 @@
   {id:468,name:"Codex｜長時間制作エンジン",scope:"Factory / Session / CAS・fencing"},
   {id:427,name:"キャラクター担当｜モルウェン",scope:"実設計図 / VRoid / 3D制作"},
   {id:421,name:"マップ担当｜風待ちの崖",scope:"崖の実設計図 / Blender制作"},
-  {id:364,name:"マップ担当｜地域統合",scope:"村・建築・地域統合"}
+  {id:364,name:"マップ担当｜地域統合",scope:"村・建築・地域統合"},
+  {id:484,name:"ChatGPT｜Production Studio",scope:"読み取り専用UI / 成果物可視化 / 独立QA"}
  ];
  const area=document.getElementById("handoff-cards");
  const status=document.getElementById("handoff-status");
