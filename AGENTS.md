@@ -9,6 +9,7 @@ Read [docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md](docs/policy/C
 
 Director-approved TWO Production OS v1.0 (2026-11-21). Applies to ChatGPT, Codex, Claude, Gemini, all other agents and automations. Current authoritative entry point; old instructions in Git history, old branches, chat/project uploads and historical documents are not active. Later explicit director approval prevails; never infer approval.
 
+- Mandatory design-closure clarification across characters, maps, architecture, props, animation, UI and code: [Cross-domain Blueprint Completion Gates](docs/policy/CROSS_DOMAIN_BLUEPRINT_COMPLETION_GATES_20261123.md). D0–D4 design maturity is distinct from G1–G4 production QA; source-grounded complete drawings before affected precision authoring, with VRoid-first qualified parallel work preserved.
 - Mandatory cross-workstream blueprint-first / target-backward production: read the dedicated section in [Production OS](docs/policy/TWO_PRODUCTION_OS_V1.md). Complete the relevant measured blueprint before precision authoring; independent modules may continue.
 
 ## Start and authority
