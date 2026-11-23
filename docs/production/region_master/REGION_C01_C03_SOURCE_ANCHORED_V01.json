@@ -1,0 +1,212 @@
+{
+  "schema": "two.region.c01_c03.source_anchored.v1",
+  "status": "DESIGN_CANDIDATE_G1_BLOCKED",
+  "source": {
+    "path": "assets/approved/game/cliff/sunset_background.png",
+    "sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "image_width_px": 1672,
+    "image_height_px": 941,
+    "source_ledger": "docs/art/approved-rilde-story-20261107.json",
+    "measurement_method": "manual approximate image pixel observations",
+    "projection": "UNKNOWN",
+    "camera": "UNKNOWN",
+    "metres_per_pixel": null
+  },
+  "pixel_features": [
+    {
+      "id": "sea_horizon_approx",
+      "xy": [
+        [
+          1075,
+          508
+        ],
+        [
+          1400,
+          504
+        ],
+        [
+          1660,
+          504
+        ]
+      ],
+      "uncertainty_px": [
+        15,
+        35
+      ]
+    },
+    {
+      "id": "cliff_upper_edge_approx",
+      "xy": [
+        [
+          555,
+          558
+        ],
+        [
+          675,
+          535
+        ],
+        [
+          825,
+          510
+        ],
+        [
+          929,
+          507
+        ],
+        [
+          1034,
+          537
+        ]
+      ],
+      "uncertainty_px": [
+        15,
+        35
+      ]
+    },
+    {
+      "id": "cliff_face_foot_approx",
+      "xy": [
+        [
+          638,
+          685
+        ],
+        [
+          808,
+          747
+        ],
+        [
+          1055,
+          762
+        ]
+      ],
+      "uncertainty_px": [
+        15,
+        35
+      ]
+    },
+    {
+      "id": "sea_stack_approx",
+      "xy": [
+        [
+          1268,
+          684
+        ],
+        [
+          1336,
+          691
+        ],
+        [
+          1374,
+          697
+        ]
+      ],
+      "uncertainty_px": [
+        15,
+        35
+      ]
+    }
+  ],
+  "sheets": [
+    {
+      "id": "C-01",
+      "name": "coastline_and_area_plan",
+      "status": "PARTIAL_2D_REFERENCE_ONLY",
+      "world_coastline_xyz_m": null,
+      "area_polygons_xyz_m": null,
+      "known": "single approved cliff CG contains projected coastline appearance, not overhead plan"
+    },
+    {
+      "id": "C-02",
+      "name": "elevation_contours_ridges_valleys",
+      "status": "BLOCKED",
+      "dem_source": null,
+      "dem_sha256": null,
+      "crs": null,
+      "vertical_datum": null,
+      "contours_xyz_m": null
+    },
+    {
+      "id": "C-03",
+      "name": "rivers_catchments_mouths",
+      "status": "BLOCKED",
+      "river_geometry_xyz_m": null,
+      "flow_elevation_m": null,
+      "catchments": null,
+      "source": null
+    }
+  ],
+  "area_boundaries": {
+    "RILDE_VILLAGE": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "WINDWAITING_CLIFF": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "COASTAL_MEADOW": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "RIVER_CORRIDOR": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "MOSS_FOREST_A1": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "MOSS_FOREST_A2": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "MOSS_FOREST_A3": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    },
+    "DUNVAR_FORTRESS": {
+      "boundary_polygon_xyz_m": null,
+      "neighbor_interfaces": null,
+      "world_transform": null,
+      "status": "UNRESOLVED"
+    }
+  },
+  "constraints": [
+    "image coordinates origin top-left x right y down",
+    "world target x east y north z up 1 BU = 1 metre",
+    "sea horizon is a visual reference, not a calibrated vertical datum",
+    "riverbank and sea-facing cliff are distinct until approved source mapping",
+    "story graph is not geographic adjacency",
+    "all area boundaries and world placement remain unknown"
+  ],
+  "qa": {
+    "source_sha_match": "PASS_FROM_LOCAL_FILE_AND_APPROVED_LEDGER",
+    "pixel_coordinates": "APPROXIMATE_NOT_INDEPENDENTLY_VALIDATED",
+    "C01": "BLOCKED",
+    "C02": "BLOCKED",
+    "C03": "BLOCKED",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next_required": [
+    "verified additional orthographic/topographic official CG or approved placement",
+    "georeferenced DEM with license CRS vertical datum SHA and coverage",
+    "owner-approved transforms and 8-area interface adjacency"
+  ]
+}
