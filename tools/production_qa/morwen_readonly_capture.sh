@@ -6,7 +6,7 @@
 declare -F capture_state >/dev/null || return 1
 test -f "$MORWEN_READONLY_NATIVE" && test ! -L "$MORWEN_READONLY_NATIVE" || return 1
 chmod a-w "$MORWEN_READONLY_NATIVE" || return 1
-printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256" || return 1
 sed -n '/^views() {/,/^}/p' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/morwen-views.sh"
 test -s "$RUNNER_TEMP/morwen-views.sh" || return 1
 source "$RUNNER_TEMP/morwen-views.sh"
@@ -39,7 +39,7 @@ case "${MORWEN_CAPTURE_MODE:-full}" in
     return 1
     ;;
 esac
-printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256" || return 1
 # Diagnostic only: measure rear orientation without overwriting existing captures.
 # The shortcut's angle per press has not been calibrated.
 for steps in 5 6 7 8; do
@@ -56,5 +56,5 @@ for steps in 5 6 7 8; do
 done
 "$gui" vroid-shortcut front || return 1
 shasum -a 256 evidence/rear-calibration-{5,6,7,8}.png > evidence/rear-calibration-sha256.txt || return 1
-printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256" || return 1
 printf '%s\n' 'CAPTURED_REVIEW_REQUIRED_REAR_SWEEP_NOT_YET_CALIBRATED' > evidence/readonly-reopen-status.txt
