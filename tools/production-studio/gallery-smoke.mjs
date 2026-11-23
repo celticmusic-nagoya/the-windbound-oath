@@ -25,6 +25,15 @@ try{
  assert.equal(await page.locator('.category-card').count(),6);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
  assert.ok(await page.locator('#published-gallery img').count()<=6);
+ // Every category containing a published image must render its thumbnail.
+ const categoryOrder=['cliff','morwen','village','blueprint','map','other'];
+ const categoryCards=page.locator('.category-card');
+ for(let i=0;i<categoryOrder.length;i++){
+  const id=categoryOrder[i];
+  const hasImage=manifest.entries.some(e=>photo(e)&&(isCliff(e)?'cliff':e.category||'other')===id);
+  if(hasImage)assert.equal(await categoryCards.nth(i).locator('img').count(),1,'missing category cover: '+id);
+ }
+
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
