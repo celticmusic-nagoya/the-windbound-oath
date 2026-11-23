@@ -1,0 +1,78 @@
+{
+  "schema": "morwen-camera-registration-acceptance-v1",
+  "status": "DESIGN_ONLY_PENDING_REAL_CAPTURE",
+  "asset_id": "MORWEN",
+  "source": {
+    "layer0_artifact": 14602858760,
+    "reference_size_px": [
+      384,
+      1024
+    ],
+    "reference_sha256": {
+      "front": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed",
+      "right": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737",
+      "back": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+      "left": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"
+    },
+    "native_candidate_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574",
+    "capture_run": 45132749773,
+    "capture_artifact": 14798806949
+  },
+  "registration": {
+    "target_projection": "orthographic if available; otherwise camera model must be recorded and fitted",
+    "candidate_projection": "UNVERIFIED",
+    "candidate_camera_angles": "UNVERIFIED",
+    "front_alignment": "UNVERIFIED",
+    "back_eight_turn": "VISUAL_REAR_CANDIDATE_NOT_CALIBRATED",
+    "crop": "FAIL_FOR_FULL_BODY_MEASUREMENT",
+    "scale": "UNVERIFIED",
+    "required_measurements": [
+      "native head crown and chin in same view",
+      "native heel/foot stance anchor",
+      "full-body uncropped silhouette bounds",
+      "camera yaw/pitch/zoom or repeatable GUI state",
+      "front/back orientation with independent confirmation"
+    ],
+    "normalization": "Only compare image-space landmarks after camera model, crop, scale and orientation are verified; do not treat 2D differences as 3D deformation"
+  },
+  "gates": [
+    {
+      "id": "CAMERA_FULL_BODY",
+      "criterion": "Both feet and crown visible without UI obstruction",
+      "state": "BLOCKED"
+    },
+    {
+      "id": "CAMERA_ANGLE",
+      "criterion": "Independent orientation check for front/right/back/left; no assumed turn-step degrees",
+      "state": "BLOCKED"
+    },
+    {
+      "id": "CAMERA_SCALE",
+      "criterion": "Documented pixel-to-normalized scale and anchor with propagated uncertainty",
+      "state": "BLOCKED"
+    },
+    {
+      "id": "PROTECTION",
+      "criterion": "Native before/after SHA equal for read-only captures",
+      "state": "PASS_PREVIOUS_ISOLATED_CAPTURE_ONLY"
+    },
+    {
+      "id": "NATIVE_EDIT",
+      "criterion": "Live owner, lease, fencing, all-event Actions, checkpoint and approved operation",
+      "state": "BLOCKED"
+    }
+  ],
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN_ALIGNED",
+    "G3": "PARTIAL_READONLY_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "non_goals": [
+    "no native mutation",
+    "no new GUI run",
+    "no inferred 3D hair thickness",
+    "no engine duplication"
+  ],
+  "next": "Obtain live owner/lease/all-event status; capture aligned full-body views once; compute residual with uncertainty before any corrective edit"
+}
