@@ -31,12 +31,12 @@ jobs:
           python -c "import bpy,PIL; print(bpy.app.version_string, bpy.app.build_hash, PIL.__version__)"
       - name: Preflight
         run: python -m py_compile tools/blueprint_engine/*.py tools/blueprint_engine/cases/*.py tools/blueprint_engine/tests/*.py
-      - name: Engine unit and #468 contract tests
+      - name: 'Engine unit and #468 contract tests'
         working-directory: tools
         run: |
           python -m unittest discover -s blueprint_engine/tests -t . -v
           cd production_qa && python -m unittest test_shared_blueprint_contract test_shared_item_correction test_studio_checkpoint_export
-      - name: Proposed #468 lower_bound extension (temp copy; #468 files untouched)
+      - name: 'Proposed #468 lower_bound extension (temp copy; #468 files untouched)'
         working-directory: tools
         run: |
           set -euo pipefail
@@ -70,7 +70,7 @@ jobs:
           git fetch --depth=1 https://github.com/$REPO feature/lind-village-world-integration-plan-01
           git show FETCH_HEAD:assets/candidates/LIND-HOME-01/blueprint-measured-20261121/evidence.zip > "$RUNNER_TEMP/in/design/e.zip"
           unzip -qo "$RUNNER_TEMP/in/design/e.zip" measurements.json -d "$RUNNER_TEMP/in/design"
-      - name: Map case LIND-HOME (native Blender, #468 Factory read-only stages)
+      - name: 'Map case LIND-HOME (native Blender, #468 Factory read-only stages)'
         working-directory: tools
         run: python -m blueprint_engine.cases.lind_home --design "$RUNNER_TEMP/in/design/measurements.json" --native "$RUNNER_TEMP/in/home/home_portal_checkpoint.blend" --out "$RUNNER_TEMP/out/lind_home"
       - name: Character case Morwen Layer0 + VRoid native
