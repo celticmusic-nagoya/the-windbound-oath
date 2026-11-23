@@ -14,6 +14,7 @@ async function loadPublishedGallery(){
  if(!response?.ok)response=await fetch("./gallery-manifest.json",{cache:"no-store",credentials:"omit",signal:AbortSignal.timeout(8000)});
  if(!response.ok)throw Error("HTTP "+response.status);
  const manifest=await response.json();
+ // A slower earlier request must never replace a newer gallery refresh.
  if(generation!==publishedGalleryGeneration)return;
  if(manifest.version!==1||!Array.isArray(manifest.entries)||manifest.entries.length>500)throw Error("一覧形式不正");
  const valid=[];
