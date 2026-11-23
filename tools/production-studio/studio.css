@@ -30,3 +30,6 @@
 #area-blueprints .area-inventory{padding-left:1.3rem;margin:8px 0;display:grid;gap:12px}
 #area-blueprints .area-inventory li{overflow-wrap:anywhere}
 #area-blueprints .area-inventory span{display:block;color:#b3c4c1;font-size:.9rem;line-height:1.5}
+
+/* Cross-agent handoff readiness: accessible and mobile-first, no false PASS state. */
+#handoff-cards{margin-top:12px}#handoff-cards .handoff-card{min-width:0}#handoff-cards dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;border-top:1px solid var(--line);padding-top:12px;font-size:.86rem}#handoff-cards dt{color:#c4d4d0}#handoff-cards dd{margin:0;color:#edc99a;font-weight:600;text-align:right}#handoff-cards p{overflow-wrap:anywhere}#handoff-status{margin:12px 0;color:#b3c4c1}
