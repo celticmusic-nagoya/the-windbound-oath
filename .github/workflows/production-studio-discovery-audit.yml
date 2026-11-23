@@ -1,0 +1,29 @@
+name: Production Studio discovery audit
+on:
+  pull_request:
+    paths:
+      - 'tools/production-studio/audit-discovery.py'
+      - 'tools/production-studio/test_audit_discovery.py'
+      - '.github/workflows/production-studio-discovery-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Offline audit regression tests
+        run: python -m unittest discover -s tools/production-studio -p 'test_audit_discovery.py' -v
+      - name: Read-only Actions artifact metadata inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/production-studio/audit-discovery.py --per-branch 10 --output studio-discovery-audit.json
+      - name: Save inventory for owner review
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-discovery-audit
+          path: studio-discovery-audit.json
+          retention-days: 14
