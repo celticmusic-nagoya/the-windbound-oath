@@ -96,6 +96,48 @@ class ItemCorrectionTests(unittest.TestCase):
     def journal(self):
         return json.loads(next((self.root / "quarantine").glob("*/correction-journal.json")).read_text())
 
+    def test_required_edit_rejects_noop_and_quarantines(self):
+        self.stage["requires_actual_edit"] = True
+        with self.assertRaisesRegex(RuntimeError, "actual native edit missing"):
+            self.execute()
+        self.assertEqual(self.journal()["status"], "BLOCKED")
+        self.assertNotIn("finish", self.calls)
+
+    def test_required_edit_rejects_byte_only_change(self):
+        self.stage["requires_actual_edit"] = True
+        self.edit = lambda native, *args, **kwargs: native.write_text(native.read_text() + "\n")
+        with self.assertRaisesRegex(RuntimeError, "actual measured edit missing"):
+            self.execute()
+        self.assertNotIn("finish", self.calls)
+
+    def test_required_edit_measures_before_correction_and_reopen(self):
+        self.stage["requires_actual_edit"] = True
+        self.remeasure_width = True
+        self.edit = lambda native, *args, **kwargs: native.write_text('{"length": 1.4, "width": 1.0}')
+        self.propose_correction = lambda *args, **kwargs: -.4
+        result = self.execute()
+        self.assertTrue(result["requires_actual_edit"])
+        self.assertAlmostEqual(result["observation"]["actual"]["length"], 1.0)
+        self.assertEqual(result["observation"]["protected_sha256"], self.protected)
+        self.assertNotEqual(result["sha256"], sha(self.source))
+
+    def test_read_only_stage_never_edits_or_corrects(self):
+        self.stage["requires_actual_edit"] = False
+        self.edit = lambda *args, **kwargs: self.fail("read-only stage called edit")
+        with self.assertRaisesRegex(RuntimeError, "tolerance:length"):
+            self.execute()
+        self.source.write_text('{"length": 1.0, "width": 1.0}')
+        self.target["source_sha256"] = self.request["source_sha256"] = sha(self.source)
+        result = self.execute()
+        self.assertFalse(result["requires_actual_edit"])
+        self.assertEqual(result["sha256"], sha(self.source))
+        def mutate_during_finish(native, *args, **kwargs):
+            native.write_text(native.read_text() + "\n")
+
+        self.finish = mutate_during_finish
+        with self.assertRaisesRegex(RuntimeError, "violates edit mode"):
+            self.execute()
+
     def test_residual_boundaries(self):
         self.assertEqual(metric_state(3, 5, 2), "PASS")
         self.assertEqual(metric_state(7, 5, 2), "HOLD")

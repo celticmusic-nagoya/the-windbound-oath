@@ -96,6 +96,10 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
     """Run one protected precision stage and return a controller checkpoint."""
     root = Path(root).resolve()
     source = Path(source)
+    edit_mode = stage.get("requires_actual_edit")
+    if "requires_actual_edit" in stage and type(edit_mode) is not bool:
+        raise ValueError("requires_actual_edit must be a boolean")
+    records_journal = edit_mode is not None or target.get("corrections") is not None
     issues = target_issues(target, request)
     if issues:
         raise ValueError("factory blueprint blocked: " + ", ".join(issues))
@@ -142,9 +146,30 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
         shutil.copyfile(source, native)
         if sha(native) != request["source_sha256"]:
             raise ValueError("factory source changed during copy")
-        perform(adapter.edit, native, target)
+        if edit_mode is True:
+            baseline, issues = observe(adapter.measure)
+            require_pass([issue for issue in issues if not issue.startswith("tolerance:")])
+        before_edit = sha(native)
+        if edit_mode is not False:
+            perform(adapter.edit, native, target)
+        after_edit = sha(native)
+        if edit_mode is not None:
+            journal.append(dict(phase="edit", required=edit_mode, before_sha256=before_edit,
+                                after_sha256=after_edit))
+        if edit_mode is True and before_edit == after_edit:
+            raise RuntimeError("factory actual native edit missing")
         observed, issues = observe(adapter.measure)
-        if target.get("corrections") is not None:
+        if edit_mode is True:
+            require_pass([issue for issue in issues if not issue.startswith("tolerance:")])
+            response = {key: observed["actual"][key] - value
+                        for key, value in baseline["actual"].items()}
+            journal[-1]["response"] = response
+            if not any(abs(delta) > baseline["uncertainty"][key] + observed["uncertainty"][key]
+                       for key, delta in response.items()):
+                raise RuntimeError("factory actual measured edit missing")
+        if edit_mode is False:
+            require_pass(issues)
+        elif target.get("corrections") is not None:
             journal.append(dict(phase="initial_measure", observation=observed, issues=issues))
             issues = correct_items(adapter, native, target, observed, issues, perform, observe, journal)
         elif issues and all(issue.startswith("tolerance:") for issue in issues) and all(
@@ -170,11 +195,13 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
                     raise ValueError("factory evidence missing, outside attempt or SHA mismatched")
                 files[path.relative_to(root).as_posix()] = expected
         saved_sha = sha(native)
+        if edit_mode is not None and (saved_sha != before_edit) != edit_mode:
+            raise RuntimeError("factory saved native violates edit mode")
         reopened, issues = observe(adapter.reopen)
         if sha(native) != saved_sha:
             issues.append("reopen_changed_native")
         require_pass(issues)
-        if target.get("corrections") is not None:
+        if records_journal:
             journal.append(dict(phase="reopen", observation=reopened))
             write_journal("PASS")
             files[journal_path.relative_to(root).as_posix()] = sha(journal_path)
@@ -185,12 +212,13 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
             "fingerprint": stage["fingerprint"],
             "observation": reopened,
             "files": files,
+            **({"requires_actual_edit": edit_mode} if edit_mode is not None else {}),
         }
     except BaseException as exc:
         quarantine = root / "quarantine"
         quarantine.mkdir(exist_ok=True)
         attempt.rename(quarantine / attempt.name)
-        if target.get("corrections") is not None:
+        if records_journal:
             journal_path = quarantine / attempt.name / journal_path.name
             write_journal("BLOCKED", str(exc))
         raise

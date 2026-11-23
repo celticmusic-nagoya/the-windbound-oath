@@ -31,6 +31,11 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
         raise ValueError("blueprint target references an unknown session stage")
     if set(factories) - targets.keys():
         raise ValueError("precision factory stage requires a supplied blueprint target")
+    for stage in stages:
+        if "requires_actual_edit" in stage and (
+            type(stage["requires_actual_edit"]) is not bool or stage["id"] not in factories
+        ):
+            raise ValueError("explicit edit mode requires a qualified factory stage")
     review_dependencies = {stage["id"]: stage["requires_g2_from"]
                            for stage in stages if "requires_g2_from" in stage}
     if any(review_dependencies[stage["id"]] not in stage["deps"]
@@ -73,7 +78,8 @@ def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,r
             record = reusable[stage_id]
             dependency_shas = {dep: completed.get(dep, {}).get("sha256") for dep in stage["deps"]}
             if (record.get("target_contract_sha256") != digest_record(targets[stage_id][0])
-                    or record.get("dependency_checkpoints") != dependency_shas):
+                    or record.get("dependency_checkpoints") != dependency_shas
+                    or record.get("requires_actual_edit") is not stage.get("requires_actual_edit")):
                 reusable.pop(stage_id)
         available=ready(stages,reusable,root,budget-(time.monotonic()-started),reserve)
         available = [stage_id for stage_id in available if stage_id not in blocked]
