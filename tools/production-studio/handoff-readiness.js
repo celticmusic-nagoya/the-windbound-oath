@@ -17,7 +17,7 @@
  if(!area||!status||!button)return;
  const el=(tag,content)=>{const n=document.createElement(tag);n.textContent=content;return n;};
  async function get(path){
-  const response=await fetch(api+path,{headers:{Accept:"application/vnd.github+json"},credentials:"omit",cache:"no-store"});
+  const response=await fetch(api+path,{headers:{Accept:"application/vnd.github+json"},credentials:"omit",cache:"no-store",signal:AbortSignal.timeout(10000)});
   if(!response.ok){
    const limited=response.status===403||response.status===429;
    throw new Error(limited?"GitHub API制限またはアクセス拒否 (HTTP "+response.status+")":"HTTP "+response.status);
@@ -37,7 +37,11 @@
     el("p","HEAD: "+(p.head?.sha||"UNKNOWN")),
     el("p","PR更新: "+(p.updated_at||"UNKNOWN")),
     el("p","参照元: GitHub REST API（公開PR情報のみ）"));
-  }else card.append(el("p","PR取得失敗: "+String(result.reason?.message||result.reason)));
+  }else {
+   const reason=result.reason;
+   const timedOut=reason?.name==="TimeoutError"||reason?.name==="AbortError";
+   card.append(el("p","PR取得失敗: "+(timedOut?"10秒でタイムアウト":String(reason?.message||reason))));
+  }
   card.append(el("p","注意: PR更新時刻は担当の停止・応答・lease更新を証明しません。"));
   const link=el("a","担当PR・最新指示を確認");link.href="https://github.com/"+repo+"/pull/"+owner.id;link.rel="noopener noreferrer";card.append(link);
   const checklist=el("dl","");
@@ -57,7 +61,7 @@
    if(current!==generation)return;
    owners.forEach((o,i)=>addCard(o,results[i]));
    const failures=results.filter(r=>r.status==="rejected").length;
-   status.textContent="PR取得 "+(owners.length-failures)+"/"+owners.length+" / "+new Date().toLocaleString("ja-JP")+
+   status.textContent="PR取得 "+(owners.length-failures)+"/"+owners.length+(failures?" / 取得失敗 "+failures+"件（未検証）":"")+" / "+new Date().toLocaleString("ja-JP")+
     " / 書き込み可否は全件SYNC_UNVERIFIED";
   }catch(e){if(current===generation)status.textContent="取得失敗: "+e.message;}
   finally{if(current===generation)button.disabled=false;}
