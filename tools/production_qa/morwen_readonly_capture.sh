@@ -11,16 +11,35 @@ sed -n '/^views() {/,/^}/p' tools/production_qa/morwen_vroid_session.sh > "$RUNN
 test -s "$RUNNER_TEMP/morwen-views.sh" || return 1
 source "$RUNNER_TEMP/morwen-views.sh"
 
-for direction in front left right back; do
-  test ! -e "evidence/view-isolated-reopen-$direction.png" || return 1
-done
-views isolated-reopen 25 || return 1
-for direction in front left right back; do
-  test -s "evidence/view-isolated-reopen-$direction.png" || return 1
-done
-test "$(shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png | cut -d ' ' -f1 | sort -u | wc -l | tr -d ' ')" = 4 || return 1
-shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png > evidence/reopen-view-sha256.txt || return 1
-printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+# Calibration mode intentionally reuses the already SHA-verified captures from run
+# 45117436032; do not regenerate the four views in this diagnostic run.
+case "${MORWEN_CAPTURE_MODE:-full}" in
+  full)
+    for direction in front left right back; do
+      test ! -e "evidence/view-isolated-reopen-$direction.png" || return 1
+    done
+    views isolated-reopen 25 || return 1
+    for direction in front left right back; do
+      test -s "evidence/view-isolated-reopen-$direction.png" || return 1
+    done
+    test "$(shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png | cut -d ' ' -f1 | sort -u | wc -l | tr -d ' ')" = 4 || return 1
+    shasum -a 256 evidence/view-isolated-reopen-{front,left,right,back}.png > evidence/reopen-view-sha256.txt || return 1
+    ;;
+  rear-only)
+    test ! -e evidence/reopen-view-sha256.txt || return 1
+    "$gui" vroid-shortcut face || return 1
+    sleep 1
+    "$gui" vroid-shortcut front || return 1
+    sleep 1
+    "$gui" zoom 0.50 0.42 25 0 || return 1
+    sleep 2
+    ;;
+  *)
+    echo "BLOCKED_UNKNOWN_CAPTURE_MODE" > evidence/readonly-reopen-status.txt
+    return 1
+    ;;
+esac
+printf '%s  %s\\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
 # Diagnostic only: measure rear orientation without overwriting existing captures.
 # The shortcut's angle per press has not been calibrated.
 for steps in 5 6 7 8; do
