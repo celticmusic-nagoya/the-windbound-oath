@@ -23,6 +23,16 @@ async function loadAreaBlueprints(){
  ];
  const design=tile(area,"アイルランド国土・エリア設計（専用ブランチ）",["制作中 / 設計候補 / G1 BLOCKED","正式地形・完成図面ではありません"],[]);
  for(const [label,path] of designFiles){const link=node("a",label);link.href="https://github.com/"+repo+"/blob/"+designBranch+"/"+path;link.rel="noopener noreferrer";design.append(link);}
+ const preview=node("figure","");
+ preview.className="blueprint-preview";
+ const image=node("img","");
+ image.alt="物語接続図 v0.4（実測地形ではありません）";
+ image.loading="lazy";
+ image.referrerPolicy="no-referrer";
+ image.src="https://raw.githubusercontent.com/"+repo+"/83c612079128c308baf021ad22f53498ae611ecf/docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg";
+ image.addEventListener("error",()=>{image.remove();preview.append(node("p","SVGプレビュー取得不可。上記の原本リンクから確認してください。"));});
+ preview.append(image,node("figcaption","物語接続図 v0.4 / G1 BLOCKED / 設計候補（地理・寸法の実測図ではありません）"));
+ design.append(preview);
 
  try{
   const found=new Map();
