@@ -98,6 +98,7 @@ class CoverageQueryTests(unittest.TestCase):
             self.assertEqual(data["status"],"COMPLETE_QUERY_ONLY")
             self.assertEqual(data["record_count"],2)
             self.assertEqual(data["records"][0]["pages"],2)
+            self.assertEqual(calls[-1][1]["orderByFields"],"OBJECTID ASC")
             self.assertFalse(data["records"][0]["incomplete"])
 
     def test_invalid_limit_rejected(self):
