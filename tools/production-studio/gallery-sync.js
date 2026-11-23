@@ -35,7 +35,7 @@ async function loadPublishedGallery(){
   const top=categories.some(([id])=>id===e.category)?e.category:e.run_id===44708204132?"cliff":"other";
   const hair=/hairharpy|hair[-_ ]asset|ヘアアセット/i.test(raw);
   const aidan=/aidan|エイダン/.test(raw);
-  const inn=/\binn\b|宿屋/.test(raw);
+  const inn=/(?:^|[^a-z])inn(?:$|[^a-z])|宿屋/.test(raw);
   const root=top==="other"?(hair?"morwen":aidan||inn?"village":"other"):top;
   const allowed=subcategories[root]||[];
   let sub=allowed.some(([id])=>id===explicit)?explicit:"";
