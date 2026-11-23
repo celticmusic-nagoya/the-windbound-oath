@@ -1,0 +1,44 @@
+{
+  "schema": "morwen-layer0-back-vroid-provisional-comparison-v1",
+  "official": {
+    "artifact_id": 14602858760,
+    "source_run_id": 44679568515,
+    "file": "7810.png",
+    "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f",
+    "resolution": [
+      384,
+      1024
+    ],
+    "sha_verified_from_artifact": true
+  },
+  "candidate": {
+    "artifact_id": 14798806949,
+    "run_id": 45132749773,
+    "native_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574",
+    "rear_7_sha256": "62f6a4657815784edc1410670b01376ea4efce713d010a7c6479b58e5c7662b0",
+    "rear_8_sha256": "f2d1085a816f961c83893a2d4315bcd81004cdb26c8fc3c0bd95ffd2b6d464de",
+    "capture_resolution": [
+      1024,
+      768
+    ]
+  },
+  "method": "Visual side-by-side only; source art and GUI screenshots are not camera-aligned orthographic full-body renders. No metric silhouette residuals asserted.",
+  "observations": [
+    "8-turn is a provisional near-rear view, not measured 180 degrees",
+    "Candidate hair is longer and has different rear outline than Layer0",
+    "Candidate dark long-sleeved top differs materially from official exposed-back design",
+    "Candidate lower body is clipped by viewport, so full-body scale and proportions cannot be measured"
+  ],
+  "qa": {
+    "official_reference_sha": "PASS",
+    "candidate_capture_sha": "PASS",
+    "rear_orientation": "PROVISIONAL",
+    "matched_projection": "NOT_RUN",
+    "design_equivalence": "FAIL_PRELIMINARY_VISIBLE_MISMATCH",
+    "g1": "BLOCKED",
+    "g2": "FAIL_PRELIMINARY",
+    "g3": "PARTIAL_PASS",
+    "g4": "NOT_RUN"
+  },
+  "next": "Preserve native; blueprint-based hair and outfit authoring only after writer/lease sync; recapture full-body with consistent orthographic framing for quantitative comparison. Do not adopt."
+}
