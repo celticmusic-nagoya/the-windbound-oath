@@ -38,6 +38,15 @@ def metric_map(values, keys, *, nonnegative=False):
                     for value in values.values()))
 
 
+def metric_state(residual, tolerance, uncertainty):
+    magnitude = abs(residual)
+    if magnitude + uncertainty <= tolerance:
+        return "PASS"
+    if magnitude - uncertainty > tolerance:
+        return "OUTSIDE"
+    return "HOLD"
+
+
 def target_issues(target, request):
     if not isinstance(target, dict) or not matches_digest(target.get("sha256")) or (
             target["sha256"] != request.get("reference_sha256")):
@@ -64,6 +73,24 @@ def target_issues(target, request):
             or operation.get("qualified") is not True
             or not matches_digest(operation.get("evidence_sha256"))):
         issues.append("operation_qualification")
+    corrections = target.get("corrections")
+    if corrections is not None:
+        keys = set(values) if isinstance(values, dict) else set()
+        if (not isinstance(corrections, dict) or not corrections or not corrections.keys() <= keys
+                or type(target.get("intersection_limit")) is not int
+                or target["intersection_limit"] < 0):
+            issues.append("correction_qualification")
+        else:
+            for metric, rule in corrections.items():
+                if (not isinstance(rule, dict) or not present(rule.get("operation_id"))
+                        or not matches_digest(rule.get("evidence_sha256"))
+                        or not finite(rule.get("max_delta")) or rule["max_delta"] <= 0
+                        or not isinstance(rule.get("affects"), list)
+                        or not isinstance(rule.get("requires_pass"), list)
+                        or not all(present(key) and key in keys for key in
+                                   rule["affects"] + rule["requires_pass"])
+                        or metric not in rule["affects"] or metric in rule["requires_pass"]):
+                    issues.append("correction_qualification:" + metric)
     protected = target.get("protection")
     if (not isinstance(protected, dict) or not present(protected.get("scope_id"))
             or not matches_digest(protected.get("baseline_sha256"))):
@@ -94,6 +121,11 @@ def measurement_issues(target, request, observation):
     if (observation.get("protected_scope_id") != target["protection"]["scope_id"]
             or observation.get("protected_sha256") != target["protection"]["baseline_sha256"]):
         issues.append("protected_scope")
+    if target.get("corrections") is not None and (
+        type(observation.get("intersections")) is not int
+        or not 0 <= observation["intersections"] <= target["intersection_limit"]
+    ):
+        issues.append("intersections")
     values = target["values"]
     actual, residuals, uncertainty = (observation.get(key) for key in ("actual", "residuals", "uncertainty"))
     if not (metric_map(actual, values.keys()) and metric_map(residuals, values.keys())
@@ -103,6 +135,7 @@ def measurement_issues(target, request, observation):
         expected = actual[key] - desired
         if not finite(expected) or not math.isclose(residuals[key], expected, rel_tol=1e-9, abs_tol=1e-12):
             issues.append(f"residual:{key}")
-        elif abs(expected) + uncertainty[key] + target["uncertainty"][key] > target["tolerances"][key]:
+        elif metric_state(expected, target["tolerances"][key],
+                          uncertainty[key] + target["uncertainty"][key]) != "PASS":
             issues.append(f"tolerance:{key}")
     return issues

@@ -57,6 +57,7 @@ jobs:
           python3 tools/production_qa/test_shared_fenced_checkpoint.py
           python3 tools/production_qa/test_shared_fenced_session.py
           python3 tools/production_qa/test_shared_blueprint_contract.py
+          python3 -m unittest discover -s tools/production_qa -p test_shared_item_correction.py
           python3 -m unittest discover -s tools/production_qa -p test_shared_git_checkpoint_store.py
       - name: Recovery preflight negative cases
         run: |
