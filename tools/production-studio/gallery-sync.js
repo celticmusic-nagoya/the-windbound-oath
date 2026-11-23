@@ -27,26 +27,52 @@ async function loadPublishedGallery(){
  return tile;
  }
  const categories=[["cliff","風待ちの崖"],["morwen","モルウェン"],["village","リルド村"],["other","その他"]];
- const category=e=>categories.some(([id])=>id===e.category)?e.category:e.run_id===44708204132?"cliff":"other";
- const groups=new Map(categories.map(([id])=>[id,valid.filter(e=>category(e)===id)]));
+ const subcategories={morwen:[["hair","ヘアアセット"],["body","身体・顔"],["wardrobe","衣装・装備"],["general","全体・その他"]],village:[["aidan","エイダンの家"],["inn","宿屋"],["buildings","その他の建築"],["general","村全体・その他"]]};
+ // Prefer explicit, publisher-provided subcategory. Legacy manifests may only carry a top-level category.
+ const classify=e=>{
+  const explicit=String(e.subcategory||"").toLowerCase();
+  const raw=[e.name,e.stage,e.asset_id,e.source_path].filter(Boolean).join(" ").toLowerCase();
+  const top=categories.some(([id])=>id===e.category)?e.category:e.run_id===44708204132?"cliff":"other";
+  const hair=/hairharpy|hair[-_ ]asset|ヘアアセット/.test(raw);
+  const aidan=/aidan|エイダン/.test(raw);
+  const inn=/\\binn\\b|宿屋/.test(raw);
+  const root=top==="other"?(hair?"morwen":aidan||inn?"village":"other"):top;
+  const allowed=subcategories[root]||[];
+  let sub=allowed.some(([id])=>id===explicit)?explicit:"";
+  if(!sub&&root==="morwen")sub=hair?"hair":/face|body|顔|身体/.test(raw)?"body":/wardrobe|outfit|衣装|装備/.test(raw)?"wardrobe":"general";
+  if(!sub&&root==="village")sub=aidan?"aidan":inn?"inn":/building|建築/.test(raw)?"buildings":"general";
+  return {root,sub};
+ };
+ const assigned=valid.map(e=>({entry:e,...classify(e)}));
+ const groups=new Map(categories.map(([id])=>[id,assigned.filter(x=>x.root===id).map(x=>x.entry)]));
+ function categoryButton(title,entries,click){
+  const button=document.createElement("button");button.className="category-card";button.type="button";
+  const cover=entries.find(e=>e.cover===true&&/\\.(png|jpe?g)$/.test(e.path))||entries.find(e=>/\\.(png|jpe?g)$/.test(e.path));
+  if(cover){const img=document.createElement("img");img.src=base+cover.path;img.alt="";img.loading="lazy";button.append(img);}
+  else {const placeholder=document.createElement("span");placeholder.className="category-placeholder";placeholder.textContent="未同期";button.append(placeholder);}
+  const label=document.createElement("strong");label.textContent=title;button.append(label);
+  const count=document.createElement("small");count.textContent=entries.length+" 件";button.append(count);
+  button.onclick=click;area.append(button);
+ }
  function home(){
- area.replaceChildren();area.classList.add("category-grid");
- status.textContent=valid.length+" 件 / カテゴリから閲覧";
- for(const [id,title] of categories){
- const entries=groups.get(id), button=document.createElement("button");
- button.className="category-card";button.type="button";
- const cover=entries.find(e=>e.cover===true&&/\.(png|jpe?g)$/.test(e.path))||entries.find(e=>/\.(png|jpe?g)$/.test(e.path));
- if(cover){const img=document.createElement("img");img.src=base+cover.path;img.alt="";img.loading="lazy";button.append(img);}
- else {const placeholder=document.createElement("span");placeholder.className="category-placeholder";placeholder.textContent="未同期";button.append(placeholder);}
- const label=document.createElement("strong");label.textContent=title;button.append(label);
- const count=document.createElement("small");count.textContent=entries.length+" 件";button.append(count);
- button.onclick=()=>detail(id,title);area.append(button);
+  area.replaceChildren();area.classList.add("category-grid");
+  status.textContent=valid.length+" 件 / カテゴリから閲覧";
+  for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
+ function subhome(id,title){
+  area.replaceChildren();area.classList.add("category-grid");
+  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
+  status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
+  categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
+  for(const [sub,label] of subcategories[id]){
+   const entries=assigned.filter(x=>x.root===id&&x.sub===sub).map(x=>x.entry);
+   categoryButton(label,entries,()=>detail(id,title+" / "+label,()=>subhome(id,title),entries));
+  }
  }
- function detail(id,title){
+ function detail(id,title,goBack=home,subset=null){
  area.replaceChildren();area.classList.remove("category-grid");
- const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=()=>home();area.append(back);
- const entries=[...groups.get(id)].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
+ const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
+ const entries=[...(subset||groups.get(id))].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
  const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
  if(photos.length>=2){
  const compare=document.createElement("button");compare.type="button";compare.className="category-back";compare.textContent="画像比較";area.append(compare);
