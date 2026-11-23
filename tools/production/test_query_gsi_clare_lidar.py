@@ -101,6 +101,31 @@ class CoverageQueryTests(unittest.TestCase):
             self.assertEqual(calls[-1][1]["orderByFields"],"OBJECTID ASC")
             self.assertFalse(data["records"][0]["incomplete"])
 
+    def test_server_page_cap_does_not_skip_records(self):
+        offsets = []
+        def fake(url, params=None):
+            if url == mod.ROOT:
+                return {"layers":[{"id":12,"name":"LiDAR Coverage DTM"}]}
+            if url.endswith("/12"):
+                return {"objectIdField":"OBJECTID","fields":[{"name":"OBJECTID"},{"name":"COUNTY"}]}
+            if url.endswith("/12/query"):
+                offset = params["resultOffset"]
+                offsets.append(offset)
+                if offset == 0:
+                    return {"features":[{"attributes":{"OBJECTID":1}}],"exceededTransferLimit":True}
+                if offset == 1:
+                    return {"features":[{"attributes":{"OBJECTID":2}}],"exceededTransferLimit":False}
+                raise AssertionError("unexpected offset " + str(offset))
+            raise AssertionError(url)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = str(pathlib.Path(tmp)/"capped.json")
+            with patch.object(mod,"get_json",side_effect=fake),patch.object(sys,"argv",["gsi","--output",out,"--limit","3"]),contextlib.redirect_stdout(io.StringIO()):
+                mod.main()
+            data = json.loads(pathlib.Path(out).read_text())
+            self.assertEqual(offsets,[0,1])
+            self.assertEqual(data["record_count"],2)
+            self.assertEqual(data["status"],"COMPLETE_QUERY_ONLY")
+
     def test_invalid_limit_rejected(self):
         with patch.object(sys,"argv",["gsi","--output","unused.json","--limit","0"]),contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as cm: mod.main()
