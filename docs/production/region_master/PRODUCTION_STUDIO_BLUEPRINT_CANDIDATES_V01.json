@@ -35,13 +35,35 @@
       "privacy": "PUBLIC_SAFE",
       "basis": "public-repository-source",
       "note": "Already on main"
+    },
+    {
+      "id": "rilde-c01-c03-directional-v01",
+      "name": "リルド地方 C-01〜C-03 方向配置図 v0.1",
+      "path": "docs/production/region_master/RILDE_C01_C03_DIRECTIONAL_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved directional canon, derived nonmetric diagram",
+      "note": "Direction-only schematic; no real coastline, terrain elevations or distances"
+    },
+    {
+      "id": "rilde-c01-c03-directional-data-v01",
+      "name": "リルド地方 C-01〜C-03 設計データ v0.1",
+      "path": "docs/production/region_master/RILDE_C01_C03_DIRECTIONAL_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "derived nonmetric drawing metadata",
+      "note": "No metric coordinates; G1 blocked"
     }
   ],
   "not_included": [
     "private handoff source files",
-    "private-source-derived local area sheets",
     "native Blender assets",
-    "unverified rendered terrain"
+    "unverified rendered terrain",
+    "private handoff original files and secrets"
   ],
   "integration_contract": {
     "gallery_current_formats": [
