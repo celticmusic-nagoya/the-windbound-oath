@@ -30,7 +30,7 @@ def main():
         if rel.suffix == ".svg":
             text = payload.decode("utf-8")
             assert "<svg" in text and "</svg>" in text
-            assert not re.search(r"<script\\b|onload\\s*=|<foreignObject\\b", text, re.I)
+            assert not re.search(r"<script\b|onload\s*=|<foreignObject\b", text, re.I)
         results.append({"id":entry["id"], "path":str(rel), "bytes":len(payload),
                         "sha256":hashlib.sha256(payload).hexdigest(), "qa":"SOURCE_INTEGRITY_PASS"})
     print(json.dumps({"status":"PASS_SOURCE_INTEGRITY_ONLY","G1":"BLOCKED","G2":"NOT_RUN",
