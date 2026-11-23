@@ -1,0 +1,24 @@
+# Cross-AI progress, design continuity and main synchronization — 2026-11-23
+
+**Director decision:** every AI and workstream must preserve the current production stage, source references, actual outputs and next dependencies so that work is not lost across chats. Applies to world/map, characters, architecture, animation, UI, gameplay, infrastructure, QA and Production Studio. **This is a policy; scheduled publication, automated sync and cross-agent visibility are NOT VERIFIED by its merge.**
+
+## Required workflow
+
+1. **Read before work:** current main AGENTS, registry, rules, Production OS, session index, prework policy, scoped source contracts, owning PR's newest instructions, owner/lease/HEAD, relevant Actions and artifacts. Verify the prework receipt and predecessor D0–D4 / G1–G4 gates; do not skip a stage based on a chat memory or concept image.
+2. **Keep one authoritative live ledger per owning PR:** use existing owner PR description/comment and established artifacts, not a second writer or shadow tracker. After a meaningful milestone, status change, failed run, approved decision, dependency SHA change or handoff, append a concise delta: scope, owner/lease, source SHA, input/output HEAD/SHA, completed stage, evidence links, QA PASS/FAIL/BLOCKED/NOT_RUN, unresolved dependencies, next qualified stage and stop conditions. Never label an unverified output complete.
+3. **Maintain a cross-workstream index on main:** update `docs/production/CROSS_AI_PROGRESS_INDEX.md` via a scoped PR for **verified, durable milestones**. This index is a discovery pointer and snapshot, not an alternative to the live owning PR. Include the as-of timestamp, source PR/commit, evidence and verification state. Do not copy private handoffs, secret URLs or signed artifacts.
+4. **Synchronization cadence:** review for main-index update at every milestone/owner handoff or material blocker change, and during an existing periodic coordination pass where available. If no substantive verified delta, do not create a PR or CI run. Prefer existing monitoring and existing shared controller; do not create redundant scheduled jobs. **Review cadence is not automatic merge permission.**
+5. **Safe main promotion:** policy/progress-only changes may be proposed through a scoped PR, validate diff/links/schema and check main drift and relevant CI, then merge only with applicable explicit director approval and branch protection. No direct main commits. A general request to keep everyone updated does not authorize future unreviewed asset merges, canonical changes, deletions, releases, costs or lease takeovers. For approval ambiguity, leave PR ready and report the precise approval required.
+6. **Reconcile after merge:** re-fetch main HEAD and the merged index; verify the expected commit exists, notify or comment on relevant existing owner PRs only where helpful and nonduplicative. Do not claim other AI sessions have consumed the update; they must read current main at their next preflight. No automatic background work unless a real verified automation is configured.
+
+## Specific world/area chain
+
+For Ireland-inspired Alveria design, use the existing source-grounded country design PR #482 and main policy. Source data reference inventory → W01 continent topology/region locator → W02 C01 coast and area polygons → W03 C02 elevation/contours → W04 C03 hydrology → W05 C04–C07 geology/ecology/routes/transforms → W06 independent multi-scale design QA → qualified Blender and runtime QA. Preserve the distinction between approved cliff CG, source-referenced Irish regions, verified terrain raster and newly invented cartographic details. Real Ireland is a landscape reference, not automatically the canon outline. Register map and area deliverables on the existing design owner PR; do not take over #364 regional integration, #421 cliff native production, #427 Morwen or #468 factory.
+
+## Cross-AI status contract
+
+A progress entry records `scope`, `owner_pr`, `head`, `as_of`, `source_evidence`, `completed_with_evidence`, `design_gates`, `production_gates`, `blockers`, `next_stage`, `protected_scope`, `status` and `verification`. An unknown HEAD, owner or live status must be marked `SYNC_UNVERIFIED` rather than inferred. A file list, green CI, generated concept art or policy text alone is not D4 PASS, G1–G4 PASS or implementation proof.
+
+## Enforcement and recovery
+
+Until existing shared tooling is qualified, manual receipt and owner PR/index updates are mandatory. Shared engine owner may add a tested nonduplicative check for missing receipts and stale index SHAs; policy-only status remains `RUNTIME_NOT_VERIFIED`. Preserve old records and causal failure history. Reconcile conflicting approvals against latest main, formal decisions and private canon; stop only affected writes, continue independent ready stages.

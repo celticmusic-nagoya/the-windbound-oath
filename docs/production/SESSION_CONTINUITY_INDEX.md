@@ -1,5 +1,7 @@
 # Cross-agent ownership and quota fallback — director approved 2026-11-23
 
+**Cross-AI milestone sync:** consult [CROSS_AI_PROGRESS_INDEX.md](CROSS_AI_PROGRESS_INDEX.md) and [shared synchronization policy](../policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md) before resuming. Owner PR remains authoritative; index is a verified snapshot, not a lease or QA PASS.
+
 Read [cross-agent ownership and quota fallback](../policy/CROSS_AGENT_OWNERSHIP_AND_QUOTA_FALLBACK_20261123.md). Claude owns shared Blueprint Engine; Codex retains #468 long-run engine; character/map owners retain actual blueprints and native production; ChatGPT coordinates and owns Production Studio. Quota limits do not grant writer authority. Require STOP_ACK, CAS/lease/fencing and checkpoint verification before any takeover; otherwise SYNC_UNVERIFIED, read-only independent work only. Automatic cross-agent failover NOT_RUN; existing G1–G4 and adoption gates unchanged.
 
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
