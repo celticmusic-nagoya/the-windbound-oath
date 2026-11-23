@@ -22,9 +22,9 @@ try{
  await page.route('https://api.github.com/**',r=>r.fulfill({json:r.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)}}:{workflow_runs:[]}}));
  await page.goto('http://127.0.0.1:8766/');
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
- assert.equal(await page.locator('.category-card').count(),4);
+ assert.equal(await page.locator('.category-card').count(),6);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
- assert.ok(await page.locator('#published-gallery img').count()<=4);
+ assert.ok(await page.locator('#published-gallery img').count()<=6);
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
@@ -75,7 +75,7 @@ try{
  await dialog.getByRole('button',{name:'閉じる',exact:true}).click();
  await dialog.waitFor({state:'detached',timeout:5000});
  }
- for(const [category,label] of [['cliff','風待ちの崖'],['morwen','モルウェン'],['village','リルド村'],['other','その他']]){
+ for(const [category,label] of [['cliff','風待ちの崖'],['morwen','モルウェン'],['village','リルド村'],['blueprint','設計図'],['map','地図・配置図'],['other','その他']]){
  const models=manifest.entries.filter(e=>(isCliff(e)?'cliff':e.category||'other')===category&&!photo(e));
  if(!models.length)continue;
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
