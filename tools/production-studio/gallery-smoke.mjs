@@ -36,7 +36,7 @@ try{
  await page.getByRole('button',{name:'閉じる',exact:true}).click();
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:/モルウェン/}).click();
- if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.filter(photo).length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('公開用成果物はまだ同期されていません。').isVisible());
+ if(morwen.length){const imgs=page.locator('#published-gallery img');assert.equal(await imgs.count(),morwen.filter(photo).length);for(const img of await imgs.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());}await page.locator('#published-gallery').screenshot({path:'gallery-qa/morwen.png'});}else assert.ok(await page.getByText('成果物はまだ同期されていません。').isVisible());
  if(morwen.filter(photo).length>=2){
  await page.getByRole('button',{name:'画像比較',exact:true}).click();
  const dialog=page.locator('dialog');
