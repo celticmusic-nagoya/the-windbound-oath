@@ -199,6 +199,7 @@ jobs:
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
+          MORWEN_CAPTURE_MODE=rear-only
           source tools/production_qa/morwen_readonly_capture.sh
       - name: Upload review evidence
         if: always()
