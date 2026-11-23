@@ -50,9 +50,6 @@ try{
  // Every category containing a published image must render its thumbnail.
  const categoryOrder=['cliff','morwen','village','blueprint','map','other'];
  const categoryCards=page.locator('.category-card');
- for(let i=0;i<categoryOrder.length;i++){
-  const id=categoryOrder[i];
-  // The published gallery can infer a category from legacy asset metadata.
  const categoryOf=e=>{
   const raw=[e.name,e.stage,e.asset_id,e.source_path].filter(Boolean).join(' ').toLowerCase();
   const top=['cliff','morwen','village','blueprint','map','other'].includes(e.category)?e.category:isCliff(e)?'cliff':'other';
@@ -63,6 +60,9 @@ try{
   if(/aidan|エイダン|(?:^|[^a-z])inn(?:$|[^a-z])|宿屋/.test(raw))return 'village';
   return 'other';
  };
+ for(let i=0;i<categoryOrder.length;i++){
+  const id=categoryOrder[i];
+  // The published gallery can infer a category from legacy asset metadata.
  const hasImage=manifest.entries.some(e=>photo(e)&&categoryOf(e)===id);
   if(hasImage)assert.equal(await categoryCards.nth(i).locator('img').count(),1,'missing category cover: '+id);
  }
