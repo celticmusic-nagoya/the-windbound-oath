@@ -2,6 +2,8 @@
 
 ## Mandatory continuity and readiness (2026-11-23)
 
+**Cross-AI progress continuity:** read [CROSS_AI_PROGRESS_INDEX](docs/production/CROSS_AI_PROGRESS_INDEX.md) and apply [Cross-AI progress/main synchronization policy](docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md). Update owning PR at each substantive milestone and main index via scoped approved PR; no automatic or unreviewed merges, no duplicate monitors.
+
 **Before every task/resume/handoff/Action dispatch or scope change, apply [Mandatory pre-work rule reconciliation and stage-sequence guard](docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md).** Verify latest main policy SHAs, canon, owner/lease/HEAD, workflow/artifact history and D0–D4 predecessors; record a compact prework receipt and fail closed on missing evidence. A policy link, green CI, placeholder blueprint or shorthand approval does not satisfy a gate. This is a manual obligation until existing shared runtime enforcement is independently verified; reuse SHA-matched receipts, never duplicate engines.
 
 Read [docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md](docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md). Owner/live evidence synchronization, stale-candidate rejection and scoped production readiness gates are mandatory for all agents and automations. Historical pointers are not work orders; incomplete infrastructure is tracked to actual verification. Existing qualified independent production continues.
