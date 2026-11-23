@@ -23,6 +23,11 @@
       "path": "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
       "git_blob_sha": "84f4f62dd895005b8c52668814eef75d33bd9699",
       "kind": "main_prework_policy"
+    },
+    {
+      "path": "private handoff reference/lore/WORLD_MAP_CANON_20261108.md",
+      "git_blob_sha": "5a3cd66e4131a34de363782a2af8f0e4bb145464",
+      "kind": "private_canon_reference_only_no_source_content_copied"
     }
   ],
   "geographic_hierarchy": [
@@ -91,7 +96,6 @@
     "AI-generated continent image is not terrain source"
   ],
   "missing_predecessors": [
-    "Authenticated latest private canon recheck",
     "Approved world/kingdom orthographic map or source terrain bytes",
     "Verified coastline and landmass topology",
     "Continent-to-region locator scale and orientation",
@@ -109,13 +113,14 @@
       "other_owner_PRs",
       "runtime_maps"
     ],
-    "no_production_actions": true
+    "no_production_actions": true,
+    "private_canon_rechecked_sha": "5a3cd66e4131a34de363782a2af8f0e4bb145464"
   },
   "qa": {
     "hierarchy_acyclic": "PASS_LOCAL",
     "known_region_directional_constraints": "DOCUMENTED",
     "continent_geography": "BLOCKED",
-    "W01": "PARTIAL",
+    "W01": "PARTIAL_CANON_DIRECTIONAL_VERIFIED_GEOMETRY_BLOCKED",
     "D0": "PARTIAL",
     "D1": "BLOCKED",
     "D2": "NOT_RUN",
@@ -124,6 +129,88 @@
     "G1": "BLOCKED",
     "G2": "NOT_RUN",
     "G3": "NOT_RUN",
-    "G4": "NOT_RUN"
-  }
+    "G4": "NOT_RUN",
+    "private_canon_recheck": "PASS_SOURCE_READ",
+    "cultural_sphere_count": "PASS_LOCAL"
+  },
+  "canonical_cultural_spheres": [
+    {
+      "id": "WESTERN_KINGDOM_SPHERE",
+      "name": "西方王国圏",
+      "political_unit": "ALVERIA_KINGDOM",
+      "direction": "west",
+      "status": "CANON_CULTURAL_SPHERE_NOT_BORDER"
+    },
+    {
+      "id": "NORTHERN_MOUNTAIN_FEDERATION_SPHERE",
+      "name": "北方山岳連邦圏",
+      "direction": "north",
+      "status": "CANON_CULTURAL_SPHERE_NOT_BORDER"
+    },
+    {
+      "id": "EASTERN_CITY_STATES_SPHERE",
+      "name": "東方諸邦圏",
+      "direction": "east",
+      "status": "CANON_CULTURAL_SPHERE_NOT_BORDER"
+    },
+    {
+      "id": "SOUTHWEST_COASTAL_STATES_SPHERE",
+      "name": "南西沿岸諸国圏",
+      "direction": "southwest",
+      "status": "CANON_CULTURAL_SPHERE_NOT_BORDER"
+    },
+    {
+      "id": "SOUTHERN_ANCIENT_TERRITORIES_SPHERE",
+      "name": "南方古代領域圏",
+      "direction": "south",
+      "status": "CANON_CULTURAL_SPHERE_NOT_BORDER"
+    }
+  ],
+  "canonical_named_places": [
+    {
+      "name": "カエルディン",
+      "kind": "royal_capital",
+      "parent": "ALVERIA_KINGDOM",
+      "coordinate": null
+    },
+    {
+      "name": "リルド村",
+      "kind": "western_coastal_village",
+      "parent": "ALVERIA_KINGDOM",
+      "coordinate": null
+    },
+    {
+      "name": "ドゥンヴァル砦",
+      "kind": "fortress_north_of_Rilde",
+      "coordinate": null
+    }
+  ],
+  "canonical_travel_constraints": {
+    "RILDE_TO_CAERDIN_WALK_DAYS_GUIDELINE": [
+      10,
+      14
+    ],
+    "RILDE_TO_DUNVAR_WALK_DAYS_GUIDELINE": [
+      0.5,
+      1
+    ],
+    "distance_metres": null,
+    "magic_long_distance_teleport": false,
+    "transport": [
+      "walking",
+      "horse",
+      "wagon",
+      "ship"
+    ]
+  },
+  "name_audit": {
+    "official_sea_cliff_name": "風見の断崖",
+    "production_working_alias": "風待ちの崖 / WINDWAITING_CLIFF",
+    "action": "DO_NOT_RENAME_CANON_OR_ASSUME_ALIAS_FORMALLY_APPROVED"
+  },
+  "canon_distinctions": [
+    "Five cultural spheres are not five separate countries",
+    "Alveria continent is not identical to medium-sized Alveria kingdom",
+    "Exact national borders, other states' names, continent silhouette, world coordinates and detailed heights remain unapproved"
+  ]
 }
