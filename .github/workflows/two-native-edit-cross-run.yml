@@ -1,0 +1,63 @@
+name: Shared measurable native edit cross-run qualification
+on:
+  push:
+    branches: [infra/shared-native-session-20261122]
+    paths: [tools/production_qa/native_edit_qa/phase.json]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-native-edit-cross-run
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: tools/production_qa
+      PULSE_SERVER: unix:/tmp/two-no-pulse-socket
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: Execute one isolated qualification phase
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          repo="repos/$GITHUB_REPOSITORY"
+          test "$(gh api "$repo" --jq .visibility)" = public
+          phase=tools/production_qa/native_edit_qa/phase.json
+          mode=$(jq -er .mode "$phase")
+          root="$RUNNER_TEMP/two-native"
+          mkdir -p "$root" "$root/work"
+          if [[ "$mode" == restore ]]; then
+            id=$(jq -er .artifact "$phase")
+            run=$(jq -er .run "$phase")
+            digest=$(jq -er .sha256 "$phase")
+            test "$(gh api "$repo/actions/artifacts/$id" --jq '[.workflow_run.id,.expired,.digest]|@tsv')" = "$(printf '%s\tfalse\tsha256:%s' "$run" "$digest")"
+            gh api "$repo/actions/artifacts/$id/zip" > "$root/in.zip" 2>/dev/null
+            echo "$digest  $root/in.zip" | sha256sum -c
+            unzip -p "$root/in.zip" checkpoint.bundle > "$root/checkpoint.bundle"
+            unzip -p "$root/in.zip" seed.json > "$root/seed.json"
+          else
+            test "$mode" = seed
+          fi
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/two-blender"
+          export BLENDER_530="$RUNNER_TEMP/two-blender/blender"
+          export PYTHONPATH="$GITHUB_WORKSPACE/tools/production_qa"
+          git -C "$root/work" init -q
+          git -C "$root/work" config user.email qa@example.invalid
+          git -C "$root/work" config user.name 'Shared qualification'
+          cd "$root/work"
+          python "$GITHUB_WORKSPACE/tools/production_qa/native_edit_qa/run_qa.py" "$mode" "$root"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-measurable-native-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/two-native/*.json
+            ${{ runner.temp }}/two-native/*.bundle
+            ${{ runner.temp }}/two-native/factory-*/preview.png
+          if-no-files-found: error
