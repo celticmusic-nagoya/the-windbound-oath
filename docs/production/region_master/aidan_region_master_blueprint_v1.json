@@ -1,0 +1,174 @@
+{
+  "schema": "two.region.master.blueprint.v1",
+  "status": "PROVISIONAL_G1_BLOCKED",
+  "region_id": "AIDAN_PROLOGUE_REGION",
+  "scope": [
+    "lind_village",
+    "windwaiting_cliff",
+    "moss_forest_A1_A2_A3",
+    "dunvar_fortress",
+    "connecting_routes"
+  ],
+  "source_ledger": [
+    {
+      "path": "docs/policy/ART_DIRECTED_HYBRID_WORLD_PRODUCTION_V2.md",
+      "git_blob_sha": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "role": "approved_coordinate_policy"
+    },
+    {
+      "path": "data/maps/cliff_moher_01_spiral_ascent.json",
+      "git_blob_sha": "8ae0db3e7921801b29b9d8eea23e39b4d7dc0395",
+      "role": "legacy_runtime_map"
+    },
+    {
+      "path": "reference/lore/THE_WINDBOUND_OATH_OFFICIAL_BIBLE_v5.0.md",
+      "repository": "celticmusic-nagoya/the-windbound-oath-handoff",
+      "git_blob_sha": "c20fc9b7ea7aaa0de7449e110463225dab07573e",
+      "role": "PRIVATE_CANON_NOT_FOR_PUBLICATION",
+      "published_content": false
+    }
+  ],
+  "coordinates": {
+    "target_authoring": {
+      "axes": {
+        "x": "east",
+        "y": "north",
+        "z": "up"
+      },
+      "handedness": "right",
+      "unit": "metre",
+      "blender_unit_m": 1,
+      "vertical_zero": "fictional_sea_level",
+      "origin": {
+        "description": "near Rilde village",
+        "x_m": null,
+        "y_m": null,
+        "z_m": null,
+        "status": "UNRESOLVED"
+      }
+    },
+    "legacy_runtime": {
+      "map_id": "cliff_moher_01_spiral_ascent",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 4800,
+        "height": 4800
+      },
+      "tile": 8,
+      "unitScale": 2.5,
+      "unitScale_meaning": "NOT_VERIFIED_METRES",
+      "transform_to_region": null,
+      "transform_status": "BLOCKED"
+    },
+    "chunks": {
+      "scheme": "stable_region_chunk_ids",
+      "size_m": null,
+      "grid_origin": null,
+      "status": "UNRESOLVED"
+    }
+  },
+  "legacy_landmarks": [
+    {
+      "id": "CLIFF_FROM_LIND",
+      "source": "spawns.points.from_lind",
+      "x": 150,
+      "y": 3658.3778132003163,
+      "level": 0,
+      "region_xyz_m": null
+    },
+    {
+      "id": "CLIFF_SUMMIT",
+      "source": "spawns.points.summit",
+      "x": 2280,
+      "y": 1262.3578904783485,
+      "level": 2,
+      "region_xyz_m": null
+    },
+    {
+      "id": "CLIFF_LIND_TRANSITION",
+      "source": "transitions.tr_c1_to_lind",
+      "rect": {
+        "x": 0,
+        "y": 3548.3778132003163,
+        "w": 64,
+        "h": 220
+      },
+      "destination": {
+        "map": "lind_village",
+        "spawn": "from_cliff"
+      },
+      "region_xyz_m": null
+    }
+  ],
+  "geography": {
+    "reference_country": "Ireland",
+    "reference_areas": [
+      "County Clare west coast",
+      "Burren",
+      "Doolin",
+      "Cliffs of Moher",
+      "Killarney woodland",
+      "Dun Aonghasa"
+    ],
+    "canonical_placement": false,
+    "dem": {
+      "source": "GSI LiDAR coverage probe",
+      "coverage": "NOT_VERIFIED",
+      "raster_sha256": null,
+      "vertical_datum_transform": null
+    },
+    "coastline": null,
+    "hydrology": null,
+    "contours": null,
+    "geology": null,
+    "route_graph": {
+      "required_story_order": [
+        "lind_village",
+        "river_escape",
+        "cliff_collapse",
+        "moss_forest_A1",
+        "moss_forest_A2",
+        "moss_forest_A3",
+        "dunvar_fortress"
+      ],
+      "geometry": "UNRESOLVED"
+    }
+  },
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "checks": {
+      "legacy_bounds": "SOURCE_VERIFIED",
+      "legacy_spawn": "SOURCE_VERIFIED",
+      "legacy_transition": "SOURCE_VERIFIED",
+      "axis_contract": "POLICY_VERIFIED",
+      "transform_roundtrip": "NOT_RUN",
+      "dem_coverage": "BLOCKED",
+      "game_navigation": "NOT_RUN",
+      "native_geometry": "NOT_RUN"
+    }
+  },
+  "protected_scope": [
+    "existing_native_assets",
+    "runtime_maps",
+    "story_events",
+    "other_regions",
+    "canon",
+    "owner_leases"
+  ],
+  "acceptance": {
+    "required": [
+      "verified_approved_CG_and_private_canon",
+      "verified_DEM_license_CRS_datum_resolution_and_SHA",
+      "explicit_invertible_legacy_to_region_transforms",
+      "numeric_roundtrip_error_bound",
+      "stable_area_bounds_and_chunk_plan",
+      "route_continuity_and_ground_contact",
+      "independent_blueprint_QA"
+    ],
+    "on_missing": "BLOCKED_NO_CANONICAL_PLACEMENT"
+  }
+}
