@@ -58,7 +58,7 @@ try{
   const top=['cliff','morwen','village','blueprint','map','other'].includes(e.category)?e.category:isCliff(e)?'cliff':'other';
   if(top!=='other')return top;
   if(/blueprint|design[-_ ]?sheet|設計図|四面図|寸法図|断面図/.test(raw))return 'blueprint';
-  if(/\\bmap\\b|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw))return 'map';
+  if(/(^|[^a-z])map([^a-z]|$)|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw))return 'map';
   if(/hairharpy|hair[-_ ]asset|ヘアアセット/i.test(raw))return 'morwen';
   if(/aidan|エイダン|(?:^|[^a-z])inn(?:$|[^a-z])|宿屋/.test(raw))return 'village';
   return 'other';
