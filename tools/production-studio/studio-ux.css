@@ -22,3 +22,11 @@ body{overflow-x:clip}
 button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--studio-focus);outline-offset:3px}
 @media(max-width:480px){#published-gallery.category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#published-gallery .category-card{padding:10px}#published-gallery .tile{padding:12px}#published-gallery .category-card strong{font-size:.92rem}#published-gallery .category-card img{aspect-ratio:1/1}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}#published-gallery .category-card{transition:none}}
+
+/* Navigation and explicit QA/adoption status are independent of visual approval. */
+#published-gallery .gallery-breadcrumb{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px;color:var(--studio-muted);font-size:.9rem;min-width:0}
+#published-gallery .gallery-breadcrumb button{min-height:44px;padding:8px 10px;background:#293a3a;color:#edf2ef;border:1px solid #64726b}
+#published-gallery .gallery-breadcrumb strong{color:#f2e4c5;overflow-wrap:anywhere}
+#published-gallery .tile h3{font-size:1rem;line-height:1.5;overflow-wrap:anywhere;margin:0}
+#published-gallery .gallery-meta{display:flex;flex-wrap:wrap;gap:6px}
+#published-gallery .gallery-chip{display:inline-flex;align-items:center;min-height:30px;padding:4px 8px;background:#283a3b;border:1px solid #60716e;border-radius:7px;font-size:.77rem;overflow-wrap:anywhere;max-width:100%}
