@@ -43,6 +43,14 @@
    const timedOut=reason?.name==="TimeoutError"||reason?.name==="AbortError";
    card.append(el("p","PR取得失敗: "+(timedOut?"10秒でタイムアウト":String(reason?.message||reason))));
   }
+  if(owner.id===468||owner.id===485){
+   const evidence=el("p","2026-11-23 担当PR報告: #468基底で片側制約116件 ISOLATED_PASS。Blender 5.3 native保存・別プロセス再オープン、CAS/fencing競合も隔離検証。共有適用・P0-Aは BLOCKED / SYNC_UNVERIFIED、P0-B〜E・G1〜G4は NOT_RUN。Release asset保全はHTTP 401で未完了。");
+   card.append(evidence);
+   const report=el("a","隔離検証の報告証跡（#468）");
+   report.href="https://github.com/"+repo+"/pull/468#issuecomment-7101409252";
+   report.rel="noopener noreferrer";
+   card.append(report,el("p","上記は担当PRの記録であり、Studioによる独立実行・本番PASSの証明ではありません。"));
+  }
   card.append(el("p","注意: PR更新時刻は担当の停止・応答・lease更新を証明しません。"));
   const link=el("a","担当PR・最新指示を確認");link.href="https://github.com/"+repo+"/pull/"+owner.id;link.rel="noopener noreferrer";card.append(link);
   const checklist=el("dl","");
