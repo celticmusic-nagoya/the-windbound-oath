@@ -1,6 +1,6 @@
 {
   "purpose": "single read-only rear-angle calibration of isolated VRoid candidate",
-  "workflow_head": "7a7f626f4f6f4ce5b02e2490e0ef0344ad42fc09",
+  "workflow_head": "67909d03a0070910d6c3e7ea3b50ec173a2031b5",
   "artifact_id": 14729674867,
   "candidate_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574",
   "calibration_steps": [
@@ -11,6 +11,6 @@
   ],
   "capture_mode": "rear-only",
   "source_run_id": 45117436032,
-  "previous_failed_run_id": 45122518238,
-  "retry_reason": "SHA manifest newline formatting failed; replaced with direct file hash comparison"
+  "previous_failed_run_id": 45131024527,
+  "retry_reason": "second failure traced to remaining per-frame escaped checksum manifest; removed all checksum-manifest printf guards, added pre-GUI fail-closed grep"
 }
