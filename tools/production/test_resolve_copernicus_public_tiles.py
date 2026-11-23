@@ -23,6 +23,18 @@ class CopernicusPublicTileTests(unittest.TestCase):
         self.assertFalse(result["published_in_index"])
         self.assertIsNone(result["cog_url"])
 
+    def test_substring_cannot_certify_tile(self):
+        name = mod.tile_name(52, -10)
+        self.assertFalse(mod.resolve("INVALID_" + name + "_SUFFIX", [(52, -10)])[0]["published_in_index"])
+
+    def test_canonical_object_path_can_certify_tile(self):
+        name = mod.tile_name(52, -10)
+        self.assertTrue(mod.resolve(name + "/" + name + ".tif", [(52, -10)])[0]["published_in_index"])
+
+    def test_mismatched_object_name_rejected(self):
+        name = mod.tile_name(52, -10)
+        self.assertFalse(mod.resolve(name + "/other.tif", [(52, -10)])[0]["published_in_index"])
+
     def test_invalid_coordinates_rejected(self):
         with self.assertRaises(ValueError):
             mod.tile_name(90, -10)
