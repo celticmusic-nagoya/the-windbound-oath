@@ -1,0 +1,231 @@
+{
+  "schema": "morwen-face-hair-native-operation-map-v1",
+  "status": "DESIGN_ONLY_UNQUALIFIED_NATIVE_OPERATIONS",
+  "asset_id": "MORWEN",
+  "source": {
+    "landmarks_blob_sha": "93eefba2426f33b5033d07ba7d7c751a99a12292",
+    "precision_blueprint": "tools/morwen_authored_sculpt/precision_blueprint_v2.json",
+    "official_artifact": 14602858760,
+    "native_sha": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+  },
+  "image_space": "384x1024 unmirrored image px, top-left origin; no native camera calibration",
+  "face_targets": [
+    {
+      "part_id": "face.eyes",
+      "target_id": "front.eye_centers",
+      "points_px": [
+        [
+          188,
+          125
+        ],
+        [
+          240,
+          124
+        ]
+      ],
+      "uncertainty_px": 2,
+      "operation_candidate": "VRoid eye size, horizontal placement, eyelid/iris sliders; GUI operation not yet qualified",
+      "protected": [
+        "other eye",
+        "face outline",
+        "existing hair"
+      ],
+      "measurement": null,
+      "tolerance": null
+    },
+    {
+      "part_id": "face.profile",
+      "target_id": "right.nose_chin",
+      "points_px": [
+        [
+          274,
+          137
+        ],
+        [
+          252,
+          177
+        ]
+      ],
+      "uncertainty_px": [
+        2,
+        3
+      ],
+      "operation_candidate": "VRoid nose and jaw shape sliders; record actual native projection before edit",
+      "protected": [
+        "eyes",
+        "ears",
+        "mouth"
+      ],
+      "measurement": null,
+      "tolerance": null
+    },
+    {
+      "part_id": "face.profile",
+      "target_id": "left.nose_chin",
+      "points_px": [
+        [
+          100,
+          137
+        ],
+        [
+          125,
+          177
+        ]
+      ],
+      "uncertainty_px": [
+        2,
+        3
+      ],
+      "operation_candidate": "VRoid nose and jaw shape sliders; inspect bilateral consistency",
+      "protected": [
+        "eyes",
+        "ears",
+        "mouth"
+      ],
+      "measurement": null,
+      "tolerance": null
+    }
+  ],
+  "hair_targets": [
+    {
+      "part_id": "hair.fringe_center",
+      "target_id": "front.fringe_center",
+      "guide_px": [
+        [
+          215,
+          36
+        ],
+        [
+          214,
+          77
+        ],
+        [
+          202,
+          116
+        ]
+      ],
+      "uncertainty_px": 10,
+      "operation_candidate": "VRoid freehand hair guide edit",
+      "status": "UNQUALIFIED"
+    },
+    {
+      "part_id": "hair.left_side",
+      "target_id": "front.image_left_side",
+      "guide_px": [
+        [
+          199,
+          38
+        ],
+        [
+          164,
+          85
+        ],
+        [
+          149,
+          146
+        ],
+        [
+          163,
+          188
+        ]
+      ],
+      "uncertainty_px": 10,
+      "operation_candidate": "VRoid asymmetric freehand hair group",
+      "status": "UNQUALIFIED"
+    },
+    {
+      "part_id": "hair.right_side",
+      "target_id": "front.image_right_side",
+      "guide_px": [
+        [
+          229,
+          38
+        ],
+        [
+          262,
+          83
+        ],
+        [
+          279,
+          151
+        ],
+        [
+          255,
+          188
+        ]
+      ],
+      "uncertainty_px": 10,
+      "operation_candidate": "VRoid asymmetric freehand hair group",
+      "status": "UNQUALIFIED"
+    },
+    {
+      "part_id": "hair.rear_volume",
+      "target_id": "right.rear_volume",
+      "guide_px": [
+        [
+          196,
+          28
+        ],
+        [
+          145,
+          56
+        ],
+        [
+          113,
+          126
+        ],
+        [
+          151,
+          191
+        ]
+      ],
+      "uncertainty_px": 10,
+      "operation_candidate": "VRoid rear hair guide",
+      "status": "UNQUALIFIED"
+    },
+    {
+      "part_id": "hair.temple_lock",
+      "target_id": "right.temple_lock",
+      "guide_px": [
+        [
+          233,
+          38
+        ],
+        [
+          215,
+          94
+        ],
+        [
+          219,
+          160
+        ],
+        [
+          241,
+          191
+        ]
+      ],
+      "uncertainty_px": 10,
+      "operation_candidate": "VRoid temple hair guide",
+      "status": "UNQUALIFIED"
+    }
+  ],
+  "measurement_policy": {
+    "target_provenance": "2D manual projected guides, not native measurements or 3D hair geometry",
+    "residual": "NOT_COMPUTABLE_UNTIL_CAMERA_CALIBRATION",
+    "acceptance": "Use shared Blueprint Engine only after matched target, measurement, uncertainty, tolerance and operation qualification",
+    "protected": [
+      "official CG SHA",
+      "native master",
+      "face/ears",
+      "unrelated hair groups",
+      "existing checkpoints"
+    ]
+  },
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN_ALIGNED",
+    "G3": "NOT_RUN_NATIVE_EDIT",
+    "G4": "NOT_RUN"
+  },
+  "next": "Owner/lease/fencing + all-event Actions preflight; aligned capture; qualify one reversible VRoid edit on disposable copy; checkpoint/reopen and independent art QA"
+}
