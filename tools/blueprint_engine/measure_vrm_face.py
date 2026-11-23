@@ -79,8 +79,12 @@ def main(argv):
         m[f"eyeline_width_{label}"] = (ext(line, 0, max) - ext(line, 0, min)) if line else None
         m[f"iris_center_x_{label}"] = (ext(ir, 0, max) + ext(ir, 0, min)) / 2
         m[f"eye_inner_x_{label}"] = ext(white, 0, max) if sign < 0 else ext(white, 0, min)
+        m[f"eyeline_inner_x_{label}"] = ((ext(line, 0, max) if sign < 0 else ext(line, 0, min))
+                                         if line else None)
     m["iris_center_distance"] = m["iris_center_x_right"] - m["iris_center_x_left"]
     m["inner_eye_gap"] = m["eye_inner_x_right"] - m["eye_inner_x_left"]
+    m["eyeline_inner_gap"] = (m["eyeline_inner_x_right"] - m["eyeline_inner_x_left"]
+                              if line else None)
     mouth = regions["FaceMouth"]
     m["mouth_mesh_width"] = (ext(mouth, 0, max) - ext(mouth, 0, min)) if mouth else None
     m["nose_to_chin_vertical"] = nose[2] - chin
@@ -95,7 +99,7 @@ def main(argv):
                   crown_z=crown, chin_z=chin, nose_tip=list(nose), head_height_m=head,
                   metrics_m=m,
                   ratios={k: (v / head if v is not None else None) for k, v in m.items()
-                          if not k.startswith(("iris_center_x", "eye_inner_x"))})
+                          if not k.startswith(("iris_center_x", "eye_inner_x", "eyeline_inner_x"))})
     with open(out, "w") as stream:
         json.dump(result, stream, sort_keys=True, indent=1)
 

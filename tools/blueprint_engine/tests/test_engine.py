@@ -415,3 +415,19 @@ class ContinuationTests(unittest.TestCase):
             value, u = adapter.value(adapter.raw(blend), ("gap", "BOX", "OTHER", 0))
             self.assertEqual(value, 4.0)                       # OTHER x 5..6, BOX x 0..1
             self.assertGreater(u, 0)
+
+
+class EyelineTests(unittest.TestCase):
+    def test_eyeline_extent_on_synthetic_stroke(self):
+        from blueprint_engine.official_face import eyeline
+        with TemporaryDirectory() as d:
+            path = Path(d) / "e.png"
+            image = Image.new("RGBA", (60, 30), (250, 220, 200, 255))     # skin
+            for x in range(12, 44):
+                image.putpixel((x, 10), (60, 25, 20, 255))                # warm dark stroke
+                image.putpixel((x, 11), (60, 25, 20, 255))
+            image.save(path)
+            r = eyeline(path, (2, 2, 57, 20), 28)
+            self.assertEqual((r["left"], r["right"], r["width"]), (12, 43, 32))
+            self.assertEqual(r["ambiguous"], [])
+            self.assertEqual(r["width_u"], 1.0)                           # sweep 0 + 2 x 0.5 px
