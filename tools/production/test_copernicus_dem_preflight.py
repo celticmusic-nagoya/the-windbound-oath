@@ -50,6 +50,23 @@ class RasterPreflightTests(unittest.TestCase):
         self.assertTrue(result['sha_match'])
         self.assertEqual(result['qa'], 'BLOCKED')
 
+    def test_all_nodata_blocked(self):
+        self.make_raster()
+        with rasterio.open(self.path, 'r+') as ds:
+            ds.write(np.full((3, 3), -9999, dtype='float32'), 1)
+        result = mod.audit(self.path)
+        self.assertIn('NO_FINITE_VALID_ELEVATIONS', result['errors'])
+        self.assertEqual(result['raster']['finite_valid_cells'], 0)
+
+    def test_nonfinite_cells_ignored(self):
+        self.make_raster()
+        with rasterio.open(self.path, 'r+') as ds:
+            ds.write(np.array([[1, 2, 3], [4, np.nan, 6], [7, 8, -9999]], dtype='float32'), 1)
+        result = mod.audit(self.path)
+        self.assertEqual(result['raster']['finite_valid_cells'], 7)
+        self.assertEqual(result['raster']['finite_min'], 1.0)
+        self.assertEqual(result['raster']['finite_max'], 8.0)
+
     def test_invalid_raster_blocked(self):
         self.path.write_text('not a raster')
         self.assertTrue(any(e.startswith('RASTER_OPEN_FAILED') for e in mod.audit(self.path)['errors']))
