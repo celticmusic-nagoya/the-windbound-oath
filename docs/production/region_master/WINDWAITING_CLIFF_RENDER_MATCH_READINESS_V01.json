@@ -1,0 +1,60 @@
+{
+  "schema": "two.cliff.render_comparison_readiness.v01",
+  "id": "WINDWAITING_CLIFF_RENDER_MATCH_READINESS_V01",
+  "source_trace": {
+    "path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_V03.json",
+    "image_size_px": [
+      1672,
+      941
+    ],
+    "source_image_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
+  },
+  "owner": "PR #421 cliff writer",
+  "read_only_discovery": {
+    "pr": 421,
+    "changed_files_listing": "INSPECTED",
+    "latest_comment": "2026-11-23 director requests isolated native end-to-end proof",
+    "known_historical_candidates": [
+      "assets/candidates/lind/windwaiting-cliff-playable/hero-cliff-v1/native-sunset.png",
+      "assets/candidates/lind/windwaiting-cliff-playable/headland-v1/native-sunset.png",
+      "assets/candidates/lind/windwaiting-cliff-playable/hero-cliff-v1/comparison.png"
+    ],
+    "latest_C13_reference": {
+      "branch_head": "58cf4ea27ca800dc4cd236149b5035c4f324ba54",
+      "manifest_sha256_claimed_in_comment": "551c083899a29b68110dac18ff2ea0ee93164453778c6c580aa1931b235a090d",
+      "manifest_bytes": "NOT_RETRIEVED",
+      "render_artifact": "NOT_VERIFIED"
+    },
+    "historical_method_E": {
+      "run_id": 44979340529,
+      "artifact_id": 14737506262,
+      "independent_branch": "DO_NOT_MIX_WITH_C13"
+    }
+  },
+  "required_match": {
+    "render_sha256": null,
+    "render_resolution_px": null,
+    "camera_projection": null,
+    "camera_pose": null,
+    "camera_intrinsics": null,
+    "landmark_registration": null,
+    "mask_definition": null,
+    "pixel_tolerance": null,
+    "trace_uncertainty_calibrated": null
+  },
+  "comparison": {
+    "residuals_px": null,
+    "status": "BLOCKED",
+    "reason": "Latest production render and verified matching camera not available in this read-only review"
+  },
+  "qa": {
+    "evidence_inventory": "PASS",
+    "latest_artifact_verified": "NOT_RUN",
+    "matched_camera": "BLOCKED",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "safety": "No new Actions, native asset edits, lease or owner changes; legacy and method E are not C13 render evidence"
+}
