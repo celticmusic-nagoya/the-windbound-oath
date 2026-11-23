@@ -25,6 +25,10 @@ jobs:
           mkdir -p evidence
           git rev-parse HEAD > evidence/checkout-sha.txt
           bash -n tools/production_qa/morwen_readonly_capture.sh
+          if grep -nF '\\n' tools/production_qa/morwen_readonly_capture.sh; then
+            echo 'BLOCKED_MALFORMED_CHECKSUM_ESCAPE' >&2
+            exit 1
+          fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
       - name: Restore native checkpoint
