@@ -310,3 +310,46 @@ class BlenderAdapterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class P1MethodTests(unittest.TestCase):
+    def test_porch_classifier_uses_geometry_rules_not_design_values(self):
+        from blueprint_engine.cases.lind_home_porch import classify
+        box = lambda a, b: dict(bbox_min=a, bbox_max=b, vertices=8)
+        parts = classify([box([-1.15, -4.7, 0], [-0.83, -4.39, 0.2]),
+                          box([-1.05, -4.6, 0.2], [-0.93, -4.49, 2.4]),
+                          box([-1.15, -4.63, 2.4], [1.15, -4.47, 2.56]),
+                          box([-1.17, -4.9, 2.5], [1.17, -3.3, 3.3])])
+        self.assertEqual([len(parts[k]) for k in ("plinths", "posts", "lintels", "other")],
+                         [1, 1, 1, 1])
+
+    def test_face_ratio_uncertainty_budget(self):
+        from blueprint_engine.cases.morwen_face_vrm import official
+        precision = {"face_front_review": {"points": {
+            "left_outer_eye": [169, 120], "left_inner_eye": [201, 120],
+            "right_inner_eye": [228, 120], "right_outer_eye": [258, 120],
+            "left_iris_center": [188, 125], "right_iris_center": [239, 125],
+            "nose_tip": [214, 144], "mouth_left": [206, 159], "mouth_right": [222, 159],
+            "chin": [214, 180]}}}
+        landmarks = {"views": {"front": {"landmarks": {
+            "crown": {"xy_px": [208, 18], "uncertainty_px": 2},
+            "chin": {"xy_px": [214, 180], "uncertainty_px": 3}}}}}
+        head, u_head, out = official(precision, landmarks)
+        self.assertEqual((head, u_head), (162, 5))
+        self.assertAlmostEqual(out["eye_width_left"]["u"], 6 / 162 + 32 * 5 / 162 ** 2)
+        self.assertGreater(out["eye_width_left"]["u"], out["eye_width_left"]["tolerance"])
+
+    def test_face_adapter_is_read_only(self):
+        from blueprint_engine.measure import VrmFaceAdapter
+        adapter = VrmFaceAdapter({}, "s")
+        for name in ("edit", "correct", "propose_correction", "correct_metric"):
+            with self.assertRaises(RuntimeError):
+                getattr(adapter, name)()
+
+    @unittest.skipUnless(HAS_BPY, "bpy 5.3.0 not installed")
+    def test_blender_components_are_reported_per_island(self):
+        with TemporaryDirectory() as d:
+            blend = BlenderAdapterTests().make(Path(d) / "a.blend")
+            raw = BlenderAdapter({}, "s", components=["BOX"]).raw(blend)
+            self.assertEqual(len(raw["objects"]["BOX"]["components"]), 1)
+            self.assertEqual(raw["objects"]["BOX"]["components"][0]["bbox_max"], [1.0, 2.0, 3.0])

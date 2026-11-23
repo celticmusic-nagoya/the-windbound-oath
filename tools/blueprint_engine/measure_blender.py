@@ -10,6 +10,35 @@ import json
 import sys
 
 import bpy
+import bmesh  # noqa: E402  (pip bpy registers bmesh on import)
+
+
+def components(obj):
+    """World-space bounds of connected mesh islands, sorted by (zmin, xmin, ymin)."""
+    bm = bmesh.new()
+    try:
+        bm.from_mesh(obj.data)
+        bm.transform(obj.matrix_world)
+        bm.verts.ensure_lookup_table()
+        seen, parts = set(), []
+        for start in bm.verts:
+            if start.index in seen:
+                continue
+            stack, island = [start], []
+            while stack:
+                vert = stack.pop()
+                if vert.index in seen:
+                    continue
+                seen.add(vert.index)
+                island.append(vert.co.copy())
+                stack.extend(edge.other_vert(vert) for edge in vert.link_edges)
+            parts.append(dict(vertices=len(island),
+                              bbox_min=[min(v[i] for v in island) for i in range(3)],
+                              bbox_max=[max(v[i] for v in island) for i in range(3)]))
+    finally:
+        bm.free()
+    return sorted(parts, key=lambda p: (round(p["bbox_min"][2], 6), round(p["bbox_min"][0], 6),
+                                        round(p["bbox_min"][1], 6)))
 
 
 def fingerprint(obj, evaluated, depsgraph):
@@ -49,6 +78,8 @@ def main(argv):
             record.update(vertices=len(mesh.vertices), faces=len(mesh.polygons))
             if evaluated:
                 obj.evaluated_get(depsgraph).to_mesh_clear()
+        if obj.type == "MESH" and obj.name in spec.get("components", ()):
+            record["components"] = components(obj)
         objects[obj.name] = record
     result = dict(bpy_version=bpy.app.version_string,
                   build_hash=bpy.app.build_hash.decode() if isinstance(bpy.app.build_hash, bytes)

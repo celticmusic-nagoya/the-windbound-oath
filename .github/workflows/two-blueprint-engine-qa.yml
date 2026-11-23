@@ -43,6 +43,8 @@ jobs:
           fetch 14602858760 "$RUNNER_TEMP/in/layer0" ""
           fetch 14741418957 "$RUNNER_TEMP/in/home" "home_portal_checkpoint.blend"
           fetch 14754066570 "$RUNNER_TEMP/in/vroid" "model.vroid"
+          unzip -qo "$RUNNER_TEMP/in/14741418957.zip" checkpoint.json -d "$RUNNER_TEMP/in/home"
+          mkdir -p "$RUNNER_TEMP/in/m00"; fetch 14626143604 "$RUNNER_TEMP/in/m00" "M00.blend"
           git fetch --depth=1 https://github.com/$REPO feature/lind-village-world-integration-plan-01
           git show FETCH_HEAD:assets/candidates/LIND-HOME-01/blueprint-measured-20261121/evidence.zip > "$RUNNER_TEMP/in/design/e.zip"
           unzip -qo "$RUNNER_TEMP/in/design/e.zip" measurements.json -d "$RUNNER_TEMP/in/design"
@@ -52,10 +54,16 @@ jobs:
       - name: Character case Morwen Layer0 + VRoid native
         working-directory: tools
         run: python -m blueprint_engine.cases.morwen_layer0 --layer0 "$RUNNER_TEMP/in/layer0" --silhouette "$RUNNER_TEMP/in/layer0/reference_silhouette_landmarks.json" --precision morwen_authored_sculpt/precision_blueprint_v2.json --vroid "$RUNNER_TEMP/in/vroid/model.vroid" --out "$RUNNER_TEMP/out/morwen"
+      - name: P1-A porch semantic correspondence (read-only)
+        working-directory: tools
+        run: python -m blueprint_engine.cases.lind_home_porch --design "$RUNNER_TEMP/in/design/measurements.json" --native "$RUNNER_TEMP/in/home/home_portal_checkpoint.blend" --owner-checkpoint "$RUNNER_TEMP/in/home/checkpoint.json" --out "$RUNNER_TEMP/out/porch"
+      - name: P1-B VRoid face front-ratio method on M00 comparator (read-only)
+        working-directory: tools
+        run: python -m blueprint_engine.cases.morwen_face_vrm --front "$RUNNER_TEMP/in/layer0/7809.png" --precision morwen_authored_sculpt/precision_blueprint_v2.json --landmarks morwen_authored_sculpt/layer0_landmarks_v1.json --m00 "$RUNNER_TEMP/in/m00/M00.blend" --out "$RUNNER_TEMP/out/face"
       - name: Deterministic output digest (cross-run comparison)
         run: |
           cd "$RUNNER_TEMP/out"
-          find lind_home morwen -path '*/factory/*' -prune -o -type f \( -path '*/residual/*' -o -path '*/targets/*' -o -path '*/handoff/*' -o -name blueprint.json \) -print | sort | xargs sha256sum | tee deterministic.sha256
+          find lind_home morwen porch face -path '*/factory/*' -prune -o -type f \( -path '*/residual/*' -o -path '*/targets/*' -o -path '*/handoff/*' -o -name blueprint.json -o -name porch_correspondence.json \) -print | sort | xargs sha256sum | tee deterministic.sha256
           sha256sum deterministic.sha256
           # no native or official source bytes leave the runner
           find . -path '*/factory/*' \( -name 'native.*' \) -delete

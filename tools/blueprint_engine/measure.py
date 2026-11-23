@@ -129,18 +129,19 @@ class BlenderAdapter(_Adapter):
     method = "bpy-world-mesh-bbox-and-object-translation"
 
     def __init__(self, selectors, protected_scope_id, protect_objects=None, python=None,
-                 timeout=600, evaluated=False):
+                 timeout=600, evaluated=False, components=()):
         super().__init__(selectors, protected_scope_id)
         self.protect_objects = protect_objects
         self.python = python or [sys.executable, "-I"]
         self.timeout = timeout
         self.evaluated = evaluated
+        self.components = list(components)
 
     def raw(self, native, deadline=None):
         out_dir = Path(native).parent
         spec = out_dir / f"spec-{time.monotonic_ns()}.json"
         out = out_dir / f"raw-{time.monotonic_ns()}.json"
-        spec.write_text(json.dumps(dict(evaluated=self.evaluated)))
+        spec.write_text(json.dumps(dict(evaluated=self.evaluated, components=self.components)))
         timeout = self.timeout if deadline is None else max(1, min(self.timeout,
                                                                    deadline - time.monotonic()))
         before = file_sha256(native)
@@ -185,3 +186,50 @@ class BlenderAdapter(_Adapter):
 def baseline_protected_sha(adapter, native):
     """Measure the protected fingerprint of the registered source before any stage."""
     return adapter.protected(native, adapter.raw(native))
+
+
+class VrmFaceAdapter(_Adapter):
+    """Read-only VRoid face measurement (measure_vrm_face.py) on a Blender-imported VRM.
+
+    Selectors: metric name -> ratio to head height (dimensionless). Native numeric
+    uncertainty is float32 storage only; definition differences against the
+    illustration are carried by the blueprint (target uncertainty / comparability).
+    Protected scope: the whole native file (read-only stage).
+    """
+    method = "bpy-vroid-material-region-front-ortho-ratio"
+    script = HERE / "measure_vrm_face.py"
+
+    def __init__(self, selectors, protected_scope_id, python=None, timeout=600):
+        super().__init__(selectors, protected_scope_id)
+        self.python = python or [sys.executable, "-I"]
+        self.timeout = timeout
+
+    def raw(self, native, deadline=None):
+        out_dir = Path(native).parent
+        spec = out_dir / f"spec-{time.monotonic_ns()}.json"
+        out = out_dir / f"raw-{time.monotonic_ns()}.json"
+        spec.write_text("{}")
+        before = file_sha256(native)
+        timeout = self.timeout if deadline is None else max(1, min(self.timeout,
+                                                                   deadline - time.monotonic()))
+        proc = subprocess.run([*self.python, str(self.script), str(native), str(spec), str(out)],
+                              capture_output=True, text=True, timeout=timeout)
+        if proc.returncode != 0 or not out.is_file():
+            raise RuntimeError("vrm face measurement failed: " + (proc.stderr + proc.stdout)[-2000:])
+        if file_sha256(native) != before:
+            raise RuntimeError("vrm face measurement modified the native file")
+        raw = json.loads(out.read_text())
+        spec.unlink()
+        out.unlink()
+        if raw.get("is_dirty") or raw.get("nonzero_shape_keys"):
+            raise RuntimeError("face not in basis/clean state: " + repr(raw.get("nonzero_shape_keys")))
+        return raw
+
+    def value(self, raw, selector):
+        value = raw["ratios"][selector]
+        if not finite(value):
+            raise ValueError(f"face metric {selector} not measurable")
+        return value, 2.0 ** -22 * 4
+
+    def protected(self, native, raw):
+        return file_sha256(native)
