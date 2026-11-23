@@ -121,7 +121,8 @@ class BlenderAdapter(_Adapter):
     """Native Blender measurement through measure_blender.py in a separate process.
 
     Selectors: ("bounds", [objects], "min"|"max", axis) union world bbox;
-               ("anchor", name, axis) world translation.
+               ("anchor", name, axis) world translation;
+               ("gap", low_object, high_object, axis) clearance between two bboxes.
     Uncertainty: float32 storage bound 2**-22 * max(1, |v|) per coordinate.
     Protected fingerprint: SHA-256 over per-object fingerprints of protect_objects
     (None = every object in the scene).
@@ -163,6 +164,15 @@ class BlenderAdapter(_Adapter):
         objects = raw["objects"]
         if selector[0] == "anchor":
             value = objects[selector[1]]["location"][selector[2]]
+        elif selector[0] == "gap":
+            # ("gap", low_object, high_object, axis): high.bbox_min - low.bbox_max
+            low, high, axis = selector[1], selector[2], selector[3]
+            value = objects[high]["bbox_min"][axis] - objects[low]["bbox_max"][axis]
+            if not finite(value):
+                raise ValueError("non-finite native measurement")
+            u = 2.0 ** -22 * (max(1.0, abs(objects[high]["bbox_min"][axis]))
+                              + max(1.0, abs(objects[low]["bbox_max"][axis])))
+            return value, u
         else:
             names, side, axis = selector[1], selector[2], selector[3]
             missing = [n for n in names if n not in objects or "bbox_min" not in objects[n]]

@@ -20,6 +20,7 @@ from ..evidence import ESTIMATED, NATIVE_MEASURED, UNDETERMINED
 from ..export import ledger, studio_record, write_json
 from ..geometry import Blueprint
 from ..measure import VrmFaceAdapter
+from ..official_face import remeasure
 from ..sources import file_sha256, register_source
 from ._run import run_group
 
@@ -139,6 +140,42 @@ def run(layer0_front, precision_json, landmarks_json, m00_blend, out, python=Non
             status=("COMPARABLE" if key in COMPARABLE else "DEFINITION_MISMATCH"),
             pass_reachable=reachable, state=report["metrics"].get(key, {}).get("state", "NOT_TARGET"),
             note=DEFINITION.get(key))
+    research = remeasure(layer0_front, precision["face_front_review"]["points"])
+    eye_definition = {
+        "eye_width_left": "sclera+iris opening; illustrated corners include the eyeline wing "
+                          "-> definition differs from the manual points; match VRoid FaceEyeline",
+        "eye_width_right": "same as left; sweep unstable on this eye",
+        "inner_eye_gap": "derived from sclera inner edges; unstable",
+        "iris_center_distance": "iris centroid (same definition as VRoid EyeIris bbox centre)"}
+    research_rows = {}
+    for key, rec in research["ratios"].items():
+        tol = OWNER_TOL_PX / research["head_px"]
+        nat = first["ratios"][key]
+        u = rec["u"] + 2.0 ** -22 * 4
+        state = "UNSTABLE" if key != "iris_center_distance" else (
+            "PASS" if abs(nat - rec["ratio"]) + u <= tol else
+            "OUTSIDE" if abs(nat - rec["ratio"]) - u > tol else "HOLD")
+        research_rows[key] = dict(manual_px=off[key]["px"], manual_u_ratio=off[key]["u"],
+                                  algorithmic_px=rec["px"], algorithmic_u_px=rec["u_px"],
+                                  algorithmic_ratio=rec["ratio"], algorithmic_u_ratio=rec["u"],
+                                  tolerance_ratio=tol, pass_reachable=rec["u"] < tol,
+                                  m00_ratio=nat, m00_state_if_adopted=state,
+                                  definition=eye_definition[key])
+    research_record = dict(
+        status="RESEARCH_ONLY_NOT_A_TARGET (official targets and owner tolerance unchanged)",
+        method="official_face.py: deterministic pixel segmentation; u = half range of a fixed "
+               "parameter sweep + 0.5 px; manual points used only as search windows",
+        head=dict(manual_px=head, manual_u_px=u_head, algorithmic_px=research["head_px"],
+                  algorithmic_u_px=research["head_u_px"],
+                  crown=research["points"]["crown"], chin=research["points"]["chin"]),
+        metrics=research_rows,
+        conclusion=["crown/chin: head-height uncertainty 5 px -> ~1.5 px",
+                    "iris centre distance: 6 px -> ~2.7 px; PASS becomes reachable",
+                    "eye widths / inner gap: sclera segmentation is unstable and is a different "
+                    "definition from the illustrated corners; next method = eyeline (lash line) "
+                    "extent, matched to VRoid FaceEyeline, with independent double annotation "
+                    "as fallback"])
+    write_json(out / "official_remeasure_research.json", research_record)
     summary = dict(case="morwen.face.front.ratio", substrate="M00 comparator (not current candidate)",
                    head_px=head, head_u_px=u_head, native_head_m=first["head_height_m"],
                    qualification=qual, result=result, comparability=comparability,

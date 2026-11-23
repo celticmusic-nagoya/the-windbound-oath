@@ -102,3 +102,24 @@ def handoff(target, request, engine_issues, *, current_dependency_hashes=None,
                 operation=target["operation"], protection=target["protection"],
                 dependency_fingerprint=target["dependency_fingerprint"],
                 corrections=sorted(target.get("corrections", {})))
+
+
+def interval_metric(lower, upper, *, uncertainty=0.0):
+    """Encode a design interval [lower, upper] in the existing two-sided #468 target.
+
+    value = midpoint, tolerance = half-width. With #468 metric_state this gives
+    PASS iff lower + u <= x <= upper - u (u = target + observation uncertainty),
+    OUTSIDE iff x < lower - u or x > upper + u, else HOLD. No contract change.
+    A pure lower bound ("clearance >= 1.0") has no upper end; the owner must
+    designate `upper` (e.g. the structural maximum). Infinite bounds are refused.
+    """
+    from . import finite
+    if not (finite(lower) and finite(upper)) or upper <= lower:
+        raise ValueError("interval needs finite lower < upper (owner-designated)")
+    if not finite(uncertainty) or uncertainty < 0:
+        raise ValueError("non-negative uncertainty required")
+    half = (upper - lower) / 2
+    if half <= uncertainty:
+        raise ValueError("interval narrower than uncertainty: PASS unreachable")
+    return dict(value=lower + half, tolerance=half, uncertainty=uncertainty,
+                encoding="interval-midpoint/half-width", lower=lower, upper=upper)

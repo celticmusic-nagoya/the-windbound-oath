@@ -8,12 +8,22 @@ from .. import digest_record
 from ..contract import compile_target, handoff
 from ..export import write_json
 from ..residual import evaluate
+from ..sources import file_sha256
+
+ENGINE_DIR = Path(__file__).resolve().parents[1]
+ENGINE_FILES = ("measure.py", "residual.py", "contract.py", "geometry.py", "evidence.py")
+
+
+def engine_dependencies():
+    """SHA of the engine code that computes values/states; part of every target fingerprint."""
+    return {f"engine/{name}": file_sha256(ENGINE_DIR / name) for name in ENGINE_FILES}
 
 from shared_factory_stage import execute_factory_stage  # #468 (Codex)
 
 
 def run_group(blueprint, target_id, registry, adapter, *, native, native_sha, baseline,
               dependencies, out, factory=True):
+    dependencies = {**dependencies, **engine_dependencies()}
     target, request, engine_issues = compile_target(
         blueprint, target_id, registry, native_sha256=native_sha,
         protected_baseline_sha256=baseline, dependency_hashes=dependencies)

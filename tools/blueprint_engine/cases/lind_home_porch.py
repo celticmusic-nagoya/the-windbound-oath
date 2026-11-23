@@ -126,8 +126,75 @@ def run(design_path, native_path, owner_checkpoint, out, python=None):
                      "t=1e-4 BU)", "per post: collision z in [0, >= post top]",
                      "opening clearance between posts >= 1.0 BU (one-sided; needs #468 "
                      "contract extension or owner-side check)"]))
+    record["difference_table"] = difference_table(d, west, east, parts, clearance)
+    gap_adapter = BlenderAdapter({}, "porch")
+    gap, gap_u = gap_adapter.value(raw, ("gap", "COL_AIDANHOUSE_porch_post_west",
+                                         "COL_AIDANHOUSE_porch_post_east", 0))
+    record["clearance_cross_check"] = dict(
+        method_a="components/bbox difference", value_a=clearance,
+        method_b="BlenderAdapter selector ('gap', west, east, x)", value_b=gap, u_b=gap_u,
+        agree=abs(gap - clearance) <= gap_u)
+    record["lower_bound_contract"] = dict(
+        status="PROPOSED_TO_CODEX_NO_CONTRACT_CHANGE",
+        option_a="interval_metric(lower=1.0, upper=<owner-designated>): value=midpoint, "
+                 "tolerance=half-width in the existing #468 target; PASS iff "
+                 "lower+u <= x <= upper-u",
+        option_b="#468 contract extension for one-sided bounds (Codex decision)",
+        upper="UNDETERMINED (owner design value; engine does not invent it)",
+        current_target="UNCHANGED (lind-home.porch remains OUTSIDE/BLOCKED)")
+    record["dependencies"] = dict(
+        design_measurements_json=DESIGN_SHA,
+        design_source_native="d35432e415fd1ad96f95487d647f80dfdc6ba7028a001424c39259e67ec5e00a "
+                             "(per measurements.json; bytes not available here)",
+        native_checkpoint=NATIVE_SHA, owner_checkpoint_json=OWNER_CHECKPOINT_SHA,
+        measure_blender_py=file_sha256(BLENDER_SCRIPT),
+        measure_py=file_sha256(Path(__file__).resolve().parents[1] / "measure.py"),
+        this_case=file_sha256(Path(__file__)))
     write_json(out / "porch_correspondence.json", record)
     return record
+
+
+U_DESIGN = 5e-7            # measurements.json stores 6 decimals
+
+
+def _u_native(v):
+    return 2.0 ** -22 * max(1.0, abs(v))
+
+
+def difference_table(d, west, east, parts, clearance):
+    """Design single proxy vs native east/west proxies, value by value."""
+    plinth_mid_y = sum((p["bbox_min"][1] + p["bbox_max"][1]) / 2 for p in parts["plinths"]) / len(parts["plinths"])
+    lintel = parts["lintels"][0]
+    rows = [
+        ("proxy_count", 1, 2, None, "design: one frame-envelope box; native: one box per post"),
+        ("outer_x_min", d[0][0], west["bbox_min"][0], "BU", "same outer span (plinth outer face)"),
+        ("outer_x_max", d[1][0], east["bbox_max"][0], "BU", "same outer span (plinth outer face)"),
+        ("y_min", d[0][1], west["bbox_min"][1], "BU", "native follows plinth depth"),
+        ("y_max", d[1][1], west["bbox_max"][1], "BU", "native follows plinth depth"),
+        ("depth_y", d[1][1] - d[0][1], west["bbox_max"][1] - west["bbox_min"][1], "BU",
+         "design depth 0.16 ~ lintel depth 0.16; native = plinth depth"),
+        ("centre_y", (d[0][1] + d[1][1]) / 2, (west["bbox_min"][1] + west["bbox_max"][1]) / 2, "BU",
+         f"visual plinth centre {plinth_mid_y:.4f}; lintel centre "
+         f"{(lintel['bbox_min'][1] + lintel['bbox_max'][1]) / 2:.4f}"),
+        ("z_min", d[0][2], west["bbox_min"][2], "BU", "ground"),
+        ("z_max", d[1][2], west["bbox_max"][2], "BU", "both 2.5; timber post top 2.4"),
+        ("ground_clearance_x", 0.0, clearance, "BU",
+         "design blocks the walk opening; native leaves 1.66 (owner min 1.0)"),
+    ]
+    table = []
+    for name, dv, nv, unit, meaning in rows:
+        if unit is None:
+            table.append(dict(quantity=name, design=dv, native=nv, unit="count", meaning=meaning,
+                              evidence="NATIVE_MEASURED (both sides)"))
+            continue
+        u = U_DESIGN + _u_native(nv) * (2 if name in ("depth_y", "ground_clearance_x") else 1)
+        delta = nv - dv
+        table.append(dict(quantity=name, design=dv, native=nv, delta=delta, unit=unit,
+                          u_design=U_DESIGN, u_native=u - U_DESIGN, u=u,
+                          significant=abs(delta) > u, meaning=meaning,
+                          evidence="design NATIVE_MEASURED on prior native (candidate, G1 "
+                                   "blocked); native NATIVE_MEASURED"))
+    return table
 
 
 def main():

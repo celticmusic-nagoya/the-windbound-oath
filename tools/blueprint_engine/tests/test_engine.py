@@ -353,3 +353,65 @@ class P1MethodTests(unittest.TestCase):
             raw = BlenderAdapter({}, "s", components=["BOX"]).raw(blend)
             self.assertEqual(len(raw["objects"]["BOX"]["components"]), 1)
             self.assertEqual(raw["objects"]["BOX"]["components"][0]["bbox_max"], [1.0, 2.0, 3.0])
+
+
+class ContinuationTests(unittest.TestCase):
+    def test_interval_metric_reuses_two_sided_contract(self):
+        from blueprint_engine.contract import interval_metric
+        m = interval_metric(1.0, 3.0, uncertainty=0.25)
+        self.assertEqual((m["value"], m["tolerance"]), (2.0, 1.0))
+        for x, expected in ((1.25, "PASS"), (2.75, "PASS"), (1.125, "HOLD"), (0.5, "OUTSIDE"),
+                            (3.5, "OUTSIDE"), (0.875, "HOLD")):
+            with self.subTest(x=x):
+                self.assertEqual(metric_state(x - m["value"], m["tolerance"], 0.25), expected)
+        for bad in ((1.0, float("inf")), (2.0, 1.0)):
+            with self.assertRaises(ValueError):
+                interval_metric(*bad)
+        with self.assertRaises(ValueError):
+            interval_metric(1.0, 1.4, uncertainty=0.25)      # PASS unreachable
+
+    def test_official_crown_and_chin_are_subpixel_and_deterministic(self):
+        from blueprint_engine.official_face import chin, crown
+        with TemporaryDirectory() as d:
+            path = Path(d) / "f.png"
+            image = Image.new("RGBA", (20, 40), (0, 0, 0, 0))
+            for x in range(20):
+                image.putpixel((x, 5), (255, 255, 255, 128))
+                for y in range(6, 40):
+                    image.putpixel((x, y), (255, 230, 210, 255))
+                image.putpixel((x, 30), (40, 20, 20, 255))
+            image.save(path)
+            c1, c2 = crown(path), crown(path)
+            self.assertEqual(c1, c2)
+            self.assertTrue(4.0 <= c1["y"] <= 6.0)
+            self.assertAlmostEqual(chin(path, 10, (25, 35))["y"], 30.0)
+
+    def test_compat_check_classifies_provenance_vs_design(self):
+        from blueprint_engine.cases.compat_check import check
+        with TemporaryDirectory() as d:
+            src = png(Path(d) / "a.png")
+            sha = file_sha256(src)
+            for name, value, deps in (("old", 10.0, {"d": "2" * 64}), ("new", 10.0, {"d": "3" * 64}),
+                                      ("moved", 11.0, {"d": "2" * 64})):
+                t, r, _ = compile_target(image_blueprint(src, value), "g", registry(),
+                                         native_sha256=sha, protected_baseline_sha256=sha,
+                                         dependency_hashes=deps)
+                root = Path(d) / name
+                (root / "targets").mkdir(parents=True)
+                (root / "handoff").mkdir()
+                (root / "targets" / "g.json").write_text(json.dumps(dict(target=t, request=r)))
+                (root / "handoff" / "g.json").write_text(json.dumps(handoff(t, r, [])))
+            rep = check(Path(d) / "old", Path(d) / "new")["targets"]["targets/g.json"]
+            self.assertEqual((rep["design_changed"], rep["provenance_changed"]),
+                             ([], ["dependency_fingerprint"]))
+            rep = check(Path(d) / "old", Path(d) / "moved")["targets"]["targets/g.json"]
+            self.assertIn("values", rep["design_changed"])
+
+    @unittest.skipUnless(HAS_BPY, "bpy 5.3.0 not installed")
+    def test_gap_selector(self):
+        with TemporaryDirectory() as d:
+            blend = BlenderAdapterTests().make(Path(d) / "a.blend")
+            adapter = BlenderAdapter({}, "s")
+            value, u = adapter.value(adapter.raw(blend), ("gap", "BOX", "OTHER", 0))
+            self.assertEqual(value, 4.0)                       # OTHER x 5..6, BOX x 0..1
+            self.assertGreater(u, 0)
