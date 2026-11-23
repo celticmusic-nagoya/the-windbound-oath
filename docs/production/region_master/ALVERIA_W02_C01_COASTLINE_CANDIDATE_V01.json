@@ -1,7 +1,7 @@
 {
   "schema": "two.world.c01.coastline_candidate.v1",
-  "stage": "W02_PRELIMINARY_GEOMETRY_NOT_APPROVED",
-  "status": "PROCEDURAL_TOPOLOGY_CANDIDATE_NOT_GEOSPATIAL_SOURCE",
+  "stage": "W02_PRELIMINARY_GEOMETRY_REVISED_NOT_APPROVED",
+  "status": "PROCEDURAL_TOPOLOGY_CANDIDATE_CORRECTED_Y_AXIS",
   "reference_frame": {
     "name": "normalized_illustration",
     "x": "east",
@@ -10,97 +10,98 @@
     "metres_per_unit": null,
     "origin_xyz_m": null,
     "vertical_datum": null,
-    "projection": "fictional_non_georeferenced"
+    "projection": "fictional_non_georeferenced",
+    "coordinate_correction": "v01 prior points used screen-down Y despite x east/y north metadata; v02 coordinates reflect Y increasing north. Visual silhouette unchanged."
   },
   "continent_coastline": {
     "ring": [
       [
         22,
-        18
+        82
       ],
       [
         34,
-        10
-      ],
-      [
-        48,
-        13
-      ],
-      [
-        60,
-        8
-      ],
-      [
-        71,
-        18
-      ],
-      [
-        81,
-        16
-      ],
-      [
-        91,
-        31
-      ],
-      [
-        88,
-        46
-      ],
-      [
-        95,
-        59
-      ],
-      [
-        86,
-        72
-      ],
-      [
-        77,
-        77
-      ],
-      [
-        68,
         90
       ],
       [
-        54,
+        48,
         87
       ],
       [
-        42,
-        93
+        60,
+        92
       ],
       [
-        31,
+        71,
+        82
+      ],
+      [
+        81,
         84
       ],
       [
+        91,
+        69
+      ],
+      [
+        88,
+        54
+      ],
+      [
+        95,
+        41
+      ],
+      [
+        86,
+        28
+      ],
+      [
+        77,
+        23
+      ],
+      [
+        68,
+        10
+      ],
+      [
+        54,
+        13
+      ],
+      [
+        42,
+        7
+      ],
+      [
+        31,
+        16
+      ],
+      [
         18,
-        81
+        19
       ],
       [
         13,
-        67
+        33
       ],
       [
         21,
-        59
+        41
       ],
       [
         14,
-        49
+        51
       ],
       [
         22,
-        39
+        61
       ],
       [
         17,
-        29
+        71
       ],
       [
         22,
-        18
+        82
       ]
     ],
     "closed": true,
@@ -134,7 +135,7 @@
       "label": "北方山岳連邦圏",
       "locator_xy": [
         54,
-        24
+        76
       ],
       "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
     },
@@ -143,7 +144,7 @@
       "label": "東方諸邦圏",
       "locator_xy": [
         78,
-        48
+        52
       ],
       "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
     },
@@ -152,7 +153,7 @@
       "label": "南西沿岸諸国圏",
       "locator_xy": [
         34,
-        72
+        28
       ],
       "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
     },
@@ -161,7 +162,7 @@
       "label": "南方古代領域圏",
       "locator_xy": [
         59,
-        77
+        23
       ],
       "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
     }
@@ -169,7 +170,7 @@
   "rilde_locator": {
     "xy": [
       23,
-      46
+      54
     ],
     "kind": "CANDIDATE_WEST_COAST_VICINITY",
     "exact_position": null,
@@ -208,7 +209,10 @@
     "G1": "BLOCKED",
     "G2": "NOT_RUN",
     "G3": "NOT_RUN",
-    "G4": "NOT_RUN"
+    "G4": "NOT_RUN",
+    "north_south_orientation": "PASS_LOCAL_AFTER_Y_INVERSION",
+    "source_geodata_coverage": "BLOCKED_NOT_VERIFIED",
+    "design_visualization": "NOT_RUN"
   },
   "next": [
     "Review candidate coast against terrain reference and approved story topology",
