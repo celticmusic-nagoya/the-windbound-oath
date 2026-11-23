@@ -1,6 +1,9 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
 ## Mandatory continuity and readiness (2026-11-23)
+
+**Before every task/resume/handoff/Action dispatch or scope change, apply [Mandatory pre-work rule reconciliation and stage-sequence guard](docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md).** Verify latest main policy SHAs, canon, owner/lease/HEAD, workflow/artifact history and D0–D4 predecessors; record a compact prework receipt and fail closed on missing evidence. A policy link, green CI, placeholder blueprint or shorthand approval does not satisfy a gate. This is a manual obligation until existing shared runtime enforcement is independently verified; reuse SHA-matched receipts, never duplicate engines.
+
 Read [docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md](docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md). Owner/live evidence synchronization, stale-candidate rejection and scoped production readiness gates are mandatory for all agents and automations. Historical pointers are not work orders; incomplete infrastructure is tracked to actual verification. Existing qualified independent production continues.
 
 - Mandatory multi-stage batches: [shared policy](docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md). Character face/hair/body then wardrobe/equipment; world geometry/interfaces then materials/scene then runtime QA. Combine safe ready stages in one session; preserve checkpoints and independent QA. Viewport-first in-session correction, selective QA and verified checkpoint resume are mandatory; live review bridge is optional and unverified. 60–120 minutes is a planning heuristic, not a stop cap; verified free standard public runners may use productive long sessions within actual limits with checkpoint reserve and genuine bounded review waits.
