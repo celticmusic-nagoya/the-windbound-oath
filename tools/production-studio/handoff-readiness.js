@@ -22,7 +22,11 @@
    const limited=response.status===403||response.status===429;
    throw new Error(limited?"GitHub API制限またはアクセス拒否 (HTTP "+response.status+")":"HTTP "+response.status);
   }
-  return response.json();
+  const data=await response.json();
+  if(!data||typeof data!=="object"||!data.head||typeof data.head.sha!=="string"||!/^([0-9a-f]{40})$/i.test(data.head.sha)||!["open","closed"].includes(data.state)){
+   throw new Error("GitHub PR応答形式を検証できません");
+  }
+  return data;
  }
  function addCard(owner,result){
   const card=el("article","");card.className="tile handoff-card";
@@ -31,7 +35,8 @@
    const p=result.value;
    card.append(el("p","PR #"+owner.id+" / "+(p.merged?"merged":p.state)+(p.draft?" / Draft":"")),
     el("p","HEAD: "+(p.head?.sha||"UNKNOWN")),
-    el("p","PR更新: "+(p.updated_at||"UNKNOWN")));
+    el("p","PR更新: "+(p.updated_at||"UNKNOWN")),
+    el("p","参照元: GitHub REST API（公開PR情報のみ）"));
   }else card.append(el("p","PR取得失敗: "+String(result.reason?.message||result.reason)));
   card.append(el("p","注意: PR更新時刻は担当の停止・応答・lease更新を証明しません。"));
   const link=el("a","担当PR・最新指示を確認");link.href="https://github.com/"+repo+"/pull/"+owner.id;link.rel="noopener noreferrer";card.append(link);
