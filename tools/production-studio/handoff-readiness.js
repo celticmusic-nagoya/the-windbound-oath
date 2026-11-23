@@ -5,6 +5,7 @@
  const api="https://api.github.com/repos/"+repo;
  const owners=[
   {id:468,name:"Codex｜長時間制作エンジン",scope:"Factory / Session / CAS・fencing"},
+  {id:485,name:"Claude｜設計図エンジン",scope:"Blueprint Engine / 残差判定 / #468契約連携"},
   {id:427,name:"キャラクター担当｜モルウェン",scope:"実設計図 / VRoid / 3D制作"},
   {id:421,name:"マップ担当｜風待ちの崖",scope:"崖の実設計図 / Blender制作"},
   {id:364,name:"マップ担当｜地域統合",scope:"村・建築・地域統合"},
