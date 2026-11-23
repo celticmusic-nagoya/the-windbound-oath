@@ -51,16 +51,34 @@ def main():
             if args.bbox_itm:
                 params.update({"geometry":",".join(map(str,args.bbox_itm)),"geometryType":"esriGeometryEnvelope",
                                "inSR":"2157","spatialRel":"esriSpatialRelIntersects"})
-            data = get_json(f"{ROOT}/{lid}/query", params)
-            if "error" in data:
-                raise ValueError(data["error"])
+            features = []
+            seen_ids = set()
+            incomplete = False
+            pages = 0
+            while pages < 100:
+                params["resultOffset"] = pages * args.limit
+                data = get_json(f"{ROOT}/{lid}/query", params)
+                if "error" in data:
+                    raise ValueError(data["error"])
+                page = [x.get("attributes", {}) for x in data.get("features", [])]
+                if not page:
+                    break
+                new_ids = [x.get(oid) for x in page]
+                if any(v is None or v in seen_ids for v in new_ids) or len(set(new_ids)) != len(new_ids):
+                    incomplete = True
+                    break
+                seen_ids.update(new_ids)
+                features.extend(page)
+                pages += 1
+                if not data.get("exceededTransferLimit", False) and len(page) < args.limit:
+                    break
+            else:
+                incomplete = True
             report["records"].append({"layer_id":lid,"layer_name":layer.get("name"),"fields":desired,
-                "features":[x.get("attributes",{}) for x in data.get("features",[])],
-                "exceeded_transfer_limit":data.get("exceededTransferLimit",False),
-                "page_full":len(data.get("features",[])) >= args.limit})
+                "features":features,"pages":pages,"incomplete":incomplete})
         except Exception as e:
             report["errors"].append({"layer_id":lid,"error":str(e)})
-    report["status"] = "PARTIAL" if report["errors"] or not report["records"] or any(x["exceeded_transfer_limit"] or x["page_full"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
+    report["status"] = "PARTIAL" if report["errors"] or not report["records"] or any(x["incomplete"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
     report["record_count"] = sum(len(x["features"]) for x in report["records"])
     report["status"] = "PARTIAL" if report["record_count"] == 0 else report["status"]
     report["status"] = "PARTIAL" if any(not x.get("features") for x in report["records"]) else report["status"]
