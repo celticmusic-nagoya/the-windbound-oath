@@ -49,6 +49,24 @@ class CoverageQueryTests(unittest.TestCase):
         self.assertEqual(calls[-1][1]["inSR"],"2157")
         self.assertEqual(calls[-1][1]["geometry"],"510000.0,690000.0,520000.0,700000.0")
 
+    def test_empty_features_fail_closed(self):
+        original = mod.get_json
+        def fake(url, params=None):
+            if url == mod.ROOT:
+                return {"layers":[{"id":12,"name":"LiDAR Coverage DTM"}]}
+            if url.endswith("/12"):
+                return {"objectIdField":"OBJECTID","fields":[{"name":"OBJECTID"},{"name":"COUNTY"}]}
+            if url.endswith("/12/query"):
+                return {"features":[]}
+            raise AssertionError(url)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = str(pathlib.Path(tmp)/"empty.json")
+            with patch.object(mod,"get_json",side_effect=fake),patch.object(sys,"argv",["gsi","--output",out]),contextlib.redirect_stdout(io.StringIO()):
+                mod.main()
+            data = json.loads(pathlib.Path(out).read_text())
+            self.assertEqual(data["status"],"PARTIAL")
+            self.assertEqual(data["record_count"],0)
+
     def test_invalid_bbox_rejected(self):
         with patch.object(sys,"argv",["gsi","--output","unused.json","--bbox-itm","10","20","9","30"]),contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as cm: mod.main()
