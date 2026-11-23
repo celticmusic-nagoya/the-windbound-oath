@@ -62,8 +62,7 @@ def main():
     report["status"] = "PARTIAL" if report["record_count"] == 0 else report["status"]
     report["raster_downloaded"] = False
     report["raster_sha256"] = None
-    pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"
-",encoding="utf-8")
+    pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"status":report["status"],"layers":len(report["records"]),"errors":len(report["errors"])},ensure_ascii=False))
 
 if __name__ == "__main__":
