@@ -1,0 +1,47 @@
+{
+  "schema": "morwen-rear-calibration-qa-v1",
+  "run_id": 45132749773,
+  "run_head": "15a059314a2b545e031c7422a8f4530181b1f1dc",
+  "artifact_id": 14798806949,
+  "artifact_zip_sha256": "71c57ec18d539d62f86b4ab12b6cb8fea86b3dd112c24b64441a0a44f7b7055a",
+  "artifact_expiry": "2026-11-30T07:46:43Z",
+  "native_candidate_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574",
+  "capture_status": "CAPTURED_REVIEW_REQUIRED_REAR_SWEEP_NOT_YET_CALIBRATED",
+  "images": [
+    {
+      "steps": 5,
+      "sha256": "24435f15b6a64b82df828fd43f370168d486ade7cd7e6f6ad0ca3f1ce58ba2a9",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "steps": 6,
+      "sha256": "2b4501bd75965c3a912d1197f888c8d0b980459860c13d4a44738cfe3fdac925",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "steps": 7,
+      "sha256": "62f6a4657815784edc1410670b01376ea4efce713d010a7c6479b58e5c7662b0",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "steps": 8,
+      "sha256": "f2d1085a816f961c83893a2d4315bcd81004cdb26c8fc3c0bd95ffd2b6d464de",
+      "width": 1024,
+      "height": 768
+    }
+  ],
+  "review": {
+    "best_rear_candidate_steps": 8,
+    "confidence": "visual provisional; camera rotation degrees not measured",
+    "observations": "Steps 7 and 8 show near-rear views. Step 8 appears most centered; images are GUI screenshots with varying viewport presentation and are not calibrated orthographic renders.",
+    "g1": "BLOCKED",
+    "g2": "NOT_RUN",
+    "g3": "PARTIAL_PASS_native_readonly_and_png_sha_only",
+    "g4": "NOT_RUN",
+    "formal_adoption": false
+  },
+  "next": "Compare with SHA-verified official Layer0 back reference at aligned camera, crop and scale; retain source image and provenance; do not infer hidden geometry."
+}
