@@ -17,7 +17,7 @@ let browser;
 try{
  for(let i=0;i<40;i++){try{if((await fetch('http://127.0.0.1:8766')).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));}
  browser=await chromium.launch({args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
+ const page=await browser.newPage({viewport:{width:360,height:780},deviceScaleFactor:1});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',r=>r.fulfill({json:r.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)}}:{workflow_runs:[]}}));
  await page.goto('http://127.0.0.1:8766/');
@@ -29,6 +29,16 @@ try{
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
  assert.equal(await images.count(),manifest.entries.filter(e=>isCliff(e)&&photo(e)).length);
+ // Public gallery presence does not prove preservation of the source ZIP.
+ const cliffEntries=manifest.entries.filter(e=>isCliff(e));
+ const preservationLabels=page.locator('#published-gallery article .gallery-preservation');
+ assert.equal(await preservationLabels.count(),cliffEntries.length);
+ for(let i=0;i<cliffEntries.length;i++){
+  const e=[...cliffEntries].sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')))[i];
+  const expected=e.preservation_status==='PRESERVED_AND_READBACK_VERIFIED'?'再取得SHA検証済み':e.preservation_status==='PRESERVATION_BLOCKED'?'権利確認待ち・未保全':'未検証';
+  assert.ok((await preservationLabels.nth(i).innerText()).includes(expected));
+ }
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'360px gallery overflow');
  for(const img of await images.all()){await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert.ok(await img.evaluate(e=>e.naturalWidth>0&&e.naturalHeight>0));}
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/actual-gallery.png'});
@@ -88,5 +98,5 @@ try{
  await page.screenshot({path:'gallery-qa/model-'+category+'.png'});
  }
  assert.deepEqual(errors,[]);
- console.log('PASS: production images decoded; SHA-256 verified; mobile width.');
+ console.log('PASS: production images decoded; SHA-256 verified; 360px mobile width and preservation-status semantics.');
 }finally{await browser?.close();server.kill();}
