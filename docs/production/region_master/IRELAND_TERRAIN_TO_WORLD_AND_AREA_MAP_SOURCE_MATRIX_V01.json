@@ -1,0 +1,174 @@
+{
+  "schema": "two.world_terrain_source_reuse_matrix.v1",
+  "status": "SOURCE_AUDIT_PARTIAL_DESIGN_CANDIDATE",
+  "purpose": "Reuse earlier Ireland terrain references in continent and eight-area maps without treating real Ireland geography as canonical",
+  "sources": [
+    {
+      "id": "S01",
+      "name": "County Clare west coast",
+      "role": "coastal cliff and headland landform reference",
+      "scope": [
+        "continent_west_coast",
+        "WINDWAITING_CLIFF"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_GEOMETRY_VERIFIED"
+    },
+    {
+      "id": "S02",
+      "name": "Cliffs of Moher",
+      "role": "sea-facing cliff silhouettes and rock-mass reference",
+      "scope": [
+        "WINDWAITING_CLIFF"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_GEOMETRY_VERIFIED"
+    },
+    {
+      "id": "S03",
+      "name": "Burren",
+      "role": "limestone pavement and karst inspiration subject to art direction",
+      "scope": [
+        "WINDWAITING_CLIFF",
+        "COASTAL_MEADOW"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_GEOLOGY_ADOPTION"
+    },
+    {
+      "id": "S04",
+      "name": "Doolin",
+      "role": "small coastal settlement and harbour landscape reference",
+      "scope": [
+        "RILDE_VILLAGE"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_LAYOUT_VERIFIED"
+    },
+    {
+      "id": "S05",
+      "name": "Killarney woodland",
+      "role": "forest ecology and landscape character reference",
+      "scope": [
+        "MOSS_FOREST_A1",
+        "MOSS_FOREST_A2",
+        "MOSS_FOREST_A3"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_VEGETATION_ADOPTION"
+    },
+    {
+      "id": "S06",
+      "name": "Dun Aonghasa",
+      "role": "cliff-edge archaeological landscape and fortress siting inspiration",
+      "scope": [
+        "DUNVAR_FORTRESS"
+      ],
+      "data_status": "REFERENCE_AREA_NAMED_NO_ARCHITECTURE_ADOPTION"
+    },
+    {
+      "id": "S07",
+      "name": "GSI LiDAR coverage probe",
+      "role": "potential elevation data source, single point negative result not a coverage conclusion",
+      "scope": [
+        "C02_elevation"
+      ],
+      "data_status": "DEM_LICENSE_CRS_DATUM_COVERAGE_SHA_UNVERIFIED"
+    },
+    {
+      "id": "S08",
+      "name": "TWO approved cliff sunset CG",
+      "path": "assets/approved/game/cliff/sunset_background.png",
+      "sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+      "role": "official projected cliff visual silhouette, not orthographic world geometry",
+      "scope": [
+        "WINDWAITING_CLIFF"
+      ],
+      "data_status": "SOURCE_SHA_RECORDED_PIXEL_TRACE_EXISTS_CAMERA_UNCALIBRATED"
+    }
+  ],
+  "map_layers": [
+    {
+      "id": "M01",
+      "name": "continent_land_sea",
+      "status": "UNMEASURED",
+      "inputs": [
+        "S01",
+        "S07"
+      ],
+      "next": "source-grounded fictional coastline topology, closed polygon"
+    },
+    {
+      "id": "M02",
+      "name": "kingdom_and_rilde_region",
+      "status": "DIRECTIONAL_ONLY",
+      "inputs": [
+        "S01",
+        "S04",
+        "S05",
+        "S06"
+      ],
+      "next": "candidate locator and noncanonical area envelopes"
+    },
+    {
+      "id": "M03",
+      "name": "coastal_cliff_area",
+      "status": "IMAGE_SPACE_ONLY",
+      "inputs": [
+        "S01",
+        "S02",
+        "S03",
+        "S08"
+      ],
+      "next": "matched camera and region-to-cliff interface"
+    },
+    {
+      "id": "M04",
+      "name": "village_harbour",
+      "status": "DIRECTIONAL_ONLY",
+      "inputs": [
+        "S04"
+      ],
+      "next": "west coast village and southwest cove with east river"
+    },
+    {
+      "id": "M05",
+      "name": "forest_and_fortress",
+      "status": "DIRECTIONAL_ONLY",
+      "inputs": [
+        "S05",
+        "S06"
+      ],
+      "next": "forest A1-A3 and fortress approach topological review"
+    }
+  ],
+  "source_boundaries": {
+    "real_ireland_outline_as_canon": false,
+    "real_dem_used_as_measured_world": false,
+    "fictional_landmass_coordinates_xyz_m": null,
+    "fictional_river_xyz_m": null,
+    "fictional_contours_xyz_m": null,
+    "private_canon_publication": false
+  },
+  "dependency_sequence": [
+    "D0 verify canon owner policy and original source bytes",
+    "W01 source reference matrix and directional topology",
+    "W02 C01 coast polygon and area candidate map",
+    "W03 C02 DEM or explicitly provisional elevation and contours",
+    "W04 C03 hydrology watershed and sea mouth",
+    "W05 C04-C07 geology ecology routes interfaces",
+    "W06 independently QA consistent world/kingdom/area maps",
+    "D4 PASS then qualified precision Blender production"
+  ],
+  "qa": {
+    "reference_reuse_traceability": "PASS_DOCUMENTED",
+    "actual_geodata_hash_license": "BLOCKED",
+    "geometry_and_topology": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "ownership": {
+    "design_pr": 482,
+    "region_pr": 364,
+    "cliff_pr": 421,
+    "shared_factory_pr": 468,
+    "no_native_mutations": true
+  }
+}
