@@ -1,0 +1,253 @@
+{
+  "schema": "two.map.area_interface_blueprint.v1",
+  "id": "RILDE_C01_C03_AREA_INTERFACE_V01",
+  "status": "DESIGN_CANDIDATE",
+  "basis": {
+    "public_region_master_blob": "d85989416e5ab769ef9a1a74439be5faf96e6348",
+    "directional_json_blob": "909f72f92b7c6d1b3e1c1ccc12455cb19f7c00ee",
+    "section_json_blob": "00c9699b7496954270bcbb76664db594539b230e",
+    "reference": "approved regional directional canon; exact geometry not provided"
+  },
+  "world": {
+    "axes": {
+      "x": "east",
+      "y": "north",
+      "z": "up"
+    },
+    "unit": "m",
+    "fictional_sea_level_z_m": 0,
+    "origin_xyz_m": null,
+    "legacy_to_world_transform": null
+  },
+  "areas": [
+    {
+      "id": "RILDE_VILLAGE",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "WINDWAITING_CLIFF",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "COASTAL_MEADOW",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "RIVER_CORRIDOR",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "MOSS_FOREST_A1",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    },
+    {
+      "id": "DUNVAR_FORTRESS",
+      "local_origin_xyz_m": null,
+      "world_transform": null,
+      "boundary_polygon_xyz_m": null,
+      "entry_portals_xyz_m": null,
+      "terrain_edge_samples": null,
+      "elevation_range_m": null,
+      "collision_boundary": null,
+      "source_status": "UNMEASURED"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "IF-01",
+      "a": "RILDE_VILLAGE",
+      "b": "WINDWAITING_CLIFF",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "candidate pedestrian access; direction west-northwest",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-02",
+      "a": "RILDE_VILLAGE",
+      "b": "COASTAL_MEADOW",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "candidate field transition north",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-03",
+      "a": "RILDE_VILLAGE",
+      "b": "RIVER_CORRIDOR",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "bridge/riverbank transition east",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-04",
+      "a": "RIVER_CORRIDOR",
+      "b": "MOSS_FOREST_A1",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "downstream story reach southeast; actual navigation unresolved",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-05",
+      "a": "MOSS_FOREST_A1",
+      "b": "MOSS_FOREST_A2",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "story sequence only",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-06",
+      "a": "MOSS_FOREST_A2",
+      "b": "MOSS_FOREST_A3",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "story sequence only",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-07",
+      "a": "RILDE_VILLAGE",
+      "b": "DUNVAR_FORTRESS",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "north road; precise route unresolved",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    },
+    {
+      "id": "IF-08",
+      "a": "MOSS_FOREST_A3",
+      "b": "DUNVAR_FORTRESS",
+      "relation": "CANDIDATE_NOT_CONFIRMED_ADJACENCY",
+      "reason": "candidate route; not canonically adjacent",
+      "shared_boundary_xyz_m": null,
+      "portal_xyz_m": null,
+      "terrain_height_residual_m": null,
+      "water_level_continuity": null,
+      "walkable_slope_deg": null,
+      "transform_roundtrip_error_m": null,
+      "qa": "BLOCKED"
+    }
+  ],
+  "C01": {
+    "coastline_xyz_m": null,
+    "harbour_polygon_xyz_m": null,
+    "sea_cliff_vs_riverbank_cliff": "DISTINCT"
+  },
+  "C02": {
+    "contours_xyz_m": null,
+    "terrain_dem_sha256": null,
+    "vertical_datum": null
+  },
+  "C03": {
+    "river_flow": "north_to_south",
+    "river_centerline_xyz_m": null,
+    "catchment_polygons_xyz_m": null,
+    "bridge_crossing_xyz_m": null
+  },
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next_inputs": [
+    "approved metric site plan or owner-approved local provisional dimensions",
+    "licensed terrain raster with CRS/datum/coverage and verified SHA",
+    "regional transforms and candidate interface owner signoff"
+  ]
+}
