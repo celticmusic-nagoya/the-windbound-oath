@@ -89,9 +89,9 @@ async function loadPublishedGallery(){
  const select=document.createElement("select");select.style.width="100%";select.setAttribute("aria-label",i?"比較B":"比較A");
  photos.forEach((e,j)=>{const o=document.createElement("option");o.value=String(j);o.textContent=(e.stage||"未分類")+" / "+e.name;select.append(o);});
  const img=document.createElement("img");img.style.cssText="width:100%;height:clamp(160px,38vh,480px);object-fit:contain";
- const info=document.createElement("p");info.style.overflowWrap="anywhere";
+ const info=document.createElement("p");info.style.overflowWrap="anywhere";info.style.fontSize="0.8rem";
  select.value=String(i===0?0:Math.max(1,photos.findIndex(e=>e.name===photos[0].name&&e.artifact_id!==photos[0].artifact_id)));
- const update=()=>{const e=photos[Number(select.value)];img.src=base+e.path;img.alt=e.name;info.textContent=(e.stage||"未分類")+" / "+(e.created_at||"日時不明")+" / QA: "+e.qa;};
+ const update=()=>{const e=photos[Number(select.value)];img.src=base+e.path;img.alt=e.name;info.textContent=(e.stage||"未分類")+" / "+(e.created_at||"日時不明")+" / QA: "+e.qa+" / 採用: "+e.adoption+" / HEAD: "+(e.head||"未記録")+" / SHA-256: "+e.sha256+" / run: "+(e.run_id??"未記録")+" / Artifact: "+(e.artifact_id??"未記録");};
  select.onchange=update;update();controls.push(select);panel.append(select,img,info);pair.append(panel);
  }
  dialog.append(pair);dialog.addEventListener("close",()=>dialog.remove());document.body.append(dialog);dialog.showModal();
