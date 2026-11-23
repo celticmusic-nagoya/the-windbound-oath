@@ -12,6 +12,7 @@
  const area=document.getElementById("handoff-cards");
  const status=document.getElementById("handoff-status");
  const button=document.getElementById("handoff-refresh");
+ let generation=0;
  if(!area||!status||!button)return;
  const el=(tag,content)=>{const n=document.createElement(tag);n.textContent=content;return n;};
  async function get(path){
@@ -39,15 +40,17 @@
   area.append(card);
  }
  async function refresh(){
+  const current=++generation;
   button.disabled=true;status.textContent="PR情報取得中 / lease・STOP_ACKは検証対象外";area.replaceChildren();
   try{
    const results=await Promise.allSettled(owners.map(o=>get("/pulls/"+o.id)));
+   if(current!==generation)return;
    owners.forEach((o,i)=>addCard(o,results[i]));
    const failures=results.filter(r=>r.status==="rejected").length;
    status.textContent="PR取得 "+(owners.length-failures)+"/"+owners.length+" / "+new Date().toLocaleString("ja-JP")+
     " / 書き込み可否は全件SYNC_UNVERIFIED";
-  }catch(e){status.textContent="取得失敗: "+e.message;}
-  finally{button.disabled=false;}
+  }catch(e){if(current===generation)status.textContent="取得失敗: "+e.message;}
+  finally{if(current===generation)button.disabled=false;}
  }
  button.addEventListener("click",refresh);
  refresh();
