@@ -19,7 +19,9 @@ def main():
     ap.add_argument("--output", required=True, help="write discovery JSON, not a source raster")
     ap.add_argument("--bbox-itm", nargs=4, type=float, metavar=("XMIN","YMIN","XMAX","YMAX"),
                     help="optional EPSG:2157 bbox; without it only list candidate Clare records")
-    ap.add_argument("--limit", type=int, default=500)\n    if not 1 <= args.limit <= 1000:\n        ap.error("--limit must be between 1 and 1000")
+    ap.add_argument("--limit", type=int, default=500)
+    if not 1 <= args.limit <= 1000:
+        ap.error("--limit must be between 1 and 1000")
     args = ap.parse_args()
     if args.bbox_itm and not (args.bbox_itm[0] < args.bbox_itm[2] and args.bbox_itm[1] < args.bbox_itm[3]):
         ap.error("bbox must have increasing min/max coordinates")
@@ -51,7 +53,8 @@ def main():
                 raise ValueError(data["error"])
             report["records"].append({"layer_id":lid,"layer_name":layer.get("name"),"fields":desired,
                 "features":[x.get("attributes",{}) for x in data.get("features",[])],
-                "exceeded_transfer_limit":data.get("exceededTransferLimit",False),\n                "page_full":len(data.get("features",[])) >= args.limit})
+                "exceeded_transfer_limit":data.get("exceededTransferLimit",False),
+                "page_full":len(data.get("features",[])) >= args.limit})
         except Exception as e:
             report["errors"].append({"layer_id":lid,"error":str(e)})
     report["status"] = "PARTIAL" if report["errors"] or not report["records"] or any(x["exceeded_transfer_limit"] or x["page_full"] for x in report["records"]) else "COMPLETE_QUERY_ONLY"
@@ -59,7 +62,8 @@ def main():
     report["status"] = "PARTIAL" if report["record_count"] == 0 else report["status"]
     report["raster_downloaded"] = False
     report["raster_sha256"] = None
-    pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    pathlib.Path(args.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+"
+",encoding="utf-8")
     print(json.dumps({"status":report["status"],"layers":len(report["records"]),"errors":len(report["errors"])},ensure_ascii=False))
 
 if __name__ == "__main__":
