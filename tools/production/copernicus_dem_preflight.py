@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import numpy as np
 from pathlib import Path
 
 
@@ -30,6 +31,25 @@ def audit(path, expected_sha256=None):
                 'bands': ds.count, 'dtype': list(ds.dtypes), 'nodata': ds.nodata,
                 'bounds': list(ds.bounds), 'resolution': list(ds.res),
                 'mask_flags': [list(map(str, x)) for x in ds.mask_flag_enums]}
+            # Block-wise scan avoids loading a full terrain tile into memory.
+            if ds.count == 1:
+                valid_count = 0
+                finite_min = None
+                finite_max = None
+                for _, window in ds.block_windows(1):
+                    block = ds.read(1, window=window, masked=True)
+                    valid = block.compressed()
+                    finite = valid[np.isfinite(valid)]
+                    valid_count += int(finite.size)
+                    if finite.size:
+                        lo, hi = float(finite.min()), float(finite.max())
+                        finite_min = lo if finite_min is None else min(finite_min, lo)
+                        finite_max = hi if finite_max is None else max(finite_max, hi)
+                result['raster']['finite_valid_cells'] = valid_count
+                result['raster']['finite_min'] = finite_min
+                result['raster']['finite_max'] = finite_max
+                if valid_count == 0:
+                    result['errors'].append('NO_FINITE_VALID_ELEVATIONS')
             if ds.driver != 'GTiff': result['errors'].append('NOT_GEOTIFF')
             if crs != 4326: result['errors'].append('EXPECTED_NATIVE_EPSG4326')
             if ds.count != 1: result['errors'].append('EXPECTED_SINGLE_BAND')
