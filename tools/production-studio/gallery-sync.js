@@ -20,6 +20,9 @@ async function loadPublishedGallery(){
  const valid=[];
  for(const e of manifest.entries){
  if(!e||typeof e!=="object"||!/^[a-f0-9]{64}$/.test(e.sha256)||!new RegExp("^published/"+e.sha256+"\\.(png|jpg|jpeg|glb|vrm)$").test(e.path)||!Number.isSafeInteger(e.bytes)||e.bytes<1||e.bytes>64*1024*1024)continue;
+ // Optional metadata must never crash grouping, filtering, or image comparison.
+ if(typeof e.name!=="string"||typeof e.qa!=="string"||typeof e.adoption!=="string")continue;
+ if(["stage","asset_id","source_path","category","subcategory","head","created_at"].some(k=>e[k]!=null&&typeof e[k]!=="string"))continue;
  valid.push(e);
  }
  function renderEntry(e){
