@@ -46,7 +46,8 @@ def audit(repo, per_branch, published, pinned):
     eligible = [x for x in rows if not x["expired"] and x["size_bytes"] > 0 and not x["already_pinned"]]
     return {
         "status": "METADATA_ONLY_NOT_APPROVED_FOR_PUBLICATION",
-        "published_entries": len(published["entries"]),
+        "main_seed_manifest_entries": len(published["entries"]),
+        "published_branch_entries": None,  # Not fetched: studio-published is a separate branch.
         "scanned_successful_runs_per_branch_max": per_branch,
         "artifacts_seen": len(rows),
         "unexpired_unpinned_artifacts": len(eligible),
