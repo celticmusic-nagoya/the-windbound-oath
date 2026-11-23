@@ -1,0 +1,74 @@
+{
+  "schema": "two.world.gsi_tile_query_contract.v1",
+  "status": "QUERY_CONTRACT_PREPARED_NOT_EXECUTED",
+  "source_layer": "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_Phase2_IE26_ITM/FeatureServer/12",
+  "official_layer_fields": [
+    "OBJECTID",
+    "DATA_URL",
+    "DATA_NAME",
+    "LICENCE",
+    "RESOLUTION",
+    "DATECAPTUR",
+    "LOCATION",
+    "COUNTY",
+    "OWNER",
+    "DATAORIGIN",
+    "SURVEYOR",
+    "RMS_ERROR"
+  ],
+  "spatial_reference_epsg": 2157,
+  "phase2_coverage_bounds_m": [
+    512000,
+    694000,
+    604000,
+    768000
+  ],
+  "query": {
+    "endpoint": "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_Phase2_IE26_ITM/FeatureServer/12/query",
+    "params": {
+      "where": "COUNTY LIKE '%Clare%'",
+      "outFields": "OBJECTID,DATA_NAME,DATA_URL,LICENCE,RESOLUTION,DATECAPTUR,LOCATION,COUNTY,OWNER,RMS_ERROR",
+      "returnGeometry": "false",
+      "resultRecordCount": 100,
+      "f": "json"
+    },
+    "expected_response": "ArcGIS FeatureSet with attributes; paginate if exceededTransferLimit",
+    "execution": "NOT_RUN_REMOTE_QUERY_UNAVAILABLE"
+  },
+  "selection_criteria": [
+    "Verify actual polygon intersects chosen cliff reference bounding box, not merely COUNTY=Clare",
+    "Select DTM not DSM for terrain height and retain DSM only for vegetation/buildings",
+    "Inspect tile-specific LICENCE and OWNER before any redistribution",
+    "Fetch DATA_URL through authorized environment and hash original raster bytes",
+    "Read raster CRS, affine transform, nodata, pixel size, vertical datum; verify against metadata",
+    "Keep real Irish coordinates in separate reference frame; do not inject into fictional canonical map"
+  ],
+  "blocked": {
+    "cliff_reference_bbox_epsg2157": null,
+    "selected_tile_objectid": null,
+    "selected_tile_data_url": null,
+    "source_raster_sha256": null,
+    "source_raster_resolution_m": null,
+    "source_raster_licence": null,
+    "source_raster_vertical_datum": null,
+    "source_raster_bytes_available": false
+  },
+  "qa": {
+    "source_service_layer_schema": "PASS_OFFICIAL_PAGE",
+    "tile_query": "NOT_RUN",
+    "tile_coverage": "BLOCKED",
+    "raster_acquisition": "NOT_RUN",
+    "W02": "PARTIAL",
+    "W03": "NOT_STARTED",
+    "D0": "PARTIAL",
+    "D1": "BLOCKED",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "evidence_urls": [
+    "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_Phase2_IE26_ITM/FeatureServer",
+    "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_Phase2_IE26_ITM/FeatureServer/12"
+  ]
+}
