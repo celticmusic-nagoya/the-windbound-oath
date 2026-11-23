@@ -12,7 +12,7 @@ from urllib.request import urlopen
 
 INDEX = "https://copernicus-dem-30m.s3.amazonaws.com/tileList.txt"
 BASE = "https://copernicus-dem-30m.s3.amazonaws.com/"
-PATTERN = re.compile(r"Copernicus_DSM_COG_10_[NS][0-9]{2}_00_[EW][0-9]{3}_00_DEM")
+PATTERN = re.compile(r"^Copernicus_DSM_COG_10_[NS][0-9]{2}_00_[EW][0-9]{3}_00_DEM$")
 
 def tile_name(lat, lon):
     if not (-90 <= lat < 90 and -180 <= lon < 180):
@@ -21,7 +21,7 @@ def tile_name(lat, lon):
         "N" if lat >= 0 else "S", abs(lat), "E" if lon >= 0 else "W", abs(lon))
 
 def resolve(index_text, coordinates):
-    published = set(PATTERN.findall(index_text))
+    # Accept only exact tile identifiers or canonical directory/object paths.\n    # Substring matching can falsely certify a tile in malformed index text.\n    published = set()\n    for line in index_text.splitlines():\n        item = line.strip().rstrip("/")\n        if not item: continue\n        parts = item.split("/")\n        candidate = parts[0]\n        if PATTERN.fullmatch(candidate) and (\n            len(parts) == 1 or (len(parts) == 2 and parts[1] == candidate + ".tif")\n        ):\n            published.add(candidate)
     result = []
     for lat, lon in coordinates:
         name = tile_name(lat, lon)
