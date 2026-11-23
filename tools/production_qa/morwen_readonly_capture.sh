@@ -39,7 +39,7 @@ case "${MORWEN_CAPTURE_MODE:-full}" in
     return 1
     ;;
 esac
-printf '%s  %s\\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
+printf '%s  %s\n' "$MORWEN_EXPECTED_SHA256" "$MORWEN_READONLY_NATIVE" | shasum -a 256 -c || return 1
 # Diagnostic only: measure rear orientation without overwriting existing captures.
 # The shortcut's angle per press has not been calibrated.
 for steps in 5 6 7 8; do
