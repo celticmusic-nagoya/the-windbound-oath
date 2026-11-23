@@ -58,6 +58,18 @@ try{
  assert.equal(await imgs.count(),2);
  for(const img of await imgs.all())await img.evaluate(e=>e.decode());
  assert.notEqual(await imgs.nth(0).getAttribute('src'),await imgs.nth(1).getAttribute('src'));
+ // Comparison provenance must remain visible for each selected published image.
+ const selected=morwen.filter(photo).sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
+ const info=dialog.locator('p').filter({hasText:'SHA-256:'});
+ assert.equal(await info.count(),2);
+ for(let i=0;i<2;i++){
+  const text=await info.nth(i).innerText();
+  assert.ok(text.includes(selected[i].sha256),'comparison SHA missing');
+  assert.ok(text.includes('HEAD: '+(selected[i].head||'未記録')),'comparison HEAD missing');
+  assert.ok(text.includes('run: '+(selected[i].run_id??'未記録')),'comparison run missing');
+  assert.ok(text.includes('Artifact: '+(selected[i].artifact_id??'未記録')),'comparison artifact missing');
+  assert.ok(text.includes('採用: '+selected[i].adoption),'comparison adoption missing');
+ }
  const a=await imgs.nth(0).boundingBox(),b=await imgs.nth(1).boundingBox();
  assert.ok(a.x+a.width<=b.x+1);
  assert.ok(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
