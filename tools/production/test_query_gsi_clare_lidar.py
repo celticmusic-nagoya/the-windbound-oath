@@ -77,6 +77,26 @@ class CoverageQueryTests(unittest.TestCase):
             with self.assertRaises(SystemExit) as cm: mod.main()
         self.assertEqual(cm.exception.code,2)
 
+    def test_missing_county_field_is_reported(self):
+        def fake(url, params=None):
+            if url == mod.ROOT:
+                return {"layers":[{"id":12,"name":"LiDAR Coverage DTM"}]}
+            if url.endswith("/12"):
+                return {"fields":[{"name":"OBJECTID"}]}
+            raise AssertionError(url)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = str(pathlib.Path(tmp)/"missing.json")
+            with patch.object(mod,"get_json",side_effect=fake),patch.object(sys,"argv",["gsi","--output",out]),contextlib.redirect_stdout(io.StringIO()):
+                mod.main()
+            data=json.loads(pathlib.Path(out).read_text())
+            self.assertEqual(data["status"],"PARTIAL")
+            self.assertEqual(data["errors"][0]["error"],"COUNTY_FIELD_MISSING")
+
+    def test_service_error_rejected(self):
+        with patch.object(mod,"get_json",return_value={"error":{"message":"Unavailable"}}),patch.object(sys,"argv",["gsi","--output","unused.json"]):
+            with self.assertRaises(RuntimeError):
+                mod.main()
+
     def test_invalid_bbox_rejected(self):
         with patch.object(sys,"argv",["gsi","--output","unused.json","--bbox-itm","10","20","9","30"]),contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as cm: mod.main()
