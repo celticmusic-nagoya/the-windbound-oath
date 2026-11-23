@@ -52,7 +52,18 @@ try{
  const categoryCards=page.locator('.category-card');
  for(let i=0;i<categoryOrder.length;i++){
   const id=categoryOrder[i];
-  const hasImage=manifest.entries.some(e=>photo(e)&&(isCliff(e)?'cliff':e.category||'other')===id);
+  // The published gallery can infer a category from legacy asset metadata.
+ const categoryOf=e=>{
+  const raw=[e.name,e.stage,e.asset_id,e.source_path].filter(Boolean).join(' ').toLowerCase();
+  const top=['cliff','morwen','village','blueprint','map','other'].includes(e.category)?e.category:isCliff(e)?'cliff':'other';
+  if(top!=='other')return top;
+  if(/blueprint|design[-_ ]?sheet|設計図|四面図|寸法図|断面図/.test(raw))return 'blueprint';
+  if(/\\bmap\\b|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw))return 'map';
+  if(/hairharpy|hair[-_ ]asset|ヘアアセット/i.test(raw))return 'morwen';
+  if(/aidan|エイダン|(?:^|[^a-z])inn(?:$|[^a-z])|宿屋/.test(raw))return 'village';
+  return 'other';
+ };
+ const hasImage=manifest.entries.some(e=>photo(e)&&categoryOf(e)===id);
   if(hasImage)assert.equal(await categoryCards.nth(i).locator('img').count(),1,'missing category cover: '+id);
  }
 
