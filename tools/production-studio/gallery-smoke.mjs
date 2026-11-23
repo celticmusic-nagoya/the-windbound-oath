@@ -42,6 +42,7 @@ try{
  const cliffEntries=manifest.entries.filter(e=>isCliff(e));
  const preservationLabels=page.locator('#published-gallery article .gallery-preservation');
  assert.equal(await preservationLabels.count(),cliffEntries.length);
+ // The gallery includes non-entry controls; only article tiles are counted.
  for(let i=0;i<cliffEntries.length;i++){
   const e=[...cliffEntries].sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')))[i];
   const expected=e.preservation_status==='PRESERVED_AND_READBACK_VERIFIED'?'manifest申告：再取得SHA検証済み（独立未検証）':e.preservation_status==='PRESERVATION_BLOCKED'?'権利確認待ち・未保全':'未検証';
