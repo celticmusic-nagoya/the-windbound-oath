@@ -1,0 +1,96 @@
+{
+  "schema": "two.region.cg_measurement_contract.v1",
+  "status": "SOURCE_CG_UNLOCATED_G1_BLOCKED",
+  "scope": "cliff_and_region_visual_blueprint",
+  "privacy": "PUBLIC_SAFE_NO_PRIVATE_HANDOFF_CONTENT",
+  "source_requirements": {
+    "approved_cg": {
+      "path": null,
+      "sha256": null,
+      "width_px": null,
+      "height_px": null,
+      "view_projection": null,
+      "approval_record": null
+    },
+    "metric_scale": {
+      "known_reference_length_m": null,
+      "reference_pixel_span_px": null,
+      "source": null
+    },
+    "camera": {
+      "projection": null,
+      "intrinsics": null,
+      "extrinsics": null,
+      "distortion": null
+    }
+  },
+  "coordinate_contract": {
+    "x": "east",
+    "y": "north",
+    "z": "up",
+    "blender_unit_m": 1,
+    "origin_m": null
+  },
+  "measurement_records": [
+    {
+      "id": "CLIFF_SILHOUETTE",
+      "type": "image_outline",
+      "image_points_px": null,
+      "world_points_m": null,
+      "uncertainty_px": null,
+      "classification": "NOT_MEASURED"
+    },
+    {
+      "id": "CLIFF_TOP_EDGE",
+      "type": "image_polyline",
+      "image_points_px": null,
+      "world_points_m": null,
+      "uncertainty_px": null,
+      "classification": "NOT_MEASURED"
+    },
+    {
+      "id": "CLIFF_BASE_CONTACT",
+      "type": "image_polyline",
+      "image_points_px": null,
+      "world_points_m": null,
+      "uncertainty_px": null,
+      "classification": "NOT_MEASURED"
+    },
+    {
+      "id": "PLATEAU_SURFACE",
+      "type": "image_polyline",
+      "image_points_px": null,
+      "world_points_m": null,
+      "uncertainty_px": null,
+      "classification": "NOT_MEASURED"
+    },
+    {
+      "id": "ROUTE_ACCESS",
+      "type": "image_polyline",
+      "image_points_px": null,
+      "world_points_m": null,
+      "uncertainty_px": null,
+      "classification": "NOT_MEASURED"
+    }
+  ],
+  "derivation_rules": [
+    "Pixel coordinates may be measured only against verified original image SHA and pixel dimensions.",
+    "Single uncalibrated perspective image does not determine unique 3D coordinates, depth, height, or slope.",
+    "Do not infer metres from legacy runtime map tile size or unitScale.",
+    "A reference metre length is insufficient to recover perspective depth without camera calibration or additional constrained views.",
+    "Retain image-derived 2D contours as 2D; mark reconstructed 3D separately with method and uncertainty.",
+    "Native measured coordinates, reconstructed estimates, hypothetical design, and unknowns must have distinct status."
+  ],
+  "acceptance": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "unblock": [
+      "Locate approved original CG and verify SHA, dimensions, provenance and approval.",
+      "Identify calibrated view(s) or independent metric constraints.",
+      "Extract pixel-space landmarks and uncertainty with reproducible script.",
+      "Check owner-approved protected scope before native sculpt or Studio publication."
+    ]
+  }
+}
