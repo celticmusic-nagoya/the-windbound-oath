@@ -5,6 +5,7 @@ on:
       - 'tools/production-studio/audit-discovery.py'
       - 'tools/production-studio/test_audit_discovery.py'
       - '.github/workflows/production-studio-discovery-audit.yml'
+      - 'tools/production-studio/inspect-candidate-zips.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,9 +22,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python tools/production-studio/audit-discovery.py --per-branch 10 --output studio-discovery-audit.json
+      - name: Inspect first three candidate archives without extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/production-studio/inspect-candidate-zips.py studio-discovery-audit.json --limit 3 --output studio-zip-inspection.json
       - name: Save inventory for owner review
         uses: actions/upload-artifact@v4
         with:
           name: studio-discovery-audit
-          path: studio-discovery-audit.json
+          path: |
+            studio-discovery-audit.json
+            studio-zip-inspection.json
           retention-days: 14
