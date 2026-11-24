@@ -29,12 +29,17 @@ jobs:
           test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
           test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
           key=$(python tools/production_qa/environment_reuse/manager.py key)
-          echo "key=$key" >> "$GITHUB_OUTPUT"
+          role=$(cat tools/production_qa/environment_reuse/publisher-role.txt)
+          case "$role" in first|second) ;; *) exit 2;; esac
+          echo "role=$role" >> "$GITHUB_OUTPUT"
+          echo "key=$key-p493-blender-race-v1" >> "$GITHUB_OUTPUT"
           PYTHONPATH=tools/production_qa/environment_reuse python - "$key" <<'PYTHON' >> "$GITHUB_OUTPUT"
           import sys
           from ensure import trusted_proof
           if trusted_proof(sys.argv[1]) is not None:
               print("eligible=true")
+          else:
+              raise SystemExit("runner image is outside qualified exact keys")
           PYTHON
       - uses: actions/cache/restore@v4
         if: steps.identity.outputs.eligible == 'true'
@@ -44,9 +49,12 @@ jobs:
           key: ${{ steps.identity.outputs.key }}
       - name: Verify reused or isolated Blender and record actual outcome
         env:
+          ROLE: ${{ steps.identity.outputs.role }}
           CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
         run: |
           set -euo pipefail
+          if [[ "$ROLE" == first ]]; then test "$CACHE_HIT" != true
+          else test "$CACHE_HIT" = true; fi
           flags=()
           readonly=false
           cache="$RUNNER_TEMP/two-env-cache"
@@ -66,6 +74,16 @@ jobs:
           python tools/production_qa/environment_reuse/ensure.py --cache "$RUNNER_TEMP/two-env-cache" --fallback "$RUNNER_TEMP/two-env-fallback" --report "$RUNNER_TEMP/reuse.json" "${flags[@]}"
           jq --argjson readonly "$readonly" --argjson uid "$(id -u)"             '. + {read_only_cache_mount: $readonly, execution_uid: $uid}'             "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/reuse-record.json"
           mv "$RUNNER_TEMP/reuse-record.json" "$RUNNER_TEMP/reuse.json"
+          if [[ "$ROLE" == second ]]; then
+            jq -e '.cache_state=="HIT" and .installer_calls==0 and .trusted_manifest_match' "$RUNNER_TEMP/reuse.json"
+            sha256sum "$RUNNER_TEMP/warm.blend" > "$RUNNER_TEMP/fixture-sha256.txt"
+            python tools/production_qa/environment_reuse/manager.py cold --root "$RUNNER_TEMP/official-xz-benchmark" --report "$RUNNER_TEMP/cold.json"
+            sha256sum "$RUNNER_TEMP/cold.blend" >> "$RUNNER_TEMP/fixture-sha256.txt"
+            jq -es '.[0].manifest_sha256==.[1].manifest_sha256 and all(.[];.native_reopen)' "$RUNNER_TEMP/reuse.json" "$RUNNER_TEMP/cold.json"
+          else
+            jq -e '.cache_state=="MISS" and .installer_calls==1 and .trusted_manifest_match' "$RUNNER_TEMP/reuse.json"
+            sha256sum "$RUNNER_TEMP/cold.blend" > "$RUNNER_TEMP/fixture-sha256.txt"
+          fi
           jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 and .read_only_cache_mount and .execution_uid > 0 else .installer_calls == 1 end)' "$RUNNER_TEMP/reuse.json"
       - name: Check headroom just before a permitted cache save
         id: headroom
@@ -92,6 +110,9 @@ jobs:
           key: ${{ steps.identity.outputs.key }}
       - uses: actions/upload-artifact@v4
         with:
-          name: environment-reuse-v2
-          path: ${{ runner.temp }}/reuse.json
+          name: environment-blender-race-${{ steps.identity.outputs.role }}
+          path: |
+            ${{ runner.temp }}/reuse.json
+            ${{ runner.temp }}/cold.json
+            ${{ runner.temp }}/fixture-sha256.txt
           if-no-files-found: error
