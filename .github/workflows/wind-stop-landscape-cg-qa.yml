@@ -8,6 +8,12 @@ on:
       - 'tests/moss/wind_stop_landscape_cg.test.cjs'
       - '.github/workflows/wind-stop-landscape-cg-qa.yml'
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'js/field/scene-data.js'
       - 'js/field/talk-data-scenes.js'

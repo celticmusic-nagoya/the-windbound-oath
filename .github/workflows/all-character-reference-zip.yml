@@ -1,6 +1,12 @@
 name: Build all-character design reference ZIP
 on:
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - '.github/workflows/all-character-reference-zip.yml'
   workflow_dispatch:
