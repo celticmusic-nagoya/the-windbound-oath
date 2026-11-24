@@ -1,6 +1,6 @@
 # Qualified shared-engine use v4.5 — director-approved scoped rollout (2026-11-24)
 
-Status: POLICY_APPROVED; existing limited-mode integration verified; individual production adapters, long-duration execution, deadline recovery and automatic takeover are NOT blanket-qualified.
+Status: POLICY_APPROVED; existing limited-mode integration verified. Long-duration execution, real deadline recovery and automatic takeover: NOT_RUN. Individual production adapters require scope-specific qualification; no blanket production PASS.
 
 ## Standard route for c / ok
 For approved reversible stages, first reconcile current main policies, owning PR/HEAD, private canon if relevant, owner/lease/fence, all workflow events, dependency SHA, D0–D4 design readiness, and operation/tolerance/uncertainty. Reuse verified prework receipts and checkpoints. The integrated Blueprint Engine (#485) is the standard measurement/residual/correction contract; the integrated Production OS (#468) is the standard bounded session/checkpoint/exclusion route. Reuse existing Factory Adapter, QA Engine and CAS/lease/fencing. Do not create parallel controllers, duplicate PRs, writers or dispatches.
