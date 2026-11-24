@@ -27,9 +27,10 @@ class AuditDiscoveryTests(unittest.TestCase):
                 return {"artifacts": artifacts}
             raise AssertionError(path)
         with patch.object(audit_module, "api", fake_api):
-            result = audit_module.audit("owner/repo", 10, {"entries": [{"path": "x"}]}, [{"artifact_id": 103}])
+            result = audit_module.audit("owner/repo", 10, {"entries": [{"path": "x"}]}, [{"artifact_id": 103}], {"entries": [{"artifact_id": 104}, {"artifact_id": 105}]})
         self.assertEqual(result["main_seed_manifest_entries"], 1)
-        self.assertIsNone(result["published_branch_entries"])
+        self.assertEqual(result["published_branch_entries"], 2)
+        self.assertTrue(next(x for x in result["candidates"] if x["artifact_id"] == 101)["already_published_artifact"] is False)
         self.assertEqual(result["artifacts_seen"], 4)
         self.assertEqual(result["unexpired_unpinned_artifacts"], 1)
         self.assertEqual(result["unexpired_unpinned_by_category"], {"village": 1})
