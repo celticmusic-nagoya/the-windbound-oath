@@ -12,21 +12,7 @@ concurrency:
   group: two-environment-reuse-linux-x64-blender-530
   cancel-in-progress: false
 jobs:
-  select:
-    runs-on: ubuntu-24.04
-    outputs:
-      probe: ${{ steps.mode.outputs.probe }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - id: mode
-        run: |
-          probe=$(cat tools/production_qa/environment_reuse/publisher-probe.txt 2>/dev/null || true)
-          case "$probe" in first|second) echo "probe=$probe" >> "$GITHUB_OUTPUT";; esac
   verify-reuse:
-    needs: select
-    if: needs.select.outputs.probe == ''
     runs-on: ubuntu-24.04
     timeout-minutes: 24
     steps:
@@ -108,51 +94,4 @@ jobs:
         with:
           name: environment-reuse-v2
           path: ${{ runner.temp }}/reuse.json
-          if-no-files-found: error
-  publisher-probe:
-    needs: select
-    if: needs.select.outputs.probe != ''
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - name: Verify public hosted runner and storage headroom
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          test "$RUNNER_ENVIRONMENT" = github-hosted
-          test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
-          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
-          usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes)
-          [[ "$usage" =~ ^[0-9]{1,11}$ ]] && (( usage + 1024*1024 <= 10*1024**3 ))
-      - uses: actions/cache/restore@v4
-        id: restore
-        with:
-          path: ${{ runner.temp }}/two-env-publisher-probe
-          key: two-env-qa-493-publisher-20261124-a163d20
-      - name: Record exact cache winner
-        env:
-          CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
-          PROBE: ${{ needs.select.outputs.probe }}
-        run: |
-          set -euo pipefail
-          dir="$RUNNER_TEMP/two-env-publisher-probe"
-          if [[ "$CACHE_HIT" == true ]]; then
-            test "$PROBE" = second
-            jq -e --arg current "$GITHUB_RUN_ID" '.role == "first" and .run != $current' "$dir/publisher.json"
-          else
-            test "$PROBE" = first
-            mkdir "$dir"
-            jq -n --arg run "$GITHUB_RUN_ID" '{role:"first",run:$run}' > "$dir/publisher.json"
-          fi
-          jq --arg role "$PROBE" --arg run "$GITHUB_RUN_ID" --arg hit "$CACHE_HIT"             '. + {observer:$run,observer_role:$role,cache_hit:($hit=="true")}'             "$dir/publisher.json" > "$RUNNER_TEMP/probe.json"
-      - uses: actions/cache/save@v4
-        if: steps.restore.outputs.cache-hit != 'true'
-        with:
-          path: ${{ runner.temp }}/two-env-publisher-probe
-          key: two-env-qa-493-publisher-20261124-a163d20
-      - uses: actions/upload-artifact@v4
-        with:
-          name: environment-publisher-probe-${{ needs.select.outputs.probe }}
-          path: ${{ runner.temp }}/probe.json
           if-no-files-found: error
