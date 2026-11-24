@@ -53,6 +53,29 @@ try {
  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
  assert.equal(await page.locator('#model-view canvas').count(),1);
  await page.screenshot({path:'qa-output/mobile-diagnostic.png',fullPage:true});
+ // Dashboard: exact HEAD, failure isolation, search and responsive layout.
+ await page.unroute('https://api.github.com/**');
+ await page.route('https://api.github.com/**',route=>{
+  const url=new URL(route.request().url());
+  if(url.pathname.endsWith('/pulls/493'))return route.fulfill({status:403,json:{}});
+  if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',head:{sha:'a'.repeat(40)},updated_at:'2026-11-24'}});
+  return route.fulfill({json:{workflow_runs:[{id:11,head_sha:'b'.repeat(40),status:'completed',conclusion:'success'},{id:22,head_sha:'a'.repeat(40),status:'completed',conclusion:'failure'}]}});
+ });
+ await page.goto('http://127.0.0.1:8765/dashboard.html');
+ await page.waitForFunction(()=>document.querySelector('#sync-status').textContent.includes('5/6'));
+ assert.equal(await page.locator('#dashboard article').count(),6);
+ assert.equal(await page.locator('#dashboard a[href$="/actions/runs/11"]').count(),0);
+ assert.equal(await page.locator('#dashboard a[href$="/actions/runs/22"]').count(),5);
+ assert.ok((await page.locator('#dashboard').innerText()).includes('G1: 未検証'));
+ assert.ok((await page.locator('#dashboard').innerText()).includes('HTTP 403'));
+ await page.locator('#query').fill('モルウェン');
+ assert.equal(await page.locator('#dashboard article').count(),1);
+ await page.locator('#query').fill('');
+ for(const width of [390,1280]){
+  await page.setViewportSize({width,height:844});
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:'qa-output/dashboard-'+width+'.png',fullPage:true});
+ }
  assert.deepEqual(errors,[]);
  console.log('PASS: mocked API, mobile width, SHA-256 match/mismatch, diagnostic GLB loader. Not actual asset QA.');
 }finally{await browser?.close();server.kill();}
