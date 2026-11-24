@@ -1,4 +1,5 @@
 import json, os, subprocess, time
+from shared_session_contract import asset_key
 from pathlib import Path
 from shared_factory_stage import execute_factory_stage
 from shared_blueprint_contract import digest_record
@@ -6,7 +7,8 @@ from session_plan import sha
 base=Path(__file__).parent.resolve()
 def call(mode,path,value='',deadline=None):
     cmd=[os.environ['BLENDER_530'],'-b','-noaudio','--factory-startup','-t','2','--python-exit-code','9','--python',str(base/'blender_stage.py'),'--',mode,str(path),str(value)]
-    out=subprocess.run(cmd,capture_output=True,text=True,check=True,timeout=max(1,deadline-time.monotonic()) if deadline else 60)
+    env = {k: v for k, v in os.environ.items() if k != "TWO_CHECKPOINT_TOKEN"}
+    out=subprocess.run(cmd,capture_output=True,text=True,check=True,env=env,timeout=max(1,deadline-time.monotonic()) if deadline else 60)
     for line in out.stdout.splitlines():
         if line.startswith('NATIVE_JSON '): return json.loads(line.split(' ',1)[1])
 class Adapter:
@@ -32,7 +34,7 @@ mode, root_argument = __import__("sys").argv[1:]
 root = Path(root_argument).resolve()
 remote = str(root / "transport.git")
 deadline = time.monotonic() + 180
-from shared_asset_lease import acquire, assert_owned, git, release
+from shared_asset_lease import acquire, assert_owned, claim_reservation, git, release
 from shared_git_checkpoint_store import GitCheckpointStore, restore_checkpoint
 def contract(source, stage_id, length):
     original_sha = sha(source)
@@ -101,5 +103,53 @@ elif mode == "restore":
          run_id=os.environ["GITHUB_RUN_ID"], completed_edits_executed=0, pending_edits_executed=1,
          continuation=continued, checkpoint_revision=store.previous,
          bundle_sha256=sha(root/"checkpoint.bundle")), indent=2)+"\n")
+elif mode == "shared-resume":
+    asset = asset_key("QA-ENG-468-REMOTE-01")
+    remote = "https://github.com/celticmusic-nagoya/the-windbound-oath-handoff.git"
+    revision = "9438b32eacf64050f4b90b1fbba5768b60f7c3ef"
+    expected_sha = "6d921d4a104bc88c99e3a904357a354e82039f799bdd4a4598c0913e5fb561b2"
+    predecessor = "engine-acceptance-correction"
+    stage_id = "engine-acceptance-resume"
+    restored = root / "restored"
+    records = restore_checkpoint(remote, asset, revision, restored, deadline)
+    if set(records) != {predecessor} or records[predecessor]["sha256"] != expected_sha:
+        raise RuntimeError("unexpected shared checkpoint contents")
+    native = restored / records[predecessor]["path"]
+    before = call("measure", native, deadline=deadline)
+    if abs(before["length"] - 1.45) > 1e-4 or before["width"] != 1.0:
+        raise RuntimeError("unexpected predecessor measurement")
+    stage, target, request = contract(native, stage_id, 1.35)
+    reservation = acquire(remote, asset, revision)
+    token = claim_reservation(remote, asset, reservation, revision)
+    try:
+        assert_owned(remote, asset, reservation, deadline=deadline)
+    except RuntimeError as exc:
+        if str(exc) != "lease lost":
+            raise
+    else:
+        raise RuntimeError("stale reservation retained write authority")
+    continued = execute_factory_stage(restored, native, stage, target, request, Adapter(), deadline,
+                                      lambda: assert_owned(remote, asset, token, deadline=deadline))
+    if sha(native) != expected_sha or continued["observation"]["protected_sha256"] != before["protected"]:
+        raise RuntimeError("predecessor or protected geometry changed")
+    successor_records = {**records, stage_id: continued}
+    store = GitCheckpointStore(remote, asset, restored, previous=revision)
+    successor = store(successor_records, token, deadline)
+    verified = restore_checkpoint(remote, asset, store.previous, root / "verified", deadline)
+    if verified != successor_records:
+        raise RuntimeError("shared continuation checkpoint readback mismatch")
+    release(remote, asset, successor)
+    from shared_asset_reservation import ref_for
+    if git("ls-remote", "--refs", remote, ref_for(asset), deadline=deadline):
+        raise RuntimeError("shared verification lease was not released")
+    observation = continued["observation"]
+    (root / "restore.json").write_text(json.dumps(dict(
+        run_id=os.environ["GITHUB_RUN_ID"], head=os.environ["GITHUB_SHA"], asset=asset,
+        predecessor_revision=revision, predecessor_sha256=expected_sha,
+        checkpoint_revision=store.previous, native_sha256=continued["sha256"],
+        protected_sha256=before["protected"], actual=observation["actual"],
+        residuals=observation["residuals"], completed_edits_executed=0,
+        pending_edits_executed=1, stale_reservation_rejected=True,
+        lease_released=True, checkpoint_readback=True), indent=2)+"\n")
 else:
     raise SystemExit("unknown qualification mode")

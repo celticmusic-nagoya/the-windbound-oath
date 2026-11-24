@@ -3,7 +3,7 @@ import hashlib
 import json
 import re
 
-ASSET_KEYS = frozenset({"MORWEN", "LIND-CLIFF", "LIND-HOME", "LIND-BUILD", "LIND-WORLD"})
+ASSET_KEYS = frozenset({"MORWEN", "LIND-CLIFF", "LIND-HOME", "LIND-BUILD", "LIND-WORLD", "QA-ENG-468-REMOTE-01"})
 FIELDS = frozenset({"blueprint", "inputs", "code", "environment", "dependencies", "qa"})
 
 def asset_key(value):

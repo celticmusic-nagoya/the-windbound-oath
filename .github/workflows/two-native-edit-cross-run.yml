@@ -21,6 +21,31 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: tools/production_qa
+      - name: Resume fixed checkpoint on private Git transport
+        if: github.event_name == 'push' && github.ref == 'refs/heads/infra/shared-native-session-20261122'
+        env:
+          TWO_CHECKPOINT_TOKEN: ${{ secrets.TWO_CHECKPOINT_WRITE_TOKEN }}
+        run: |
+          set -euo pipefail
+          phase=tools/production_qa/native_edit_qa/phase.json
+          if [[ "$(jq -er .mode "$phase")" != shared-resume ]]; then exit 0; fi
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
+          test -n "$TWO_CHECKPOINT_TOKEN"
+          root="$RUNNER_TEMP/two-native"
+          mkdir -p "$root/work"
+          env -u TWO_CHECKPOINT_TOKEN bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/two-blender"
+          export BLENDER_530="$RUNNER_TEMP/two-blender/blender"
+          export PYTHONPATH="$GITHUB_WORKSPACE/tools/production_qa"
+          export GIT_TERMINAL_PROMPT=0
+          export GIT_CONFIG_COUNT=2 GIT_CONFIG_KEY_0=credential.helper GIT_CONFIG_VALUE_0=''
+          export GIT_CONFIG_KEY_1=credential.https://github.com/celticmusic-nagoya/the-windbound-oath-handoff.git.helper
+          export GIT_CONFIG_VALUE_1='!f() { if [ "$1" = get ]; then printf "username=x-access-token\npassword=%s\n" "$TWO_CHECKPOINT_TOKEN"; fi; }; f'
+          git -C "$root/work" init -q
+          git -C "$root/work" config user.email qa@example.invalid
+          git -C "$root/work" config user.name 'Shared qualification'
+          cd "$root/work"
+          python "$PYTHONPATH/native_edit_qa/run_qa.py" shared-resume "$root"
       - name: Execute one isolated qualification phase
         env:
           GH_TOKEN: ${{ github.token }}
@@ -31,6 +56,7 @@ jobs:
           test "$(gh api "$repo" --jq .visibility)" = public
           phase=tools/production_qa/native_edit_qa/phase.json
           mode=$(jq -er .mode "$phase")
+          if [[ "$mode" == shared-resume ]]; then exit 0; fi
           root="$RUNNER_TEMP/two-native"
           mkdir -p "$root" "$root/work"
           if [[ "$mode" == restore ]]; then
