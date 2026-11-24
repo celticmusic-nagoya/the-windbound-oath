@@ -48,6 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           flags=()
+          readonly=false
           cache="$RUNNER_TEMP/two-env-cache"
           if [[ "$CACHE_HIT" == true ]]; then
             test "$(id -u)" != 0
@@ -55,11 +56,17 @@ jobs:
             sudo mount --bind "$cache/app" "$cache/app"
             trap 'sudo umount "$cache/app"' EXIT
             sudo mount -o remount,bind,ro "$cache/app"
-            findmnt -n -o OPTIONS --mountpoint "$cache/app" | grep -Eq '(^|,)ro(,|$)'
+            options=$(findmnt -n -o OPTIONS --mountpoint "$cache/app")
+            grep -Eq '(^|,)ro(,|$)' <<< "$options"
+            test ! -w "$cache/app/blender"
+            readonly=true
+            printf 'Cached application mount: %s, effective UID: %s\n' "$options" "$(id -u)"
             flags=(--cache-hit)
           fi
           python tools/production_qa/environment_reuse/ensure.py --cache "$RUNNER_TEMP/two-env-cache" --fallback "$RUNNER_TEMP/two-env-fallback" --report "$RUNNER_TEMP/reuse.json" "${flags[@]}"
-          jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 else .installer_calls == 1 end)' "$RUNNER_TEMP/reuse.json"
+          jq --argjson readonly "$readonly" --argjson uid "$(id -u)"             '. + {read_only_cache_mount: $readonly, execution_uid: $uid}'             "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/reuse-record.json"
+          mv "$RUNNER_TEMP/reuse-record.json" "$RUNNER_TEMP/reuse.json"
+          jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 and .read_only_cache_mount and .execution_uid > 0 else .installer_calls == 1 end)' "$RUNNER_TEMP/reuse.json"
       - name: Check headroom just before a permitted cache save
         id: headroom
         if: steps.identity.outputs.eligible == 'true' && steps.restore.outputs.cache-hit != 'true'
