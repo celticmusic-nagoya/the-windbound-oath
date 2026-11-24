@@ -41,7 +41,9 @@ BUNDLE_SHA = "29bdbef26f3c3afc67eea4a15a9e6bcd0cd8e71efb8b6e732cc20d0698d39b41"
 REVISION = "d6411635b93f20a6d89ccc74ba5e86299252ff52"
 NATIVE_SHA = "fcce6167a3bb5f5f870fa48178be111ea7e2cd905118909f423c2f5155898d82"
 STAGE_KEY = "cube-continuation"
-ASSET = "LIND-HOME"   # registered #468 key; used only on this job-local transport (as run_qa)
+ASSET = "LIND-HOME"   # registered #468 key; used only on the job-local transport (as run_qa)
+# Production asset keys may never be leased by this acceptance case on a shared transport.
+PRODUCTION_KEYS = frozenset({"MORWEN", "LIND-CLIFF", "LIND-HOME", "LIND-BUILD", "LIND-WORLD"})
 FIXTURE_ID = "BLUEPRINT-ENGINE-FIXTURE"
 CS = "fixture object-aligned world, Z-up"
 TARGET_LENGTH = 1.45                      # provisional engine-acceptance design value
@@ -151,7 +153,12 @@ def make_adapter(**kwargs):
                              python=bpy_python(), **kwargs)
 
 
-def run(artifact_dir, out):
+def run(artifact_dir, out, transport=None, lease_asset=None):
+    """transport None: job-local bare repo (ISOLATED). Otherwise an existing transport URL with a
+    dedicated verification key registered by #468 (never a production asset key)."""
+    if transport is not None and (not lease_asset or lease_asset in PRODUCTION_KEYS):
+        raise SystemExit("shared transport requires a dedicated #468-registered verification key")
+    asset = lease_asset or ASSET
     from shared_asset_lease import acquire, assert_owned, git, release
     from shared_factory_stage import execute_factory_stage
     from shared_git_checkpoint_store import GitCheckpointStore, restore_checkpoint
@@ -174,7 +181,7 @@ def run(artifact_dir, out):
                                              native_sha256=source_sha,
                                              protected_baseline_sha256=baseline,
                                              dependency_hashes=deps)
-    request.update(asset_id=ASSET, stage="engine-acceptance-correction")
+    request.update(asset_id=asset, stage="engine-acceptance-correction")
     gate = handoff(target, request, issues, current_dependency_hashes=deps,
                    current_protected_sha256=baseline)
     write_json(out / "blueprint.json", bp.to_dict())
@@ -192,14 +199,17 @@ def run(artifact_dir, out):
     os.chdir(work)
     git("init", "-q")
     git("commit", "--allow-empty", "-qm", "engine acceptance root")
-    remote = str(work / "transport.git")
-    git("init", "--bare", "-q", remote)
+    if transport is None:
+        remote = str(work / "transport.git")
+        git("init", "--bare", "-q", remote)
+    else:
+        remote = transport
     head = git("rev-parse", "HEAD")
 
     def scenario(name, adapter, guard_factory):
         root = work / name
         root.mkdir()
-        token = acquire(remote, ASSET, head)
+        token = acquire(remote, asset, head)
         guard = guard_factory(token)
         before = evaluate(target, make_adapter().measure(_copy(native, root), target))
         try:
@@ -218,13 +228,13 @@ def run(artifact_dir, out):
                     result["states_after_rejected_correction"] = {
                         k: r["state"] for k, r in
                         evaluate(target, done[-1]["observation"])["metrics"].items()}
-            release(remote, ASSET, token) if _owned(remote, token) else None
+            release(remote, asset, token) if _owned(remote, asset, token) else None
         result["residual_before"] = before["overall"]
         result["source_unchanged"] = file_sha256(native) == source_sha
         return result
 
     results = {}
-    results["correct"] = scenario("correct", make_adapter(), lambda t: (lambda: assert_owned(remote, ASSET, t)))
+    results["correct"] = scenario("correct", make_adapter(), lambda t: (lambda: assert_owned(remote, asset, t)))
     ok = results["correct"]
     if ok["status"] == "PASS":
         cp = ok["checkpoint"]
@@ -232,19 +242,19 @@ def run(artifact_dir, out):
         independent = make_adapter().measure(_copy(out_native, work / "independent"), target)
         ok["independent_remeasure"] = evaluate(target, independent)
         ok["output_native_sha256"] = file_sha256(out_native)
-        store = GitCheckpointStore(remote, ASSET, work / "correct")
-        release(remote, ASSET, store({"engine-acceptance-correction": cp}, ok.pop("token"),
+        store = GitCheckpointStore(remote, asset, work / "correct")
+        release(remote, asset, store({"engine-acceptance-correction": cp}, ok.pop("token"),
                                      time.monotonic() + 120))
-        readback = restore_checkpoint(remote, ASSET, store.previous, work / "readback",
+        readback = restore_checkpoint(remote, asset, store.previous, work / "readback",
                                       time.monotonic() + 120)
         ok["checkpoint_revision"] = store.previous
         ok["readback_equal"] = readback["engine-acceptance-correction"] == cp
         ok["journal"] = json.loads((work / "correct" / [p for p in cp["files"]
                                     if p.endswith("correction-journal.json")][0]).read_text())
     results["fault_width"] = scenario("fault_width", make_adapter(script=FAULT_SCRIPT, extra="width"),
-                                      lambda t: (lambda: assert_owned(remote, ASSET, t)))
+                                      lambda t: (lambda: assert_owned(remote, asset, t)))
     results["fault_gap"] = scenario("fault_gap", make_adapter(script=FAULT_SCRIPT, extra="gap"),
-                                    lambda t: (lambda: assert_owned(remote, ASSET, t)))
+                                    lambda t: (lambda: assert_owned(remote, asset, t)))
 
     def stale(token):
         state = {"calls": 0}
@@ -252,13 +262,16 @@ def run(artifact_dir, out):
         def guard():
             state["calls"] += 1
             if state["calls"] == 2:            # another writer takes over mid-stage
-                release(remote, ASSET, token)
-                acquire(remote, ASSET, head)
-            assert_owned(remote, ASSET, token)
+                release(remote, asset, token)
+                acquire(remote, asset, head)
+            assert_owned(remote, asset, token)
         return guard
     results["stale_token"] = scenario("stale_token", make_adapter(), stale)
 
     summary = dict(
+        transport="job-local" if transport is None else "shared",
+        verification_level="ISOLATED" if transport is None else "SHARED_TRANSPORT_VERIFICATION_KEY",
+        lease_asset=asset,
         input=dict(run_id="45305587537", artifact_id="14880921255", bundle_sha256=BUNDLE_SHA,
                    revision=REVISION, native_sha256=NATIVE_SHA, restore_run=record["run_id"]),
         target_contract_sha256=digest_record(target), design_sha256=target["sha256"],
@@ -288,10 +301,10 @@ def _copy(src, directory):
     return dst
 
 
-def _owned(remote, token):
+def _owned(remote, asset, token):
     from shared_asset_lease import assert_owned
     try:
-        assert_owned(remote, ASSET, token)
+        assert_owned(remote, asset, token)
         return True
     except Exception:
         return False
@@ -301,8 +314,10 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--artifact", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--transport", help="existing lease transport URL (default: job-local)")
+    ap.add_argument("--lease-asset", help="#468-registered verification key for --transport")
     a = ap.parse_args()
-    s = run(a.artifact, a.out)
-    print(json.dumps(dict(verdict=s["verdict"],
+    s = run(a.artifact, a.out, a.transport, a.lease_asset)
+    print(json.dumps(dict(verdict=s["verdict"], level=s["verification_level"],
                           states={k: v["status"] for k, v in s["results"].items()}), indent=1))
     sys.exit(0 if s["verdict"] == "PASS" else 1)

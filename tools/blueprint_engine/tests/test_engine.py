@@ -713,3 +713,11 @@ class ReuseTests(unittest.TestCase):
         for name in character + world:
             self.assertTrue({"run_group", "compile_target", "evaluate"} & uses[name], name)
             self.assertIn("Blueprint", uses[name], name)
+
+
+class SharedTransportGuardTests(unittest.TestCase):
+    def test_shared_transport_refuses_production_keys(self):
+        from blueprint_engine.cases import native_correction_loop as loop
+        for key in (None, "", *sorted(loop.PRODUCTION_KEYS)):
+            with self.subTest(key=key), self.assertRaises(SystemExit):
+                loop.run("/nonexistent", "/nonexistent", transport="/tmp/x.git", lease_asset=key)
