@@ -86,9 +86,11 @@ def verify(root, prov, expected, maximum):
 
 
 def startup(app, fixture, lock):
-    env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PULSE_SERVER": "unix:/tmp/two-no-pulse-socket"}
+    env = {k: v for k, v in os.environ.items() if not k.startswith("PYTHON")}
+    env.update(PYTHONDONTWRITEBYTECODE="1", PYTHONNOUSERSITE="1",
+               PULSE_SERVER="unix:/tmp/two-no-pulse-socket")
     prefix = [str(app / "blender"), "-b", "--factory-startup", "--disable-autoexec",
-              "-t", "2", "--python-exit-code", "9"]
+              "-t", "2", "--python-use-system-env", "--python-exit-code", "9"]
     check = f"assert bpy.app.version_string == {lock['version']!r}; assert bpy.app.build_hash.decode() == {lock['build']!r}; "
     subprocess.run(prefix + ["--python-expr", "import bpy; " + check +
                    f"bpy.ops.wm.save_as_mainfile(filepath={str(fixture)!r})"], env=env, check=True, timeout=45)
@@ -104,7 +106,7 @@ def main():
     parser.add_argument("--expected")
     args = parser.parse_args()
     prov = provenance()
-    key = "two-env-v1-" + hashlib.sha256(canonical(prov)).hexdigest()
+    key = f"two-env-v{prov['schema']}-" + hashlib.sha256(canonical(prov)).hexdigest()
     if args.mode == "key":
         print(key)
         return
@@ -114,13 +116,9 @@ def main():
     installer_calls = 0
     if args.mode == "cold":
         root.mkdir(exist_ok=False)
-        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PULSE_SERVER": "unix:/tmp/two-no-pulse-socket"}
-        checksum_url = "https://mirror.blender.org/release/Blender5.3/blender-5.3.0.sha256"
-        checksums = subprocess.check_output(["curl", "-fsSL", "--max-time", "30", checksum_url], text=True)
-        matches = [line.split()[0] for line in checksums.splitlines() if line.split()[-1:] == [lock["archive"]]]
-        if matches != [lock["archive_sha256"]]:
-            raise ValueError("official archive identity differs from lock")
-        subprocess.run(["bash", str(INSTALLER), str(root / "app")], env=env, check=True, timeout=780)
+        env = {**os.environ, "TWO_BLENDER_ARCHIVE_SHA256": lock["archive_sha256"]}
+        subprocess.run(["bash", str(INSTALLER), str(root / "app"), "extract-only"],
+                       env=env, check=True, timeout=780, umask=0o022)
         installer_calls = 1
         (root / "manifest.json").write_bytes(canonical(dict(provenance=prov,
                                              **inventory(root / "app", lock["max_tree_bytes"]))))
