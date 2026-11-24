@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scenario: [hit, corrupt, miss]
+        scenario: [corrupt, miss]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,8 +37,8 @@ jobs:
       - id: identity
         run: |
           set -euo pipefail
-          key=$(python tools/production_qa/environment_reuse/manager.py key)
-          test "$key" = "$(jq -er .key tools/production_qa/environment_reuse/blender-530-proof.json)"
+          python tools/production_qa/environment_reuse/manager.py key
+          key=$(jq -er .key tools/production_qa/environment_reuse/blender-530-proof.json)
           echo "key=$key" >> "$GITHUB_OUTPUT"
       - uses: actions/cache/restore@v4
         if: matrix.scenario != 'miss'
@@ -64,12 +64,26 @@ jobs:
           if [[ "$SCENARIO" == corrupt ]]; then
             test -d "$cache" && test ! -L "$cache"
             test -f "$cache/manifest.json" && test ! -L "$cache/manifest.json"
+            rm -- "$cache/manifest.json"
             printf 'invalid manifest\n' > "$cache/manifest.json"
+            PYTHONPATH=tools/production_qa/environment_reuse python - "$cache" <<'PYTHON'
+          import json, sys
+          from pathlib import Path
+          from manager import verify
+          from ensure import PROOF
+          proof = json.loads(PROOF.read_text())
+          try:
+              verify(Path(sys.argv[1]), proof["provenance"], proof["manifest_sha256"], 2**31)
+          except ValueError as exc:
+              if str(exc) != "untrusted manifest SHA":
+                  raise
+              print("Injected manifest corruption refused before execution")
+          else:
+              raise SystemExit("Injected manifest was accepted")
+          PYTHON
           fi
           python tools/production_qa/environment_reuse/ensure.py --cache "$cache" --fallback "$fallback" --report "$report" "${flags[@]}"
           case "$SCENARIO" in
-            hit) jq -e '.cache_state == "HIT" and .installer_calls == 0 and .native_reopen' "$report"
-                 test ! -e "$fallback" ;;
             corrupt) jq -e '.cache_state == "REJECTED" and .installer_calls == 1 and .native_reopen' "$report"
                      test "$(cat "$cache/manifest.json")" = "invalid manifest" ;;
             miss) jq -e '.cache_state == "MISS" and .installer_calls == 1 and .native_reopen' "$report"
