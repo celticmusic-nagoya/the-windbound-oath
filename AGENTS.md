@@ -1,5 +1,7 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+**Production-First v5.0 (2026-11-25):** [current scope clarification](docs/policy/PRODUCTION_FIRST_V5_20261125.md). Infrastructure rollout is a separate support workstream, never a global production prerequisite. Apply existing technical gates to affected stages only; reuse verified receipts and do not acquire writer leases for read-only work. Preserve all safety and approval gates.
+
 **Director-approved v4.5 qualified engine usage (2026-11-24):** [Qualified shared-engine policy](docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md). Use merged #485 Blueprint Engine and #468 Production OS for eligible reversible c/ok work in existing owner routes. Only proven short native sessions, isolated correction and checkpoint restore are eligible; long continuous runs, deadline recovery, auto-takeover and unqualified production native writes remain disabled pending scoped evidence and independent QA. No duplicate engine, writer or dispatch.
 
 
