@@ -8,6 +8,7 @@
     "historical evidence only"
   ],
   "active": [
+    "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
     "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
     "docs/policy/TWO_PRODUCTION_OS_V1.md",
     "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md",
@@ -58,5 +59,15 @@
       "independent_qa"
     ],
     "forced_reclaim_requires_separate_approval": true
+  },
+  "qualified_engines_v45": {
+    "approved": "2026-11-24",
+    "policy": "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
+    "short_verified_scope": "ENABLED_WITH_ASSET_PREFLIGHT",
+    "long_run": "NOT_RUN",
+    "deadline_recovery": "NOT_RUN",
+    "automatic_writer_takeover": "NOT_RUN",
+    "production_native_write": "ASSET_SCOPE_GATED",
+    "cache_493": "INDEPENDENT_QA_PENDING"
   }
 }

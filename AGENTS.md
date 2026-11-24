@@ -1,5 +1,8 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+**Director-approved v4.5 qualified engine usage (2026-11-24):** [Qualified shared-engine policy](docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md). Use merged #485 Blueprint Engine and #468 Production OS for eligible reversible c/ok work in existing owner routes. Only proven short native sessions, isolated correction and checkpoint restore are eligible; long continuous runs, deadline recovery, auto-takeover and unqualified production native writes remain disabled pending scoped evidence and independent QA. No duplicate engine, writer or dispatch.
+
+
 ## Mandatory continuity and readiness (2026-11-23)
 
 **Cross-AI progress continuity:** read [CROSS_AI_PROGRESS_INDEX](docs/production/CROSS_AI_PROGRESS_INDEX.md) and apply [Cross-AI progress/main synchronization policy](docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md). Update owning PR at each substantive milestone and main index via scoped approved PR; no automatic or unreviewed merges, no duplicate monitors.
