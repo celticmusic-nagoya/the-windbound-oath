@@ -1,0 +1,140 @@
+name: Shared native session qualification
+on:
+  push:
+    branches: [infra/shared-native-session-20261122]
+    paths: ['.github/workflows/two-shared-native-session-qa.yml', 'tools/production_qa/shared_*.py', 'tools/production_qa/bounded*.py', 'tools/production_qa/session_plan.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+  statuses: write
+concurrency:
+  group: two-shared-native-session-qualification
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Contract and bounded operation regression
+        run: |
+          PYTHONPATH=tools/production_qa python3 - <<'PY'
+          import sys,time
+          from shared_session_contract import fingerprint,FIELDS
+          from bounded_operation import run_operation
+          h={k:{"fixture":"a"*64} for k in FIELDS}
+          a=fingerprint("MORWEN","face",h)
+          assert a==fingerprint("MORWEN","face",dict(reversed(list(h.items()))))
+          for key in FIELDS:
+              changed={**h,key:{"fixture":"b"*64}}
+              assert a!=fingerprint("MORWEN","face",changed)
+          try:
+              fingerprint("unknown","face",h)
+          except ValueError: pass
+          else: raise AssertionError("unknown asset accepted")
+          run_operation([sys.executable,"-c","pass"],time.monotonic()+3,grace=1)
+          started=time.monotonic()
+          try:
+              run_operation([sys.executable,"-c","import time; time.sleep(60)"],started+3,grace=1)
+          except TimeoutError: raise
+          except __import__("subprocess").TimeoutExpired: pass
+          else: raise AssertionError("timeout not enforced")
+          assert time.monotonic()-started<5
+          print("CONTRACT_AND_BOUNDED_OPERATION_PASS")
+          PY
+      - name: Dispatch preflight regression
+        run: |
+          python3 tools/production_qa/shared_dispatch_preflight.py
+          python3 tools/production_qa/test_shared_dispatch_reservation.py
+      - name: Controller safety regression
+        run: python3 tools/production_qa/shared_controller_regression.py
+      - name: Isolated multi-writer integration
+        run: |
+          python3 tools/production_qa/shared_lease_integration_test.py
+          python3 tools/production_qa/test_shared_fenced_checkpoint.py
+          python3 tools/production_qa/test_shared_fenced_session.py
+          python3 tools/production_qa/test_shared_blueprint_contract.py
+          python3 -m unittest discover -s tools/production_qa -p test_shared_item_correction.py
+          python3 -m unittest discover -s tools/production_qa -p test_shared_git_checkpoint_store.py
+      - name: Recovery preflight negative cases
+        run: |
+          PYTHONPATH=tools/production_qa python3 - <<'PY'
+          from shared_recovery_preflight import recovery_preflight
+          token="a"*40
+          record=dict(token=token,run_id=123,run_attempt=2,head="b"*40)
+          run=dict(id=123,run_attempt=2,head_sha="b"*40,status="completed",conclusion="failure")
+          assert recovery_preflight(record,token,run,True,True)["decision"]=="REVIEW_REQUIRED"
+          cases=[(record,"c"*40,run,True,True),
+                 (record,token,{**run,"status":"in_progress"},True,True),
+                 (record,token,{**run,"run_attempt":1},True,True),
+                 (record,token,{**run,"head_sha":"c"*40},True,True),
+                 (record,token,{**run,"id":124},True,True),
+                 (record,token,run,False,True),
+                 (record,token,run,True,False)]
+          for args in cases:
+              try: recovery_preflight(*args)
+              except RuntimeError: pass
+              else: raise AssertionError("unsafe recovery accepted")
+          print("RECOVERY_PREFLIGHT_PASS")
+          PY
+  windows-deadline:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned Windows dependency
+        run: python -m pip install pywin32==311
+      - name: Verify job object deadline and child cleanup
+        shell: pwsh
+        run: |
+          $env:PYTHONPATH = "tools/production_qa"
+          @'
+          import sys,time,tempfile
+          from pathlib import Path
+          from bounded_windows_operation import run_operation
+          run_operation([sys.executable,"-c","pass"],time.monotonic()+15)
+          with tempfile.TemporaryDirectory() as d:
+              marker=Path(d)/"child-survived"
+              ready=Path(d)/"child-started"
+              child="import time; from pathlib import Path; Path("+repr(str(ready))+").touch(); time.sleep(6); Path("+repr(str(marker))+").touch()"
+              parent="import subprocess,sys,time; subprocess.Popen([sys.executable,'-c',"+repr(child)+"]); time.sleep(60)"
+              try:
+                  run_operation([sys.executable,"-c",parent],time.monotonic()+4)
+              except TimeoutError: pass
+              else: raise AssertionError("deadline not enforced")
+              assert ready.exists(), "child never started"
+              time.sleep(7)
+              assert not marker.exists(), "child survived deadline"
+          print("WINDOWS_JOB_DEADLINE_PASS")
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  aggregate:
+    if: always()
+    needs: [qualify, windows-deadline]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Publish result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LINUX: ${{ needs.qualify.result }}
+          WINDOWS: ${{ needs.windows-deadline.result }}
+        run: |
+          state=failure
+          if [[ "$LINUX" == success && "$WINDOWS" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/shared-session-qa -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          [[ "$state" == success ]]

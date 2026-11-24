@@ -1,0 +1,137 @@
+"""Budget-aware sequential controller using the shared planner.
+Adapter callbacks must enforce the supplied monotonic deadline (bounded_operation
+on POSIX), verify native reopen and return checkpoint metadata.
+No automatic takeover; retain lease on failure until reconciled.
+"""
+import time
+from session_plan import ready,sha
+from shared_asset_lease import acquire,assert_owned,claim_reservation,release
+from shared_blueprint_contract import digest_record, measurement_issues, target_issues
+from shared_factory_stage import execute_factory_stage
+from shared_session_contract import asset_key
+
+def run(remote,asset,commit,root,stages,completed,execute,persist,budget=19800,reserve=1800,
+        *, reservation=None, fenced=False, blueprint_targets=None, factory_stages=None, verify_g2=None):
+    """Carry a dispatch reservation into the worker and use the returned fence at each stage.
+
+    In fenced mode, persist must atomically publish a changed ledger and return
+    its new lease token. It must also confirm an unchanged ledger when no stage
+    was executed by returning the current token after verifying durability.
+    Stages declaring requires_blueprint need a validated target before editing.
+    A factory entry is (source_path, adapter); a None source selects its
+    sole dependency's verified checkpoint without changing the blueprint SHA.
+    The optional requires_g2_from names a dependency. verify_g2 authenticates
+    its independent review against the dependency's exact native SHA.
+    """
+    if not 0<reserve<budget<=21600: raise ValueError('invalid budget')
+    asset_key(asset)
+    targets = blueprint_targets or {}
+    factories = factory_stages or {}
+    if set(targets) - {stage["id"] for stage in stages}:
+        raise ValueError("blueprint target references an unknown session stage")
+    if set(factories) - targets.keys():
+        raise ValueError("precision factory stage requires a supplied blueprint target")
+    for stage in stages:
+        if "requires_actual_edit" in stage and (
+            type(stage["requires_actual_edit"]) is not bool or stage["id"] not in factories
+        ):
+            raise ValueError("explicit edit mode requires a qualified factory stage")
+    review_dependencies = {stage["id"]: stage["requires_g2_from"]
+                           for stage in stages if "requires_g2_from" in stage}
+    if any(review_dependencies[stage["id"]] not in stage["deps"]
+           for stage in stages if stage["id"] in review_dependencies):
+        raise ValueError("G2 gate must reference a stage dependency")
+    started=time.monotonic()
+    end=started+budget
+    def durable(records,token,changed):
+        if time.monotonic()>=end:raise TimeoutError('handoff budget exhausted')
+        confirmation = persist(records,token,end)
+        if fenced:
+            if not isinstance(confirmation, str) or (changed and confirmation == token):
+                raise RuntimeError('atomic checkpoint publication unconfirmed')
+            token = confirmation
+        elif confirmation is not True:
+            raise RuntimeError('durability unconfirmed')
+        if time.monotonic()>=end:raise TimeoutError('handoff deadline exceeded')
+        assert_owned(remote,asset,token)
+        return token
+    if reservation is None:
+        token=acquire(remote,asset,commit)
+    else:
+        if not fenced:
+            raise ValueError('dispatch reservations require fenced publication')
+        token=claim_reservation(remote,asset,reservation,commit)
+    executed=[]
+    while True:
+        assert_owned(remote,asset,token)
+        reusable = dict(completed)
+        blocked = set()
+        for stage_id, dependency in review_dependencies.items():
+            native_sha = completed.get(dependency, {}).get("sha256")
+            if not native_sha or verify_g2 is None or verify_g2(dependency, native_sha) is not True:
+                blocked.add(stage_id)
+                reusable.pop(stage_id, None)
+        for stage in stages:
+            stage_id = stage["id"]
+            if stage_id not in factories or stage_id not in reusable:
+                continue
+            record = reusable[stage_id]
+            dependency_shas = {dep: completed.get(dep, {}).get("sha256") for dep in stage["deps"]}
+            if (record.get("target_contract_sha256") != digest_record(targets[stage_id][0])
+                    or record.get("dependency_checkpoints") != dependency_shas
+                    or record.get("requires_actual_edit") is not stage.get("requires_actual_edit")):
+                reusable.pop(stage_id)
+        available=ready(stages,reusable,root,budget-(time.monotonic()-started),reserve)
+        available = [stage_id for stage_id in available if stage_id not in blocked]
+        if not available:break
+        stage=next(s for s in stages if s['id']==available[0])
+        blueprint = targets.get(stage["id"])
+        if stage.get("requires_blueprint") is True and blueprint is None:
+            raise ValueError("blueprint target required for precision stage")
+        if blueprint is not None:
+            target, request = blueprint
+            if request.get("asset_id") != asset or request.get("head_sha") != commit or request.get("stage") != stage["id"]:
+                raise ValueError("blueprint request does not match the session stage")
+            issues = target_issues(target, request)
+            if issues:
+                raise ValueError("blueprint target blocked: " + ", ".join(issues))
+        deadline=min(started+budget-reserve,time.monotonic()+stage['seconds'])
+        factory = factories.get(stage["id"])
+        if factory is None:
+            result=execute(stage,token,deadline)
+        else:
+            source, adapter = factory
+            if source is None:
+                if len(stage["deps"]) != 1:
+                    raise ValueError("factory source requires exactly one checkpoint dependency")
+                source = root / completed[stage["deps"][0]]["path"]
+            result = execute_factory_stage(root, source, stage, target, request, adapter, deadline,
+                                           lambda: assert_owned(remote, asset, token))
+            result["target_contract_sha256"] = digest_record(target)
+            result["dependency_checkpoints"] = {dep: completed[dep]["sha256"] for dep in stage["deps"]}
+        if time.monotonic()>deadline:raise TimeoutError('stage deadline exceeded; reconcile retained lease')
+        assert_owned(remote,asset,token)
+        p=(root/result['path']).resolve()
+        if not p.is_relative_to(root.resolve()) or result.get('reopened') is not True or sha(p)!=result.get('sha256') or result.get('fingerprint')!=stage['fingerprint']:raise RuntimeError('invalid checkpoint')
+        if blueprint is not None:
+            observation = result.get("observation")
+            issues = measurement_issues(target, request, observation)
+            if issues or observation["native_sha256"] != result["sha256"]:
+                raise RuntimeError("blueprint checkpoint blocked: " + ", ".join(issues or ["native_sha256"]))
+        # Invalidate descendants even if an upstream stage reused its nominal fingerprint.
+        invalid={stage['id']}
+        while True:
+            expanded=invalid | {s['id'] for s in stages if set(s['deps']) & invalid}
+            if expanded==invalid:break
+            invalid=expanded
+        updated={k:v for k,v in completed.items() if k not in invalid}
+        updated[stage['id']]=result
+        # Must confirm durable off-runner persistence before advancing.
+        token=durable(updated,token,changed=True)
+        completed.clear()
+        completed.update(updated)
+        executed.append(stage['id'])
+    if not fenced or not executed:
+        token=durable(completed,token,changed=False)
+    release(remote,asset,token)
+    return executed
