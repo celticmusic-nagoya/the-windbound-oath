@@ -2,7 +2,7 @@
   "version": "1.0",
   "implementation_status": "POLICY_ONLY",
   "approval_required": [
-    "main_merge",
+    "main_merge_outside_approved_delivery_scope",
     "formal_adoption",
     "canon_change",
     "destructive_deletion",
@@ -332,5 +332,44 @@
     "production_verified_requires_actual_native_edit_cross_run_restore_and_qa": true,
     "policy_is_runtime_pass": false,
     "track_open_dependencies_to_closure": true
+  },
+  "delivery_closure": {
+    "approved": "2026-11-24",
+    "status": "POLICY_ONLY",
+    "default_scoped_main_integration_authorized": true,
+    "required": [
+      "implementation",
+      "applicable_qa",
+      "review",
+      "authorized_merge",
+      "main_readback",
+      "applicable_runtime_verification"
+    ],
+    "states": [
+      "REGISTERED",
+      "IMPLEMENTED",
+      "QA_PENDING",
+      "MERGE_PENDING",
+      "MERGED",
+      "VERIFIED",
+      "BLOCKED"
+    ],
+    "exceptions": [
+      "formal_adoption",
+      "canon_change",
+      "protected_production_asset_change",
+      "destructive_deletion",
+      "publication",
+      "added_cost",
+      "forced_lease_reclaim",
+      "unrelated_merge",
+      "draft_only",
+      "research_only"
+    ],
+    "direct_main_commit": false,
+    "blocker_remediation_required": true,
+    "reassess_after_unchanged_next_steps": 2,
+    "continue_independent_work": true,
+    "latest_approved_priority": true
   }
 }
