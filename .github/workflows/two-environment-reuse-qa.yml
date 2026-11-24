@@ -12,17 +12,18 @@ concurrency:
   group: two-environment-reuse-linux-x64-blender-530
   cancel-in-progress: false
 jobs:
-  cold:
+  qualify:
     runs-on: ubuntu-24.04
     timeout-minutes: 24
-    outputs:
-      key: ${{ steps.identity.outputs.key }}
-      manifest: ${{ steps.proof.outputs.manifest }}
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [hit, corrupt, miss]
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Check hosted public runner and cache headroom
+      - name: Verify free hosted runner and cache headroom
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -30,80 +31,51 @@ jobs:
           test "$RUNNER_ENVIRONMENT" = github-hosted
           test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
           test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
-          usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes)
-          test "$((usage + 2 * 1024 * 1024 * 1024))" -le "$((10 * 1024 * 1024 * 1024))"
-          printf 'Existing cache bytes: %s\n' "$usage"
+          gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq -e '.active_caches_size_in_bytes <= 10737418240'
       - id: identity
-        run: echo "key=$(python tools/production_qa/environment_reuse/manager.py key)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache/restore@v4
-        id: lookup
-        with:
-          path: ${{ runner.temp }}/two-env-cache
-          key: ${{ steps.identity.outputs.key }}
-          lookup-only: true
-      - id: proof
-        name: Install verified official Blender and reopen a fixture
-        env:
-          CACHE_HIT: ${{ steps.lookup.outputs.cache-hit }}
         run: |
           set -euo pipefail
-          test "$CACHE_HIT" != true || { echo "Exact key already exists. Use its original trusted cold proof."; exit 1; }
-          python tools/production_qa/environment_reuse/manager.py cold --root "$RUNNER_TEMP/two-env-cache" --report "$RUNNER_TEMP/cold.json"
-          echo "manifest=$(jq -er .manifest_sha256 "$RUNNER_TEMP/cold.json")" >> "$GITHUB_OUTPUT"
-          jq -c . "$RUNNER_TEMP/cold.json"
-      - uses: actions/cache/save@v4
-        with:
-          path: ${{ runner.temp }}/two-env-cache
-          key: ${{ steps.identity.outputs.key }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: environment-reuse-cold
-          path: ${{ runner.temp }}/cold.json
-          if-no-files-found: error
-  warm:
-    needs: cold
-    runs-on: ubuntu-24.04
-    timeout-minutes: 24
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Match the cold runner image and key
-        env:
-          EXPECTED_KEY: ${{ needs.cold.outputs.key }}
-        run: |
-          set -euo pipefail
-          test "$RUNNER_ENVIRONMENT" = github-hosted
-          test "$(python tools/production_qa/environment_reuse/manager.py key)" = "$EXPECTED_KEY"
-      - id: restore-start
-        run: echo "epoch=$(date +%s)" >> "$GITHUB_OUTPUT"
+          key=$(python tools/production_qa/environment_reuse/manager.py key)
+          test "$key" = "$(jq -er .key tools/production_qa/environment_reuse/blender-530-proof.json)"
+          echo "key=$key" >> "$GITHUB_OUTPUT"
       - uses: actions/cache/restore@v4
+        if: matrix.scenario != 'miss'
         id: restore
         with:
           path: ${{ runner.temp }}/two-env-cache
-          key: ${{ needs.cold.outputs.key }}
-      - name: Verify warm bytes against the cold job and reopen a fixture
+          key: ${{ steps.identity.outputs.key }}
+      - name: Verify cache selection and isolated rebuild
+        id: environment
         env:
-          EXPECTED_MANIFEST: ${{ needs.cold.outputs.manifest }}
           CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
-          RESTORE_START: ${{ steps.restore-start.outputs.epoch }}
+          SCENARIO: ${{ matrix.scenario }}
         run: |
           set -euo pipefail
-          restore_seconds=$(($(date +%s) - RESTORE_START))
-          manager=tools/production_qa/environment_reuse/manager.py
-          if [[ "$CACHE_HIT" == true ]] && python "$manager" warm --root "$RUNNER_TEMP/two-env-cache" --expected "$EXPECTED_MANIFEST" --report "$RUNNER_TEMP/warm.json"; then
-            jq -e '.installer_calls == 0 and .native_reopen' "$RUNNER_TEMP/warm.json"
-          else
-            echo "Warm qualification failed. Rebuild in an isolated directory without replacing the shared cache."
-            python "$manager" cold --root "$RUNNER_TEMP/two-env-fallback" --report "$RUNNER_TEMP/warm.json"
-            exit 1
+          cache="$RUNNER_TEMP/two-env-cache"
+          fallback="$RUNNER_TEMP/two-env-fallback"
+          report="$RUNNER_TEMP/reuse.json"
+          flags=()
+          if [[ "$SCENARIO" != miss ]]; then
+            test "$CACHE_HIT" = true
+            flags=(--cache-hit)
           fi
-          jq --argjson seconds "$restore_seconds" '. + {cache_hit: true, restore_wall_seconds: $seconds}' "$RUNNER_TEMP/warm.json" > "$RUNNER_TEMP/warm-report.json"
-          mv "$RUNNER_TEMP/warm-report.json" "$RUNNER_TEMP/warm.json"
-          jq -c . "$RUNNER_TEMP/warm.json"
+          if [[ "$SCENARIO" == corrupt ]]; then
+            test -d "$cache" && test ! -L "$cache"
+            test -f "$cache/manifest.json" && test ! -L "$cache/manifest.json"
+            printf 'invalid manifest\n' > "$cache/manifest.json"
+          fi
+          python tools/production_qa/environment_reuse/ensure.py --cache "$cache" --fallback "$fallback" --report "$report" "${flags[@]}"
+          case "$SCENARIO" in
+            hit) jq -e '.cache_state == "HIT" and .installer_calls == 0 and .native_reopen' "$report"
+                 test ! -e "$fallback" ;;
+            corrupt) jq -e '.cache_state == "REJECTED" and .installer_calls == 1 and .native_reopen' "$report"
+                     test "$(cat "$cache/manifest.json")" = "invalid manifest" ;;
+            miss) jq -e '.cache_state == "MISS" and .installer_calls == 1 and .native_reopen' "$report"
+                  test ! -e "$cache" ;;
+          esac
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: environment-reuse-warm
-          path: ${{ runner.temp }}/warm.json
+          name: environment-reuse-${{ matrix.scenario }}
+          path: ${{ runner.temp }}/reuse.json
           if-no-files-found: warn
