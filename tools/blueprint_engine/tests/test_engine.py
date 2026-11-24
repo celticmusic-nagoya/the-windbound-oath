@@ -490,27 +490,226 @@ class LowerBoundEngineTests(unittest.TestCase):
                                           dependency_hashes={"d": "2" * 64})
             self.assertNotIn("lower_bound", target)
 
-    def test_reference_matches_patched_468_when_available(self):
-        """Parity: engine reference == #468 functions with proposals/468-lower-bound.patch."""
-        import os
-        patched = os.environ.get("TWO_PATCHED_468_DIR")
-        if not patched:
-            self.skipTest("set TWO_PATCHED_468_DIR to a #468 checkout with the patch applied")
-        code = (
-            "import itertools, sys; sys.path.insert(0, sys.argv[1]);"
-            "import shared_blueprint_contract as c;"
-            "sys.path.insert(0, sys.argv[2]);"
-            "from blueprint_engine.bounds import REFERENCE as R, CONTRACT_SUPPORTS_LOWER_BOUND as S;"
-            "assert S;"
-            "g=(-.5,-.25,-.125,0,.125,.25,.5);"
-            "ts=[{'lower_bound':{'k':1.0},'tolerances':{'k':0},'values':{'k':1.0}},"
-            "    {'tolerances':{'k':.25},'values':{'k':1.0}}];"
-            "bad=sum(c.constrained_state(t,'k',r,u)!=R['constrained_state'](t,'k',r,u)"
-            "        or c.deficit(t,'k',r)!=R['deficit'](t,'k',r)"
-            "        for t in ts for r,u in itertools.product(g,(0,.125,.25)));"
-            "print(bad); sys.exit(1 if bad else 0)")
-        env = {**os.environ, "TWO_PRODUCTION_QA_DIR": patched}
-        proc = subprocess.run([sys.executable, "-c", code, patched,
-                               str(Path(__file__).resolve().parents[2])],
-                              capture_output=True, text=True, env=env)
-        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+    def test_reference_matches_468_contract(self):
+        """Parity: engine reference == #468 shared_blueprint_contract (patch applied at 2747ac90)."""
+        import itertools
+        import shared_blueprint_contract as c
+        from blueprint_engine import bounds
+        self.assertTrue(bounds.CONTRACT_SUPPORTS_LOWER_BOUND)
+        self.assertIs(bounds.constrained_state, c.constrained_state)
+        self.assertIs(bounds.deficit, c.deficit)
+        self.assertIs(bounds.lower_bound_issues, c.lower_bound_issues)
+        grid = (-.5, -.25, -.125, 0, .125, .25, .5)
+        targets = [{"lower_bound": {"k": 1.0}, "tolerances": {"k": 0}, "values": {"k": 1.0}},
+                   {"tolerances": {"k": .25}, "values": {"k": 1.0}}]
+        R = bounds.REFERENCE
+        for t in targets:
+            for r, u in itertools.product(grid, (0, .125, .25)):
+                self.assertEqual(c.constrained_state(t, "k", r, u),
+                                 R["constrained_state"](t, "k", r, u))
+                self.assertEqual(c.deficit(t, "k", r), R["deficit"](t, "k", r))
+        bad = [{"lower_bound": {"k": float("nan")}, "tolerances": {"k": 0}, "values": {"k": 1.0}},
+               {"lower_bound": {"k": 2.0}, "tolerances": {"k": 0}, "values": {"k": 1.0}},
+               {"lower_bound": {"k": 1.0}, "tolerances": {"k": .1}, "values": {"k": 1.0}},
+               {"lower_bound": {"k": 1.0}, "tolerances": {"k": 0}, "values": {"k": 1.0},
+                "corrections": {"k": {}}},
+               {"lower_bound": [], "tolerances": {"k": 0}, "values": {"k": 1.0}}]
+        for t in bad:
+            self.assertEqual(c.lower_bound_issues(t), R["lower_bound_issues"](t))
+            self.assertTrue(c.lower_bound_issues(t))
+
+
+class _StateAdapter:
+    """Pure-Python Factory adapter over an in-memory state (no native file edits)."""
+
+    def __init__(self, state, u, response):
+        from blueprint_engine.measure import _Adapter
+        self.inner = type("A", (_Adapter,), dict(
+            raw=lambda s, native, deadline=None: dict(self.state),
+            value=lambda s, raw, key: (raw[key], self.u),
+            protected=lambda s, native, raw: "a" * 64))({k: k for k in state}, "scope")
+        self.state, self.u, self.response = dict(state), u, response
+
+    def measure(self, native, target, *, deadline=None):
+        return self.inner.measure(native, target)
+
+    reopen = measure
+
+    def finish(self, native, target, *, deadline=None):
+        return dict(self.inner.evidence_files)
+
+    def edit(self, native, target, *, deadline=None):
+        return None
+
+    def propose_correction(self, native, target, obs, key, *, deadline=None):
+        return -obs["residuals"][key]
+
+    def correct_metric(self, native, target, key, amount, *, deadline=None):
+        self.state[key] += amount
+        for other, delta in self.response.items():
+            self.state[other] += delta
+        Path(native).write_bytes(Path(native).read_bytes() + b"x")   # emulate a saved edit
+        return amount
+
+
+class AcceptanceQATests(unittest.TestCase):
+    """Final QA items requested by independent design QA (#485 comment 7100440033)."""
+
+    def target(self, src, *, b_value=5.0, c_lower=2.0, affects=("a",), b_u=0.0):
+        bp = Blueprint(blueprint_id="t", asset_id="T", stage="s", status="TEST",
+                       canon_status="TEST")
+        bp.add_source(register_source(src, source_id="img", role="NATIVE_WORKING",
+                                      projection="data", coordinate_system="c", units="u",
+                                      provenance="t", license="t"))
+        for e in "abc":
+            bp.add_element(element_id=e, kind="dimension", module="m", sources=["img"],
+                           evidence=PROVISIONAL_DESIGN, coordinate_system="c", units="u",
+                           dims=0, value=1.0, uncertainty=0.0)
+        bp.add_group(target_id="g", measurement_id="m", coordinate_system="c", units="u",
+                     projection="data", operation_id="m", protection_scope_id="scope",
+                     tolerance_basis="t", intersection_limit=0,
+                     corrections={"a": dict(operation_id="m", max_delta=1.0,
+                                            affects=list(affects), requires_pass=["c"])},
+                     metrics={"a": dict(element="a", value=10.0, tolerance=.1, uncertainty=0.0,
+                                        evidence=PROVISIONAL_DESIGN),
+                              "b": dict(element="b", value=b_value, tolerance=.1,
+                                        uncertainty=b_u, evidence=PROVISIONAL_DESIGN),
+                              "c": dict(element="c", value=c_lower, tolerance=0.0,
+                                        uncertainty=0.0, evidence=PROVISIONAL_DESIGN,
+                                        bound="lower")})
+        sha = file_sha256(src)
+        target, request, issues = compile_target(bp, "g", registry(), native_sha256=sha,
+                                                 protected_baseline_sha256="a" * 64,
+                                                 dependency_hashes={"d": "2" * 64})
+        gate = handoff(target, request, issues)
+        self.assertTrue(gate["factory_ready"], gate)
+        return target, request
+
+    def run_factory(self, state, u, response, **kw):
+        with TemporaryDirectory() as d:
+            root = Path(d)
+            src = root / "src.bin"
+            src.write_bytes(b"native")
+            target, request = self.target(src, **kw)
+            adapter = _StateAdapter(state, u, response)
+            stage = dict(id="s", fingerprint="f")
+            (root / "f").mkdir()
+            try:
+                return execute_factory_stage(root / "f", src, stage, target, request, adapter,
+                                             time.monotonic() + 60, lambda: None), None
+            except Exception as exc:              # noqa: BLE001
+                self.assertEqual(src.read_bytes(), b"native")     # source never touched
+                self.assertTrue(list((root / "f" / "quarantine").glob("factory-*")))
+                return None, exc
+
+    def test_clean_correction_passes(self):
+        cp, exc = self.run_factory(dict(a=10.5, b=5.0, c=2.5), .01, {})
+        self.assertIsNone(exc)
+        self.assertEqual(cp["observation"]["actual"]["a"], 10.0)
+
+    def test_hold_to_outside_on_other_metric_stops(self):
+        # b: |r| .11, u .02 -> HOLD; correction moves b by .03 (<= .04 noise) -> OUTSIDE
+        cp, exc = self.run_factory(dict(a=10.5, b=5.11, c=2.5), .02, {"b": .03})
+        self.assertIsNone(cp)
+        self.assertIn("interfered with metric: b", str(exc))
+
+    def test_hold_on_affected_metric_blocks_correction_and_remeasures_once(self):
+        cp, exc = self.run_factory(dict(a=10.5, b=5.11, c=2.5), .02, {}, affects=("a", "b"))
+        self.assertIsNone(cp)
+        self.assertIn("factory measurement blocked", str(exc))
+
+    def test_lower_bound_crossing_by_other_correction_stops(self):
+        # c: r = +.01 PASS (u .002+.002); correction moves c by -.009 -> not PASS
+        cp, exc = self.run_factory(dict(a=10.5, b=5.0, c=2.01), .002, {"c": -.009})
+        self.assertIsNone(cp)
+        self.assertIn("interfered with metric: c", str(exc))
+
+    def test_lower_bound_metric_cannot_be_auto_corrected(self):
+        with TemporaryDirectory() as d:
+            src = Path(d) / "s"
+            src.write_bytes(b"n")
+            bp = Blueprint(blueprint_id="t", asset_id="T", stage="s", status="T", canon_status="T")
+            bp.add_source(register_source(src, source_id="img", role="NATIVE_WORKING",
+                                          projection="data", coordinate_system="c", units="u",
+                                          provenance="t", license="t"))
+            bp.add_element(element_id="c", kind="dimension", module="m", sources=["img"],
+                           evidence=PROVISIONAL_DESIGN, coordinate_system="c", units="u",
+                           dims=0, value=1.0, uncertainty=0.0)
+            with self.assertRaises(BlueprintError):
+                bp.add_group(target_id="g", measurement_id="m", coordinate_system="c",
+                             units="u", projection="data", operation_id="m",
+                             protection_scope_id="s", tolerance_basis="t", intersection_limit=0,
+                             corrections={"c": dict(operation_id="m", max_delta=1.0,
+                                                    affects=["c"], requires_pass=[])},
+                             metrics={"c": dict(element="c", value=1.0, tolerance=0.0,
+                                                uncertainty=0.0, evidence=PROVISIONAL_DESIGN,
+                                                bound="lower")})
+
+    def test_malformed_and_nonfinite_inputs_are_refused(self):
+        with TemporaryDirectory() as d:
+            src = Path(d) / "s"
+            src.write_bytes(b"n")
+            for field, bad in (("value", float("nan")), ("value", float("inf")),
+                               ("tolerance", -1.0), ("tolerance", float("inf")),
+                               ("uncertainty", float("nan")), ("uncertainty", -0.1),
+                               ("value", "1.0"), ("value", True)):
+                with self.subTest(field=field, bad=bad):
+                    metric = dict(element="c", value=1.0, tolerance=0.1, uncertainty=0.0,
+                                  evidence=PROVISIONAL_DESIGN)
+                    metric[field] = bad
+                    bp = Blueprint(blueprint_id="t", asset_id="T", stage="s", status="T",
+                                   canon_status="T")
+                    bp.add_source(register_source(src, source_id="img", role="NATIVE_WORKING",
+                                                  projection="data", coordinate_system="c",
+                                                  units="u", provenance="t", license="t"))
+                    bp.add_element(element_id="c", kind="dimension", module="m",
+                                   sources=["img"], evidence=PROVISIONAL_DESIGN,
+                                   coordinate_system="c", units="u", dims=0, value=1.0,
+                                   uncertainty=0.0)
+                    with self.assertRaises(BlueprintError):
+                        bp.add_group(target_id="g", measurement_id="m", coordinate_system="c",
+                                     units="u", projection="data", operation_id="m",
+                                     protection_scope_id="s", tolerance_basis="t",
+                                     metrics={"c": metric})
+            # tampered compiled targets and non-finite observations fail closed
+            target, request = self.target(src)
+            for mutate in (lambda t: t["lower_bound"].update(c=float("nan")),
+                           lambda t: t["lower_bound"].update(c=3.0),
+                           lambda t: t["tolerances"].update(c=0.5),
+                           lambda t: t.update(lower_bound=[]),
+                           lambda t: t["uncertainty"].update(a=float("inf"))):
+                t = copy.deepcopy(target)
+                mutate(t)
+                try:                                 # refusal or exception: both fail closed
+                    ready = handoff(t, request, [])["factory_ready"]
+                except ValueError:
+                    ready = False
+                self.assertFalse(ready)
+            obs = _StateAdapter(dict(a=10.0, b=5.0, c=2.5), 0.0, {}).measure(src, target)
+            for key, bad in (("a", float("nan")), ("c", float("inf")), ("b", -1.0)):
+                o = copy.deepcopy(obs)
+                o["uncertainty"][key] = bad
+                self.assertTrue(measurement_issues(target, request, o), (key, bad))
+
+
+class ReuseTests(unittest.TestCase):
+    """Character and map cases share one engine path; no case forks the judgement."""
+    FORBIDDEN = {"metric_state", "constrained_state", "deficit", "evaluate", "compile_target",
+                 "handoff", "target_issues", "measurement_issues"}
+
+    def test_cases_reuse_engine_core_without_redefinition(self):
+        import ast
+        cases = Path(__file__).resolve().parents[1] / "cases"
+        uses = {}
+        for path in sorted(cases.glob("*.py")):
+            tree = ast.parse(path.read_text())
+            defined = {n.name for n in ast.walk(tree)
+                       if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+            self.assertFalse(defined & self.FORBIDDEN, path.name)
+            uses[path.stem] = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+                               for a in n.names}
+        character = ("morwen_layer0", "morwen_face_vrm")
+        world = ("lind_home", "lind_home_porch", "native_correction_loop")
+        for name in character + world:
+            self.assertTrue({"run_group", "compile_target", "evaluate"} & uses[name], name)
+            self.assertIn("Blueprint", uses[name], name)

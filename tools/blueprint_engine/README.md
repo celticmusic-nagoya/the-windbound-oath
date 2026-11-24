@@ -32,6 +32,27 @@ python3 -m blueprint_engine.cases.morwen_layer0 --layer0 DIR --silhouette DIR/re
 artifacts 14602858760, 14741418957, 14754066570 and the LIND-HOME evidence ZIP) and publishes
 `deterministic.sha256` for cross-run comparison. Native and official-image bytes are not uploaded.
 
+## Engine acceptance (v1.0 contract freeze)
+* Contract: target/request/observation envelope, `metric_state`, and the one-sided `lower_bound`
+  (`constrained_state`/`deficit`/`lower_bound_issues`) are the #468 implementations (applied in
+  #468 `2747ac90`; `proposals/468-lower-bound.patch` is kept as the record of that change).
+  `bounds.REFERENCE` is a parity oracle only (`test_reference_matches_468_contract`).
+* Two-sided: `|r|+u<=t` PASS, `|r|-u>t` OUTSIDE, else HOLD. Lower bound `r=x-L`: `r-u>=0` PASS,
+  `r+u<0` OUTSIDE, else HOLD; tolerance must be 0, never auto-corrected, no upper end invented.
+* Interference (Factory monitor, tested through the engine contract): a correction stops when a
+  non-affected metric moves beyond noise, PASS leaves PASS, HOLD becomes OUTSIDE, or a lower bound
+  is crossed; a HOLD on an affected metric blocks the correction (one remeasure, then stop).
+* Malformed / non-finite values, tolerances, uncertainties and tampered lower bounds fail closed.
+* Real native loop: `cases/native_correction_loop.py` restores the #468 cross-run checkpoint
+  (artifact 14880921255, SHA-pinned), measures OUTSIDE, executes the #468 qualified fixture
+  correction through `execute_factory_stage` under a job-local lease, re-measures PASS in a new
+  process, stores/reads back the checkpoint, and proves the stop paths (non-affected metric,
+  lower-bound crossing, stale fence). `fault_injection_blender.py` is test-only.
+* Reuse: character (Morwen Layer0 / VRoid face) and map (LIND-HOME, porch, native loop) cases use
+  the same `Blueprint -> compile_target -> handoff -> evaluate -> Factory` path; cases may not
+  redefine judgement functions (`ReuseTests`). Asset-specific edit operations stay with asset owners.
+
 ## Readiness (revision-specific, see owning PR record)
-IMPLEMENTED + ISOLATED_PASS for read-only measurement stages. Edit/correction execution is the
-owner adapter + #468 Factory. G1–G4 of any asset are not assessed by this engine.
+Engine contract and measure/correct/remeasure loop: see the PR record for the run that verified the
+exact HEAD. Asset targets (porch re-issue, Morwen face definitions) and asset G1–G4 are owned by the
+asset PRs and are not engine acceptance criteria.
