@@ -11,6 +11,10 @@
 | Shared factory / long-run controller | [PR #468](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/468) | Existing shared engine owner; **live runtime gate not checked for this snapshot** | RUNTIME_NOT_VERIFIED for cross-AI ledger automation | Reuse existing receipt/lease/QA infrastructure; qualify any gate with tests |
 | Production Studio | Existing Studio owner | Published candidate visibility exists; **latest deployment not checked** | SYNC_UNVERIFIED | Register only public-safe approved derivative artifacts through existing route |
 
+## Mandatory Rilde geography reference (director approved 2026-11-24)
+
+Before world/map work, read [Rilde geography canon contract](region_master/RILDE_GEOGRAPHY_CANON_CONTRACT_20261124.md). Preserve southwest fishing harbor, northwest sea cliff and separate eastern riverbank cliff. Metric blueprint adjustments are authorized within the contract; no geometry acceptance is implied. Original visual master remains referenced at PR #344. Design research remains PR #482; native owners unchanged.
+
 ## Update instructions
 
 At each meaningful milestone, the owning PR receives the precise delta first. Update this main index through a scoped reviewed PR when verified progress, ownership, source SHA, QA or blockers materially change; skip no-change updates. Revalidate current main and owner state; record timestamp, exact commit and evidence; never fabricate a live HEAD from this snapshot. Follow [cross-AI synchronization policy](../policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md) and [prework rule](../policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md). **A general sync preference does not waive explicit future main merge approval or asset adoption gates.**
