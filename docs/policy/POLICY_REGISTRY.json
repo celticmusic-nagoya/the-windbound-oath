@@ -8,6 +8,7 @@
     "historical evidence only"
   ],
   "active": [
+    "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
     "docs/policy/TWO_PRODUCTION_OS_V1.md",
     "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md",
     "docs/policy/CONTINUOUS_3D_AUTHORING_AND_WORLD_EXPANSION_20261121.md",
@@ -37,5 +38,25 @@
     "policy": "AGENTS.md#mandatory-main-delivery-closure-director-approved-2026-11-24",
     "historical_conflicts": "inactive",
     "scope": "all agents and automations"
+  },
+  "autonomous_handoff_v5": {
+    "approved": "2026-11-24",
+    "policy": "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
+    "status": "POLICY_APPROVED_RUNTIME_NOT_VERIFIED",
+    "shorthand": [
+      "c",
+      "ok",
+      "qa",
+      "sync",
+      "status"
+    ],
+    "writer_transfer_requires": [
+      "verified_stop",
+      "valid_lease_release_or_qualified_expiry",
+      "CAS_new_fencing",
+      "checkpoint_restore",
+      "independent_qa"
+    ],
+    "forced_reclaim_requires_separate_approval": true
   }
 }
