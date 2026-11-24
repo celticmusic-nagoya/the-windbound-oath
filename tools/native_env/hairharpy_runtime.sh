@@ -31,7 +31,8 @@ echo "asset_sha256=$got api_digest=$api" | tee -a "$out/sha_check.txt"
 git clone -q --depth 1 --branch "$tag" https://github.com/Rackta/HairHarpy /tmp/hh-src
 [ "$(git -C /tmp/hh-src rev-parse HEAD)" = "$tag_commit" ]
 echo "$bridge_sha  /tmp/hh-src/resources/bridge/hmc_bridge_blender.py" | sha256sum -c - | tee -a "$out/sha_check.txt"
-cp /tmp/hh-src/LICENSE.md "$out/HairHarpy_LICENSE_v2.0.0.md"
+# License §2.1: share only by linking to the author repository; record its identity, do not copy it into artifacts.
+echo "$(sha256sum /tmp/hh-src/LICENSE.md | cut -d' ' -f1)  https://github.com/Rackta/HairHarpy/blob/$tag_commit/LICENSE.md" > "$out/hairharpy_license_ref.txt"
 
 mkdir -p "$bin/app" && tar -xzf "$bin/$asset" -C "$bin/app"
 app="$bin/app/HairHarpy-2.0.0/AppRun"
