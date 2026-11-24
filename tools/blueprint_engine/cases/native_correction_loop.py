@@ -185,11 +185,13 @@ def run(artifact_dir, out):
     stage = dict(id="engine-acceptance-correction",
                  fingerprint=digest_record(dict(target=digest_record(target), deps=deps)))
 
-    # job-local lease transport (#468 single writer / fencing)
+    # job-local lease transport (#468 single writer / fencing); fixed identity for commit-tree
+    for var, val in (("GIT_AUTHOR_NAME", "blueprint-engine"), ("GIT_COMMITTER_NAME", "blueprint-engine"),
+                     ("GIT_AUTHOR_EMAIL", "engine@localhost"), ("GIT_COMMITTER_EMAIL", "engine@localhost")):
+        os.environ.setdefault(var, val)
     os.chdir(work)
     git("init", "-q")
-    git("-c", "user.name=engine", "-c", "user.email=engine@local", "commit", "--allow-empty",
-        "-qm", "engine acceptance root")
+    git("commit", "--allow-empty", "-qm", "engine acceptance root")
     remote = str(work / "transport.git")
     git("init", "--bare", "-q", remote)
     head = git("rev-parse", "HEAD")
