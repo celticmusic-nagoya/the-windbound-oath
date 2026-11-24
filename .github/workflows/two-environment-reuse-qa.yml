@@ -31,7 +31,9 @@ jobs:
           test "$RUNNER_ENVIRONMENT" = github-hosted
           test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
           test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
-          gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq -e '.active_caches_size_in_bytes <= 10737418240'
+          usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes)
+          [[ "$usage" =~ ^[0-9]+$ ]]
+          test "$usage" -le 10737418240
       - id: identity
         run: |
           set -euo pipefail
