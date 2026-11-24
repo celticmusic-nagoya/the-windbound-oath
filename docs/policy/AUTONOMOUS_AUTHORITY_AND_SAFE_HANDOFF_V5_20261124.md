@@ -1,0 +1,30 @@
+# Autonomous scoped authority and safe cross-agent handoff v5.0 — director approved 2026-11-24
+
+Status: **APPROVED POLICY; automated takeover and production enforcement NOT VERIFIED**. Applies to ChatGPT, Codex, Claude and other agents, all production workstreams. This later explicit director decision supersedes earlier *procedural waiting requirements* where inconsistent, but does not waive integrity, security, QA or irreversible-action approvals. Existing single-writer PR ownership remains in force until an evidenced handoff. No new orchestration engine or duplicate monitoring is authorized.
+
+## 1. Delegated authority; c / ok
+
+- The current qualified owner has full operational discretion **within the already approved, reversible asset/stage scope**: plan, edit work copies, run bounded eligible Actions, measure, correct, save/reopen checkpoints, and perform QA without routine per-step approvals. Existing protected geometry, canon, native masters, approved designs, licenses and secrets remain protected.
+- `c [scope]`: reconcile current main policy, live owner PR/HEAD, lease/fence, event-complete Actions/artifacts, dependencies and prior failures; then execute the next eligible non-destructive production or blocker-remediation stage, not just report. `ok`: approve the immediately preceding clearly defined proposal and continue that same scoped workflow. `qa`/ `qaのみ` is read-only; `sync` reconciles; `status` reports. Neither shorthand grants forced reclaim, unreviewed merge, protected asset mutation, formal adoption, destructive deletion, publication, external connection or added cost.
+- The latest **explicit, scoped** director decision outranks older instructions. A newer instruction removes an obsolete administrative HOLD only after its exact scope and dependencies are identified; it never changes physical ownership or a running writer's fence by assertion alone.
+
+## 2. Automatic continuation and safe reassignment
+
+- The shared controller should detect owner quota exhaustion, unavailability, interrupted jobs and stale heartbeats through **actual observable signals**; silence alone is not proof of stopped writers. Reuse the current queue, CAS/lease/fencing and checkpoint engines; do not build shadow controllers.
+- Persist a handoff receipt on the owning PR/private channel as appropriate: task and asset/stage key, prior owner, exact branch/HEAD, lease/fence and expiry, all active run IDs, verified STOP_ACK or verified writer termination, checkpoint path/SHA, input/output SHA, protected fingerprint, QA, failure ledger, next qualified operation and rollback condition.
+- Transfer write authority only after **all competing writer paths have verifiably ceased**, the old lease has been validly released or expired under an independently qualified recovery protocol, a new monotonic fencing token is acquired via CAS, and the successor verifies checkpoint restore/reopen and ownership. Reject stale tokens and late writes. Do not infer a valid release from missing Git refs, an expired timestamp, a failed run or quota exhaustion alone. Force reclaim remains separately authorized and must be independently verified.
+- If these conditions are not satisfied, mark only the conflicting write stage `HANDOFF_PENDING`/`SYNC_UNVERIFIED`; assign the substitute read-only QA, isolated-copy authoring, design, asset research or other non-interfering ready stages. The original writer must not regain write authority automatically after quota recovery.
+- Maintain one writer per conflicting asset/stage and one owning PR. The substitute continues in that PR or an explicitly qualified transfer, preserving prior failed attempts and checkpoints. A handoff is not permission to dispatch duplicate runs.
+
+## 3. Blocker elimination, not safety bypass
+
+- Classify blockers as administrative/stale-policy, resource/quota, dependency/design, tool/runtime, exclusive-write/lease, provenance/license, or QA. Remove obsolete administrative blocks immediately when the later approval is verified. Fix operational blocks with bounded, evidenced remediation; isolate only affected work.
+- After two unchanged blocker reports or two same-cause failures, require a different causal remedy, verified owner transfer, or independent deliverable. Do not repeat unchanged status checks, launch unchanged failed jobs or spend resources merely to keep a job alive.
+- A missing production lease ref is not proof that all writers stopped. Until HOME's writer paths, STOP_ACK, contact tolerances/uncertainty, qualified operation and independent QA are established, production native writes remain BLOCKED; safe isolated work continues.
+- Missing G1–G4 evidence is not converted to PASS by policy. Development can progress through qualified independent modules; final adoption and production integration retain their applicable gates.
+
+## 4. Boundaries, rollout and evidence
+
+- Explicit separate approval remains necessary for canon changes, formal asset adoption, protected production asset modification, destructive deletion, new publication, external connections, additional costs, forced reclaim and unrelated merges. Scoped policy integration may proceed through a reviewed PR after applicable QA, never direct main commits.
+- Phase A: adopt this policy and update existing policy/index pointers; static schema/link QA. Phase B: implement quota/termination signal and handoff receipt in the **existing controller owner's PR**, not here. Phase C: isolate and test cross-run STOP_ACK, CAS release, fencing, stale-token rejection, checkpoint restore and fallback work, including concurrent writers and quota recovery. Phase D: only after independent QA enable production auto-handoff.
+- Track `POLICY_APPROVED`, `IMPLEMENTED`, `ISOLATED_PASS`, `PRODUCTION_VERIFIED` separately. Record exact HEAD, run/artifact SHA, expiry, actual native outputs and QA; no claim of automatic failover until real proof. Preserve the current #364 HOME production HOLD and #493 single-publisher/independent QA gates until their owners close them.
