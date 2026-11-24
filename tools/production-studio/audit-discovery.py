@@ -20,8 +20,9 @@ def api(repo, suffix):
         ["gh", "api", f"repos/{repo}/{suffix}"], text=True
     ))
 
-def audit(repo, per_branch, published, pinned):
+def audit(repo, per_branch, published, pinned, live_published=None):
     known = {int(x["artifact_id"]) for x in pinned}
+    published_ids = {int(e["artifact_id"]) for e in (live_published or {}).get("entries", []) if str(e.get("artifact_id", "")).isdigit()}
     # Count only metadata, not images: no assumption about asset license or publishability.
     rows = []
     for branch, category in BRANCHES.items():
@@ -39,15 +40,16 @@ def audit(repo, per_branch, published, pinned):
                         "expired": bool(artifact["expired"]),
                         "size_bytes": artifact["size_in_bytes"],
                         "already_pinned": artifact["id"] in known,
+                        "already_published_artifact": artifact["id"] in published_ids,
                     })
             if len(runs) < min(remaining, 100):
                 break
     rows.sort(key=lambda x: (x["branch"], -x["run_id"], x["artifact_id"]))
-    eligible = [x for x in rows if not x["expired"] and x["size_bytes"] > 0 and not x["already_pinned"]]
+    eligible = [x for x in rows if not x["expired"] and x["size_bytes"] > 0 and not x["already_pinned"] and not x["already_published_artifact"]]
     return {
         "status": "METADATA_ONLY_NOT_APPROVED_FOR_PUBLICATION",
         "main_seed_manifest_entries": len(published["entries"]),
-        "published_branch_entries": None,  # Not fetched: studio-published is a separate branch.
+        "published_branch_entries": len(live_published["entries"]) if live_published is not None else None,
         "scanned_successful_runs_per_branch_max": per_branch,
         "artifacts_seen": len(rows),
         "unexpired_unpinned_artifacts": len(eligible),
@@ -64,9 +66,16 @@ def main():
         parser.error("--per-branch must be 1..50")
     root = pathlib.Path(__file__).resolve().parent
     repo = os.environ["GITHUB_REPOSITORY"]
+    try:
+        live_published = api(repo, "contents/gallery-manifest.json?ref=studio-published")
+        import base64
+        live_published = json.loads(base64.b64decode(live_published["content"]).decode())
+    except (subprocess.CalledProcessError, KeyError, ValueError) as exc:
+        print(f"WARNING: published manifest unavailable: {exc}", file=__import__("sys").stderr)
+        live_published = None
     result = audit(repo, args.per_branch,
                    json.loads((root / "gallery-manifest.json").read_text()),
-                   json.loads((root / "sync-selection.json").read_text()))
+                   json.loads((root / "sync-selection.json").read_text()), live_published)
     pathlib.Path(args.output).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({k: v for k, v in result.items() if k != "candidates"}, ensure_ascii=False))
 
