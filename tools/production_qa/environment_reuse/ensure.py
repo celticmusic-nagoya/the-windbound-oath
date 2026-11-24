@@ -8,8 +8,30 @@ import sys
 
 from manager import HERE, canonical, sha
 
-PROOF = HERE / "blender-530-proof.json"
-PROOF_SHA256 = "e3dc3d6cd26d3c5aca42fd83e7916bd8e2a89eee97473367e4cb899789cda37b"
+PROOFS = {
+    "two-env-v2-bbd0205f555b77b35aff404f409a56c3773d8091f53d6202d04113b91fa6de7c": (
+        "blender-530-133-proof.json",
+        "d044ff1d6f41b686e33733086ae3ac9d6c77092214d1c617f43e002a5cfa9b2c",
+    ),
+    "two-env-v2-ac7b2c3360e3ddee164fb959bc2f9ef3c67174e110da7fcb4104e854dae2e18d": (
+        "blender-530-376-proof.json",
+        "e3dc3d6cd26d3c5aca42fd83e7916bd8e2a89eee97473367e4cb899789cda37b",
+    ),
+}
+
+
+def trusted_proof(key):
+    item = PROOFS.get(key)
+    if item is None:
+        return None
+    name, expected = item
+    path = HERE / name
+    if sha(path) != expected:
+        raise ValueError("cold proof integrity check failed")
+    proof = json.loads(path.read_text())
+    if proof.get("key") != key:
+        raise ValueError("cold proof key mismatch")
+    return proof
 
 
 def manager(*args, **kwargs):
@@ -17,12 +39,10 @@ def manager(*args, **kwargs):
 
 
 def ensure(cache, fallback, report, cache_hit):
-    if not sha(PROOF) == PROOF_SHA256:
-        raise ValueError("cold proof integrity check failed")
-    proof = json.loads(PROOF.read_text())
     key = manager("key", stdout=subprocess.PIPE, text=True, check=True).stdout.strip()
+    proof = trusted_proof(key)
     state = "MISS"
-    if cache_hit and key == proof["key"]:
+    if cache_hit and proof is not None:
         warm = manager("warm", "--root", cache, "--expected", proof["manifest_sha256"],
                        "--report", report, check=False)
         if warm.returncode == 0:
@@ -33,7 +53,8 @@ def ensure(cache, fallback, report, cache_hit):
             raise ValueError("fallback requires an unused isolated directory")
         manager("cold", "--root", fallback, "--report", report, check=True)
     result = json.loads(report.read_text())
-    result.update(cache_state=state, application_path=str((cache if state == "HIT" else fallback) / "app"))
+    result.update(cache_state=state, trusted_manifest_match=(proof is not None and
+                  result["manifest_sha256"] == proof["manifest_sha256"]), application_path=str((cache if state == "HIT" else fallback) / "app"))
     report.write_bytes(canonical(result))
     return result
 
