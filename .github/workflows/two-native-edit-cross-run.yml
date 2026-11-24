@@ -34,6 +34,8 @@ jobs:
           root="$RUNNER_TEMP/two-native"
           mkdir -p "$root" "$root/work"
           if [[ "$mode" == restore ]]; then
+            test "$(jq -r .resume_pending "$phase")" = true
+            export TWO_RESUME_PENDING=1
             id=$(jq -er .artifact "$phase")
             run=$(jq -er .run "$phase")
             digest=$(jq -er .sha256 "$phase")

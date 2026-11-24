@@ -32,30 +32,34 @@ mode, root_argument = __import__("sys").argv[1:]
 root = Path(root_argument).resolve()
 remote = str(root / "transport.git")
 deadline = time.monotonic() + 180
-from shared_asset_lease import acquire, git, release
+from shared_asset_lease import acquire, assert_owned, git, release
 from shared_git_checkpoint_store import GitCheckpointStore, restore_checkpoint
-if mode == "seed":
-    git("init", "--bare", "-q", remote)
-    git("commit", "--allow-empty", "-qm", "Synthetic qualification root")
-    source = root / "source.blend"
-    call("create", source, deadline=deadline)
+def contract(source, stage_id, length):
     original_sha = sha(source)
     dependency = {"fixture": sha(base / "blender_stage.py")}
-    reference = digest_record({"length": 1.2, "width": 1.0})
-    target = dict(sha256=reference, target_id="cube", source_sha256=original_sha,
+    reference = digest_record({"length": length, "width": 1.0})
+    target = dict(sha256=reference, target_id=stage_id, source_sha256=original_sha,
         coordinate_system="object-aligned", units="m", projection="native-3d", measurement_id="bbox",
-        values={"length": 1.2, "width": 1.0}, tolerances={"length": 1e-4, "width": 1e-4},
+        values={"length": length, "width": 1.0}, tolerances={"length": 1e-4, "width": 1e-4},
         uncertainty={"length": 0, "width": 0}, intersection_limit=0,
         operation=dict(id="scale-x", qualified=True, evidence_sha256=dependency["fixture"]),
         protection=dict(scope_id="scope", baseline_sha256=call("measure", source, deadline=deadline)["protected"]),
         dependency_fingerprint=digest_record(dependency),
         corrections={"length": dict(operation_id="correct-x", evidence_sha256=dependency["fixture"],
             qualified=True, max_delta=.3, affects=["length"], requires_pass=["width"])})
-    request = dict(target_id="cube", asset_id=asset, stage="cube", source_sha256=original_sha,
+    request = dict(target_id=stage_id, asset_id=asset, stage=stage_id, source_sha256=original_sha,
                    reference_sha256=reference, dependency_hashes=dependency)
-    stage = dict(id="cube", fingerprint=digest_record(target), requires_actual_edit=True)
+    stage = dict(id=stage_id, fingerprint=digest_record(target), requires_actual_edit=True)
+    return stage, target, request
+
+if mode == "seed":
+    git("init", "--bare", "-q", remote)
+    git("commit", "--allow-empty", "-qm", "Synthetic qualification root")
+    source = root / "source.blend"
+    call("create", source, deadline=deadline)
+    original_sha = sha(source)
+    stage, target, request = contract(source, "cube", 1.2)
     token = acquire(remote, asset, git("rev-parse", "HEAD"))
-    from shared_asset_lease import assert_owned
     result = execute_factory_stage(root, source, stage, target, request, Adapter(), deadline,
                                    lambda: assert_owned(remote, asset, token))
     if sha(source) != original_sha:
@@ -78,7 +82,24 @@ elif mode == "restore":
     if (sha(native) != seed["native_sha256"] or observation["protected"] != result["observation"]["protected_sha256"]
             or abs(observation["length"]-1.2)>1e-4 or observation["topology"] != [8,6]):
         raise RuntimeError("independent native reopen mismatch")
+    if os.environ.get("TWO_RESUME_PENDING") != "1":
+        raise RuntimeError("restore phase requires the pending native stage")
+    stage_id = "cube-continuation"
+    stage, target, request = contract(native, stage_id, 1.3)
+    token = acquire(remote, asset, seed["revision"])
+    continued = execute_factory_stage(restored, native, stage, target, request, Adapter(), deadline,
+                                      lambda: assert_owned(remote, asset, token))
+    if sha(native) != seed["native_sha256"]:
+        raise RuntimeError("restored predecessor changed")
+    store = GitCheckpointStore(remote, asset, restored, previous=seed["revision"])
+    release(remote, asset, store({"cube": result, stage_id: continued}, token, deadline))
+    verified = restore_checkpoint(remote, asset, store.previous, root/"verified", deadline)
+    if verified["cube"] != result or verified[stage_id] != continued:
+        raise RuntimeError("continuation checkpoint readback mismatch")
+    git("-C", remote, "bundle", "create", str(root/"checkpoint.bundle"), "--all")
     (root/"restore.json").write_text(json.dumps(dict(seed=seed, observation=observation,
-         run_id=os.environ["GITHUB_RUN_ID"], completed_edits_executed=0), indent=2)+"\n")
+         run_id=os.environ["GITHUB_RUN_ID"], completed_edits_executed=0, pending_edits_executed=1,
+         continuation=continued, checkpoint_revision=store.previous,
+         bundle_sha256=sha(root/"checkpoint.bundle")), indent=2)+"\n")
 else:
     raise SystemExit("unknown qualification mode")

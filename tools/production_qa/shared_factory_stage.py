@@ -11,13 +11,14 @@ from tempfile import mkdtemp
 import time
 
 from session_plan import sha
-from shared_blueprint_contract import finite, measurement_issues, metric_state, target_issues
+from shared_blueprint_contract import (constrained_state, deficit, finite, measurement_issues,
+                                      target_issues)
 
 
 def correction_states(target, observation):
     return {
-        key: metric_state(residual, target["tolerances"][key],
-                          target["uncertainty"][key] + observation["uncertainty"][key])
+        key: constrained_state(target, key, residual,
+                               target["uncertainty"][key] + observation["uncertainty"][key])
         for key, residual in observation["residuals"].items()
     }
 
@@ -83,10 +84,11 @@ def correct_items(adapter, native, target, observed, issues, perform, observe, j
             if ((key not in rule["affects"] and abs(delta) > uncertainty)
                     or (states[key] == "PASS" and after_states[key] != "PASS")
                     or (states[key] == "HOLD" and after_states[key] == "OUTSIDE")
-                    or (key != choice and abs(updated["residuals"][key])
-                        > abs(observed["residuals"][key]) + uncertainty)):
+                    or (key != choice and deficit(target, key, updated["residuals"][key])
+                        > deficit(target, key, observed["residuals"][key]) + uncertainty)):
                 raise RuntimeError("correction interfered with metric: " + key)
-        if abs(updated["residuals"][choice]) >= abs(observed["residuals"][choice]):
+        if (deficit(target, choice, updated["residuals"][choice])
+                >= deficit(target, choice, observed["residuals"][choice])):
             raise RuntimeError("correction did not reduce its measured residual")
         observed = updated
     return issues
@@ -173,7 +175,8 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
             journal.append(dict(phase="initial_measure", observation=observed, issues=issues))
             issues = correct_items(adapter, native, target, observed, issues, perform, observe, journal)
         elif issues and all(issue.startswith("tolerance:") for issue in issues) and all(
-            abs(observed["residuals"][key]) > target["tolerances"][key]
+            key not in (target.get("lower_bound") or {})
+            and abs(observed["residuals"][key]) > target["tolerances"][key]
             + target["uncertainty"][key] + observed["uncertainty"][key]
             for _, key in (issue.split(":", 1) for issue in issues)
         ):

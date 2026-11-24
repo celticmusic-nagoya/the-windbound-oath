@@ -47,6 +47,50 @@ def metric_state(residual, tolerance, uncertainty):
     return "HOLD"
 
 
+def constrained_state(target, key, residual, uncertainty):
+    """Shared judgement for one metric (#468 Factory, observation check, #485 display).
+
+    Two-sided (default, unchanged): metric_state(|r|, t, u).
+    Lower bound (key in target["lower_bound"], L = values[key], r = x - L):
+    r - u >= 0 PASS, r + u < 0 OUTSIDE, otherwise HOLD.
+    """
+    if key in (target.get("lower_bound") or {}):
+        if residual - uncertainty >= 0:
+            return "PASS"
+        if residual + uncertainty < 0:
+            return "OUTSIDE"
+        return "HOLD"
+    return metric_state(residual, target["tolerances"][key], uncertainty)
+
+
+def deficit(target, key, residual):
+    """Distance from acceptance used to detect worsening; moving further above a
+    lower bound is never a worsening."""
+    if key in (target.get("lower_bound") or {}):
+        return max(0.0, -residual)
+    return abs(residual)
+
+
+def lower_bound_issues(target):
+    bounds = target.get("lower_bound")
+    if bounds is None:
+        return []
+    values = target.get("values")
+    tolerances = target.get("tolerances")
+    if (not isinstance(bounds, dict) or not bounds or not isinstance(values, dict)
+            or not isinstance(tolerances, dict)):
+        return ["lower_bound"]
+    corrections = target.get("corrections") or {}
+    if not isinstance(corrections, dict):
+        return ["lower_bound"]
+    issues = []
+    for key, lower in bounds.items():
+        if (key not in values or not finite(lower) or lower != values[key]
+                or tolerances.get(key) != 0 or key in corrections):
+            issues.append("lower_bound:" + str(key))
+    return issues
+
+
 def target_issues(target, request):
     if not isinstance(target, dict) or not matches_digest(target.get("sha256")) or (
             target["sha256"] != request.get("reference_sha256")):
@@ -96,6 +140,7 @@ def target_issues(target, request):
     if (not isinstance(protected, dict) or not present(protected.get("scope_id"))
             or not matches_digest(protected.get("baseline_sha256"))):
         issues.append("protected_scope")
+    issues += lower_bound_issues(target)
     dependencies = request.get("dependency_hashes")
     if (not isinstance(dependencies, dict)
             or not all(present(key) and matches_digest(value) for key, value in dependencies.items())
@@ -136,7 +181,7 @@ def measurement_issues(target, request, observation):
         expected = actual[key] - desired
         if not finite(expected) or not math.isclose(residuals[key], expected, rel_tol=1e-9, abs_tol=1e-12):
             issues.append(f"residual:{key}")
-        elif metric_state(expected, target["tolerances"][key],
-                          uncertainty[key] + target["uncertainty"][key]) != "PASS":
+        elif constrained_state(target, key, expected,
+                               uncertainty[key] + target["uncertainty"][key]) != "PASS":
             issues.append(f"tolerance:{key}")
     return issues
