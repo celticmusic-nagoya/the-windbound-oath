@@ -1,0 +1,38 @@
+# Mandatory pre-work rule reconciliation and stage-sequence guard — 2026-11-23
+
+**Scope:** all ChatGPT, Codex, Claude, other agents, automations and human-initiated development across character, map/world, environment, architecture, animation, UI, combat, code and infrastructure. This is a **mandatory execution protocol**, not evidence that automation has been implemented or that any asset is approved.
+
+## Problem / priority
+Existing main policies already require blueprint-first, continuity, ownership, preflight and G1–G4, but a written rule can be skipped when a session starts from a historical pointer, a user shorthand (`c`/`ok`), a green CI run or a partial diagram. **A rule is not enforced by merely linking it.** At every new task, resume, agent handoff, PR change, workflow dispatch or material scope change, reconcile active rules **before** affected mutation. Reuse a verified SHA-matched preflight in the same unchanged context; do not repeatedly reread unchanged large files.
+
+## P0 mandatory pre-work sequence (ordered; no skip)
+
+1. **Current authority:** resolve latest `main` HEAD; read `AGENTS.md`, `docs/production/SESSION_CONTINUITY_INDEX.md`, `docs/policy/POLICY_REGISTRY.json`, `docs/policy/PRODUCTION_RULES.json`, `docs/policy/TWO_PRODUCTION_OS_V1.md`, active directives, this policy and all *relevant* registered scoped policies. Record paths, Git blob SHA and effective precedence; latest formally approved rules override conflicting historical notes, not private canon. Do not infer approval from old comments or memories.
+2. **Canonical evidence:** confirm private handoff and approved images/design references by authenticated path and SHA, licences, native source provenance, actual scale/coordinates, protected scope. If unavailable, mark only dependent work BLOCKED; continue independent safe design.
+3. **Live ownership:** read owning PR latest comments, HEAD, current stage, writer/lease, CAS/fencing and STOP_ACK where applicable; review **all relevant workflow events**, artifacts, expiry and failed history. Do not create a duplicate PR, writer, workflow or controller. Unknown lease/owner => SYNC_UNVERIFIED for conflicting writes.
+4. **Stage dependency graph:** list required predecessor deliverables and acceptance evidence for this exact scope. For precision production require D0–D4 source/parent/detail/executable-target/independent-design QA; for runtime integration require qualified native source and G1–G3 evidence; for formal adoption require all applicable G1–G4 PASS plus explicit approval. UI/code uses testable state/flow contracts instead of irrelevant 3D drawings. Existing qualified independent stages may continue.
+5. **Readiness decision:** record each prerequisite as PASS / FAIL / BLOCKED / NOT_RUN (and HOLD where measurement uncertainty applies), with evidence SHA or missing input. A placeholder, JSON shell, concept drawing, render thumbnail, CI green or a previous agent's completion claim is **not** sufficient evidence. Do not turn NOT_RUN into PASS.
+6. **Execution preflight:** compare exact changed bytes, dependency SHA and qualified operation; perform cheap relevant syntax/schema/unit/geometry and regression checks **before** dispatch or expensive render. Ensure approved non-destructive scope, safe checkpoint/rollback, writer ownership and cost/publication permissions. If preflight fails, fix or block the affected stage; no blind retries.
+7. **Execute and close:** only execute ready stages in the existing owner route; actual edit → measure → residual/tolerance/uncertainty → correct → render → independent QA → save/reopen → runtime G4 as applicable. Recheck rules/HEAD/lease if they change. Record evidence, failures and remaining stage; progress reporting is not a stage-completion criterion.
+
+## Anti-skip enforcement contract
+
+Every mutating task/Action must carry a compact **prework receipt** in the owning PR, existing production manifest or current verified system, with:
+
+- `main_head`, `policy_blob_shas`, `effective_rules`, `scope_id`, `owner_pr`, `owner_head`, `writer_lease_fencing_evidence`;
+- `source_sha256`, `protected_scope`, `dependency_shas`, `stage`, `predecessor_gate_statuses`, `acceptance_criteria`;
+- `preflight_checks`, `result` (READY / BLOCKED / SYNC_UNVERIFIED), `blockers`, `checkpoint`, `next_stage`.
+
+The receipt is a **policy requirement**; it does not assert a working CI enforcement hook. Shared controller/Blueprint Engine owners must implement or reuse an existing gate and regression-test it, **not** add a parallel engine. A stage dispatch must fail closed on missing required receipt/evidence **once the qualified enforcement path exists**. Until verified, agents must manually check and record the receipt before affected mutation; report enforcement as `POLICY_ONLY / RUNTIME_NOT_VERIFIED` rather than PASS.
+
+## Explicit dependency examples
+
+- **World:** country/region C01–C07 evidence → area master plan/elevations/sections → detailed rock/building/vegetation/route blueprints → independent D4 → Blender geometry/material/render → scene G2/G3 → game G4. Country/area conceptual map is not a measured coordinate/terrain contract. Provisional local design may proceed independently; canonical world placement is separately gated.
+- **Character:** official Layer0/four-view and source SHA → full character composition and part-specific face/hair/body/wardrobe/rig targets → independent D4 per qualified scope → VRoid-first native authoring where qualified → matched renders/deformation QA → export and game integration. Preserve approved native-first parallel operations and #427 ownership; no forced suspension of safe work.
+- **Code/UI:** current state/behavior contract → implementation and test design → preflight → isolated change → regression/compatibility QA → integration. Do not substitute document creation for tests.
+
+## Conflict, exception and recovery
+
+If current rules conflict, **stop only the affected stage**, record both exact source/SHAs and seek authorized resolution; do not silently choose the convenient rule. Latest main and later formally approved decisions govern, but a rule cannot override private canon, owner lease, protected content or explicit approval boundaries. No exception solely for time pressure, token efficiency or user shorthand. For already-verified unchanged dependencies, reuse the prior receipt with SHA check. If a rule changes, invalidate only impacted receipt fields and stages. Two same-cause failures trigger causal reassessment per Retry v3, not automatic abandonment or unchanged retry.
+
+**Safety:** no direct main commits; scoped PR review and explicit merge approval; no formal asset adoption, protected source replacement, destructive deletion, new publication, lease takeover, external connection or additional cost without applicable approval. G1–G4 remain separate from D0–D4. Report what was actually verified and what remains NOT_RUN.

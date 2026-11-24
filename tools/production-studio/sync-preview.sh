@@ -26,6 +26,10 @@ for x in selection:
             subprocess.run(['gh','api',f'repos/{repo}/actions/artifacts/{a}/zip'],stdout=out,check=True)
     import hashlib
     digest=meta.get('digest','')
+    expected=x.get('artifact_digest')
+    if expected is not None:
+        assert isinstance(expected,str) and len(expected)==71 and expected.startswith('sha256:'), 'invalid pinned archive digest'
+        assert digest==expected, f'archive digest changed: {a}'
     assert digest.startswith('sha256:') and hashlib.file_digest(target.open('rb'),'sha256').hexdigest()==digest[7:]
     assert target.stat().st_size <= 128*1024*1024
     active.append(x)
@@ -34,7 +38,7 @@ PY
 python artifact-sync.py "$RUNNER_TEMP/studio-selection.json" "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site/published"
 python stage-village.py
 npm install --ignore-scripts --no-audit --no-fund
-cp -t "$RUNNER_TEMP/studio-site" index.html studio.css studio.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js
+cp -t "$RUNNER_TEMP/studio-site" index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js
 mkdir -p "$RUNNER_TEMP/studio-site/vendor/three"
 cp -r node_modules/three/{build,examples,LICENSE} "$RUNNER_TEMP/studio-site/vendor/three/"
 sed -i 's@./node_modules/three/@./vendor/three/@g' "$RUNNER_TEMP/studio-site/index.html"

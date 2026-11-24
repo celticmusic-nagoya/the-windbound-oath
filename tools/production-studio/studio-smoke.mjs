@@ -13,10 +13,22 @@ try {
  const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',route=>route.fulfill({json:route.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)},updated_at:'2026-11-22'}:{workflow_runs:[]}}));
+ await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
+ // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
+ const blueprint=page.locator('#area-blueprints .blueprint-preview img');
+ await blueprint.waitFor({state:'visible'});
+ await blueprint.evaluate(e=>e.decode());
+ assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
+ assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
+ assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
+ await page.locator('#local-title summary').click();
+ assert.equal(await page.locator('#local-title').evaluate(e=>e.open),true);
  const fixture=Buffer.from('diagnostic only');
  await page.locator('#artifact-zip').setInputFiles({name:'diagnostic.zip',mimeType:'application/zip',buffer:fixture});
  await page.locator('#artifact-digest').fill(createHash('sha256').update(fixture).digest('hex'));
