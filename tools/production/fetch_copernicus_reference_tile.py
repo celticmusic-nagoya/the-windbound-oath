@@ -59,9 +59,12 @@ def acquire(lat, lon, out_dir, opener=urlopen):
             return {"qa": "BLOCKED_RASTER_INVALID", "tile": tile,
                     "index_sha256": hashlib.sha256(raw).hexdigest(),
                     "receipt": receipt, "inspection": inspection}
-        if target.exists():
-            raise FileExistsError("REFUSE_TO_OVERWRITE_EXISTING_RASTER")
-        os.replace(tmp, target)
+        # Same-directory hard link is an atomic no-clobber promotion.
+        # os.replace would overwrite a file created after the exists() check.
+        try:
+            os.link(tmp, target)
+        except FileExistsError as exc:
+            raise FileExistsError("REFUSE_TO_OVERWRITE_EXISTING_RASTER") from exc
         return {"qa": "BLOCKED_LICENSE_DATUM_CANON",
                 "tile": tile, "index_sha256": hashlib.sha256(raw).hexdigest(),
                 "receipt": receipt, "raster_path": str(target),
@@ -78,7 +81,9 @@ def main():
     p.add_argument("--report", required=True)
     args = p.parse_args()
     result = acquire(args.lat, args.lon, args.out_dir)
-    Path(args.report).write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    # Never overwrite an existing receipt or a raster via --report.
+    with Path(args.report).open("x", encoding="utf-8") as stream:
+        stream.write(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({"qa": result["qa"], "tile": result["tile"]["tile_id"]}))
 
 if __name__ == "__main__":
