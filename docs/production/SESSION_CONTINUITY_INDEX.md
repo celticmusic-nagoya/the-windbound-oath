@@ -1,3 +1,6 @@
+
+## Continuity update: director-approved autonomous authority and safe quota handoff v5 (2026-11-24)
+Read [scoped authority and handoff policy](docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md). c/ok advance approved reversible work; latest scoped approval supersedes obsolete administrative HOLD. Quota-driven reassignment requires verified writer cessation, CAS release/qualified expiry, new fencing and checkpoint restore; otherwise continue isolated independent work. Policy adoption is not runtime auto-failover PASS; never force reclaim or bypass G1–G4/irreversible approvals.
 # Cross-agent ownership and quota fallback — director approved 2026-11-23
 
 **Cross-AI milestone sync:** consult [CROSS_AI_PROGRESS_INDEX.md](CROSS_AI_PROGRESS_INDEX.md) and [shared synchronization policy](../policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md) before resuming. Owner PR remains authoritative; index is a verified snapshot, not a lease or QA PASS.
