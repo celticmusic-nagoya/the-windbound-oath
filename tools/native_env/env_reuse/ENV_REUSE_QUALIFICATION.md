@@ -11,7 +11,7 @@ and are not runner measurements. No Actions were dispatched for this record.
 | `session_plan.py`, `bounded_operation.py` | byte-identical to the #474 pin `5c067e51` |
 | #468 API used by #474 (`acquire`, `publish_checkpoint`, `digest_record`, `execute_factory_stage`, `fingerprint`, `run`, `run_operation`) | signatures unchanged |
 | VRoid checkpoint bridge contract test (main planner + #427 pin `340c693b`) | PASS |
-| Morwen L0 hair `g1_eval` oracle tests | 5/5 PASS |
+| Morwen L0 hair G1 oracle tests (code now in private storage, see PR #474) | 5/5 PASS |
 | HairHarpy v4 session against main `4143ef02` #468 (local, isolated fencing remote) | COMPLETE in 668 s; 205/205 PASS; measured values identical to CI run 45097145790 (max abs diff 0.0); same target SHA |
 | #485 `residual.evaluate` on CI and local v4 observations | 205 PASS on both |
 
