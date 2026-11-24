@@ -9,7 +9,7 @@ import sys
 from manager import HERE, canonical, sha
 
 PROOF = HERE / "blender-530-proof.json"
-PROOF_SHA256 = "d044ff1d6f41b686e33733086ae3ac9d6c77092214d1c617f43e002a5cfa9b2c"
+PROOF_SHA256 = "e3dc3d6cd26d3c5aca42fd83e7916bd8e2a89eee97473367e4cb899789cda37b"
 
 
 def manager(*args, **kwargs):

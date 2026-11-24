@@ -12,7 +12,63 @@ concurrency:
   group: two-environment-reuse-linux-x64-blender-530
   cancel-in-progress: false
 jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Identify permitted publisher key
+        id: identity
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
+          key=$(python tools/production_qa/environment_reuse/manager.py key)
+          if [[ "$key" == "$(jq -er .key tools/production_qa/environment_reuse/blender-530-proof.json)" ]]; then
+            echo "key=$key" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/cache/restore@v4
+        if: steps.identity.outputs.key != ''
+        id: lookup
+        with:
+          path: ${{ runner.temp }}/two-env-cache
+          key: ${{ steps.identity.outputs.key }}
+          lookup-only: true
+      - name: Build once and verify the pinned pristine manifest
+        if: steps.identity.outputs.key != '' && steps.lookup.outputs.cache-hit != 'true'
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .visibility)" = public
+          python tools/production_qa/environment_reuse/manager.py cold --root "$RUNNER_TEMP/two-env-cache" --report "$RUNNER_TEMP/publisher.json"
+          jq -es '.[0].key == .[1].key and .[0].manifest_sha256 == .[1].manifest_sha256 and .[1].native_reopen' tools/production_qa/environment_reuse/blender-530-proof.json "$RUNNER_TEMP/publisher.json"
+          # The installer caps the uncompressed tree at 2 GiB. Reserve an
+          # additional 256 MiB for archive metadata and concurrent usage drift.
+          if usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes) &&
+             [[ "$usage" =~ ^[0-9]{1,11}$ ]] &&
+             (( usage + 2 * 1024**3 + 256 * 1024**2 <= 10 * 1024**3 )); then
+            echo "allowed=true" >> "$GITHUB_OUTPUT"
+            echo "Eligible for save, existing cache bytes: $usage"
+          else
+            echo "Shared save skipped: cache headroom unavailable"
+          fi
+      - uses: actions/cache/save@v4
+        if: steps.publish.outputs.allowed == 'true'
+        with:
+          path: ${{ runner.temp }}/two-env-cache
+          key: ${{ steps.identity.outputs.key }}
+      - uses: actions/upload-artifact@v4
+        if: steps.publish.outcome == 'success'
+        with:
+          name: environment-reuse-v2-publisher
+          path: ${{ runner.temp }}/publisher.json
+          if-no-files-found: error
   verify-reuse:
+    needs: publish
     runs-on: ubuntu-24.04
     timeout-minutes: 24
     steps:
@@ -48,7 +104,16 @@ jobs:
         run: |
           set -euo pipefail
           flags=()
-          if [[ "$CACHE_HIT" == true ]]; then flags=(--cache-hit); fi
+          cache="$RUNNER_TEMP/two-env-cache"
+          if [[ "$CACHE_HIT" == true ]]; then
+            test "$(id -u)" != 0
+            test -d "$cache/app" && test ! -L "$cache" && test ! -L "$cache/app"
+            sudo mount --bind "$cache/app" "$cache/app"
+            trap 'sudo umount "$cache/app"' EXIT
+            sudo mount -o remount,bind,ro "$cache/app"
+            findmnt -n -o OPTIONS --mountpoint "$cache/app" | grep -Eq '(^|,)ro(,|$)'
+            flags=(--cache-hit)
+          fi
           python tools/production_qa/environment_reuse/ensure.py --cache "$RUNNER_TEMP/two-env-cache" --fallback "$RUNNER_TEMP/two-env-fallback" --report "$RUNNER_TEMP/reuse.json" "${flags[@]}"
           jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 else .installer_calls == 1 end)' "$RUNNER_TEMP/reuse.json"
       - uses: actions/upload-artifact@v4
