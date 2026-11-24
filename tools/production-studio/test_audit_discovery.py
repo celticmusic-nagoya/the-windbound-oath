@@ -48,5 +48,28 @@ class AuditDiscoveryTests(unittest.TestCase):
         self.assertEqual(result["artifacts_seen"], 0)
 
 
+class ZipInspectionTests(unittest.TestCase):
+    def test_signatures_duplicates_and_budget(self):
+        import tempfile
+        import zipfile
+        script = pathlib.Path(__file__).with_name("inspect-candidate-zips.py")
+        spec = importlib.util.spec_from_file_location("zip_inspector", script)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "candidate.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("valid.png", b"\x89PNG\r\n\x1a\n")
+                archive.writestr("VALID.PNG", b"\x89PNG\r\n\x1a\n")
+                archive.writestr("fake.jpg", b"not an image")
+                archive.writestr("../unsafe.png", b"\x89PNG\r\n\x1a\n")
+            result = module.inspect_zip(path)
+            self.assertEqual(result["safe_images"], 1)
+            self.assertEqual(result["rejected_members"], 3)
+            with patch.object(module, "MAX_TOTAL", 1):
+                with self.assertRaisesRegex(ValueError, "aggregate"):
+                    module.inspect_zip(path)
+
+
 if __name__ == "__main__":
     unittest.main()
