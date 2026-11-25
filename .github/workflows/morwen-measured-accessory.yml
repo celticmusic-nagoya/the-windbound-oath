@@ -1,0 +1,125 @@
+name: Morwen accessory material swatches
+on:
+  push:
+    branches: [asset/morwen-measured-textile-20261125]
+    paths: ['.github/workflows/morwen-measured-accessory.yml']
+permissions:
+  contents: read
+concurrency:
+  group: morwen-accessory-material-swatches
+  cancel-in-progress: false
+jobs:
+  accessory:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/asset/morwen-measured-textile-20261125'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Preflight exact embedded script before source acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/accessory.py" <<'PY'
+          import hashlib, io, json, pathlib, sys, zipfile
+          from PIL import Image, ImageDraw
+          import numpy as np
+          
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+          
+          def tint(image, color):
+              a = np.asarray(image.convert("RGB"), dtype=np.float32)
+              y = a @ np.array([.2126,.7152,.0722], dtype=np.float32)
+              median = float(np.median(y))
+              assert median > 1
+              factor = np.clip(y / median, .55, 1.45)
+              return Image.fromarray(np.clip(np.rint(factor[:,:,None]*np.array(color)),0,255).astype(np.uint8))
+          
+          def read_map(z, asset, suffix):
+              matches = [i for i in z.infolist() if pathlib.PurePosixPath(i.filename).name.lower().startswith(asset.lower()+"_") and i.filename.lower().endswith("_"+suffix.lower()+".jpg")]
+              assert len(matches) == 1, (asset, suffix, [i.filename for i in matches])
+              i = matches[0]
+              assert 0 < i.file_size <= 12_000_000
+              raw = z.read(i)
+              im = Image.open(io.BytesIO(raw))
+              assert im.format == "JPEG" and im.size == (1024,1024)
+              im.load()
+              return im.convert("RGB"), {"member":i.filename,"sha256":sha(raw),"size":[1024,1024]}
+          
+          def save(im, out, filename, receipt):
+              p=out/filename
+              im.save(p)
+              with Image.open(p) as reopened:
+                  assert reopened.size == im.size and reopened.convert(im.mode).tobytes() == im.tobytes()
+              receipt[filename]={"sha256":sha(p.read_bytes()),"pixel_sha256":sha(im.tobytes()),"size":list(im.size)}
+          
+          def test():
+              a=np.tile(np.arange(16,240,dtype=np.uint8),(8,1))
+              im=Image.fromarray(a).convert("RGB")
+              c=tint(im,[52,38,49])
+              assert c.size==im.size and np.asarray(c).std()>0
+              assert np.asarray(c).max()<=76
+              buf=io.BytesIO()
+              with zipfile.ZipFile(buf,"w") as z:
+                  img=io.BytesIO();Image.new("RGB",(1024,1024),(64,32,16)).save(img,format="JPEG")
+                  z.writestr("Leather037_1K-JPG_Color.jpg",img.getvalue())
+              with zipfile.ZipFile(buf) as z:
+                  assert read_map(z,"Leather037","Color")[0].size==(1024,1024)
+                  try: read_map(z,"Leather037","NormalGL")
+                  except AssertionError: pass
+                  else: raise AssertionError("missing map accepted")
+              print("synthetic preflight PASS")
+          
+          def main(root):
+              root=pathlib.Path(root)
+              out=root/"accessory";out.mkdir(exist_ok=False)
+              receipt={"scope":"SWATCH_ONLY_NOT_ADOPTED","license":"CC0-1.0","license_url":"https://docs.ambientcg.com/license/","assets":{},"outputs":{},"limitations":["No UV mapping, physical scale, native application or rendered model QA","Leather tint values are provisional art-direction choices","Metal source is procedural, not measured scan"]}
+              tiles=[]
+              for asset,maps,tech in [("Leather037",["Color","NormalGL","Roughness"],"Photometric Stereo"),("Metal048A",["Color","Roughness","Metalness"],"Procedural")]:
+                  raw=(root/(asset+".zip")).read_bytes()
+                  assert 0<len(raw)<=24_000_000
+                  meta={"source":"https://ambientcg.com/view?id="+asset,"technique":tech,"archive_sha256":sha(raw),"maps":{}}
+                  with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                      assert len(z.infolist())<=100 and sum(i.file_size for i in z.infolist())<=100_000_000 and z.testzip() is None
+                      for name in maps:
+                          im,m=read_map(z,asset,name);meta["maps"][name]=m
+                          if asset=="Leather037" and name=="Color":
+                              for label,col in [("bag_brown",(62,42,33)),("boot_violet_black",(44,35,49))]:
+                                  candidate=tint(im,col)
+                                  save(candidate,out,label+".png",receipt["outputs"])
+                                  tiles.append((label,candidate))
+                          else:
+                              save(im,out,asset+"_"+name+".png",receipt["outputs"])
+                              if name=="Color": tiles.append(("gold_source",im))
+                  receipt["assets"][asset]=meta
+              preview=Image.new("RGB",(3*384,416),(28,26,33))
+              d=ImageDraw.Draw(preview)
+              for i,(label,im) in enumerate(tiles):
+                  preview.paste(im.resize((384,384),Image.Resampling.LANCZOS),(i*384,32))
+                  d.text((i*384+8,10),label,fill="white")
+              save(preview,out,"comparison.png",receipt["outputs"])
+              (out/"receipt.json").write_text(json.dumps(receipt,indent=2)+"\n")
+          
+          if __name__=="__main__":
+              if sys.argv[1]=="--test": test()
+              else: main(sys.argv[1])
+          PY
+          python3 -m py_compile "$RUNNER_TEMP/accessory.py"
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/python" -m pip install --disable-pip-version-check --only-binary=:all: Pillow==12.3.0 numpy==2.3.5
+          "$RUNNER_TEMP/venv/bin/python" "$RUNNER_TEMP/accessory.py" --test
+      - name: Acquire two bounded CC0 archives and author swatches
+        shell: bash
+        run: |
+          set -euo pipefail
+          for asset in Leather037 Metal048A; do
+            curl --fail --location --proto '=https' --proto-redir '=https' --max-time 120 --max-filesize 24000000 --silent --show-error --output "$RUNNER_TEMP/$asset.zip" "https://ambientcg.com/get?file=${asset}_1K-JPG.zip"
+          done
+          "$RUNNER_TEMP/venv/bin/python" "$RUNNER_TEMP/accessory.py" "$RUNNER_TEMP"
+          cat "$RUNNER_TEMP/accessory/receipt.json"
+      - name: Upload isolated material candidates and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-accessory-material-swatches-not-adopted
+          path: ${{ runner.temp }}/accessory/
+          retention-days: 7
+          if-no-files-found: error
