@@ -19,6 +19,23 @@ const RULES=[
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
+const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000;
+const PRESERVATION_WORKFLOW=".github/workflows/public-preservation-pilot.yml";
+const preservationLabel=id=>id===45706894871?"自動保全":id===45710690152?"独立復元":"保全／復元（実行種別はログ参照）";
+function selectPreservationRuns(data){
+ if(!Array.isArray(data?.workflow_runs))throw Error("保全Actions一覧形式不正");
+ const seen=new Set(),rows=[];
+ for(const x of data.workflow_runs.slice(0,10)){
+  if(!isId(x?.id)||seen.has(x.id)||x.path!==PRESERVATION_WORKFLOW||x.head_branch!=="main"||
+     x.repository?.full_name!==REPO||x.head_repository?.full_name!==REPO||
+     !/^[a-f0-9]{40}$/.test(x.head_sha||"")||!Number.isFinite(Date.parse(x.updated_at))||
+     !["queued","waiting","pending","requested","in_progress","completed"].includes(x.status))continue;
+  seen.add(x.id);
+  rows.push({id:x.id,label:preservationLabel(x.id),status:x.status,conclusion:typeof x.conclusion==="string"?x.conclusion:null,updated:x.updated_at});
+ }
+ return rows.sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||b.id-a.id).slice(0,5);
+}
+function refreshDelay(success){return success?REFRESH_MS:RETRY_MS;}
 function selectRecentArtifacts(data){
  if(!Array.isArray(data?.artifacts))throw Error("Artifact一覧形式不正");
  const seen=new Set(), rows=[];
@@ -37,23 +54,59 @@ function selectRecentArtifacts(data){
  }
  return rows.sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id).slice(0,30);
 }
-if(typeof module!=="undefined")module.exports={selectRecentArtifacts};
+if(typeof module!=="undefined")module.exports={selectRecentArtifacts,selectPreservationRuns,refreshDelay};
 if(typeof document==="undefined")return;
 const area=document.getElementById("recent-review-artifacts"),status=document.getElementById("recent-review-status"),refresh=document.getElementById("refresh-recent-review");
 if(!area||!status||!refresh)return;
 const make=(tag,text)=>{const e=document.createElement(tag);e.textContent=text;return e;};
-let generation=0;
-async function update(){
- const g=++generation;refresh.disabled=true;status.textContent="最新Artifactの公開メタデータを取得中";
+const heading=document.getElementById("recent-review-title");
+const preservationHeading=make("h2","原本保全・独立復元｜公開Actions");
+preservationHeading.id="preservation-status-title";
+const preservationStatus=make("p","未取得");preservationStatus.setAttribute("role","status");
+const preservationArea=make("section","");preservationArea.className="grid";
+preservationArea.setAttribute("aria-labelledby",preservationHeading.id);
+heading.before(preservationHeading,make("p","実行結果のみ表示。非公開原本・保全台帳・認証情報は取得しません。保存成功は正式採用やGUI再読込の証明ではありません。"),preservationStatus,preservationArea);
+const cadence=make("p","表示中は5分ごとに自動更新。通信失敗時は15分間隔に抑制し、前回の結果を保持します。");
+cadence.className="note";refresh.after(cadence);
+let generation=0,timer=null,nextDue=0,busy=false;
+function schedule(){
+ if(timer!==null)clearTimeout(timer);
+ timer=null;
+ if(!document.hidden&&!busy)timer=setTimeout(()=>update(),Math.max(0,nextDue-Date.now()));
+}
+async function publicJson(path){
+ const res=await fetch(API+path,{credentials:"omit",cache:"no-store",signal:AbortSignal.timeout(10000),headers:{Accept:"application/vnd.github+json"}});
+ if(!res.ok)throw Error("HTTP "+res.status);
+ return res.json();
+}
+async function updatePreservation(){
  try{
-  const res=await fetch(API+"/actions/artifacts?per_page=100",{credentials:"omit",cache:"no-store",signal:AbortSignal.timeout(10000),headers:{Accept:"application/vnd.github+json"}});
-  if(!res.ok)throw Error("HTTP "+res.status);
-  const rows=selectRecentArtifacts(await res.json());
+  const rows=selectPreservationRuns(await publicJson("/actions/workflows/public-preservation-pilot.yml/runs?branch=main&per_page=10"));
+  preservationArea.replaceChildren();
+  for(const x of rows){
+   const card=make("article","");card.className="tile";card.dataset.runId=String(x.id);
+   card.append(make("h3",x.label),make("p",x.status+" / "+(x.conclusion||"未確定")),make("p",new Date(x.updated).toLocaleString("ja-JP")));
+   const link=make("a","Actions実行記録 #"+x.id);link.href=GH+"/actions/runs/"+x.id;link.rel="noopener noreferrer";card.append(link);preservationArea.append(card);
+  }
+  preservationStatus.textContent=rows.length+" 件 / "+new Date().toLocaleString("ja-JP")+"（公開実行情報）";return true;
+ }catch(e){preservationStatus.textContent="更新失敗: "+e.message+"。前回取得分を保持。";return false;}
+}
+async function update(){
+ if(busy||document.hidden)return;
+ busy=true;if(timer!==null)clearTimeout(timer);timer=null;
+ const g=++generation;refresh.disabled=true;status.textContent="最新Artifactの公開メタデータを取得中";
+ const preservation=updatePreservation();let success=false;
+ try{
+  const rows=selectRecentArtifacts(await publicJson("/actions/artifacts?per_page=100"));
   if(g!==generation)return;
   area.replaceChildren();
   for(const x of rows){
    const card=make("article","");card.className="tile";card.dataset.artifactId=String(x.id);
    card.style.overflowWrap="anywhere";card.append(make("h3",x.category),make("p",x.name),make("p","制作日時 "+new Date(x.created).toLocaleString("ja-JP")+" / HEAD "+x.head.slice(0,12)),make("p","未公開候補・内容／QA／採用未判定（公開メタデータ）"));
+   if(Number.isFinite(Date.parse(x.expires))){
+    const remaining=Date.parse(x.expires)-Date.now();
+    card.append(make("p","元Artifact期限 "+new Date(x.expires).toLocaleString("ja-JP")+(remaining<=48*3600000?" / 48時間以内または失効（保全状況は不明）":"")));
+   }
    const link=make("a","GitHubで原Artifactを取得");link.href=GH+"/actions/runs/"+x.run+"/artifacts/"+x.id;link.rel="noopener noreferrer";card.append(link);
    const run=make("a","生成元Actions・実行結果");run.href=GH+"/actions/runs/"+x.run;run.rel="noopener noreferrer";card.append(run);
    if(x.bytes<=128*1024*1024){
@@ -68,8 +121,13 @@ async function update(){
    area.append(card);
   }
   status.textContent=rows.length+" 件（直近100 Artifact中、既知の制作元・期限内のみ、最大30件）／ "+new Date().toLocaleString("ja-JP")+(rows.length?"":"。対象未検出の場合は下記の制作元を確認。");
- }catch(e){if(g===generation)status.textContent="最新一覧取得失敗: "+e.message+"。下記の制作元Actionsから確認できます。";}
- finally{if(g===generation)refresh.disabled=false;}
+  success=true;
+ }catch(e){if(g===generation)status.textContent="最新一覧取得失敗: "+e.message+"。前回取得分を保持。下記の制作元Actionsから確認できます。";}
+ finally{
+  const preservationSuccess=await preservation;
+  if(g===generation){refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess);schedule();}
+ }
 }
+document.addEventListener("visibilitychange",()=>{if(document.hidden){if(timer!==null)clearTimeout(timer);timer=null;}else schedule();});
 refresh.addEventListener("click",update);update();
 })();

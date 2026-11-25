@@ -44,6 +44,8 @@ jobs:
       - run: npm install --ignore-scripts --no-audit --no-fund
       - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
       - run: npx playwright install --with-deps chromium
+      - name: Verify live production metadata refresh
+        run: node --test test_recent_review_artifacts.cjs
       - run: node studio-smoke.mjs
       - name: Verify committed Pages files
         run: STUDIO_ROOT="$PWD" node gallery-smoke.mjs
@@ -58,7 +60,7 @@ jobs:
       - name: Stage isolated browser distribution
         run: |
           mkdir -p dist
-          cp index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js gallery-manifest.json README.md dist/
+          cp index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js recent-review-artifacts.js gallery-manifest.json README.md dist/
           cp -r vendor published dist/
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > distribution-sha256.txt
       - uses: actions/upload-artifact@v4
