@@ -570,10 +570,23 @@ jobs:
           assert comment["created_at"] == comment["updated_at"]
           assert comment["body"] == f'/two-morwen-launch vrm_export main={os.environ["GITHUB_SHA"]}'
           PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/transfer-run.json"
           PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
-          import os
-          from shared_asset_lease import assert_reservation
-          assert_reservation("origin", os.environ["TRANSFER_ASSET"], os.environ["TRANSFER_FENCE"], os.environ["GITHUB_SHA"])
+          import json, os, pathlib
+          from morwen_transfer_claim import await_bound
+          env = os.environ
+          run = json.loads((pathlib.Path(env["RUNNER_TEMP"])/"transfer-run.json").read_bytes())
+          assert run["id"] == int(env["GITHUB_RUN_ID"]) and run["run_attempt"] == 1
+          assert run["event"] == "workflow_dispatch" and run["head_branch"] == "main"
+          assert run["head_sha"] == env["GITHUB_SHA"]
+          assert run["path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          assert run["display_title"] == "Morwen VRoid / vrm_export request:" + env["REQUEST_ID"]
+          assert run["repository"]["id"] == 1408120919 and run["head_repository"]["id"] == 1408120919
+          assert run["actor"]["id"] == 315379131
+          token = await_bound("origin", env["TRANSFER_ASSET"], env["TRANSFER_FENCE"],
+                              env["GITHUB_SHA"], env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          with open(env["GITHUB_ENV"], "a", encoding="utf-8") as f:
+              f.write("MORWEN_BOUND_FENCE=" + token + "\n")
           PY
           artifact=15018109141
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact" --jq 'select(.expired == false and .workflow_run.id == 45605491226) | .id' | grep -qx "$artifact"
@@ -665,6 +678,7 @@ jobs:
         timeout-minutes: 22
         env:
           TRANSFER_MODE: ${{ inputs.mode == 'vrm_export' }}
+          REQUEST_ID: ${{ inputs.request_id }}
           TRANSFER_FENCE: ${{ inputs.transfer_fence }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
@@ -680,6 +694,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          verify_transfer_run() {
+            PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import verify
+          env = os.environ
+          verify("origin", env["TRANSFER_ASSET"], env["MORWEN_BOUND_FENCE"], env["GITHUB_SHA"],
+                 env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          PY
+          }
+          if [ "$TRANSFER_MODE" = true ]; then verify_transfer_run; fi
           app="$RUNNER_TEMP/VRoidStudio.app"
           /usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist" > evidence/version.txt
           exe="$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")"
@@ -810,11 +834,7 @@ jobs:
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
           if [ "$TRANSFER_MODE" = true ]; then
-            PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
-          import os
-          from shared_asset_lease import assert_reservation
-          assert_reservation("origin", os.environ["TRANSFER_ASSET"], os.environ["TRANSFER_FENCE"], os.environ["GITHUB_SHA"])
-          PY
+            verify_transfer_run
             export MORWEN_TRANSFER_PYTHON="$RUNNER_TEMP/transfer-venv/bin/python"
             out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
             mkdir -m 700 "$out"
@@ -822,6 +842,9 @@ jobs:
               "$MORWEN_READONLY_NATIVE" "$out/views" "$out" \
               transfer-control/.github/morwen/vrm-export-profile.json
             cmp "$MORWEN_READONLY_NATIVE" evidence/input-model.vroid
+            verify_transfer_run
+            "$MORWEN_TRANSFER_PYTHON" transfer-control/tools/production_qa/pack_transfer.py "$out" "$out/Morwen-transfer.zip" > "$out/package-receipt.json"
+            verify_transfer_run
             exit 0
           fi
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
