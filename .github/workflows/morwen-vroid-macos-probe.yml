@@ -1196,12 +1196,25 @@ jobs:
                     grep -Fq Cancel evidence/skirt-import-dialog.txt
                     grep -Fq Open evidence/skirt-import-dialog.txt
                     grep -Fq Documents evidence/skirt-import-dialog.txt
-                    # Require a uniquely visible filename; no guessed coordinates or blind keyboard.
-                    "$gui" click-label evidence/skirt-import-dialog.png uv-grid.png Cancel
+                    # Actual run45615371028: Vision returns "- uv-grid.png" and "Open|".
+                    # Match the exact observed label, never click a filename substring.
+                    cat > "$RUNNER_TEMP/skirt-import-label.py" <<'PY'
+          import sys,pathlib
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().strip().split(" | ")]
+          assert rows.count("Texture Editor")==1 and rows.count("Cancel")==1,rows
+          assert any(s in ("Documents","# Documents") for s in rows),rows
+          files=[s for s in rows if s in ("uv-grid.png","- uv-grid.png")]
+          opens=[s for s in rows if s in ("Open","Open|")]
+          assert len(files)==1 and len(opens)==1,rows
+          assert sys.argv[2] in ("file","open")
+          print(files[0] if sys.argv[2]=="file" else opens[0])
+          PY
+                    file_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-dialog.txt file)
+                    "$gui" click-label evidence/skirt-import-dialog.png "$file_label" Cancel
                     sleep 2
                     capture_state skirt-import-selected
-                    grep -Fq uv-grid.png evidence/skirt-import-selected.txt
-                    "$gui" click-label evidence/skirt-import-selected.png Open Cancel
+                    open_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-selected.txt open)
+                    "$gui" click-label evidence/skirt-import-selected.png "$open_label" Cancel
                     sleep 5
                     capture_state skirt-import-preview
                     grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
