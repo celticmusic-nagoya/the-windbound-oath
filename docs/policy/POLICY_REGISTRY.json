@@ -75,6 +75,34 @@
     "policy": "docs/policy/PRODUCTION_FIRST_V5_20261125.md",
     "approved": "2026-11-25",
     "infrastructure_global_prerequisite": false,
-    "scope": "all agents and automations"
+    "scope": "all agents and automations",
+    "authority_resolution": {
+      "status": "MIGRATION_PENDING",
+      "active_allowlist_only": true,
+      "historical_documents_are_execution_authority": false,
+      "unknown_document_status": "REFERENCE_ONLY",
+      "migration_requires": "preserve applicable technical and safety requirements; audit consumers and links before retiring active entries",
+      "retirement_candidates": [
+        "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
+        "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
+        "docs/policy/TWO_PRODUCTION_OS_V1.md",
+        "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md",
+        "docs/policy/CONTINUOUS_3D_AUTHORING_AND_WORLD_EXPANSION_20261121.md",
+        "docs/policy/ART_DIRECTED_HYBRID_WORLD_PRODUCTION_V2.md",
+        "docs/policy/HIGH_END_3D_TECHNOLOGY_REASSESSMENT_AND_PRODUCTION_PIPELINE_20261120.md",
+        "docs/policy/MORWEN_BLUEPRINT_FIRST_BASE_SELECTION_20261120.md",
+        "docs/policy/MORWEN_VISUAL_EQUIVALENCE_REFERENCE_20261118.md",
+        "docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md",
+        "docs/policy/ACTIVE_PRODUCTION_DIRECTIVES_20261121.md",
+        "docs/policy/TOKEN_EFFICIENCY_POLICY_V1.md",
+        "docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md",
+        "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md",
+        "docs/policy/BLENDER_530_UNIFICATION_20261122.md",
+        "docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md",
+        "docs/policy/CROSS_AGENT_OWNERSHIP_AND_QUOTA_FALLBACK_20261123.md",
+        "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
+        "docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md"
+      ]
+    }
   }
 }
