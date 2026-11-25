@@ -66,11 +66,33 @@ async function loadPublishedGallery(){
   button.onclick=click;area.append(button);
  }
  function navigation(items){const nav=document.createElement("nav");nav.className="gallery-breadcrumb";nav.setAttribute("aria-label","成果物の階層");items.forEach((item,i)=>{if(i){const sep=document.createElement("span");sep.textContent=" / ";sep.setAttribute("aria-hidden","true");nav.append(sep);}if(item.action){const b=document.createElement("button");b.type="button";b.textContent=item.label;b.onclick=item.action;nav.append(b);}else{const current=document.createElement("strong");current.textContent=item.label;current.setAttribute("aria-current","page");nav.append(current);}});area.append(nav);}
+ // Exact HEAD grouping: only published manifest entries, never infer a revision from a filename.
+ function revisionHistory(){
+  area.replaceChildren();area.classList.remove("category-grid");
+  navigation([{label:"制作領域",action:home},{label:"制作改訂履歴"}]);
+  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
+  const note=document.createElement("p");note.textContent="公開済み成果物を完全なHEADで集約。QA・採用はmanifest申告であり、修正の因果関係・全履歴・独立QAは未保証。日時は成果物登録情報のみ。";note.style.gridColumn="1/-1";area.append(note);
+  const revisions=new Map();
+  for(const item of assigned){const head=/^[a-f0-9]{40}$/.test(item.entry.head||"")?item.entry.head:null;if(!revisions.has(head))revisions.set(head,[]);revisions.get(head).push(item);}
+  const latest=items=>items.map(x=>typeof x.entry.created_at==="string"&&Number.isFinite(Date.parse(x.entry.created_at))?Date.parse(x.entry.created_at):-Infinity).reduce((a,b)=>Math.max(a,b),-Infinity);
+  const ordered=[...revisions].sort((a,b)=>a[0]===null?1:b[0]===null?-1:latest(b[1])-latest(a[1])||a[0].localeCompare(b[0]));
+  status.textContent="制作改訂履歴 / "+ordered.filter(([h])=>h!==null).length+" HEAD / "+valid.length+" 件";
+  for(const [head,items] of ordered){
+   const card=document.createElement("article");card.className="tile";card.dataset.revisionHead=head||"unknown";
+   const title=document.createElement("h3");title.textContent=head?"HEAD "+head.slice(0,12):"HEAD未記録・不正値（改訂未確定）";card.append(title);
+   const desc=document.createElement("p");desc.textContent=(head?"完全HEAD: "+head+" / ":"")+items.length+" 件 / "+(Number.isFinite(latest(items))?new Date(latest(items)).toISOString():"日時不明");card.append(desc);
+   const counts=(key)=>{const map=new Map();for(const {entry} of items){const value=entry[key]||"未記録";map.set(value,(map.get(value)||0)+1);}return [...map].map(([k,n])=>k+": "+n).join(" / ");};
+   for(const line of ["制作領域: "+[...new Set(items.map(x=>categories.find(([id])=>id===x.root)?.[1]||"その他"))].join(" / "),"QA: "+counts("qa"),"採用: "+counts("adoption")]){const p=document.createElement("p");p.textContent=line;card.append(p);}
+   if(head){const link=document.createElement("a");link.href="https://github.com/celticmusic-nagoya/the-windbound-oath/commit/"+head;link.textContent="制作コミットを確認";card.append(link);}
+   const button=document.createElement("button");button.type="button";button.textContent="この一覧の成果物を見る";button.onclick=()=>detail(null,head?"HEAD "+head.slice(0,12):"HEAD未確定",revisionHistory,items.map(x=>x.entry));card.append(button);area.append(card);
+  }
+ }
  function home(){
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域"}]);
   status.textContent=valid.length+" 件 / カテゴリから閲覧";
   const recent=document.createElement("button");recent.type="button";recent.className="category-back";recent.textContent="全成果物・新着順";recent.onclick=()=>detail(null,"全成果物・新着順",home,valid);area.append(recent);
+  const history=document.createElement("button");history.type="button";history.className="category-back";history.textContent="制作改訂履歴（HEAD別）";history.onclick=revisionHistory;area.append(history);
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
  function subhome(id,title){
