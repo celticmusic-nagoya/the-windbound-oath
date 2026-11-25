@@ -1,5 +1,5 @@
 name: Morwen VRoid macOS compatibility probe
-run-name: Morwen VRoid / ${{ inputs.mode }}${{ inputs.request_id != '' && format(' request:{0}', inputs.request_id) || '' }}
+run-name: Morwen VRoid / skirt length and flat texture controls
 on:
   workflow_dispatch:
     inputs:
@@ -422,29 +422,22 @@ jobs:
           set -euo pipefail
           python3 -m venv "$RUNNER_TEMP/material-venv"
           "$RUNNER_TEMP/material-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14683737147/zip" > "$RUNNER_TEMP/material-sheet.zip"
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15018392749/zip" > "$RUNNER_TEMP/material-textile.zip"
-          gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_rebuild_trial.py?ref=41ce803f607dca8744e15c45f1c671ee69c6bea3" > "$RUNNER_TEMP/skirt-recipe.py"
-          echo "8c703690bdc4d18c8c40ee93755f4baf3f0c9c0b7df17217e5b27eec8c0eaead  $RUNNER_TEMP/skirt-recipe.py" | shasum -a 256 -c
-          gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_skirt_p1_repair.py?ref=e3db88bf78326061a8b064ba8626fc7d27dfcc4f" > "$RUNNER_TEMP/skirt-p1.py"
-          echo "4bf739d1f45ccbfbdee4f4fa421e882a4ee8f3275d31b057060e920ea1ba2f28  $RUNNER_TEMP/skirt-p1.py" | shasum -a 256 -c
-          "$RUNNER_TEMP/material-venv/bin/python" - "$RUNNER_TEMP" <<'PY' | tee evidence/skirt-generated-sha.txt
+          "$RUNNER_TEMP/material-venv/bin/python" - "$RUNNER_TEMP/uv-grid.png" <<'PY' > evidence/skirt-generated-sha.txt
           import hashlib
-          import pathlib
-          import runpy
+          import json
+          from pathlib import Path
+          from PIL import Image
           import sys
 
-          p = pathlib.Path(sys.argv[1])
-          sys.argv = [str(p/"skirt-recipe.py"), str(p/"material-sheet.zip"), str(p/"material-textile.zip"), str(p/"prior.png")]
-          prior = runpy.run_path(sys.argv[0])
-          sha = lambda a: hashlib.sha256(a.tobytes()).hexdigest()
-          assert sha(prior["dark"]) == "42004bf87da39e527e04e60b9295da9a0af73d1983596633c6493ab777008ac0"
-          assert sha(prior["result"]) == "cc42bb0faf2881a1e258389b99b48a959495fdb2bd062611326ed24bed4a13fd"
-          # Byte hashes depend on the PNG encoder. The pinned algorithms and raw RGBA are verified.
-          runpy.run_path(str(p/"skirt-p1.py"))["build"](prior["dark"], prior["result"], p/"p1")
-          (p/"p1/candidate-B.png").rename(p/"uv-grid.png")
+          out = Path(sys.argv[1])
+          image = Image.new("RGBA", (1024, 512), (52, 38, 60, 255))
+          image.save(out)
+          with Image.open(out) as reopened:
+              assert reopened.tobytes() == image.tobytes()
+          print(json.dumps(dict(scope="VOLATILE_FLAT_COLOR_CONTROL",
+              png_sha256=hashlib.sha256(out.read_bytes()).hexdigest(),
+              pixel_sha256=hashlib.sha256(image.tobytes()).hexdigest())))
           PY
-          cp "$RUNNER_TEMP/p1/receipt.json" evidence/skirt-p1-receipt.json
           cat > "$RUNNER_TEMP/skirt-verify.py" <<'PY'
           import hashlib,struct,zlib,sys
           from pathlib import Path
@@ -478,7 +471,7 @@ jobs:
                   row[i]=(row[i]+q)&255
               out.append(bytes(row));prev=row
           h=hashlib.sha256(b''.join(out)).hexdigest();print(h)
-          assert h=='8c5a60f44d30225764f03dcb367e189090311fb88b84d514afb062420bd003b4'
+          assert h=='08c659580d5375143aa9dc3c7753d1df8f2640fe82a957d0bbc376694cdd68ef'
           PY
           python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-pixel-sha.txt
       - name: Compile UV guide inspector before VRoid startup
@@ -762,9 +755,9 @@ jobs:
             for direction in $directions; do
               "$gui" vroid-shortcut front
               case "$direction" in
-                left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
-                left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
-                right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; sleep 0.45; done ;;
               esac
               action=default; last_y=0; pan_used=0; accepted=0
               for attempt in 0 1 2 3; do
@@ -839,9 +832,9 @@ jobs:
               for direction in front left4 left8 right4; do
                 "$gui" vroid-shortcut front
                 case "$direction" in
-                  left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
-                  left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
-                  right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                  left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                  left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                  right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; sleep 0.45; done ;;
                 esac
                 sleep 2
                 tag="frame-$attempt-$direction"
@@ -1090,11 +1083,11 @@ jobs:
                 "$gui" zoom 0.50 0.42 6 0
                 sleep 2
                 capture_state face-close-front
-                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done
+                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
                 sleep 2
                 capture_state face-close-left4
                 "$gui" vroid-shortcut front
-                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done
+                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; sleep 0.45; done
                 sleep 2
                 capture_state face-close-right4
                 "$gui" vroid-shortcut front
@@ -1165,6 +1158,73 @@ jobs:
                 capture_state skirt-template
                 grep -Fq Bottoms evidence/skirt-template.txt
                 grep -Fq 'Edit Texture' evidence/skirt-template.txt
+                # Calibrated against the verified P1 Uniform Skirt control screen.
+                # Restore the symmetric Skirt (Longer) control before the flat texture trial.
+                "$gui" vroid-shortcut front
+                sleep 3
+                capture_state geometry-front-before
+                cat > "$RUNNER_TEMP/skirt-length-check.py" <<'PY'
+          import json
+          from pathlib import Path
+          import re
+          import sys
+
+          labels = Path(sys.argv[1]).read_text()
+          for label in ("Bottoms", "Customize", "Skirt (Tighter)", "Skirt (Wider)",
+                        "Skirt (Shorter)", "Skirt (Longer)", "Edit Texture"):
+              assert label in labels, label
+          values = re.findall(r"(?<![.\d])\d+\.\d{3}(?![.\d])", labels)
+          assert len(values) == 4 and values[:3] == ["0.000"] * 3, values
+          value = float(values[-1])
+          if sys.argv[2] == "changed":
+              assert 0.10 <= value <= 0.40, value
+          else:
+              assert value == 0.0, value
+          print(json.dumps(dict(values=values, longer=value, phase=sys.argv[2])))
+          PY
+                length_check="$RUNNER_TEMP/skirt-length-check.py"
+                python3 "$length_check" evidence/geometry-front-before.txt before > evidence/geometry-before.json
+                # Record side and rear at the same deliberate camera increments.
+                geometry_views() {
+                  local label="$1" i
+                  "$gui" vroid-shortcut front
+                  sleep 2
+                  for i in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
+                  sleep 2
+                  capture_state "geometry-side-$label"
+                  for i in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
+                  sleep 2
+                  capture_state "geometry-rear-$label"
+                  "$gui" vroid-shortcut front
+                  sleep 3
+                }
+                geometry_views before
+                "$gui" slider 0.73828125 0.6510416667 0.80078125 0.6510416667 0.6
+                sleep 3
+                capture_state geometry-front-changed
+                python3 "$length_check" evidence/geometry-front-changed.txt changed > evidence/geometry-changed.json
+                geometry_views changed
+                "$gui" slider 0.80078125 0.6510416667 0.73828125 0.6510416667 0.6
+                sleep 3
+                capture_state geometry-front-restored
+                python3 "$length_check" evidence/geometry-front-restored.txt restored > evidence/geometry-restored.json
+                test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$sha_before"
+                test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
+                printf '%s\n' "$sha_before" > evidence/geometry-native-after.txt
+                python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path("evidence")
+          files = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.glob("geometry-*"))}
+          assert len(files) == 18, files
+          (root/"geometry-receipt.json").write_text(json.dumps(dict(
+              run=os.environ["GITHUB_RUN_ID"], files=files, formal_adoption=False,
+              scope="VOLATILE_GLOBAL_SKIRT_LENGTH_CONTROL_RESTORED_NO_NATIVE_SAVE"), indent=2))
+          PY
+                capture_state skirt-template
                 "$gui" click-label evidence/skirt-template.png 'Edit Texture' Bottoms
                 ready=0
                 for delay in 4 10 20 30; do
@@ -1182,10 +1242,11 @@ jobs:
                     local prefix="$1" view n
                     for view in front left4 left8 right4; do
                       "$gui" vroid-shortcut front
+                      sleep 2
                       case "$view" in
-                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
-                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
-                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; sleep 0.45; done ;;
+                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; sleep 0.45; done ;;
                       esac
                       sleep 2
                       capture_state "$prefix-$view"
@@ -1410,25 +1471,50 @@ jobs:
                   test -s evidence/skirt-export-metadata.json
                   test -s evidence/skirt-alpha-row-bounds.json
                   if [ "$WARDROBE_IMPORT" = true ]; then
-                    # Probe native display modes, without changing the calibrated import screen.
+                    # The B run enumerated this native mode. Keep the original
+                    # display dimensions for the calibrated import and export.
                     cat > "$RUNNER_TEMP/skirt-display.swift" <<'SWIFT'
           import CoreGraphics
+          import Foundation
           let display = CGMainDisplayID()
           let modes = CGDisplayCopyAllDisplayModes(display, nil) as? [CGDisplayMode] ?? []
-          let current = CGDisplayCopyDisplayMode(display)
-          print("CURRENT \(current?.width ?? 0)x\(current?.height ?? 0)")
-          for mode in modes {
-              print("AVAILABLE \(mode.width)x\(mode.height) pixels=\(mode.pixelWidth)x\(mode.pixelHeight)")
-          }
+          let width = Int(CommandLine.arguments[1])!
+          let height = Int(CommandLine.arguments[2])!
+          guard let mode = modes.first(where: {
+              $0.width == width && $0.height == height &&
+              $0.pixelWidth == width && $0.pixelHeight == height
+          }) else { exit(2) }
+          guard CGDisplaySetDisplayMode(display, mode, nil) == .success else { exit(3) }
+          let fresh = CGDisplayCopyDisplayMode(display)
+          print("CURRENT \(fresh?.width ?? 0)x\(fresh?.height ?? 0)")
           SWIFT
-                    swift "$RUNNER_TEMP/skirt-display.swift" > evidence/skirt-display-modes.txt
-                    "$gui" pan 0.390625 0.7447916667 0.390625 0.530 0.4
-                    for zoom in 12 32 56 80; do
-                      if [ "$zoom" = 12 ]; then delta=12; elif [ "$zoom" = 32 ]; then delta=20; else delta=24; fi
-                      "$gui" zoom 0.390625 0.530 "$delta" 0
+                    if swift "$RUNNER_TEMP/skirt-display.swift" 1920 1080 > evidence/skirt-display-modes.txt; then
+                      sleep 4
+                      osascript > evidence/skirt-hd-window.txt 2>&1 <<'APPLESCRIPT' || true
+          tell application "System Events"
+              set vr to first application process whose bundle identifier is "net.pixiv.vroid.macosx"
+              tell window 1 of vr
+                  set position to {0, 25}
+                  set size to {1920, 1010}
+                  return size
+              end tell
+          end tell
+          APPLESCRIPT
+                      sleep 3
+                      capture_state skirt-hd-unzoomed
+                      "$gui" zoom 0.326 0.56 26 0
                       sleep 2
-                      capture_state "skirt-close-zoom-$zoom"
-                    done
+                      "$gui" pan 0.326 0.74 0.326 0.42 0.5
+                      sleep 2
+                      capture_state skirt-hd-zoom-26
+                      for zoom in 34 42 48; do
+                        if [ "$zoom" = 48 ]; then delta=6; else delta=8; fi
+                        "$gui" zoom 0.326 0.56 "$delta" 0
+                        sleep 2
+                        capture_state "skirt-hd-zoom-$zoom"
+                      done
+                      swift "$RUNNER_TEMP/skirt-display.swift" 1024 768 >> evidence/skirt-display-modes.txt
+                    fi
                   fi
                 fi
                 ;;
@@ -1453,7 +1539,7 @@ jobs:
           if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview","skirt-uv-front","skirt-uv-left4","skirt-uv-left8","skirt-uv-right4"]
           if os.environ["WARDROBE_IMPORT"]=="true":
               required += [f"skirt-baseline-{view}" for view in ("front","left4","left8","right4")]
-              required += [f"skirt-close-zoom-{zoom}" for zoom in (12,32,56,80)]
+              required += [f.stem for f in sorted(p.glob("skirt-hd-*.png"))]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -1467,11 +1553,11 @@ jobs:
               name="skirt-guide-profile.json"
               hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           if os.environ["WARDROBE_IMPORT"]=="true":
-              for name in ("skirt-display-modes.txt","skirt-p1-receipt.json","skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
+              for name in ("skirt-display-modes.txt","skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
-          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_UV_MATERIAL_FIT_TRIAL_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
+          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_FLAT_CONTROL_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
           PY
             echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
           fi
