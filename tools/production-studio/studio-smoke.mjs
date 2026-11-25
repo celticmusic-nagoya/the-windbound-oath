@@ -182,6 +182,30 @@ try {
  assert.equal(checkedAltered.items[0].action,'REVIEW_INPUT');
  assert.equal(checkedAltered.items[1].verdict,'REJECTED');
  assert.equal(checkedAltered.factory_ready,false);
+// Read-only report pairing: use actual CLI output, then reject mismatched bytes and promoted execution flags.
+ const enginePanel=page.locator('#anchor-engine-preflight');
+ await enginePanel.locator(':scope > summary').focus();
+ await enginePanel.locator(':scope > summary').press('Enter');
+ await page.waitForFunction(()=>document.querySelector('#anchor-engine-preflight').open);
+ const originalInput=page.locator('#engine-handoff-original'),reportInput=page.locator('#engine-preflight-report');
+ const engineStatus=page.locator('#engine-preflight-status'),engineResults=page.locator('#engine-preflight-results');
+ await originalInput.setInputFiles({name:'handoff.json',mimeType:'application/json',buffer:handoffBytes});
+ await reportInput.setInputFiles({name:'preflight.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(check))});
+ await page.waitForFunction(()=>document.querySelector('#engine-preflight-status').textContent.includes('入力SHA-256一致'));
+ assert.equal(await engineResults.locator('article').count(),5);
+ assert.ok((await engineStatus.innerText()).includes('実行来歴は未認証'));
+ assert.ok((await engineStatus.innerText()).includes('Factory BLOCKED'));
+ await reportInput.setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...check,factory_ready:true}))});
+ await page.waitForFunction(()=>document.querySelector('#engine-preflight-status').textContent.includes('照合失敗'));
+ assert.equal(await engineResults.locator('article').count(),0);
+ await reportInput.setInputFiles({name:'preflight.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(check))});
+ await page.waitForFunction(()=>document.querySelector('#engine-preflight-status').textContent.includes('入力SHA-256一致'));
+ await originalInput.setInputFiles({name:'modified.json',mimeType:'application/json',buffer:Buffer.concat([handoffBytes,Buffer.from(' ')])});
+ await page.waitForFunction(()=>document.querySelector('#engine-preflight-status').textContent.includes('照合失敗'));
+ assert.equal(await engineResults.locator('article').count(),0);
+ await originalInput.setInputFiles([]);
+ assert.equal(await engineResults.locator('article').count(),0);
+
 
  await east.fill('2');assert.ok((await batchStatus.innerText()).includes('未反映'));assert.equal(await batchResults.locator('article').count(),0);
  assert.equal(await handoffButton.isDisabled(),true);
