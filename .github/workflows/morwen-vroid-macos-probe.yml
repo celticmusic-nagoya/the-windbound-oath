@@ -605,6 +605,11 @@ jobs:
               exit 1
             fi
             read -r thickness _ _ <<< "$protected"
+            # Exact observed baseline, not a general percentage-based correction.
+            if [ "$before" != 0.03 ] || [ "$thickness" != 0.05 ]; then
+              echo BLOCKED_HAIR_OBSERVED_BASELINE_MISMATCH > evidence/hair-author-status.txt
+              exit 1
+            fi
             python3 - "$before" "$sx" "$sy" <<'PY'
           import sys,math
           w,x,y=map(float,sys.argv[1:])
@@ -620,7 +625,7 @@ jobs:
           import sys
           from decimal import Decimal
           a,b,t,u=map(Decimal,sys.argv[1:])
-          assert 0<b<a and (a-b)/a<=Decimal("0.20") and a-b>=Decimal("0.01") and t==u
+          assert (a,b,t,u)==tuple(map(Decimal,("0.03","0.02","0.05","0.05"))), "not the observed one-display-step candidate"
           PY
             "$gui" click 0.0234 0.0990
             sleep 2
@@ -699,7 +704,8 @@ jobs:
               before=a,after=b,reopened=c,protected_thickness=[t,u,v],
               source_sha256=sha(src),candidate_sha256=sha(dst),
               screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-before-geometry","hair-after-selected","hair-reopened-geometry")},
-              limitations=["Unregistered projection","Other strands and modules need independent protection review","No artistic acceptance or formal adoption"]),indent=2))
+              scope="OBSERVED_ONE_DISPLAY_STEP_EXPLORATORY_CANDIDATE",
+              limitations=["Display quantization does not measure true width or world units","Unregistered projection","Other strands and modules need independent protection review","No artistic acceptance or formal adoption"]),indent=2))
           PY
             echo HAIR_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/hair-author-status.txt
           fi
@@ -761,7 +767,9 @@ jobs:
           assert sha(p/"model.vroid")==r["candidate_sha256"]
           assert sha(p/"input-model.vroid")==r["source_sha256"]
           assert all(sha(p/(k+".png"))==v for k,v in r["screenshots"].items())
-          assert len(set(r["protected_thickness"]))==1
+          assert r["scope"]=="OBSERVED_ONE_DISPLAY_STEP_EXPLORATORY_CANDIDATE"
+          assert (r["before"],r["after"],r["reopened"])==(0.03,0.02,0.02)
+          assert r["protected_thickness"]==[0.05,0.05,0.05]
           target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.02},uncertainty={"hair_width":0.01})
           report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.01}))
           assert report["overall"]=="PASS"
