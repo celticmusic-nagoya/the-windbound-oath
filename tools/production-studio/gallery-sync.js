@@ -70,6 +70,7 @@ async function loadPublishedGallery(){
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域"}]);
   status.textContent=valid.length+" 件 / カテゴリから閲覧";
+  const recent=document.createElement("button");recent.type="button";recent.className="category-back";recent.textContent="全成果物・新着順";recent.onclick=()=>detail(null,"全成果物・新着順",home,valid);area.append(recent);
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
  function subhome(id,title){
@@ -94,7 +95,7 @@ async function loadPublishedGallery(){
  compare.onclick=()=>{
  const dialog=document.createElement("dialog");dialog.className="gallery-lightbox";
  const close=document.createElement("button");close.textContent="閉じる";close.onclick=()=>dialog.close();dialog.append(close);
- const note=document.createElement("p");note.textContent="表示比較のみ。同一カメラ・縮尺・照明は未保証。";dialog.append(note);
+ const note=document.createElement("p");note.textContent="カテゴリ内の全画像から表示比較。同一カメラ・縮尺・照明は未保証。";dialog.append(note);
  const pair=document.createElement("div");pair.style.cssText="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%";
  const controls=[];
  for(let i=0;i<2;i++){
@@ -113,8 +114,13 @@ async function loadPublishedGallery(){
  const stages=[...new Set(entries.map(e=>e.stage||"未分類"))];
  const filter=document.createElement("select");filter.className="category-back";filter.setAttribute("aria-label","制作段階");for(const name of ["すべて",...stages]){const opt=document.createElement("option");opt.value=name;opt.textContent=name;filter.append(opt);}area.append(filter);
  const search=document.createElement("input");search.type="search";search.placeholder="画像名・制作段階・QAで検索";search.setAttribute("aria-label","成果物検索");search.className="gallery-search";area.append(search);
- for(const e of entries){const tile=renderEntry(e);tile.dataset.stage=e.stage||"未分類";tile.dataset.search=[e.name,e.stage,e.qa,e.adoption,e.head,e.run_id,e.artifact_id].join(" ").toLowerCase();const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{
- const visiblePhotos=photos.filter(p=> (filter.value==="すべて"||(p.stage||"未分類")===filter.value)&&[p.name,p.stage,p.qa,p.adoption,p.head,p.run_id,p.artifact_id].join(" ").toLowerCase().includes(search.value.trim().toLowerCase()));
+ const makeFilter=(label,key)=>{const select=document.createElement("select");select.className="category-back";select.setAttribute("aria-label",label);const all=document.createElement("option");all.value="";all.textContent=label+"：すべて";select.append(all);const values=[...new Set(entries.map(e=>e[key]))].sort();values.forEach((v,i)=>{const opt=document.createElement("option");opt.value=String(i);opt.textContent=v||"未記録";select.append(opt);});area.append(select);return {select,values};};
+ const qaFilter=makeFilter("QA状態","qa"),adoptionFilter=makeFilter("採用状態","adoption");
+ const matches=e=>(filter.value==="すべて"||(e.stage||"未分類")===filter.value)&&(qaFilter.select.value===""||e.qa===qaFilter.values[Number(qaFilter.select.value)])&&(adoptionFilter.select.value===""||e.adoption===adoptionFilter.values[Number(adoptionFilter.select.value)])&&[e.name,e.stage,e.qa,e.adoption,e.head,e.run_id,e.artifact_id].join(" ").toLowerCase().includes(search.value.trim().toLowerCase());
+ const clear=document.createElement("button");clear.type="button";clear.className="category-back";clear.textContent="絞り込み解除";clear.onclick=()=>{filter.value="すべて";qaFilter.select.value="";adoptionFilter.select.value="";search.value="";apply();};area.append(clear);
+ const tiles=[];
+ for(const e of entries){const tile=renderEntry(e);tiles.push({tile,e});const img=tile.querySelector("img");if(img){const open=document.createElement("button");open.type="button";open.className="gallery-image-button";open.setAttribute("aria-label",e.name+" を拡大");img.replaceWith(open);open.append(img);open.onclick=()=>{
+ const visiblePhotos=photos.filter(matches);
  let index=visiblePhotos.indexOf(e);if(index<0)return;
  const dialog=document.createElement("dialog");dialog.className="gallery-lightbox";dialog.setAttribute("aria-label","成果物画像レビュー");
  const bar=document.createElement("div");bar.style.cssText="display:flex;gap:8px;align-items:center;flex-wrap:wrap";
@@ -137,8 +143,9 @@ async function loadPublishedGallery(){
  dialog.addEventListener("keydown",event=>{if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||viewport.contains(event.target))return;if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();move(event.key==="ArrowLeft"?-1:1);}});
  dialog.append(bar,heading,viewport,original,info);update();dialog.addEventListener("close",()=>{dialog.remove();if(open.isConnected)open.focus();});document.body.append(dialog);dialog.showModal();close.focus();
  };}area.append(tile);}
- const apply=()=>{let count=0;const q=search.value.trim().toLowerCase();for(const tile of area.querySelectorAll("article")){tile.hidden=(filter.value!=="すべて"&&tile.dataset.stage!==filter.value)||!tile.dataset.search.includes(q);if(!tile.hidden)count++;}status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;
- if(!entries.length){filter.hidden=true;search.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
+ const empty=document.createElement("p");empty.textContent="条件に一致する成果物はありません。";empty.hidden=true;area.append(empty);
+ const apply=()=>{let count=0;for(const {tile,e} of tiles){tile.hidden=!matches(e);if(!tile.hidden)count++;}empty.hidden=count!==0||entries.length===0;status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;qaFilter.select.onchange=apply;adoptionFilter.select.onchange=apply;
+ if(!entries.length){filter.hidden=true;search.hidden=true;qaFilter.select.hidden=true;adoptionFilter.select.hidden=true;clear.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
  home();
  }catch(e){if(generation===publishedGalleryGeneration)status.textContent="同期一覧未取得: "+e.message;}
