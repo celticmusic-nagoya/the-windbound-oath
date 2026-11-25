@@ -1,0 +1,41 @@
+{
+  "schema": "two.region.moss_a2_overlook_receipt.v06",
+  "parent": "2fbd9814f11f3bf14f4284d175b9284f1b7d69e5",
+  "status": "NEAR_OVERLOOK_CANDIDATE_REQUIRES_RELOCATION_AND_ALIGNMENT",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v05": "5e19c7571892f60a4f2be678ccd73298dcd49949"
+  },
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394"
+  ],
+  "outputs": {
+    "script_blob": "7e2f510900599b8efda660e112c4b48eafd34837",
+    "qa_blob": "d5a644afeb7fbb8e5f54abd3b5e7d99bdbf2378f",
+    "script_sha256": "8136ad145a9eef636fb9780927f0232cf0b7553793c6d2794833cf7f6822f548",
+    "qa_sha256": "473f56f4d2a5f206607966c6a2255f4c9f3c6e323233eeefc0dc17c87fa27962",
+    "png_sha256": "95bb7fabe6aa44322cb0914508bb465f6797aebf43822672308dcd1e1d240419"
+  },
+  "execution": "Actual local Python, four source SHA matched before/after. 371 eligible dry sites, 13 terrain-clear all three targets, zero clear without envelope conflicts. Graph 2521 nodes, 11068 directed edges including super-source edges, 38 road entry points, all 13 terrain-clear sites reachable on discrete width screen. Exact script and full 1774-line JSON blobs match local Git fingerprints; plan inspected. No actual relocation, terrain mutation or Blender.",
+  "decision": "Prefer near viewpoint (465,-375), 10.453m range, 12.307deg angular span, 54.689m spur, max long/cross 10.684/9.797%, viewpoint grade 9.759%, minimum sampled terrain ray clearance .310m. Requires relocation of 6 provisional reserves including hero A2-ECO-0001. Alternative (415,-352.5) preserves hero but range 61.967m, 1.942deg span and marginal .0646m ray clearance. Neither is adopted. Next: preserve all 451 counts while testing relocation of six reserves (including hero composition), fillet and check route ribbon turns, exact road interface and protected boundaries, then request independent D4. Stop if alignment or relocation infeasible; not an asset production gate pass.",
+  "limits": [
+    "2.5m grid and finite sight sampling, no exact continuous terrain visibility or seam/turn certification. Conservative full cylinders and all intersected layered triangle gradients; no actual assets, water flow, official CG, LOD recheck or runtime. Numeric criteria provisional. Full QA JSON contains all 13 found paths; no claim of global optimum."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ALIGNMENT_RELOCATION",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
