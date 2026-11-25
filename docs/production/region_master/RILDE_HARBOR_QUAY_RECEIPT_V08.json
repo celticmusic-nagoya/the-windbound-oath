@@ -1,0 +1,69 @@
+{
+  "schema": "two.region.harbor_quay_receipt.v08",
+  "parent": "1a161feb6ff6a8d98449eb7b3e759bcb903748f8",
+  "status": "PROVISIONAL_DESIGN_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v02": "1bb8cb6e4d92d54f090acc4b68ccf1ff5263d752",
+    "v04": "f73af6186f7cef5ab714ec690e8f01dbfb1fd6d0",
+    "v07": "066a67f364238bf82cf0007f998a11541b1cb836"
+  },
+  "execution": "Local Python, exact SHA-256 on both input attachments, Shapely planar tests executed. No Blender or Actions.",
+  "runtime": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "matplotlib": "3.10.8"
+  },
+  "outputs": {
+    "script": {
+      "git_blob": "19aa4717dc6327e96b00b0c804f8390240c8ddf7",
+      "sha256": "2ad4ea8c9fe636cbd64d70acd05028c01a44e95acf709f038ce6bc7dff2a0d1f"
+    },
+    "design_json": {
+      "git_blob": "f554cb46eb30e8fc05361a130e29617808dc37e8",
+      "sha256": "7a6b48bdcf9ed6a116a332a5c3a4c24f825931084e2ba1f6373e2f48979fa2f4"
+    },
+    "preview": {
+      "sha256": "dd2eb9fd6e3378ff347429e51b50d0b6c98d2e4310dc44a8810634906632a8e1",
+      "delivery": "local attachment only"
+    }
+  },
+  "reproduction": "python tools/map_blueprint/design_rilde_harbor_quay_v08.py <exact V02 JSON> <exact V07 JSON>; inputs still attachment-only; source SHA enforced",
+  "checks": {
+    "load_area_m2": 15.999999999999904,
+    "load_outside_apron_m2": 0,
+    "load_reserved_overlap_m2": 0,
+    "post_count": 4,
+    "post_outside_apron_m2": 0,
+    "post_reserved_overlap_m2": 0,
+    "paths": {
+      "STAIR_ACCESS": {
+        "length_m": 6.5840169206866594,
+        "outside_free_area_m2": 0,
+        "min_clearance_m": 0.7499999999999986
+      },
+      "HANDLING_ACCESS": {
+        "length_m": 16.317905033744008,
+        "outside_free_area_m2": 0,
+        "min_clearance_m": 0.8574929257125488
+      }
+    }
+  },
+  "design": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL_QUAY_LAYOUT",
+    "D3": "HOLD_ORIGINAL_TERRAIN_HULL_FOUNDATION",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Stop iterative plan-only refinements; recover full terrain and approved CG, independent D4. Advance eligible independent area or asset after owner check. No adoption, main merge or public release."
+}

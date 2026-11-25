@@ -1,0 +1,140 @@
+{
+  "status": "DESIGN_CANDIDATE_NOT_ADOPTED",
+  "source_sha256": [
+    "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175",
+    "e9101ea9c35ac68d432a9449bba8c79b95da0456302a15d1c920e74ef2258470"
+  ],
+  "frame": "provisional m; X east Y north Z up",
+  "loading_zone_xy": [
+    [
+      -182.08305376458466,
+      -189.4193552905033
+    ],
+    [
+      -177.96708772116443,
+      -196.27929869620363
+    ],
+    [
+      -176.25210186973936,
+      -195.25030718534856
+    ],
+    [
+      -180.3680679131596,
+      -188.39036377964823
+    ],
+    [
+      -182.08305376458466,
+      -189.4193552905033
+    ]
+  ],
+  "quay_posts": [
+    {
+      "id": "MP-01",
+      "xy": [
+        -186.67064091714678,
+        -186.34095568719525
+      ],
+      "radius_m": 0.15,
+      "height_m": 0.8,
+      "base_z_m": 2
+    },
+    {
+      "id": "MP-02",
+      "xy": [
+        -178.43870883030635,
+        -200.06084249859595
+      ],
+      "radius_m": 0.15,
+      "height_m": 0.8,
+      "base_z_m": 2
+    },
+    {
+      "id": "MP-03",
+      "xy": [
+        -172.30549538901383,
+        -216.97159605681182
+      ],
+      "radius_m": 0.15,
+      "height_m": 0.8,
+      "base_z_m": 2
+    },
+    {
+      "id": "MP-04",
+      "xy": [
+        -180.7854784290647,
+        -222.27158545684364
+      ],
+      "radius_m": 0.15,
+      "height_m": 0.8,
+      "base_z_m": 2
+    }
+  ],
+  "walkway_width_m": 1.2,
+  "walkways": {
+    "STAIR_ACCESS": [
+      [
+        -170.0,
+        -205.0
+      ],
+      [
+        -172.6555325417223,
+        -203.38260509348697
+      ],
+      [
+        -174.15749292571255,
+        -206.51592461852033
+      ]
+    ],
+    "HANDLING_ACCESS": [
+      [
+        -170.0,
+        -205.0
+      ],
+      [
+        -175.2231103588843,
+        -200.46386417368086
+      ],
+      [
+        -178.13858630630696,
+        -198.71457860522725
+      ],
+      [
+        -181.2255608388721,
+        -193.56962105095198
+      ]
+    ]
+  },
+  "quay_section": {
+    "apron_z_m": 2,
+    "toe_z_m": -2.2,
+    "retained_height_m": 4.2,
+    "foundation_bottom_z_m": null,
+    "foundation_width_m": null,
+    "reason": "original ground and bearing not verified; no structural sizing"
+  },
+  "checks": {
+    "load_area_m2": 15.999999999999904,
+    "load_outside_apron_m2": 0.0,
+    "load_reserved_overlap_m2": 0.0,
+    "post_count": 4,
+    "post_outside_apron_m2": 0.0,
+    "post_reserved_overlap_m2": 0.0,
+    "paths": {
+      "STAIR_ACCESS": {
+        "length_m": 6.5840169206866594,
+        "outside_free_area_m2": 0.0,
+        "min_clearance_m": 0.7499999999999986
+      },
+      "HANDLING_ACCESS": {
+        "length_m": 16.317905033744008,
+        "outside_free_area_m2": 0.0,
+        "min_clearance_m": 0.8574929257125488
+      }
+    }
+  },
+  "limits": [
+    "Proposed game layout only; posts are reservation footprints, not verified mooring capacity. No mooring lines or actual berth anchors designed.",
+    "No actual ground, foundations, stair railing, hull boarding or collision proof.",
+    "D0-D3 partial, D4 NOT_RUN; G1 BLOCKED, G2-G4 NOT_RUN."
+  ]
+}
