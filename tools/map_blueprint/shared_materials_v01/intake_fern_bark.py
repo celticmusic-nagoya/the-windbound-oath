@@ -38,10 +38,15 @@ def metadata(asset):
     return json.loads(b)
 
 errors=[]
-for asset in ('fern_02','jolcham_oak_bark_01'):
+alpha_only=len(sys.argv)>3 and sys.argv[3]=='alpha'
+for asset in (('fern_02',) if alpha_only else ('fern_02','jolcham_oak_bark_01')):
     try:
         q=metadata(asset)
-        if asset=='fern_02':
+        if alpha_only:
+            rec=q['Alpha']['1k']['png']
+            if rec['size']!=114589 or rec['md5']!='1421e5e36946c23a7ddcc907de89025c': raise ValueError('provider alpha metadata changed')
+            acquire(asset,'textures/fern_02_alpha_1k.png',rec)
+        elif asset=='fern_02':
             rec=q['gltf']['1k']['gltf']
             name=Path(urllib.parse.urlsplit(rec['url']).path).name
             b=acquire(asset,name,rec)
