@@ -9,6 +9,7 @@ on:
         required: true
         default: face_candidate
         options:
+          - wardrobe_import
           - parallel_ac
           - wardrobe_export
           - parallel_next
@@ -43,7 +44,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || (inputs.mode == 'wardrobe_export' && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
     env:
@@ -62,7 +63,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -73,15 +74,16 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -304,7 +306,7 @@ jobs:
           if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
           echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
       - name: Compile skirt alpha inspection before VRoid startup
-        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe'
+        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import') && matrix.lane == 'C-wardrobe'
         shell: bash
         run: |
           set -euo pipefail
@@ -400,8 +402,76 @@ jobs:
           test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-before.txt")" = '-0.026 0.000 0.000 0.000'
           test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-after.txt")" = '0.044 0.000 0.000 0.000'
           echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
+      - name: Generate exact plaid candidate and verify decoder before startup
+        if: inputs.mode == 'wardrobe_import'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/skirt-recipe.py" <<'PY'
+          import hashlib, math, struct, sys, zlib
+          from pathlib import Path
+          N=512
+          COLORS=((129,52,150),(163,73,191),(68,27,95),(231,169,153))
+          LAYERS=((1,0,.50,.40,.52),(1,1,.50,.37,.30),(2,0,.235,.075,.66),(2,1,.24,.085,.63),(2,0,.735,.045,.48),(2,1,.74,.055,.45),(3,0,.49,.018,.82),(3,1,.46,.016,.77),(3,1,.55,.016,.77))
+          factors=[[min(1,max(0,(w/2+1/N-abs((i/N-c+.5)%1-.5))*N))*a for i in range(N)] for _,_,c,w,a in LAYERS]
+          wave=[math.sin(2*math.pi*128*i/N) for i in range(N)]
+          rows=[]
+          for y in range(N):
+              row=bytearray()
+              for x in range(N):
+                  rgb=list(COLORS[0])
+                  for (col,axis,*_),factor in zip(LAYERS,factors):
+                      q=factor[y if axis else x]
+                      rgb=[v*(1-q)+t*q for v,t in zip(rgb,COLORS[col])]
+                  row.extend([max(0,min(255,round(v+wave[x]*wave[y]*1.8))) for v in rgb]+[255])
+              rows.append(bytes(row)*2)
+          digest=hashlib.sha256(b''.join(rows)).hexdigest()
+          assert digest=='cdebf9c8f521085d9dc389f41c719d2b2d2a9e1c64ec49f3f4b58af66e2d36ff', digest
+          def chunk(tag,data):
+              return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
+          png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1024,512,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b''.join(b'\0'+r for r in rows),9))+chunk(b'IEND',b'')
+          with Path(sys.argv[1]).open('xb') as f: f.write(png)
+          print(digest,hashlib.sha256(png).hexdigest())
+          PY
+          cat > "$RUNNER_TEMP/skirt-verify.py" <<'PY'
+          import hashlib,struct,zlib,sys
+          from pathlib import Path
+          b=Path(sys.argv[1]).read_bytes()
+          assert b[:8]==b'\x89PNG\r\n\x1a\n' and len(b)<64_000_000
+          pos=8; ids=[]; hdr=None; end=False
+          while pos<len(b):
+              n=struct.unpack('>I',b[pos:pos+4])[0]; tag=b[pos+4:pos+8]; d=b[pos+8:pos+8+n]
+              assert len(d)==n and zlib.crc32(tag+d)==struct.unpack('>I',b[pos+8+n:pos+12+n])[0]
+              pos+=12+n
+              if tag==b'IHDR':
+                  assert hdr is None;hdr=struct.unpack('>IIBBBBB',d)
+                  assert hdr==(1024,512,8,6,0,0,0),hdr
+              elif tag==b'IDAT':ids.append(d)
+              elif tag==b'IEND':end=True;break
+          assert hdr and ids and end and pos==len(b)
+          stride=4096; expect=(stride+1)*512
+          dec=zlib.decompressobj();raw=dec.decompress(b''.join(ids),expect+1)
+          assert len(raw)==expect and dec.eof and not dec.unused_data and not dec.unconsumed_tail
+          prev=bytearray(stride);out=[]
+          for y in range(512):
+              start=y*(stride+1);f=raw[start];row=bytearray(raw[start+1:start+1+stride]);assert f<=4
+              for i in range(stride):
+                  a=row[i-4] if i>=4 else 0;b=prev[i];c=prev[i-4] if i>=4 else 0
+                  if f==1:q=a
+                  elif f==2:q=b
+                  elif f==3:q=(a+b)//2
+                  elif f==4:
+                      p=a+b-c;pa,pb,pc=abs(p-a),abs(p-b),abs(p-c);q=a if pa<=pb and pa<=pc else b if pb<=pc else c
+                  else:q=0
+                  row[i]=(row[i]+q)&255
+              out.append(bytes(row));prev=row
+          h=hashlib.sha256(b''.join(out)).hexdigest();print(h)
+          assert h=='cdebf9c8f521085d9dc389f41c719d2b2d2a9e1c64ec49f3f4b58af66e2d36ff'
+          PY
+          python3 "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-sha.txt
+          python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-pixel-sha.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -422,7 +492,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -496,10 +566,11 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
@@ -1079,6 +1150,41 @@ jobs:
           assert sum(s in ("Uniform Skirt","v Uniform Skirt","∨ Uniform Skirt") for s in labels)==1
           assert labels.index("Export Guide")==labels.index("Export")+1
           PY
+                  if [ "$WARDROBE_IMPORT" = true ]; then
+                    # Import into isolated volatile editor only. Never accept an unidentified dialog.
+                    target="$HOME/Documents/morwen-skirt-candidate.png"
+                    test ! -e "$target"
+                    test ! -L "$target"
+                    cp "$RUNNER_TEMP/morwen-skirt-candidate.png" "$target"
+                    cmp "$RUNNER_TEMP/morwen-skirt-candidate.png" "$target"
+                    "$gui" click-label evidence/skirt-export-layer.png Import 'Import from Closet'
+                    sleep 4
+                    capture_state skirt-import-dialog
+                    grep -Fq Cancel evidence/skirt-import-dialog.txt
+                    grep -Fq Open evidence/skirt-import-dialog.txt
+                    grep -Fq Documents evidence/skirt-import-dialog.txt
+                    # Require a uniquely visible filename; no guessed coordinates or blind keyboard.
+                    "$gui" click-label evidence/skirt-import-dialog.png morwen-skirt-candidate.png Cancel
+                    sleep 2
+                    capture_state skirt-import-selected
+                    grep -Fq morwen-skirt-candidate.png evidence/skirt-import-selected.txt
+                    "$gui" click-label evidence/skirt-import-selected.png Open Cancel
+                    sleep 5
+                    capture_state skirt-import-preview
+                    grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
+                    grep -Fq 'Uniform Skirt' evidence/skirt-import-preview.txt
+                    grep -Fq 'Default Design' evidence/skirt-import-preview.txt
+                    "$gui" click-label evidence/skirt-import-preview.png 'Default Design' 'Uniform Skirt'
+                    sleep 2
+                    capture_state skirt-export-layer
+                    python3 - evidence/skirt-export-layer.txt <<'PY'
+          import sys,pathlib
+          labels=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(labels.count(s)==1 for s in ("Texture Editor","Toggle Visibility","Export","Export Guide"))
+          assert sum(s in ("Uniform Skirt","v Uniform Skirt","∨ Uniform Skirt") for s in labels)==1
+          assert labels.index("Export Guide")==labels.index("Export")+1
+          PY
+                  fi
                   "$gui" click-label evidence/skirt-export-layer.png Export 'Export Guide'
                   sleep 4
                   capture_state skirt-export-dialog
@@ -1136,6 +1242,9 @@ jobs:
           pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
           PY
                   "$RUNNER_TEMP/skirt-alpha" "$export_dir"
+                  if [ "$WARDROBE_IMPORT" = true ]; then
+                    python3 "$RUNNER_TEMP/skirt-verify.py" "$export_dir/layer.png" | tee evidence/skirt-import-pixel-sha.txt
+                  fi
                   capture_state skirt-export-complete
                   test -s evidence/skirt-export-metadata.json
                   test -s evidence/skirt-alpha-row-bounds.json
@@ -1155,6 +1264,7 @@ jobs:
               "C-wardrobe":["outfit-tops","outfit-bottoms","outfit-neckwear","outfit-socks","outfit-shoes","skirt-template","skirt-texture-editor"]
           }[lane]
           if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor","skirt-export-layer","skirt-export-dialog","skirt-export-destination","skirt-export-complete"]
+          if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview"]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -1164,9 +1274,12 @@ jobs:
           if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe":
               for name in ("skirt-export-metadata.json","skirt-alpha-row-bounds.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          if os.environ["WARDROBE_IMPORT"]=="true":
+              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt"):
+                  hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
-          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope="READ_ONLY_TARGETED_MODULE_EVIDENCE",files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No new native mutation or module merge"]),indent=2))
+          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_TEXTURE_IMPORT_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
           PY
             echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
           fi
@@ -1399,7 +1512,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
