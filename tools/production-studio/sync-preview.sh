@@ -7,7 +7,7 @@ python - <<'PY'
 import json, subprocess, os
 from pathlib import Path
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
-assert len(selection)<=20
+assert len(selection)<=24
 active=[]
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
@@ -38,7 +38,7 @@ PY
 python artifact-sync.py "$RUNNER_TEMP/studio-selection.json" "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site/published"
 python stage-village.py
 npm install --ignore-scripts --no-audit --no-fund
-cp -t "$RUNNER_TEMP/studio-site" index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js
+cp -t "$RUNNER_TEMP/studio-site" index.html studio.css studio-ux.css studio.js handoff-readiness.js model-inspector.js model-viewer.js artifact-verify.js zip-preview.js gallery-sync.js recent-review-artifacts.js
 mkdir -p "$RUNNER_TEMP/studio-site/vendor/three"
 cp -r node_modules/three/{build,examples,LICENSE} "$RUNNER_TEMP/studio-site/vendor/three/"
 sed -i 's@./node_modules/three/@./vendor/three/@g' "$RUNNER_TEMP/studio-site/index.html"
