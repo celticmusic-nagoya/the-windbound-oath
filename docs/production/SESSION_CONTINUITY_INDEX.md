@@ -1,3 +1,6 @@
+## Director decision — Morwen early Blender transfer (2026-11-26)
+Read [early Blender transfer](../policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md). Morwen #427 changes from VRoid-native completion-before-export to verified VRoid base → isolated VRM export → qualified Blender main authoring. Existing C1/legwear/garter assets remain reusable; not native-export prerequisites. Latest source and writer qualification must be verified; no current transfer PASS or asset adoption. Other characters unchanged.
+
 ## Director decision — photo-derived high-fidelity material authoring v1.0 (2026-11-25)
 All agents and automations must apply [photo-derived material policy](../policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md) to relevant asset work: rights-cleared real material microstructure, original motifs, separate light-responsive maps, restrained stylized skin/hair/eyes, actual model and game QA. Morwen first; relevant world materials included. Existing native-first, canon, ownership and G1–G4 remain. No asset adoption or runtime PASS implied.
 
