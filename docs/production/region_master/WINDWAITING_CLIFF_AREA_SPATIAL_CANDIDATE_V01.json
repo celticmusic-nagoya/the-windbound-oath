@@ -1,0 +1,152 @@
+{
+  "schema": "two.cliff.area_spatial_candidate.v01",
+  "status": "PROVISIONAL_LOCAL_NOT_ADOPTED",
+  "parent_region_blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+  "cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+  "local_frame": {
+    "x": "east",
+    "y": "north",
+    "z": "up",
+    "unit": "m",
+    "authored_design_m_per_schematic_unit": 100,
+    "schematic_origin": [
+      -4.5,
+      0
+    ],
+    "canonical_transform": null,
+    "sea_z": 0
+  },
+  "authored_controls": {
+    "north_samples_m": [
+      0,
+      35,
+      70,
+      100,
+      135,
+      170,
+      210,
+      250,
+      300
+    ],
+    "coast_toe_x_m": [
+      140,
+      113,
+      58,
+      30,
+      19,
+      35,
+      10,
+      17,
+      0
+    ],
+    "rim_north_samples_m": [
+      0,
+      50,
+      105,
+      145,
+      190,
+      235,
+      300
+    ],
+    "rim_z_m": [
+      30,
+      40,
+      55,
+      46,
+      59,
+      68,
+      58
+    ],
+    "rim_offset_north_m": [
+      0,
+      50,
+      100,
+      150,
+      200,
+      250,
+      300
+    ],
+    "rim_offset_x_m": [
+      10,
+      14,
+      18,
+      11,
+      22,
+      15,
+      12
+    ],
+    "east_edge_x_m": 275,
+    "east_edge_z_formula": "18+3*sin(pi*y/300)",
+    "inland_interpolation": "edge+(rim_z-edge)*(1-f)^3+0.6*sin(pi*f)*sin(y/42)",
+    "route_xy_m": [
+      [
+        275,
+        62.5
+      ],
+      [
+        230,
+        105
+      ],
+      [
+        150,
+        150
+      ],
+      [
+        155,
+        175
+      ],
+      [
+        155,
+        200
+      ]
+    ],
+    "section_north_m": [
+      62.5,
+      150,
+      250
+    ]
+  },
+  "measurements": {
+    "vertices": 3872,
+    "triangles": 7740,
+    "connected_components": 1,
+    "watertight": true,
+    "consistent_winding": true,
+    "positive_volume": true,
+    "glb_reopen_watertight": true,
+    "route_length_m": 204.31070395976002,
+    "max_sampled_centerline_grade_percent": 10.691799716814936,
+    "minimum_sampled_centerline_rim_clearance_m": 104.05119374431042,
+    "design_goal_grade_percent": 15,
+    "grade_history_percent": [
+      33.89778529613316,
+      31.80032968537662,
+      10.691799716814936
+    ]
+  },
+  "local_artifact_sha256": {
+    "build_cliff_area.py": "2bfbe529640d529c51d913abbd38d307a7ac5085d17e9718e5085a0373407b1b",
+    "design_and_qa.json": "e1a85230a49a693f1da5d0b498d94b4b619376660307f00acebfe97d479caf0f",
+    "cliff_area_design_v01.png": "76da8214fa66ee658afc6fa9d1ca2bd9029b55d2b912ea5b1d21b135fcfb1903",
+    "windwaiting_cliff_area_v01.glb": "01648c7834ff37e99c9f77c15f5fafd4f3ae2e0e93c70e5aec1013e1ff36c905"
+  },
+  "artifact_location": "ChatGPT local attachments only; not committed binaries",
+  "limits": [
+    "Local trimesh build, not Blender native or production engine",
+    "Authored scale and heights, not Ireland DEM or source CG reconstruction; Copernicus tile index DNS failure",
+    "Sampled route centerline only; no collision, navmesh, cross slope, clearance verification for full route width or game validation",
+    "Independent QA, self intersection audit and formal placement absent",
+    "No changes to #421 native writer or protected CG; no adoption or main merge"
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "BLOCKED",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_LOCAL_MESH_CHECKS",
+    "G4": "NOT_RUN"
+  }
+}
