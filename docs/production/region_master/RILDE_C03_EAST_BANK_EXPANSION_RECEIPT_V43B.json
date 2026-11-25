@@ -1,0 +1,97 @@
+{
+  "schema": "two.region.east_bank_expansion.v43b",
+  "status": "ISOLATED_DRY_INTERFACE_MESH_PASS_A2_AND_LANDING_HOLD",
+  "parent": "a06ee751bfffbb7834d1119efa64665843b7a085",
+  "dependencies": {
+    "v42c_receipt": "42493321072329b8a1002b3481a3968d1e30bd6b",
+    "v32_receipt": "95d0d78eac64573523e26f1a823934bd4bbf6cf2",
+    "expansion_design": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "v39_standard_sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "scope": "Independent downstream dry extension, no V39 replacement. Original upstream V42C held; longitudinal control surface not executed. Coordinates glTF east/up/south provisional metres. A2 west edge analytic from V02, not verified exact original A2 GLB.",
+  "rejected_a": {
+    "method": "Constrained boundary triangulation with marked-edge subdivision and harmonic height residual",
+    "triangles": 22648,
+    "max_grade_pct": 4296.417255285329,
+    "p95_grade_pct": 61.815572976362496,
+    "cause": "Skinny triangles amplify height residual gradient. Rejected. Also plot generation timeout recovered with fixed legend location and QA variable shadowing fixed.",
+    "script_sha256": "4b49e1c8434c684d1a45b37f2ea370c1250f939991614363e3564ad584692604",
+    "qa_sha256": "25ccb43fdb324038bc4730e0667dec33a7d92d1ccd69a2e50d0fd89905fbf59c"
+  },
+  "v43b": {
+    "method": "2m interior lattice, boundary segment clearance, Delaunay triangulation with exact boundary set and polygon coverage validation; harmonic elevation correction to V02 analytic forest surface with exact seam constraints.",
+    "area_m2": 3098.8245832729153,
+    "vertices": 786,
+    "triangles": 1462,
+    "exact_existing_shared_edges": {
+      "lower": 37,
+      "A1": 10,
+      "V32": 1
+    },
+    "analytic_A2_edge_vertices": 41,
+    "analytic_A2_corner_delta_m": -8.991941946590032e-7,
+    "max_grade_pct": 11.17616452992403,
+    "p95_grade_pct": 8.251655392010814,
+    "area_weighted_grade_pct": 3.8188746401100517,
+    "area_over_15pct_m2": 0,
+    "existing_overlap_m2": 0,
+    "water_overlap_m2": 0,
+    "nonmanifold_edges": 0,
+    "all_vertices_indices_exact_reopen": true,
+    "original_sha_unchanged": true,
+    "sections": [
+      {
+        "north_m": -325,
+        "width_m": 24,
+        "height_m": [
+          22.57405215841751,
+          22.71727752685547
+        ]
+      },
+      {
+        "north_m": -350,
+        "width_m": 27.2,
+        "height_m": [
+          22.782325744628906,
+          23.468922472937265
+        ]
+      },
+      {
+        "north_m": -375,
+        "width_m": 36.3,
+        "height_m": [
+          22.89954948425293,
+          24.038838825304992
+        ]
+      }
+    ],
+    "render": "Two matched actual VTK EGL geometry-only views. New patch visibly closes part of gap; outer edge remains open, original steep bank unchanged, no materials or vegetation."
+  },
+  "outputs": {
+    "glb_sha256": "a5a38d5bef3d8691d17bc39620efd99bda20a1aeddc5f746d2a33dfa3f4099c6",
+    "build_sha256": "19fad8189e03b839f39d2925ce38715f16edc4dc582050fe380e9bb139c46b1d",
+    "verify_render_sha256": "02ccbaf292d7c19fd2b3aaa7d3fe47048ea446b1f0af0e81a1f41b2165c3751e",
+    "qa_sha256": "9196b65c5fb843c703b83f6d98af37626dfba2954b3a85ad22bd2e05008afb4a",
+    "render_qa_sha256": "f09b96a7827f30c83ef4f7a818a1fe0e042d602dbd651f685dddbd325dae74df",
+    "design_sheet_sha256": "33f74e743cffea67a5a1cf7afd89bf135f076bb206bc908bb5bdb3171701247e",
+    "comparison_sha256": "99210680af129b0eed5bb7d47897638653a3e4df687b64f93e40fc6fee8a5c3c",
+    "package_sha256": "271407122718da037102b394272428fc3e7342bf0a1d12c1753436171e5dacc7",
+    "package_bytes": 943908,
+    "zip_crc": "PASS",
+    "location": "Local ChatGPT attachments; no binary committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_A2_EXACT_SOURCE_AND_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_DESIGN_MESH_READBACK_AND_EGL_PASS",
+    "G4": "NOT_RUN"
+  },
+  "next": "Recover original A2 source or verify reconstruction against exact original before seam certification. Broader southern terrain and joint landing/route design still required. Upstream longitudinal control design pending; native and independent QA pending. No formal adoption or main integration."
+}
