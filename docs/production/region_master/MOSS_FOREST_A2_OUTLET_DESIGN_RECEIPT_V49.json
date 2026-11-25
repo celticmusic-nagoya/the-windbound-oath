@@ -1,0 +1,101 @@
+{
+  "schema": "two.region.a2_south_outlet.v49",
+  "parent": "c8ba608a6308e14116a71d69f8141b48e98d50c0",
+  "status": "MEASURED_OUTLET_DESIGN_HOLD_RECEIVER_SURFACE",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "v48b": "36182b9ceb509d8500b68afbff602dd134212a66",
+    "river_v26": "dc2051c9e9b876d262c08f557e8816ece8e12ba2",
+    "lower_v28": "f1d8ce3e7fcf75514c3d44c9387ff84d1f909477",
+    "geography": "6943ac3ce21003b49e91c6d1cb5989aa6c02e7df"
+  },
+  "source": {
+    "v48b_sha256": "dcb49712ab5cbd6988bd6b65398e235e007ec626b4b0bbb89482223f9ee21b8a",
+    "unchanged": true,
+    "official_cg_blob": "5abfe58fd4ba4b08a3ddce0181a9978190b0186f",
+    "official_cg_status": "fetch_file base64 returned empty content; pixels unverified",
+    "receiver_mesh_status": "V28 or later exact receiving surface unavailable; V26 control points used only for provisional comparison"
+  },
+  "frame": "asset-local provisional m, X east Y north Z up; canonical transform unknown",
+  "outlet": {
+    "y": -450,
+    "left_x": 426.92635345458984,
+    "right_x": 442.7725944519043,
+    "stage_m": 20.096996307373047,
+    "width_m": 15.846240997314453,
+    "max_depth_m": 0.4027881622314453,
+    "wetted_cross_section_m2": 5.060954239674525,
+    "wetted_perimeter_m": 15.896786628540934,
+    "ground_edge_vertices": 41,
+    "water_edge_vertices": 9,
+    "discharge": null
+  },
+  "method": "Three cubic Bezier corridors from measured south seam to existing V26 plan. Exact analytic endpoint tangents remove first numerical footprint overlaps (0.029–0.047 m2), final known A2/A3/V48B area overlaps zero. 2001 samples per curve; station data at 5m spacing. Width tapers from measured seam width to 5m at 20m then 4m at end; 2% comparison reference, not a design standard. Linear stage profiles for comparison only.",
+  "options": [
+    {
+      "id": "J1",
+      "join": [
+        310,
+        -390,
+        2.15
+      ],
+      "length_m": 169.00076016639164,
+      "drop_m": 17.94699630737305,
+      "average_grade_pct": 10.619476675550528,
+      "remaining_drop_at_2pct_m": 14.566981104045215,
+      "known_overlap_m2": 0
+    },
+    {
+      "id": "J2",
+      "join": [
+        260,
+        -440,
+        1.5
+      ],
+      "length_m": 200.46919137968322,
+      "drop_m": 18.596996307373047,
+      "average_grade_pct": 9.276735332438609,
+      "remaining_drop_at_2pct_m": 14.587612479779382,
+      "known_overlap_m2": 0
+    },
+    {
+      "id": "J3",
+      "join": [
+        195,
+        -450,
+        1.25
+      ],
+      "length_m": 272.74948833059733,
+      "drop_m": 18.846996307373047,
+      "average_grade_pct": 6.910002443168202,
+      "remaining_drop_at_2pct_m": 13.3920065407611,
+      "known_overlap_m2": 0
+    }
+  ],
+  "outputs": {
+    "png_sha256": "c3f49de6fbffba189c10dae7572d7b5b2e5e03c7a3945e15e6e886f39d7f505f",
+    "station_csv_sha256": "772ed97cbeea7d224f2757697fbd3c1083bd8b21b7dfe87a903465b8b8293bd5",
+    "script_sha256": "30f1b5d2685ba47c79f63296a021ac565189a61b43b6d0ee4c3ef2832438f273",
+    "qa_sha256": "cdc3a7b93df6832cfb9e6bd0eecf4016df4214c2cdfc47a74b8361af3fc59dea",
+    "location": "local ChatGPT files; no binary or script upload"
+  },
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_RECEIVER",
+    "D2": "PARTIAL_SECTIONS",
+    "D3": "HOLD_RECEIVER_AND_TOLERANCE",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NEW_MESH",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "No continuous terrain/collision survey, earthwork, flow simulation, canonical location, CG verification or independently approved design. No route selected; no terrain modification, native modeling, adoption, main merge or publication."
+  ],
+  "next": "Recover exact C03 lower receiving ground and water (V28 or later) and full current forest terrain from artifacts or original reproducible scripts; quantify actual confluence and protected terrain intersections before precision design. Do not extend unverified ground speculatively. Independent art/material scope may progress."
+}
