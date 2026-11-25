@@ -1,0 +1,123 @@
+{
+  "schema": "two.region.river_tributary_mesh.v29",
+  "status": "ISOLATED_CONFLUENCE_GEOMETRY_PASS_ART_AND_LANDING_HOLD",
+  "parent": "bb762b3157dc8c8489942cf607e9ecc3d9f7a459",
+  "dependencies": {
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "river_design": "dc2051c9e9b876d262c08f557e8816ece8e12ba2",
+    "v28_receipt": "f1d8ce3e7fcf75514c3d44c9387ff84d1f909477",
+    "v28_glb_sha256": "cb18018be81531239c1d29814d865a6e771c5927570b0d116c91446edd9619f3",
+    "a1_formula": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "trail_v02": "053220f5bb45e95aa31f3d4296f98d95f25d05e9",
+    "landing_method_stop": "7f6bb9af6091cbe77f8270268b8c170444a840de",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "frame": "provisional local metres, A1 analytic reconstruction (not exact native bytes), source V28 unchanged",
+  "design": {
+    "join_xy": [
+      330,
+      -225
+    ],
+    "water_z_m": 4.3,
+    "decision": "Move confluence 25m north of previous southern core seam; route tributary north of trail start. Candidate adjustment only.",
+    "points": [
+      [
+        485,
+        -125
+      ],
+      [
+        452,
+        -149
+      ],
+      [
+        411,
+        -169
+      ],
+      [
+        375,
+        -194
+      ],
+      [
+        350,
+        -211
+      ],
+      [
+        330,
+        -225
+      ]
+    ],
+    "water_levels_m": [
+      18,
+      14,
+      10,
+      7,
+      5.3,
+      4.3
+    ],
+    "length_m": 184.99460698983896,
+    "sinuosity": 1.002905472213697
+  },
+  "qa": {
+    "vertices": 45304,
+    "triangles": 86562,
+    "mesh_count": 6,
+    "shared_ground_seam": {
+      "samples": 61,
+      "delta_m": 0
+    },
+    "shared_water_seam": {
+      "samples": 6,
+      "delta_m": 0
+    },
+    "lower_water_seam": {
+      "samples": 10,
+      "delta_m": 0.0000037939361163807916
+    },
+    "source_a1_core_pre_seam_m": 9.486438052874746e-7,
+    "shoreline_residual_m": 3.552713678800501e-15,
+    "changed_core_vertices": 225,
+    "changed_a1_vertices": 535,
+    "minimum_changed_a1_triangle_to_v01_v02_route_proxy_m": 18.200274723201296,
+    "core_max_cut_m": 12.864072990962578,
+    "a1_max_cut_m": 12.045178852643769,
+    "all_faces_exact_reopen": true,
+    "reopen_max_xyz_m": 0.000015257206655405753,
+    "lower_mesh_vertices_and_faces_exact": true,
+    "source_unchanged": true,
+    "water_profile": {
+      "samples": 371,
+      "wet_samples": 371,
+      "max_downstream_increment_m": -0.005903480278859341,
+      "uphill_steps": 0,
+      "spacing_control_m": 0.49972202320753006,
+      "status": "SAMPLED_DOWNHILL_PASS",
+      "limit": "sampled actual exported triangular surface only; no hydraulic simulation"
+    }
+  },
+  "outputs": {
+    "glb_sha256": "2fc188aa6961fac96424ecafe793c202fd1f6aca56399f1a45125b750f7a0f5f",
+    "sheet_sha256": "5f1dfb9afb58b864bd6f18739b569cb56fcf6be7b294cf63f2d6a1bf619c4deb",
+    "script_sha256": "eb73aeb7e17aeb11d4e6848c4715423554dfd80882d0ba387af03e435634daf9",
+    "qa_sha256": "9a56eb6188213cb84f19f37a1c8d9d029da371c1489341384253313494ace76c",
+    "water_qa_sha256": "15cf467e4d828d1e1961d5216bf145dfc447a3035503da78082f3b9835482a82",
+    "package_sha256": "b6db6968df6273c22196f47550d0891462ae82061fde5257fa51b6587bdb9a83",
+    "location": "Local ChatGPT attachments. Build script and measured QA in ZIP. Water-profile supplemental QA output included; standalone check script not included. No binary commit."
+  },
+  "limitations": [
+    "Branch is very straight (sinuosity 1.003) relative to EPA sample; deep narrow cut is visible and not final art. Head spring/source hydrology not certified.",
+    "Only route proxies protected, not actual trail/native collision. V11 narrow-bank failures remain; landing not solved. No claim of complete catchment, discharge, main-channel full downhill, bridge or sea connection.",
+    "No native Blender, D4 independent design review, G2, game/device verification, or main merge."
+  ],
+  "next": "Reassess at area scale: broaden valley and coordinate landing approach before art refinement. Avoid repeating V10/V11 narrow shelf methods. Preserve V28 lower reach and A1/A2 boundary, maintain actual trail after exact source recovery. Resolve narrow-bank incision and branch sinuosity. Independent design QA before native precision editing.",
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_FORMAL_METRIC_AND_LANDING",
+    "G2": "SELF_HOLD_NOT_INDEPENDENT",
+    "G3": "LOCAL_GLB_REOPEN_PASS",
+    "G4": "NOT_RUN"
+  }
+}
