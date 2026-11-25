@@ -32,3 +32,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{o
 #published-gallery .gallery-chip{display:inline-flex;align-items:center;min-height:30px;padding:4px 8px;background:#283a3b;border:1px solid #60716e;border-radius:7px;font-size:.77rem;overflow-wrap:anywhere;max-width:100%}
 
 #published-gallery [hidden]{display:none!important}
+
+/* Long production-stage labels must not size a native select beyond its grid area.
+   Keep the options intact; constrain the control, not the document overflow. */
+#published-gallery select.category-back{min-width:0;max-width:100%;width:100%;justify-self:stretch;box-sizing:border-box;min-height:44px}
+#published-gallery .gallery-breadcrumb>*{min-width:0;max-width:100%}
+#published-gallery .gallery-image-button{min-width:0;max-width:100%}
