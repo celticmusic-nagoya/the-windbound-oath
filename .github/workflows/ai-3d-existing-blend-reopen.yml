@@ -1,0 +1,49 @@
+name: AI 3D existing Blender artifact reopen (read-only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/ai_3d/audit_blend_readonly.py'
+      - '.github/workflows/ai-3d-existing-blend-reopen.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reopen-existing:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve immutable existing Method C artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-3d-evidence
+          gh run download 43989787109 --repo celticmusic-nagoya/the-windbound-oath \
+            --name route-mat-01-method-c-review-43989787109 \
+            --dir /tmp/two-3d-evidence
+          test -s /tmp/two-3d-evidence/assets/candidates/route-mat-01/method-c-01/render/abutment.blend
+      - name: Install Ubuntu Blender for cross-version read-only screening
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender
+          blender --version | head -n 1
+      - name: Read-only reopen and mesh inventory
+        run: |
+          set -euo pipefail
+          blender -b /tmp/two-3d-evidence/assets/candidates/route-mat-01/method-c-01/render/abutment.blend \
+            --disable-autoexec --python-exit-code 1 \
+            --python tools/ai_3d/audit_blend_readonly.py -- \
+            --min-meshes 55 --min-triangles 44712 \
+            --report /tmp/two-3d-evidence/reopen-report.json
+      - name: Upload independent audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-3d-method-c-readonly-reopen
+          path: /tmp/two-3d-evidence/reopen-report.json
+          if-no-files-found: warn
+          retention-days: 7
