@@ -1,0 +1,72 @@
+name: Morwen Open Access gold thread photos
+on:
+  push:
+    branches: [asset/morwen-measured-textile-20261125]
+    paths: ['.github/workflows/morwen-gold-thread-photo-acquire.yml']
+permissions:
+  contents: read
+concurrency:
+  group: morwen-gold-thread-photo-acquisition
+  cancel-in-progress: false
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Acquire and verify public-domain object photographs
+        run: |
+          set -euo pipefail
+          python -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0
+          python - <<'PY'
+          import hashlib, io, json, pathlib, urllib.parse, urllib.request
+          from PIL import Image
+          root=pathlib.Path('gold-thread-sources'); root.mkdir(exist_ok=False)
+          records=[]
+          def fetch(url,allowed,max_bytes):
+              parsed=urllib.parse.urlsplit(url)
+              if parsed.scheme!='https' or parsed.hostname not in allowed or parsed.username or parsed.password: raise ValueError('unapproved URL')
+              req=urllib.request.Request(url,headers={'User-Agent':'TWO material research/1.0 (Open Access, bounded acquisition)'})
+              with urllib.request.urlopen(req,timeout=35) as response:
+                  final=urllib.parse.urlsplit(response.geturl())
+                  if final.scheme!='https' or final.hostname not in allowed: raise ValueError('unapproved redirect')
+                  data=response.read(max_bytes+1)
+                  if len(data)>max_bytes: raise ValueError('source exceeds byte limit')
+              return data
+          def sha(b):return hashlib.sha256(b).hexdigest()
+          for oid in [445867,451169,214169]:
+              record={'object_id':oid,'object_page':f'https://www.metmuseum.org/art/collection/search/{oid}'}
+              try:
+                  raw=fetch(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{oid}',{'collectionapi.metmuseum.org'},2_000_000)
+                  obj=json.loads(raw)
+                  if obj.get('objectID')!=oid or obj.get('isPublicDomain') is not True: raise ValueError('object identity or public-domain flag failed')
+                  medium=obj.get('medium','')
+                  if 'gold' not in medium.lower() or 'thread' not in medium.lower(): raise ValueError('material qualification failed')
+                  image_url=obj.get('primaryImage','')
+                  img=fetch(image_url,{'images.metmuseum.org'},32_000_000)
+                  with Image.open(io.BytesIO(img)) as im:
+                      im.verify()
+                  with Image.open(io.BytesIO(img)) as im:
+                      if im.format!='JPEG' or min(im.size)<512 or max(im.size)>16000: raise ValueError('unexpected image type/dimensions')
+                      size=list(im.size)
+                      decoded_sha=sha(im.convert('RGB').tobytes())
+                  (root/f'{oid}.json').write_bytes(raw)
+                  (root/f'{oid}.jpg').write_bytes(img)
+                  record.update(status='ACQUIRED_PUBLIC_DOMAIN',title=obj.get('title'),medium=medium,credit=obj.get('creditLine'),image_url=image_url,metadata_sha256=sha(raw),image_sha256=sha(img),pixel_sha256=decoded_sha,size=size,bytes=len(img))
+              except Exception as e:
+                  record.update(status='FAILED',error_type=type(e).__name__,error=str(e)[:400])
+              records.append(record)
+          receipt={'scope':'SOURCE_ACQUISITION_ONLY_NOT_ADOPTED','provider':'The Metropolitan Museum of Art','rights_terms':'https://www.metmuseum.org/policies/image-resources','license':'CC0 for Open Access public-domain images; object flag checked individually','records':records,'limits':'No motif reuse, no physical PBR calibration, no native edit; actual crop and visual inspection pending.'}
+          (root/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps(receipt,indent=2))
+          if not any(r['status']=='ACQUIRED_PUBLIC_DOMAIN' for r in records):raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-met-gold-thread-oa-sources-not-adopted
+          path: gold-thread-sources/
+          if-no-files-found: warn
+          retention-days: 7
