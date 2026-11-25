@@ -1,0 +1,128 @@
+name: Map Blender 08 Preview
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/**'
+      - '.github/workflows/map-blender-08-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and headless OpenGL runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender libegl1 libgl1 libopengl0 libglx-mesa0 libgl1-mesa-dri xvfb
+      - name: Validate Python
+        run: python3 -m py_compile tools/map_blender/map_blender_08.py tools/map_blender/map_blender_11_detail.py tools/map_blender/map_blender_12_refine.py tools/map_blender/map_blender_13_cliff.py tools/map_blender/map_blender_14_ridge.py tools/map_blender/map_blender_15_blend.py tools/map_blender/map_blender_16_material.py tools/map_blender/map_blender_17_composition.py tools/map_blender/map_blender_18_visibility.py tools/map_blender/map_blender_19_integrate.py tools/map_blender/map_blender_20_unified.py tools/map_blender/map_blender_21_topology.py tools/map_blender/map_blender_21d_water_paths.py tools/map_blender/map_blender_22_carved.py tools/map_blender/map_blender_23_original_kit.py tools/map_blender/hero_roof_01_tile.py tools/map_blender/blender_preflight.py tools/map_blender/roof_slate_system_02.py tools/map_blender/fetch_roof_cc0_material.py tools/map_blender/audit_pinterest_references.py
+      - name: Validate curated Pinterest references and asset provenance
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("tools/map_blender/pinterest_roof_reference_selection.json")
+          data=json.loads(p.read_text())
+          assert data["selection_status"]=="REFERENCE_ONLY_NOT_LICENSED_ASSET"
+          assert len(data["selected"])>=4
+          assert all(x["pin"].startswith("https://www.pinterest.com/pin/") for x in data["selected"])
+          assert data["asset_policy"]["canonical"]=="candidate_only"
+          print("Curated Pinterest references: PASS; image reuse prohibited")
+          PY
+      - name: Audit Pinterest board with read-only API when configured
+        if: github.event_name != 'pull_request'
+        env:
+          PINTEREST_ACCESS_TOKEN: ${{ secrets.PINTEREST_ACCESS_TOKEN }}
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          python3 tools/map_blender/audit_pinterest_references.py
+      - name: Validate MAP21 topology
+        run: |
+          python3 tools/map_blender/test_map21_topology.py
+          python3 tools/map_blender/test_map21_terrain.py
+      - name: Preflight Cycles rendering and runtime compatibility
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          xvfb-run -a blender --background --python tools/map_blender/blender_preflight.py
+      - name: Fetch CC0 Poly Haven red slate PBR maps (optional)
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          if ! python3 tools/map_blender/fetch_roof_cc0_material.py; then
+            echo "::warning::Optional CC0 material unavailable; render with original procedural fallback and record material in manifest."
+          fi
+      - name: Generate MAP08 through MAP23 and hero tile preview
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_08.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_11_detail.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_12_refine.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_13_cliff.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_14_ridge.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_15_blend.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_16_material.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_17_composition.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_18_visibility.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_19_integrate.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_20_unified.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_21_topology.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_21d_water_paths.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_22_carved.py
+          xvfb-run -a blender --background --python tools/map_blender/map_blender_23_original_kit.py
+          xvfb-run -a blender --background --python tools/map_blender/hero_roof_01_tile.py
+          xvfb-run -a blender --background --python tools/map_blender/roof_slate_system_02.py
+      - name: Verify SHA-256, source chain, and occlusion
+        env:
+          MAP_OUTPUT: ${{ runner.temp }}/map-blender-08
+        run: |
+          python3 - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          p=Path(os.environ["MAP_OUTPUT"])
+          names=("build_report.json","detail_report.json","map12_report.json","map13_report.json","map14_report.json","map15_report.json","map16_report.json","map17_report.json","map18_report.json","map19_report.json")
+          reports=[json.loads((p/name).read_text()) for name in names]
+          for report in reports:
+              for name,expected in report["files"].items():
+                  assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          for i,name in enumerate(("rilde_blockout.blend","rilde_detail.blend","rilde_map12.blend","rilde_map13.blend","rilde_map14.blend","rilde_map15.blend","rilde_map16.blend","rilde_map17.blend","rilde_map18.blend"),1):
+              assert reports[i]["source_sha256"]==reports[i-1]["files"][name],name
+          audit=reports[6]["ray_test"]
+          assert reports[6]["occlusion_acceptance"]=="PASS", "MAP16 occlusion regression"
+          assert audit["total"]==9
+          independent=json.loads((p/"map20_report.json").read_text())
+          for name,expected in independent["files"].items():
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          hero=json.loads((p/"roof_tile_hero_manifest.json").read_text())
+          assert hero["master_status"]=="CANDIDATE_NOT_CANON"
+          for name,expected in hero["files"].items():
+              assert (p/name).stat().st_size>1000, name
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          assert json.loads((p/"blender_preflight.json").read_text())["status"]=="PASS"
+          slate=json.loads((p/"roof_slate_system_02_manifest.json").read_text())
+          assert slate["status"]=="CANDIDATE_NOT_CANON"
+          assert slate["material"] in ("Poly Haven CC0 red slate PBR","original procedural fallback"), "Unknown roof material"
+          print("Actual roof material:",slate["material"])
+          for name,expected in slate["files"].items():
+              assert (p/name).stat().st_size>1000,name
+              assert hashlib.sha256((p/name).read_bytes()).hexdigest()==expected,name
+          print("Slate system 02 artifact and SHA-256: PASS")
+          print("Hero tile artifact and SHA-256: PASS")
+          print("MAP20 synthetic occlusion:",independent["synthetic_occlusion"])
+          print("SHA-256 chain: PASS")
+          print("Visibility audit:",audit["blocked"],"/",audit["total"],reports[-2]["occlusion_acceptance"])
+          PY
+      - name: Upload QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-blender-08-preview
+          path: ${{ runner.temp }}/map-blender-08/
+          if-no-files-found: warn
+          retention-days: 14
