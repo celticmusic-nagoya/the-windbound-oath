@@ -4,14 +4,52 @@ on:
     types: [created]
 permissions: {}
 jobs:
+  probe:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 427 && github.event.issue.pull_request &&
+      github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
+      github.event.comment.author_association == 'OWNER' &&
+      github.event.comment.body == '/two-morwen-launch probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Read-only connector receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs=require("node:fs"), {execFileSync}=require("node:child_process");
+          function command(e,attempt,now) {
+            const c=e.comment||{};
+            if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1")throw Error("identity");
+            const age=now-Date.parse(c.created_at);if(!Number.isFinite(age)||age<0||age>600000)throw Error("stale");
+            if(c.body==="/two-morwen-launch probe")return {kind:"probe",id:c.id};
+            const m=/^\/two-morwen-launch hair_candidate main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
+            if(!m||m[0]!==c.body)throw Error("command");
+            return {kind:"start",id:c.id,main:m[1],blob:m[2],previous:Number(m[3])};
+          }
+          const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH,"utf8"));
+          const q=command(e,process.env.GITHUB_RUN_ATTEMPT,Date.now());
+          const repo="repos/celticmusic-nagoya/the-windbound-oath";
+          const path=".github/workflows/morwen-vroid-macos-probe.yml";
+          function api(p){return JSON.parse(execFileSync("gh",["api",p],{encoding:"utf8",timeout:20000,maxBuffer:5000000}));}
+          const live=api(repo+"/issues/comments/"+q.id);
+          if(live.body!==e.comment.body||live.created_at!==live.updated_at||live.created_at!==e.comment.created_at||live.user.id!==315379131||live.author_association!=="OWNER"||live.issue_url!=="https://api.github.com/"+repo+"/issues/427")throw Error("comment changed");
+          if(q.kind==="probe"){console.log("READ_ONLY_CONNECTOR_RECEIVED",q.id);process.exit(0);}
+          throw Error("probe only");
+          JS
   accept:
     if: >-
       github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
       github.event.issue.number == 427 && github.event.issue.pull_request &&
       github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
       github.event.comment.author_association == 'OWNER' &&
-      (github.event.comment.body == '/two-morwen-launch probe' ||
-       startsWith(github.event.comment.body, '/two-morwen-launch hair_candidate main='))
+      startsWith(github.event.comment.body, '/two-morwen-launch hair_candidate main=')
     runs-on: ubuntu-latest
     timeout-minutes: 3
     permissions:
@@ -63,6 +101,8 @@ jobs:
           let active=0;for(const s of ["queued","in_progress","waiting","requested","pending"])active+=api(wf+"/runs?status="+s+"&per_page=1").total_count;
           const priorBlob=api(repo+"/contents/"+path+"?ref="+prior.head_sha).sha;
           eligible(q,head,blob,prior,runs,active,priorBlob);
+          if(blob==="3947ec75c38d439b013e60e8696a58ef070a1275")throw Error("launch metadata alone is not a production correction");
+          if(runs.some(x=>x.display_title==="Morwen VRoid / hair_candidate request:"+q.id))throw Error("request already dispatched");
           if(api(repo+"/git/ref/heads/main").object.sha!==q.main)throw Error("main moved");
           const args=["api","--method","POST",wf+"/dispatches","--input","-"];
           execFileSync("gh",args,{input:JSON.stringify({ref:"main",inputs:{mode:"hair_candidate",expected_main:q.main,request_id:String(q.id)}}),encoding:"utf8",timeout:20000});
