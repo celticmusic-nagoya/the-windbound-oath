@@ -1,0 +1,65 @@
+{
+  "schema": "two.region.forest_v19b_recovery_floor_kit.v20",
+  "parent": "13d0c926db25d385b95731ac5ca8b10530ec96cf",
+  "status": "FLOOR_KIT_LOSSLESS_PASS_NATIVE_V19B_RUNNING",
+  "policies": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gate": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "v19_failure": {
+    "run": 45628546915,
+    "head": "afe2eed8f4f1558517bc5a82d33458a0e758b575",
+    "job": 139255606989,
+    "conclusion": "failure",
+    "log": "native_forest_art_v19.py line 65 assert len(placed)>=4; AssertionError: 0. Archive SHA and Blender official SHA/5.3 runtime passed. No native/render output. Exact per-cause rejection counts unavailable in original run.",
+    "hypothesis": "Full bounding circles used for every obstacle overrestrict background candidates. Distinguish root footprint from canopy overlap, retain full-crown exclusion against reservations."
+  },
+  "v19b": {
+    "head": "ad19d64e8f0446fed30a6854e97d17bfa7a59878",
+    "run": 45629334087,
+    "last_observed": "in_progress",
+    "script_blob": "b3b28261fc0a253c5447786d23bffb824306aa68",
+    "workflow_blob": "d109a2829ae74aff5151e2943ac188f86b13edd2",
+    "change": "Actual source-vertex radial bounds; root band 1.2m; 0.20m ground gap, 4m tree center distance and canopy circle overlap <=0.35; original reservation 0.75m full-crown gap preserved; actual root samples and slope tests. Rejection counters and background preflight separate HOLD if fewer than 4. Independent native material study can execute even on background HOLD. No duplicate run.",
+    "official_cg": "New read-only git show from immutable registration commit, exact expected SHA; preserve source if verified. Previous connector base64 read returned empty content; G1 not asserted.",
+    "native_checkpoint": "af449df826519bd8568452fd1069a7e69e23aa98823dd9a1397ab16ef4accd4d",
+    "result": "NOT_AVAILABLE"
+  },
+  "floor_kit": {
+    "source_sha256": "09366ffaf5b1f6657b1b9ca158c9681d0d52537a4a90bf94f7ac25ec6f2162f1",
+    "output_sha256": "321995830ef5a33553c58cdedc22fcaa00779422cfc9336f45d5adccf2b5be79",
+    "bytes": 5933384,
+    "nodes": 85,
+    "meshes": 8,
+    "triangles": 204637,
+    "types": {
+      "rock": 12,
+      "moss": 70,
+      "stump": 3
+    },
+    "images": 9,
+    "exact_buffer_views": 44,
+    "all_selected_geometry_transform_signatures_exact": true,
+    "original_sha_preserved": true,
+    "script_blob": "ebe92da6b8df1d64f2fd0bbf2954185df5f0b643",
+    "script_sha256": "6f49fac0f942b6254fecc203738742a01ae1b6d36b73ad878240edb3ede3b4db",
+    "qa_sha256": "74383adfa1e44dc9cbac8c28cd6591e144e5e15933a583f14262b90019ac572a",
+    "compile": "PASS",
+    "drive": "Existing authorized owner-only transfer folder; shared=false; metadata size verified and raw download SHA equals original. File IDs omitted from repo. Output binary local and Drive; exact executed code committed/readback. No Cloud billing registration or WIF setup."
+  },
+  "limits": "Standalone V15C floor subset, not integrated into V19B. Prior native pilot has 7 existing rock/stump placements, avoid duplicating them on future import. V15 moss close-camera dark flat appearance remains a known art defect; no independent G2. No full-scene native equivalence, traversal, Android or main merge.",
+  "next": "Read V19B exact run outputs. Inspect background counters and rendered material quality; if same placement cause repeats stop trying density and use a separate bounded background design. Recover official CG from verified artifact if present. Integrate selected floor kit only through qualified native transfer or verified source reconstruction; no public links or billing.",
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_PENDING_OFFICIAL_CG",
+    "G2": "NOT_RUN",
+    "G3": "FLOOR_KIT_EXACT_REOPEN_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  }
+}
