@@ -1,0 +1,87 @@
+{
+  "schema": "two.region.riparian_composition.v38b",
+  "status": "LOCAL_REPRESENTATIVE_BANK_STUDY_READBACK_PASS_ART_PERFORMANCE_HOLD",
+  "parent": "c9e322e92dcf370688c7abda782d7a02a936308f",
+  "dependencies": {
+    "v37_receipt": "2ec1687a32e7931cb0bc6c0953a98a4ffa275978",
+    "v37_glb_sha256": "4db247b048f626e16850fc1880ba14fd5bcf0df90bb5b07b264862b915af38cb",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "eco_artifact": 14626151525,
+    "eco_archive_sha256": "821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "placement": {
+    "method": "Exact ECO LOD1 procedural candidate source buffers from verified archive; dry footprint, triangle root height, water/route and existing object exclusion. Two representative windows in glTF X,Z: [281,-194,326,-162],[-130,489,-89,517].",
+    "source_sha256": {
+      "grass_meadow": "f8aa30605e75118197c56430888780f73c86d745659d64c5b0c7e518b7bdbaae",
+      "grass_tuft_short": "e3511f45bbe988f57fbf6c5e09ec602828dec136cfe0a249acd7b99b79a3bc6c",
+      "sedge_bank": "182c8bf96ee7215f5c913ebde5578299613f5257efd38e75f4f2e8dc6376df0a",
+      "reed_riverside": "65c90bf90c0058cda39b01d25fb6717655d56d3b5aa98f57f50320a19ee4bf21",
+      "shrub_round_a": "6d16ebf1a269ff9714ec6c46d36b33b7005ca8e1032a5133e5732c96e561f1af"
+    },
+    "counts": {
+      "meadow": 54,
+      "short_grass": 70,
+      "sedge": 28,
+      "reed": 16,
+      "shrub": 4
+    },
+    "instances": 172,
+    "shrub_target": 10,
+    "shrub_rejected_by_bounded_site_search": 6,
+    "min_water_gap_m": 0.12517295615838472,
+    "min_protected_proxy_gap_m": 137.36631633342645,
+    "min_prior_object_gap_m": 0.04150023583867461,
+    "max_nearest_root_m": 0.004185514302863069,
+    "max_root_burial_m": 0.08947894313586957,
+    "footprint_area_m2": 72.96725788471674,
+    "added_triangles": 230210,
+    "total_triangles": 416583,
+    "source_records_and_buffers_preserved": true
+  },
+  "tint": {
+    "method": "Author-authored non-directional linear RGB vertex multipliers from actual water footprint distance and smooth patch variation; original photo maps unchanged. Not measured moisture.",
+    "affected_faces": 55235,
+    "vertices": 35752,
+    "unique_positions": 35587,
+    "exact_shared_position_color_delta": 0,
+    "geometry_and_material_records_preserved": true,
+    "readback_triangles": 416583
+  },
+  "render": {
+    "method": "Two matched CPU raster pairs, vertex colors and alpha cutout; not native, not runtime",
+    "new_eco_visible_pixels": [
+      9811,
+      5495
+    ],
+    "self_review": "Color variation and some reeds visible; composition remains sparse, angular shore and open tile edge, no true scene lighting. Triangle cost increased from 186373 to 416583. Stop additive vegetation iteration; prioritize exact native intake and representative terrain morphology/lighting plus batching and LOD."
+  },
+  "outputs": {
+    "intermediate_glb_sha256": "ffa0f5de4efb6bdf73e66bc2689d263d18a01231bfed1095b156fbedfea676e0",
+    "glb_sha256": "72b5d4dc8ab555b389cc61856a246beb3e9f7380bb9c710222625c26f173038b",
+    "build_script_sha256": "0c15f7f1f61407a0ae4fd48217172edd57fa01850a6360777cda16a50d71f5cd",
+    "tint_script_sha256": "d54b82eaac08d3f9b3f1341aec7bf57cababc7ca6bfd739af31e7edfbc846ee6",
+    "qa_sha256": "6392263a0f60abac892c9d0abfd775da99bfa293e7141cd1e637362d6da126ee",
+    "tint_qa_sha256": "d90979a67677c8558b3163ea05776fa9d398f6b4ac707260c1d1ef3a13e2dc1f",
+    "render_qa_sha256": "6e554ae54024aa98a097a8fd2e7731539cd72807d64b98e809d6a2f82fdedfc7",
+    "comparison_sha256": "6264e960464858228a98b6787b39b6990912e631ce5c53d069ba29998db26479",
+    "package_sha256": "3255c9078eacec83b864678da37d4c5612c2fa01ee1605335474d02c599a5f4d",
+    "package_bytes": 40938684,
+    "zip_crc": "PASS",
+    "location": "ChatGPT local attachments; binary not committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "SELF_HOLD_NOT_INDEPENDENT",
+    "G3": "LOCAL_GLB_READBACK_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "limits": "Procedural ECO candidates not photo scans. Root contact and convex footprint checks only. Native Blender not installed locally; no exact runner intake yet. No lighting, terrain reshape, flow, device QA, adoption or main merge.",
+  "next": "Qualify exact input transfer for isolated native representative scene; terrain silhouette and lighting, vegetation instancing and budget rather than further density increments. Landing remains separate HOLD."
+}
