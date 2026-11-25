@@ -1,5 +1,5 @@
 name: Morwen VRoid macOS compatibility probe
-run-name: Morwen VRoid / skirt length and flat texture controls
+run-name: Morwen VRoid / skirt flat texture control
 on:
   workflow_dispatch:
     inputs:
@@ -1158,73 +1158,6 @@ jobs:
                 capture_state skirt-template
                 grep -Fq Bottoms evidence/skirt-template.txt
                 grep -Fq 'Edit Texture' evidence/skirt-template.txt
-                # Calibrated against the verified P1 Uniform Skirt control screen.
-                # Restore the symmetric Skirt (Longer) control before the flat texture trial.
-                "$gui" vroid-shortcut front
-                sleep 3
-                capture_state geometry-front-before
-                cat > "$RUNNER_TEMP/skirt-length-check.py" <<'PY'
-          import json
-          from pathlib import Path
-          import re
-          import sys
-
-          labels = Path(sys.argv[1]).read_text()
-          for label in ("Bottoms", "Customize", "Skirt (Tighter)", "Skirt (Wider)",
-                        "Skirt (Shorter)", "Skirt (Longer)", "Edit Texture"):
-              assert label in labels, label
-          values = re.findall(r"(?<![.\d])\d+\.\d{3}(?![.\d])", labels)
-          assert len(values) == 4 and values[:3] == ["0.000"] * 3, values
-          value = float(values[-1])
-          if sys.argv[2] == "changed":
-              assert 20.0 <= value <= 30.0, value
-          else:
-              assert value == 0.0, value
-          print(json.dumps(dict(values=values, longer=value, phase=sys.argv[2])))
-          PY
-                length_check="$RUNNER_TEMP/skirt-length-check.py"
-                python3 "$length_check" evidence/geometry-front-before.txt before > evidence/geometry-before.json
-                # Record side and rear at the same deliberate camera increments.
-                geometry_views() {
-                  local label="$1" i
-                  "$gui" vroid-shortcut front
-                  sleep 2
-                  for i in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
-                  sleep 2
-                  capture_state "geometry-side-$label"
-                  for i in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
-                  sleep 2
-                  capture_state "geometry-rear-$label"
-                  "$gui" vroid-shortcut front
-                  sleep 3
-                }
-                geometry_views before
-                "$gui" slider 0.73828125 0.6510416667 0.80078125 0.6510416667 0.6
-                sleep 3
-                capture_state geometry-front-changed
-                python3 "$length_check" evidence/geometry-front-changed.txt changed > evidence/geometry-changed.json
-                geometry_views changed
-                "$gui" slider 0.798828125 0.7083333333 0.73828125 0.7083333333 0.6
-                sleep 3
-                capture_state geometry-front-restored
-                python3 "$length_check" evidence/geometry-front-restored.txt restored > evidence/geometry-restored.json
-                test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$sha_before"
-                test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
-                printf '%s\n' "$sha_before" > evidence/geometry-native-after.txt
-                python3 - <<'PY'
-          import hashlib
-          import json
-          import os
-          from pathlib import Path
-
-          root = Path("evidence")
-          files = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.glob("geometry-*"))}
-          assert len(files) == 18, files
-          (root/"geometry-receipt.json").write_text(json.dumps(dict(
-              run=os.environ["GITHUB_RUN_ID"], files=files, formal_adoption=False,
-              scope="VOLATILE_GLOBAL_SKIRT_LENGTH_CONTROL_RESTORED_NO_NATIVE_SAVE"), indent=2))
-          PY
-                capture_state skirt-template
                 "$gui" click-label evidence/skirt-template.png 'Edit Texture' Bottoms
                 ready=0
                 for delay in 4 10 20 30; do
