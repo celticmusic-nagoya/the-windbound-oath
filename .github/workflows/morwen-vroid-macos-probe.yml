@@ -299,6 +299,32 @@ jobs:
           test "$("$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-7-geometry.png" '^Thickness$' | cut -d ' ' -f1)" = 0.04
           if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
           echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
+      - name: Compile skirt alpha inspection before VRoid startup
+        if: inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/skirt-alpha.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          let dir=URL(fileURLWithPath:CommandLine.arguments[1])
+          let files=try FileManager.default.contentsOfDirectory(at:dir,includingPropertiesForKeys:nil).filter{$0.pathExtension.lowercased()=="png"}
+          guard files.count==1,let im=NSBitmapImageRep(data:try Data(contentsOf:files[0])) else { exit(2) }
+          var rows:[[Int]]=[]
+          for y in 0..<im.pixelsHigh {
+              var lo=im.pixelsWide
+              var hi = -1
+              for x in 0..<im.pixelsWide {
+                  guard let c=im.colorAt(x:x,y:y) else { exit(2) }
+                  if c.alphaComponent>=0.5 { lo=min(lo,x);hi=max(hi,x) }
+              }
+              rows.append(hi>=0 ? [lo,hi] : [])
+          }
+          let result:[String:Any]=["scope":"Alpha coverage only, not UV topology","width":im.pixelsWide,"height":im.pixelsHigh,"rows":rows]
+          let data=try JSONSerialization.data(withJSONObject:result)
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-alpha-row-bounds.json"))
+          SWIFT
+          swiftc "$RUNNER_TEMP/skirt-alpha.swift" -o "$RUNNER_TEMP/skirt-alpha"
       - name: Restore native checkpoint
         if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next'
         env:
@@ -1012,24 +1038,7 @@ jobs:
           result=dict(scope="RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED",sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source="Uniform Skirt / Default Design",formal_adoption=False)
           pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
           PY
-                  swift - "$export_dir" <<'SWIFT'
-          import Cocoa
-          import Foundation
-          let dir=URL(fileURLWithPath:CommandLine.arguments[1])
-          let files=try FileManager.default.contentsOfDirectory(at:dir,includingPropertiesForKeys:nil).filter{$0.pathExtension.lowercased()=="png"}
-          guard files.count==1,let im=NSBitmapImageRep(data:try Data(contentsOf:files[0])) else { exit(2) }
-          var rows:[[Int]]=[]
-          for y in 0..<im.pixelsHigh {
-              var lo=im.pixelsWide,hi = -1
-              for x in 0..<im.pixelsWide {
-                  guard let c=im.colorAt(x:x,y:y) else { exit(2) }
-                  if c.alphaComponent>=0.5 { lo=min(lo,x);hi=max(hi,x) }
-              }
-              rows.append(hi>=0 ? [lo,hi] : [])
-          }
-          let data=try JSONSerialization.data(withJSONObject:["scope":"Alpha coverage only, not UV topology","width":im.pixelsWide,"height":im.pixelsHigh,"rows":rows])
-          try data.write(to:URL(fileURLWithPath:"evidence/skirt-alpha-row-bounds.json"))
-          SWIFT
+                  "$RUNNER_TEMP/skirt-alpha" "$export_dir"
                   capture_state skirt-export-complete
                   test -s evidence/skirt-export-metadata.json
                   test -s evidence/skirt-alpha-row-bounds.json
