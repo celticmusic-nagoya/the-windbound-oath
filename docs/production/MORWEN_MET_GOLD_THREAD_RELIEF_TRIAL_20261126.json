@@ -1,0 +1,98 @@
+{
+  "scope": "PHOTO_LUMINANCE_RELIEF_PROXY_NOT_MEASURED_NORMAL_NOT_UV",
+  "main": "2fce4a5d9d987911ce5f6124c58238f8891fdf11",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "4dcca3446b6b26b76f81c9cb22dd73a701f5fa20",
+  "run": 45637863965,
+  "job": 139288070978,
+  "artifact": 15033257928,
+  "archive_sha256": "d834abab4ed4a78e5ae5baa328c1119b7e85b36b1eae40f00aef7edbe13a54c4",
+  "rights": {
+    "provider": "The Metropolitan Museum of Art",
+    "terms": "https://www.metmuseum.org/policies/image-resources",
+    "license": "CC0 Open Access; actual object metadata isPublicDomain=true independently checked for both acquired images"
+  },
+  "sources": [
+    {
+      "id": 445867,
+      "url": "https://www.metmuseum.org/art/collection/search/445867",
+      "image": "https://images.metmuseum.org/CRDImages/is/original/DP17727.jpg",
+      "title": "Square",
+      "medium": "Linen, silk, and gold thread; plain weave, embroidered",
+      "credit": "Rogers Fund, 1909",
+      "size": [
+        1624,
+        1680
+      ],
+      "metadata_sha256": "5aa5f112c18af76fc0741f2384ea535d40bbffff728903ca146e186ed0748b0c",
+      "image_sha256": "3e6b03b6d0146805861fb71ecb2159556f9edef4ee006f19c8669acfdbf72060",
+      "pixel_sha256": "7cd089e9d7ea9bfe3a5ad8358e45ae3f6f78a781930fe7b0f2f79aa450b40ba6",
+      "use": "straight border interior crop only, not distinctive ornament"
+    },
+    {
+      "id": 451169,
+      "url": "https://www.metmuseum.org/art/collection/search/451169",
+      "image": "https://images.metmuseum.org/CRDImages/is/original/LC-53_124_5.jpg",
+      "title": "Textile Fragment",
+      "medium": "Linen; embroidered in silk and gold wrapped thread",
+      "credit": "Rogers Fund, 1953",
+      "size": [
+        4000,
+        4000
+      ],
+      "metadata_sha256": "3d84678baa053109b03cc4ab248c4298a3718cdfc829e86426a4b2de7e4a94bc",
+      "image_sha256": "ae1c942af40a0a03e33ddd61ee01f3d4bcff9a97a7b388d2db72860b9ab6e336",
+      "pixel_sha256": "c8e30abf25bca66f3e7d0e4b7befd2cef578162d712498180182ab40ea619f92",
+      "use": "visual observation only"
+    },
+    {
+      "id": 214169,
+      "status": "excluded",
+      "reason": "unexpected image type/dimensions; no repeat"
+    }
+  ],
+  "crop": {
+    "object": 445867,
+    "xyxy": [
+      690,
+      429,
+      850,
+      441
+    ],
+    "size": [
+      160,
+      12
+    ],
+    "png_sha256": "99d1b09444abde45675faa345c7179d5a8de0770618932bce2bcfd2117531ea3",
+    "method": "grayscale minus Gaussian blur radius2, normalized by 3 sigma, clip +/-1, scale .65; mirror tile 320x24, central difference tangent GL normal. Single photo luminance mixes reflectance and illumination; not physical relief, no gold roughness measurement or verified fiber scale; repeated strip not flow-aligned."
+  },
+  "parent_receipt_sha256": "91950b02f239a573660418cb4aaf6bf79949fc94cfa01fc4c6d2d2bd7a309d99",
+  "qa": {
+    "source_crc": "PASS",
+    "source_hashes": "6/6 PASS",
+    "parent_maps": "39/39 byte and pixel SHA PASS",
+    "normal_maps_generated": 13,
+    "basecolor_and_roughness_unchanged": 26,
+    "output_reopen": "39/39 PASS",
+    "repeat": "42/42 byte-identical",
+    "normal_xy_std_range": [
+      0.11211224068332742,
+      0.14376907295698482
+    ],
+    "visual": "actual sheet reviewed; photo proxy has stronger fine diagonal relief than previous wool proxy but original pixelated motif outline remains; not a G2 improvement verdict",
+    "G2": "NOT_RUN actual Layer0; outer skirt G2 FAIL unchanged",
+    "G3": "NOT_RUN native",
+    "G4": "NOT_RUN runtime"
+  },
+  "outputs": {
+    "script_sha256": "d15574d26ebb8a03d85bc42d2bb9d37732e8e597729981a9fd6edffb6cbf60bb",
+    "receipt_sha256": "fd2e0e7947bee82f1c7acb8b80afb63b7746bfbdb81749951c0d4e64571d19a2",
+    "comparison_sha256": "abcf9ee64fe77a66423a7b04e24c3c4e9d7e22beb8c13b707cc26ec758a125d2",
+    "local_zip_sha256": "fb32c9b145bfc67987fee805c939be62c2a307204bc91dbdb68c09644f8c4c1f",
+    "storage": "local ZIP 43 entries CRC PASS; only evidence summary committed"
+  },
+  "next": "Stop isolated relief iterations; improve motif contours and exact UV mapping, compare on actual native garment with dynamic light; no native writes or main integration for unreviewed asset."
+}
