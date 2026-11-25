@@ -1,0 +1,58 @@
+{
+  "schema": "two.region.moss_a3_surface_receipt.v06",
+  "parent": "518adf8dd7a23835947a956883b8054255814652",
+  "status": "DETAIL_AUTHORING_TARGETS_NOT_D4",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "regional_owner_head": "133cdf7e76417e1127d88129deb900939901e220",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "input_sha256": "cfa58995b99bfb84f44a44f8268521e61a036cece630b6a4d2ff5905425ce7fa",
+  "outputs": {
+    "script_blob": "59764879e7d96a298088243efee865edc95aa922",
+    "qa_blob": "acbbffca333b087ee3dc93fd89da4c6940ff2792",
+    "script_sha256": "7989be05ee22179e199a9a402a5fbd42a4a37f14cde7b9cfd56838516ed305a5",
+    "qa_sha256": "7d44fa5f33545d00caeb52b450ad2e570973050b88bc2b69555b0518eb3f3c94",
+    "png_sha256": "81651cc771edd31627727212b81226d314a511d28ac8f793b597935821300592"
+  },
+  "measurements": {
+    "section_count": 59,
+    "angular_samples_per_section": 721,
+    "sampled_radius_outside_envelope": 0,
+    "max_sampled_inset_m": 0.08490234724295331,
+    "min_sampled_radius_m": 0.02641891476200293,
+    "groove_width_m": 0.018,
+    "groove_depth_target_m": 0.008,
+    "groove_panel_clearance_m": 0.09100725547773057,
+    "groove_outside_panel_m2": 0,
+    "chip_targets": 5
+  },
+  "materials": {
+    "status": "PROVIDER_CC0_VERIFIED_BYTES_NOT_ACQUIRED",
+    "license": "https://polyhaven.com/license",
+    "bark": "https://polyhaven.com/a/jolcham_oak_bark_01",
+    "stone": "https://polyhaven.com/a/rock_01",
+    "moss": "https://polyhaven.com/a/mossy_rock"
+  },
+  "execution": "Actual local Python, pinned V05 SHA unchanged, design drawing inspected, exact script and QA Git fingerprints verified. No actual meshes or material downloads.",
+  "reproduction": "python detail.py <V05 QA JSON>",
+  "decision": "Submit independent D4 for authored A3 landmark design scope. Confirm CG/source, actual geometry requirements, ornament crossing treatment, continuous branch junction/root contact, texture bytes and sword concealment with owners. Do not proceed to unqualified native precision production. Other independent production may proceed.",
+  "limits": [
+    "Authored numerical targets, not actual continuous surface. No sculpt, actual UV, material bake, sword cavity proof, native or runtime. Paired flowing line ornament is not a semantic rune, interlace crossings unresolved. CC0 provider metadata only; texture bytes not acquired. No formal adoption or merge."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_CONTINUOUS_GEOMETRY_AND_SOURCES",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
