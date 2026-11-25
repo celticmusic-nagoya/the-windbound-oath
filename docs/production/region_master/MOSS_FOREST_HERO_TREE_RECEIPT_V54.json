@@ -1,0 +1,82 @@
+{
+  "schema": "two.region.sanctuary.hero_tree.v54",
+  "parent": "6611ace02f321fb265859fc4556add1b6571f876",
+  "status": "LOCAL_CROWN_PHOTO_BARK_FEASIBILITY_ATTACHMENT_AND_ART_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "v53": "2a9710402f171c4797e4ce97523430d1e59ea9f6",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "scope": "Independent reversible feasibility only, no D4 or placement, no native or canon mutation. V53 source exact. Reuse V05 seven crown ellipsoid design envelopes; authored stylized leaf blade size and branch distribution.",
+  "source": {
+    "v53_sha256": "66b3b7f3ec7a32e64280ead2096de881a18d8ddce92647ab7a4b284f9816f407",
+    "asset": "Jolcham Oak Bark 01",
+    "author": "Charlotte Baglioni",
+    "license": "CC0",
+    "license_url": "https://polyhaven.com/license",
+    "asset_url": "https://polyhaven.com/a/jolcham_oak_bark_01",
+    "artifact": 15023783357,
+    "archive_sha256": "620d6f222d3b4613f7140c47342b973fe603125de4cc387492d47269f3420343",
+    "maps_sha256": {
+      "diff": "2eb8d1e79a64827ad70b20bc80bec2171494a442310099ac88d15970a46e6c5f",
+      "nor_gl": "f0c17caeafb7aad681e7a376e754ed1593a6bf61acc0bc71a45d9850f29e2ae3",
+      "arm": "81a8da5f51e92c5d82248800bb1860720c68338bf54d2505086ce2cb479aa0f5"
+    },
+    "maps": "Decoded source diffuse and normal, ARM with blue reset to zero. 2m vertical provider height, inferred 1m horizontal. Dominant-axis UV charts, exact original expanded triangle positions. No author-added baked lighting."
+  },
+  "measurements": {
+    "main_triangle_positions_exact_after_glb_reopen": true,
+    "main_triangles": 142286,
+    "known_main_tiny_faces": 1,
+    "main_uv_split_vertices": 84687,
+    "secondary_branches": 56,
+    "twigs": 224,
+    "leaf_blades": 7167,
+    "branch_triangles": 9296,
+    "leaf_triangles": 86004,
+    "scene_triangles": 237586,
+    "maximum_leaf_normalized_radius_in_crown_union": 0.9949295764741961,
+    "source_unchanged": true
+  },
+  "attachment": {
+    "status": "HOLD_DISAGREE_SIGNED_DISTANCE_AND_RAY",
+    "initial_inside_ray": 50,
+    "retry": "Ray-only recheck assertion failed; output not replaced. Switch to signed distance with 18mm internal depth screen.",
+    "corrected_starts": 19,
+    "min_signed_interior_depth_m": 0.018257576772225878,
+    "signed_distance_inside": 56,
+    "independent_ray_inside": 52,
+    "decision": "Stop same-cause attempts. Different intersection/junction morphology approach required; no unconditional attachment pass. Separate branch shells not Boolean joined, leaves not connected by petioles."
+  },
+  "render": {
+    "method": "Actual GLB importer VTK EGL, 3 matched overview views and one matched close-up; normal/albedo/ORM bound on two wood mesh actors, no IBL or Blender native",
+    "self_art": "Bark detail visible but crown groups too discrete and sparse, base bulb and sparse branching remain, UV chart seams possible, no leaf petioles, heavy geometry. G2 HOLD."
+  },
+  "outputs": {
+    "glb_sha256": "b62ced11407f79f37954f046c00f692d01294c3c2da6ba7b06ff05f8f49a29f6",
+    "glb_bytes": 55647844,
+    "build_sha256": "f83643483979838e04657c64d28493cf4a0532b638bca76f4e21512bb126f11b",
+    "render_sha256": "7da5c3c91e9266122c555eca24974814d27e84ed11ca8b11c9de534457d78421",
+    "qa_sha256": "ffb7ae5d318a17879ce8516da12c661c8265226c7f507f244132470f4dbd1d71",
+    "comparison_sha256": "a21972ea71631874620ccc5f5a112425bfa4ac9cd5053fa23a3b2b746375b36a",
+    "package_sha256": "902dec6e27e68b54b838fc50b4edf19abbafdb41496f49048a2788cb6b6896a9",
+    "package_bytes": 54456778,
+    "zip_crc": "PASS",
+    "py_compile": "PASS",
+    "location": "local GLB, package, code and QA; receipt only committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_LAYOUT_AND_DESIGN",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLTF_REOPEN_PBR_PREVIEW_PASS_ATTACHMENT_HOLD_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Stop iterative point-attachment and density tuning. Reassess branch junction morphology and use coherent branch surface or source-grounded high-quality existing tree approach, integrated native scene evaluation. Optimize foliage topology and texture budget, no adoption/main merge."
+}
