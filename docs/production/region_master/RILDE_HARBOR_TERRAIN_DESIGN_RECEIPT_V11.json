@@ -1,0 +1,134 @@
+{
+  "schema": "two.region.harbor_terrain_design_receipt.v11",
+  "parent": "919efb98a3651f3fd4f671c6d5e9f621c733c097",
+  "status": "DESIGN_ONLY_HOLD",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "recovered_baseline": "5aade3829bcc608e19fe28b644d0ab8aa96dd7cc",
+    "harbor_v02": "1bb8cb6e4d92d54f090acc4b68ccf1ff5263d752",
+    "harbor_v09": "65ae83999cd596d1d26709a83e36cd202db32774",
+    "slope_calibration_head": "919efb98a3651f3fd4f671c6d5e9f621c733c097"
+  },
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "6b937509815cd82b35ed6513ed7546c59bf13c3be97993203c52c3803c5e334e",
+    "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175"
+  ],
+  "frame": {
+    "axes": "X east Y north Z up, provisional m",
+    "canonical_transform": null,
+    "grid_bounds_xy": [
+      -230,
+      -245,
+      -80,
+      -125
+    ],
+    "grid_step_m": 0.5,
+    "coast_xy": [
+      [
+        -320,
+        -110
+      ],
+      [
+        -200,
+        -165
+      ],
+      [
+        -170,
+        -215
+      ],
+      [
+        -250,
+        -265
+      ],
+      [
+        -380,
+        -300
+      ]
+    ]
+  },
+  "method": {
+    "fixed_constraints": "6760 slope-matched road samples; 478 apron boundary points z=2 excluding distance <=.75m from road; 281 village boundary interpolated samples x -150..-80 at y=-125; 162 schematic coastal samples z=0 excluding <=6m from apron",
+    "base": "plateau(x,y)*smooth(distance_to_shore/65); blend to apron z=2 within 12m and reconstructed village south edge within 20m. Artificial baseline only.",
+    "bounds": "For each grid point lower=max(z_i-.5*d_i), upper=min(z_i+.5*d_i). Clamp baseline to compatible bounds; exclude road, apron, water and existing village.",
+    "correction": "8-neighbor min-envelope relaxation with .5 slope limit, then restore independently compatible lower bound. Stop on max change <1e-10 or 100 iterations; assert retained interval.",
+    "protected": "No input file writes; no native model edits."
+  },
+  "attempts": [
+    {
+      "id": "V10",
+      "max_sampled_slope_pct": 61.506843687789114,
+      "slope_over_limit": 14,
+      "verdict": "FAIL_SLOPE_LIMIT",
+      "cause": "artificial baseline local gradient above envelope limit despite pointwise constraints",
+      "outputs": {
+        "npz_sha256": "10b733e3eef456d8e6da6f283783f96d760108489ef2f61ece4ff5056bdc56c4",
+        "script_sha256": "344e2b85e786e1ca51e83b4e4b1d12014358b002c13e96c4bccb6d19e5ad3400"
+      }
+    },
+    {
+      "id": "V11",
+      "correction": "local constrained 8-neighbor slope relaxation",
+      "verdict": "SAMPLED_SLOPE_PASS_APRON_INTERFACE_HOLD"
+    }
+  ],
+  "checks": {
+    "slope_relaxation_iterations": 2,
+    "changed_raster_samples": 14,
+    "max_relaxation_m": 0.05753421843894557,
+    "fixed_constraints": 7681,
+    "constraint_counts": {
+      "apron": 478,
+      "coast": 162,
+      "road": 6760,
+      "village": 281
+    },
+    "slope_limit_pct": 50,
+    "pair_conflicts_directed": 0,
+    "worst_pair_excess_m": 0,
+    "raster_samples": 55282,
+    "raster_conflicts": 0,
+    "raster_valid": 55282,
+    "adjacent_slope_samples": 218513,
+    "max_sampled_slope_pct": 50,
+    "slope_over_limit": 0,
+    "max_cut_from_hypothetical_baseline_m": 7.026466623296673,
+    "max_fill_from_hypothetical_baseline_m": 0.7234481336228304,
+    "approx_cut_from_hypothetical_baseline_m3": 4363.96491257543,
+    "approx_fill_from_hypothetical_baseline_m3": 5.668595218683096,
+    "road_apron_overlap_m2": 2.8298078556679505,
+    "road_samples_in_apron": 56,
+    "road_apron_z_difference_max_m": 0.0053081514634736315
+  },
+  "execution": "Actual local Python NumPy 2.3.5, trimesh 4.11.1, Shapely 2.1.2 and SciPy; V10/V11 calculated, source SHA verified before/after, V11 PNG inspected. No Blender or Actions.",
+  "outputs": {
+    "delivery": "local attachment only; exact script and NPZ bytes not committed",
+    "npz_sha256": "1a866ca1770c8a2a480b6000596b6b5f98319473b703128963238df62979b7fb",
+    "png_sha256": "c86dedadb5209f1bed887439d30805f935fb7b56c142a157dc44d0fda7501f6e",
+    "script_sha256": "2f613a243a7c30b8a51b42574f54994356c402e5281053263c15ca5622026f41",
+    "script_git_blob_fingerprint": "4ddce32ef43996391fd5ce31554760a8f36fa2f1"
+  },
+  "design": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL_RECOVERED_AND_ASSUMED",
+    "D2": "PARTIAL_HEIGHTFIELD",
+    "D3": "HOLD_APRON_AND_ORIGINAL_TERRAIN",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NEW_NATIVE_MESH",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "No original harbor terrain: cut/fill differences are against invented baseline, not actual earthworks.",
+    "Grid excludes road, apron and existing village. No conforming seam, return walls, drainage, foundation or native mesh.",
+    "Road/apron overlap is diagnostic; >5mm height difference remains HOLD.",
+    "1V:2H is a provisional visual slope target, not geotechnical design. D4 not run. No adoption or main merge."
+  ],
+  "next": "Resolve apron overlap via a single explicit transition surface, not overlay; independent D4 for affected terrain before native precision production. Preserve V09 road and recovered source. Assess significant assumed cutting (~7m max) as an art/design concern rather than accepted ground."
+}
