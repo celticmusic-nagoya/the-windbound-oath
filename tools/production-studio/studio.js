@@ -184,13 +184,13 @@ loadAreaBlueprints();
   }catch(e){if(g===receiptGeneration)receiptStatus.textContent="検査結果読込失敗: "+e.message;}
  });
  function pendingPlacement(){return inputs.some((input,i)=>input.validity.badInput||(input.value===""?null:input.valueAsNumber)!==rows[current][fields[i]]);}
- function validateReceipt(data){
+ function validateReceipt(data,compare=false){
    const cc=data?.coordinate_contract;
-   if(data?.schema!==receiptSchema||data.status!=="PROVISIONAL"||data.source_blob!==source||!cc||Object.keys(coordinateContract).some(k=>cc[k]!==coordinateContract[k])||data.placement_revision!==revision||!Array.isArray(data.anchors)||data.anchors.length!==2)throw Error("検査契約・配置改訂不一致");
+   if(data?.schema!==receiptSchema||data.status!=="PROVISIONAL"||data.source_blob!==source||!cc||Object.keys(coordinateContract).some(k=>cc[k]!==coordinateContract[k])||!Number.isSafeInteger(data.placement_revision)||data.placement_revision<0||(!compare&&data.placement_revision!==revision)||!Array.isArray(data.anchors)||data.anchors.length!==2)throw Error("検査契約・配置改訂不一致");
    const indices=data.anchors.map(a=>ids.indexOf(a?.area_id));
    if(indices.some(i=>i<0)||indices[0]===indices[1])throw Error("エリアID不正");
    const bounded=v=>typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=1000000;
-   if(!data.anchors.every((a,i)=>Array.isArray(a.local_xyz_m)&&a.local_xyz_m.length===3&&a.local_xyz_m.every(bounded)&&a.placement&&fields.every(k=>a.placement[k]===rows[indices[i]][k]&&a.placement[k]!==null))||![data.tolerance_m,data.uncertainty_m].every(v=>bounded(v)&&v>=0))throw Error("座標・配置スナップショット不一致");
+   if(!data.anchors.every((a,i)=>Array.isArray(a.local_xyz_m)&&a.local_xyz_m.length===3&&a.local_xyz_m.every(bounded)&&a.placement&&a.placement.id===a.area_id&&fields.every(k=>a.placement[k]!==null&&valid(a.placement[k],k)&&(compare||a.placement[k]===rows[indices[i]][k])))||![data.tolerance_m,data.uncertainty_m].every(v=>bounded(v)&&v>=0))throw Error("座標・配置スナップショット不一致");
   return indices;
  }
  function calculateAnchor(placements,local,t,u){
@@ -205,7 +205,9 @@ loadAreaBlueprints();
  const batchLabel=node("label","検査JSONを複数選択"),batchInput=node("input","");batchInput.type="file";batchInput.multiple=true;batchInput.accept=".json,application/json";batchInput.id="anchor-batch-import";batchLabel.htmlFor=batchInput.id;
  const batchStatus=node("p","未選択");batchStatus.id="anchor-batch-status";batchStatus.setAttribute("role","status");
  const batchList=node("div","");batchList.id="anchor-batch-results";
- batch.append(batchLabel,batchInput,batchStatus,batchList);anchorPanel.append(batch);
+ const compareLabel=node("label"," 基準JSONと現在配置を比較（異なる改訂を許可）"),compareMode=node("input","");compareMode.type="checkbox";compareMode.id="anchor-batch-compare";compareLabel.prepend(compareMode);
+ batch.append(compareLabel,batchLabel,batchInput,batchStatus,batchList);anchorPanel.append(batch);
+ compareMode.addEventListener("change",renderBatch);
  let batchItems=[],batchGeneration=0,batchLoading=false,batchError="";
  function renderBatch(){
   batchList.replaceChildren();
@@ -217,11 +219,13 @@ loadAreaBlueprints();
   for(const item of batchItems){
    try{
     if(item.error)throw Error(item.error);
-    const d=item.data,indices=validateReceipt(d),local=d.anchors.map(a=>a.local_xyz_m),placements=indices.map(i=>rows[i]);
-    const key=JSON.stringify({pair:indices.map((i,j)=>[i,local[j]]).sort((a,b)=>a[0]-b[0]),t:d.tolerance_m,u:d.uncertainty_m});
+    const d=item.data,indices=validateReceipt(d,compareMode.checked),local=d.anchors.map(a=>a.local_xyz_m),placements=indices.map(i=>rows[i]);
+    if(placements.some(p=>fields.some(k=>p[k]===null)))throw Error("現在配置のXYZ・回転が未設定");
+    const baseline=compareMode.checked?calculateAnchor(d.anchors.map(a=>a.placement),local,d.tolerance_m,d.uncertainty_m):null;
+    const key=JSON.stringify({pair:indices.map((i,j)=>[i,local[j]]).sort((a,b)=>a[0]-b[0]),t:d.tolerance_m,u:d.uncertainty_m,baseline:compareMode.checked?indices.map((i,j)=>[i,...fields.map(k=>d.anchors[j].placement[k])]).sort((a,b)=>a[0]-b[0]):null});
     if(seen.has(key))throw Error("同一入力の重複");seen.add(key);
     const result=calculateAnchor(placements,local,d.tolerance_m,d.uncertainty_m);
-    counts[result.verdict]++;items.push({name:item.name,indices,result,t:d.tolerance_m,u:d.uncertainty_m});
+    counts[result.verdict]++;items.push({name:item.name,indices,result,baseline,baselineRevision:d.placement_revision,t:d.tolerance_m,u:d.uncertainty_m});
    }catch(e){counts.REJECTED++;items.push({name:item.name,error:e.message});}
   }
   const rank={OUTSIDE:0,HOLD:1,PASS:2};
@@ -229,10 +233,12 @@ loadAreaBlueprints();
   for(const item of items){
    const line=node("article","");line.className="tile";line.dataset.verdict=item.result?.verdict??"REJECTED";line.append(node("strong",item.name));
    if(item.error)line.append(node("p","REJECTED： "+item.error));
-   else{const {r,verdict}=item.result,fmt=x=>Number(x.toPrecision(10)).toString();line.append(node("p",item.indices.map(i=>names[i]).join(" ↔ ")),node("p",verdict+" / r: "+fmt(r)+" m / t: "+fmt(item.t)+" m / u: "+fmt(item.u)+" m"));}
+   else{const {r,verdict}=item.result,fmt=x=>Number(x.toPrecision(10)).toString();line.append(node("p",item.indices.map(i=>names[i]).join(" ↔ ")),node("p",verdict+" / r: "+fmt(r)+" m / t: "+fmt(item.t)+" m / u: "+fmt(item.u)+" m"));
+    if(item.baseline){const before=item.baseline,change=r-before.r,eps=before.eps+item.result.eps,uncertainty=2*item.u+eps;const trend=change>uncertainty?"増加":change< -uncertainty?"減少":"差を確定できない";line.dataset.trend=trend;line.append(node("p","基準 r"+item.baselineRevision+": "+before.verdict+" / "+fmt(before.r)+" m → 現在 r"+revision+": "+verdict+" / "+fmt(r)+" m"),node("p","残差差分: "+fmt(change)+" m / "+trend+"（同じ入力・t/u、差分不確かさ上限 2u）"));}
+   }
    batchList.append(line);
   }
-  batchStatus.textContent="配置 revision "+revision+" / "+batchItems.length+" 件 / PASS "+counts.PASS+" / HOLD "+counts.HOLD+" / OUTSIDE "+counts.OUTSIDE+" / REJECTED "+counts.REJECTED+"（暫定位置検査のみ）";
+  batchStatus.textContent=(compareMode.checked?"基準→現在の比較 / ":"厳密照合 / ")+"配置 revision "+revision+" / "+batchItems.length+" 件 / PASS "+counts.PASS+" / HOLD "+counts.HOLD+" / OUTSIDE "+counts.OUTSIDE+" / REJECTED "+counts.REJECTED+"（暫定位置検査のみ）";
  }
  batchInput.addEventListener("change",async()=>{
   const g=++batchGeneration,files=Array.from(batchInput.files);batchItems=[];batchError="";batchLoading=false;
