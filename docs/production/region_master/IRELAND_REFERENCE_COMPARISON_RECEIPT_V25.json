@@ -1,0 +1,130 @@
+{
+  "schema": "two.region.ireland_reference_comparison.v25",
+  "status": "TWO_REFERENCE_REGIONS_VERIFIED_FICTIONAL_DESIGN_PENDING",
+  "parent": "04b9b71ca5b050c4774dab00a9f50f8d59fef06b",
+  "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+  "policy": {
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_material": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "v24": {
+    "run": 45637268935,
+    "job": 139286397256,
+    "conclusion": "success",
+    "artifact": 15033082981,
+    "archive_sha256": "24db9c45da797fead2745c536d8c8d56d32d18aa7b6a8b0ec6048bafacd98007",
+    "archive_crc": "PASS",
+    "source_sha256": "7e87dc609f464a4e071442bd76c99c08e4ff8781b9cdeeb8e6d2139f770e82e2",
+    "source_bytes": 14276456,
+    "crop_sha256": "e03b97e076272031e873db31ae48ef78e1ef231e2a1ca0bc258c8a95d73c4939",
+    "contours_sha256": "a292e02f220b55994fdbe4261bd10f8d0b183acb4458f66102c88a95bac9b732",
+    "hillshade_sha256": "1e7569761962c7453ad42c9ee9c7b4177bc9ffcfc193e305b2da496a3b2ec17e",
+    "derived_hashes": "PASS",
+    "source_crs": "EPSG:4326",
+    "source_shape": [
+      3600,
+      2400
+    ],
+    "crop_crs": "EPSG:32629",
+    "crop_shape": [
+      330,
+      575
+    ],
+    "source_vertical_datum": "EGM2008 per product specification; not embedded per-file vertical CRS"
+  },
+  "comparison": {
+    "screen": "z>5m; not a woodland classification; interior only; square windows overlap, span measured between cell centres",
+    "grid_m": 30,
+    "clare": {
+      "range_m": [
+        -2.3680412769317627,
+        251.5603485107422
+      ],
+      "slope_p50_p90_p95_deg": [
+        3.3706774804665214,
+        7.801664857407377,
+        10.215967176883991
+      ],
+      "relief_180m_p50_p90_p95": [
+        12.919075012207031,
+        24.989547729492188,
+        30.367660522460938
+      ],
+      "relief_480m_p50_p90_p95": [
+        30.83521270751953,
+        52.55590286254883,
+        62.01959095001218
+      ],
+      "contours": 221
+    },
+    "southwest": {
+      "range_m": [
+        8.615309715270996,
+        836.9531860351562
+      ],
+      "slope_p50_p90_p95_deg": [
+        9.276564183627617,
+        21.054171149692394,
+        25.66063850974918
+      ],
+      "relief_180m_p50_p90_p95": [
+        36.52430725097656,
+        82.45988082885744,
+        100.31526908874515
+      ],
+      "relief_480m_p50_p90_p95": [
+        95.56171417236328,
+        189.0018157958985,
+        220.99740295410157
+      ],
+      "contours": 375,
+      "vertices": 189750,
+      "triangles": 377692,
+      "reopen_exact": true
+    },
+    "existing_a3": {
+      "bounds_m": [
+        500,
+        -500,
+        700,
+        -400
+      ],
+      "range_m": [
+        23.84299423353013,
+        36.76740902879253
+      ],
+      "slope_p50_p90_p95_deg": [
+        6.625243390039865,
+        9.02524858935327,
+        9.31406418424047
+      ],
+      "grid_m": 2.5,
+      "limit": "different sample spacing and domain; not direct benchmark or requirement"
+    }
+  },
+  "outputs": {
+    "glb_sha256": "2273c18bb1cac8bfadb8408741d2ddc79dfe1db6d0003522b93bad64bd21d420",
+    "sheet_sha256": "0133e326da90b196527b4606fda1309131e87bd43c0fe35559b546ee4d4b0faf",
+    "qa_sha256": "5e4c0890302f299c8a84dec77f782fb66ced8ffea0e6a4283e81a56f3c4a377e",
+    "executed_script_sha256": "43f8d959db3a2e7dcb20f17eb9c9f013867fef1833bcd53edc5e3ca4c6fccbcf",
+    "package_sha256": "c68772d4e8966fee67cc94cbe79fc6b91ead32d3758dc8c44ce0aae80b253c99",
+    "package_bytes": 4329062,
+    "drive": "Uploaded into previously authorized private folder; size and shared=false verified; download hash not checked this turn. No private file ID committed."
+  },
+  "design_decision": "Use measured differences to design differentiated low coastal land and upland valley/ridge structure. Do not copy Ireland coordinates or assume measured slopes are playable route specifications. Current A3 relief is a provisional candidate; preserve seams and protected route/arena before designing new relief. New photo-derived material policy applies to world materials, no change to existing source texture rights.",
+  "gates": {
+    "reference": "PASS_TWO_REGIONS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_FICTIONAL_METRIC_TRANSFORM",
+    "G2": "NOT_RUN",
+    "G3": "SOUTHWEST_REFERENCE_GLB_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "policy551": "Independent review not recorded; no merge",
+  "next": "Design C02 provisional regional heightfield variant and C03 drainage constraints against current V03 layout; show profiles and explicit seam/route constraints, preserve existing native assets and do not claim official world metric scale."
+}
