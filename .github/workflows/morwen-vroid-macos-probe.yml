@@ -7,8 +7,9 @@ on:
         description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: face_candidate
+        default: wardrobe_guide
         options:
+          - wardrobe_guide
           - wardrobe_import
           - parallel_ac
           - wardrobe_export
@@ -44,7 +45,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
     env:
@@ -63,7 +64,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -74,16 +75,17 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
+          WARDROBE_GUIDE: ${{ inputs.mode == 'wardrobe_guide' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -306,7 +308,7 @@ jobs:
           if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
           echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
       - name: Compile skirt alpha inspection before VRoid startup
-        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import') && matrix.lane == 'C-wardrobe'
+        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && matrix.lane == 'C-wardrobe'
         shell: bash
         run: |
           set -euo pipefail
@@ -471,7 +473,7 @@ jobs:
           python3 "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-sha.txt
           python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-pixel-sha.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -492,7 +494,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -566,11 +568,12 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
+          WARDROBE_GUIDE: ${{ inputs.mode == 'wardrobe_guide' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
@@ -1185,6 +1188,40 @@ jobs:
           assert labels.index("Export Guide")==labels.index("Export")+1
           PY
                   fi
+                  if [ "$WARDROBE_GUIDE" = true ]; then
+                    "$gui" click-label evidence/skirt-export-layer.png 'Export Guide' 'Toggle Visibility'
+                    sleep 4
+                    capture_state skirt-export-dialog
+                    # Use only the visible, simple default filename and verified Documents destination.
+                    export_name=$(python3 - evidence/skirt-export-dialog.txt <<'PY'
+          import pathlib,re,sys
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(rows.count(s)==1 for s in ("Save As:","Where:","Documents","Cancel","Save","Texture Editor")),rows
+          i=rows.index("Save As:")
+          assert i+1<len(rows)
+          name=rows[i+1]
+          assert re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9 _-]{0,63}(?:\.png)?',name),name
+          assert name.lower() not in ("documents","save","cancel","layer","layer.png","where")
+          print(name if name.lower().endswith(".png") else name+".png")
+          PY
+                    )
+                    test -d "$HOME/Documents"
+                    for existing in "$HOME/Documents/$export_name" "$HOME/Documents/$(basename "$export_name" .png)"; do
+                      if [ -e "$existing" ] || [ -L "$existing" ]; then exit 1; fi
+                    done
+                    export_dir="$RUNNER_TEMP/morwen-skirt-export"
+                    mkdir "$export_dir"
+                    cp evidence/skirt-export-dialog.png evidence/skirt-export-destination.png
+                    cp evidence/skirt-export-dialog.txt evidence/skirt-export-destination.txt
+                    "$gui" click-label evidence/skirt-export-destination.png Save Cancel
+                    for delay in 2 4 8 12; do
+                      sleep "$delay"
+                      if [ -s "$HOME/Documents/$export_name" ]; then break; fi
+                    done
+                    test -f "$HOME/Documents/$export_name"
+                    test ! -L "$HOME/Documents/$export_name"
+                    cp "$HOME/Documents/$export_name" "$export_dir/layer.png"
+                  else
                   "$gui" click-label evidence/skirt-export-layer.png Export 'Export Guide'
                   sleep 4
                   capture_state skirt-export-dialog
@@ -1217,6 +1254,7 @@ jobs:
                   test -f "$HOME/Documents/layer.png"
                   test ! -L "$HOME/Documents/layer.png"
                   cp "$HOME/Documents/layer.png" "$export_dir/layer.png"
+                  fi
                   # Never upload the stock PNG itself. Read it only within this runner.
                   python3 - "$export_dir" <<'PY'
           import pathlib,sys,hashlib,json,struct,zlib,os
@@ -1238,10 +1276,36 @@ jobs:
               pos+=12+n
               if tag==b"IEND": break
           assert pos==len(b) and image and chunks[-1]=="IEND" and "IDAT" in chunks
-          result=dict(scope=("RUNNER_LOCAL_AUTHORED_TEXTURE_REEXPORT_NOT_DISTRIBUTED" if os.environ["WARDROBE_IMPORT"]=="true" else "RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED"),sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source="Uniform Skirt / Default Design",formal_adoption=False)
+          result=dict(scope=("RUNNER_LOCAL_AUTHORED_TEXTURE_REEXPORT_NOT_DISTRIBUTED" if os.environ["WARDROBE_IMPORT"]=="true" else "RUNNER_LOCAL_UV_GUIDE_METADATA_ONLY_NOT_DISTRIBUTED" if os.environ["WARDROBE_GUIDE"]=="true" else "RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED"),sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source=("Uniform Skirt / Export Guide" if os.environ["WARDROBE_GUIDE"]=="true" else "Uniform Skirt / Default Design"),formal_adoption=False)
           pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
           PY
                   "$RUNNER_TEMP/skirt-alpha" "$export_dir"
+                  if [ "$WARDROBE_GUIDE" = true ]; then
+                    swift - "$export_dir/layer.png" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          guard let im=NSBitmapImageRep(data:try Data(contentsOf:URL(fileURLWithPath:CommandLine.arguments[1]))) else { exit(2) }
+          let w=im.pixelsWide,h=im.pixelsHigh
+          guard w>0,h>0,w<=4096,h<=4096 else { exit(2) }
+          var rows=[[Int]](repeating:[0,0,0],count:h)
+          var cols=[[Int]](repeating:[0,0,0],count:w)
+          for y in 0..<h {
+              for x in 0..<w {
+                  guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { exit(2) }
+                  let a=c.alphaComponent
+                  if a>=0.5 {
+                      rows[y][0]+=1; cols[x][0]+=1
+                      let v=(c.redComponent+c.greenComponent+c.blueComponent)/3
+                      if v<0.25 { rows[y][1]+=1;cols[x][1]+=1 }
+                      if v>0.75 { rows[y][2]+=1;cols[x][2]+=1 }
+                  }
+              }
+          }
+          let result:[String:Any]=["scope":"UV guide aggregate profiles only; not an inferred island map","width":w,"height":h,"rows":rows,"columns":cols]
+          let data=try JSONSerialization.data(withJSONObject:result)
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-guide-profile.json"))
+          SWIFT
+                  fi
                   if [ "$WARDROBE_IMPORT" = true ]; then
                     python3 "$RUNNER_TEMP/skirt-verify.py" "$export_dir/layer.png" | tee evidence/skirt-import-pixel-sha.txt
                   fi
@@ -1274,6 +1338,9 @@ jobs:
           if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe":
               for name in ("skirt-export-metadata.json","skirt-alpha-row-bounds.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          if os.environ["WARDROBE_GUIDE"]=="true":
+              name="skirt-guide-profile.json"
+              hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           if os.environ["WARDROBE_IMPORT"]=="true":
               for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
@@ -1512,7 +1579,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
