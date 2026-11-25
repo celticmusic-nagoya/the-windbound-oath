@@ -1,5 +1,5 @@
 name: Morwen VRoid macOS compatibility probe
-run-name: Morwen VRoid / ${{ inputs.mode }}
+run-name: Morwen VRoid / ${{ inputs.mode }}${{ inputs.request_id != '' && format(' request:{0}', inputs.request_id) || '' }}
 on:
   workflow_dispatch:
     inputs:
@@ -14,6 +14,14 @@ on:
           - reopen_only
           - native_calibration
           - communication_test
+      expected_main:
+        description: Internal launch guard; empty for manual runs
+        type: string
+        default: ''
+      request_id:
+        description: Internal comment ID; empty for manual runs
+        type: string
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -27,6 +35,20 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 35
     steps:
+      - name: Verify automatic launch identity before checkout
+        env:
+          EXPECTED_MAIN: ${{ inputs.expected_main }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          MODE: ${{ inputs.mode }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$EXPECTED_MAIN" ] || [ -n "$REQUEST_ID" ]; then
+            test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+            [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            test "$MODE" = hair_candidate
+          fi
       - uses: actions/checkout@v4
         with:
           ref: 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
