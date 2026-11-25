@@ -81,6 +81,34 @@ try{
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'390px gallery overflow');
  await page.setViewportSize({width:360,height:780});
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
+ // Global recent view and exact independent QA/adoption filters.
+ await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
+ const allTiles=page.locator('#published-gallery article');
+ const visibleTiles=page.locator('#published-gallery article:visible');
+ const recent=[...manifest.entries].sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
+ assert.equal(await allTiles.count(),recent.length);
+ assert.deepEqual(await allTiles.locator('h3').allTextContents(),recent.map(e=>e.name));
+ const sample=recent[0];
+ const qaFilter=page.getByRole('combobox',{name:'QA状態',exact:true}),adoptionFilter=page.getByRole('combobox',{name:'採用状態',exact:true});
+ await qaFilter.selectOption({label:sample.qa||'未記録'});
+ assert.equal(await visibleTiles.count(),recent.filter(e=>e.qa===sample.qa).length);
+ await adoptionFilter.selectOption({label:sample.adoption||'未記録'});
+ const matching=recent.filter(e=>e.qa===sample.qa&&e.adoption===sample.adoption);
+ assert.equal(await visibleTiles.count(),matching.length);
+ if(matching.some(photo)){
+  await visibleTiles.locator('.gallery-image-button').first().click();
+  const filteredReview=page.getByRole('dialog',{name:'成果物画像レビュー'});
+  assert.equal(await filteredReview.getByRole('status').innerText(),'1 / '+matching.filter(photo).length);
+  await filteredReview.getByRole('button',{name:'閉じる',exact:true}).click();
+ }
+ await page.getByRole('searchbox',{name:'成果物検索'}).fill('NO_MATCH_9c32e9e8');
+ assert.equal(await visibleTiles.count(),0);
+ assert.ok(await page.getByText('条件に一致する成果物はありません。').isVisible());
+ await page.getByRole('button',{name:'絞り込み解除',exact:true}).click();
+ assert.equal(await visibleTiles.count(),recent.length);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'all-results mobile overflow');
+ await page.locator('#published-gallery').screenshot({path:'gallery-qa/recent-filters-mobile.png'});
+ await page.getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
  await page.getByRole('button',{name:/風待ちの崖/}).click();
  const images=page.locator('#published-gallery img');
  assert.equal(await images.count(),manifest.entries.filter(e=>isCliff(e)&&photo(e)).length);
