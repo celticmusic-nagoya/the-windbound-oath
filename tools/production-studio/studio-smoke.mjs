@@ -10,12 +10,19 @@ let browser;
 try {
  for(let i=0;i<40;i++){try{if((await fetch('http://127.0.0.1:8765')).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));}
  browser=await chromium.launch({args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
- const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
+ // Deterministic navigation: avoid smooth-scroll movement during Playwright's hit testing.
+ const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,reducedMotion:'reduce'});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',route=>route.fulfill({json:route.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)},updated_at:'2026-11-22'}:{workflow_runs:[]}}));
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
+ // Pointer check before the long inspection. Test the summary label rather than its blank right-hand area.
+ const localSummary=page.locator('#local-title > summary');
+ await localSummary.click({position:{x:24,y:22}});
+ await page.waitForFunction(()=>document.querySelector('#local-title').open===true);
+ await localSummary.click({position:{x:24,y:22}});
+ await page.waitForFunction(()=>document.querySelector('#local-title').open===false);
  // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
  const blueprint=page.locator('#area-blueprints .blueprint-preview img');
  await blueprint.waitFor({state:'visible'});
@@ -79,12 +86,39 @@ try {
  assert.ok((await plotNote.innerText()).includes('同一点 1'));
  assert.equal(await plot.locator('[data-yaw-area]').count(),2);
  await placement.screenshot({path:'qa-output/placement-overview-mobile.png'});
+ // Anchor pair: incomplete data blocked, 90-degree rotation, vertical residual and conservative verdicts.
+ const anchor=page.locator('#placement-anchor-check'),result=page.locator('#anchor-result');
+ await anchor.locator('summary').click();
+ assert.ok((await result.innerText()).includes('BLOCKED'));
+ saved.revision=4;
+ Object.assign(saved.areas[0],{x_m:0,y_m:0,z_m:0,yaw_deg:90});
+ Object.assign(saved.areas[1],{x_m:0,y_m:10,z_m:3,yaw_deg:0});
+ await input.setInputFiles({name:'anchors.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(saved))});
+ await page.waitForFunction(()=>document.querySelector('#placement-status').textContent.includes('revision 4'));
+ for(const [name,value] of [['A local X (m)','10'],['A local Y (m)','0'],['A local Z (m)','0'],['B local X (m)','0'],['B local Y (m)','0'],['B local Z (m)','0']])await anchor.getByRole('spinbutton',{name,exact:true}).fill(value);
+ assert.ok((await result.innerText()).includes('3D残差 r: 3 m'));
+ assert.ok((await result.innerText()).includes('BLOCKED'));
+ await anchor.getByRole('spinbutton',{name:'合成不確かさ u (m)',exact:true}).fill('0.2');
+ const tol=anchor.getByRole('spinbutton',{name:'許容誤差 t (m)',exact:true});
+ for(const [value,verdict] of [['4','PASS'],['2','OUTSIDE'],['3','HOLD']]){await tol.fill(value);assert.equal(await result.getAttribute('data-verdict'),verdict);}
+ await anchor.getByRole('combobox',{name:'アンカー B エリア'}).selectOption('0');
+ assert.equal(await result.getAttribute('data-verdict'),null);
+ assert.ok((await result.innerText()).includes('別の2エリア'));
+ await anchor.getByRole('combobox',{name:'アンカー B エリア'}).selectOption('1');
+ assert.equal(await result.getAttribute('data-verdict'),'HOLD');
+ await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
  assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
- await page.locator('#local-title summary').click();
+ // After the long anchor workflow use the native keyboard disclosure action.
+ // Record hit test / focus diagnostics; no scripted assignment to details.open.
+ await localSummary.scrollIntoViewIfNeeded();
+ console.log('local disclosure diagnostics',await localSummary.evaluate(el=>{const b=el.getBoundingClientRect();return {rect:{x:b.x,y:b.y,w:b.width,h:b.height},hit:document.elementFromPoint(b.x+24,b.y+22)?.outerHTML.slice(0,180),active:document.activeElement?.tagName,open:el.parentElement.open};}));
+ await localSummary.focus();
+ await localSummary.press('Enter');
+ await page.waitForFunction(()=>document.querySelector('#local-title').open===true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),true);
  const fixture=Buffer.from('diagnostic only');
  await page.locator('#artifact-zip').setInputFiles({name:'diagnostic.zip',mimeType:'application/zip',buffer:fixture});
