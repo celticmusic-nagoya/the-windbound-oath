@@ -514,6 +514,7 @@ jobs:
               capture_state "$tag-group" >&2 || return 1
               grep -Fq 'Freehand Guides' "evidence/$tag-group.txt" || return 1
               grep -Fq 'Hair 3' "evidence/$tag-group.txt" || return 1
+              grep -Fq 'Front' "evidence/$tag-group.txt" || return 1
               if "$row" "evidence/$tag-group.png" '^Width$' >/dev/null 2>&1; then return 1; fi
               "$gui" click-label "evidence/$tag-group.png" 'Hair 3' 'Freehand Guides' >&2 || return 1
               sleep 2
@@ -541,7 +542,7 @@ jobs:
           PY
             chmod u+w "$MORWEN_READONLY_NATIVE"
             echo HAIR_WIDTH_MUTATION_ATTEMPTED > evidence/hair-author-status.txt
-            slider_by hair-width '^Width$' -0.008
+            slider_by hair-width '^Width$' -0.008 || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
             capture_state hair-after-selected
             read -r after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Width$')"
             read -r thickness_after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Thickness$')"
@@ -556,6 +557,43 @@ jobs:
             capture_state hair-save-dialog
             grep -Fq 'Close Hairstyle Editor' evidence/hair-save-dialog.txt
             grep -Fq 'Front' evidence/hair-save-dialog.txt
+            grep -Fq 'Back' evidence/hair-save-dialog.txt
+            # Match the archived 1024x768 save modal. Verify the two checkboxes independently.
+            # Unknown appearance or geometry stops the trial; never overwrite the original preset.
+            swift - evidence/hair-save-dialog.png > evidence/hair-save-selection.txt <<'SWIFT'
+          import Cocoa
+          import Foundation
+          import Vision
+          let url = URL(fileURLWithPath: CommandLine.arguments[1])
+          guard let im = NSBitmapImageRep(data: try Data(contentsOf: url)),
+                im.pixelsWide == 1024, im.pixelsHigh == 768 else { exit(2) }
+          let req = VNRecognizeTextRequest()
+          try VNImageRequestHandler(url: url).perform([req])
+          for (label, y) in [("Front",364),("Back",399)] {
+              let hits = (req.results ?? []).filter { o in
+                  o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) == label &&
+                  abs((1-o.boundingBox.midY)*768-Double(y)) < 9 &&
+                  abs(o.boundingBox.minX*1024-366) < 15
+              }
+              guard hits.count == 1 else { exit(2) }
+          }
+          func state(_ y: Int) -> String {
+              var blue = 0, white = 0
+              for yy in (y-5)...(y+5) {
+                  for x in 343...353 {
+                      guard let c = im.colorAt(x:x,y:yy)?.usingColorSpace(.deviceRGB) else { return "unknown" }
+                      if c.blueComponent>0.72 && c.redComponent<0.30 && c.greenComponent>0.24 && c.greenComponent<0.85 { blue += 1 }
+                      if c.redComponent>0.9 && c.greenComponent>0.9 && c.blueComponent>0.9 { white += 1 }
+                  }
+              }
+              if blue>=20 { return "checked" }
+              if white>=100 && blue==0 { return "unchecked" }
+              return "unknown"
+          }
+          let front=state(364), back=state(399)
+          print("Front",front,"Back",back)
+          exit(front=="checked" && back=="unchecked" ? 0 : 1)
+          SWIFT
             "$gui" click-label evidence/hair-save-dialog.png 'Save as new item' 'Close Hairstyle Editor'
             sleep 4
             capture_state hair-save-return
