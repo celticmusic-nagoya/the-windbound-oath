@@ -1,0 +1,53 @@
+{
+  "schema": "two.region.photo_biome_receipt.v04",
+  "parent": "7427c08cabb28f07d638c5c92603d34c623cd6ae",
+  "status": "CANDIDATE_PHOTO_BIOME_WITH_PLACEMENT_QA",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "catalog": "4900fc6568f2b8ae15d2d6d56171176c26b846d6",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "prior_recovery": {
+    "run": 45607440576,
+    "artifact": 15017224941,
+    "archive_sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564",
+    "files_verified": 17,
+    "apply_blob": "72b050a057b28d65e97b86e08867e0c4cddf611c",
+    "qa_blob": "e3a3914fa6d3f777983c7d3895ed780a3e4122a3",
+    "terrain_glb_sha256": "79843431c4ddaa6f077483384445f36223546c4ee8573add58882d0d4044bda2",
+    "moss_source_glb_sha256": "451599a92e375059fda4c11fc9265e35dde547df6dbc65a6f0572b4d72ae9e88",
+    "rock_face_glb_sha256": "02660544ed952316cbac76a3b2c9278f04d37bde9ffa3b3dc0879ce0407dbf43",
+    "boulder_glb_sha256": "794d886289c2e2ba4b6df0f2dff596ad1cb2a35fda8684a22a7b399f6b7a384e"
+  },
+  "outputs": {
+    "script_blob": "f8325d1ef44aac8e43745d5a901b5fda9f2baefb",
+    "qa_blob": "92ec34742f6885366f3b6e7e6b61383dc74c1fd0",
+    "script_sha256": "80809b2e4cdf8483391d1508b03b1521c7615e104a2c22848c4b89d875f983b2",
+    "qa_sha256": "8e6f1b30d123327b809c80f2a5d6d55aa8fc8947da028b38c8a433d3ce70788f",
+    "terrain_glb_sha256": "a493779090f9db0786b1f37568933b2da8f8d9d5bb14156d1b48c02c88eafdac",
+    "placement_glb_sha256": "25d2273f16e37e94d6368e5ef109b03f02a5d1322ee946a1bf6784f0d1df1fb6",
+    "preview_sha256": "295dc4fca3962c99f839ed853d08a9b463e7ca1e5c1a9d4aa2206947435990ab",
+    "delivery": "Local binary GLBs and PNG; exact code and QA committed. No binaries committed."
+  },
+  "execution": "Actual local Python. First visual mask exhibited regular stripes; replaced with seeded irregular Gaussian patches and full-domain map. Final rerun preserves output GLB/PNG hashes. Ten pinned inputs unchanged, source mesh buffer and topology exact, 12 instances reopened, source moss mesh/material/images unchanged. Previous source recovery Actions SUCCESS; no new Actions dispatched.",
+  "measurements": {
+    "terrain_vertices": 3321,
+    "terrain_triangles": 6400,
+    "instances": 12,
+    "unique_meshes": 6,
+    "full_instance_triangles": 126254,
+    "minimum_protected_clearance_m": 1.5547284848979197,
+    "minimum_pair_gap_m": 5.1367970825879015,
+    "maximum_sampled_burial_m": 0.11246514215469361,
+    "maximum_buried_vertex_fraction": 0.18059102517329442,
+    "minimum_near_ground_vertices": 1107
+  },
+  "limits": [
+    "Authored artistic moisture and moss masks not hydrology. Standard glTF COLOR_0 modulates base color only; roughness unchanged and custom scalar attributes require renderer implementation. Two separate GLBs in same local frame, not a combined scene. Rocky distribution follows preliminary one-sided route selection, not final composition. Vertex-sampled contact not continuous surface or physical collision. No LOD reduction; 126254 rock triangles plus terrain and other assets may be costly. Planar preview not native render. No official CG, independent D4, G2/G4 or adoption."
+  ],
+  "decision": "Next prioritize measured scan LOD reduction preserving source UV/material and artistic distribution/occlusion, then actual renderer integration and material blending once appropriate design scope independently reviewed. Preserve existing owners and raw source hashes. No native precision production or main merge."
+}
