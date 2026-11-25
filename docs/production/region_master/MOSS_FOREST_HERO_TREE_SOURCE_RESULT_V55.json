@@ -1,0 +1,96 @@
+{
+  "schema": "two.region.hero_tree.source_result.v55",
+  "parent": "5ad9b2a90d1afd576ee15ac9cefae0e6b3235967",
+  "status": "SOURCE_RECOVERED_AND_RENDERED_DIRECT_FIT_HOLD_ARCHIVAL_REPACK_PASS",
+  "dependency_receipt": "fea787b27a00f3bdb3d3adc160db2f126fedcf37",
+  "source": {
+    "asset": "Island Tree 01",
+    "authors": [
+      "Rico Cilliers",
+      "Rob Tuytel"
+    ],
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/island_tree_01",
+    "license_url": "https://polyhaven.com/license",
+    "run": 45723788766,
+    "job": 139588370773,
+    "artifact": 15073087704,
+    "archive_sha256": "3a1f4b37db5eded7d7f64e8afe8f8a361d4bbf9b4bdf444eeba18f0345cd67d5",
+    "archive_bytes": 38902980,
+    "expires": "2026-12-09T23:46:21Z",
+    "provider_size_md5_sha_checks": 12,
+    "archive_crc": "PASS",
+    "source_gltf_sha256": "78e905a40670bfabb2760601d4d9a6c17193a50d68e6271c66893eb7bd75906d",
+    "source_bin_sha256": "1faa817b46e24ed6fc90d3ec72188a0dc5ac75e82c89b3dd3c5fdaecf7cc005c"
+  },
+  "preview": {
+    "source_geometry_buffer_exact": true,
+    "accessors_meshes_nodes_exact": true,
+    "source_triangles": [
+      34787,
+      1060032,
+      504584
+    ],
+    "total_triangles": 1599403,
+    "source_extents_y_up_m": [
+      4.755149841308594,
+      5.027446746826172,
+      4.817679405212402
+    ],
+    "hypothetical_height_fit_factor": 3.281984042976975,
+    "scaled_extents_y_up_m": [
+      15.60632610321045,
+      16.5,
+      15.81154727935791
+    ],
+    "v05_provisional_envelope_y_up_m": [
+      15.3,
+      16.5,
+      12.2
+    ],
+    "alpha": "Exact source RGB decoded from JPEG combined with 16-bit provider alpha quantized to 8-bit; preview MASK cutoff 0.5, not source BLEND. Original archive unchanged.",
+    "alpha_coverage_at_half": 0.25060081481933594,
+    "pbr_texture_bindings_3_of_3": true,
+    "render": "Actual VTK EGL GLB importer, three orthographic views and closeup, visually inspected. No native, IBL or runtime verification.",
+    "self_art": "Natural twisted trunk, branching and fine foliage superior in morphology to V54; dark preview, coastal leaf shape and soil base; height-normalized silhouette exceeds envelope width/depth, so not a direct canonical oak fit. Preserve for trunk/root morphology study and independently designed adaptation."
+  },
+  "repack": {
+    "v54_input_sha256": "b62ced11407f79f37954f046c00f692d01294c3c2da6ba7b06ff05f8f49a29f6",
+    "old_bytes": 55647844,
+    "new_bytes": 38058300,
+    "reduction_pct": 31.608671128390885,
+    "exact_decoded_rgb_all_maps": true,
+    "nonimage_buffers_exact": true,
+    "materials_nodes_accessors_exact": true,
+    "reopened_geometry_exact": true,
+    "matched_closeup_pixel_mae": 0,
+    "matched_closeup_pixel_max": 0,
+    "matched_closeup_pixels_identical_fraction": 1,
+    "limits": "No new morphology, attachment or G2 approval; decoded GPU memory unchanged. Encoded file size only."
+  },
+  "outputs": {
+    "source_preview_glb_sha256": "457e4e92dc64b949b28207cb3216ad79654a0b4da4d1da25cdd3b63cd3384ec4",
+    "source_preview_glb_bytes": 66591124,
+    "repack_glb_sha256": "58ea39d3fd3e11f214b48450ebeb2e4db84b12aa666f636e23aaff5c35bf297c",
+    "intake_preview_script_sha256": "33ceabff707967bf8d21528263ac6687dfcc2fff5474ac817c55199f5c669075",
+    "repack_script_sha256": "14a1358cadfac9fd72c1c6e7095b41e58d770d9dc50c10105fa7dbcfb00f0a4c",
+    "render_repack_script_sha256": "432a601c7ffdeee02e26072443718590ab4454c6a8e2c8adab350cc0da07ab66",
+    "source_qa_sha256": "92e747d8d2952164d7a287626da5f172084ed98a2f2f7535e845cb75545019bd",
+    "repack_qa_sha256": "f8b4bbd2580db1cf2c9f1db005eb7f5407e7a0f6fd8994af799fa2f55d5af6f3",
+    "source_views_sha256": "59ddb4dfb5c80de817ebc31c457e9f915118e03dc8d29d1767af9ccbbd1caeae",
+    "repack_comparison_sha256": "bc9763f4a00499decc1b719b680471df26539e2df2685c93e2745c4eb6aa0db4",
+    "package_sha256": "b372e2bbb12ad055a2ce85e90d56702489271e6c6913f7853e77c3b98aaa1201",
+    "package_bytes": 74558210,
+    "zip_crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Source authenticated Actions artifact; derivative GLB, local code and QA package. No binary committed."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_CANON_FIT",
+    "G2": "SELF_HOLD_SOURCE_ONLY",
+    "G3": "SOURCE_LOCAL_GLTF_REOPEN_PREVIEW_PASS_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Use source scan trunk primitive (34787 tris) as independent morphology candidate; inspect ground patch, branch interface and oak leaf compatibility; design/measure actual envelope-safe adaptation and scene preview. Decimate excessive foliage only on copy with measured silhouette and alpha preservation. No formal adoption/main merge."
+}
