@@ -123,13 +123,19 @@ async function loadPublishedGallery(){
  const prev=control("← 前へ",()=>move(-1)),next=control("次へ →",()=>move(1));
  const count=document.createElement("span");count.setAttribute("role","status");bar.append(count);
  const heading=document.createElement("h3");heading.style.overflowWrap="anywhere";
- const full=document.createElement("img");full.style.cssText="display:block;width:100%;max-height:58vh;object-fit:contain";
+ const viewport=document.createElement("div");viewport.setAttribute("role","region");viewport.setAttribute("aria-label","画像拡大表示");viewport.tabIndex=0;viewport.style.cssText="width:100%;max-height:58vh;overflow:auto;overscroll-behavior:contain";
+ const full=document.createElement("img");full.style.cssText="display:block;width:100%;max-height:58vh;object-fit:contain";viewport.append(full);
+ let zoom=1;
+ const zoomOut=control("縮小",()=>setZoom(zoom-0.5)),zoomIn=control("拡大",()=>setZoom(zoom+0.5)),reset=control("全体表示",()=>setZoom(1));
+ const zoomLabel=document.createElement("span");zoomLabel.setAttribute("aria-label","拡大率");bar.append(zoomLabel);
+ function setZoom(value){zoom=Math.max(1,Math.min(4,value));full.style.width=(zoom*100)+"%";full.style.maxWidth=zoom===1?"100%":"none";full.style.maxHeight=zoom===1?"58vh":"none";zoomLabel.textContent=Math.round(zoom*100)+"%";zoomOut.disabled=zoom===1;zoomIn.disabled=zoom===4;reset.disabled=zoom===1;if(zoom===1){viewport.scrollTop=0;viewport.scrollLeft=0;}}
+
  const info=document.createElement("details");const summary=document.createElement("summary");summary.textContent="制作情報・QA・来歴";const meta=document.createElement("p");meta.style.overflowWrap="anywhere";info.append(summary,meta);
  const original=document.createElement("a");original.textContent="元画像を開く";original.target="_blank";original.rel="noopener noreferrer";
- function update(){const p=visiblePhotos[index];heading.textContent=p.name;full.src=base+p.path;full.alt=p.name;original.href=full.src;count.textContent=(index+1)+" / "+visiblePhotos.length;prev.disabled=index===0;next.disabled=index===visiblePhotos.length-1;meta.textContent="制作段階: "+(p.stage||"未分類")+" / QA: "+p.qa+" / 採用: "+p.adoption+" / HEAD: "+(p.head||"未記録")+" / SHA-256: "+p.sha256+" / run: "+(p.run_id??"未記録")+" / Artifact: "+(p.artifact_id??"未記録");}
+ function update(){const p=visiblePhotos[index];heading.textContent=p.name;setZoom(1);full.src=base+p.path;full.alt=p.name;original.href=full.src;count.textContent=(index+1)+" / "+visiblePhotos.length;prev.disabled=index===0;next.disabled=index===visiblePhotos.length-1;meta.textContent="制作段階: "+(p.stage||"未分類")+" / QA: "+p.qa+" / 採用: "+p.adoption+" / HEAD: "+(p.head||"未記録")+" / SHA-256: "+p.sha256+" / run: "+(p.run_id??"未記録")+" / Artifact: "+(p.artifact_id??"未記録");}
  function move(delta){const target=index+delta;if(target>=0&&target<visiblePhotos.length){index=target;update();}}
- dialog.addEventListener("keydown",event=>{if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();move(event.key==="ArrowLeft"?-1:1);}});
- dialog.append(bar,heading,full,original,info);update();dialog.addEventListener("close",()=>{dialog.remove();if(open.isConnected)open.focus();});document.body.append(dialog);dialog.showModal();close.focus();
+ dialog.addEventListener("keydown",event=>{if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||viewport.contains(event.target))return;if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();move(event.key==="ArrowLeft"?-1:1);}});
+ dialog.append(bar,heading,viewport,original,info);update();dialog.addEventListener("close",()=>{dialog.remove();if(open.isConnected)open.focus();});document.body.append(dialog);dialog.showModal();close.focus();
  };}area.append(tile);}
  const apply=()=>{let count=0;const q=search.value.trim().toLowerCase();for(const tile of area.querySelectorAll("article")){tile.hidden=(filter.value!=="すべて"&&tile.dataset.stage!==filter.value)||!tile.dataset.search.includes(q);if(!tile.hidden)count++;}status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;
  if(!entries.length){filter.hidden=true;search.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
