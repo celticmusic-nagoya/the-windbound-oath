@@ -1,19 +1,18 @@
 name: Morwen VRoid macOS compatibility probe
+run-name: Morwen VRoid / ${{ inputs.mode }}
 on:
   workflow_dispatch:
     inputs:
-      poll_probe:
-        description: Read-only two-command reception test in the same macOS job
-        type: boolean
-        default: false
-      native_probe:
-        description: Disposable iris control qualification and bounded framing survey (not artistic correction)
-        type: boolean
-        default: false
-      frame_probe:
-        description: Read-only front framing recovery; reuse three verified captures from previous run
-        type: boolean
-        default: false
+      mode:
+        description: "Choose one mode (front_frame is the current production step)"
+        type: choice
+        required: true
+        default: front_frame
+        options:
+          - front_frame
+          - reopen_only
+          - native_calibration
+          - communication_test
 permissions:
   contents: read
   actions: read
@@ -33,13 +32,15 @@ jobs:
           persist-credentials: false
       - name: Record checkout and compile existing GUI controls
         env:
-          NATIVE_PROBE: ${{ inputs.native_probe }}
-          FRAME_PROBE: ${{ inputs.frame_probe }}
+          MODE: ${{ inputs.mode }}
+          NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
         shell: bash
         run: |
           set -euo pipefail
-          if [ "$NATIVE_PROBE" = true ] && [ "$FRAME_PROBE" = true ]; then exit 1; fi
+          case "$MODE" in front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
+          printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
           grep -qx 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb evidence/checkout-sha.txt
           bash -n tools/production_qa/morwen_readonly_capture.sh
@@ -144,7 +145,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore three existing frame candidates
-        if: inputs.frame_probe
+        if: inputs.mode == 'front_frame'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -191,8 +192,8 @@ jobs:
       - name: Launch signed application and collect evidence
         timeout-minutes: 22
         env:
-          NATIVE_PROBE: ${{ inputs.native_probe }}
-          FRAME_PROBE: ${{ inputs.frame_probe }}
+          NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -480,7 +481,7 @@ jobs:
             echo CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ART_QA > evidence/native-probe-status.txt
           fi
       - name: Checkout trusted shared engines for control receipt
-        if: inputs.native_probe
+        if: inputs.mode == 'native_calibration'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -490,7 +491,7 @@ jobs:
             tools/production_qa
             tools/blueprint_engine
       - name: Validate reopened control evidence with shared engines
-        if: inputs.native_probe
+        if: inputs.mode == 'native_calibration'
         env:
           PYTHONPATH: ${{ github.workspace }}/shared-main/tools
         shell: bash
@@ -521,7 +522,7 @@ jobs:
           (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
           PY
       - name: Receive two read-only probe instructions in this session
-        if: inputs.poll_probe && !inputs.frame_probe
+        if: inputs.mode == 'communication_test'
         timeout-minutes: 4
         env:
           GH_TOKEN: ${{ github.token }}
@@ -581,7 +582,7 @@ jobs:
               raise SystemExit("Two live probe instructions not received")
           PY
       - name: Label disposable native output
-        if: always() && inputs.native_probe
+        if: always() && inputs.mode == 'native_calibration'
         shell: bash
         run: |
           set -euo pipefail
