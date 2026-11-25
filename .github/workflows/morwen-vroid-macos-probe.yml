@@ -10,6 +10,10 @@ on:
         description: Disposable iris control qualification and bounded framing survey (not artistic correction)
         type: boolean
         default: false
+      frame_probe:
+        description: Read-only framing recovery from default camera; no edit or repeated iris test
+        type: boolean
+        default: false
 permissions:
   contents: read
   actions: read
@@ -30,9 +34,11 @@ jobs:
       - name: Record checkout and compile existing GUI controls
         env:
           NATIVE_PROBE: ${{ inputs.native_probe }}
+          FRAME_PROBE: ${{ inputs.frame_probe }}
         shell: bash
         run: |
           set -euo pipefail
+          if [ "$NATIVE_PROBE" = true ] && [ "$FRAME_PROBE" = true ]; then exit 1; fi
           mkdir -p evidence
           git rev-parse HEAD > evidence/checkout-sha.txt
           grep -qx 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb evidence/checkout-sha.txt
@@ -43,7 +49,7 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-          if [ "$NATIVE_PROBE" = true ]; then
+          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ]; then
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
@@ -160,6 +166,7 @@ jobs:
         timeout-minutes: 22
         env:
           NATIVE_PROBE: ${{ inputs.native_probe }}
+          FRAME_PROBE: ${{ inputs.frame_probe }}
         shell: bash
         run: |
           set -euo pipefail
@@ -293,8 +300,73 @@ jobs:
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
-          MORWEN_CAPTURE_MODE=rear-only
-          source tools/production_qa/morwen_readonly_capture.sh
+          if [ "$FRAME_PROBE" = true ]; then
+            test "$NATIVE_PROBE" != true
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            # Avoid old rear-only zoom +25. Read-only camera moves, no saving.
+            "$gui" vroid-shortcut face
+            "$gui" vroid-shortcut front
+            sleep 2
+            echo "direction attempt action bbox_xmin bbox_ymin bbox_xmax bbox_ymax foreground margin" > evidence/frame-recovery-ledger.txt
+            all=1
+            for direction in front left4 left8 right4; do
+              "$gui" vroid-shortcut front
+              case "$direction" in
+                left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
+                left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
+                right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+              esac
+              action=default; last_y=0; pan_used=0; accepted=0
+              for attempt in 0 1 2 3 4 5; do
+                sleep 2
+                tag="reframe-$direction-$attempt"
+                capture_state "$tag"
+                grep -Fq 'Morwen-resume.vroid' "evidence/$tag.txt"
+                grep -Fq 'Face Sets' "evidence/$tag.txt"
+                if dialog_visible "$tag"; then exit 1; fi
+                result=$("$RUNNER_TEMP/frame-margin" "evidence/$tag.png") && good=1 || good=0
+                read -r label xmin ymin xmax ymax foreground count margin_label margin <<< "$result"
+                test "$label" = bbox && test "$margin_label" = margin || exit 1
+                for value in "$xmin" "$ymin" "$xmax" "$ymax" "$count" "$margin"; do
+                  [[ "$value" =~ ^[0-9]+$ ]] || exit 1
+                done
+                printf '%s %s %s %s %s %s %s %s %s\n' "$direction" "$attempt" "$action" "$xmin" "$ymin" "$xmax" "$ymax" "$count" "$margin" >> evidence/frame-recovery-ledger.txt
+                if [ "$good" = 1 ]; then
+                  cp "evidence/$tag.png" "evidence/frame-selected-$direction.png"
+                  accepted=1
+                  break
+                fi
+                [ "$attempt" -lt 5 ] || break
+                # If clipped below but ample space above, move camera upward once.
+                # A failed or reversed pan changes method to keyboard zoom, not repeated scrolling.
+                if [ "$pan_used" = 0 ] && [ "$ymax" -ge 693 ] && [ "$ymin" -ge 235 ]; then
+                  last_y="$ymin"
+                  "$gui" pan 0.50 0.57 0.50 0.37 0.5
+                  pan_used=1
+                  action=pan_up
+                elif [ "$action" = pan_up ] && [ "$ymin" -gt "$((last_y+10))" ]; then
+                  "$gui" pan 0.50 0.37 0.50 0.57 0.5
+                  action=undo_reversed_pan
+                else
+                  "$gui" vroid-shortcut zoom-out
+                  action=keyboard_zoom_out
+                fi
+              done
+              if [ "$accepted" != 1 ]; then all=0; fi
+            done
+            "$gui" vroid-shortcut front
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            shasum -a 256 evidence/reframe-*.png > evidence/frame-recovery-sha256.txt
+            if [ "$all" = 1 ]; then
+              echo FOUR_MARGIN_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+            else
+              echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
+              exit 1
+            fi
+          else
+            MORWEN_CAPTURE_MODE=rear-only
+            source tools/production_qa/morwen_readonly_capture.sh
+          fi
           if [ "$NATIVE_PROBE" = true ]; then
             row="$RUNNER_TEMP/face-row"
             sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
@@ -422,7 +494,7 @@ jobs:
           (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
           PY
       - name: Receive two read-only probe instructions in this session
-        if: inputs.poll_probe
+        if: inputs.poll_probe && !inputs.frame_probe
         timeout-minutes: 4
         env:
           GH_TOKEN: ${{ github.token }}
