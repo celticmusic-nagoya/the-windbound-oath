@@ -1,0 +1,236 @@
+{
+  "schema": "two.region.harbor_basin_receipt.v04",
+  "status": "DESIGN_SAMPLED_PASS_NOT_ADOPTED",
+  "parent": "7b6ce650ee5ee741f2f0777ac0323b83e42134c6",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "area_plan": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "harbor_v02": "1bb8cb6e4d92d54f090acc4b68ccf1ff5263d752",
+    "harbor_v02_attachment_sha256": "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175"
+  },
+  "frame": {
+    "units": "provisional m",
+    "axes": "X east Y north Z up",
+    "canonical_transform": null
+  },
+  "assumptions": {
+    "sea_datum_m": 0,
+    "low_water_m": -0.8,
+    "high_water_m": 0.8,
+    "draft_m": 0.65,
+    "underkeel_margin_m": 0.35,
+    "required_depth_m": 1,
+    "apron_z_m": 2,
+    "quay_toe_z_m": -2.2,
+    "footing_bottom_z_m": null,
+    "route_buffer_width_m": 4,
+    "sample_step_m": 0.25,
+    "bed_formula": "min(-3.2*min(distance_to_shore/8,1), -2.2*max(1-max(distance_to_quay-6,0)/4,0))",
+    "water_side_only": true
+  },
+  "attempts": [
+    {
+      "id": "V03",
+      "bed_formula": "min(-3.2*min(distance_to_shore/8,1), -2.2*max(1-distance_to_quay/5,0))",
+      "minimum_low_water_depth_sections_m": 0.3,
+      "required_depth_m": 1,
+      "verdict": "FAIL_SHOAL_BETWEEN_QUAY_AND_ACCESS",
+      "design_json_sha256": "38a582f846173adfe0a8d2c8cece2978776b5e41698fefcf69133f19216107eb",
+      "preview_sha256": "7f7157f54ffe9ec739cd92047427847bd5680fb366c5b244da17b29cf5280747"
+    },
+    {
+      "id": "V04",
+      "change": "maintain toe depth within 6m of quay, fade outside; extend access to 0.5m off second face",
+      "minimum_low_water_depth_sections_m": 1.4,
+      "verdict": "SAMPLED_DESIGN_PASS"
+    }
+  ],
+  "routes": [
+    {
+      "id": "BERTH_1",
+      "centerline_xy": [
+        [
+          -225,
+          -190
+        ],
+        [
+          -218,
+          -179.5
+        ],
+        [
+          -203,
+          -179.5
+        ]
+      ],
+      "length_m": 27.61942946412396,
+      "samples": 1822,
+      "minimum_low_water_depth_m": 2.4,
+      "berth_min_depth_m": 1.1893835876531025,
+      "target_overlap_m2": 15
+    },
+    {
+      "id": "BERTH_2",
+      "centerline_xy": [
+        [
+          -225,
+          -190
+        ],
+        [
+          -218,
+          -203
+        ],
+        [
+          -215,
+          -216.5
+        ],
+        [
+          -200,
+          -216.5
+        ]
+      ],
+      "length_m": 43.59413974617273,
+      "samples": 2847,
+      "minimum_low_water_depth_m": 2.4,
+      "berth_min_depth_m": 2.4,
+      "target_overlap_m2": 15
+    },
+    {
+      "id": "BERTH_3",
+      "centerline_xy": [
+        [
+          -225,
+          -190
+        ],
+        [
+          -221,
+          -206
+        ],
+        [
+          -222,
+          -224.5
+        ],
+        [
+          -208,
+          -224.5
+        ]
+      ],
+      "length_m": 49.01942981611955,
+      "samples": 3162,
+      "minimum_low_water_depth_m": 2.4,
+      "berth_min_depth_m": 2.4,
+      "target_overlap_m2": 15
+    },
+    {
+      "id": "LANDING_APPROACH",
+      "centerline_xy": [
+        [
+          -225,
+          -190
+        ],
+        [
+          -200,
+          -205
+        ],
+        [
+          -184,
+          -210
+        ],
+        [
+          -176.72997170285018,
+          -211.5579830217101
+        ],
+        [
+          -173.7287464628563,
+          -209.75724787771375
+        ]
+      ],
+      "length_m": 56.85290807155098,
+      "samples": 3638,
+      "minimum_low_water_depth_m": 1.4,
+      "terminal_gap_m": 0.5
+    }
+  ],
+  "sections": [
+    {
+      "id": "QSEC_1",
+      "face_xy": [
+        -182.6,
+        -194
+      ],
+      "water_normal_xy": [
+        -0.8574929257125441,
+        -0.5144957554275265
+      ],
+      "apron_perpendicular_width_m": 6.002450479987819
+    },
+    {
+      "id": "QSEC_2",
+      "face_xy": [
+        -173.3,
+        -209.5
+      ],
+      "water_normal_xy": [
+        -0.8574929257125444,
+        -0.5144957554275262
+      ],
+      "apron_perpendicular_width_m": 6.002450479987819
+    },
+    {
+      "id": "QSEC_3",
+      "face_xy": [
+        -178,
+        -220
+      ],
+      "water_normal_xy": [
+        -0.52999894000318,
+        0.847998304005088
+      ],
+      "apron_perpendicular_width_m": 3.709992580022254
+    }
+  ],
+  "checks": {
+    "route_count": 4,
+    "passed_sampled": 4,
+    "route_depth_sample_count_with_repeats": 11469,
+    "land_overlap_m2": 0,
+    "other_berth_overlap_m2": 0,
+    "section_min_depth_m": 1.4,
+    "section_sample_interval_m": 0.25,
+    "section_waterward_length_m": 16,
+    "freeboard_at_assumed_high_water_m": 1.2,
+    "source_v02_sha_unchanged": true
+  },
+  "artifacts": {
+    "delivery": "Local attachments, not binary objects committed",
+    "sha256": {
+      "design_basin.py": "25a1813037986185f42988fc25b1b9e1d250b220468cf76778853becfa22a32a",
+      "harbor_basin_v04.json": "c87293d91b8410d5823c0019f7f0d7d2b9bcc99628e12ef7e0f8024d0c46e8ed",
+      "harbor_sections_v04.png": "42aa102d748919e0af249378e5084df6106fedf15f705ff0f6fe67d8abfb9a8f",
+      "harbor_sections_v04.svg": "5508679a3c1c8d784fe2bbb0553553f88dce60d74f9691da1f6feeb414945993"
+    }
+  },
+  "execution": "Actual Python NumPy 2.3.5 and Shapely 2.1.2, V03 and V04 executed, PNGs visually inspected, V02 JSON SHA verified. No Blender or Actions.",
+  "design": {
+    "D0": "PARTIAL_CG_UNAVAILABLE",
+    "D1": "PARTIAL_ORIGINAL_TERRAIN_UNAVAILABLE",
+    "D2": "PARTIAL_PLAN_AND_SECTIONS",
+    "D3": "HOLD_FOUNDATION_TIDE_REAL_TERRAIN",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Artificial local bathymetry, not survey or physical tidal dynamics. Depth sample PASS is not hull swept-path or navigation PASS.",
+    "Berth 1 limiting depth 1.189m under assumed low water; tide and draft uncertainty not resolved.",
+    "Landing endpoint 0.5m from face; boarding, mooring fittings, steps/gangway, return wall transitions and foundation unresolved.",
+    "Full-width road/terrain seam, art and native geometry not verified. No formal adoption or main merge."
+  ],
+  "next": "Design boarding access and village full-width route interface; resolve actual CG/terrain and independent D4 before precision native geometry."
+}
