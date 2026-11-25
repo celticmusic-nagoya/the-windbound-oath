@@ -7,8 +7,9 @@ on:
         description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: wardrobe_export
+        default: parallel_ac
         options:
+          - parallel_ac
           - wardrobe_export
           - parallel_next
           - face_candidate
@@ -42,7 +43,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || (inputs.mode == 'wardrobe_export' && '["C-wardrobe"]' || '["reopen"]'))) }}
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || (inputs.mode == 'wardrobe_export' && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
     env:
@@ -61,7 +62,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -72,15 +73,15 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' }}
-          FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -303,7 +304,7 @@ jobs:
           if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
           echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
       - name: Compile skirt alpha inspection before VRoid startup
-        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export') && matrix.lane == 'C-wardrobe'
+        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe'
         shell: bash
         run: |
           set -euo pipefail
@@ -329,16 +330,37 @@ jobs:
           SWIFT
           swiftc "$RUNNER_TEMP/skirt-alpha.swift" -o "$RUNNER_TEMP/skirt-alpha"
       - name: Preflight mouth controls on exact archived images
-        if: inputs.mode == 'face_candidate'
+        if: inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body')
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
+          cat > "$RUNNER_TEMP/mouth-readout.py" <<'PY'
+          import re, sys
+          from pathlib import Path
+          LABELS=('Mouth Width','Mouth Position (Y)','Mouth Corners','Mouth (Z)')
+          def parse(text):
+              rows=[x.strip() for x in text.split('|')]
+              if rows.count('Parameters')!=1 or 'Mouth' not in rows[:rows.index('Parameters')] or 'Customize' not in rows or 'Edit Texture' not in rows:
+                  raise ValueError('mouth panel not verified')
+              rows=rows[rows.index('Parameters')+1:]
+              result=[]
+              for label in LABELS:
+                  if rows.count(label)!=1: raise ValueError(f'nonunique {label}')
+                  i=rows.index(label)
+                  if i+1>=len(rows): raise ValueError(f'missing {label} value')
+                  v=rows[i+1].replace('−','-')
+                  if not re.fullmatch(r'-?\d+\.\d{3}',v): raise ValueError(f'invalid {label} value')
+                  result.append(v)
+              return ' '.join(result)
+          if __name__=='__main__':
+              print(parse(Path(sys.argv[1]).read_text()))
+          PY
           gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15007077087/zip" > "$RUNNER_TEMP/face-fixture.zip"
           echo "55d76ca1388acf10a53953d498ff57a13b0a0a51346381416c91745c786757a8  $RUNNER_TEMP/face-fixture.zip" | shasum -a 256 -c
           python3 - <<'PY'
-          import os,zipfile,hashlib,pathlib
+          import os,zipfile,hashlib,pathlib,json
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
           with zipfile.ZipFile(p/"face-fixture.zip") as z:
               assert z.testzip() is None
@@ -346,17 +368,23 @@ jobs:
                   b=z.read(n)
                   assert hashlib.sha256(b).hexdigest()==h
                   (p/n).write_bytes(b)
+              receipt=json.loads(z.read("module-receipt.json"))
+              for n in ("face-control-mouth.txt","face-control-nose.txt"):
+                  b=z.read(n)
+                  assert hashlib.sha256(b).hexdigest()==receipt["files"][n]
+                  (p/n).write_bytes(b)
           PY
           row="$RUNNER_TEMP/face-row"
           img="$RUNNER_TEMP/face-control-mouth.png"
-          test "$("$row" "$img" '^Mouth Width$' | cut -d ' ' -f1)" = -0.026
-          for pattern in '^Mouth Position \(Y\)$' '^Mouth Corners$' '^Mouth \(Z\)$'; do
-            test "$("$row" "$img" "$pattern" | cut -d ' ' -f1)" = 0.000
-          done
+          python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/face-control-mouth.txt" | tee evidence/mouth-fixture-values.txt
+          grep -qx -- '-0.026 0.000 0.000 0.000' evidence/mouth-fixture-values.txt
+          if python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/face-control-nose.txt"; then exit 1; fi
+          "$row" "$img" '^Mouth Width$' | tee evidence/mouth-fixture-slider.txt
+          test "$(cut -d ' ' -f1 evidence/mouth-fixture-slider.txt)" = -0.026
           if "$row" "$RUNNER_TEMP/face-control-nose.png" '^Mouth Width$'; then exit 1; fi
           echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -377,7 +405,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -451,10 +479,10 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' }}
-          FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
@@ -1041,18 +1069,31 @@ jobs:
                   grep -Fq 'Cancel' evidence/skirt-export-dialog.txt
                   export_dir="$RUNNER_TEMP/morwen-skirt-export"
                   mkdir "$export_dir"
-                  "$gui" key 5 cmd shift
-                  sleep 2
-                  capture_state skirt-export-go
-                  grep -Eiq 'Go to Folder|Go to the folder' evidence/skirt-export-go.txt
-                  "$gui" text "$export_dir"
-                  "$gui" key 36
-                  sleep 3
-                  capture_state skirt-export-destination
-                  grep -Fq 'morwen-skirt-export' evidence/skirt-export-destination.txt
-                  grep -Fq 'Save As' evidence/skirt-export-destination.txt
+                  # Actual dialog from run45594627894: filename layer, Where Documents.
+                  # Bypass the failed Go to Folder path; never overwrite an existing file.
+                  python3 - evidence/skirt-export-dialog.txt <<'PY'
+          import pathlib,sys
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(rows.count(s)==1 for s in ("Save As:","Where:","layer","Documents","Cancel","Save","Texture Editor"))
+          assert rows.index("Cancel")<rows.index("Save")
+          PY
+                  test -d "$HOME/Documents"
+                  for existing in "$HOME/Documents/layer.png" "$HOME/Documents/layer"; do
+                    if [ -e "$existing" ] || [ -L "$existing" ]; then
+                      echo BLOCKED_EXPORT_DESTINATION_EXISTS > evidence/module-status.txt
+                      exit 1
+                    fi
+                  done
+                  cp evidence/skirt-export-dialog.png evidence/skirt-export-destination.png
+                  cp evidence/skirt-export-dialog.txt evidence/skirt-export-destination.txt
                   "$gui" click-label evidence/skirt-export-destination.png Save Cancel
-                  sleep 5
+                  for delay in 2 4 8 12; do
+                    sleep "$delay"
+                    if [ -s "$HOME/Documents/layer.png" ]; then break; fi
+                  done
+                  test -f "$HOME/Documents/layer.png"
+                  test ! -L "$HOME/Documents/layer.png"
+                  cp "$HOME/Documents/layer.png" "$export_dir/layer.png"
                   # Never upload the stock PNG itself. Read it only within this runner.
                   python3 - "$export_dir" <<'PY'
           import pathlib,sys,hashlib,json,struct,zlib
@@ -1118,13 +1159,8 @@ jobs:
             bash -n "$RUNNER_TEMP/session-helpers.sh"
             source "$RUNNER_TEMP/session-helpers.sh"
             mouth_values() {
-              local tag="$1" pattern hit
-              grep -Fq ' | Mouth |' "evidence/$tag.txt" || return 1
-              grep -Fq 'Parameters' "evidence/$tag.txt" || return 1
-              for pattern in '^Mouth Width$' '^Mouth Position \(Y\)$' '^Mouth Corners$' '^Mouth \(Z\)$'; do
-                hit=$("$row" "evidence/$tag.png" "$pattern") || return 1
-                printf '%s\n' "$hit" | cut -d ' ' -f1
-              done | paste -sd ' ' -
+              local tag="$1"
+              python3 "$RUNNER_TEMP/mouth-readout.py" "evidence/$tag.txt"
             }
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
             face_cat 0.792
@@ -1331,7 +1367,7 @@ jobs:
             fi
           fi
       - name: Label face candidate or quarantine
-        if: always() && inputs.mode == 'face_candidate'
+        if: always() && (inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body'))
         shell: bash
         run: |
           set -euo pipefail
@@ -1346,7 +1382,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
