@@ -1,0 +1,81 @@
+{
+  "schema": "two.region.river_material_v33",
+  "status": "EXACT_GEOMETRY_MATERIAL_CANDIDATE_LANDING_AND_ART_HOLD",
+  "parent": "acf3918ba20d4c2e59f58c371a71883641f0c71c",
+  "dependencies": {
+    "v32_receipt": "95d0d78eac64573523e26f1a823934bd4bbf6cf2",
+    "v32_glb_sha256": "8cefe04377488074bac0712c40c33f12f39dd8439f4da947ada4041e5b26f2b4",
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "source_recovery": "cc9d9595d95d8b41223e7d8ae1bca16386f20c94",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "landing": {
+    "method": "Finite dry-lattice 1m search with grade cost, minimax height envelope, two different domains. Not a terrain regrade or full-width validation.",
+    "initial_sites": 175,
+    "initial_centerline_candidates": 6,
+    "best_initial_max_absolute_adjustment_m": 2.862967458458539,
+    "length_m": 116.79462166448685,
+    "initial_rejection": "tight backtracking and impossible-to-certify 2m ribbon",
+    "extended_sites": 232,
+    "extended_centerline_candidates": 35,
+    "best_extended_max_absolute_adjustment_m": 11.231121693116625,
+    "extended_rejection": "excessive earthwork; no demonstrated full-width solution",
+    "decision": "Stop repeating path-only work. V32 area terrain remains unmodified; the joint terrain redesign is still outstanding. Shift to independent material scope."
+  },
+  "material": {
+    "archive_sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564",
+    "source_license": "Poly Haven CC0, prior verified source receipt; no new download",
+    "source_urls": [
+      "https://polyhaven.com/a/forrest_ground_01",
+      "https://polyhaven.com/a/grassy_cobblestone",
+      "https://polyhaven.com/license"
+    ],
+    "source_maps_sha256": [
+      "e4d557ff61a0b42712a58e8a2e91c6010738977d4e172b7af47abd7d406ae735",
+      "aa23fa930c6303490f842f7c016c19d838263e8e4538d42508a9332e3fd76b69",
+      "abc91717bc60c831f2cd86ad06a5c575ac0e5bd11870b1e7b6dcefc122fc64db",
+      "dace14cfb2726a96df34606ca7c20fb7e4f5a267f1da43e8865baeb8a135693c",
+      "02b3dbb258f993380bab554e2f7ea7913d45f4659945a449e138dfef021f07f9",
+      "109dfccf27a2f2d42a304ea0a5971bc28d33732b39ee224c1f7057dca4dd7a6f"
+    ],
+    "maps": "6 exact embedded 2K JPEGs; 1 original periodic 512px water normal; glTF sRGB base and linear normal/ARM; 2m planar ground tile, 8m water tile",
+    "water_normal_sha256": "c8d62c7a9035dd009417c492559258521045ee3fc01248987e71788bff32c795",
+    "normal_quantization_error_max": 0.005108061122221841,
+    "triangle_count": 86824,
+    "source_binary_prefix_exact": true,
+    "original_accessor_and_view_records_exact": true,
+    "all_face_index_partitions_exact": true,
+    "nodes_exact": true,
+    "trimesh_reopen_triangle_count_exact": true,
+    "riverbed_faces": 14688,
+    "water_faces": 16901,
+    "bank_faces": 55235,
+    "preview": "3 matched orthographic CPU pairs with approximate texture minification; no native BRDF/shadows/transmission. Inspected, uniform tiling and opaque water remain inadequate.",
+    "limits": "Centroid face classification is not exact shoreline subdivision; cobblestone is provisional photo material not actual fluvial gravel. No physical flow, transparent water, vegetation, D4, G2, G4."
+  },
+  "outputs": {
+    "glb_sha256": "d352b4faaaae6f8c9371761c165b1fe79d8edce0ee6c30694c7b93fca573b98b",
+    "material_script_sha256": "448f17630ed72c60a87352fc2599fa95068d4a22965a2057dda462c337a999e2",
+    "render_script_sha256": "80116a3c9fe27d4f18b9c1aeee977ba1d308d287c61d6b6fd9a357dbf659b6c4",
+    "material_qa_sha256": "d67137491ea9f555ccb4b77ba41589b4bdeb90ef1696e0a5ca1fd32e0a2f0039",
+    "landing_qa_sha256": "2c77ef0a75a21bd8d267ded701f9c24da3933fba604e6c657784a5a3490d1ea4",
+    "comparison_sha256": "d87f407fe1603734c76d4bfe2098d79c59ee2cd207cbe53a449d30f790a04a3c",
+    "package_sha256": "8d25e817d2bcc1e4d72c0f09c34c0e8715df227ba118a1af7b14cbb292f071c5",
+    "package_bytes": 22975185,
+    "zip_crc": "PASS",
+    "location": "Local ChatGPT attachments; scripts, source notices, QA and actual GLB in ZIP; no binary commit"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "SELF_HOLD_NOT_INDEPENDENT",
+    "G3": "LOCAL_GLB_GEOMETRY_AND_MATERIAL_READBACK_PASS",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat narrow-bank or path-only search. Coordinate actual joint landform/landing design under D4; separate native water/material work and rights-cleared riverbed gravel/vegetation after scoped QA. No formal adoption, main merge or new cost."
+}
