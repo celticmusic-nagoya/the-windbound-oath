@@ -1177,7 +1177,7 @@ jobs:
           assert len(values) == 4 and values[:3] == ["0.000"] * 3, values
           value = float(values[-1])
           if sys.argv[2] == "changed":
-              assert 0.10 <= value <= 0.40, value
+              assert 20.0 <= value <= 30.0, value
           else:
               assert value == 0.0, value
           print(json.dumps(dict(values=values, longer=value, phase=sys.argv[2])))
@@ -1204,7 +1204,7 @@ jobs:
                 capture_state geometry-front-changed
                 python3 "$length_check" evidence/geometry-front-changed.txt changed > evidence/geometry-changed.json
                 geometry_views changed
-                "$gui" slider 0.80078125 0.6510416667 0.73828125 0.6510416667 0.6
+                "$gui" slider 0.798828125 0.7083333333 0.73828125 0.7083333333 0.6
                 sleep 3
                 capture_state geometry-front-restored
                 python3 "$length_check" evidence/geometry-front-restored.txt restored > evidence/geometry-restored.json
