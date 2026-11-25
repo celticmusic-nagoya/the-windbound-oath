@@ -44,19 +44,19 @@ concurrency:
   cancel-in-progress: false
 jobs:
   reopen:
-    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && inputs.mode != 'vrm_export'
     name: ${{ matrix.lane }}
-    strategy:
+    strategy: &morwen_worker_strategy
       fail-fast: false
       max-parallel: 3
       matrix:
         lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
-    env:
+    env: &morwen_worker_env
       LANE: ${{ matrix.lane }}
       HAIR_STRAND: ${{ inputs.mode == 'parallel_next' && 'Hair 7' || 'Hair 3' }}
-    steps:
+    steps: &morwen_worker_steps
       - name: Verify automatic launch identity before checkout
         env:
           EXPECTED_MAIN: ${{ inputs.expected_main }}
@@ -532,7 +532,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TRANSFER_FENCE: ${{ inputs.transfer_fence }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
-          PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
           REQUEST_ID: ${{ inputs.request_id }}
           REQUEST_ACTOR: ${{ github.actor_id }}
           PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
@@ -544,8 +543,9 @@ jobs:
           [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
           [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
           test -n "$TRANSFER_ASSET"
-          test -n "$PRIVATE_DROP" && test -d "$PRIVATE_DROP" && test ! -L "$PRIVATE_DROP"
-          test -w "$PRIVATE_DROP"
+          PRIVATE_DROP="$RUNNER_TEMP/morwen-private-transfer"
+          mkdir -m 700 "$PRIVATE_DROP"
+          printf 'PRIVATE_DROP=%s\n' "$PRIVATE_DROP" >> "$GITHUB_ENV"
           python3 -m venv "$RUNNER_TEMP/transfer-venv"
           "$RUNNER_TEMP/transfer-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0
           profile=transfer-control/.github/morwen/vrm-export-profile.json
@@ -556,7 +556,9 @@ jobs:
           drop = pathlib.Path(sys.argv[2]).resolve(strict=True)
           assert approved["source_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
           assert approved["asset_id"] == os.environ["TRANSFER_ASSET"]
-          assert drop.is_absolute() and str(drop) == approved["private_drop"]
+          assert drop.is_absolute() and drop == (pathlib.Path(os.environ["RUNNER_TEMP"]) / "morwen-private-transfer").resolve()
+          assert approved["private_destination"] == "celticmusic-nagoya/the-windbound-oath-handoff"
+          assert approved["staging"] == "RUNNER_TEMP_OWNER_ONLY"
           assert drop.stat().st_mode & 0o077 == 0
           PY
           gh api "repos/$GITHUB_REPOSITORY/issues/comments/$REQUEST_ID" > "$RUNNER_TEMP/transfer-request.json"
@@ -681,7 +683,6 @@ jobs:
           REQUEST_ID: ${{ inputs.request_id }}
           TRANSFER_FENCE: ${{ inputs.transfer_fence }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
-          PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
           HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
@@ -1722,6 +1723,36 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
+- name: Close editor before using protected transfer credential
+        if: success() && inputs.mode == 'vrm_export'
+        shell: bash
+        run: |
+          set -euo pipefail
+          osascript -e 'tell application id "net.pixiv.vroid.macosx" to quit' >/dev/null 2>&1 || true
+          for i in $(seq 1 15); do
+            if ! pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then break; fi
+            sleep 2
+          done
+          if pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then
+            echo PRIVATE_TRANSFER_BLOCKED_EDITOR_STILL_RUNNING
+            exit 1
+          fi
+      - name: Transfer candidate directly to reviewed private handoff
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$MORWEN_PRIVATE_TRANSFER_APPROVED" = true
+          test -n "$DEST_TOKEN"
+          out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py "$out/Morwen-transfer.zip" "$out/private-release-receipt.json"
       - name: Upload review evidence
         if: always() && inputs.mode != 'vrm_export'
         uses: actions/upload-artifact@v4
@@ -1736,3 +1767,18 @@ jobs:
             evidence/face-mouth-candidate-not-adopted.vroid
             evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
+  vrm-export-protected:
+    # A separate job reuses the exact worker steps, not a second engine.
+    # The pre-existing environment is only requested by this reviewed mode.
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' && inputs.mode == 'vrm_export' &&
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    name: VRM export and private transfer
+    strategy: *morwen_worker_strategy
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: two-private-preservation
+    env: *morwen_worker_env
+    steps: *morwen_worker_steps
