@@ -1,0 +1,157 @@
+{
+  "schema": "two.region.river_valley_improvement.v30b",
+  "status": "LOCAL_VALLEY_GEOMETRY_AND_SAMPLED_WATER_PASS_LANDING_AND_LOWER_NORMAL_HOLD",
+  "parent": "b17dca64a609351ea34aefcce434ab3a7fd716c8",
+  "dependencies": {
+    "v29_receipt": "21025320fb12e0929ae85454d16e54f15ecc760d",
+    "v29_glb_sha256": "2fc188aa6961fac96424ecafe793c202fd1f6aca56399f1a45125b750f7a0f5f",
+    "v28_glb_sha256": "cb18018be81531239c1d29814d865a6e771c5927570b0d116c91446edd9619f3",
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "design": {
+    "frame": "provisional metres, analytic A1 reconstruction",
+    "control_points": [
+      [
+        485,
+        -125
+      ],
+      [
+        458,
+        -123
+      ],
+      [
+        430,
+        -151
+      ],
+      [
+        414,
+        -183
+      ],
+      [
+        375,
+        -194
+      ],
+      [
+        350,
+        -211
+      ],
+      [
+        330,
+        -225
+      ]
+    ],
+    "water_m": [
+      18,
+      15.8,
+      13,
+      10,
+      7,
+      5.3,
+      4.3
+    ],
+    "length_m": 199.56195650528406,
+    "sinuosity": 1.0818789881578235,
+    "epa_caragh_sample_median": 1.0856530846366992,
+    "shoulder": "9–24m tapered, actual source untouched",
+    "min_changed_triangle_to_route_proxy_m": 5
+  },
+  "metrics": {
+    "mask": "union of triangles with at least one vertex differing >1e-6 between V29 and V30",
+    "core": {
+      "triangles": 727,
+      "area_m2": 2271.875,
+      "p95_grade_pct": [
+        175.51168609946603,
+        95.14247222167744
+      ],
+      "area_over_100pct_m2": [
+        359.375,
+        84.375
+      ]
+    },
+    "a1": {
+      "triangles": 2229,
+      "area_m2": 6965.625,
+      "p95_grade_pct": [
+        129.4668719181653,
+        69.48479650677578
+      ],
+      "area_over_100pct_m2": [
+        600,
+        0
+      ]
+    },
+    "max_cut_m": {
+      "core": 12.848226903109062,
+      "a1": 12.027936633218236
+    }
+  },
+  "recovery": {
+    "v30a": {
+      "sha256": "643c9ad099299e7279d54afb1380d77a5b0c63e2314ae9843c7a429290398dd4",
+      "failure": "2 upstream water increases up to 0.4417775m; 4 zero-area core water faces after float32"
+    },
+    "v30b": {
+      "change": "extend water-stage support only at source head and quantize/deduplicate before triangulation",
+      "water_samples": 397,
+      "max_downstream_increment_m": -0.0058954222362697095,
+      "uphill_steps": 0,
+      "new_zero_area": 0,
+      "new_nonupward": 0,
+      "inherited_lower_water_nonupward_faces": 1
+    }
+  },
+  "qa": {
+    "vertices": 45395,
+    "triangles": 86702,
+    "shared_ground_seam": {
+      "samples": 61,
+      "max_delta_m": 0
+    },
+    "shared_water_seam": {
+      "samples": 6,
+      "max_delta_m": 0
+    },
+    "lower_water_seam": {
+      "samples": 10,
+      "max_delta_m": 0
+    },
+    "reopen_faces_exact": true,
+    "lower_meshes_exact": true,
+    "shoreline_preexport_residual_m": 3.552713678800501e-15,
+    "landing": {
+      "candidate_dry_nodes": 106,
+      "reachable": 0,
+      "grade_limit_pct": 15,
+      "wet_buffer_m": 1,
+      "target": [
+        380,
+        -230
+      ],
+      "status": "NO_PATH_IN_FINITE_EDGE_GRAPH",
+      "limits": "Mesh edges only; no full-width, shoreline or runtime traversal proof. Stop repeated local-bank tests; area-scale route/landing design remains necessary."
+    }
+  },
+  "outputs": {
+    "glb_sha256": "bcf32a6d1ba71902af240efc6e756e066ee445aa3d6c9990129ed72e1da087c3",
+    "build_sha256": "8a3a023b84574849f8b6bbd509e8be2822df57098a29e2ea115abb8c3fd2537b",
+    "check_sha256": "0e05e65b8bbce80ed7dfc708fc6e27b4c09bd41c127a93c369a463827f97c1fe",
+    "qa_sha256": "b7676760d753b371d1ec0cb4ea4c011c9b7c9fcecf4218f5048590a17c679bc7",
+    "comparison_png_sha256": "1e33a3a614eed730c732b33148121a677a12a54885ccfde58f5adb777a03632a",
+    "package_sha256": "6b971321b8099ec592fad67cd00600c34b54fa66a6e0a73850e937f8399c63a3",
+    "location": "ChatGPT attachments, scripts and rejected diagnostics included, no binary commit"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "SELF_HOLD_NOT_INDEPENDENT",
+    "G3": "PARTIAL_GLB_REOPEN_LOWER_FACE_HOLD",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat narrow-bank regrading. Design area-scale landing access with full-width graded alignment and boundary conditions, fix inherited lower water face in a separate recoverable candidate, then native art/material work after scoped design QA. No main merge or formal adoption."
+}
