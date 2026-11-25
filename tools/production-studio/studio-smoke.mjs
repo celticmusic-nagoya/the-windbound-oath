@@ -275,7 +275,9 @@ try {
  await batchFile.setInputFiles([]);assert.equal(await batchResults.locator('article').count(),0);
  await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
- assert.equal(await page.locator('#projects article').count(),3);
+ // Count project cards only: nested artifact cards are intentional.
+ assert.equal(await page.locator('#projects > article').count(),3);
+ assert.equal(await page.locator('#projects .artifact-results article').count(),1);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
  assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
