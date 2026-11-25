@@ -1,7 +1,7 @@
 """V19 isolated native art study, not final map or full V15C equivalence.
 Preserve V18 object geometry/transforms; change terrain material and canopy lighting,
 place bounded background trees outside reserved corridors using actual mesh bounds."""
-import bpy,sys,math,random,json,hashlib
+import bpy,sys,math,random,json,hashlib,collections
 from pathlib import Path
 from mathutils import Vector
 src,out=map(Path,sys.argv[sys.argv.index('--')+1:]);out.mkdir(parents=True,exist_ok=True)
@@ -42,27 +42,58 @@ def hit(x,y):
 trees=[o for o in scene.objects if o.name.startswith(('V18_T_','V18_D_'))]
 assert len(trees)==75
 templates=[trees[0].data,next(o.data for o in trees if o.name.startswith('V18_D_'))]
-obstacles=[(o.location.x,o.location.y,radius(o)) for o in scene.objects if o.type=='MESH' and o!=terrain]
-rng=random.Random(2026112519);placed=[]
-# Distinct background bands inside existing provisional tile. No extension into adjacent areas.
-for i in range(1800):
+# Separate ground-level contact from canopy overlap. All radii conservatively
+# enclose actual vertices in the relevant height bands, rather than box corners.
+def radial_bounds(o,tree):
+    xyz=[o.matrix_world@v.co for v in o.data.vertices]
+    bottom=min(v.z for v in xyz)
+    all_r=max(math.hypot(v.x-o.location.x,v.y-o.location.y) for v in xyz)
+    root_r=max(math.hypot(v.x-o.location.x,v.y-o.location.y) for v in xyz if v.z<=bottom+1.2) if tree else all_r
+    return all_r,root_r
+def circle_overlap(r,s,d):
+    if d>=r+s:return 0.0
+    if d<=abs(r-s):return 1.0
+    a=math.acos(max(-1,min(1,(d*d+r*r-s*s)/(2*d*r))))
+    b=math.acos(max(-1,min(1,(d*d+s*s-r*r)/(2*d*s))))
+    area=r*r*a+s*s*b-.5*math.sqrt(max(0,(-d+r+s)*(d+r-s)*(d-r+s)*(d+r+s)))
+    return area/(math.pi*min(r,s)**2)
+obstacles=[]
+for o in scene.objects:
+    if o.type!='MESH' or o==terrain:continue
+    tree=o.name.startswith(('V18_T_','V18_D_'))
+    cr,rr=radial_bounds(o,tree)
+    obstacles.append((o.location.x,o.location.y,cr,rr,tree))
+rng=random.Random(2026112519);placed=[];reject=collections.Counter()
+for i in range(3000):
     if len(placed)>=18:break
     if i%2==0:x,y=rng.uniform(25,91),rng.uniform(-94,-70)
     else:x,y=rng.uniform(76,94),rng.uniform(-69,-23)
     m=templates[i%2];s=rng.uniform(1.30,1.80)
-    r=max(math.hypot(v.co.x,v.co.y) for v in m.vertices)*s
-    if x-r< -100 or x+r>100 or y-r< -100 or y+r>0:continue
-    g=protected_gap(x,y,r)
-    if g<.75:continue
-    gap=min(math.hypot(x-a,y-b)-r-rr for a,b,rr in obstacles)
-    if gap<.20:continue
-    p,n=hit(x,y)
-    if n.z<math.cos(math.radians(20)):continue
-    o=bpy.data.objects.new('V19_BG_%02d'%len(placed),m);scene.collection.objects.link(o)
     bottom=min(v.co.z for v in m.vertices)
+    r=max(math.hypot(v.co.x,v.co.y) for v in m.vertices)*s
+    rr=max(math.hypot(v.co.x,v.co.y) for v in m.vertices if v.co.z<=bottom+1.2/s)*s
+    if x-r< -100 or x+r>100 or y-r< -100 or y+r>0:reject['tile_edge']+=1;continue
+    g=protected_gap(x,y,r)
+    if g<.75:reject['protected_full_crown']+=1;continue
+    gap=min(math.hypot(x-a,y-b)-rr-oroot for a,b,oc,oroot,tree in obstacles)
+    if gap<.20:reject['ground_footprint']+=1;continue
+    overlap=max((circle_overlap(r,oc,math.hypot(x-a,y-b)) for a,b,oc,oroot,tree in obstacles if tree),default=0)
+    if overlap>.35 or any(math.hypot(x-a,y-b)<4 for a,b,oc,oroot,tree in obstacles if tree):reject['tree_canopy']+=1;continue
+    p,n=hit(x,y)
+    if n.z<math.cos(math.radians(20)):reject['slope']+=1;continue
+    o=bpy.data.objects.new('V19_BG_%02d'%len(placed),m);scene.collection.objects.link(o)
     o.location=(x,y,p.z-bottom*s-.02);o.scale=(s,)*3;o.rotation_euler.z=rng.uniform(0,2*math.pi)
-    obstacles.append((x,y,r));placed.append(dict(name=o.name,location=list(o.location),scale=s,yaw=o.rotation_euler.z,protected_gap=g,obstacle_gap=gap,ground_z=p.z))
-assert len(placed)>=4,len(placed)
+    # Sample actual low root vertices against the triangular terrain, reject excessive burial/gap.
+    bpy.context.view_layer.update()
+    root=[o.matrix_world@v.co for v in m.vertices if v.co.z<=bottom+.12/s]
+    residual=[v.z-hit(v.x,v.y)[0].z for v in root]
+    if not residual or min(residual)<-.20 or min(abs(a) for a in residual)>.04:
+        bpy.data.objects.remove(o,do_unlink=True);reject['root_contact']+=1;continue
+    obstacles.append((x,y,r,rr,True));placed.append(dict(name=o.name,location=list(o.location),scale=s,yaw=o.rotation_euler.z,protected_gap=g,obstacle_gap=gap,crown_circle_overlap=overlap,min_root_residual=min(residual),nearest_root_abs=min(abs(a) for a in residual),ground_z=p.z))
+# A zero-placement result is an explicit background HOLD, not a production PASS.
+# It must not block the independent terrain/leaf material study.
+(out/'background_preflight.json').write_text(json.dumps(dict(status='PASS_CANDIDATE' if len(placed)>=4 else 'HOLD_INSUFFICIENT_BACKGROUND_PLACEMENTS',count=len(placed),rejections=dict(reject),placements=placed),indent=2)+'\n')
+print('V19B background preflight',len(placed),dict(reject))
 # Native vertex-color modulation of the original photo ground. No terrain geometry or UV changes.
 me=terrain.data
 c=me.color_attributes.new(name='V19_ground_color',type='FLOAT_COLOR',domain='POINT')
@@ -108,6 +139,6 @@ assert all(geom(bpy.data.objects[n])==v for n,v in originals.items())
 for i in range(2):
     camera(i);scene.render.filepath=str((out/('forest_v19_view_%d.png'%(i+1))).resolve());bpy.ops.render.render(write_still=True)
 assert sha(src)==lock
-q=dict(status='NATIVE_ART_STUDY_NOT_ADOPTED',source_sha256=lock,blender=bpy.app.version_string,before=before,after=after,original_mesh_geometry_transforms_exact=len(originals),ground_color_vertices=len(me.vertices) if False else len(bpy.data.objects['A3 provisional reconstructed terrain'].data.vertices),leaf_materials=sorted(set(leaf)),background_trees=placed,views=views,limitations=['Original V18 subset, no exact V15C transfer; conservative bounding circle clearance, not collision/navmesh; foreground incomplete; nonphysical low-energy leaf fill; no independent G2 or Android.'])
+q=dict(status='NATIVE_ART_STUDY_NOT_ADOPTED',source_sha256=lock,blender=bpy.app.version_string,before=before,after=after,original_mesh_geometry_transforms_exact=len(originals),ground_color_vertices=len(me.vertices) if False else len(bpy.data.objects['A3 provisional reconstructed terrain'].data.vertices),leaf_materials=sorted(set(leaf)),background_trees=placed,background_status='PASS_CANDIDATE' if len(placed)>=4 else 'HOLD_INSUFFICIENT_BACKGROUND_PLACEMENTS',background_rejections=dict(reject),views=views,limitations=['Original V18 subset, no exact V15C transfer; separate root circles and full-crown reservation; overlap is conservative planar proxy, not collision/navmesh; foreground incomplete; nonphysical low-energy leaf fill; no independent G2 or Android.'])
 q['sha256']={p.name:sha(p) for p in out.iterdir() if p.suffix in ('.png','.blend')}
 (out/'qa.json').write_text(json.dumps(q,indent=2)+'\n');print(q)
