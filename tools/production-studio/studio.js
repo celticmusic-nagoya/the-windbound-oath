@@ -156,7 +156,35 @@ loadAreaBlueprints();
   plotNote.textContent="配置点 "+points.length+"/8（番号は下の一覧）。同一点 "+[...groups.values()].filter(g=>g.length>1).length+" 箇所。地形・境界・接続・衝突は未検証。方向線はローカル+X軸の向き。";
  }
  const valid=(v,k)=>v===null||(typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=(k==="yaw_deg"?360:1000000));
- function render(){summary.replaceChildren();rows.forEach((r,i)=>{const l=node("li",(i+1)+". "+names[i]+": "+fields.map(k=>r[k]===null?"未設定":String(r[k])).join(" / "));summary.append(l);});status.textContent="配置案 revision "+revision+" / "+rows.filter(r=>fields.every(k=>r[k]!==null)).length+"/8 エリア入力済み / PROVISIONAL・未検証";overview();}
+ // Manual, provisional anchor pair: never infer a physical connection from story adjacency.
+ const anchorPanel=node("details","");anchorPanel.id="placement-anchor-check";
+ anchorPanel.append(node("summary","接続アンカーの位置誤差検査"),node("p","対応する2点のエリア内ローカル座標を入力。単位m、配置案の平行移動とZ回転を適用。接続の正式採用・面の継ぎ目・衝突は判定しません。"));
+ const anchorNumber=(parent,label,nonnegative=false)=>{const l=node("label",label),input=node("input","");input.type="number";input.step="any";input.min=nonnegative?"0":"-1000000";input.max="1000000";input.style.maxWidth="100%";input.setAttribute("aria-label",label);l.append(input);parent.append(l);return input;};
+ const sides=["A","B"].map((side,i)=>{const group=node("fieldset","");group.style.minWidth="0";group.append(node("legend","アンカー "+side));const select=node("select","");select.setAttribute("aria-label","アンカー "+side+" エリア");ids.forEach((id,j)=>{const o=node("option",names[j]);o.value=String(j);select.append(o);});select.value=String(i);group.append(select);const xyz=["X","Y","Z"].map(axis=>anchorNumber(group,side+" local "+axis+" (m)"));anchorPanel.append(group);return {select,xyz};});
+ const tolerance=anchorNumber(anchorPanel,"許容誤差 t (m)",true),uncertainty=anchorNumber(anchorPanel,"合成不確かさ u (m)",true);
+ const anchorResult=node("div","");anchorResult.id="anchor-result";anchorResult.setAttribute("role","status");anchorPanel.append(anchorResult);
+ function numberFrom(input){return input.value!==""&&!input.validity.badInput&&input.validity.valid&&Number.isFinite(input.valueAsNumber)?input.valueAsNumber:null;}
+ function anchors(){
+  anchorResult.replaceChildren();delete anchorResult.dataset.verdict;
+  const indices=sides.map(s=>Number(s.select.value));
+  if(indices[0]===indices[1]){anchorResult.textContent="別の2エリアを選択してください。";return;}
+  const local=sides.map(s=>s.xyz.map(numberFrom));
+  const placements=indices.map(i=>rows[i]);
+  if(local.some(v=>v.some(x=>x===null))||placements.some(p=>fields.some(k=>p[k]===null))){anchorResult.textContent="BLOCKED：両方の配置XYZ・回転とローカルアンカーXYZが必要です。";return;}
+  const world=placements.map((p,i)=>{const [x,y,z]=local[i],a=p.yaw_deg*Math.PI/180;return [p.x_m+x*Math.cos(a)-y*Math.sin(a),p.y_m+x*Math.sin(a)+y*Math.cos(a),p.z_m+z];});
+  const delta=world[1].map((v,i)=>v-world[0][i]),r=Math.hypot(...delta),t=numberFrom(tolerance),u=numberFrom(uncertainty);
+  const fmt=x=>Number(x.toPrecision(10)).toString();
+  anchorResult.append(node("p","配置 revision "+revision+" / A: "+world[0].map(fmt).join(", ")+" m / B: "+world[1].map(fmt).join(", ")+" m"),node("p","差分 B−A: "+delta.map(fmt).join(", ")+" m / 3D残差 r: "+fmt(r)+" m"));
+  if(t===null||u===null){anchorResult.append(node("p","BLOCKED：許容誤差・合成不確かさを入力してください。"));return;}
+  // Roundoff guard conservatively holds near the decision boundary.
+  const eps=64*Number.EPSILON*Math.max(1,...world.flat().map(Math.abs),r,t,u);
+  const verdict=r+u<t-eps?"PASS":r-u>t+eps?"OUTSIDE":"HOLD";
+  anchorResult.dataset.verdict=verdict;
+  anchorResult.append(node("p",verdict+"（入力値に対する暫定位置検査のみ） / r+u="+fmt(r+u)+" m / r−u="+fmt(r-u)+" m / t="+fmt(t)+" m"),node("p","境界付近は丸め誤差を考慮してHOLD。入力不確かさは独立検証されていません。G1〜G4とは別判定です。"));
+ }
+ for(const input of [...sides.flatMap(s=>[s.select,...s.xyz]),tolerance,uncertainty])input.addEventListener("input",anchors);
+
+ function render(){summary.replaceChildren();rows.forEach((r,i)=>{const l=node("li",(i+1)+". "+names[i]+": "+fields.map(k=>r[k]===null?"未設定":String(r[k])).join(" / "));summary.append(l);});status.textContent="配置案 revision "+revision+" / "+rows.filter(r=>fields.every(k=>r[k]!==null)).length+"/8 エリア入力済み / PROVISIONAL・未検証";overview();anchors();}
  function show(){inputs.forEach((input,i)=>input.value=rows[current][fields[i]]??"");render();}
  function commit(){const vals=inputs.map(input=>input.value===""?null:input.valueAsNumber);if(inputs.some(input=>input.validity.badInput)||vals.some((v,i)=>!valid(v,fields[i]))){status.textContent="入力範囲外または不正値。配置案は変更していません。";return false;}if(vals.some((v,i)=>v!==rows[current][fields[i]])){fields.forEach((k,i)=>rows[current][k]=vals[i]);revision++;}render();return true;}
  choose.addEventListener("change",()=>{if(!commit()){choose.value=String(current);return;}current=Number(choose.value);show();});
@@ -164,7 +192,7 @@ loadAreaBlueprints();
  const exportButton=node("button","配置案JSONを書き出す");exportButton.type="button";exportButton.onclick=()=>{if(!commit())return;const data={schema,status:"PROVISIONAL",source_blob:source,coordinate_contract:{axes:"X east Y north Z up",unit:"metre",origin:null,yaw:"degrees_ccw_about_positive_z"},revision,areas:rows};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=node("a","");a.href=url;a.download="two-provisional-placement-r"+revision+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  const label=node("label","配置案JSONを読み込む");const file=node("input","");file.type="file";file.accept=".json,application/json";file.id="placement-import";label.htmlFor=file.id;
  file.addEventListener("change",async()=>{const g=++generation, selected=file.files[0];if(!selected)return;try{if(selected.size>65536)throw Error("64KiB上限");const data=JSON.parse(await selected.text());if(g!==generation)return;const c=data?.coordinate_contract;if(data?.schema!==schema||data.status!=="PROVISIONAL"||data.source_blob!==source||c?.axes!=="X east Y north Z up"||c.unit!=="metre"||c.origin!==null||c.yaw!=="degrees_ccw_about_positive_z"||!Number.isSafeInteger(data.revision)||data.revision<0||data.revision>=Number.MAX_SAFE_INTEGER-1||!Array.isArray(data.areas)||data.areas.length!==ids.length||!ids.every(id=>data.areas.filter(r=>r?.id===id).length===1))throw Error("配置契約・参照元不一致");const next=ids.map(id=>{const r=data.areas.find(x=>x.id===id);if(!fields.every(k=>valid(r[k],k)))throw Error("座標形式不正");return Object.fromEntries([["id",id],...fields.map(k=>[k,r[k]])]);});rows=next;revision=data.revision;show();}catch(e){if(g===generation)status.textContent="配置案読込失敗: "+e.message;}});
- panel.append(apply,exportButton,label,file,status,plot,plotNote,summary);
+ panel.append(apply,exportButton,label,file,status,plot,plotNote,summary,anchorPanel);
  const link=node("a","設計担当PR #482・原本確認");link.href="https://github.com/"+repo+"/pull/482";panel.append(link);byId("area-blueprints").append(panel);show();
 })();
 
