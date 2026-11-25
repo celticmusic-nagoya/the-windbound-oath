@@ -10,3 +10,6 @@ Complete the relevant measured blueprint before precision editing. Use qualified
 Two same-cause failures or unchanged next steps require causal reassessment and safe remediation or independent deliverable. Preserve originals, checkpoints and failure evidence. c/ok advances approved reversible work. No direct main commits, unreviewed merges, forced reclaim, destructive deletion, canon/protected changes, formal adoption, new publication or added costs without applicable authorization. Report actual outputs and concrete blockers. Monitor meaningful changes only.
 ## Precedence
 This policy clarifies administrative scope and infrastructure dependencies in existing policies; all technical safety, canon, acceptance and approval requirements remain. Existing scoped policies and delivery closure apply. No runtime capability is certified by this revision.
+
+## Transition verification
+See the [migration ledger](PRODUCTION_FIRST_V5_MIGRATION.md) for source coverage, automated checks and outstanding qualification. All existing registered policies remain active during migration.
