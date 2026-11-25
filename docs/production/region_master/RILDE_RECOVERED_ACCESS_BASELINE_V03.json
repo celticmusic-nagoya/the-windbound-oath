@@ -1,0 +1,102 @@
+{
+  "schema": "two.region.recovered_access_baseline.v03",
+  "parent": "a72e31487f90d40daf292e06e81c308a1eb1e8b3",
+  "status": "RECONSTRUCTED_V03_NOT_BYTE_IDENTICAL_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "core_v01": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "expansion_v02": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "access_v03": "250c61114b4779b6349bfbc3c4f6ae2eeacb9b9a",
+    "harbor_v08": "44d642692d296a71d70d31c1ec20b32f50c5d0e0",
+    "terrain_recovery": "a9ebd0569ef2626c82be8a17c26477cd77229a30"
+  },
+  "source_classification": {
+    "exact_individual_v02": [
+      "MOSS_FOREST_A1",
+      "MOSS_FOREST_A2",
+      "MOSS_FOREST_A3",
+      "IF07_FORT_CONNECTOR",
+      "DUNVAR_FORTRESS",
+      "RIVER_WATER_CLIPPED"
+    ],
+    "exact_individual_v03": [
+      "EAST_RIVER_BRIDGE isolated GLB, 3 meshes"
+    ],
+    "reconstructed_v01_not_byte_identical": [
+      "RILDE_VILLAGE",
+      "COASTAL_MEADOW",
+      "RIVER_CORRIDOR",
+      "IF01_CLIFF_CONNECTOR",
+      "IF03_RIVER_CONNECTOR"
+    ],
+    "north_regrade": "replayed V03 operation from original source script, metrics match recorded pre-export; final combined GLB does not match original V03 SHA",
+    "cg": "Git blob request UnicodeDecodeError on binary; official image not viewed this turn"
+  },
+  "outputs": {
+    "reconstructed_v03_sha256": "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "expected_original_v03_sha256": "6f24df182e23ddd2bcbe784e13715c10c4b10042409d534ba6c11ca02fe7c77f",
+    "replay_match": true,
+    "preview_sha256": "9a48e70ff78ffeea6794b404c923e4e9dae6fbc81833140135b8e4cba38f8b4b",
+    "local_repro_zip_sha256": "4fa5010db37b2e083c04353c809f6fa78cf65a34582a61afed7843a5f832d0be",
+    "binary_delivery": "local attachments, not stored in GitHub"
+  },
+  "script_blobs": {
+    "recover_tiles": "d6e0ef8f4bb0b5effef7cbb929ad37e85e83baf0",
+    "recover_water": "483645dae0398b00146c48d037acb153a3653055",
+    "assemble_recovery": "936a0757cef1a13fb38ccfdac07abc8ef7210caa",
+    "restore_access": "3682a981ab50fb3ca622149a9499ec4624e04beb",
+    "recover_bridge": "1c9d3c1d31dde0e3fffc0ecc5dd7cb084d999f96"
+  },
+  "execution": "Fresh scratch directory from local reproduction ZIP; ran 5 Python scripts, compared final GLB bytes with original recovery output; actual byte match. No Blender or Actions.",
+  "runtime": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "trimesh": "4.11.1"
+  },
+  "checks": {
+    "geometries": 14,
+    "vertices": 61783,
+    "triangles": 119831,
+    "protected_meshes_relative_to_recovery_baseline": 12,
+    "changed": [
+      {
+        "id": "DUNVAR_FORTRESS",
+        "changed_vertices": 4040,
+        "max_abs_delta_m": 7.3142897538754
+      },
+      {
+        "id": "IF07_FORT_CONNECTOR",
+        "changed_vertices": 1470,
+        "max_abs_delta_m": 7.525036180030106
+      }
+    ],
+    "north_seam_samples": 42,
+    "north_seam_max_delta_m": 0,
+    "grade_samples": 3603,
+    "grade_percent": 11.893463134765625,
+    "cross_grade_percent": 0.9097290039063566
+  },
+  "design": {
+    "D0": "PARTIAL_ORIGINAL_CG_AND_COMBINED_GLBS_UNAVAILABLE",
+    "D1": "PARTIAL_RECOVERY",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_RECOVERY",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "V01 source colors are provisional. Original bytes and canonical transform remain unverified.",
+    "Not complete terrain coverage: no actual harbor, coastal cliff, river mouth, vegetation or building geometry. No V04 bridge patch integrated.",
+    "Protected mesh comparison is relative to reconstructed baseline, not the original V03.",
+    "No Blender, independent art/design QA or runtime tests; no formal adoption or main merge."
+  ],
+  "next": "Use isolated recovered baseline for measured harbor and bridge interface design and D4 review; don't mislabel it as original. Pursue source CG retrieval through authorized binary route. No further plan-only loops."
+}
