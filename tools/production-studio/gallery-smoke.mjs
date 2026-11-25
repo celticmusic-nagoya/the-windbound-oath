@@ -111,6 +111,21 @@ try{
  await page.unroute('**/gallery-manifest.json');
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+ // Project-to-gallery and back: use existing category filters and focus actual target.
+ await page.waitForFunction(()=>document.querySelector('#project-cliff'));
+ const cliffProject=page.locator('#project-cliff');
+ await cliffProject.getByRole('button',{name:'この領域の成果物を見る',exact:true}).click();
+ assert.ok((await page.locator('#published-status').innerText()).includes('風待ちの崖'));
+ assert.equal(await page.locator('#published-gallery article').count(),manifest.entries.filter(e=>categoryOf(e)==='cliff').length);
+ assert.equal(await page.locator('#published-title').evaluate(e=>document.activeElement===e),true);
+ await page.getByRole('button',{name:'この領域の制作状況へ',exact:true}).click();
+ assert.equal(await cliffProject.locator('h3').evaluate(e=>document.activeElement===e),true);
+ await page.locator('#project-morwen').getByRole('button',{name:'この領域の成果物を見る',exact:true}).click();
+ assert.ok((await page.locator('#published-status').innerText()).includes('モルウェン'));
+ await page.getByRole('button',{name:'この領域の制作状況へ',exact:true}).click();
+ assert.equal(await page.locator('#project-morwen h3').evaluate(e=>document.activeElement===e),true);
+ await page.getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'project navigation mobile overflow');
  // Global recent view and exact independent QA/adoption filters.
  await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
  const allTiles=page.locator('#published-gallery article');
