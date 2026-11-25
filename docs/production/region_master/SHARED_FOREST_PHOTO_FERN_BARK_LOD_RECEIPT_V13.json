@@ -1,0 +1,186 @@
+{
+  "schema": "two.region.forest_photo_fern_bark_lod.v13",
+  "parent": "10b8783bd8b22325a6894d9c3ab5608404430efd",
+  "status": "VERIFIED_PHOTO_FERN_BARK_AND_FIXED_LOD_CANDIDATE_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v12": "800c307ea4cd09f179e1c24d591b50ab539ca4e5",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "v12b_scene_sha256": "0149abf289aedfe9d6d646810e544e950575f5a546c431821aa012e639c7f000"
+  },
+  "acquisition": {
+    "assets": [
+      {
+        "name": "Fern 02",
+        "page": "https://polyhaven.com/a/fern_02",
+        "authors": [
+          "Rico Cilliers (modeling)",
+          "Rob Tuytel (scanning)"
+        ],
+        "license": "CC0"
+      },
+      {
+        "name": "Jolcham Oak Bark 01",
+        "page": "https://polyhaven.com/a/jolcham_oak_bark_01",
+        "authors": [
+          "Charlotte Baglioni"
+        ],
+        "license": "CC0",
+        "provider_height_m": 2
+      }
+    ],
+    "workflow_blob": "839a08d04ac3c41e5508ed580fcc5f55406b423a",
+    "script_blob": "006645f5d78ddff4e132d7641d4d21907ed86077",
+    "archives": [
+      {
+        "run": 45620722818,
+        "head": "d62d7f58e61f82f5a5e4726489e8053680695c07",
+        "artifact": 15023783357,
+        "sha256": "620d6f222d3b4613f7140c47342b973fe603125de4cc387492d47269f3420343",
+        "expires": "2026-12-09T13:11:39Z",
+        "files": 8,
+        "conclusion": "success"
+      },
+      {
+        "run": 45621380185,
+        "head": "10b8783bd8b22325a6894d9c3ab5608404430efd",
+        "artifact": 15024936587,
+        "sha256": "05cb8bcc0edf09943b21e6af6207e2eb1825b3c9c2268754f210f070b5218a0d",
+        "expires": "2026-12-09T13:15:01Z",
+        "files": 1,
+        "conclusion": "success"
+      }
+    ],
+    "verified_sha_md5_size_crc": "9/9 PASS",
+    "source_rows": [
+      {
+        "path": "fern_02/fern_02_1k.gltf",
+        "sha256": "33974295ee19670af4877705fc7d91f33f42d6302f0d44a625e072271223031f"
+      },
+      {
+        "path": "fern_02/fern_02.bin",
+        "sha256": "fe1abb762bcbbc7ad9e86925c8080437a62add257d9280e9142fdc85c226e64c"
+      },
+      {
+        "path": "fern_02/textures/fern_02_arm_1k.jpg",
+        "sha256": "ebfb5d76ce9cbdaec20bcd22dce9b755f0b1b8650ef29ca13555e3e6961025d7"
+      },
+      {
+        "path": "fern_02/textures/fern_02_diff_1k.jpg",
+        "sha256": "a828a6e7b4c01c826911e2eac4b3afc7457dab7b3b392a31c681ed88b7d50029"
+      },
+      {
+        "path": "fern_02/textures/fern_02_nor_gl_1k.jpg",
+        "sha256": "45bce132c6e96a0864bc89ab5da51361ab3f4afa83a6669ae499ab5ca811f621"
+      },
+      {
+        "path": "fern_02/textures/fern_02_alpha_1k.png",
+        "sha256": "ea3c64284c7ebdeedf484d2d816eae92825ec526140c3bb83859ddc7a64001f9"
+      },
+      {
+        "path": "jolcham_oak_bark_01/jolcham_oak_bark_01_diff_2k.jpg",
+        "sha256": "2eb8d1e79a64827ad70b20bc80bec2171494a442310099ac88d15970a46e6c5f"
+      },
+      {
+        "path": "jolcham_oak_bark_01/jolcham_oak_bark_01_nor_gl_2k.jpg",
+        "sha256": "f0c17caeafb7aad681e7a376e754ed1593a6bf61acc0bc71a45d9850f29e2ae3"
+      },
+      {
+        "path": "jolcham_oak_bark_01/jolcham_oak_bark_01_arm_2k.jpg",
+        "sha256": "81a8da5f51e92c5d82248800bb1860720c68338bf54d2505086ce2cb479aa0f5"
+      }
+    ],
+    "note": "New source acquisition through existing scoped workflow; RGB JPEG provided for alpha-mask glTF; targeted second run fetched only exact metadata-locked alpha PNG. No duplicate recovery."
+  },
+  "lod": {
+    "source_triangles": 41046,
+    "lod1_triangles": 20522,
+    "lod2_triangles": 10261,
+    "bidirectional_samples_per_direction": 10000,
+    "lod1_sampled_max_m": 0.006238162929997691,
+    "lod2_sampled_max_m": 0.011093670602366087,
+    "lod1_p95_m": 0.0017300906019650751,
+    "lod2_p95_m": 0.0036087758997831007,
+    "new_degenerate_faces": 0,
+    "scene_before": 846465,
+    "fixed_lod2_scene": 754110,
+    "removed": 92355,
+    "stump_contact_preserved": true,
+    "nonstump_decoded_geometry_transforms_exact": true,
+    "limitation": "Sampled distances, not certified Hausdorff; fixed LOD2, retains LOD0 buffer. Not device performance or file-size improvement. Initial reopen comparison found generated trimesh names non-deterministic; replaced with actual geometry/transform fingerprint multiset comparison, PASS."
+  },
+  "bark": {
+    "tree_instances": 75,
+    "unique_meshes": 7,
+    "source_maps_size": [
+      2048,
+      4096
+    ],
+    "original_uv_degenerate": true,
+    "projection": "Dominant-axis planar chart, approximate tile dimensions at 1.8x instance scale; exact source diffuse, normal, ARM textures; original vertex colors detached from bark only. Duplicated triangle corners for UV/tangent, exact triangle positions and placement.",
+    "new_uv_degenerate_faces": 0,
+    "min_projection_area_ratio": 0.5872663220186001,
+    "triangles_unchanged": true,
+    "limit": "Chart seams and texel scale not calibrated; no anatomically improved branch morphology; original materials preserved. CPU basecolor comparison only."
+  },
+  "fern": {
+    "unique_meshes": 4,
+    "source_triangles": [
+      2384,
+      2248,
+      784,
+      816
+    ],
+    "placements": 48,
+    "alpha_coverage_at_half": 0.15347671508789062,
+    "alpha_nonbinary_fraction": 0.03996467590332031,
+    "minimum_protected_gap_m": 0.7675317091543308,
+    "minimum_obstacle_gap_m": 0.12798934021557754,
+    "maximum_sampled_root_burial_m": 0.10428084567156048,
+    "max_nearest_root_abs_m": 0.0009323129483682635,
+    "triangle_count": 828894,
+    "scene_bytes": 47340332,
+    "reopen_geometry_nodes": 600,
+    "source_buffers_and_metadata_preserved": true,
+    "alpha_fix": "Exact source RGB plus separate 16-bit alpha quantized to 8-bit PNG; original textures and binary retained. 4 variants x 12 each, seeded placement."
+  },
+  "outputs": {
+    "lod1_sha256": "a8464413124b9f1420f9dcd6ed172c876679101b6b3d87762926d4da91d1494b",
+    "lod2_sha256": "37937fd013b3bce108e121097f9a1c63908d2d2158c35f807127a043503e37a5",
+    "lod_comparison_sha256": "0d94dad7691fb4ba882bc207e8862d227e27bb3525196b2205076a37f4ddf60f",
+    "fixed_lod2_scene_sha256": "a5cc4ecd0f74cdaf41c2c74f6c2a2ac2e62070ea761a7c3cacead388283dc5c0",
+    "lod_qa_sha256": "389e76233a13290679ac335513ea3faf8a088bf387e1a2a0dc3bc7bb3cc93ae0",
+    "scene_lod_qa_sha256": "baa39f77e3d17dcdc5a8fd0df69e102aa923334fa8e441d41999eb685681fbec",
+    "perspective_qa_sha256": "077830740c2a491bd26f3743338b98ded0fe4aa629fb4fd5562f4f7e8baf0add",
+    "bark_scene_sha256": "baee62a175ce69b5f8c989c9fd467f6e82f321711d0d41af576806e01d0cd52e",
+    "bark_comparison_sha256": "0b253a5a43b428e6d87d1c77cd6891e477d529b9510beb981e64cbcb8f64dd20",
+    "bark_qa_sha256": "e4a1db9a23ca3b765784b5ebb71239824091515be7f08ee50b6314baffc5e1be",
+    "fern_library_sha256": "2e6c1003a729a6230116fcab1819b8099cee9ae6473ee63a443466a8091e36eb",
+    "fern_rgba_sha256": "4776104a0a467a00939b869043d3bf1cd7d557a3cb53558f9ce7ea2e21108a17",
+    "final_scene_sha256": "f105dd10841464b732c9655faa1b9b895e9e0ecc44e2d52f5ffb7145f6b20ffd",
+    "fern_qa_sha256": "47b03752b9741b058a63659574f2c356fbed9980638bd439b78f37b7fce719b8",
+    "final_preview_sha256": "4d00bfa28768779eedbeabacf88f7bb35a9d7d3c252a0578ac55d6cf005bc687",
+    "preview_qa_sha256": "6722cc98a7f238738cfd82e6ccaee1990cabf704971e95befe642cb25806dae0",
+    "local_reproduction_zip_sha256": "e4f1ec9efdbe79bca885fdcc5db0c060daa8059b6b036ee27dda62f46f45213b",
+    "local_reproduction_manifest_sha256": "6b9fb42ab85a58e5b996e1d34a8d3297e6c31e8102675272db05a07f5993a3ad",
+    "delivery": "Source archives in authenticated Actions; intake script/workflow and this receipt in PR. Local GLBs, render PNGs and reproduction code/QA ZIP only; no local binary or study code committed."
+  },
+  "execution": "Actual local VTK quadric reduction with UV/normal attributes and bidirectional nearest-surface samples. Actual Python GLB assembly, original buffers retained, reopened and measured. True perspective CPU renderer with near-plane clipping, perspective-correct UV, depth and alpha, bilinear sample, directional vertex-normal light and authored distance fog. Inspected matched stump two-view comparison, three recorded/derived low viewpoints, matched bark closeup, two final fern viewpoints. Scripts py_compile PASS. Actual source intake Actions success; no Blender native rendering.",
+  "art_review": "Self review HOLD. Bark readable relative to untextured source; fern silhouettes visible in two views (5791,6558 pixels). Forest still too open at gate and near path, scattered rather than rich floor colonies, primitive branch geometry, flat light, no shadow or hero tree. No independent G2. Do not conflate increased detail with completion.",
+  "next": "Obtain independent source-grounded composition/blueprint review; prioritize path-edge understory colonies with explicit walkable exclusion, actual native Blender lighting and shadows, old-tree morphology and true UV unwrap. Compact duplicate buffers and texture memory after visual acceptance; actual runtime LOD and Android device testing.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_SCENE_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT_SELF_HOLD",
+    "G3": "PARTIAL_SOURCE_ASSEMBLY_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}
