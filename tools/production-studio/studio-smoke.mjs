@@ -150,6 +150,25 @@ try {
  await input.setInputFiles(jsonFile('new-revision.json',saved));
  await page.waitForFunction(()=>document.querySelector('#anchor-batch-status').textContent.includes('REJECTED 5'));
  assert.equal(await batchResults.locator('[data-verdict="PASS"]').count(),0);
+ // Explicit comparison allows an older baseline only in comparison mode.
+ const compareMode=page.locator('#anchor-batch-compare');
+ await compareMode.check();
+ await page.waitForFunction(()=>document.querySelector('#anchor-batch-status').textContent.includes('基準→現在の比較'));
+ const invalidBaseline=structuredClone(receipt);invalidBaseline.anchors[0].placement.yaw_deg=999;
+ await batchFile.setInputFiles([jsonFile('baseline.json',{...receipt,residual_m:999,verdict:'PASS'}),jsonFile('invalid-baseline.json',invalidBaseline)]);
+ await page.waitForFunction(()=>document.querySelector('#anchor-batch-status').textContent.includes('REJECTED 1'));
+ assert.ok((await batchResults.innerText()).includes('基準 r4: HOLD / 3 m → 現在 r5: HOLD / 3 m'));
+ assert.equal(await batchResults.locator('[data-trend="差を確定できない"]').count(),1);
+ const height=placement.getByRole('spinbutton',{name:'Z 上 (m)',exact:true});
+ await height.fill('2');
+ assert.equal(await batchResults.locator('article').count(),0);
+ await placement.getByRole('button',{name:'配置案に反映',exact:true}).click();
+ assert.ok((await batchResults.innerText()).includes('基準 r4: HOLD / 3 m → 現在 r6: PASS / 1 m'));
+ assert.equal(await batchResults.locator('[data-trend="減少"]').count(),1);
+ await height.fill('');await placement.getByRole('button',{name:'配置案に反映',exact:true}).click();
+ assert.ok((await batchResults.innerText()).includes('現在配置のXYZ・回転が未設定'));
+ await compareMode.uncheck();
+ assert.equal(await batchResults.locator('[data-verdict="REJECTED"]').count(),2);
  await batchFile.setInputFiles([]);assert.equal(await batchResults.locator('article').count(),0);
  await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
