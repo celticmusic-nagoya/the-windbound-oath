@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Choose one mode (front_frame is the current production step)"
+        description: "Choose one mode (hair_candidate is the current production step)"
         type: choice
         required: true
-        default: front_frame
+        default: hair_candidate
         options:
+          - hair_candidate
           - front_frame
           - reopen_only
           - native_calibration
@@ -35,10 +36,11 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -50,7 +52,7 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ]; then
+          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ] || [ "$HAIR_PROBE" = true ]; then
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
@@ -194,6 +196,7 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -391,6 +394,8 @@ jobs:
               echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
               exit 1
             fi
+          elif [ "$HAIR_PROBE" = true ]; then
+            : # Skip previous framing and iris tests.
           else
             MORWEN_CAPTURE_MODE=rear-only
             source tools/production_qa/morwen_readonly_capture.sh
@@ -480,8 +485,156 @@ jobs:
           PY
             echo CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ART_QA > evidence/native-probe-status.txt
           fi
+          if [ "$HAIR_PROBE" = true ]; then
+            echo HAIR_CONTROL_NOT_YET_VERIFIED > evidence/hair-author-status.txt
+            row="$RUNNER_TEMP/face-row"
+            sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
+            bash -n "$RUNNER_TEMP/session-helpers.sh"
+            source "$RUNNER_TEMP/session-helpers.sh"
+            select_strand() {
+              local tag="$1" expected="$2"
+              "$gui" vroid-shortcut hair >&2 || return 1
+              sleep 3
+              capture_state "$tag-tab" >&2 || return 1
+              grep -Fq "$expected" "evidence/$tag-tab.txt" || return 1
+              grep -Fq 'Hairstyle Sets' "evidence/$tag-tab.txt" || return 1
+              "$gui" click 0.023 0.231 >&2 || return 1
+              sleep 2
+              capture_state "$tag-category" >&2 || return 1
+              grep -Fq 'Front' "evidence/$tag-category.txt" || return 1
+              "$gui" click-label "evidence/$tag-category.png" 'Edit Hairstyle' 'Edit Hair Bounce' >&2 || return 1
+              sleep 3
+              capture_state "$tag-editor" >&2 || return 1
+              grep -Fq 'Freehand Group 1' "evidence/$tag-editor.txt" || return 1
+              grep -Fq 'Hair Groups' "evidence/$tag-editor.txt" || return 1
+              grep -Fq 'Edit Preset' "evidence/$tag-editor.txt" || return 1
+              "$gui" vroid-shortcut hair-select >&2 || return 1
+              "$gui" click 0.0713 0.3997 >&2 || return 1
+              sleep 2
+              capture_state "$tag-group" >&2 || return 1
+              grep -Fq 'Freehand Guides' "evidence/$tag-group.txt" || return 1
+              grep -Fq 'Hair 3' "evidence/$tag-group.txt" || return 1
+              grep -Fq 'Front' "evidence/$tag-group.txt" || return 1
+              if "$row" "evidence/$tag-group.png" '^Width$' >/dev/null 2>&1; then return 1; fi
+              "$gui" click-label "evidence/$tag-group.png" 'Hair 3' 'Freehand Guides' >&2 || return 1
+              sleep 2
+              capture_state "$tag-selected" >&2 || return 1
+              grep -Fq 'Hair 3' "evidence/$tag-selected.txt" || return 1
+              grep -Fq 'Hair Groups' "evidence/$tag-selected.txt" || return 1
+              "$row" "evidence/$tag-selected.png" '^Width$'
+            }
+            test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            if ! hit=$(select_strand hair-before Morwen-resume.vroid); then
+              echo BLOCKED_SINGLE_STRAND_WIDTH_NOT_VERIFIED > evidence/hair-author-status.txt
+              exit 1
+            fi
+            read -r before sx sy <<< "$hit"
+            if ! protected=$("$row" evidence/hair-before-selected.png '^Thickness$'); then
+              echo BLOCKED_THICKNESS_PROTECTION_NOT_VERIFIED > evidence/hair-author-status.txt
+              exit 1
+            fi
+            read -r thickness _ _ <<< "$protected"
+            python3 - "$before" "$sx" "$sy" <<'PY'
+          import sys,math
+          w,x,y=map(float,sys.argv[1:])
+          assert all(map(math.isfinite,(w,x,y))) and w>0 and .74<x<.98 and .15<y<.90
+          PY
+            chmod u+w "$MORWEN_READONLY_NATIVE"
+            echo HAIR_WIDTH_MUTATION_ATTEMPTED > evidence/hair-author-status.txt
+            slider_by hair-width '^Width$' -0.008 || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
+            capture_state hair-after-selected
+            read -r after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Width$')"
+            read -r thickness_after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Thickness$')"
+            python3 - "$before" "$after" "$thickness" "$thickness_after" <<'PY'
+          import sys
+          from decimal import Decimal
+          a,b,t,u=map(Decimal,sys.argv[1:])
+          assert 0<b<a and (a-b)/a<=Decimal("0.20") and a-b>=Decimal("0.001") and t==u
+          PY
+            "$gui" click 0.0234 0.0990
+            sleep 2
+            capture_state hair-save-dialog
+            grep -Fq 'Close Hairstyle Editor' evidence/hair-save-dialog.txt
+            grep -Fq 'Front' evidence/hair-save-dialog.txt
+            grep -Fq 'Back' evidence/hair-save-dialog.txt
+            # Match the archived 1024x768 save modal. Verify the two checkboxes independently.
+            # Unknown appearance or geometry stops the trial; never overwrite the original preset.
+            swift - evidence/hair-save-dialog.png > evidence/hair-save-selection.txt <<'SWIFT'
+          import Cocoa
+          import Foundation
+          import Vision
+          let url = URL(fileURLWithPath: CommandLine.arguments[1])
+          guard let im = NSBitmapImageRep(data: try Data(contentsOf: url)),
+                im.pixelsWide == 1024, im.pixelsHigh == 768 else { exit(2) }
+          let req = VNRecognizeTextRequest()
+          try VNImageRequestHandler(url: url).perform([req])
+          for (label, y) in [("Front",364),("Back",399)] {
+              let hits = (req.results ?? []).filter { o in
+                  o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) == label &&
+                  abs((1-o.boundingBox.midY)*768-Double(y)) < 9 &&
+                  abs(o.boundingBox.minX*1024-366) < 15
+              }
+              guard hits.count == 1 else { exit(2) }
+          }
+          func state(_ y: Int) -> String {
+              var blue = 0, white = 0
+              for yy in (y-5)...(y+5) {
+                  for x in 343...353 {
+                      guard let c = im.colorAt(x:x,y:yy)?.usingColorSpace(.deviceRGB) else { return "unknown" }
+                      if c.blueComponent>0.72 && c.redComponent<0.30 && c.greenComponent>0.24 && c.greenComponent<0.85 { blue += 1 }
+                      if c.redComponent>0.9 && c.greenComponent>0.9 && c.blueComponent>0.9 { white += 1 }
+                  }
+              }
+              if blue>=20 { return "checked" }
+              if white>=100 && blue==0 { return "unchecked" }
+              return "unknown"
+          }
+          let front=state(364), back=state(399)
+          print("Front",front,"Back",back)
+          exit(front=="checked" && back=="unchecked" ? 0 : 1)
+          SWIFT
+            "$gui" click-label evidence/hair-save-dialog.png 'Save as new item' 'Close Hairstyle Editor'
+            sleep 4
+            capture_state hair-save-return
+            grep -Fq 'Body' evidence/hair-save-return.txt
+            grep -Fq 'Outfit' evidence/hair-save-return.txt
+            if grep -Fq 'Close Hairstyle Editor' evidence/hair-save-return.txt || dialog_visible hair-save-return; then exit 1; fi
+            native_save
+            reopen_copy
+            if ! hit=$(select_strand hair-reopened Morwen-c1.vroid); then
+              echo BLOCKED_HAIR_REOPEN_CONTROL_NOT_VERIFIED > evidence/hair-author-status.txt
+              exit 1
+            fi
+            read -r reopened _ _ <<< "$hit"
+            read -r thickness_reopened _ _ <<< "$("$row" evidence/hair-reopened-selected.png '^Thickness$')"
+            if [ "$after" != "$reopened" ] || [ "$thickness" != "$thickness_reopened" ]; then
+              echo BLOCKED_HAIR_REOPEN_VALUE_MISMATCH > evidence/hair-author-status.txt
+              exit 1
+            fi
+            python3 - "$before" "$after" "$reopened" "$thickness" "$thickness_after" "$thickness_reopened" <<'PY'
+          import hashlib,json,pathlib,sys,zipfile
+          p=pathlib.Path("evidence")
+          def sha(q): return hashlib.sha256(q.read_bytes()).hexdigest()
+          src=p/"input-model.vroid"; dst=p/"model.vroid"
+          assert sha(src)=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+          with zipfile.ZipFile(src) as a,zipfile.ZipFile(dst) as b:
+              assert a.testzip() is None and b.testzip() is None
+              assert a.read("v1model/data.bin")!=b.read("v1model/data.bin")
+          assert sha(src)!=sha(dst)
+          a,b,c,t,u,v=map(float,sys.argv[1:])
+          (p/"hair-author-receipt.json").write_text(json.dumps(dict(
+              status="SINGLE_STRAND_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED",
+              target="Front / first Freehand Group 1 / Hair 3 / Width",
+              before=a,after=b,reopened=c,protected_thickness=[t,u,v],
+              source_sha256=sha(src),candidate_sha256=sha(dst),
+              screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-after-selected","hair-reopened-selected")},
+              limitations=["Unregistered projection","Other strands and modules need independent protection review","No artistic acceptance or formal adoption"]),indent=2))
+          PY
+            echo HAIR_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/hair-author-status.txt
+          fi
       - name: Checkout trusted shared engines for control receipt
-        if: inputs.mode == 'native_calibration'
+        if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -520,6 +673,34 @@ jobs:
           assert ready(stages,completed,p,10,1)==[]
           report["scope"]="CONTROL_REOPEN_TEST_ONLY; NO_FACTORY_CAS_OR_ART_ACCEPTANCE"
           (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
+          PY
+      - name: Validate hair candidate receipt with shared engines
+        if: inputs.mode == 'hair_candidate'
+        env:
+          PYTHONPATH: ${{ github.workspace }}/shared-main/tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          from blueprint_engine.residual import evaluate
+          from session_plan import ready,sha
+          p=pathlib.Path("evidence").resolve()
+          r=json.loads((p/"hair-author-receipt.json").read_text())
+          assert r["status"]=="SINGLE_STRAND_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED"
+          assert sha(p/"model.vroid")==r["candidate_sha256"]
+          assert sha(p/"input-model.vroid")==r["source_sha256"]
+          assert all(sha(p/(k+".png"))==v for k,v in r["screenshots"].items())
+          assert len(set(r["protected_thickness"]))==1
+          target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.002},uncertainty={"hair_width":0.001})
+          report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.001}))
+          assert report["overall"]=="PASS"
+          fingerprint=hashlib.sha256((p/"hair-author-receipt.json").read_bytes()).hexdigest()
+          stages=[dict(id="hair_width_candidate_receipt",deps=[],seconds=1,qualified=True,fingerprint=fingerprint)]
+          completed={"hair_width_candidate_receipt":dict(path="model.vroid",sha256=r["candidate_sha256"],reopened=True,fingerprint=fingerprint)}
+          assert ready(stages,completed,p,10,1)==[]
+          report["scope"]="HAIR_WIDTH_REOPEN_CONTROL_ONLY; NO_ART_ACCEPTANCE_OR_FACTORY_CAS"
+          (p/"hair-shared-engine-qa.json").write_text(json.dumps(report,indent=2))
           PY
       - name: Receive two read-only probe instructions in this session
         if: inputs.mode == 'communication_test'
@@ -593,6 +774,18 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
+      - name: Label hair candidate or quarantine
+        if: always() && inputs.mode == 'hair_candidate'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f evidence/model.vroid ]; then
+            if [ -s evidence/hair-shared-engine-qa.json ] && grep -qx HAIR_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED evidence/hair-author-status.txt; then
+              mv evidence/model.vroid evidence/hair-width-candidate-not-adopted.vroid
+            else
+              mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
+            fi
+          fi
       - name: Upload review evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -603,5 +796,6 @@ jobs:
             evidence/*.txt
             evidence/*.json
             evidence/calibration-only-reopened-not-adopted.vroid
+            evidence/hair-width-candidate-not-adopted.vroid
             evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
