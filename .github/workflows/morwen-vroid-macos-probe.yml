@@ -426,7 +426,25 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15018392749/zip" > "$RUNNER_TEMP/material-textile.zip"
           gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_rebuild_trial.py?ref=41ce803f607dca8744e15c45f1c671ee69c6bea3" > "$RUNNER_TEMP/skirt-recipe.py"
           echo "8c703690bdc4d18c8c40ee93755f4baf3f0c9c0b7df17217e5b27eec8c0eaead  $RUNNER_TEMP/skirt-recipe.py" | shasum -a 256 -c
-          "$RUNNER_TEMP/material-venv/bin/python" "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/material-sheet.zip" "$RUNNER_TEMP/material-textile.zip" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-sha.txt
+          gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_skirt_p1_repair.py?ref=e3db88bf78326061a8b064ba8626fc7d27dfcc4f" > "$RUNNER_TEMP/skirt-p1.py"
+          echo "4bf739d1f45ccbfbdee4f4fa421e882a4ee8f3275d31b057060e920ea1ba2f28  $RUNNER_TEMP/skirt-p1.py" | shasum -a 256 -c
+          "$RUNNER_TEMP/material-venv/bin/python" - "$RUNNER_TEMP" <<'PY' | tee evidence/skirt-generated-sha.txt
+          import hashlib
+          import pathlib
+          import runpy
+          import sys
+
+          p = pathlib.Path(sys.argv[1])
+          sys.argv = [str(p/"skirt-recipe.py"), str(p/"material-sheet.zip"), str(p/"material-textile.zip"), str(p/"prior.png")]
+          prior = runpy.run_path(sys.argv[0])
+          sha = lambda a: hashlib.sha256(a.tobytes()).hexdigest()
+          assert sha(prior["dark"]) == "42004bf87da39e527e04e60b9295da9a0af73d1983596633c6493ab777008ac0"
+          assert sha(prior["result"]) == "cc42bb0faf2881a1e258389b99b48a959495fdb2bd062611326ed24bed4a13fd"
+          # Byte hashes depend on the PNG encoder. The pinned algorithms and raw RGBA are verified.
+          runpy.run_path(str(p/"skirt-p1.py"))["build"](prior["dark"], prior["result"], p/"p1")
+          (p/"p1/candidate-A.png").rename(p/"uv-grid.png")
+          PY
+          cp "$RUNNER_TEMP/p1/receipt.json" evidence/skirt-p1-receipt.json
           cat > "$RUNNER_TEMP/skirt-verify.py" <<'PY'
           import hashlib,struct,zlib,sys
           from pathlib import Path
@@ -460,7 +478,7 @@ jobs:
                   row[i]=(row[i]+q)&255
               out.append(bytes(row));prev=row
           h=hashlib.sha256(b''.join(out)).hexdigest();print(h)
-          assert h=='cc42bb0faf2881a1e258389b99b48a959495fdb2bd062611326ed24bed4a13fd'
+          assert h=='eae608424f24c14c946b7d94f70282076a66a436dd989ed92589ad12c04e8efd'
           PY
           python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-pixel-sha.txt
       - name: Compile UV guide inspector before VRoid startup
@@ -1159,6 +1177,26 @@ jobs:
                   fi
                 done
                 test "$ready" = 1 || { echo BLOCKED_TEXTURE_EDITOR_TRANSITION > evidence/module-status.txt; exit 1; }
+                if [ "$WARDROBE_IMPORT" = true ]; then
+                  skirt_views() {
+                    local prefix="$1" view n
+                    for view in front left4 left8 right4; do
+                      "$gui" vroid-shortcut front
+                      case "$view" in
+                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
+                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
+                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                      esac
+                      sleep 2
+                      capture_state "$prefix-$view"
+                      grep -Fq 'Texture Editor' "evidence/$prefix-$view.txt"
+                      grep -Fq 'Uniform Skirt' "evidence/$prefix-$view.txt"
+                    done
+                    "$gui" vroid-shortcut front
+                    sleep 2
+                  }
+                  skirt_views skirt-baseline
+                fi
                 if [ "$NEXT_BATCH" = true ]; then
                   # Source: actual C artifact15007343469, Uniform Skirt / Default Design.
                   # Actual context menu from artifact15009347382; select Export directly.
@@ -1256,21 +1294,7 @@ jobs:
                     grep -Fq 'Default Design' evidence/skirt-import-preview.txt
                     ! grep -Fq Cancel evidence/skirt-import-preview.txt
                     "$material_python" "$panel_check" imported evidence/skirt-import-preview.png evidence/skirt-texture-editor.png > evidence/skirt-panel-imported.json
-                    # Observe projection in the live editor; names denote requested shortcuts, not verified angles.
-                    for view in front left4 left8 right4; do
-                      "$gui" vroid-shortcut front
-                      case "$view" in
-                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
-                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
-                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
-                      esac
-                      sleep 2
-                      capture_state "skirt-uv-$view"
-                      grep -Fq 'Texture Editor' "evidence/skirt-uv-$view.txt"
-                      grep -Fq 'Uniform Skirt' "evidence/skirt-uv-$view.txt"
-                    done
-                    "$gui" vroid-shortcut front
-                    sleep 2
+                    skirt_views skirt-uv
                     capture_state skirt-import-preview
                     grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
                     grep -Fq 'Default Design' evidence/skirt-import-preview.txt
@@ -1385,6 +1409,15 @@ jobs:
                   capture_state skirt-export-complete
                   test -s evidence/skirt-export-metadata.json
                   test -s evidence/skirt-alpha-row-bounds.json
+                  if [ "$WARDROBE_IMPORT" = true ]; then
+                    # Native camera samples after export. Pan uses the existing in-app binding.
+                    "$gui" pan 0.390625 0.7447916667 0.390625 0.530 0.4
+                    for zoom in 4 8 12; do
+                      "$gui" zoom 0.390625 0.530 4 0
+                      sleep 2
+                      capture_state "skirt-close-zoom-$zoom"
+                    done
+                  fi
                 fi
                 ;;
               *) exit 1 ;;
@@ -1406,6 +1439,9 @@ jobs:
           }[lane]
           if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor","skirt-export-layer","skirt-export-dialog","skirt-export-destination","skirt-export-complete"]
           if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview","skirt-uv-front","skirt-uv-left4","skirt-uv-left8","skirt-uv-right4"]
+          if os.environ["WARDROBE_IMPORT"]=="true":
+              required += [f"skirt-baseline-{view}" for view in ("front","left4","left8","right4")]
+              required += [f"skirt-close-zoom-{zoom}" for zoom in (4,8,12)]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -1419,7 +1455,7 @@ jobs:
               name="skirt-guide-profile.json"
               hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           if os.environ["WARDROBE_IMPORT"]=="true":
-              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
+              for name in ("skirt-p1-receipt.json","skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
