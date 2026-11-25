@@ -1,0 +1,223 @@
+{
+  "schema": "morwen_projection_review_v1",
+  "status": "SCREEN_SPACE_REVIEW_ONLY_NOT_D4_OR_ART_ACCEPTANCE",
+  "source_artifact": 14602858760,
+  "capture_artifact": 14998780697,
+  "capture_run": 45561010173,
+  "source_native_sha256": "9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574",
+  "views": {
+    "front": {
+      "sha256": "ea6ae356689df5c5066ef595767a9fc4929a04a2a35f4f0d40405739be07b45e",
+      "bbox_px": [
+        358,
+        175,
+        665,
+        635
+      ],
+      "margin_px": 60,
+      "foreground_pixels": 36633,
+      "height_px": 460
+    },
+    "left4": {
+      "sha256": "d4dbc1ab4dd0e3eb9f77dc3fb5d92e2e8e9f81295e28d5695b72a527b0b6b24e",
+      "bbox_px": [
+        472,
+        177,
+        586,
+        639
+      ],
+      "margin_px": 66,
+      "foreground_pixels": 28304,
+      "height_px": 462
+    },
+    "left8": {
+      "sha256": "c190ea1867a37111a3523205ba6cd5973b94f21e8cfa47e37b36b002b1c2519f",
+      "bbox_px": [
+        372,
+        179,
+        666,
+        636
+      ],
+      "margin_px": 59,
+      "foreground_pixels": 36609,
+      "height_px": 457
+    },
+    "right4": {
+      "sha256": "bd35da1698406e445151f01c02045ee617d029bce589243b5512fcfd65e81eef",
+      "bbox_px": [
+        426,
+        181,
+        550,
+        637
+      ],
+      "margin_px": 68,
+      "foreground_pixels": 27960,
+      "height_px": 456
+    }
+  },
+  "front_landmarks": {
+    "definition": "x,y,conservative review half-width px; not statistical confidence interval",
+    "reference": {
+      "crown": [
+        208,
+        18,
+        2
+      ],
+      "eye_L": [
+        188,
+        125,
+        2
+      ],
+      "eye_R": [
+        240,
+        124,
+        2
+      ],
+      "chin": [
+        214,
+        180,
+        3
+      ],
+      "hair_hem_L": [
+        148,
+        190,
+        4
+      ],
+      "hair_hem_R": [
+        277,
+        189,
+        4
+      ],
+      "foot_y": [
+        0,
+        1001,
+        6
+      ]
+    },
+    "native": {
+      "crown": [
+        511,
+        175,
+        2
+      ],
+      "eye_L": [
+        499,
+        219,
+        2
+      ],
+      "eye_R": [
+        524,
+        219,
+        2
+      ],
+      "chin": [
+        510,
+        245,
+        3
+      ],
+      "hair_hem_L": [
+        473,
+        257,
+        4
+      ],
+      "hair_hem_R": [
+        547,
+        257,
+        4
+      ],
+      "foot_y": [
+        0,
+        635,
+        2
+      ]
+    }
+  },
+  "metrics": {
+    "head_to_full_height": {
+      "reference_nominal_low_high": [
+        0.164802,
+        0.158426,
+        0.171282
+      ],
+      "native_nominal_low_high": [
+        0.152174,
+        0.140086,
+        0.164474
+      ],
+      "interval_overlap": true,
+      "state": "HOLD_UNREGISTERED",
+      "tolerance": null,
+      "operation": null
+    },
+    "eye_spacing_to_head_height": {
+      "reference_nominal_low_high": [
+        0.320988,
+        0.287425,
+        0.356688
+      ],
+      "native_nominal_low_high": [
+        0.357143,
+        0.28,
+        0.446154
+      ],
+      "interval_overlap": true,
+      "state": "HOLD_UNREGISTERED",
+      "tolerance": null,
+      "operation": null
+    },
+    "crown_to_left_eye_to_head_height": {
+      "reference_nominal_low_high": [
+        0.660494,
+        0.616766,
+        0.707006
+      ],
+      "native_nominal_low_high": [
+        0.628571,
+        0.533333,
+        0.738462
+      ],
+      "interval_overlap": true,
+      "state": "HOLD_UNREGISTERED",
+      "tolerance": null,
+      "operation": null
+    },
+    "hem_span_to_head_height": {
+      "reference_nominal_low_high": [
+        0.796296,
+        0.724551,
+        0.872611
+      ],
+      "native_nominal_low_high": [
+        1.057143,
+        0.88,
+        1.261538
+      ],
+      "interval_overlap": false,
+      "state": "HOLD_UNREGISTERED",
+      "tolerance": null,
+      "operation": null
+    },
+    "left_hem_below_chin_to_head_height": {
+      "reference_nominal_low_high": [
+        0.061728,
+        0.017964,
+        0.10828
+      ],
+      "native_nominal_low_high": [
+        0.171429,
+        0.066667,
+        0.292308
+      ],
+      "interval_overlap": true,
+      "state": "HOLD_UNREGISTERED",
+      "tolerance": null,
+      "operation": null
+    }
+  },
+  "limitations": [
+    "Hair-inclusive crown-to-chin is not anatomical head height. Shoes differ.",
+    "Reference and candidate poses, yaw/pitch, projection and cross-run camera are not registered.",
+    "No tolerance or corrective operation assigned; do not feed values as qualified correction targets.",
+    "Hair hem corresponds approximately, not identical strand ends. Mouth/nose not reliably resolved in native image."
+  ]
+}
