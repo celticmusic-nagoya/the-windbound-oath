@@ -163,9 +163,34 @@ loadAreaBlueprints();
  const sides=["A","B"].map((side,i)=>{const group=node("fieldset","");group.style.minWidth="0";group.append(node("legend","アンカー "+side));const select=node("select","");select.setAttribute("aria-label","アンカー "+side+" エリア");ids.forEach((id,j)=>{const o=node("option",names[j]);o.value=String(j);select.append(o);});select.value=String(i);group.append(select);const xyz=["X","Y","Z"].map(axis=>anchorNumber(group,side+" local "+axis+" (m)"));anchorPanel.append(group);return {select,xyz};});
  const tolerance=anchorNumber(anchorPanel,"許容誤差 t (m)",true),uncertainty=anchorNumber(anchorPanel,"合成不確かさ u (m)",true);
  const anchorResult=node("div","");anchorResult.id="anchor-result";anchorResult.setAttribute("role","status");anchorPanel.append(anchorResult);
+ const receiptButton=node("button","検査結果JSONを書き出す");receiptButton.type="button";receiptButton.disabled=true;
+ const receiptLabel=node("label","検査結果JSONを再読込（入力値のみ復元・再計算）"),receiptFile=node("input","");receiptFile.type="file";receiptFile.accept=".json,application/json";receiptFile.id="anchor-receipt-import";receiptLabel.htmlFor=receiptFile.id;
+ const receiptStatus=node("p","");receiptStatus.id="anchor-receipt-status";receiptStatus.setAttribute("role","status");
+ anchorPanel.append(receiptButton,receiptLabel,receiptFile,receiptStatus);
+ const receiptSchema="two.studio.anchor_residual_receipt.v1",coordinateContract={axes:"X east Y north Z up",unit:"metre",origin:null,yaw:"degrees_ccw_about_positive_z"};
+ let receipt=null,receiptGeneration=0;
+ function downloadReceipt(data,name){const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=node("a","");a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ receiptButton.onclick=()=>{if(!commit()||!receipt)return;downloadReceipt(receipt,"two-anchor-residual-r"+revision+".json");receiptStatus.textContent="端末内に書出し。共有は担当PR等の許可された経路で行ってください。";};
+ receiptFile.addEventListener("change",async()=>{
+  const g=++receiptGeneration,selected=receiptFile.files[0];if(!selected)return;
+  try{
+   if(selected.size>65536)throw Error("64KiB上限");
+   const data=JSON.parse(await selected.text());if(g!==receiptGeneration)return;
+   const cc=data?.coordinate_contract;
+   if(data?.schema!==receiptSchema||data.status!=="PROVISIONAL"||data.source_blob!==source||!cc||Object.keys(coordinateContract).some(k=>cc[k]!==coordinateContract[k])||data.placement_revision!==revision||!Array.isArray(data.anchors)||data.anchors.length!==2)throw Error("検査契約・配置改訂不一致");
+   const indices=data.anchors.map(a=>ids.indexOf(a?.area_id));
+   if(indices.some(i=>i<0)||indices[0]===indices[1])throw Error("エリアID不正");
+   const bounded=v=>typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=1000000;
+   if(!data.anchors.every((a,i)=>Array.isArray(a.local_xyz_m)&&a.local_xyz_m.length===3&&a.local_xyz_m.every(bounded)&&a.placement&&fields.every(k=>a.placement[k]===rows[indices[i]][k]&&a.placement[k]!==null))||![data.tolerance_m,data.uncertainty_m].every(v=>bounded(v)&&v>=0))throw Error("座標・配置スナップショット不一致");
+   if(inputs.some((input,i)=>input.validity.badInput||(input.value===""?null:input.valueAsNumber)!==rows[current][fields[i]]))throw Error("未反映の配置入力あり");
+   sides.forEach((s,i)=>{s.select.value=String(indices[i]);s.xyz.forEach((input,j)=>input.value=String(data.anchors[i].local_xyz_m[j]));});
+   tolerance.value=String(data.tolerance_m);uncertainty.value=String(data.uncertainty_m);anchors();
+   receiptStatus.textContent="入力復元・再計算完了。保存された判定は信用せず再計算しました。";
+  }catch(e){if(g===receiptGeneration)receiptStatus.textContent="検査結果読込失敗: "+e.message;}
+ });
  function numberFrom(input){return input.value!==""&&!input.validity.badInput&&input.validity.valid&&Number.isFinite(input.valueAsNumber)?input.valueAsNumber:null;}
  function anchors(){
-  anchorResult.replaceChildren();delete anchorResult.dataset.verdict;
+  anchorResult.replaceChildren();delete anchorResult.dataset.verdict;receipt=null;receiptButton.disabled=true;receiptStatus.textContent="";
   const indices=sides.map(s=>Number(s.select.value));
   if(indices[0]===indices[1]){anchorResult.textContent="別の2エリアを選択してください。";return;}
   const local=sides.map(s=>s.xyz.map(numberFrom));
@@ -180,6 +205,8 @@ loadAreaBlueprints();
   const eps=64*Number.EPSILON*Math.max(1,...world.flat().map(Math.abs),r,t,u);
   const verdict=r+u<t-eps?"PASS":r-u>t+eps?"OUTSIDE":"HOLD";
   anchorResult.dataset.verdict=verdict;
+  receipt={schema:receiptSchema,status:"PROVISIONAL",source_blob:source,coordinate_contract:coordinateContract,placement_revision:revision,anchors:placements.map((p,i)=>({area_id:p.id,placement:{...p},local_xyz_m:local[i],world_xyz_m:world[i]})),delta_b_minus_a_m:delta,residual_m:r,tolerance_m:t,uncertainty_m:u,roundoff_guard_m:eps,verdict,qa_scope:"MANUAL_INPUT_POSITION_ONLY",independent_qa:"NOT_RUN"};
+  receiptButton.disabled=false;
   anchorResult.append(node("p",verdict+"（入力値に対する暫定位置検査のみ） / r+u="+fmt(r+u)+" m / r−u="+fmt(r-u)+" m / t="+fmt(t)+" m"),node("p","境界付近は丸め誤差を考慮してHOLD。入力不確かさは独立検証されていません。G1〜G4とは別判定です。"));
  }
  for(const input of [...sides.flatMap(s=>[s.select,...s.xyz]),tolerance,uncertainty])input.addEventListener("input",anchors);
