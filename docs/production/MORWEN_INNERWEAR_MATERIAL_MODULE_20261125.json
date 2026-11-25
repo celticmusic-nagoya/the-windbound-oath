@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "scope": "INNERWEAR_MODULE_CANDIDATE_NOT_ADOPTED",
   "authority": "Director clarification 2026-11-25: reproduce existing official Layer 0 four-view innerwear design, with equal wardrobe material quality. Supersedes provisional design proposal, not asset adoption.",
   "owner_pr": 427,
@@ -57,15 +57,15 @@
       "id": "cotton_jersey",
       "url": "https://polyhaven.com/a/cotton_jersey",
       "license": "CC0",
-      "status": "listed_not_acquired",
-      "role": "Soft matte knit"
+      "status": "acquired_verified_artifact_15026208724",
+      "role": "Soft matte knit; candidate only"
     },
     {
       "id": "stretch_poplin",
       "url": "https://polyhaven.com/a/stretch_poplin",
       "license": "CC0",
-      "status": "listed_not_acquired",
-      "role": "Fine stretch woven comparison"
+      "status": "acquired_verified_artifact_15026208724",
+      "role": "Fine stretch woven comparison; candidate only"
     }
   ],
   "license_url": "https://polyhaven.com/license",
@@ -87,9 +87,9 @@
     "rig": "match existing body rig and deformation, protect body and outer clothing"
   },
   "qa": {
-    "D0": "Official reference acquisition and 4/4 SHA PASS; PBR source acquisition pending",
+    "D0": "Reference 4/4 and acquired CC0 source maps 6/6 exact byte/MD5/decoded SHA PASS",
     "D1": "module interface specified, actual fit pending",
-    "D2": "PARTIAL: source views reviewed, garment-specific measurement drawing and actual native template pending",
+    "D2": "PARTIAL: 5 standalone cloth BaseColor candidates and preserved normal/roughness; garment contour and native mapping pending",
     "D3": "BLOCKED pending exact UV, dimensions, fit and tolerance",
     "D4": "NOT_RUN",
     "G1": "Official design input verified; candidate design/asset conformity not yet evaluated",
@@ -111,7 +111,7 @@
     "No hidden geometry or fabric composition inferred as canon",
     "Do not mutate active native checkpoint",
     "No paid source acquisition",
-    "PBR material candidates not acquired; comparison only until measured"
+    "Appearance samples from painted reference are not physical albedo; stocking opacity and physical textile scale unresolved. No fixed lighting or reflective highlights in BaseColor."
   ],
   "layer0": {
     "artifact_id": 14602858760,
@@ -156,5 +156,141 @@
       "Fabric fiber composition and reflectance are not determined by illustration",
       "Actual seam construction, hidden lining and UV topology not specified; do not invent canon"
     ]
+  },
+  "material_trial": {
+    "main": "5f0e5c341303e42b6843e1ac9b36d911e44219c9",
+    "reference_archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+    "material_source_run": 45624991144,
+    "material_source_artifact": 15026208724,
+    "material_source_archive_sha256": "9a904f93c5514043fbd5d7136715d0a80d7af28ffcb588a351f1c8f5265c0426",
+    "source_view": "7809.png",
+    "sample_method": "Manual interior 5x5 medians, source pixels; lighting not removed by physical inverse rendering",
+    "samples": {
+      "upper": {
+        "xy": [
+          253,
+          299
+        ],
+        "rgba": [
+          91,
+          49,
+          94,
+          253
+        ]
+      },
+      "lower": {
+        "xy": [
+          202,
+          470
+        ],
+        "rgba": [
+          93,
+          48,
+          93,
+          253
+        ]
+      },
+      "strap": {
+        "xy": [
+          159,
+          466
+        ],
+        "rgba": [
+          111,
+          67,
+          107,
+          253
+        ]
+      },
+      "band": {
+        "xy": [
+          140,
+          565
+        ],
+        "rgba": [
+          80,
+          50,
+          79,
+          252
+        ]
+      },
+      "stocking": {
+        "xy": [
+          155,
+          635
+        ],
+        "rgba": [
+          120,
+          80,
+          93,
+          252
+        ]
+      }
+    },
+    "outputs": [
+      {
+        "role": "body-cloth-knit",
+        "source": "cotton_jersey",
+        "rgb": [
+          92,
+          48,
+          94
+        ],
+        "sha256": "a32deff40b812de2181c0d459db42bfea56b8eb46e60134015200f7f78ac0ba6"
+      },
+      {
+        "role": "body-cloth-woven",
+        "source": "stretch_poplin",
+        "rgb": [
+          92,
+          48,
+          94
+        ],
+        "sha256": "5c5aaa646ed8ec0e124d60a2f176b4f6d136cbee2df7d17bb1cf30c4320d0a6c"
+      },
+      {
+        "role": "strap-woven",
+        "source": "stretch_poplin",
+        "rgb": [
+          111,
+          67,
+          107
+        ],
+        "sha256": "d2472efa675874e08c9da46111e40363414a62e333d055e44b8ae3eb75bfee5c"
+      },
+      {
+        "role": "band-knit",
+        "source": "cotton_jersey",
+        "rgb": [
+          80,
+          50,
+          79
+        ],
+        "sha256": "9ad29ba2c525e7b42a46f36638640831d37ce62e87f448a33341d82df877d88e"
+      },
+      {
+        "role": "stocking-knit-opaque-trial",
+        "source": "cotton_jersey",
+        "rgb": [
+          120,
+          80,
+          93
+        ],
+        "sha256": "d6ba302b329f43e04908a23d4cfa46bf287213b40b00aa09067fea278fdd03fb"
+      }
+    ],
+    "qa": {
+      "archive_crc": "2/2 PASS",
+      "source_maps": "6/6 PASS",
+      "flat_basecolor": "5/5 PASS",
+      "original_normal_roughness": "4/4 PASS",
+      "repeat": "11/11 byte-identical",
+      "visual": "Actual plane lighting comparison inspected; knit texture visible under grazing light, woven subtler; opaque stocking approximation only. No garment art QA."
+    },
+    "script_sha256": "913eb30e4cfdd73990478ebf51c27c62edccbffb9c81edc502307a01adb7fa8c",
+    "receipt_sha256": "7a95f2dcf892ab010786a9eb9e16cf4768a1916b39f7726a5bb157d6ccfafeac",
+    "comparison_sha256": "b17b9574be739bf2fc9ff24c8b484805223a86ddf4e1df9912f27c094154c6ba",
+    "storage": "Local maps and recipe only; receipt summary committed; no official images republished.",
+    "next": "Observed decorative motif placement, separate source-view garment contour landmarks and native template fit after owner coordination. No further isolated hair highlight tuning."
   }
 }
