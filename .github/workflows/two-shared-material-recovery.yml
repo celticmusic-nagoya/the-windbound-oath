@@ -11,8 +11,8 @@ on:
       source_set:
         description: Locked source set to recover
         type: choice
-        options: [native-pilot, fern-alpha, fern-bark, stump, forest]
-        default: native-pilot
+        options: [native-density, native-pilot, fern-alpha, fern-bark, stump, forest]
+        default: native-density
 permissions:
   contents: read
   actions: read
@@ -45,9 +45,9 @@ jobs:
           fi
           echo 'run=true' >> "$GITHUB_OUTPUT"
       - name: Recover only selected locked sources
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') != 'native-pilot'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') != 'native-pilot' && (inputs.source_set || 'native-density') != 'native-density'
         env:
-          SOURCE_SET: ${{ inputs.source_set || 'native-pilot' }}
+          SOURCE_SET: ${{ inputs.source_set || 'native-density' }}
         shell: bash
         run: |
           case "$SOURCE_SET" in
@@ -59,10 +59,10 @@ jobs:
           esac
           python 'tools/map_blueprint/shared_materials_v01/material_cache.py' --catalog 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' "${assets[@]}" --out "$RUNNER_TEMP/two-material-cache" --report "$RUNNER_TEMP/material-recovery.json"
       - name: Preserve exact source candidate files and report
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') != 'native-pilot'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') != 'native-pilot' && (inputs.source_set || 'native-density') != 'native-density'
         uses: actions/upload-artifact@v4
         with:
-          name: two-shared-material-${{ inputs.source_set || 'native-pilot' }}-candidates
+          name: two-shared-material-${{ inputs.source_set || 'native-density' }}-candidates
           path: |
             ${{ runner.temp }}/two-material-cache
             ${{ runner.temp }}/material-recovery.json
@@ -70,7 +70,7 @@ jobs:
           if-no-files-found: error
 
       - name: Native pilot exact artifact intake
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-pilot'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -92,7 +92,7 @@ jobs:
           recover 15024936587 05cb8bcc0edf09943b21e6af6207e2eb1825b3c9c2268754f210f070b5218a0d
           echo 'V16_FIVE_ARCHIVES_SHA_PASS' > "$RUNNER_TEMP/v16-output/intake.txt"
       - name: Install approved Blender and render isolated subset
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-pilot'
         shell: bash
         run: |
           set -euo pipefail
@@ -101,10 +101,43 @@ jobs:
           bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_v16.py -- "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
       - name: Preserve native pilot and render evidence
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-pilot'
         uses: actions/upload-artifact@v4
         with:
           name: two-forest-v16-native-pilot
           path: ${{ runner.temp }}/v16-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Recover verified pilot for native density study
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-density'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v18-input" "$RUNNER_TEMP/v18-output"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15026419458/zip" > "$RUNNER_TEMP/v18-pilot.zip"
+          printf '%s  %s\n' 9ec037afa4b944dbbe73ace584445ca6de663ac12239e4493d760a55e445b7d0 "$RUNNER_TEMP/v18-pilot.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v18-pilot.zip"
+          unzip -q "$RUNNER_TEMP/v18-pilot.zip" -d "$RUNNER_TEMP/v18-input"
+          echo 'V18_NATIVE_PILOT_ARCHIVE_SHA_PASS' > "$RUNNER_TEMP/v18-output/intake.txt"
+      - name: Execute approved Blender density and lighting study
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-density'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          model="$(find "$RUNNER_TEMP/v18-input" -type f -name forest_v16_native_pilot.blend)"
+          test -f "$model"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_density_v18.py -- "$model" tools/map_blueprint/shared_materials_v01/v15c_vegetation_transforms_v18.txt "$RUNNER_TEMP/v18-output"
+      - name: Preserve V18 native density and lighting evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-density') == 'native-density'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v18-native-density
+          path: ${{ runner.temp }}/v18-output
           retention-days: 14
           if-no-files-found: error
