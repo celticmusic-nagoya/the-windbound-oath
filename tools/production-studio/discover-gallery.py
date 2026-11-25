@@ -39,6 +39,7 @@ def preview_vroid(selection,known,saved):
 # Exact producer receipts from the owning workflows. These are preview-only,
 # not publication authorization; unknown archives stay outside this list.
 PREVIEW_RECEIPTS = (
+    (44850191454, 14684514477, "aa18ea5dd1d8304d35367f792f612cfed8e1880e", "feature/lind-village-world-integration-plan-01", "aidan-measured-blueprint.yml", "aidan-measured-blueprint", "blueprint", "Aidan measured candidate G1 BLOCKED / preview only", r"(?:exterior-(?:front|rear|left|right|roof)|interior-(?:floor-furniture|axonometric))\.png"),
     (45572622840, 15003297779, "41fac9e455910104a6d4b6121387f3d5da5b76e9", "main", "morwen-vroid-macos-probe.yml", "morwen-isolated-vroid-reopen-review", "morwen", "VRoid hair candidate / preview only", r"(?:evidence/)?hair-(?:before-selected|after-selected|reopened-geometry)\.png"),
     (45561010173, 14998780697, "3924c3708e5ed94efd898037664bb03141cfc285", "main", "morwen-vroid-macos-probe.yml", "morwen-isolated-vroid-reopen-review", "morwen", "VRoid selected framing / preview only", r"(?:evidence/)?frame-selected-(?:front|left4|left8|right4)\.png"),
     (44979340529, 14737506262, "cf0443ad1085d27f90127854ed48c9b168d87195", "feature/lind-cliff-rock-art-study-20261118", "lind-cliff-c11-method-e.yml", "c11-method-e-cf0443ad1085d27f90127854ed48c9b168d87195", "cliff", "C11 Method E / preview only", r"review/c11_(?:front|oblique|low)\.png"),
