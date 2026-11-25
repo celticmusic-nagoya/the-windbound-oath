@@ -1219,7 +1219,7 @@ jobs:
                   cp "$HOME/Documents/layer.png" "$export_dir/layer.png"
                   # Never upload the stock PNG itself. Read it only within this runner.
                   python3 - "$export_dir" <<'PY'
-          import pathlib,sys,hashlib,json,struct,zlib
+          import pathlib,sys,hashlib,json,struct,zlib,os
           folder=pathlib.Path(sys.argv[1])
           images=list(folder.glob("*.png"))
           assert len(images)==1 and images[0].is_file()
@@ -1238,7 +1238,7 @@ jobs:
               pos+=12+n
               if tag==b"IEND": break
           assert pos==len(b) and image and chunks[-1]=="IEND" and "IDAT" in chunks
-          result=dict(scope="RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED",sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source="Uniform Skirt / Default Design",formal_adoption=False)
+          result=dict(scope=("RUNNER_LOCAL_AUTHORED_TEXTURE_REEXPORT_NOT_DISTRIBUTED" if os.environ["WARDROBE_IMPORT"]=="true" else "RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED"),sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source="Uniform Skirt / Default Design",formal_adoption=False)
           pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
           PY
                   "$RUNNER_TEMP/skirt-alpha" "$export_dir"
