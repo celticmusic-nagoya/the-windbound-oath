@@ -1,0 +1,108 @@
+name: Morwen brass source material acquisition
+on:
+  push:
+    branches: [asset/morwen-measured-textile-20261125]
+    paths: ['.github/workflows/morwen-brass-material-acquire.yml']
+permissions:
+  contents: read
+concurrency:
+  group: morwen-brass-material-acquisition
+  cancel-in-progress: false
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Acquire and validate actual brass model texture channels
+        run: |
+          set -euo pipefail
+          python -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
+          python - <<'PY'
+          import hashlib, io, json, pathlib, urllib.parse, urllib.request
+          from PIL import Image, ImageDraw
+          import numpy as np
+          root=pathlib.Path('brass-source'); root.mkdir(exist_ok=False)
+          asset='brass_pan_01'
+          limit=15_000_000
+          def require(ok,msg):
+              if not ok: raise ValueError(msg)
+          def sha(b): return hashlib.sha256(b).hexdigest()
+          def fetch(url,host,n):
+              u=urllib.parse.urlsplit(url)
+              require(u.scheme=='https' and u.hostname==host and not u.username and not u.password,'unapproved URL')
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'TWO-Morwen-MaterialQA/1.0 (Poly Haven attribution)'}),timeout=35) as r:
+                  f=urllib.parse.urlsplit(r.geturl())
+                  require(f.scheme=='https' and f.hostname==host,'unapproved redirect')
+                  b=r.read(n+1)
+              require(0<len(b)<=n,'size limit')
+              return b
+          def walk(o):
+              if isinstance(o,dict):
+                  if all(k in o for k in ('url','size','md5')): yield o
+                  for v in o.values(): yield from walk(v)
+              elif isinstance(o,list):
+                  for v in o: yield from walk(v)
+          def select(meta,role):
+              for fmt in (('png','jpg') if role in ('metal','nor_gl') else ('jpg','png')):
+                  name=f'{asset}_{role}_1k.{fmt}'
+                  matches={x['url']:x for x in walk(meta) if urllib.parse.urlsplit(x['url']).path.rsplit('/',1)[-1]==name}
+                  require(len(matches)<=1,'ambiguous map '+role)
+                  if matches: return next(iter(matches.values()))
+              raise ValueError('missing 1K map '+role)
+          def verify(b,item):
+              require(len(b)==item['size'] and hashlib.md5(b).hexdigest()==item['md5'].lower(),'provider integrity mismatch')
+          def decode(b,role):
+              with Image.open(io.BytesIO(b)) as im:
+                  require(im.format in ('JPEG','PNG') and 128<=min(im.size)<=max(im.size)<=4096 and im.width*im.height<=8_388_608,'image format/dimensions')
+                  if role in ('rough','metal'):
+                      if im.mode in ('I;16','I;16B','I;16L','I'):
+                          a=np.asarray(im).astype(np.int64)
+                          require(a.min()>=0 and a.max()<=65535,'scalar range')
+                          return ((a*255+32767)//65535).astype(np.uint8)
+                      require(im.mode in ('L','RGB'),'unexpected scalar mode')
+                      return np.array(im.convert('L'))
+                  require(im.mode=='RGB','expected RGB')
+                  return np.array(im)
+          # Cheap fixtures run before network access.
+          f=io.BytesIO(); Image.new('RGB',(256,128),(120,100,80)).save(f,format='PNG')
+          raw=f.getvalue(); item={'url':'https://dl.polyhaven.org/brass_pan_01_nor_gl_1k.png','size':len(raw),'md5':hashlib.md5(raw).hexdigest()}
+          assert select({'nested':[item]},'nor_gl')==item
+          verify(raw,item); assert decode(raw,'nor_gl').shape==(128,256,3)
+          for fn in (lambda:select({},'nor_gl'),lambda:verify(raw+b'x',item),lambda:decode(b'bad','metal')):
+              try: fn()
+              except (ValueError,OSError): continue
+              raise AssertionError('invalid fixture accepted')
+          print('PRECHECK PASS')
+          meta_raw=fetch('https://api.polyhaven.com/files/'+asset,'api.polyhaven.com',2_000_000)
+          (root/'api-files.json').write_bytes(meta_raw); meta=json.loads(meta_raw)
+          rec={'scope':'SOURCE_MAPS_ONLY_NOT_ADOPTED','asset':asset,'source':'https://polyhaven.com/a/brass_pan_01','author':'Rico Cilliers','license':'CC0','license_url':'https://polyhaven.com/license','api_terms':'https://github.com/Poly-Haven/Public-API/blob/master/ToS.md','api_sha256':sha(meta_raw),'capture_method':'UNVERIFIED; textured real-world brass object candidate, not asserted scanned or measured','maps':{}}
+          arrays={}
+          for role in ('diff','nor_gl','rough','metal'):
+              item=select(meta,role); require(0<item['size']<=limit,'map exceeds limit')
+              data=fetch(item['url'],'dl.polyhaven.org',limit);verify(data,item)
+              name=urllib.parse.urlsplit(item['url']).path.rsplit('/',1)[-1]
+              (root/name).write_bytes(data); a=decode(data,role); arrays[role]=a
+              rec['maps'][role]={'name':name,'url':item['url'],'size':len(data),'md5':item['md5'],'sha256':sha(data),'decoded_pixel_sha256':sha(a.tobytes()),'shape':list(a.shape)}
+              (root/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
+          require(len(set(a.shape[:2] for a in arrays.values()))==1,'map dimensions differ')
+          mask=arrays['metal']>=230; require(mask.any(),'no high metalness region')
+          rec['high_metalness_fraction']=float(mask.mean())
+          rec['high_metalness_roughness_percentiles']=np.percentile(arrays['rough'][mask]/255,[10,50,90]).tolist()
+          rec['limits']='UV atlas includes wood, patina, object-specific layout. Do not tile whole atlas or copy object design. Actual metal region crop and scan provenance review pending.'
+          sheet=Image.new('RGB',(1040,300),(25,25,30)); draw=ImageDraw.Draw(sheet)
+          for i,(k,a) in enumerate(arrays.items()):
+              panel=Image.fromarray(a).convert('RGB');panel.thumbnail((250,260));sheet.paste(panel,(i*260+5,26));draw.text((i*260+5,5),k,fill='white')
+          sheet.save(root/'comparison.png');rec['comparison_sha256']=sha((root/'comparison.png').read_bytes())
+          (root/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
+          print(json.dumps(rec,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-brass-source-maps-not-adopted
+          path: brass-source/
+          if-no-files-found: warn
+          retention-days: 7
