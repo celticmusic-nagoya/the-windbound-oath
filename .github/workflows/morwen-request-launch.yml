@@ -85,12 +85,13 @@ jobs:
             return {kind:"start",id:c.id,mode:m[1],main:m[2],blob:m[3],previous:Number(m[4])};
           }
           function eligible(q,head,blob,prior,runs,active,priorBlob) {
-           if(q.kind!=="start"||head!==q.main||blob!==q.blob||prior.id!==q.previous||prior.status!=="completed"||prior.head_branch!=="main"||prior.event!=="workflow_dispatch"||prior.path!==".github/workflows/morwen-vroid-macos-probe.yml"||!["hair_candidate","hair_review","parallel_batch","parallel_next","face_candidate","wardrobe_export"].includes(prior.display_title?.split(" / ")[1]?.split(" ")[0])||runs[0]?.id!==prior.id||active!==0||priorBlob===blob)throw Error("ineligible");
+           if(q.kind!=="start"||head!==q.main||blob!==q.blob||prior.id!==q.previous||prior.status!=="completed"||prior.head_branch!=="main"||prior.event!=="workflow_dispatch"||prior.path!==".github/workflows/morwen-vroid-macos-probe.yml"||!["hair_candidate","hair_review","parallel_batch","parallel_next","face_candidate","wardrobe_export","parallel_ac"].includes(prior.display_title?.split(" / ")[1]?.split(" ")[0])||runs[0]?.id!==prior.id||active!==0||priorBlob===blob)throw Error("ineligible");
            if(q.mode==="hair_candidate"&&prior.conclusion==="failure"&&prior.display_title?.startsWith("Morwen VRoid / hair_candidate"))return true;
            if(q.mode==="hair_review"&&prior.conclusion==="success"&&prior.id===45572622840)return true;
            if(q.mode==="parallel_batch"&&prior.conclusion==="success"&&prior.id===45574711897)return true;
            if(q.mode==="parallel_next"&&prior.conclusion==="failure"&&[45581111206,45583270461].includes(prior.id))return true;
            if(q.mode==="face_candidate"&&["success","failure"].includes(prior.conclusion)&&prior.id===45585724554)return true;
+           if(q.mode==="face_candidate"&&prior.conclusion==="failure"&&prior.id===45601016604)return true;
            if(q.mode==="wardrobe_export"&&["success","failure"].includes(prior.conclusion)&&prior.id===45592878835)return true;
            if(q.mode==="parallel_ac"&&prior.conclusion==="failure"&&prior.id===45594627894)return true;
            throw Error("unqualified transition");
