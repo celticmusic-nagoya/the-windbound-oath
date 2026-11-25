@@ -10,6 +10,7 @@ on:
         default: wardrobe_guide
         options:
           - wardrobe_guide
+          - vrm_export
           - wardrobe_import
           - parallel_ac
           - wardrobe_export
@@ -28,6 +29,10 @@ on:
         default: ''
       request_id:
         description: Internal comment ID; empty for manual runs
+        type: string
+        default: ''
+      transfer_fence:
+        description: Rotated fence produced by the reviewed control job
         type: string
         default: ''
 permissions:
@@ -60,6 +65,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ "$MODE" = vrm_export ]; then
+            test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+            [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            exit 0
+          fi
           if [ -n "$EXPECTED_MAIN" ] || [ -n "$REQUEST_ID" ]; then
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
@@ -85,7 +96,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in vrm_export|wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -489,7 +500,7 @@ jobs:
           SWIFT
           swiftc "$RUNNER_TEMP/skirt-guide-profile.swift" -o "$RUNNER_TEMP/skirt-guide-profile"
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
+        if: inputs.mode != 'vrm_export' && inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -508,6 +519,77 @@ jobs:
               data=z.read(item)
               assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
+          PY
+      - uses: actions/checkout@v4
+        if: inputs.mode == 'vrm_export'
+        with:
+          ref: ${{ github.sha }}
+          path: transfer-control
+          persist-credentials: false
+      - name: Verify reviewed transfer fence and restore exact face and hair checkpoint
+        if: inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          REQUEST_ACTOR: ${{ github.actor_id }}
+          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$REQUEST_ACTOR" = 315379131
+          [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          test -n "$TRANSFER_ASSET"
+          test -n "$PRIVATE_DROP" && test -d "$PRIVATE_DROP" && test ! -L "$PRIVATE_DROP"
+          test -w "$PRIVATE_DROP"
+          python3 -m venv "$RUNNER_TEMP/transfer-venv"
+          "$RUNNER_TEMP/transfer-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0
+          profile=transfer-control/.github/morwen/vrm-export-profile.json
+          printf '%s  %s\n' "$PROFILE_SHA256" "$profile" | shasum -a 256 -c
+          python3 - "$profile" "$PRIVATE_DROP" <<'PY'
+          import json, os, pathlib, sys
+          approved = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          drop = pathlib.Path(sys.argv[2]).resolve(strict=True)
+          assert approved["source_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
+          assert approved["asset_id"] == os.environ["TRANSFER_ASSET"]
+          assert drop.is_absolute() and str(drop) == approved["private_drop"]
+          assert drop.stat().st_mode & 0o077 == 0
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$REQUEST_ID" > "$RUNNER_TEMP/transfer-request.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"])
+          comment = json.loads((p/"transfer-request.json").read_bytes())
+          repo = os.environ["GITHUB_REPOSITORY"]
+          assert comment["issue_url"] == f"https://api.github.com/repos/{repo}/issues/427"
+          assert comment["user"]["id"] == 315379131 and comment["author_association"] == "OWNER"
+          assert comment["created_at"] == comment["updated_at"]
+          assert comment["body"] == f'/two-morwen-launch vrm_export main={os.environ["GITHUB_SHA"]}'
+          PY
+          PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import os
+          from shared_asset_lease import assert_reservation
+          assert_reservation("origin", os.environ["TRANSFER_ASSET"], os.environ["TRANSFER_FENCE"], os.environ["GITHUB_SHA"])
+          PY
+          artifact=15018109141
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact" --jq 'select(.expired == false and .workflow_run.id == 45605491226) | .id' | grep -qx "$artifact"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact/zip" > "$RUNNER_TEMP/face-transfer.zip"
+          printf '%s  %s\n' b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588 "$RUNNER_TEMP/face-transfer.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, zipfile
+          p = pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"face-transfer.zip") as z:
+              assert z.testzip() is None
+              source = z.read("face-mouth-candidate-not-adopted.vroid")
+              receipt = json.loads(z.read("mouth-candidate-receipt.json"))
+              assert hashlib.sha256(source).hexdigest() == receipt["candidate_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
+              assert receipt["source_sha256"] == "55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          with (p/"Morwen-resume.vroid").open("xb") as f:
+              f.write(source)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
         if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
@@ -582,6 +664,10 @@ jobs:
       - name: Launch signed application and collect evidence
         timeout-minutes: 22
         env:
+          TRANSFER_MODE: ${{ inputs.mode == 'vrm_export' }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
           HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
@@ -723,6 +809,21 @@ jobs:
           screencapture -x evidence/final-recovery-screen.png || true
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
+          if [ "$TRANSFER_MODE" = true ]; then
+            PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import os
+          from shared_asset_lease import assert_reservation
+          assert_reservation("origin", os.environ["TRANSFER_ASSET"], os.environ["TRANSFER_FENCE"], os.environ["GITHUB_SHA"])
+          PY
+            export MORWEN_TRANSFER_PYTHON="$RUNNER_TEMP/transfer-venv/bin/python"
+            out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+            mkdir -m 700 "$out"
+            bash transfer-control/tools/production_qa/vrm_export_session.sh "$gui" \
+              "$MORWEN_READONLY_NATIVE" "$out/views" "$out" \
+              transfer-control/.github/morwen/vrm-export-profile.json
+            cmp "$MORWEN_READONLY_NATIVE" evidence/input-model.vroid
+            exit 0
+          fi
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
           if [ "$HAIR_REVIEW" = true ]; then MORWEN_EXPECTED_SHA256=55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541; fi
           if [ "$FRAME_PROBE" = true ]; then
@@ -1599,7 +1700,7 @@ jobs:
             fi
           fi
       - name: Upload review evidence
-        if: always()
+        if: always() && inputs.mode != 'vrm_export'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
