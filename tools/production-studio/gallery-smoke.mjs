@@ -81,6 +81,36 @@ try{
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'390px gallery overflow');
  await page.setViewportSize({width:360,height:780});
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/category-home.png'});
+ // Exact full HEAD history: distinguish equal prefixes, missing HEAD and mixed domain metadata.
+ const h1='a'.repeat(39)+'1',h2='a'.repeat(39)+'2';
+ const fixtures=[
+  {...manifest.entries[0],name:'history map',category:'cliff',head:h1,created_at:'2026-11-24T00:00:00Z',qa:'NOT_RUN'},
+  {...manifest.entries[0],name:'history character',category:'morwen',head:h1,created_at:'2026-11-25T00:00:00Z',qa:'FAIL'},
+  {...manifest.entries[0],name:'history village',category:'village',head:h2,created_at:'2026-11-23T00:00:00Z'},
+  {...manifest.entries[0],name:'history unknown',head:'invalid',created_at:'2026-11-26T00:00:00Z'}
+ ];
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:fixtures}}));
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('4 件'));
+ await page.getByRole('button',{name:'制作改訂履歴（HEAD別）',exact:true}).click();
+ const historyCards=page.locator('#published-gallery [data-revision-head]');
+ assert.equal(await historyCards.count(),3);
+ assert.deepEqual(await historyCards.evaluateAll(es=>es.map(e=>e.dataset.revisionHead)),[h1,h2,'unknown']);
+ const first=historyCards.first();
+ assert.ok((await first.innerText()).includes('NOT_RUN: 1'));
+ assert.ok((await first.innerText()).includes('FAIL: 1'));
+ assert.ok((await first.innerText()).includes('モルウェン'));
+ assert.ok((await first.innerText()).includes(h1));
+ assert.equal(await historyCards.last().locator('a').count(),0);
+ await first.getByRole('button',{name:'この一覧の成果物を見る',exact:true}).click();
+ assert.deepEqual(await page.locator('#published-gallery article h3').allTextContents(),['history character','history map']);
+ await page.getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ assert.equal(await historyCards.count(),3);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'history mobile overflow');
+ await page.locator('#published-gallery').screenshot({path:'gallery-qa/revision-history-fixture.png'});
+ await page.unroute('**/gallery-manifest.json');
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  // Global recent view and exact independent QA/adoption filters.
  await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
  const allTiles=page.locator('#published-gallery article');
