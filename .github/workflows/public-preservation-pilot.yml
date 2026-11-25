@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Test bridge guards without credentials
-        run: python3 -m unittest discover -s tools/private-preservation -p test_public_preservation_bridge.py
+        run: python3 -m unittest discover -s tools/private-preservation -p 'test_*.py'
       - name: Diagnose or transfer reviewed pilot
         env:
           CONFIRM_WRITE: ${{ inputs.confirm_write }}
