@@ -1,0 +1,186 @@
+{
+  "schema": "two.region.riverbank_morphology_study.v41",
+  "status": "MEASURED_SECTION_SURVEY_COMPLETE_LOCAL_SHAPE_STUDY_NOT_ADOPTED",
+  "parent": "accaee1c93602646d70385a910b848e00b095451",
+  "dependencies": {
+    "v40_receipt": "56f2785fd662ea183df84b3acdf4db76e864110f",
+    "v39_receipt": "173de657c4d0d627b57d05028679547b30c2fa47",
+    "source_glb_sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "scope": "Reversible local feasibility study on V39 standard GLB, not a D4-approved precision production or native edit. Coordinates glTF east/up/south, provisional metres.",
+  "trial_a": {
+    "method": "Screened inverse-distance neighbor relaxation with height cap .35m",
+    "rejection": "Core changed-neighborhood dihedral p95 worsened 10.9008573 to 11.5318016 degrees; lower max 15.5184015 to 17.3236660; no adoption.",
+    "qa_sha256": "a80d9567a577210c1f098ee985801be4b2df70f8fd95c61a5858058d64a5eac5"
+  },
+  "trial_b": {
+    "method": "Bounded sparse least squares on actual adjacent triangle gradient jumps; height-only cap .34999m tapered over 10m; explicit area-weighted smooth normals over four connected terrain meshes, exact-position shared normal IDs.",
+    "windows_gltf_xz": [
+      [
+        268,
+        -218,
+        350,
+        -135
+      ],
+      [
+        -155,
+        450,
+        -55,
+        530
+      ]
+    ],
+    "changed_vertices": 2001,
+    "changed_faces": 4442,
+    "changed_area_m2": 9834.72831161035,
+    "max_height_delta_m": 0.3499908447265625,
+    "core": {
+      "dihedral_p95_deg": [
+        10.900857320325178,
+        9.62532577179339
+      ],
+      "max_deg": [
+        29.352623385498077,
+        27.025158950685743
+      ],
+      "median_deg": [
+        0.6986150570905882,
+        1.161982568763064
+      ],
+      "grade_p95_pct": [
+        121.54446373226536,
+        120.51110178961125
+      ]
+    },
+    "lower": {
+      "dihedral_p95_deg": [
+        5.094826057175838,
+        5.091915607833183
+      ],
+      "max_deg": [
+        15.518401475710471,
+        15.472794606677812
+      ],
+      "grade_p95_pct": [
+        87.11641756308921,
+        87.42604660427322
+      ]
+    },
+    "protected": {
+      "water_projected_footprint_buffer_m": 0.75,
+      "object_aabbs": 236,
+      "object_buffer_m": 0.25,
+      "all_support_triangle_positions_exact": true,
+      "boundary_vertex_positions_exact": true,
+      "all_nonterrain_mesh_records_exact": true,
+      "all_indices_uv_materials_transforms_exact": true,
+      "shared_terrain_normal_delta": 0
+    },
+    "reopen": {
+      "actors": 250,
+      "triangles": 416583
+    },
+    "preview": {
+      "method": "3 matched VTK EGL/OpenGL 4.5 textured views, software renderer, not native or full PBR",
+      "pixel_mae": [
+        1.1953148148148147,
+        0.3971379928315412,
+        0.9713853046594982
+      ],
+      "self_review": "Shoreline angularity and uniform valley profiles remain. Core upper-tail improvement insufficient; median and lower grade metrics worsened slightly. Stop local smoothing. V39 remains baseline."
+    }
+  },
+  "survey": {
+    "method": "Exact original and trial triangle-plane intersections; 6 axis sections, not river-normal widths. Raw segments and bank offsets in section_design.json. 1:3 envelope provisional design feasibility only; not universal grade or accepted target.",
+    "sections": [
+      {
+        "id": "V41-S01",
+        "axis": "south",
+        "coordinate": -205.3,
+        "water_section_m": 9.66,
+        "dry_10m_mean_grade_pct": [
+          42.3,
+          88.8
+        ]
+      },
+      {
+        "id": "V41-S02",
+        "axis": "south",
+        "coordinate": -180.3,
+        "water_section_m": 9.58,
+        "dry_10m_mean_grade_pct": [
+          42,
+          98.9
+        ]
+      },
+      {
+        "id": "V41-S03",
+        "axis": "south",
+        "coordinate": -155.3,
+        "water_section_m": 9.74,
+        "dry_10m_mean_grade_pct": [
+          44,
+          95.6
+        ]
+      },
+      {
+        "id": "V41-S04",
+        "axis": "east",
+        "coordinate": -140.3,
+        "water_section_m": 28.91,
+        "dry_10m_mean_grade_pct": [
+          42.5,
+          38.7
+        ]
+      },
+      {
+        "id": "V41-S05",
+        "axis": "east",
+        "coordinate": -110.3,
+        "water_section_m": 28.08,
+        "dry_10m_mean_grade_pct": [
+          45.9,
+          45.5
+        ]
+      },
+      {
+        "id": "V41-S06",
+        "axis": "east",
+        "coordinate": -80.3,
+        "water_section_m": 27.29,
+        "dry_10m_mean_grade_pct": [
+          51,
+          50.7
+        ]
+      }
+    ],
+    "lower_available_to_tile_edge_approx_m": 26,
+    "decision": "Broad section/area design required, with asymmetric depositional shelves and steep erosion banks, actual parent extent and route/landing interface. Do not make uniform 1:3 banks or claim complete blueprint."
+  },
+  "outputs": {
+    "glb_sha256": "47c1e5200e90100b09dd28e44da911e330d4432098f911ad02cea0ead1be6032",
+    "build_sha256": "b3c5213ea721a57b4df8be149614c3c0f369ca3e6fdd913459c2c5f9d7073080",
+    "qa_sha256": "dde805d6df644c87c4ebbb39d6f6e51fbcb6171f0b2d118748e0867d23adece4",
+    "section_json_sha256": "7acb8d02060a3b6c2c214653a96be3c0b9237abb5c7f88d94410bb314d577ee1",
+    "section_sheet_sha256": "2d3a94866e1a05fcd651cf4e655dc2c28b2177adee74c99f3ffdb3814181521a",
+    "comparison_sha256": "28c5adea1ea6e0ffaca709ce2225dd9786ed400aac89eee431e01e00accd7640",
+    "render_qa_sha256": "3abd9c9d3173416a06d9cc1c8161ffb19770be43b8b5074d00997deb2332dd98",
+    "package_sha256": "57234854af882b288029d004b289ecad181ea4589d8c2cc70988929dbbdf7002",
+    "package_bytes": 30087794,
+    "zip_crc": "PASS",
+    "location": "Local ChatGPT attachments, no binary committed."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_PARENT_METRIC_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLB_READBACK_AND_EGL_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "No further height-only smoothing loops. Use measured six sections to design whole-bank landform with depositional and erosion zones and outer interface, verify D4, then actual remesh and native review. Blender transfer remains blocked. No formal adoption/main merge."
+}
