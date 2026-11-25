@@ -774,7 +774,11 @@ jobs:
           PY
             chmod u+w "$MORWEN_READONLY_NATIVE"
             echo HAIR_WIDTH_MUTATION_ATTEMPTED > evidence/hair-author-status.txt
-            slider_by hair-width '^Width$' -0.008 || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
+            # Run45583270461 Hair7: measured slider moved 8px, display remained .03.
+            # One revised bounded drag, 16px on 1024px screen; retain exact .02/.04 postcondition.
+            delta=-0.008
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then delta=-0.015625; fi
+            slider_by hair-width '^Width$' "$delta" || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
             capture_state hair-after-selected
             read -r after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Width$')"
             read -r thickness_after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Thickness$')"
@@ -955,6 +959,81 @@ jobs:
                   fi
                 done
                 test "$ready" = 1 || { echo BLOCKED_TEXTURE_EDITOR_TRANSITION > evidence/module-status.txt; exit 1; }
+                if [ "$NEXT_BATCH" = true ]; then
+                  # Source: actual C artifact15007343469, Uniform Skirt / Default Design.
+                  # Official VRoid shortcut Cmd+Shift+E exports the selected layer.
+                  grep -Fq 'Uniform Skirt' evidence/skirt-texture-editor.txt
+                  grep -Fq 'Default Design' evidence/skirt-texture-editor.txt
+                  grep -Fq 'Texture Editor' evidence/skirt-texture-editor.txt
+                  "$gui" click-label evidence/skirt-texture-editor.png 'Default Design' 'Uniform Skirt'
+                  sleep 2
+                  capture_state skirt-export-layer
+                  grep -Fq 'Default Design' evidence/skirt-export-layer.txt
+                  "$gui" key 14 cmd shift
+                  sleep 4
+                  capture_state skirt-export-dialog
+                  grep -Fq 'Save As' evidence/skirt-export-dialog.txt
+                  grep -Fq 'Cancel' evidence/skirt-export-dialog.txt
+                  export_dir="$RUNNER_TEMP/morwen-skirt-export"
+                  mkdir "$export_dir"
+                  "$gui" key 5 cmd shift
+                  sleep 2
+                  capture_state skirt-export-go
+                  grep -Eiq 'Go to Folder|Go to the folder' evidence/skirt-export-go.txt
+                  "$gui" text "$export_dir"
+                  "$gui" key 36
+                  sleep 3
+                  capture_state skirt-export-destination
+                  grep -Fq 'morwen-skirt-export' evidence/skirt-export-destination.txt
+                  grep -Fq 'Save As' evidence/skirt-export-destination.txt
+                  "$gui" click-label evidence/skirt-export-destination.png Save Cancel
+                  sleep 5
+                  # Never upload the stock PNG itself. Read it only within this runner.
+                  python3 - "$export_dir" <<'PY'
+          import pathlib,sys,hashlib,json,struct,zlib
+          folder=pathlib.Path(sys.argv[1])
+          images=list(folder.glob("*.png"))
+          assert len(images)==1 and images[0].is_file()
+          b=images[0].read_bytes()
+          assert b[:8]==b"\x89PNG\r\n\x1a\n" and 0<len(b)<64_000_000
+          pos=8; chunks=[]; image=None
+          while pos<len(b):
+              n=struct.unpack(">I",b[pos:pos+4])[0]
+              tag=b[pos+4:pos+8]; data=b[pos+8:pos+8+n]
+              assert len(data)==n and zlib.crc32(tag+data)==struct.unpack(">I",b[pos+8+n:pos+12+n])[0]
+              chunks.append(tag.decode("ascii"))
+              if tag==b"IHDR":
+                  width,height,depth,ctype,comp,flt,interlace=struct.unpack(">IIBBBBB",data)
+                  assert 0<width<=8192 and 0<height<=8192
+                  image=dict(width=width,height=height,bit_depth=depth,color_type=ctype,interlace=interlace)
+              pos+=12+n
+              if tag==b"IEND": break
+          assert pos==len(b) and image and chunks[-1]=="IEND" and "IDAT" in chunks
+          result=dict(scope="RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED",sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source="Uniform Skirt / Default Design",formal_adoption=False)
+          pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
+          PY
+                  swift - "$export_dir" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          let dir=URL(fileURLWithPath:CommandLine.arguments[1])
+          let files=try FileManager.default.contentsOfDirectory(at:dir,includingPropertiesForKeys:nil).filter{$0.pathExtension.lowercased()=="png"}
+          guard files.count==1,let im=NSBitmapImageRep(data:try Data(contentsOf:files[0])) else { exit(2) }
+          var rows:[[Int]]=[]
+          for y in 0..<im.pixelsHigh {
+              var lo=im.pixelsWide,hi = -1
+              for x in 0..<im.pixelsWide {
+                  guard let c=im.colorAt(x:x,y:y) else { exit(2) }
+                  if c.alphaComponent>=0.5 { lo=min(lo,x);hi=max(hi,x) }
+              }
+              rows.append(hi>=0 ? [lo,hi] : [])
+          }
+          let data=try JSONSerialization.data(withJSONObject:["scope":"Alpha coverage only, not UV topology","width":im.pixelsWide,"height":im.pixelsHigh,"rows":rows])
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-alpha-row-bounds.json"))
+          SWIFT
+                  capture_state skirt-export-complete
+                  test -s evidence/skirt-export-metadata.json
+                  test -s evidence/skirt-alpha-row-bounds.json
+                fi
                 ;;
               *) exit 1 ;;
             esac
@@ -969,13 +1048,16 @@ jobs:
               "B-hair":["hair-group"]+[f"hair-{s}-{k}" for s in (6,7,11) for k in ("selected","geometry")],
               "C-wardrobe":["outfit-tops","outfit-bottoms","outfit-neckwear","outfit-socks","outfit-shoes","skirt-template","skirt-texture-editor"]
           }[lane]
-          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor"]
+          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor","skirt-export-layer","skirt-export-dialog","skirt-export-destination","skirt-export-complete"]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
                   f=p/(tag+ext)
                   assert f.is_file() and f.stat().st_size>0, f
                   hashes[f.name]=hashlib.sha256(f.read_bytes()).hexdigest()
+          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe":
+              for name in ("skirt-export-metadata.json","skirt-alpha-row-bounds.json"):
+                  hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
           (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope="READ_ONLY_TARGETED_MODULE_EVIDENCE",files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No new native mutation or module merge"]),indent=2))
