@@ -10,6 +10,7 @@ import pathlib
 import re
 import subprocess
 import tempfile
+from release_transport import ReleaseTransport, TransportError
 
 SOURCE = 'celticmusic-nagoya/the-windbound-oath'
 DEST = SOURCE + '-handoff'
@@ -21,7 +22,8 @@ EXPECTED = dict(GITHUB_REPOSITORY=SOURCE, GITHUB_REF='refs/heads/main',
                 GITHUB_EVENT_NAME='workflow_dispatch', GITHUB_ACTOR='celticmusic-nagoya',
                 GITHUB_TRIGGERING_ACTOR='celticmusic-nagoya', CONFIRM_WRITE='PRESERVE_REVIEWED_PILOT')
 STAGES = frozenset(('RUNNER', 'DEST_ACCESS', 'DEST_REF', 'ENGINE_PIN', 'REVIEW_QUEUE',
-                    'ENGINE_IMPORT', 'RELEASE_PREFLIGHT', 'SOURCE_META', 'SOURCE_ZIP', 'TRANSFER'))
+                    'ENGINE_IMPORT', 'RELEASE_PREFLIGHT', 'SOURCE_META', 'SOURCE_ZIP', 'TRANSFER', 'RELEASE_CREATE',
+                    'RELEASE_UPLOAD', 'RELEASE_DRAFT_READBACK', 'RELEASE_PUBLISH', 'RELEASE_FINAL_READBACK'))
 STAGE = 'RUNNER'
 
 class ApiError(ValueError):
@@ -128,6 +130,7 @@ def run():
             preflight(module, rows, source, dest, root)
         else:
             stage('TRANSFER')
+            module.gh = ReleaseTransport(module.gh, dest, stage)
             module.preserve(rows, source, dest, target, public_bridge=True)
 
 def main():
@@ -137,7 +140,7 @@ def main():
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             run()
     except Exception as exc:
-        status = exc.status if isinstance(exc, ApiError) else 0
+        status = exc.status if isinstance(exc, (ApiError, TransportError)) else 0
         print('PILOT_BLOCKED: stage=' + (STAGE if STAGE in STAGES else 'RUNNER') + ' http=' + str(status))
         return 1
     print('PILOT_PREFLIGHT_VERIFIED: no remote writes' if os.environ.get('DIAGNOSE_ONLY','true') == 'true' else 'PILOT_READBACK_VERIFIED: confirm private release metadata separately')
