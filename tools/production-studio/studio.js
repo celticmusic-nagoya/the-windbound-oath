@@ -116,6 +116,32 @@ loadAreaBlueprints();
  });
 })();
 
+// Placement proposals are local, reversible, and never overwrite an area source.
+(() => {
+ const ids=["RILDE_VILLAGE","WINDWAITING_CLIFF","COASTAL_MEADOW","RIVER_CORRIDOR","MOSS_FOREST_A1","MOSS_FOREST_A2","MOSS_FOREST_A3","DUNVAR_FORTRESS"];
+ const names=["リルド村","風待ちの崖","海岸草原","河川回廊","モスの森 A1","モスの森 A2","モスの森 A3","ドゥンヴァル砦"];
+ const schema="two.studio.provisional_placement.v1", source="300fa1fa080886abdb1493039a41fe6449633cb0";
+ const panel=node("article","");panel.className="tile";panel.id="placement-editor";
+ panel.append(node("h3","暫定エリア配置案"),node("p","端末内の配置案専用。X東・Y北・Z上（m）、Z軸回転は度・反時計回り。全体原点未確定。空欄は未設定であり0ではありません。地形・境界・原本には反映しません。"));
+ const fields=["x_m","y_m","z_m","yaw_deg"],labels=["X 東 (m)","Y 北 (m)","Z 上 (m)","Z 回転 (°)"];
+ let rows=ids.map(id=>({id,x_m:null,y_m:null,z_m:null,yaw_deg:null})), current=0, revision=0, generation=0;
+ const choose=node("select","");choose.setAttribute("aria-label","配置エリア");ids.forEach((id,i)=>{const o=node("option",names[i]);o.value=String(i);choose.append(o);});panel.append(choose);
+ const inputs=fields.map((key,i)=>{const l=node("label",labels[i]);const input=node("input","");input.type="number";input.step="any";input.min=key==="yaw_deg"?"-360":"-1000000";input.max=key==="yaw_deg"?"360":"1000000";input.style.maxWidth="100%";input.setAttribute("aria-label",labels[i]);l.append(input);panel.append(l);return input;});
+ const status=node("p","");status.setAttribute("role","status");status.id="placement-status";
+ const summary=node("ul","");summary.id="placement-summary";summary.className="area-inventory";
+ const valid=(v,k)=>v===null||(typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=(k==="yaw_deg"?360:1000000));
+ function render(){summary.replaceChildren();rows.forEach((r,i)=>{const l=node("li",names[i]+": "+fields.map(k=>r[k]===null?"未設定":String(r[k])).join(" / "));summary.append(l);});status.textContent="配置案 revision "+revision+" / "+rows.filter(r=>fields.every(k=>r[k]!==null)).length+"/8 エリア入力済み / PROVISIONAL・未検証";}
+ function show(){inputs.forEach((input,i)=>input.value=rows[current][fields[i]]??"");render();}
+ function commit(){const vals=inputs.map(input=>input.value===""?null:input.valueAsNumber);if(inputs.some(input=>input.validity.badInput)||vals.some((v,i)=>!valid(v,fields[i]))){status.textContent="入力範囲外または不正値。配置案は変更していません。";return false;}if(vals.some((v,i)=>v!==rows[current][fields[i]])){fields.forEach((k,i)=>rows[current][k]=vals[i]);revision++;}render();return true;}
+ choose.addEventListener("change",()=>{if(!commit()){choose.value=String(current);return;}current=Number(choose.value);show();});
+ const apply=node("button","配置案に反映");apply.type="button";apply.onclick=()=>commit();
+ const exportButton=node("button","配置案JSONを書き出す");exportButton.type="button";exportButton.onclick=()=>{if(!commit())return;const data={schema,status:"PROVISIONAL",source_blob:source,coordinate_contract:{axes:"X east Y north Z up",unit:"metre",origin:null,yaw:"degrees_ccw_about_positive_z"},revision,areas:rows};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=node("a","");a.href=url;a.download="two-provisional-placement-r"+revision+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+ const label=node("label","配置案JSONを読み込む");const file=node("input","");file.type="file";file.accept=".json,application/json";file.id="placement-import";label.htmlFor=file.id;
+ file.addEventListener("change",async()=>{const g=++generation, selected=file.files[0];if(!selected)return;try{if(selected.size>65536)throw Error("64KiB上限");const data=JSON.parse(await selected.text());if(g!==generation)return;const c=data?.coordinate_contract;if(data?.schema!==schema||data.status!=="PROVISIONAL"||data.source_blob!==source||c?.axes!=="X east Y north Z up"||c.unit!=="metre"||c.origin!==null||c.yaw!=="degrees_ccw_about_positive_z"||!Number.isSafeInteger(data.revision)||data.revision<0||data.revision>=Number.MAX_SAFE_INTEGER-1||!Array.isArray(data.areas)||data.areas.length!==ids.length||!ids.every(id=>data.areas.filter(r=>r?.id===id).length===1))throw Error("配置契約・参照元不一致");const next=ids.map(id=>{const r=data.areas.find(x=>x.id===id);if(!fields.every(k=>valid(r[k],k)))throw Error("座標形式不正");return Object.fromEntries([["id",id],...fields.map(k=>[k,r[k]])]);});rows=next;revision=data.revision;show();}catch(e){if(g===generation)status.textContent="配置案読込失敗: "+e.message;}});
+ panel.append(apply,exportButton,label,file,status,summary);
+ const link=node("a","設計担当PR #482・原本確認");link.href="https://github.com/"+repo+"/pull/482";panel.append(link);byId("area-blueprints").append(panel);show();
+})();
+
 const imageUrls=[];
 function clearGallery(){for(const url of imageUrls)URL.revokeObjectURL(url);imageUrls.length=0;byId("gallery").replaceChildren();byId("images").value="";byId("image-status").textContent="画像未選択";}
 byId("clear-images").addEventListener("click",clearGallery);
