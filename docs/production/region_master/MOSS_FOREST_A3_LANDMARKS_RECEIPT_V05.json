@@ -1,0 +1,79 @@
+{
+  "schema": "two.region.moss_a3_landmarks_receipt.v05",
+  "parent": "f7faf27b49a5ddca29f03a62f7e8a15d231d0079",
+  "status": "AUTHORING_TARGETS_ONLY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "gate_policy": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v01_design": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "v04_contract": "e45210ba8925df3eec04d3ad12ae4bd29512d158",
+    "regional_owner_head": "133cdf7e76417e1127d88129deb900939901e220",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "outputs": {
+    "script_blob": "ee3157cd120d69cc0427ef457024eef8ccec92db",
+    "design_blob": "246095359e151284e447a30c203d33f36cedbe77",
+    "script_sha256": "bfd7624d46f003633afe3b25d6531c27b04d6744af8548633a5cdd03b1c6faaa",
+    "design_sha256": "cfa58995b99bfb84f44a44f8268521e61a036cece630b6a4d2ff5905425ce7fa",
+    "png_sha256": "a7a5331b92a54b0f764860b38d1a1b4f0393434339432ffe681fe5884555b6d3"
+  },
+  "hero": {
+    "height_m": 16.5,
+    "limbs": 6,
+    "roots": 7,
+    "crown_clusters": 7,
+    "root_footprint_outside_reserve_m2": 0,
+    "root_protected_overlap_m2": 0,
+    "crown_protected_overlap_m2": 0,
+    "crown_road_clearance_m": 4.8170909172014325,
+    "crown_arena_clearance_m": 4.372023856882329,
+    "root_ground_relief_m": 0.3538434628348561,
+    "root_tip_top_below_ground_m": 0.075
+  },
+  "altar": {
+    "candidates": 36,
+    "pass": 33,
+    "width_m": 2.4,
+    "depth_m": 1.2,
+    "height_m": 1.24,
+    "body_area_m2": 2.88,
+    "interaction_area_m2": 3.45,
+    "side_clearance_m": 1.8,
+    "body_pad_edge_clearance_m": 0.6,
+    "body_ground_relief_m": 0,
+    "interaction_ground_relief_m": 0
+  },
+  "visibility": {
+    "tree_midtrunk_clear": 25,
+    "altar_point_clear": 29,
+    "travel_views": 29,
+    "battle_actor_center_rays_clear": 3,
+    "battle_actor_center_rays": 3,
+    "blocked_tree_stations_m": [
+      351.04899380548056,
+      353.0478492862235,
+      355.04670476696646,
+      357.0455602477094
+    ]
+  },
+  "execution": "Actual local Python. Initial execution corrected overwritten input-list variables in reused V01 functions, rerun succeeded. Seven source SHA verified unchanged; two exact text blobs match local Git fingerprints, six-panel drawing visually inspected. Tree/altar design targets only, not finished art or 3D asset.",
+  "reproduction": "python design_landmarks.py <A3 GLB> <V03 shoulders NPZ> <V04 endpoint NPZ> <V01 QA JSON> <V01 design.py> <V04 gate contract JSON> <V02 staging JSON>",
+  "limits": [
+    "Provisional authored dimensions not measured from official CG. Six-panel design sheet is not six orthographic views. Root knot contact and planar conservative reservations do not certify continuous mesh grounding, sculpt, wind or actual asset occlusion. Sightlines sample terrain, gate reserves, root footprint extrusions and crown ellipsoids; do not include final trunk/branch/foliage mesh. Altar point is not sword visibility. Sword dimensions and concealment/event mechanism pending source and gameplay owner. No Blender or runtime."
+  ],
+  "decision": "Keep staged tree reveal at gate as provisional composition, not a visibility pass for full tree. Next design detailed bark/root branching and stone material/ornament specifications, actual reference/asset source check and D4 request; do not start unqualified precision native production. No formal adoption or main merge.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_SOURCE_MATERIAL_NATIVE_INTERFACE",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
