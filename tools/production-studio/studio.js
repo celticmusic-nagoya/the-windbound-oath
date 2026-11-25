@@ -85,6 +85,37 @@ async function loadAreaBlueprints(){
 
 loadAreaBlueprints();
 
+// Local-only image-space audit inspection. No upload, adoption or inferred world dimensions.
+(() => {
+ const area=byId("area-blueprints");
+ const panel=node("article","");panel.className="tile";
+ panel.append(node("h3","設計計測JSON・端末内検査"),node("p","崖CG輪郭・画像座標QA v01対応。取得済みJSONを端末内で読み取ります。原本の正当性やG1〜G4は独立検証しません。"));
+ const label=node("label","計測JSONを選択");label.htmlFor="blueprint-audit-file";
+ const file=node("input","");file.type="file";file.accept=".json,application/json";file.id="blueprint-audit-file";
+ const result=node("div","未選択");result.id="blueprint-audit-result";result.setAttribute("role","status");
+ panel.append(label,file,result);area.append(panel);
+ let generation=0;
+ file.addEventListener("change",async()=>{
+  const current=++generation;result.replaceChildren();
+  const selected=file.files[0];if(!selected){result.textContent="未選択";return;}
+  try{
+   if(selected.size>2*1024*1024)throw Error("2MB上限");
+   const raw=await selected.text();if(current!==generation)return;
+   const d=JSON.parse(raw);
+   if(d?.schema!=="two.cliff.image_space_geometry_audit.v01"||!Array.isArray(d.derived)||d.derived.length>100||!d.qa||!d.checks)throw Error("非対応の計測JSON");
+   if(!d.derived.every(x=>x&&typeof x.id==="string"&&Number.isFinite(x.polyline_length_px)&&x.polyline_length_px>=0&&Number.isSafeInteger(x.point_count)&&x.point_count>=0&&x.world_metric===null))throw Error("計測項目形式不正");
+   const fmt=v=>v===null||v===undefined?"未記録":typeof v==="string"||typeof v==="number"||typeof v==="boolean"?String(v):"形式未対応";
+   result.append(node("p","端末選択資料 / 来歴・SHA未検証 / 画像座標のみ（px）。実距離・標高・角度ではありません。"));
+   result.append(node("p","点数: "+fmt(d.checks.point_count)+" / 特徴数: "+fmt(d.checks.feature_count)));
+   result.append(node("p","比較準備: "+(d.comparison_ready===true?"資料申告：準備済み":"未完了")+" / "+fmt(d.reason)));
+   for(const key of ["pixel_structure","source_trace_accuracy","projected_render_comparison","G1","G2","G3","G4"])result.append(node("p",key+": "+fmt(d.qa[key])+"（資料申告）"));
+   const contract=d.required_render_contract||{};
+   result.append(node("p","投影残差: "+fmt(contract.projected_residuals_px)+" / 許容誤差(px): "+fmt(contract.tolerance_px)+" / 不確かさ(px): "+fmt(contract.uncertainty_px)));
+   for(const x of d.derived){const item=node("p",x.id+" / "+x.point_count+" 点 / 画像内輪郭長 "+x.polyline_length_px+" px / 実寸未確定");item.style.overflowWrap="anywhere";result.append(item);}
+  }catch(e){if(current===generation)result.textContent="計測JSON検査失敗: "+e.message;}
+ });
+})();
+
 const imageUrls=[];
 function clearGallery(){for(const url of imageUrls)URL.revokeObjectURL(url);imageUrls.length=0;byId("gallery").replaceChildren();byId("images").value="";byId("image-status").textContent="画像未選択";}
 byId("clear-images").addEventListener("click",clearGallery);
