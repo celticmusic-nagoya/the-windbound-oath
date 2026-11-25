@@ -1,0 +1,96 @@
+{
+  "schema": "two.region.a2_photo_material.v51",
+  "parent": "652a1392c4d2fa83dcf7b1d252ccfb435d23535f",
+  "status": "LOCAL_PHOTO_PBR_SCAN_PLACEMENT_REOPEN_PASS_ART_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "catalog": "4900fc6568f2b8ae15d2d6d56171176c26b846d6",
+    "v50": "dd602538dcb035d4ea8ff6dab0ee8f2b8710e179"
+  },
+  "scope": "Isolated material and placement feasibility, no terrain/water precision changes, canonical placement or route claims. Provisional 3m texture repeat; source scale unknown.",
+  "source": {
+    "v50_sha256": "96db10299b95a598a78cb6fd0a7140a391fe3f8591e07de70247fa500ba76c09",
+    "artifact_id": 15017224941,
+    "archive_sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564",
+    "archive_crc": "PASS",
+    "manifest_files_sha_size_pass": 17,
+    "license_evidence": "https://polyhaven.com/license; existing locked catalog CC0-1.0",
+    "assets": [
+      {
+        "id": "forrest_ground_01",
+        "author": "Rob Tuytel",
+        "url": "https://polyhaven.com/a/forrest_ground_01",
+        "maps": [
+          "diffuse original JPEG",
+          "OpenGL normal original JPEG",
+          "AO+roughness packed ORM; metallic zero"
+        ]
+      },
+      {
+        "id": "rock_moss_set_01",
+        "author": "Kless Gyzen",
+        "url": "https://polyhaven.com/a/rock_moss_set_01",
+        "maps": [
+          "original diffuse",
+          "normal",
+          "roughness"
+        ],
+        "geometry": "Original source binary and accessors copied; six original scan mesh types"
+      }
+    ],
+    "recovery": "Direct provider DNS unavailable; recovered prior exact authenticated Actions archive, no repeated dispatch."
+  },
+  "qa": {
+    "original_v50_buffer_prefix_exact": true,
+    "original_ground_and_water_geometry_and_transforms_exact_reopen": true,
+    "source_rock_binary_exact": true,
+    "all_six_rock_local_vertices_and_faces_exact_reopen": true,
+    "ground_triangles": 1600,
+    "water_triangles": 491,
+    "added_rock_triangles": 63127,
+    "scene_triangles": 65218,
+    "rock_instances": 6,
+    "min_wet_footprint_gap_m": 0.21532206140001678,
+    "rock_footprint_min_interinstance_gap_threshold_m": 0.3,
+    "min_ground_signed_range_m": [
+      -0.3192264863211456,
+      -0.13554964611331854
+    ],
+    "max_ground_signed_range_m": [
+      0.7108781869899339,
+      1.4052890678948131
+    ],
+    "water_material_unchanged": true,
+    "render": "VTK EGL actual GLB importer, PBR mode, normal and ORM textures bound on ground and all six rocks, three matched views and lights; no IBL/transmission",
+    "self_art": "HOLD: source scan shape/microstructure visible close up, repetitive terrain texture and reduced macro variation, flat unchanged water, bare patch edges, no forest/hero rock composition."
+  },
+  "outputs": {
+    "glb_sha256": "188f1aca8195326adf17b329387942c4991207207061498952dc3fd2b7aa6b21",
+    "glb_bytes": 21601016,
+    "build_sha256": "995610ff7eb142aa2ab82a8ab2db4d18e678aad9e21b78834639b01c78ecd269",
+    "render_sha256": "f08d6f19ff316c2e2074ec6202aea01c26fc5a47d1f1de31c1134e045c37bcb3",
+    "comparison_sha256": "050353307f40b177d96ac4c328fdeb3d47ed1ac65142e0a4a2cc4596acf509da",
+    "qa_sha256": "af1ef39910888f0fd9f35b8e40402ea9dd843438b28f1327e64f1d0357347f4b",
+    "manifest_sha256": "ca8cba7c8537af3f3dab80e67caf0d5bbfa66f5125d645175ed758aefe8e7b80",
+    "package_sha256": "b1d87bb4917064ae24db87ca393b2724c7604159d9acd75439e9a4998ab2c0c0",
+    "package_bytes": 22215280,
+    "zip_crc": "PASS",
+    "location": "Local ChatGPT package; GitHub receipt only; no public distribution"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_OFFICIAL_CG_AND_FULL_LAYOUT",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLB_REOPEN_PBR_PREVIEW_PASS_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "No complete collision or traversal survey; sampled contact and planar hull only. 63127 additional triangles; LOD and Android budget not measured.",
+    "Original V50 water proxy unchanged. No physical water, photo scale certification, scene-level forest/hero geometry, full C03 receiving mesh or canonical placement. No formal adoption or main merge."
+  ],
+  "next": "Avoid repeated material-only tuning. Recover V21+ exact native forest checkpoint through authenticated artifact route and assess composition, determine terrain/route safe interfaces; evaluate multiscale terrain shading and LOD in actual representative scene. C03 receiver recovery remains HOLD."
+}
