@@ -11,10 +11,11 @@ on:
       source_set:
         description: Locked source set to recover
         type: choice
-        options: [fern-alpha, fern-bark, stump, forest]
-        default: fern-alpha
+        options: [native-pilot, fern-alpha, fern-bark, stump, forest]
+        default: native-pilot
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: two-shared-material-recovery-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -22,7 +23,7 @@ jobs:
   recover:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 24
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,9 +45,9 @@ jobs:
           fi
           echo 'run=true' >> "$GITHUB_OUTPUT"
       - name: Recover only selected locked sources
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') != 'native-pilot'
         env:
-          SOURCE_SET: ${{ inputs.source_set || 'fern-alpha' }}
+          SOURCE_SET: ${{ inputs.source_set || 'native-pilot' }}
         shell: bash
         run: |
           case "$SOURCE_SET" in
@@ -58,12 +59,52 @@ jobs:
           esac
           python 'tools/map_blueprint/shared_materials_v01/material_cache.py' --catalog 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' "${assets[@]}" --out "$RUNNER_TEMP/two-material-cache" --report "$RUNNER_TEMP/material-recovery.json"
       - name: Preserve exact source candidate files and report
-        if: always() && steps.scope.outputs.run == 'true'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') != 'native-pilot'
         uses: actions/upload-artifact@v4
         with:
-          name: two-shared-material-${{ inputs.source_set || 'fern-alpha' }}-candidates
+          name: two-shared-material-${{ inputs.source_set || 'native-pilot' }}-candidates
           path: |
             ${{ runner.temp }}/two-material-cache
             ${{ runner.temp }}/material-recovery.json
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Native pilot exact artifact intake
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
+          recover() {
+            local id="$1" expected="$2" f="$RUNNER_TEMP/v16-$1.zip"
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$f"
+            printf '%s  %s\n' "$expected" "$f" | sha256sum -c -
+            unzip -tq "$f"
+            mkdir -p "$RUNNER_TEMP/v16-input/$id"
+            unzip -q "$f" -d "$RUNNER_TEMP/v16-input/$id"
+          }
+          recover 14626151525 821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90
+          recover 15017224941 cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564
+          recover 15023498109 1a83910660fe9c7ed3fa32ec4c18b00b99210fb056b7a8644bc93c6587376898
+          recover 15023783357 620d6f222d3b4613f7140c47342b973fe603125de4cc387492d47269f3420343
+          recover 15024936587 05cb8bcc0edf09943b21e6af6207e2eb1825b3c9c2268754f210f070b5218a0d
+          echo 'V16_FIVE_ARCHIVES_SHA_PASS' > "$RUNNER_TEMP/v16-output/intake.txt"
+      - name: Install approved Blender and render isolated subset
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_v16.py -- "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
+      - name: Preserve native pilot and render evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-pilot') == 'native-pilot'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v16-native-pilot
+          path: ${{ runner.temp }}/v16-output
           retention-days: 14
           if-no-files-found: error
