@@ -1,0 +1,63 @@
+{
+  "scope": "ISOLATED_MATERIAL_ONLY_NOT_ADOPTED",
+  "main": "5f0e5c341303e42b6843e1ac9b36d911e44219c9",
+  "source": {
+    "trim_sha256": "22b6e4634d7f0e9f600d52a9180b2ba25fadab43c31979b4674634c7f4251ca4",
+    "metal_artifact": 15020595762,
+    "metal_archive_sha256": "6b8e75aa63c035b5e3f59da78f30225b021880ccceb72ceb47b425a915c8375e",
+    "metal_maps_verified": "3/3 byte and pixel SHA; CRC PASS"
+  },
+  "parameters": {
+    "thread_base_rgb": [
+      205,
+      158,
+      108
+    ],
+    "thread_roughness_nominal": 0.52,
+    "thread_metalness": 0,
+    "thread_microrelief": "procedural height h=.23*cos(2*pi*((x%8)+.5*y)/8)+.09*cos(2*pi*y/4); periodic central differences, normalized tangent normal GL, neutral outside existing alpha",
+    "hardware_roughness_mean": 0.30055636985629214,
+    "ornament_rgb": [
+      93,
+      57,
+      116
+    ],
+    "ornament_roughness_trials": [
+      0.48,
+      0.15
+    ]
+  },
+  "outputs": {
+    "trim-basecolor.png": "22b6e4634d7f0e9f600d52a9180b2ba25fadab43c31979b4674634c7f4251ca4",
+    "trim-normalGL.png": "d2ab5044f8e18a428cc7a285a6afbe1534ff88bee33573ed8ec02c5dcc15031f",
+    "trim-roughness.png": "cdbbf0ddd257e89e8dfd1344cc1d6a45fa1a4788a2e34f519e978c60709052eb",
+    "trim-metalness.png": "8cb6c7f4045f376b93b004189a0e4fe749889fae83f719990983230c9e993808",
+    "trim-mask.png": "ac51308c31bd34059bd7abafc7b86983b4269b907f9f2802cff6465374f47a67",
+    "hardware-roughness-trial.png": "ea4a6856a44802cef7ccb44d4ff76abe063501e708e805e135d9526875928aa5",
+    "comparison.png": "4da8ffcbe67fb9f7dd739258e2a84c7b1232198a0aeea497b0aa360644df7a72"
+  },
+  "local_script_sha256": "626078a7594f9b72232cddea663f5b928d98dedf3cf3a5a4f69c821baeb7690f",
+  "local_receipt_sha256": "78832207fe65d0c578c66bc500208c235350e8fad00ac99427a1793a8de9b6a4",
+  "qa": {
+    "alpha_exact": true,
+    "repeat_512_exact": "5/5 trim maps",
+    "first_attempt": "normal repeat assertion FAIL:398 channel samples differed by 1 due to numerical phase rounding; use bounded x%8 phase, preserve rejected attempt",
+    "repeat_rebuild": "all seven PNGs and receipt byte-identical",
+    "cpu_sphere_mean_abs_rgb": {
+      "thread_normal": 2.74902133182608,
+      "hardware_roughness": 26.872548096045552,
+      "ornament_roughness": 4.641530071803889
+    },
+    "visual": "actual sheet reviewed; thread fine regular weave visible but may alias; metal broader highlights at .30; violet glossy sphere appears coated rather than gemstone, HOLD for later transmission/facet test",
+    "G2": "NOT_RUN actual garment",
+    "G3": "NOT_RUN native",
+    "G4": "NOT_RUN game"
+  },
+  "limitations": [
+    "No measured thread, procedural Metal048A not verified alloy",
+    "Purple ornament only opaque shader, not actual gemstone or Layer0 color measurement",
+    "No garment UV or shape application; original trim placement remains provisional",
+    "Only receipt committed; local images/script not hosted",
+    "Codex native run45627058278 active at prework; no native writes or new dispatch"
+  ]
+}
