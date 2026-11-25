@@ -1,5 +1,5 @@
 name: Morwen VRoid macOS compatibility probe
-run-name: Morwen VRoid / skirt flat texture control
+run-name: Morwen VRoid / skirt native window capture
 on:
   workflow_dispatch:
     inputs:
@@ -422,6 +422,8 @@ jobs:
           set -euo pipefail
           python3 -m venv "$RUNNER_TEMP/material-venv"
           "$RUNNER_TEMP/material-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
+          gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_capture_probe.py?ref=e62b941cfe70fcacfceed3ed6374e64f3b96cd0b" > "$RUNNER_TEMP/morwen-capture.py"
+          echo "0418bb50d68bb194fd001d77374a040938c3599cee3540a56391032c81b2c130  $RUNNER_TEMP/morwen-capture.py" | shasum -a 256 -c
           "$RUNNER_TEMP/material-venv/bin/python" - "$RUNNER_TEMP/uv-grid.png" <<'PY' > evidence/skirt-generated-sha.txt
           import hashlib
           import json
@@ -1158,6 +1160,41 @@ jobs:
                 capture_state skirt-template
                 grep -Fq Bottoms evidence/skirt-template.txt
                 grep -Fq 'Edit Texture' evidence/skirt-template.txt
+                probe_capture() {
+                  local tag="$1" dest="$RUNNER_TEMP/capture-$1" name result=0
+                  "$RUNNER_TEMP/material-venv/bin/python" "$RUNNER_TEMP/morwen-capture.py" --capture "$dest" > "evidence/capture-$tag.stdout.txt" 2> "evidence/capture-$tag.stderr.txt" || result=$?
+                  printf '%s\n' "$result" > "evidence/capture-$tag.exit.txt"
+                  for name in geometry.json receipt.json display.png window.png; do
+                    if [ -f "$dest/$name" ]; then
+                      cp "$dest/$name" "evidence/capture-$tag.$name"
+                    fi
+                  done
+                }
+                probe_capture stock-preview
+                # The normal preview has a wider viewport than Texture Editor.
+                # Capture full-resolution frames, with no digital scaling.
+                "$gui" vroid-shortcut front
+                sleep 2
+                for turn in 1 2 3 4; do "$gui" vroid-shortcut turn-left; sleep 0.45; done
+                "$gui" zoom 0.50 0.56 30 0
+                sleep 2
+                "$gui" pan 0.50 0.79 0.50 0.46 0.5
+                sleep 2
+                capture_state capture-stock-close-30
+                "$gui" zoom 0.50 0.56 11 0
+                sleep 2
+                capture_state capture-stock-close-41
+                "$gui" zoom 0.50 0.56 5 0
+                sleep 2
+                capture_state capture-stock-close-46
+                "$gui" zoom 0.50 0.56 -16 0
+                sleep 2
+                "$gui" pan 0.50 0.46 0.50 0.79 0.5
+                "$gui" zoom 0.50 0.56 -30 0
+                "$gui" vroid-shortcut front
+                sleep 3
+                capture_state skirt-template
+                grep -Fq 'Edit Texture' evidence/skirt-template.txt
                 "$gui" click-label evidence/skirt-template.png 'Edit Texture' Bottoms
                 ready=0
                 for delay in 4 10 20 30; do
@@ -1404,50 +1441,7 @@ jobs:
                   test -s evidence/skirt-export-metadata.json
                   test -s evidence/skirt-alpha-row-bounds.json
                   if [ "$WARDROBE_IMPORT" = true ]; then
-                    # The B run enumerated this native mode. Keep the original
-                    # display dimensions for the calibrated import and export.
-                    cat > "$RUNNER_TEMP/skirt-display.swift" <<'SWIFT'
-          import CoreGraphics
-          import Foundation
-          let display = CGMainDisplayID()
-          let modes = CGDisplayCopyAllDisplayModes(display, nil) as? [CGDisplayMode] ?? []
-          let width = Int(CommandLine.arguments[1])!
-          let height = Int(CommandLine.arguments[2])!
-          guard let mode = modes.first(where: {
-              $0.width == width && $0.height == height &&
-              $0.pixelWidth == width && $0.pixelHeight == height
-          }) else { exit(2) }
-          guard CGDisplaySetDisplayMode(display, mode, nil) == .success else { exit(3) }
-          let fresh = CGDisplayCopyDisplayMode(display)
-          print("CURRENT \(fresh?.width ?? 0)x\(fresh?.height ?? 0)")
-          SWIFT
-                    if swift "$RUNNER_TEMP/skirt-display.swift" 1920 1080 > evidence/skirt-display-modes.txt; then
-                      sleep 4
-                      osascript > evidence/skirt-hd-window.txt 2>&1 <<'APPLESCRIPT' || true
-          tell application "System Events"
-              set vr to first application process whose bundle identifier is "net.pixiv.vroid.macosx"
-              tell window 1 of vr
-                  set position to {0, 25}
-                  set size to {1920, 1010}
-                  return size
-              end tell
-          end tell
-          APPLESCRIPT
-                      sleep 3
-                      capture_state skirt-hd-unzoomed
-                      "$gui" zoom 0.326 0.56 26 0
-                      sleep 2
-                      "$gui" pan 0.326 0.74 0.326 0.42 0.5
-                      sleep 2
-                      capture_state skirt-hd-zoom-26
-                      for zoom in 34 42 48; do
-                        if [ "$zoom" = 48 ]; then delta=6; else delta=8; fi
-                        "$gui" zoom 0.326 0.56 "$delta" 0
-                        sleep 2
-                        capture_state "skirt-hd-zoom-$zoom"
-                      done
-                      swift "$RUNNER_TEMP/skirt-display.swift" 1024 768 >> evidence/skirt-display-modes.txt
-                    fi
+                    probe_capture flat-editor
                   fi
                 fi
                 ;;
@@ -1472,7 +1466,6 @@ jobs:
           if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview","skirt-uv-front","skirt-uv-left4","skirt-uv-left8","skirt-uv-right4"]
           if os.environ["WARDROBE_IMPORT"]=="true":
               required += [f"skirt-baseline-{view}" for view in ("front","left4","left8","right4")]
-              required += [f.stem for f in sorted(p.glob("skirt-hd-*.png"))]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -1486,8 +1479,10 @@ jobs:
               name="skirt-guide-profile.json"
               hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           if os.environ["WARDROBE_IMPORT"]=="true":
-              for name in ("skirt-display-modes.txt","skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
+              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          for f in sorted(p.glob("capture-*")):
+              hashes[f.name]=hashlib.sha256(f.read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
           (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_FLAT_CONTROL_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
