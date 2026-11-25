@@ -32,9 +32,13 @@ class BridgeTest(unittest.TestCase):
     def test_select_only_reviewed_pilot(self):
         rows=[dict(artifact_id=x,rights='APPROVED_PRIVATE_COPY') for x in (*b.PILOT,42)]
         q=dict(source_repository=b.SOURCE,items=rows)
-        self.assertEqual(b.select_pilot(q),rows[:2])
+        self.assertEqual(b.select_pilot(q),rows[:len(b.PILOT)])
         for bad in (rows[1:],rows+[rows[0]], [dict(rows[0],rights='PENDING'),*rows[1:]]):
             with self.assertRaises(ValueError): b.select_pilot(dict(q,items=bad))
+
+    def test_home_batch_excludes_completed_material_pilot(self):
+        self.assertEqual(b.PILOT, (14684514477, 14686298362, 14741951418))
+        self.assertTrue(set(b.PILOT).isdisjoint((15018392749, 15020595762)))
 
     def test_private_errors_and_receipts_not_logged(self):
         out=io.StringIO()
@@ -68,9 +72,9 @@ class BridgeTest(unittest.TestCase):
         rows=[dict(artifact_id=i) for i in b.PILOT]
         with tempfile.TemporaryDirectory() as tmp, patch.object(b,'absent',return_value=True), patch.object(b,'api',return_value={}) as api:
             b.preflight(module,rows,'source','dest',pathlib.Path(tmp))
-        self.assertEqual(module.verify_zip.call_count,2)
-        self.assertEqual(module.verify_meta.call_count,2)
-        self.assertEqual(api.call_count,4)
+        self.assertEqual(module.verify_zip.call_count,len(b.PILOT))
+        self.assertEqual(module.verify_meta.call_count,len(b.PILOT))
+        self.assertEqual(api.call_count,2*len(b.PILOT))
         module.preserve.assert_not_called()
         self.assertEqual(module.gh.call_count,1)
         self.assertEqual(module.gh.call_args.args[1][0],'api')
