@@ -17,6 +17,12 @@ try {
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
+ // Pointer check before the long inspection. Test the summary label rather than its blank right-hand area.
+ const localSummary=page.locator('#local-title > summary');
+ await localSummary.click({position:{x:24,y:22}});
+ await page.waitForFunction(()=>document.querySelector('#local-title').open===true);
+ await localSummary.click({position:{x:24,y:22}});
+ await page.waitForFunction(()=>document.querySelector('#local-title').open===false);
  // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
  const blueprint=page.locator('#area-blueprints .blueprint-preview img');
  await blueprint.waitFor({state:'visible'});
@@ -106,9 +112,12 @@ try {
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
  assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
- const localSummary=page.locator('#local-title > summary');
+ // After the long anchor workflow use the native keyboard disclosure action.
+ // Record hit test / focus diagnostics; no scripted assignment to details.open.
  await localSummary.scrollIntoViewIfNeeded();
- await localSummary.click();
+ console.log('local disclosure diagnostics',await localSummary.evaluate(el=>{const b=el.getBoundingClientRect();return {rect:{x:b.x,y:b.y,w:b.width,h:b.height},hit:document.elementFromPoint(b.x+24,b.y+22)?.outerHTML.slice(0,180),active:document.activeElement?.tagName,open:el.parentElement.open};}));
+ await localSummary.focus();
+ await localSummary.press('Enter');
  await page.waitForFunction(()=>document.querySelector('#local-title').open===true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),true);
  const fixture=Buffer.from('diagnostic only');
