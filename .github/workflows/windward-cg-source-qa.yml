@@ -1,0 +1,27 @@
+name: Windward Approved CG Source QA
+on:
+  pull_request:
+    paths:
+      - 'tools/map_blender/lind/verify_windward_cg_sources.py'
+      - '.github/workflows/windward-cg-source-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify immutable approved CGs and build contact sheet
+        run: |
+          python -m pip install --disable-pip-version-check pillow
+          python tools/map_blender/lind/verify_windward_cg_sources.py out/windward-cg
+      - name: Upload QA evidence (game-only, internal review)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windward-approved-cg-source-qa
+          path: out/windward-cg/
+          if-no-files-found: warn
+          retention-days: 7
