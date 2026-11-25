@@ -102,7 +102,23 @@ try{
  await page.locator('#published-gallery').screenshot({path:'gallery-qa/actual-gallery.png'});
  await page.locator('.gallery-image-button').first().click();
  await page.locator('dialog img').evaluate(e=>e.decode());
+ const review=page.getByRole('dialog',{name:'成果物画像レビュー'});
+ const cliffPhotos=cliffEntries.filter(photo).sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
+ assert.equal(await review.getByRole('status').innerText(),'1 / '+cliffPhotos.length);
+ assert.ok(await review.getByRole('button',{name:'← 前へ'}).isDisabled());
+ await review.getByText('制作情報・QA・来歴',{exact:true}).click();
+ assert.ok((await review.locator('details p').innerText()).includes(cliffPhotos[0].sha256));
+ if(cliffPhotos.length>1){
+  await review.getByRole('button',{name:'次へ →'}).click();
+  assert.equal(await review.getByRole('status').innerText(),'2 / '+cliffPhotos.length);
+  assert.ok((await review.locator('details p').innerText()).includes(cliffPhotos[1].sha256));
+  await review.getByRole('button',{name:'← 前へ'}).click();
+  assert.equal(await review.getByRole('status').innerText(),'1 / '+cliffPhotos.length);
+ }
+ assert.ok(await review.evaluate(e=>e.scrollWidth<=e.clientWidth+1),'review overflow');
+ await review.screenshot({path:'gallery-qa/image-review-mobile.png'});
  await page.getByRole('button',{name:'閉じる',exact:true}).click();
+ assert.ok(await page.locator('.gallery-image-button').first().evaluate(e=>document.activeElement===e),'review focus not restored');
  await page.getByRole('button',{name:'← カテゴリ一覧'}).click();
  await page.getByRole('button',{name:/モルウェン/}).click();
  await page.getByRole('button',{name:/モルウェン \/ 全件/}).click();
