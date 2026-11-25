@@ -1,0 +1,89 @@
+{
+  "schema": "two.region.moss_a3_gate_local_receipt.v04",
+  "parent": "7034f3af06cf503a53deb1276106ef83c0f76b9c",
+  "status": "LOCAL_RESERVES_PASS_GLOBAL_BYPASS_HOLD",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v03": "a52575bbab67ad1673c40c8b6d90a68b87c50bf5",
+    "v01_design": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "regional_owner_head": "133cdf7e76417e1127d88129deb900939901e220",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "inputs_sha256": [
+    "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "c3d6c314cc23f50012840a2b81414f46ea638ac6f7917f3ae557394e434d3f32",
+    "3ab29ffddcaabce5a997e1ce65bd6c55e0f3df2d8e73f00049fb9c6474e9f65e",
+    "b4adf3246b4f9c298f4017050966e332af859caf29038468c3e305d726ce78cf"
+  ],
+  "selected": {
+    "candidate_count": 12,
+    "pass_local_count": 12,
+    "offset_m": 3.5,
+    "scale": 1,
+    "footprint_union_m2": 65.13622749080079,
+    "rock_area_m2": 50.35499999999978,
+    "root_area_m2": 16.115000000000006,
+    "protected_overlap_m2": 0,
+    "protected_clearance_m": 0.39999999999996155,
+    "outside_m2": 0,
+    "max_grade_pct": 10.602568658863145,
+    "max_relief_m": 0.6351850436952731,
+    "open_connected": true,
+    "closed_bypass_connected": true,
+    "swept_centerline_extra_clearance_m": 2.2500000000000124,
+    "height_reserves_m": {
+      "rock_L": 3.2,
+      "rock_R": 2.6,
+      "root_L": 1.1,
+      "root_R": 0.9
+    }
+  },
+  "contract": {
+    "state_permission_checks": 30,
+    "transition_sequences": 4,
+    "all_pass": true,
+    "states": [
+      "SEALED",
+      "UNSEALED",
+      "INSIDE",
+      "ENCOUNTER_DONE",
+      "OATH_DONE"
+    ],
+    "unknowns": [
+      "Actual save schema/event authority",
+      "World navigation bypass enforcement",
+      "Post-oath reverse release and reopening",
+      "Atomic reward transaction and actual inventory idempotency"
+    ]
+  },
+  "outputs": {
+    "script_sha256": "4316ad87ef639feb592bac9b7dbcb222176f6e84c553635af03a7f6b3b35e86d",
+    "qa_sha256": "13a9a6e1ec743640a0db85ed54ed09acd60dc473e9882988c1912ff86f075e8d",
+    "contract_sha256": "4d2c308774f3c972c803cd8f74eb006c38dedb81ad45af34479bb612c4f07780",
+    "png_sha256": "80662c0359e2fc8079eca38d56eb39898e5b248762421cc89f28cec70b77d377",
+    "script_local_git_fingerprint": "594394182939183225e15405b180c3d5deac6f11",
+    "qa_local_git_fingerprint": "733eb5f677a3ca71c1b5865b2c2315cdb10f720c",
+    "contract_local_git_fingerprint": "e45210ba8925df3eec04d3ad12ae4bd29512d158",
+    "delivery": "Local exact script, QA, contract and PNG; compact receipt committed."
+  },
+  "execution": "Actual local Python; 12 local asymmetric rock/root footprint candidates, conservative exact triangle ground metrics, planar connected-component screen, 30 permission checks and 4 transition sequences of proposed pure functions. Five SHA inputs unchanged. Polygon serialization verified, figure inspected. No native edits, gameplay changes, or Actions.",
+  "decision": "Retain local composition only; root groups are flank-tree reserves, not roots of distant sacred tree. Physical closed-gate bypass remains connected; do not claim collision prevention. Hand off proposed state contract to regional integration owner for gameplay review; no assumption that pure function tests prove atomic reward or save compatibility. Continue independently with hero tree/altar spatial design or actual qualified source recovery. No canon/adoption/main merge.",
+  "limits": [
+    "All dimensions authored, not CG measurements. V03 vs V04 area compares different functional scope; V04 does not achieve enclosure isolation. Gate height envelopes are not 3D meshes. Overlap between root and rock groups intentional, actual attachment unverified. No independent D4 or runtime."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_GAMEPLAY_BOUNDARY",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ACTUAL_COLLISION_AND_ASSETS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
