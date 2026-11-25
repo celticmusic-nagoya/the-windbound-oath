@@ -1,0 +1,61 @@
+{
+  "schema": "two.region.forest_private_drive_native_pilot_receipt.v17",
+  "parent": "2ae2990674c6abbaf69874e88d060c3d5f7697f7",
+  "status": "PRIVATE_DRIVE_ROUNDTRIP_PASS_NATIVE_SUBSET_PASS_FULL_NATIVE_PENDING",
+  "policy": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "previous_receipt": "3e2912dce3b7c577c4be880b5d7d6610f7a3ac76"
+  },
+  "drive": {
+    "authorization": "Director explicitly approved Google Drive transfer",
+    "folder": "THE WINDBOUND OATH - Private Production Transfer",
+    "visibility": "Verified owner-only permissions, shared=false on folder and both files",
+    "files": [
+      {
+        "name": "v16_full_scene_native_input.zip",
+        "bytes": 45872066,
+        "sha256": "ab35c88f7cf53781edf0dd2aec2e75074adb7308abb5b0f40fc1e565c64a7dca"
+      },
+      {
+        "name": "forest-v16-native-pilot.zip",
+        "bytes": 45078610,
+        "sha256": "9ec037afa4b944dbbe73ace584445ca6de663ac12239e4493d760a55e445b7d0"
+      }
+    ],
+    "roundtrip": "Both files uploaded via authorized connector file references, metadata read back, downloaded with authenticated connector, actual local SHA-256 and ZIP CRC verified. No public sharing, no credential or private file IDs committed.",
+    "runner": "NOT_QUALIFIED; Drive connector session does not confer GitHub Actions Drive authentication. No service account access, token or private sharing change assumed. No full native input transfer to runner yet."
+  },
+  "pilot": {
+    "run": 45625353014,
+    "head": "27f7f881b3c3ec9c6b480400d6e279ea6dcbf831",
+    "job": 139244316366,
+    "conclusion": "success",
+    "artifact": 15026419458,
+    "archive_sha256": "9ec037afa4b944dbbe73ace584445ca6de663ac12239e4493d760a55e445b7d0",
+    "blender": "5.3.0",
+    "before_and_after": {
+      "mesh_objects": 89,
+      "triangles": 296578,
+      "packed_images": 25,
+      "external_images": []
+    },
+    "outputs": {
+      "forest_v16_native_pilot.blend": "64a959e42ab7e3b97ce7308de8dd9b73e840ab91f7c074d069662ce72d094504",
+      "forest_v16_view_1.png": "3e388b5d96493575dea51c024897cd651fdbed238b325f65de523f2e855b4e1e",
+      "forest_v16_view_2.png": "0d7bc7f0c239260699b961433e2163d281c63620af02f0605d73b0b22f954422",
+      "qa.json": "bcbbc95ce15403b1e05cbdd1cb167967b00887c87695dcf626d23a652f80143d"
+    },
+    "validation": "Actual output archive digest, CRC and per-file SHA verified, both images inspected. Technical subset native save/reopen and render pass. Subset 88 placement rows, original source geometry; not V15C equivalence.",
+    "art": "Self HOLD: empty background, sparse understory, dark canopies, insufficient composition and hero tree. Not independent G2."
+  },
+  "next": "Qualify least-privilege authenticated GitHub Actions read access to only the private transfer file(s), ideally dedicated read-only principal, without public link or committed secrets. Exact input SHA check before full native import; preserve original V15C. No duplicate pilot dispatch.",
+  "gates": {
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT_SELF_HOLD",
+    "G3": "SUBSET_NATIVE_PASS_FULL_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}
