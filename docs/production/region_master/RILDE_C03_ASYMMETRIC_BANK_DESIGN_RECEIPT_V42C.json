@@ -1,0 +1,115 @@
+{
+  "schema": "two.region.asymmetric_bank_design.v42c",
+  "status": "STANDALONE_SECTION_DRIVEN_REMESH_FEASIBILITY_HOLD",
+  "parent": "70b5228854cadf90f1c63bc06315ff2bf3ce7837",
+  "dependencies": {
+    "v41_receipt": "7e94f81c9a67639b3ef342c952223aad2a45aa4e",
+    "v39_glb_sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "v41_section_json_sha256": "7acb8d02060a3b6c2c214653a96be3c0b9237abb5c7f88d94410bb314d577ee1",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "scope": "Isolated feasibility design, not precision production, no baseline replacement. Provisional glTF east/up/south metres. Based on actual exported source cross sections. West deposition-side interpretation is a designer choice, not a verified geological fact.",
+  "design": {
+    "z_gltf_m": [
+      -225,
+      -135
+    ],
+    "full_strength": [
+      -205.3,
+      -155.3
+    ],
+    "shore_guard_m": 1,
+    "shelf_end_m": 7,
+    "outer_tie_m": 38,
+    "nominal_shelf_grade": 0.12,
+    "shoulder_nominal_cap": 0.78,
+    "shoulder_transition_m": 3,
+    "source_profile_sampling_m": 0.25,
+    "method": "Conforming marked-edge subdivision twice; matched triangular footprint, cubic Hermite shelf, early source tie with smooth minimum shoulder; pin all vertices of wet-touching triangles. East bank and water remain reference."
+  },
+  "trials": {
+    "a": {
+      "rejection": "6.050348623320937 m2 changed-face overlap with wet footprint",
+      "correction": "Pin every support vertex of triangles intersecting actual water footprint"
+    },
+    "b": {
+      "cut_m3": 6273.122413689118,
+      "max_cut_m": 4.843942642211914,
+      "qa_sha256": "0486f24fcf440f54208e2195780e54abfcfbacb340a33a27715fec9903ff14d1",
+      "decision": "Excessive cut; early-tie alternative tested"
+    },
+    "c": {
+      "cut_m3": 1717.6938409595653,
+      "fill_m3": 0.007516595561166492,
+      "max_cut_m": 2.2507190704345703,
+      "max_fill_m": 0.012518882751464844,
+      "cut_reduction_fraction": 0.7261819987425658,
+      "changed_vertices": 12047,
+      "changed_faces": 24750,
+      "changed_area_m2": 2148.7845118835103,
+      "core_triangles": [
+        24000,
+        66816
+      ],
+      "reopened_triangles": 69491,
+      "wet_overlap_m2": 0,
+      "original_outer_boundary_edges_exact": 520,
+      "nonmanifold_edges": 0,
+      "water_vertices_indices_exact": true,
+      "readback_vertices_indices_exact": true,
+      "all_projected_triangles_positive": true,
+      "section_mean_grade_pct_before": [
+        37.06878229279506,
+        37.193395549539396,
+        38.87710112439571
+      ],
+      "after": [
+        13.323392277516444,
+        13.818455713677894,
+        12.886845152519536
+      ],
+      "shelf_max_sampled_grade_pct": [
+        18.581258320757854,
+        29.54449909573853,
+        21.756637127310796
+      ],
+      "shoulder_max_sampled_grade_pct": [
+        78.53600112463077,
+        92.13190271842109,
+        84.08355953729796
+      ],
+      "affected_prop_aabb_count": 83,
+      "decision": "HOLD. Mean transverse grades improve but not a certified traversable ribbon. Local slope maxima exceed nominal design targets; rendered longitudinal ripples visible. No prop reintegration or accepted earthwork budget. V39 remains baseline."
+    }
+  },
+  "render": {
+    "method": "Two matched actual VTK EGL geometry-only views, original materials and props excluded",
+    "independent_art_review": false
+  },
+  "outputs": {
+    "glb_sha256": "355332ce9db0547781e8130f830eb284a5b6ad9c85d996ffd5d5b56d8b056ae1",
+    "design_script_sha256": "46e540fda0dac09dfd761670449ba44aad858857d570ca0e63c145ff5673d6ef",
+    "qa_sha256": "e76b5d9dec6f67619c172079d3378799775a48c1816dfd2353d1d2df2e9f26a8",
+    "readback_qa_sha256": "dc620a8b1bf26e3bdac4f5d0d073b941b6b6cc70bfd4108c9f9ff04fef589886",
+    "targets_npz_sha256": "ce0a12dd3bcc5faefed7cbd12b51408fc3b0b7e67334247d25aad2c66693c736",
+    "sheet_sha256": "7b467d68feff9baa7d7842395b815d72d6be7ecebe741deaaca00fe6f23aca12",
+    "comparison_sha256": "a75873fbcb46ba6d9cf218fe12c9f651e82ec77b5e90c0c5844387361f73a237",
+    "package_sha256": "88835ad77c0d630ede27d57d987a4b0c98b866dba5ab9c2cc8b827435b92501c",
+    "package_bytes": 3007363,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; no binary committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_PARENT_METRIC_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_DESIGN_GLB_READBACK_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Stop derivative-driven profile fitting in current trial. Use explicit longitudinal control sections and constraints to remove ripples and jointly resolve bank shoulder and prop support before D4; lower valley requires broader parent envelope, landing remains unresolved. Prefer independent area production if design approval remains blocked. No formal adoption, main merge or public distribution."
+}
