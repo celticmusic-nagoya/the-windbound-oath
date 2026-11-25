@@ -13,7 +13,7 @@
 
 ## Mandatory Rilde geography reference (director approved 2026-11-24)
 
-Before world/map work, read [Rilde geography canon contract](region_master/RILDE_GEOGRAPHY_CANON_CONTRACT_20261124.md). Preserve southwest fishing harbor, northwest sea cliff and separate eastern riverbank cliff. Metric blueprint adjustments are authorized within the contract; no geometry acceptance is implied. Original visual master remains referenced at PR #344. Design research remains PR #482; native owners unchanged.
+Before world/map work, read [Rilde geography canon contract](region_master/RILDE_GEOGRAPHY_CANON_CONTRACT_20261124.md). Preserve southwest fishing harbor, northwest sea cliff and separate eastern riverbank cliff. Metric blueprint adjustments are authorized within the contract; no geometry acceptance is implied. Director clarification 2026-11-25: the latest Ireland-inspired continent/kingdom/region design system on PR #482 is the governing production baseline; PR #344's 2026-11-16 illustration is historical visual evidence only, not current geography/terrain authority. See [updated Rilde geography contract](region_master/RILDE_GEOGRAPHY_CANON_CONTRACT_20261124.md) and [exact design precedence record](https://github.com/celticmusic-nagoya/the-windbound-oath/blob/4d60c5172220c8bd98a5162b80ee4c08dd1685c3/docs/production/region_master/WORLD_MAP_DESIGN_PRECEDENCE_20261125.md). Unresolved metric geometry, DEM, world transforms, D4 and G1–G4 remain unverified. Native owners unchanged.
 
 ## Update instructions
 
