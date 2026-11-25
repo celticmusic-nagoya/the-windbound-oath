@@ -126,6 +126,117 @@ jobs:
           SWIFT
           swiftc "$RUNNER_TEMP/frame-margin.swift" -o "$RUNNER_TEMP/frame-margin"
           fi
+          if [ "$HAIR_PROBE" = true ]; then
+            cat > "$RUNNER_TEMP/hair-row.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          import Vision
+          let args=CommandLine.arguments
+          guard args.count==3, ["^Width$","^Thickness$"].contains(args[2]) else { exit(2) }
+          let url=URL(fileURLWithPath:args[1])
+          guard let im=NSBitmapImageRep(data:try Data(contentsOf:url)), im.pixelsWide==1024, im.pixelsHigh==768 else { exit(2) }
+          let req=VNRecognizeTextRequest()
+          req.recognitionLevel = .accurate
+          req.usesLanguageCorrection = false
+          try VNImageRequestHandler(url:url).perform([req])
+          let rows=req.results ?? []
+          func label(_ o:VNRecognizedTextObservation)->String {
+              o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
+          }
+          func blue(_ x:Int,_ y:Int)->Bool {
+              guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { return false }
+              return c.blueComponent>0.78 && c.redComponent<0.22 && c.greenComponent>0.30 && c.greenComponent<0.82
+          }
+          // Selection must be the unique visible Hair 3 row, highlighted blue.
+          let strands=rows.filter { label($0)=="Hair 3" && $0.boundingBox.midX<0.28 }
+          guard strands.count==1, let strand=strands.first else { exit(2) }
+          let sy=Int((1-strand.boundingBox.midY)*768)
+          guard sy>=340 && sy<=370 else { exit(2) }
+          var selected=0
+          for yy in (sy-4)...(sy+4) { for xx in 65...90 { if blue(xx,yy) { selected+=1 } } }
+          guard selected>=200 else { exit(2) }
+          // Geometry only: explicit section anchor above the row, no texture controls exposed.
+          let headers=rows.filter { label($0).contains("Hair Parameters") && $0.boundingBox.midX>0.74 }
+          guard headers.count==1, let head=headers.first,
+                !rows.contains(where:{ ["Highlights Position","Offset"].contains(label($0)) && $0.boundingBox.midX>0.74 }) else { exit(2) }
+          let hits=rows.filter {
+              $0.boundingBox.minX>0.71 && $0.boundingBox.midX<0.91 &&
+              $0.boundingBox.midY<head.boundingBox.midY &&
+              label($0).range(of:args[2],options:.regularExpression) != nil
+          }
+          guard hits.count==1, let hit=hits.first else { exit(2) }
+          let fields=rows.filter {
+              $0.boundingBox.midX>0.92 && abs($0.boundingBox.midY-hit.boundingBox.midY)<0.026 &&
+              label($0).range(of:#"^[−-]?\d+\.\d{2,3}$"#,options:.regularExpression) != nil
+          }
+          guard fields.count==1, let field=fields.first else { exit(2) }
+          let value=label(field).replacingOccurrences(of:"−",with:"-")
+          let fy=Int((1-field.boundingBox.midY)*768)
+          // Actual hair-panel sliders are ~32px beneath their numerical readout.
+          guard fy>=120 && fy+42<650 else { exit(2) }
+          var xs:[Int]=[], ys:[Int]=[]
+          for yy in (fy+22)...(fy+42) { for xx in 780...995 { if blue(xx,yy) { xs.append(xx);ys.append(yy) } } }
+          guard let lo=xs.min(),let hi=xs.max(),let top=ys.min(),let bot=ys.max(),
+                hi-lo>=8,hi-lo<=32,bot-top>=8,bot-top<=24 else { exit(2) }
+          print(value,Double(lo+hi)/2048,Double(top+bot)/1536)
+          SWIFT
+            swiftc "$RUNNER_TEMP/hair-row.swift" -o "$RUNNER_TEMP/hair-row"
+            cat > "$RUNNER_TEMP/hair-save-guard.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          import Vision
+          let url = URL(fileURLWithPath: CommandLine.arguments[1])
+          guard let im = NSBitmapImageRep(data: try Data(contentsOf: url)),
+                im.pixelsWide == 1024, im.pixelsHigh == 768 else { exit(2) }
+          let req = VNRecognizeTextRequest()
+          try VNImageRequestHandler(url: url).perform([req])
+          for (label, y) in [("Front",364),("Back",399)] {
+              let hits = (req.results ?? []).filter { o in
+                  (o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines).replacingOccurrences(of:"*",with:"").trimmingCharacters(in:.whitespacesAndNewlines) == label) &&
+                  abs((1.0-Double(o.boundingBox.midY))*768.0-Double(y)) < 9.0 &&
+                  abs(Double(o.boundingBox.minX)*1024.0-366.0) < 15.0
+              }
+              guard hits.count == 1 else { exit(2) }
+          }
+          func state(_ y: Int) -> String {
+              var blue = 0, white = 0
+              for yy in (y-5)...(y+5) {
+                  for x in 343...353 {
+                      guard let c = im.colorAt(x:x,y:yy)?.usingColorSpace(.deviceRGB) else { return "unknown" }
+                      if c.blueComponent>0.72 && c.redComponent<0.30 && c.greenComponent>0.24 && c.greenComponent<0.85 { blue += 1 }
+                      if c.redComponent>0.9 && c.greenComponent>0.9 && c.blueComponent>0.9 { white += 1 }
+                  }
+              }
+              if blue>=20 { return "checked" }
+              if white>=100 && blue==0 { return "unchecked" }
+              return "unknown"
+          }
+          let front=state(364), back=state(399)
+          print("Front",front,"Back",back)
+          exit(front=="checked" && back=="unchecked" ? 0 : 1)
+          SWIFT
+            swiftc "$RUNNER_TEMP/hair-save-guard.swift" -o "$RUNNER_TEMP/hair-save-guard"
+          fi
+      - name: Verify hair save guard on actual archived dialog before VRoid startup
+        if: inputs.mode == 'hair_candidate'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15002346250/zip" > "$RUNNER_TEMP/save-fixture.zip"
+          echo "550a10b9e1e8d518ef5c5f78ace91e91a4e3953da249d904088f0c275c8e2ca7  $RUNNER_TEMP/save-fixture.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,pathlib,hashlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"save-fixture.zip") as z:
+              assert z.testzip() is None
+              data=z.read("hair-save-dialog.png")
+              assert hashlib.sha256(data).hexdigest()=="45b87217661b28e5834e1ecb49209233c1a992a5160ee5ddcde526475b48b48b"
+              (p/"save-fixture.png").write_bytes(data)
+          PY
+          "$RUNNER_TEMP/hair-save-guard" "$RUNNER_TEMP/save-fixture.png" | tee evidence/hair-save-preflight.txt
+          grep -qx 'Front checked Back unchecked' evidence/hair-save-preflight.txt
       - name: Restore native checkpoint
         env:
           GH_TOKEN: ${{ github.token }}
@@ -487,60 +598,6 @@ jobs:
           fi
           if [ "$HAIR_PROBE" = true ]; then
             echo HAIR_CONTROL_NOT_YET_VERIFIED > evidence/hair-author-status.txt
-            cat > "$RUNNER_TEMP/hair-row.swift" <<'SWIFT'
-          import Cocoa
-          import Foundation
-          import Vision
-          let args=CommandLine.arguments
-          guard args.count==3, ["^Width$","^Thickness$"].contains(args[2]) else { exit(2) }
-          let url=URL(fileURLWithPath:args[1])
-          guard let im=NSBitmapImageRep(data:try Data(contentsOf:url)), im.pixelsWide==1024, im.pixelsHigh==768 else { exit(2) }
-          let req=VNRecognizeTextRequest()
-          req.recognitionLevel = .accurate
-          req.usesLanguageCorrection = false
-          try VNImageRequestHandler(url:url).perform([req])
-          let rows=req.results ?? []
-          func label(_ o:VNRecognizedTextObservation)->String {
-              o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
-          }
-          func blue(_ x:Int,_ y:Int)->Bool {
-              guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { return false }
-              return c.blueComponent>0.78 && c.redComponent<0.22 && c.greenComponent>0.30 && c.greenComponent<0.82
-          }
-          // Selection must be the unique visible Hair 3 row, highlighted blue.
-          let strands=rows.filter { label($0)=="Hair 3" && $0.boundingBox.midX<0.28 }
-          guard strands.count==1, let strand=strands.first else { exit(2) }
-          let sy=Int((1-strand.boundingBox.midY)*768)
-          guard sy>=340 && sy<=370 else { exit(2) }
-          var selected=0
-          for yy in (sy-4)...(sy+4) { for xx in 65...90 { if blue(xx,yy) { selected+=1 } } }
-          guard selected>=200 else { exit(2) }
-          // Geometry only: explicit section anchor above the row, no texture controls exposed.
-          let headers=rows.filter { label($0).contains("Hair Parameters") && $0.boundingBox.midX>0.74 }
-          guard headers.count==1, let head=headers.first,
-                !rows.contains(where:{ ["Highlights Position","Offset"].contains(label($0)) && $0.boundingBox.midX>0.74 }) else { exit(2) }
-          let hits=rows.filter {
-              $0.boundingBox.minX>0.71 && $0.boundingBox.midX<0.91 &&
-              $0.boundingBox.midY<head.boundingBox.midY &&
-              label($0).range(of:args[2],options:.regularExpression) != nil
-          }
-          guard hits.count==1, let hit=hits.first else { exit(2) }
-          let fields=rows.filter {
-              $0.boundingBox.midX>0.92 && abs($0.boundingBox.midY-hit.boundingBox.midY)<0.026 &&
-              label($0).range(of:#"^[−-]?\d+\.\d{2,3}$"#,options:.regularExpression) != nil
-          }
-          guard fields.count==1, let field=fields.first else { exit(2) }
-          let value=label(field).replacingOccurrences(of:"−",with:"-")
-          let fy=Int((1-field.boundingBox.midY)*768)
-          // Actual hair-panel sliders are ~32px beneath their numerical readout.
-          guard fy>=120 && fy+42<650 else { exit(2) }
-          var xs:[Int]=[], ys:[Int]=[]
-          for yy in (fy+22)...(fy+42) { for xx in 780...995 { if blue(xx,yy) { xs.append(xx);ys.append(yy) } } }
-          guard let lo=xs.min(),let hi=xs.max(),let top=ys.min(),let bot=ys.max(),
-                hi-lo>=8,hi-lo<=32,bot-top>=8,bot-top<=24 else { exit(2) }
-          print(value,Double(lo+hi)/2048,Double(top+bot)/1536)
-          SWIFT
-            swiftc "$RUNNER_TEMP/hair-row.swift" -o "$RUNNER_TEMP/hair-row"
             row="$RUNNER_TEMP/hair-row"
             sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
             bash -n "$RUNNER_TEMP/session-helpers.sh"
@@ -635,40 +692,7 @@ jobs:
             grep -Fq 'Back' evidence/hair-save-dialog.txt
             # Match the archived 1024x768 save modal. Verify the two checkboxes independently.
             # Unknown appearance or geometry stops the trial; never overwrite the original preset.
-            swift - evidence/hair-save-dialog.png > evidence/hair-save-selection.txt <<'SWIFT'
-          import Cocoa
-          import Foundation
-          import Vision
-          let url = URL(fileURLWithPath: CommandLine.arguments[1])
-          guard let im = NSBitmapImageRep(data: try Data(contentsOf: url)),
-                im.pixelsWide == 1024, im.pixelsHigh == 768 else { exit(2) }
-          let req = VNRecognizeTextRequest()
-          try VNImageRequestHandler(url: url).perform([req])
-          for (label, y) in [("Front",364),("Back",399)] {
-              let hits = (req.results ?? []).filter { o in
-                  o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) == label &&
-                  abs((1-o.boundingBox.midY)*768-Double(y)) < 9 &&
-                  abs(o.boundingBox.minX*1024-366) < 15
-              }
-              guard hits.count == 1 else { exit(2) }
-          }
-          func state(_ y: Int) -> String {
-              var blue = 0, white = 0
-              for yy in (y-5)...(y+5) {
-                  for x in 343...353 {
-                      guard let c = im.colorAt(x:x,y:yy)?.usingColorSpace(.deviceRGB) else { return "unknown" }
-                      if c.blueComponent>0.72 && c.redComponent<0.30 && c.greenComponent>0.24 && c.greenComponent<0.85 { blue += 1 }
-                      if c.redComponent>0.9 && c.greenComponent>0.9 && c.blueComponent>0.9 { white += 1 }
-                  }
-              }
-              if blue>=20 { return "checked" }
-              if white>=100 && blue==0 { return "unchecked" }
-              return "unknown"
-          }
-          let front=state(364), back=state(399)
-          print("Front",front,"Back",back)
-          exit(front=="checked" && back=="unchecked" ? 0 : 1)
-          SWIFT
+            "$RUNNER_TEMP/hair-save-guard" evidence/hair-save-dialog.png > evidence/hair-save-selection.txt
             "$gui" click-label evidence/hair-save-dialog.png 'Save as new item' 'Close Hairstyle Editor'
             sleep 4
             capture_state hair-save-return
