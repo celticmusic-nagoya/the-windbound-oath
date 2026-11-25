@@ -1,0 +1,209 @@
+{
+  "schema": "two.region.expansion_surfaces.v02",
+  "status": "PROVISIONAL_DESIGN_NOT_ADOPTED",
+  "source": {
+    "core_blob": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "core_glb_sha256": "4aba238a8ffa677f124acfb8595afbeb5a10ba753abbb71153e6bcd6bf044131",
+    "region_plan_blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "main_agents_blob": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc"
+  },
+  "frame": {
+    "axes": "X east Y north Z up",
+    "gltf": "X east Y up Z south",
+    "unit": "m",
+    "canonical_transform": null
+  },
+  "sample_step_m": 2.5,
+  "tiles": [
+    {
+      "id": "MOSS_FOREST_A1",
+      "bounds_xy_m": [
+        375,
+        -300,
+        500,
+        -100
+      ],
+      "translation_m": [
+        400,
+        -200,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 4131,
+      "triangles": 8000,
+      "height_range_m": [
+        13.478994880956174,
+        25.209076988295017
+      ],
+      "sha256": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d"
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "bounds_xy_m": [
+        400,
+        -400,
+        600,
+        -300
+      ],
+      "translation_m": [
+        500,
+        -300,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 3321,
+      "triangles": 6400,
+      "height_range_m": [
+        20.15198438056962,
+        36.75281024872652
+      ],
+      "sha256": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc"
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "bounds_xy_m": [
+        500,
+        -500,
+        700,
+        -400
+      ],
+      "translation_m": [
+        600,
+        -400,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 3321,
+      "triangles": 6400,
+      "height_range_m": [
+        23.84299423353013,
+        36.76740902879253
+      ],
+      "sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b"
+    },
+    {
+      "id": "IF07_FORT_CONNECTOR",
+      "bounds_xy_m": [
+        -25,
+        300,
+        25,
+        475
+      ],
+      "translation_m": [
+        0,
+        387.5,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 1491,
+      "triangles": 2800,
+      "height_range_m": [
+        18.466109142929344,
+        46.93508600165946
+      ],
+      "sha256": "9bfa4d2e46eab9cb1a33295a4d354ad1479db3477bc0a6208b191e93a6fdc146"
+    },
+    {
+      "id": "DUNVAR_FORTRESS",
+      "bounds_xy_m": [
+        -125,
+        475,
+        125,
+        725
+      ],
+      "translation_m": [
+        0,
+        600,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 10201,
+      "triangles": 20000,
+      "height_range_m": [
+        41.231608956694814,
+        52.44336352304303
+      ],
+      "sha256": "480226276267a405666553822dc3eab289e2cafa92f21de1e0a12a835226307f"
+    }
+  ],
+  "height_model": {
+    "plateau": "18+3*sin(pi*y/300)+.006*(x+175)+.85*sin((x+175)/74)*sin(y/85)",
+    "smooth": "t=clamp(t,0,1); t*t*(3-2*t)",
+    "forest": "plateau(x,y)+smooth((x-375)/45)*(5*sin((x-375)/39)*cos((y+245)/50)+9*exp(-((x-610)/86)^2-((y+395)/95)^2))",
+    "fort": "plateau(x,y)+smooth((y-300)/180)*(28+3*cos(x/55)+2*sin((y-470)/60))"
+  },
+  "seams": [
+    {
+      "a": "RIVER_CORRIDOR",
+      "b": "MOSS_FOREST_A1",
+      "samples": 61,
+      "max_xyz_delta_m": 9.486438052874746e-7
+    },
+    {
+      "a": "MOSS_FOREST_A1",
+      "b": "MOSS_FOREST_A2",
+      "samples": 41,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "MOSS_FOREST_A2",
+      "b": "MOSS_FOREST_A3",
+      "samples": 41,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "COASTAL_MEADOW",
+      "b": "IF07_FORT_CONNECTOR",
+      "samples": 21,
+      "max_xyz_delta_m": 9.525617485905968e-7
+    },
+    {
+      "a": "IF07_FORT_CONNECTOR",
+      "b": "DUNVAR_FORTRESS",
+      "samples": 21,
+      "max_xyz_delta_m": 0
+    }
+  ],
+  "water": {
+    "method": "Clip existing GLB terrain triangles where z_ground <= water_z; triangulate wet footprints on sloped plane; verify non-end boundary vertex correspondence",
+    "water_z": "4+.012*(y+250)",
+    "vertices": 2471,
+    "triangles": 4059,
+    "shoreline_vertices": 864,
+    "shoreline_xy_gap_m": 0,
+    "preexport_intersection_residual_m": 1.7763568394002505e-15,
+    "reopen_max_xyz_delta_m": 0.0000076248380196375365,
+    "sha256": "4043fbc171b2b16f138a1b406c2df72846c8fb625fb05ea5ab9e28d8e6f59bcd",
+    "mouth": "NOT_BUILT"
+  },
+  "fort_connector": {
+    "sampled_centerline_grade_max_percent": 23.26952112849483,
+    "goal_percent": 15,
+    "status": "FAIL_PROVISIONAL_GRADE_GOAL",
+    "next": "regrade or switchback; preserve existing meadow seam and avoid treating geometry as navigation proof"
+  },
+  "artifacts": {
+    "location": "ChatGPT attachments only; not committed binaries",
+    "combined_glb_sha256": "06a61e83880af9ada3958aa780edd4730fa4bf7bbe2309aac16eb9ac33ba5644",
+    "preview_sha256": "548ba22b54370cf952b4e2341779a00401c61013369a8f62bf7dbc1250d99f81",
+    "script_sha256": "e49106f43f358d2a9290f7c4554f47dd4319b27580e503be9a7ce5c7e8b8bbbc"
+  },
+  "qa": {
+    "new_terrain_triangles": 43600,
+    "new_terrain_vertices": 22465,
+    "retained_five_meshes_exact": true,
+    "combined_geometries": 11,
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_LOCAL_MESH",
+    "G4": "NOT_RUN",
+    "independent": "NOT_RUN"
+  },
+  "limitations": [
+    "Authored relief, no DEM, no formal placement.",
+    "Open terrain surfaces only. Combined expansion excludes cliff; cliff remains separate earlier candidate. No fortress buildings, vegetation, harbor, bridge, river mouth, collision or navmesh.",
+    "A2 origin is outside center of authored bounds; origins independent from bounds. Partial seam samples, not full traversal proof.",
+    "No Blender native or shared engine execution. #506 initial main run cannot be listed via PR-only connector. No duplicate dispatch.",
+    "No existing owner, protected asset, formal adoption or main changes."
+  ]
+}
