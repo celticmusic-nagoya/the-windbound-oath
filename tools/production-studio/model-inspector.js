@@ -26,7 +26,7 @@ if(typeof document!=="undefined"){const input=document.getElementById("model-fil
  verify.addEventListener("click",async()=>{
   if(busy)return;
   const f=file.files[0],digest=expected.value.trim().toLowerCase().replace(/^sha256:/,"");
-  if(!f||!(/\\.(vroid|vrm|blend|glb)$/i.test(f.name))||!/^[0-9a-f]{64}$/.test(digest)){out.textContent="対象形式のファイルとSHA-256を指定してください";return;}
+  if(!f||!(/\.(vroid|vrm|blend|glb)$/i.test(f.name))||!/^[0-9a-f]{64}$/.test(digest)){out.textContent="対象形式のファイルとSHA-256を指定してください";return;}
   if(f.size>100*1024*1024||f.size===0){out.textContent="空ファイルまたは100 MiB上限超過";return;}
   if(!globalThis.crypto?.subtle){out.textContent="HTTPSまたはlocalhostが必要です";return;}
   busy=true;file.disabled=expected.disabled=verify.disabled=true;out.textContent="照合中";
