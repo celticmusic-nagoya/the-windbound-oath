@@ -330,7 +330,10 @@ jobs:
             capture_state native-probe-before
             read -r initial sx sy <<< "$("$row" evidence/native-probe-before.png '^Iris Size \(X\)$')"
             read -r protected_y _ _ <<< "$("$row" evidence/native-probe-before.png '^Iris Size \(Y\)$')"
-            test "$initial" = 0.141 && test "$protected_y" = 0.194
+            if [ "$initial" != 0.141 ] || [ "$protected_y" != 0.194 ]; then
+              echo BLOCKED_BASELINE_VALUE_MISMATCH > evidence/native-probe-status.txt
+              exit 1
+            fi
             chmod u+w "$MORWEN_READONLY_NATIVE"
             echo DISPOSABLE_CALIBRATION_MUTATION_ATTEMPTED > evidence/native-probe-status.txt
             slider_by probe-iris-x '^Iris Size \(X\)$' 0.017
@@ -349,7 +352,10 @@ jobs:
             capture_state native-probe-reopened
             read -r reopened _ _ <<< "$("$row" evidence/native-probe-reopened.png '^Iris Size \(X\)$')"
             read -r y_reopened _ _ <<< "$("$row" evidence/native-probe-reopened.png '^Iris Size \(Y\)$')"
-            test "$changed" = "$reopened" && test "$protected_y" = "$y_reopened"
+            if [ "$changed" != "$reopened" ] || [ "$protected_y" != "$y_reopened" ]; then
+              echo BLOCKED_REOPEN_VALUE_MISMATCH > evidence/native-probe-status.txt
+              exit 1
+            fi
             test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
             python3 - "$initial" "$changed" "$reopened" "$protected_y" "$y_after" "$y_reopened" <<'PY'
           import hashlib,json,pathlib,sys,zipfile
