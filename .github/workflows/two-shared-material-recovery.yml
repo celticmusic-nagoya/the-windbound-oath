@@ -155,7 +155,16 @@ jobs:
           unzip -tq "$RUNNER_TEMP/v19.zip"
           unzip -q "$RUNNER_TEMP/v19.zip" -d "$RUNNER_TEMP/v19-input"
           echo V19_CHECKPOINT_ARCHIVE_SHA_PASS > "$RUNNER_TEMP/v19-output/intake.txt"
-      - name: Execute V19 native forest art study
+          # Read-only recovery of the existing official source from its immutable commit.
+          # Failure here blocks canon comparison, not independent material evaluation.
+          cg="$RUNNER_TEMP/v19-official-cg.png"
+          if git show dc17dd4846f35ea1f5dea25168eec9ddb50a3838:assets/sources/lind-world-20261116/original.png > "$cg" 2>/dev/null && printf '%s  %s\n' abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620 "$cg" | sha256sum -c -; then
+            cp "$cg" "$RUNNER_TEMP/v19-output/official_cg_verified.png"
+            echo OFFICIAL_CG_SHA_PASS > "$RUNNER_TEMP/v19-output/official_cg_status.txt"
+          else
+            echo OFFICIAL_CG_BYTES_UNVERIFIED > "$RUNNER_TEMP/v19-output/official_cg_status.txt"
+          fi
+      - name: Execute V19B corrected native forest art study
         if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-art') == 'native-art'
         shell: bash
         run: |
@@ -168,7 +177,7 @@ jobs:
         if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'native-art') == 'native-art'
         uses: actions/upload-artifact@v4
         with:
-          name: two-forest-v19-native-art
+          name: two-forest-v19b-native-art
           path: ${{ runner.temp }}/v19-output
           retention-days: 14
           if-no-files-found: error
