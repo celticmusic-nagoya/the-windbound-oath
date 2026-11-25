@@ -1,0 +1,78 @@
+{
+  "schema": "two.region.photo_rock_recovery_receipt.v07",
+  "parent": "6bdbcc3405a20e5d8147cd6151beed6d1d6d1520",
+  "status": "EXACT_V04_GLBS_RECOVERED_ACTUAL_SCAN_PREVIEW_NOT_BLENDER",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "catalog": "4900fc6568f2b8ae15d2d6d56171176c26b846d6",
+    "apply": "72b050a057b28d65e97b86e08867e0c4cddf611c",
+    "v04_qa": "92ec34742f6885366f3b6e7e6b61383dc74c1fd0",
+    "v04_receipt": "735689eb37f6664858d6f0a6e5cee3f4a7cd0156",
+    "v05_receipt": "d4dfac77854d85f796aec1db9ee5861e2efa6e3e",
+    "v06": "8de4cbf429ef8c4793d9f2833e91c526e591d174",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "recovered_archive": {
+    "run": 45607440576,
+    "artifact": 15017224941,
+    "expires": "2026-12-09T11:47:38Z",
+    "sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564",
+    "files_verified": 17,
+    "provider_md5_checked": true,
+    "zip_crc_pass": true
+  },
+  "outputs": {
+    "source_glb_sha256": "451599a92e375059fda4c11fc9265e35dde547df6dbc65a6f0572b4d72ae9e88",
+    "placement_glb_sha256": "25d2273f16e37e94d6368e5ef109b03f02a5d1322ee946a1bf6784f0d1df1fb6",
+    "recover_script_sha256": "94c25fd91e53e6145c3f785b81c1c30345cea3e14352f3a16d20b91d39aeb2bb",
+    "render_script_sha256": "c2039b73c2b2adf3c1ac277e87d71aa9205e6fdd77260d6a631300bcdbb8ba68",
+    "recovery_qa_sha256": "67fc5c202ff7b26a5c2c2adab7eb46fdd600b87c0f52ff8b06e2e212e358d91b",
+    "render_qa_sha256": "163d9539741fadd50f12fd32facd3b2b141e1ec222a66bdee9d212fb84bbc3fa",
+    "preview_sha256": "bc13b07df2a6849df21e73cce69a17f354ffa29c485d2db6c67ecc326dec85e4",
+    "delivery": "GLBs, scripts and PNG created locally; this commit registers receipt only. Existing authenticated source archive retained."
+  },
+  "measurements": {
+    "source_sha_exact": true,
+    "placement_sha_exact": true,
+    "instances": 12,
+    "meshes": 6,
+    "instance_triangles": 126254,
+    "source_geometry_material_images_exact": true,
+    "render_views": 12,
+    "covered_pixels": [
+      50165,
+      62251,
+      41689,
+      52654,
+      61807,
+      63677,
+      59012,
+      67531,
+      59500,
+      55920,
+      68283,
+      75298
+    ]
+  },
+  "execution": "Downloaded existing authenticated archive, SHA+MD5+image size validation, packed source with existing apply.py logic, reconstructed exact V04 node list from recorded translations, yaw and scale. First local placement hash mismatch resolved by correcting one transcribed coordinate from exact V04 JSON. Reopened GLB; verified identical mesh/material/image and buffer. Actual CPU triangle raster with UV interpolation, depth buffer, tangent-space normal and approximate roughness response. First Numba compile failed on array-to-uint8 cast; changed to astype, rendered 12 views. Inspected image, natural irregular silhouettes, moss muted brown/olive, some broad flat cut faces; no final art judgment. Both scripts py_compile PASS. No new Actions dispatched.",
+  "limits": [
+    "V05 LOD binaries and original lod.py not recovered; GitHub blob lookup for recorded local fingerprint returned 404. Exact source placement is now available for bounded regeneration or prior-file recovery.",
+    "No Blender installed; custom CPU shader is not full glTF BRDF, MikkTSpace, shadow or environmental lighting. Render fitted independently per rock; not a scale comparison.",
+    "Terrain GLB, vegetation, CG, contact, actual scene occlusion and runtime camera not verified. D4 outstanding. No native production edits, formal adoption, main merge or Android QA."
+  ],
+  "gates": {
+    "D0": "PARTIAL_SOURCE_BYTES_VERIFIED",
+    "D1": "HOLD_ACTUAL_SCENE",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_EXACT_GLB_REOPEN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Recover original V05 binaries/script if possible; otherwise regenerate separately versioned LOD from exact V04 using a bounded equivalent method without claiming byte identity. Retrieve terrain and complete actual Blender/PBR scene and matched-camera QA under eligible D4 scope. No further raw-source recovery needed."
+}
