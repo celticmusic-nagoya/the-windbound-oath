@@ -1,0 +1,43 @@
+name: Morwen measured textile candidate
+on:
+  push:
+    branches: [asset/morwen-measured-textile-20261125]
+    paths:
+      - '.github/workflows/morwen-measured-textile.yml'
+      - 'tools/production_qa/morwen_scan_finish.py'
+      - 'tools/production_qa/morwen_skirt_recipe.py'
+permissions:
+  contents: read
+concurrency:
+  group: morwen-measured-textile-candidate
+  cancel-in-progress: false
+jobs:
+  material:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/asset/morwen-measured-textile-20261125'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Regenerate verified authored pattern and get one CC0 measured material
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/production_qa/morwen_skirt_recipe.py "$RUNNER_TEMP/base.png"
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/python" -m pip install --disable-pip-version-check --only-binary=:all: Pillow==12.3.0 numpy==2.3.5
+          curl --fail --location --proto '=https' --proto-redir '=https' --max-time 120 --max-filesize 24000000 --silent --show-error --output "$RUNNER_TEMP/Fabric085_1K-JPG.zip" 'https://ambientcg.com/get?file=Fabric085_1K-JPG.zip'
+          "$RUNNER_TEMP/venv/bin/python" tools/production_qa/morwen_scan_finish.py "$RUNNER_TEMP/base.png" "$RUNNER_TEMP/Fabric085_1K-JPG.zip" "$RUNNER_TEMP/derived"
+          cat "$RUNNER_TEMP/derived/receipt.json"
+      - name: Upload only derived exploratory materials and receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-measured-textile-not-adopted
+          path: |
+            ${{ runner.temp }}/derived/plaid_accent.png
+            ${{ runner.temp }}/derived/dark_pleat.png
+            ${{ runner.temp }}/derived/comparison.png
+            ${{ runner.temp }}/derived/receipt.json
+          retention-days: 7
+          if-no-files-found: error
