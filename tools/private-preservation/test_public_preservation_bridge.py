@@ -1,5 +1,5 @@
-import base64, contextlib, io, json, os, unittest
-from unittest.mock import patch
+import base64, contextlib, io, json, os, pathlib, tempfile, unittest
+from unittest.mock import patch, Mock
 import public_preservation_bridge as b
 
 class BridgeTest(unittest.TestCase):
@@ -46,5 +46,50 @@ class BridgeTest(unittest.TestCase):
         with contextlib.redirect_stdout(out), patch.object(b,'run',side_effect=success):
             self.assertEqual(b.main(),0)
         self.assertNotIn('private receipt',out.getvalue())
+
+    def test_http_status_only(self):
+        failure=Mock(returncode=1,stderr=b'private body and token (HTTP 403)')
+        with patch.object(b.subprocess,'run',return_value=failure):
+            with self.assertRaises(b.ApiError) as exc: b.api('secret','private endpoint')
+            self.assertEqual(exc.exception.status,403)
+            self.assertNotIn('secret',str(exc.exception))
+        self.assertEqual(b.ApiError(999).status,0)
+
+    def test_absent_only_404(self):
+        with patch.object(b,'api',side_effect=b.ApiError(404)):
+            self.assertTrue(b.absent('x','tag'))
+        with patch.object(b,'api',side_effect=b.ApiError(403)):
+            with self.assertRaises(b.ApiError): b.absent('x','tag')
+        with patch.object(b,'api',return_value={}):
+            self.assertFalse(b.absent('x','tag'))
+
+    def test_preflight_read_only(self):
+        module=Mock(); module.gh.return_value=b''
+        rows=[dict(artifact_id=i) for i in b.PILOT]
+        with tempfile.TemporaryDirectory() as tmp, patch.object(b,'absent',return_value=True), patch.object(b,'api',return_value={}) as api:
+            b.preflight(module,rows,'source','dest',pathlib.Path(tmp))
+        self.assertEqual(module.verify_zip.call_count,2)
+        self.assertEqual(module.verify_meta.call_count,2)
+        self.assertEqual(api.call_count,4)
+        module.preserve.assert_not_called()
+        self.assertEqual(module.gh.call_count,1)
+        self.assertEqual(module.gh.call_args.args[1][0],'api')
+
+    def test_preflight_existing_release_blocks_before_download(self):
+        module=Mock(); module.gh.return_value=f'preserved-artifact-{b.PILOT[0]}'.encode()
+        with tempfile.TemporaryDirectory() as tmp, patch.object(b,'api') as api:
+            with self.assertRaises(ValueError): b.preflight(module,[dict(artifact_id=b.PILOT[0])],'source','dest',pathlib.Path(tmp))
+        api.assert_not_called()
+        module.preserve.assert_not_called()
+
+    def test_diagnostic_default_never_preserves(self):
+        rows=[dict(artifact_id=i,rights='APPROVED_PRIVATE_COPY') for i in b.PILOT]
+        q=dict(source_repository=b.SOURCE,items=rows)
+        ref=dict(ref='refs/heads/main',object=dict(type='commit',sha='a'*40))
+        module=Mock()
+        with patch.dict(os.environ,dict(b.EXPECTED,SOURCE_TOKEN='x',DEST_TOKEN='y'),clear=True), patch.object(b,'api',side_effect=[dict(full_name=b.DEST,private=True),ref]), patch.object(b,'read_file',side_effect=[b'pass',json.dumps(q).encode()]), patch.object(b.importlib.util,'module_from_spec',return_value=module), patch.object(b.importlib.util,'spec_from_file_location',return_value=Mock()), patch.object(b,'preflight') as pf:
+            b.run()
+        pf.assert_called_once()
+        module.preserve.assert_not_called()
 
 if __name__ == '__main__': unittest.main()
