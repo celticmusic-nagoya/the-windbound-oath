@@ -22,7 +22,7 @@ jobs:
       - name: Verify exact tested acquisition script
         run: |
           set -euo pipefail
-          echo '40735e039bc538e0d9e973bcd83f884a0f853f6f5fb03905b7812b7103ca2215  tools/production_qa/morwen_photo_textile_acquire.py' | sha256sum -c
+          test "$(git hash-object tools/production_qa/morwen_photo_textile_acquire.py)" = 1166443bcee0e276600a0ae861a2fbe1db716480
           python -m py_compile tools/production_qa/morwen_photo_textile_acquire.py
           python -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
           python tools/production_qa/morwen_photo_textile_acquire.py --self-test
