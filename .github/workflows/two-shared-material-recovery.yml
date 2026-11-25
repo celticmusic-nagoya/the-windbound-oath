@@ -7,6 +7,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/material_cache.py'
       - 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'
       - 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -41,6 +42,10 @@ jobs:
         run: |
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            # V55 source intake is independent, avoid default river-gravel recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             # V52 native virtual audit is independent; do not recover materials again for its isolated change.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
@@ -303,5 +308,40 @@ jobs:
         with:
           name: two-forest-v52-native-virtual-qa
           path: ${{ runner.temp }}/v52-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v55-hero-source:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V55 intake-only scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Acquire official 1K model and verify provider checksums
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/v55-source"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py' "$RUNNER_TEMP/v55-source" "$RUNNER_TEMP/v55-report.json"
+      - name: Preserve exact candidate source and intake evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hero-tree-v55-island-source
+          path: |
+            ${{ runner.temp }}/v55-source
+            ${{ runner.temp }}/v55-report.json
           retention-days: 14
           if-no-files-found: error
