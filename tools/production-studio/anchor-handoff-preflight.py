@@ -111,8 +111,8 @@ def preflight(raw):
             else:
                 require(item.get("baseline_placement") is None
                         and item.get("baseline_revision") is None, "unexpected baseline")
-            key = json.dumps([sorted([(a, xyz, [b[k] for k in FIELDS] if bp else None)
-                                     for a, xyz, b in zip(areas, local, bp or ps)]), t, u])
+            key = (tuple(sorted((a, tuple(xyz), tuple(b[k] for k in FIELDS) if bp else None)
+                                for a, xyz, b in zip(areas, local, bp or ps))), t, u)
             require(key not in seen, "duplicate pair input")
             seen.add(key)
             result = measure(ps, local, t, u)
@@ -123,6 +123,7 @@ def preflight(raw):
             out.append({"index": i, "area_ids": areas, "placement": ps,
                         "local_xyz_m": local, "tolerance_m": t, "uncertainty_m": u,
                         "result": result, "baseline_result": baseline,
+                        "baseline_placement": bp, "baseline_revision": item.get("baseline_revision"),
                         "claimed_result_matches": match,
                         "evidence_class": "PROVISIONAL_DESIGN",
                         "action": "REVIEW_INPUT" if not match else
