@@ -1,0 +1,121 @@
+{
+  "scope": "2D_SWATCH_ONLY_NOT_ADOPTED",
+  "source_sheet_sha256": "384268738ff34d653dd5fb9077728d33dbedc7485aae45e5eb6b87d828a472e9",
+  "source_textile_archive_sha256": "09150c4f57a3648d813fd63850c14342d0b0e688ea282cbedc27016c03e320e1",
+  "sample_centers_px": [
+    [
+      387,
+      1388
+    ],
+    [
+      430,
+      1388
+    ],
+    [
+      472,
+      1388
+    ],
+    [
+      515,
+      1388
+    ],
+    [
+      557,
+      1388
+    ]
+  ],
+  "sample_extent": "20x20 px median sRGB",
+  "palette_rgb": [
+    [
+      52,
+      38,
+      60
+    ],
+    [
+      93,
+      57,
+      116
+    ],
+    [
+      160,
+      111,
+      182
+    ],
+    [
+      250,
+      240,
+      237
+    ],
+    [
+      205,
+      158,
+      108
+    ]
+  ],
+  "source_dark_median_rgb": [
+    53,
+    39,
+    68
+  ],
+  "candidate_dark_median_rgb": [
+    52,
+    38,
+    60
+  ],
+  "trim_spec": {
+    "period_px": 512,
+    "width_px": 1024,
+    "height_px": 128,
+    "band_centers_y_px": [
+      84,
+      99
+    ],
+    "approx_width_px": [
+      11,
+      4
+    ],
+    "alpha_outside_zero": true,
+    "repeat_exact": true,
+    "physical_scale": "unknown"
+  },
+  "outputs": {
+    "dark_palette_calibrated": {
+      "sha256": "7b5558f4d6a548cd15e7803161532c8fbad5e98b25ffc49e094ae646a882ae83",
+      "pixel_sha256": "42004bf87da39e527e04e60b9295da9a0af73d1983596633c6493ab777008ac0",
+      "size": [
+        1024,
+        512
+      ]
+    },
+    "gold_double_trim_overlay": {
+      "sha256": "22b6e4634d7f0e9f600d52a9180b2ba25fadab43c31979b4674634c7f4251ca4",
+      "pixel_sha256": "7fd250ab5d677ac73996129e12da7c142bef09e259e644082630a3be4256909a",
+      "size": [
+        1024,
+        128
+      ]
+    },
+    "comparison": {
+      "sha256": "641a28dac11ab042fa3a536460047985b9f87cf826447e7fb8d97e58e261def7",
+      "size": [
+        1200,
+        750
+      ]
+    }
+  },
+  "recipe": {
+    "luminance_weights": [
+      0.2126,
+      0.7152,
+      0.0722
+    ],
+    "dark": "y=source RGB dot weights; delta=y-median(y); dark RGB=round(clip(palette[0]+delta,0,255)); alpha source exact",
+    "gold": "tile delta first128 rows first512 cols twice; mod=3*sin(2*pi*(x%8+y*.5)/8)+clip(delta,-10,10)*.7; RGB=round(clip(palette[4]+mod,0,255)); alpha=round(255*max(clip(5.5-abs(y-84),0,1),clip(2-abs(y-99),0,1))); RGB=0 where alpha=0"
+  },
+  "limitations": [
+    "Local actual PNGs, only receipt and recipe committed; no hosted output yet",
+    "No UV or native application",
+    "Gold tint derived from official 2D palette, not physical reflectance",
+    "Gold stitching modulation authored, not measured gold-thread scan"
+  ]
+}
