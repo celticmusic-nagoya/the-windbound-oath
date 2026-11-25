@@ -1,0 +1,96 @@
+{
+  "scope": "ISOLATED_CPU_OPTICAL_FIXTURES_NOT_NATIVE_OR_CANON_GEOMETRY",
+  "main": "5f0e5c341303e42b6843e1ac9b36d911e44219c9",
+  "owner_pr": 427,
+  "material_pr": 540,
+  "prework": {
+    "agents_blob": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index_blob": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry_blob": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules_blob": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "native_first_blob": "e82bdcd967d0ccd0d362765886534f1329da99a5",
+    "canon_blobs": [
+      "e1000869aaf232d989761d15c982ed798378b49d",
+      "ec5940c2ca6466150810f93c7fc6a463ef7ebec3"
+    ],
+    "native_owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+    "native_run": 45627058278,
+    "native_status": "in_progress; no native writes or dispatch"
+  },
+  "reference": {
+    "artifact": 14683737147,
+    "archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+    "crc": "PASS",
+    "manifest": "5/5 exact SHA",
+    "visual": "Actual official clothed full-body v3 reviewed; gold-tone round glasses and violet ornaments. No inferred optical constants or cut geometry."
+  },
+  "lens": {
+    "model": "parallel glass plate, unpolarized Fresnel, effective two-interface reflection 2R/(1+R), approximate refraction displacement and synthetic non-character contrast target",
+    "ior": 1.5,
+    "angle_deg": [
+      0,
+      30,
+      60
+    ],
+    "clear_contrast_retention": [
+      0.927,
+      0.927,
+      0.848
+    ],
+    "tinted_contrast_retention": [
+      0.822,
+      0.822,
+      0.753
+    ],
+    "tint_rgb_linear": [
+      0.92,
+      0.87,
+      0.97
+    ],
+    "frame": "gold-tone palette #CD9E6C; fixture only",
+    "candidate": "clear lens preferred for target contrast, actual eye visibility not evaluated"
+  },
+  "gem": {
+    "model": "generic convex octagonal crown/pavilion, Snell refraction, Fresnel and absorption, up to 32 internal reflections, same synthetic environment and angles 0/30",
+    "ior_trials": [
+      1.54,
+      1.65
+    ],
+    "absorption_coefficients": [
+      0.58,
+      1.65,
+      0.29
+    ],
+    "first_attempt": "8 bounces left maximum unresolved path weight ~0.38",
+    "refinement": "32 bounces: at 30 deg max residual weight ~0.0034 for IOR1.54, ~0.0192 for IOR1.65; mean rounded 0.00000 and 0.00001",
+    "visual": "transmission adds facets/internal reflection vs opaque baseline; dark central ring remains visually prominent; hold gemstone appearance until cut/lighting and absorption calibrated",
+    "not_established": "actual canonical gemstone composition, IOR, cut, thickness, optical dispersion"
+  },
+  "outputs": {
+    "lens-comparison.png": {
+      "sha256": "279ce3bbbd299a77ced5abe92147e08e246475b9b12a66096e6b05a7b5fb63cd",
+      "pixel_sha256": "96c3d2286f45bbb879a6ca03ea4413efd560b8b3a5e20b31406fe4d4fe6d2291"
+    },
+    "gem-comparison.png": {
+      "sha256": "664823ddee8df9f79a6f60ae428b878dd5cd5e6984cb55173e846bd250df5ec7",
+      "pixel_sha256": "06053a3ce9cdedd7e11e3e7f091cf202de2a359e71ac6c8472a399957baade67"
+    }
+  },
+  "local_script_sha256": "f885ff329052dda766c140ffe829fe7ab2918d9812450f6894cc5b0504493b4e",
+  "local_receipt_sha256": "287c589ff8b550acfb16dcbe1f9a3e096b96e12fc4b3d0726ed03d993a13cc6f",
+  "qa": {
+    "optical_identity_tests": "4/4 PASS",
+    "png_reopen": "2/2 PASS",
+    "repeat": "two sheets and receipt byte-identical",
+    "G2": "NOT_RUN actual model",
+    "G3": "NOT_RUN native",
+    "G4": "NOT_RUN runtime"
+  },
+  "limits": [
+    "No canonical geometry changed",
+    "No actual eye images, model fit, frame shader, curved lens, AR coating or motion-tested alpha sorting",
+    "Gem fixture uses finite bounces; residual weight not an art metric",
+    "No Blender/VRoid production transfer, no final adoption",
+    "Local script and images not hosted; only summary committed"
+  ]
+}
