@@ -59,6 +59,26 @@ try {
  await input.setInputFiles({name:'invalid-placement.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...saved,status:'ADOPTED'}))});
  await page.waitForFunction(()=>document.querySelector('#placement-status').textContent.includes('配置案読込失敗'));
  assert.equal(await east.inputValue(),'250');
+ // Overview uses only entered XY, equal scale, north-up and CCW yaw.
+ const plot=page.locator('#placement-overview'),plotNote=page.locator('#placement-overview-note');
+ assert.equal(await plot.locator('[data-area-id]').count(),0);
+ assert.ok((await plotNote.innerText()).includes('0/8'));
+ saved.revision=3;
+ Object.assign(saved.areas[0],{x_m:0,y_m:0,yaw_deg:90});
+ Object.assign(saved.areas[1],{x_m:100,y_m:100,yaw_deg:0});
+ Object.assign(saved.areas[2],{x_m:100,y_m:100});
+ await input.setInputFiles({name:'overview.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(saved))});
+ await page.waitForFunction(()=>document.querySelector('#placement-status').textContent.includes('revision 3'));
+ assert.equal(await plot.locator('[data-area-id]').count(),3);
+ const pointA=plot.locator('[data-area-id="RILDE_VILLAGE"]'),pointB=plot.locator('[data-area-id="WINDWAITING_CLIFF"]');
+ const dx=Number(await pointB.getAttribute('cx'))-Number(await pointA.getAttribute('cx'));
+ const dy=Number(await pointA.getAttribute('cy'))-Number(await pointB.getAttribute('cy'));
+ assert.ok(dx>0&&Math.abs(dx-dy)<1e-6,'equal-scale north-up');
+ const yaw=plot.locator('[data-yaw-area="RILDE_VILLAGE"]');
+ assert.ok(Number(await yaw.getAttribute('y2'))<Number(await yaw.getAttribute('y1')));
+ assert.ok((await plotNote.innerText()).includes('同一点 1'));
+ assert.equal(await plot.locator('[data-yaw-area]').count(),2);
+ await placement.screenshot({path:'qa-output/placement-overview-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
