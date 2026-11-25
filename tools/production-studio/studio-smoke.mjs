@@ -13,10 +13,32 @@ try {
  // Deterministic navigation: avoid smooth-scroll movement during Playwright's hit testing.
  const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,reducedMotion:'reduce'});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.route('https://api.github.com/**',route=>route.fulfill({json:route.request().url().includes('/pulls/')?{state:'open',draft:true,head:{sha:'a'.repeat(40)},updated_at:'2026-11-22'}:{workflow_runs:[]}}));
+ const fixtureBranch='feature/fixture',fixtureHead='a'.repeat(40),previousHead='b'.repeat(40);
+ const mockRun=(id,sha,status,conclusion,branch=fixtureBranch)=>({id,name:'fixture run '+id,head_sha:sha,head_branch:branch,status,conclusion,updated_at:'2026-11-25T00:00:00Z'});
+ await page.route('https://api.github.com/**',route=>{
+  const url=new URL(route.request().url());
+  if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
+  if(url.pathname.endsWith('/artifacts'))return route.fulfill({json:{total_count:1,artifacts:[{id:123,name:'fixture artifact',expired:false,expires_at:'2026-12-01T00:00:00Z'}]}});
+  return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
+ });
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
+ // Exact revision separation, active/failed runs, and the prior successful artifact path.
+ const project=page.locator('#projects > article').first();
+ await project.locator('[data-revision="current"]').first().waitFor();
+ assert.deepEqual(await project.locator('[data-revision="current"]').evaluateAll(es=>es.map(e=>e.dataset.runId)),['5','4']);
+ assert.equal(await project.locator('[data-revision="prior"]').getAttribute('data-run-id'),'3');
+ assert.ok((await project.locator('[data-revision="current"]').nth(1).innerText()).includes('failure'));
+ const prior=project.locator('.project-prior-run');
+ await prior.locator(':scope > summary').focus();await prior.locator(':scope > summary').press('Enter');
+ await page.waitForFunction(()=>document.querySelector('.project-prior-run').open);
+ await prior.getByRole('button',{name:'このrunの成果物一覧',exact:true}).click();
+ await prior.locator('.artifact-results').getByText('fixture artifact',{exact:true}).waitFor();
+ assert.ok((await prior.locator('.artifact-results').innerText()).includes(previousHead));
+ assert.equal(await prior.locator('.artifact-results a').getAttribute('href'),'https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/3/artifacts/123');
+ await prior.locator(':scope > summary').press('Enter');
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'project runs mobile overflow');
  // Pointer check before the long inspection. Test the summary label rather than its blank right-hand area.
  const localSummary=page.locator('#local-title > summary');
  await localSummary.click({position:{x:24,y:22}});
@@ -253,7 +275,9 @@ try {
  await batchFile.setInputFiles([]);assert.equal(await batchResults.locator('article').count(),0);
  await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
- assert.equal(await page.locator('#projects article').count(),3);
+ // Count project cards only: nested artifact cards are intentional.
+ assert.equal(await page.locator('#projects > article').count(),3);
+ assert.equal(await page.locator('#projects .artifact-results article').count(),1);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
  assert.ok(await page.locator('#published-title').evaluate(e=>e.getBoundingClientRect().top)<await page.locator('#projects-title').evaluate(e=>e.getBoundingClientRect().top));
