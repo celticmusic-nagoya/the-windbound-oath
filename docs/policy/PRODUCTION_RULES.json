@@ -371,5 +371,13 @@
     "reassess_after_unchanged_next_steps": 2,
     "continue_independent_work": true,
     "latest_approved_priority": true
+  },
+  "production_first_v5": {
+    "policy": "docs/policy/PRODUCTION_FIRST_V5_20261125.md",
+    "infrastructure_global_prerequisite": false,
+    "read_only_writer_lease_required": false,
+    "reuse_verified_receipts": true,
+    "unverified_long_sessions_enabled": false,
+    "affected_scope_only": true
   }
 }
