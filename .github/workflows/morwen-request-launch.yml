@@ -142,7 +142,8 @@ jobs:
       github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
       github.event.comment.author_association == 'OWNER' &&
       startsWith(github.event.comment.body, '/two-morwen-launch vrm_export main=') &&
-      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true'
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -162,7 +163,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PYTHONPATH: tools/production_qa
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
-          PRIVATE_DROP: ${{ vars.MORWEN_PRIVATE_TRANSFER_DIR }}
           PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
           REVIEWED_WORKER_BLOB: ${{ vars.MORWEN_VRM_WORKER_BLOB }}
           REVIEWED_PREVIOUS_RUN: ${{ vars.MORWEN_VRM_PREVIOUS_RUN }}
@@ -197,7 +197,7 @@ jobs:
           const profile=fs.readFileSync(".github/morwen/vrm-export-profile.json");
           if(!/^[0-9a-f]{64}$/.test(env.PROFILE_SHA256)||crypto.createHash("sha256").update(profile).digest("hex")!==env.PROFILE_SHA256)throw Error("profile review missing");
           const reviewed=JSON.parse(profile);
-          if(reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_drop!==env.PRIVATE_DROP||!env.PRIVATE_DROP||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
+          if(!/^[A-Z0-9][A-Z0-9_-]{2,100}$/.test(env.TRANSFER_ASSET||"")||reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_destination!=="celticmusic-nagoya/the-windbound-oath-handoff"||reviewed.staging!=="RUNNER_TEMP_OWNER_ONLY"||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
           const prior=api(wf+"/runs?branch=main&per_page=1").workflow_runs[0];
           if(!prior||String(prior.id)!==env.REVIEWED_PREVIOUS_RUN||prior.status!=="completed")throw Error("prior run changed");
           for(const status of ["queued","in_progress","waiting","requested","pending"]){if(api(wf+"/runs?status="+status+"&per_page=1").total_count!==0)throw Error("active worker");}
