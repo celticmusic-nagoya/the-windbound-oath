@@ -1,0 +1,85 @@
+{
+  "schema": "two.region.moss_a3_gate_receipt.v03",
+  "parent": "8e75e824b00d39aafeba0d48f50802afb37f9adb",
+  "status": "LOCAL_ACCESS_SCREEN_PASS_HOLD_ART_DIRECTION_AND_ONE_WAY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v02": "f51f4a25925ba279fa44fa6053fa75f9f813d8bf"
+  },
+  "inputs_sha256": [
+    "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "c3d6c314cc23f50012840a2b81414f46ea638ac6f7917f3ae557394e434d3f32",
+    "3ab29ffddcaabce5a997e1ce65bd6c55e0f3df2d8e73f00049fb9c6474e9f65e",
+    "b4adf3246b4f9c298f4017050966e332af859caf29038468c3e305d726ce78cf"
+  ],
+  "criteria": {
+    "frame": "provisional m X east Y north Z up",
+    "actor_radius_m": 0.65,
+    "source_slope_limit_pct": 15,
+    "grid_m": 1,
+    "scope": "A3 only, point-centre planar obstacle clearance model"
+  },
+  "baseline": {
+    "source_triangles": 6400,
+    "steep_area_m2": 3753.125,
+    "gate_only_connected": true,
+    "grid_nodes": 15689,
+    "undirected_edge_count": 61514,
+    "bypass_grid_length_m": 30.041630560342625,
+    "grid_endpoint_snap_m": [
+      0.5423371946067822,
+      0.671603545696791
+    ],
+    "endpoint_links_clear": [
+      true,
+      true
+    ]
+  },
+  "selected": {
+    "candidate_count": 12,
+    "local_pass_count": 1,
+    "offset_m": 1,
+    "thickness_m": 1.5,
+    "rock_reserve_area_m2": 228.28930561396263,
+    "rock_outside_m2": 0,
+    "protected_overlap_m2": 2.1544591948020512e-14,
+    "closure_area_m2": 7.5,
+    "closure_outside_original_gate_m2": 2.5,
+    "open_connected": true,
+    "original_gate_closed_connected": false,
+    "reverse_open_connected": true,
+    "ring_perimeter_m": 152.3672532816139,
+    "rock_boundary_clearance_m": 0.13564287748681636,
+    "ground_grade_pct": 9.530497853753923,
+    "ground_relief_m": 2.159536252765559
+  },
+  "outputs": {
+    "script_sha256": "99211c5b3a11516f309a05d7429a1c0dc0c8d1cb19ede07fe33befff38340902",
+    "qa_sha256": "5220f3032a7a12df5e652ed4152e153e8ae0a1c8e664073bf3d2e5e2812ecd0b",
+    "geometry_sha256": "8aa7ae98975da7eecec3b422d9e029a32e304c9c88eed055feb8e599756f35dc",
+    "png_sha256": "0ef5aed2cd1d8140b04f6d6fa9f623dd86b649e5369acf129e0de8986bf5b8d2",
+    "script_local_git_fingerprint": "8fae90c2a81e47831fca4a0160b58aed2f7eda63",
+    "qa_local_git_fingerprint": "e35c5718934c755af6b8a257e61418c869c0d463",
+    "geometry_local_git_fingerprint": "6eaf37dd31a64809fc84c0c90348bd5bee1b061f"
+  },
+  "execution": "Actual local Python, two runs; five input SHA unchanged, exact polygon serialization roundtrip, plot inspected, SHA and Git fingerprints computed. Full script/geometry/QA/PNG delivered locally; receipt only committed.",
+  "decision": "Do not promote full enclosure: 152m perimeter and only 0.136m A3 boundary clearance create art and future seam risks. Open-state reverse connectivity confirms one-way semantics require game integration. Next design localized natural rock/roots and a game-side state contract with existing gameplay owner; keep geometry independent and no gameplay writes without scope. No canon changes.",
+  "limits": [
+    "A3 only. Closed-gate result applies to planar actor disk proxy and chosen obstacle reservation, not world-wide navigation or actual one-way function. Rock height/climbing/collision and full scene composition unresolved. No actual rock meshes, Blender, official CG, independent D4, runtime or adoption."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_GATE_GAMEPLAY_INTERFACE",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ACTUAL_BOUNDARY_HEIGHT_AND_COLLISION",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
