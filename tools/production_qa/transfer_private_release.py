@@ -7,6 +7,8 @@ import json
 import re
 import zipfile
 from pathlib import Path
+import os
+import sys
 
 DEST = 'celticmusic-nagoya/the-windbound-oath-handoff'
 BASE = 'https://api.github.com/repos/' + DEST
@@ -54,8 +56,17 @@ def transfer(raw, token, run_id, revision, request_id, api, *, expected_source=S
     ref = api(token,'GET',BASE+'/git/ref/heads/main')
     target = ref.get('object',{}).get('sha','')
     require(ref.get('ref') == 'refs/heads/main' and ref.get('object',{}).get('type') == 'commit' and re.fullmatch(r'[0-9a-f]{40}',target), 'destination revision')
-    # Create-only: the caller preflights the tag/release absence, and a failed
-    # attempt is reconciled manually, never retried with a different tag.
+    # Include drafts: release-by-tag may not resolve an unpublished draft.
+    # A bounded list must prove absence before any write.
+    for page in range(1, 21):
+        rows = api(token,'GET',BASE+f'/releases?per_page=100&page={page}')
+        require(isinstance(rows,list) and len(rows)<=100, 'release listing invalid')
+        require(not any(row.get('tag_name')==tag for row in rows), 'destination draft or release exists')
+        if len(rows)<100:
+            break
+    else:
+        raise ValueError('release inventory not fully verified')
+    # A failed attempt is reconciled manually, never retried with another tag.
     from release_transport import TransportError
     for endpoint in ('/releases/tags/'+tag, '/git/ref/tags/'+tag):
         try:
@@ -79,3 +90,42 @@ def transfer(raw, token, run_id, revision, request_id, api, *, expected_source=S
     require(rel.get('id')==rid and rel.get('tag_name')==tag and rel.get('draft') is False and rel.get('prerelease') is True, 'private prerelease receipt')
     require(api(token,'GET',asset_url,binary=True,limit=len(raw)) == raw, 'final readback mismatch')
     return dict(scope='PRIVATE_CANDIDATE_READBACK_VERIFIED',release_id=rid,asset_id=aid,sha256=digest,bytes=len(raw),run_id=run_id,request_id=request_id,adoption='NOT_ADOPTED')
+
+
+def main():
+    """Only the separately approved protected stage may invoke this CLI."""
+    from release_transport import request
+    from morwen_transfer_claim import verify
+    env = os.environ
+    require(env.get('MORWEN_PRIVATE_TRANSFER_APPROVED') == 'true'
+            and env.get('GITHUB_REPOSITORY') == 'celticmusic-nagoya/the-windbound-oath'
+            and env.get('GITHUB_REF') == 'refs/heads/main'
+            and env.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
+            and env.get('GITHUB_RUN_ATTEMPT') == '1'
+            and env.get('GITHUB_ACTOR_ID') == '41898282', 'protected stage identity')
+    require(len(sys.argv) == 3, 'usage: transfer_private_release.py PACKAGE NEW_RECEIPT')
+    path, receipt = map(Path,sys.argv[1:])
+    require(path.is_file() and not path.is_symlink() and path.parent.stat().st_mode & 0o077 == 0
+            and receipt.parent.resolve() == path.parent.resolve() and not os.path.lexists(receipt), 'private input/output')
+    def fence():
+        verify('origin',env['TRANSFER_ASSET'],env['MORWEN_BOUND_FENCE'],env['GITHUB_SHA'],
+               env['REQUEST_ID'],env['GITHUB_RUN_ID'],env['GITHUB_RUN_ATTEMPT'])
+    fence()
+    def guarded_api(token,method,url,*args,**kwargs):
+        if method in ('POST','PATCH'):
+            fence()
+        return request(token,method,url,*args,**kwargs)
+    result = transfer(path.read_bytes(),env['DEST_TOKEN'],env['GITHUB_RUN_ID'],env['GITHUB_SHA'],env['REQUEST_ID'],guarded_api)
+    fence()
+    with receipt.open('x',encoding='utf-8') as f:
+        json.dump(result,f,indent=2)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception:
+        # Never put private URLs, credentials, paths or response bodies in public logs.
+        print('PRIVATE_TRANSFER_BLOCKED_RECONCILE_NO_RETRY')
+        raise SystemExit(1) from None
+    print('PRIVATE_TRANSFER_READBACK_VERIFIED')
