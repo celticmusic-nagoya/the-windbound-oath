@@ -25,6 +25,9 @@ jobs:
         run: |
           python -m py_compile discover-gallery.py artifact-sync.py stage-village.py
           node --check gallery-smoke.mjs
+          node --check recent-review-artifacts.js
+          node --check zip-preview.js
+          node --test test_recent_review_artifacts.cjs
           bash -n sync-preview.sh
           python -m unittest discover -s . -p test_publication_gate.py -v
           python - <<'PY'
