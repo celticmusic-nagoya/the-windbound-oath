@@ -2,7 +2,7 @@
 
 ## Director-approved Morwen early Blender transfer (2026-11-26)
 
-For Morwen #427, [early Blender transfer](docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md) supersedes conflicting VRoid-native completion-before-export wording below and in the older VRoid-first policy. Preserve the verified VRoid base/checkpoints, export and validate actual VRM on an isolated copy, then use Blender as the main authoring environment. D0–D4, G1–G4, licensing, protected originals, writer safety, spending and adoption requirements remain. No automatic extension to other characters.
+For Morwen #427, [early Blender transfer](docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md) supersedes conflicting VRoid-native completion-before-export wording below and in the older VRoid-first policy. Preserve the verified VRoid base/checkpoints, export and validate actual VRM on an isolated copy, then use Blender as the main authoring environment. Director-approved Morwen visual targets: 7.75 heads nominal, Layer 0 hair shape, official clothed design dark violet hair color; synthetic photo-style material reference only. D0–D4, G1–G4, licensing, protected originals, writer safety, spending and adoption requirements remain. No automatic extension to other characters.
 
 ## Production-First v6.0 — director-approved 2026-11-25 (read this first)
 
