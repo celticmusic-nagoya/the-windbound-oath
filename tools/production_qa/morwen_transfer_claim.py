@@ -68,3 +68,34 @@ def claim(remote, asset, token, revision, request, run, attempt):
 def verify(remote, asset, token, revision, request, run, attempt):
     expected = binding(asset, revision, request, run, attempt)
     read_binding(remote, asset, token, expected, time.monotonic() + 45)
+
+
+def await_bound(remote, asset, reservation, revision, request, run, attempt, timeout=60):
+    """Read only: wait for launcher to bind the one-time reservation to this run."""
+    expected = binding(asset, revision, request, run, attempt)
+    if not re.fullmatch(r"[0-9a-f]{40}", reservation) or not 0 < timeout <= 120:
+        raise ValueError("invalid reservation or wait limit")
+    ref = ref_for(asset)
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        current = git("ls-remote", "--refs", remote, ref, deadline=deadline)
+        match = re.fullmatch(r"([0-9a-f]{40})\t" + re.escape(ref), current)
+        if not match:
+            raise RuntimeError("transfer reservation missing or ambiguous")
+        token = match.group(1)
+        if token != reservation:
+            read_binding(remote, asset, token, expected, deadline)
+            return token
+        # The exact unconsumed reservation is the only permissible wait state.
+        try:
+            read_binding(remote, asset, token, binding(asset, revision, request), deadline)
+        except RuntimeError:
+            # A legitimate CAS handoff may race the read. Re-read once; fail on other errors.
+            updated = git("ls-remote", "--refs", remote, ref, deadline=deadline)
+            if updated == current:
+                raise
+            continue
+        remaining = deadline - time.monotonic()
+        if remaining > 0:
+            time.sleep(min(0.5, remaining))
+    raise TimeoutError("launcher did not bind reservation to this run")
