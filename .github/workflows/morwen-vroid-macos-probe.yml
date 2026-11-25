@@ -6,6 +6,10 @@ on:
         description: Read-only two-command reception test in the same macOS job
         type: boolean
         default: false
+      native_probe:
+        description: Disposable iris control qualification and bounded framing survey (not artistic correction)
+        type: boolean
+        default: false
 permissions:
   contents: read
   actions: read
@@ -17,7 +21,7 @@ jobs:
   reopen:
     if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
     runs-on: macos-15
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,6 +41,78 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
+          cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
+          import Foundation
+          import Vision
+          import AppKit
+          let request = VNRecognizeTextRequest()
+          request.recognitionLevel = .accurate
+          request.usesLanguageCorrection = false
+          let args = CommandLine.arguments
+          try VNImageRequestHandler(url: URL(fileURLWithPath: args[1])).perform([request])
+          let rows = request.results ?? []
+          let labels = rows.filter {
+              $0.boundingBox.minX > 0.71 && $0.boundingBox.midX < 0.91
+                  && $0.topCandidates(1).first?.string
+                      .trimmingCharacters(in: .whitespacesAndNewlines)
+                      .range(of: args[2], options: [.regularExpression, .caseInsensitive]) != nil
+          }
+          guard labels.count == 1, let label = labels.first else { exit(2) }
+          let fields = rows.filter {
+              $0.boundingBox.midX > 0.92
+                  && abs($0.boundingBox.midY - label.boundingBox.midY) < 0.018
+                  && $0.topCandidates(1).first?.string.range(
+                      of: #"^[−-]?\d+\.\d{3}$"#, options: .regularExpression
+                  ) != nil
+          }
+          guard fields.count == 1, let field = fields.first,
+                let value = field.topCandidates(1).first?.string else { exit(2) }
+          let png = try Data(contentsOf: URL(fileURLWithPath: args[1]))
+          guard let image = NSBitmapImageRep(data: png) else { exit(2) }
+          let w = image.pixelsWide, h = image.pixelsHigh
+          let fieldY = 1 - field.boundingBox.midY
+          let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
+          guard expectedY >= 9, expectedY + 9 < h else { exit(2) }
+          var xs: [Int] = [], ys: [Int] = []
+          for y in (expectedY - 9)...(expectedY + 9) {
+              for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
+                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(NSColorSpace.deviceRGB) else { continue }
+                  if c.blueComponent > 0.78 && c.redComponent < 0.22
+                      && c.greenComponent > 0.30 && c.greenComponent < 0.82 {
+                      xs.append(x)
+                      ys.append(y)
+                  }
+              }
+          }
+          guard let minX = xs.min(), let maxX = xs.max(), maxX - minX <= 35,
+                let minY = ys.min(), let maxY = ys.max() else { exit(2) }
+          print(value.replacingOccurrences(of: "−", with: "-"),
+                Double(minX + maxX) / (2 * Double(w)),
+                Double(minY + maxY) / (2 * Double(h)))
+          SWIFT
+          swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
+          cat > "$RUNNER_TEMP/frame-margin.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          guard let image = NSBitmapImageRep(data: try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1]))),
+                image.pixelsWide == 1024, image.pixelsHigh == 768 else { exit(2) }
+          let x0 = 298, x1 = 725, y0 = 104, y1 = 705
+          var xmin = x1, xmax = x0, ymin = y1, ymax = y0, count = 0
+          for y in y0...y1 {
+              for x in x0...x1 {
+                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { exit(2) }
+                  let v = [c.redComponent, c.greenComponent, c.blueComponent].map { $0 * 255 }
+                  if v.max()! - v.min()! > 18 || v.reduce(0,+)/3 < 205 {
+                      xmin = min(xmin,x); xmax = max(xmax,x); ymin = min(ymin,y); ymax = max(ymax,y); count += 1
+                  }
+              }
+          }
+          let margin = min(xmin-x0,x1-xmax,ymin-y0,y1-ymax)
+          print("bbox", xmin, ymin, xmax, ymax, "foreground_pixels", count, "margin", margin)
+          // Foreground heuristic only; independent review of orientation and body crop required.
+          exit(count >= 1500 && ymax-ymin >= 120 && margin >= 12 ? 0 : 1)
+          SWIFT
+          swiftc "$RUNNER_TEMP/frame-margin.swift" -o "$RUNNER_TEMP/frame-margin"
       - name: Restore native checkpoint
         env:
           GH_TOKEN: ${{ github.token }}
@@ -77,7 +153,9 @@ jobs:
           ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
           hdiutil detach "$RUNNER_TEMP/vroid-mount"
       - name: Launch signed application and collect evidence
-        timeout-minutes: 12
+        timeout-minutes: 22
+        env:
+          NATIVE_PROBE: ${{ inputs.native_probe }}
         shell: bash
         run: |
           set -euo pipefail
@@ -213,6 +291,119 @@ jobs:
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
           MORWEN_CAPTURE_MODE=rear-only
           source tools/production_qa/morwen_readonly_capture.sh
+          if [ "$NATIVE_PROBE" = true ]; then
+            row="$RUNNER_TEMP/face-row"
+            sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
+            bash -n "$RUNNER_TEMP/session-helpers.sh"
+            source "$RUNNER_TEMP/session-helpers.sh"
+            echo FRAME_PROBE_REVIEW_REQUIRED > evidence/frame-probe-status.txt
+            for attempt in 1 2 3 4; do
+              "$gui" vroid-shortcut face
+              "$gui" vroid-shortcut front
+              "$gui" zoom 0.50 0.42 -6 0
+              sleep 2
+              good=1
+              for direction in front left4 left8 right4; do
+                "$gui" vroid-shortcut front
+                case "$direction" in
+                  left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
+                  left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
+                  right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                esac
+                sleep 2
+                tag="frame-$attempt-$direction"
+                capture_state "$tag"
+                if ! grep -Fq 'Morwen-resume.vroid' "evidence/$tag.txt" || ! grep -Fq 'Face Sets' "evidence/$tag.txt"; then
+                  echo BLOCKED_UNKNOWN_VIEWPORT > evidence/frame-probe-status.txt
+                  exit 1
+                fi
+                "$RUNNER_TEMP/frame-margin" "evidence/$tag.png" >> evidence/frame-margin.txt || good=0
+              done
+              if [ "$good" = 1 ]; then
+                echo "MARGIN_HEURISTIC_PASS_REVIEW_REQUIRED attempt=$attempt" > evidence/frame-probe-status.txt
+                break
+              fi
+            done
+            "$gui" vroid-shortcut front
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            face_cat "$CAT_IRIS"
+            capture_state native-probe-before
+            read -r initial sx sy <<< "$("$row" evidence/native-probe-before.png '^Iris Size \(X\)$')"
+            read -r protected_y _ _ <<< "$("$row" evidence/native-probe-before.png '^Iris Size \(Y\)$')"
+            test "$initial" = 0.141 && test "$protected_y" = 0.194
+            chmod u+w "$MORWEN_READONLY_NATIVE"
+            echo DISPOSABLE_CALIBRATION_MUTATION_ATTEMPTED > evidence/native-probe-status.txt
+            slider_by probe-iris-x '^Iris Size \(X\)$' 0.017
+            capture_state native-probe-after
+            read -r changed _ _ <<< "$("$row" evidence/native-probe-after.png '^Iris Size \(X\)$')"
+            read -r y_after _ _ <<< "$("$row" evidence/native-probe-after.png '^Iris Size \(Y\)$')"
+            python3 - "$initial" "$changed" "$protected_y" "$y_after" <<'PY'
+          import sys
+          from decimal import Decimal
+          a,b,y,z = map(Decimal,sys.argv[1:])
+          assert Decimal("0.002") < b-a <= Decimal("0.15") and y == z, "unexpected response"
+          PY
+            native_save
+            reopen_copy
+            face_cat "$CAT_IRIS"
+            capture_state native-probe-reopened
+            read -r reopened _ _ <<< "$("$row" evidence/native-probe-reopened.png '^Iris Size \(X\)$')"
+            read -r y_reopened _ _ <<< "$("$row" evidence/native-probe-reopened.png '^Iris Size \(Y\)$')"
+            test "$changed" = "$reopened" && test "$protected_y" = "$y_reopened"
+            test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            python3 - "$initial" "$changed" "$reopened" "$protected_y" "$y_after" "$y_reopened" <<'PY'
+          import hashlib,json,pathlib,sys,zipfile
+          p=pathlib.Path("evidence")
+          a,b,c,y,z,q=map(float,sys.argv[1:])
+          def sha(f): return hashlib.sha256(f.read_bytes()).hexdigest()
+          with zipfile.ZipFile(p/"input-model.vroid") as src, zipfile.ZipFile(p/"model.vroid") as dst:
+              assert src.testzip() is None and dst.testzip() is None
+              assert src.read("v1model/data.bin") != dst.read("v1model/data.bin")
+          assert sha(p/"model.vroid") != sha(p/"input-model.vroid")
+          record=dict(status="DISPOSABLE_CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ADOPTED",
+                      before=a,after=b,reopened=c,protected_iris_y=[y,z,q],
+                      native_sha256=sha(p/"model.vroid"),source_sha256=sha(p/"input-model.vroid"),
+                      screenshots={k:sha(p/(k+".png")) for k in ("native-probe-before","native-probe-after","native-probe-reopened")})
+          (p/"native-probe.json").write_text(json.dumps(record,indent=2))
+          PY
+            echo CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ART_QA > evidence/native-probe-status.txt
+          fi
+      - name: Checkout trusted shared engines for control receipt
+        if: inputs.native_probe
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: shared-main
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa
+            tools/blueprint_engine
+      - name: Validate reopened control evidence with shared engines
+        if: inputs.native_probe
+        env:
+          PYTHONPATH: ${{ github.workspace }}/shared-main/tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          from blueprint_engine.residual import evaluate
+          from session_plan import ready,sha
+          p=pathlib.Path("evidence").resolve()
+          record=json.loads((p/"native-probe.json").read_text())
+          assert record["status"]=="DISPOSABLE_CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ADOPTED"
+          assert sha(p/"model.vroid")==record["native_sha256"]
+          assert all(sha(p/(k+".png"))==v for k,v in record["screenshots"].items())
+          target=dict(values={"iris_x":record["after"]},tolerances={"iris_x":0.002},uncertainty={"iris_x":0.001})
+          report=evaluate(target,dict(actual={"iris_x":record["reopened"]},uncertainty={"iris_x":0.001}))
+          assert report["overall"]=="PASS"
+          fingerprint=hashlib.sha256((p/"native-probe.json").read_bytes()).hexdigest()
+          stages=[dict(id="isolated_control_receipt",deps=[],seconds=1,qualified=True,fingerprint=fingerprint)]
+          completed={"isolated_control_receipt":dict(path="model.vroid",sha256=record["native_sha256"],reopened=True,fingerprint=fingerprint)}
+          assert ready(stages,completed,p,10,1)==[]
+          report["scope"]="CONTROL_REOPEN_TEST_ONLY; NO_FACTORY_CAS_OR_ART_ACCEPTANCE"
+          (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
+          PY
       - name: Receive two read-only probe instructions in this session
         if: inputs.poll_probe
         timeout-minutes: 4
@@ -281,4 +472,6 @@ jobs:
           path: |
             evidence/*.png
             evidence/*.txt
+            evidence/*.json
+            evidence/model.vroid
           retention-days: 7
