@@ -221,7 +221,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Acquire and measure public Irish terrain reference rasters
+      - name: Acquire remaining southwest Irish terrain reference raster
         if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'ireland-dem'
         shell: bash
         run: |
@@ -229,12 +229,12 @@ jobs:
           mkdir -p "$RUNNER_TEMP/v23-output"
           sudo apt-get update -qq
           sudo apt-get install -y -qq python3-gdal python3-numpy
-          /usr/bin/python3 tools/map_blueprint/shared_materials_v01/ireland_dem_v23.py "$RUNNER_TEMP/v23-output"
+          /usr/bin/python3 tools/map_blueprint/shared_materials_v01/ireland_dem_v24_southwest.py "$RUNNER_TEMP/v23-output"
       - name: Preserve exact DSM source and measured reference outputs
         if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'ireland-dem'
         uses: actions/upload-artifact@v4
         with:
-          name: two-ireland-dem-v23-reference
+          name: two-ireland-dem-v24-southwest
           path: ${{ runner.temp }}/v23-output
           retention-days: 14
           if-no-files-found: error
