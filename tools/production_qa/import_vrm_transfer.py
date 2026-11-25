@@ -12,6 +12,91 @@ import struct
 import sys
 
 
+def validate_embedded_geometry(model, raw, json_length):
+    """Strict embedded GLB framing and reference/range preflight, not full schema QA."""
+    def require(ok, reason):
+        if not ok:
+            raise ValueError(reason)
+
+    def uint(value):
+        return type(value) is int and value >= 0
+
+    def index(items, value, label):
+        require(uint(value) and value < len(items), f"invalid {label} index")
+        return items[value]
+
+    start = 20 + json_length
+    require(json_length > 0 and json_length % 4 == 0 and start + 8 <= len(raw), "missing or misaligned BIN chunk")
+    size, kind = struct.unpack_from("<I4s", raw, start)
+    require(kind == b"BIN\0" and size > 0 and size % 4 == 0 and start + 8 + size == len(raw), "invalid BIN chunk length or trailing bytes")
+    buffers = model.get("buffers", [])
+    require(len(buffers) == 1 and "uri" not in buffers[0], "expected one embedded buffer")
+    length = buffers[0].get("byteLength")
+    require(uint(length) and 0 < length <= size and size - length <= 3, "invalid embedded buffer length")
+    require(not any(raw[start + 8 + length:]), "nonzero BIN padding")
+    views = model.get("bufferViews", [])
+    accessors = model.get("accessors", [])
+    nodes = model.get("nodes", [])
+    meshes = model.get("meshes", [])
+    skins = model.get("skins", [])
+    materials = model.get("materials", [])
+    for view in views:
+        require(type(view.get("buffer")) is int and view["buffer"] == 0, "invalid bufferView buffer")
+        off, count = view.get("byteOffset", 0), view.get("byteLength")
+        require(uint(off) and uint(count) and count > 0 and off + count <= length, "bufferView range exceeds embedded buffer")
+    component_bytes = {5120: 1, 5121: 1, 5122: 2, 5123: 2, 5125: 4, 5126: 4}
+    dimensions = {"SCALAR": (1, 1), "VEC2": (2, 1), "VEC3": (3, 1), "VEC4": (4, 1), "MAT2": (2, 2), "MAT3": (3, 3), "MAT4": (4, 4)}
+    for accessor in accessors:
+        width = component_bytes.get(accessor.get("componentType"))
+        shape = dimensions.get(accessor.get("type"))
+        count, off = accessor.get("count"), accessor.get("byteOffset", 0)
+        require(width is not None and shape is not None and uint(count) and count > 0 and uint(off), "invalid accessor format")
+        require("sparse" not in accessor, "sparse accessor requires separate qualification")
+        view = index(views, accessor.get("bufferView"), "accessor bufferView")
+        rows, cols = shape
+        column = rows * width
+        element = ((column + 3) // 4 * 4 if cols > 1 else column) * cols
+        stride = view.get("byteStride", element)
+        require(uint(stride) and stride >= element and stride % width == 0 and off % width == 0 and (view.get("byteOffset", 0) + off) % width == 0, "invalid accessor alignment or stride")
+        require(off + (count - 1) * stride + element <= view["byteLength"], "accessor range exceeds bufferView")
+    for image in model.get("images", []):
+        require("uri" not in image, "expected embedded image bufferView")
+        index(views, image.get("bufferView"), "image bufferView")
+    for skin in skins:
+        require(bool(skin.get("joints")), "skin has no joints")
+        for joint in skin["joints"]:
+            index(nodes, joint, "joint node")
+        if "skeleton" in skin:
+            index(nodes, skin["skeleton"], "skeleton node")
+        if "inverseBindMatrices" in skin:
+            index(accessors, skin["inverseBindMatrices"], "inverse bind accessor")
+    for node in nodes:
+        for child in node.get("children", []):
+            index(nodes, child, "child node")
+        if "mesh" in node:
+            index(meshes, node["mesh"], "node mesh")
+        if "skin" in node:
+            index(skins, node["skin"], "node skin")
+    for mesh in meshes:
+        for primitive in mesh.get("primitives", []):
+            for attribute in primitive.get("attributes", {}).values():
+                index(accessors, attribute, "primitive attribute accessor")
+            for target in primitive.get("targets", []):
+                for attribute in target.values():
+                    index(accessors, attribute, "morph accessor")
+            if "indices" in primitive:
+                index(accessors, primitive["indices"], "primitive indices accessor")
+            if "material" in primitive:
+                index(materials, primitive["material"], "primitive material")
+    ext = model.get("extensions", {})
+    if "VRMC_vrm" in ext:
+        for bone in ext["VRMC_vrm"].get("humanoid", {}).get("humanBones", {}).values():
+            index(nodes, bone.get("node"), "humanoid node")
+    elif "VRM" in ext:
+        for bone in ext["VRM"].get("humanoid", {}).get("humanBones", []):
+            index(nodes, bone.get("node"), "humanoid node")
+
+
 def inspect_vrm(raw):
     if len(raw) < 20 or struct.unpack_from("<4sII", raw) != (b"glTF", 2, len(raw)):
         raise ValueError("expected a complete GLB v2 container")
@@ -19,6 +104,7 @@ def inspect_vrm(raw):
     if kind != b"JSON" or length > len(raw) - 20:
         raise ValueError("invalid JSON chunk")
     model = json.loads(raw[20:20+length])
+    validate_embedded_geometry(model, raw, length)
     extensions = model.get("extensions", {})
     if "VRMC_vrm" in extensions:
         vrm = extensions["VRMC_vrm"]
