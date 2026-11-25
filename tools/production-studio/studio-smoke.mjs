@@ -79,6 +79,27 @@ try {
  assert.ok((await plotNote.innerText()).includes('同一点 1'));
  assert.equal(await plot.locator('[data-yaw-area]').count(),2);
  await placement.screenshot({path:'qa-output/placement-overview-mobile.png'});
+ // Anchor pair: incomplete data blocked, 90-degree rotation, vertical residual and conservative verdicts.
+ const anchor=page.locator('#placement-anchor-check'),result=page.locator('#anchor-result');
+ await anchor.locator('summary').click();
+ assert.ok((await result.innerText()).includes('BLOCKED'));
+ saved.revision=4;
+ Object.assign(saved.areas[0],{x_m:0,y_m:0,z_m:0,yaw_deg:90});
+ Object.assign(saved.areas[1],{x_m:0,y_m:10,z_m:3,yaw_deg:0});
+ await input.setInputFiles({name:'anchors.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(saved))});
+ await page.waitForFunction(()=>document.querySelector('#placement-status').textContent.includes('revision 4'));
+ for(const [name,value] of [['A local X (m)','10'],['A local Y (m)','0'],['A local Z (m)','0'],['B local X (m)','0'],['B local Y (m)','0'],['B local Z (m)','0']])await anchor.getByRole('spinbutton',{name,exact:true}).fill(value);
+ assert.ok((await result.innerText()).includes('3D残差 r: 3 m'));
+ assert.ok((await result.innerText()).includes('BLOCKED'));
+ await anchor.getByRole('spinbutton',{name:'合成不確かさ u (m)',exact:true}).fill('0.2');
+ const tol=anchor.getByRole('spinbutton',{name:'許容誤差 t (m)',exact:true});
+ for(const [value,verdict] of [['4','PASS'],['2','OUTSIDE'],['3','HOLD']]){await tol.fill(value);assert.equal(await result.getAttribute('data-verdict'),verdict);}
+ await anchor.getByRole('combobox',{name:'アンカー B エリア'}).selectOption('0');
+ assert.equal(await result.getAttribute('data-verdict'),null);
+ assert.ok((await result.innerText()).includes('別の2エリア'));
+ await anchor.getByRole('combobox',{name:'アンカー B エリア'}).selectOption('1');
+ assert.equal(await result.getAttribute('data-verdict'),'HOLD');
+ await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
