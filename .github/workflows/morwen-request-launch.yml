@@ -29,7 +29,7 @@ jobs:
             if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1")throw Error("identity");
             const age=now-Date.parse(c.created_at);if(!Number.isFinite(age)||age<0||age>600000)throw Error("stale");
             if(c.body==="/two-morwen-launch probe")return {kind:"probe",id:c.id};
-            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
+            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
             if(!m||m[0]!==c.body)throw Error("command");
             return {kind:"start",id:c.id,mode:m[1],main:m[2],blob:m[3],previous:Number(m[4])};
           }
@@ -56,7 +56,8 @@ jobs:
        startsWith(github.event.comment.body, '/two-morwen-launch face_candidate main=') ||
        startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_export main=') ||
        startsWith(github.event.comment.body, '/two-morwen-launch parallel_ac main=') ||
-       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_import main='))
+       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_import main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_guide main='))
     runs-on: ubuntu-latest
     timeout-minutes: 3
     permissions:
@@ -81,7 +82,7 @@ jobs:
             if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1")throw Error("identity");
             const age=now-Date.parse(c.created_at);if(!Number.isFinite(age)||age<0||age>600000)throw Error("stale");
             if(c.body==="/two-morwen-launch probe")return {kind:"probe",id:c.id};
-            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
+            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
             if(!m||m[0]!==c.body)throw Error("command");
             return {kind:"start",id:c.id,mode:m[1],main:m[2],blob:m[3],previous:Number(m[4])};
           }
@@ -96,6 +97,7 @@ jobs:
            if(q.mode==="wardrobe_export"&&["success","failure"].includes(prior.conclusion)&&prior.id===45592878835)return true;
            if(q.mode==="parallel_ac"&&prior.conclusion==="failure"&&prior.id===45594627894)return true;
            if(q.mode==="wardrobe_import"&&["success","failure"].includes(prior.conclusion)&&prior.id===45605491226)return true;
+           if(q.mode==="wardrobe_guide"&&prior.conclusion==="success"&&prior.id===45605491226)return true;
            throw Error("unqualified transition");
           }
           const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH,"utf8"));
@@ -117,7 +119,7 @@ jobs:
           let active=0;for(const s of ["queued","in_progress","waiting","requested","pending"])active+=api(wf+"/runs?status="+s+"&per_page=1").total_count;
           const priorBlob=api(repo+"/contents/"+path+"?ref="+prior.head_sha).sha;
           eligible(q,head,blob,prior,runs,active,priorBlob);
-          if(q.mode==="hair_review"||q.mode==="parallel_batch"||q.mode==="parallel_next"||q.mode==="face_candidate"||q.mode==="wardrobe_export"||q.mode==="parallel_ac"||q.mode==="wardrobe_import"){const a=api(repo+"/actions/artifacts/15003297779");if(a.expired||a.workflow_run?.id!==45572622840||a.digest!=="sha256:b1c9b7b61433b17c4caa160f0558461386edb0b6440b9740f6652e89565a6482")throw Error("saved candidate artifact unavailable");}
+          if(q.mode==="hair_review"||q.mode==="parallel_batch"||q.mode==="parallel_next"||q.mode==="face_candidate"||q.mode==="wardrobe_export"||q.mode==="parallel_ac"||q.mode==="wardrobe_import"||q.mode==="wardrobe_guide"){const a=api(repo+"/actions/artifacts/15003297779");if(a.expired||a.workflow_run?.id!==45572622840||a.digest!=="sha256:b1c9b7b61433b17c4caa160f0558461386edb0b6440b9740f6652e89565a6482")throw Error("saved candidate artifact unavailable");}
           if(blob==="3947ec75c38d439b013e60e8696a58ef070a1275")throw Error("launch metadata alone is not a production correction");
           if(runs.some(x=>x.display_title==="Morwen VRoid / "+q.mode+" request:"+q.id))throw Error("request already dispatched");
           if(api(repo+"/git/ref/heads/main").object.sha!==q.main)throw Error("main moved");
