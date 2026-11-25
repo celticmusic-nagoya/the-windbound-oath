@@ -1,13 +1,16 @@
 name: Private preservation pilot (public standard runner)
 on:
+  push:
+    branches: [main]
+    paths: ['tools/private-preservation/approved_batch.json']
   workflow_dispatch:
     inputs:
       confirm_write:
-        description: Type PRESERVE_REVIEWED_PILOT for the final two reviewed VRoid native archives
+        description: Type PRESERVE_REVIEWED_PILOT for the checked-in reviewed preservation batch
         required: true
         type: string
       diagnose_only:
-        description: Read-only diagnosis (keep checked until preflight PASS)
+        description: Read-only diagnosis for preserve requests (verify_existing always read-only)
         required: true
         type: boolean
         default: true
@@ -19,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   pilot:
-    if: ${{ github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event.repository.private == false && github.ref == 'refs/heads/main' && github.actor == 'celticmusic-nagoya' && github.triggering_actor == 'celticmusic-nagoya' && inputs.confirm_write == 'PRESERVE_REVIEWED_PILOT' }}
+    if: ${{ github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event.repository.private == false && github.ref == 'refs/heads/main' && github.actor == 'celticmusic-nagoya' && github.triggering_actor == 'celticmusic-nagoya' && ((github.event_name == 'workflow_dispatch' && inputs.confirm_write == 'PRESERVE_REVIEWED_PILOT') || (github.event_name == 'push' && github.run_attempt == '1' && github.event.forced == false && github.event.deleted == false)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: two-private-preservation
@@ -31,8 +34,8 @@ jobs:
         run: python3 -m unittest discover -s tools/private-preservation -p 'test_*.py'
       - name: Diagnose or transfer reviewed pilot
         env:
-          CONFIRM_WRITE: ${{ inputs.confirm_write }}
-          DIAGNOSE_ONLY: ${{ inputs.diagnose_only }}
+          CONFIRM_WRITE: ${{ github.event_name == 'push' && 'PRESERVE_REVIEWED_MAIN_PUSH' || inputs.confirm_write }}
+          DIAGNOSE_ONLY: ${{ github.event_name == 'push' && 'false' || inputs.diagnose_only }}
           SOURCE_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
         run: python3 tools/private-preservation/public_preservation_bridge.py
