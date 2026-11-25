@@ -1078,8 +1078,12 @@ jobs:
           assert rows.index("Cancel")<rows.index("Save")
           PY
                   test -d "$HOME/Documents"
-                  test ! -e "$HOME/Documents/layer.png" && test ! -L "$HOME/Documents/layer.png"
-                  test ! -e "$HOME/Documents/layer" && test ! -L "$HOME/Documents/layer"
+                  for existing in "$HOME/Documents/layer.png" "$HOME/Documents/layer"; do
+                    if [ -e "$existing" ] || [ -L "$existing" ]; then
+                      echo BLOCKED_EXPORT_DESTINATION_EXISTS > evidence/module-status.txt
+                      exit 1
+                    fi
+                  done
                   cp evidence/skirt-export-dialog.png evidence/skirt-export-destination.png
                   cp evidence/skirt-export-dialog.txt evidence/skirt-export-destination.txt
                   "$gui" click-label evidence/skirt-export-destination.png Save Cancel
@@ -1087,7 +1091,8 @@ jobs:
                     sleep "$delay"
                     if [ -s "$HOME/Documents/layer.png" ]; then break; fi
                   done
-                  test -f "$HOME/Documents/layer.png" && test ! -L "$HOME/Documents/layer.png"
+                  test -f "$HOME/Documents/layer.png"
+                  test ! -L "$HOME/Documents/layer.png"
                   cp "$HOME/Documents/layer.png" "$export_dir/layer.png"
                   # Never upload the stock PNG itself. Read it only within this runner.
                   python3 - "$export_dir" <<'PY'
