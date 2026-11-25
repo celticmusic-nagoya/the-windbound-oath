@@ -540,7 +540,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          test "$REQUEST_ACTOR" = 315379131
+          test "$REQUEST_ACTOR" = 41898282 # github-actions[bot]; owner checked separately
           [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
           [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
           test -n "$TRANSFER_ASSET"
@@ -582,7 +582,7 @@ jobs:
           assert run["path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
           assert run["display_title"] == "Morwen VRoid / vrm_export request:" + env["REQUEST_ID"]
           assert run["repository"]["id"] == 1408120919 and run["head_repository"]["id"] == 1408120919
-          assert run["actor"]["id"] == 315379131
+          assert run["actor"]["id"] == 41898282 and run["actor"]["login"] == "github-actions[bot]"
           token = await_bound("origin", env["TRANSFER_ASSET"], env["TRANSFER_FENCE"],
                               env["GITHUB_SHA"], env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
           with open(env["GITHUB_ENV"], "a", encoding="utf-8") as f:
