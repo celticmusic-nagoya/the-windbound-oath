@@ -1,0 +1,120 @@
+{
+  "schema": "two.region.moss_a2_south_drainage.v48b",
+  "parent": "dd236bacb68e494b4bab783ca8b73988d01010d1",
+  "status": "LOCAL_DRAINAGE_GEOMETRY_SCREEN_PASS_OUTLET_D4_HOLD",
+  "dependencies": {
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "approach_v47b": "6bff1d308103ed77b07c9abe244956957dce8f6f",
+    "hydrology_v03": "11c39295f270d328b1a7c7acd01bea60434698bd",
+    "expansion_v02": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "recovery_recipe": "d6e0ef8f4bb0b5effef7cbb929ad37e85e83baf0"
+  },
+  "source_sha256": {
+    "a2": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "a3": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b"
+  },
+  "scope": "Independent isolated feasibility mesh in previously unbuilt south rectangle, no V47B edits; exact A2/A3 V02 sources regenerated and SHA verified. V47B original bytes not accessible in this session. Provisional m, east/north/up, GLB east/up/south, origin [500,-400,0]. Bounds [400,-450,500,-400]. No canonical placement or native precision edit.",
+  "method": "Compare unmodified formula continuation, three constant-width feathered channels and four longitudinally tapered channels. Hold north/east original rows; 1% stage/centerline slope, hypothetical 50% maximum surface grade screen. Selected taper_5_15 by least cut among feasible local candidates.",
+  "comparison": [
+    {
+      "id": "natural",
+      "cut_m3": 0,
+      "south_wet_m": 0,
+      "through": 0
+    },
+    {
+      "id": "channel_400_475",
+      "cut_m3": 2914.903343367117,
+      "south_wet_m": 30.50881560381299,
+      "through": 1
+    },
+    {
+      "id": "channel_400_490",
+      "cut_m3": 3240.35
+    },
+    {
+      "id": "channel_405_500",
+      "cut_m3": 3311.31
+    },
+    {
+      "id": "taper_5_15",
+      "cut_m3": 1818.529839349609,
+      "south_wet_m": 15.846237736865646,
+      "through": 1
+    },
+    {
+      "id": "taper_7.5_15",
+      "cut_m3": 2022.15
+    },
+    {
+      "id": "taper_10_15",
+      "cut_m3": 2221.75
+    },
+    {
+      "id": "taper_5_20",
+      "cut_m3": 2018.76
+    }
+  ],
+  "selected": {
+    "id": "taper_5_15",
+    "stage_north_m": 20.59699553361176,
+    "stage_south_m": 20.09699553361176,
+    "cut_m3": 1818.529839349609,
+    "fill_m3": 0,
+    "max_cut_m": 2.852648541547776,
+    "max_surface_grade_pct": 30.75304299122549,
+    "wet_components": 1,
+    "side_wet_contact_m": 0,
+    "center_bed_grade_pct": 1,
+    "terrain_vertices": 861,
+    "terrain_faces": 1600,
+    "water_vertices": 300,
+    "water_faces": 491
+  },
+  "qa": {
+    "north_seam_vertices": 41,
+    "east_seam_vertices": 21,
+    "shared_corner": 1,
+    "post_export_xyz_exact_both": true,
+    "source_unchanged": true,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0,
+    "reopen_max_terrain_vertex_delta_m": 9.526852409180719e-7,
+    "reopened_wet_area_m2": 1265.6244552503447,
+    "water_mesh_area_xy_m2": 1265.6243558722722,
+    "wet_symdiff_m2": 0.0003472649472212815,
+    "reopened_north_wet_width_m": 30.50881560381299,
+    "reopened_south_wet_width_m": 15.846237055832603,
+    "reopened_connected_components": 1,
+    "water_nonmanifold_edges": 0,
+    "water_degenerate_faces": 0
+  },
+  "outputs": {
+    "glb_sha256": "dcb49712ab5cbd6988bd6b65398e235e007ec626b4b0bbb89482223f9ee21b8a",
+    "design_png_sha256": "f1b0eaf66b55bc3506262500f42fb7cb75d5b1d9972a3679dbe37beb20ac77ee",
+    "build_script_sha256": "c0f73929ec3833c8db6e4756d7c85d618c8a99fe0a04e87512ebac00866db37c",
+    "actual_render_sha256": "2bf793692eaa0f33d70edc32c8e1c6d5bb3e356105bfbf101e09d3599288937c",
+    "location": "ChatGPT local deliverables; not binary or script upload. VTK EGL reopened GLB diagnostic, no final materials."
+  },
+  "gates": {
+    "D0": "PARTIAL_CANON_CG_AND_LATEST_MESH_NOT_VERIFIED",
+    "D1": "HOLD_DOWNSTREAM_INTERFACE",
+    "D2": "PARTIAL_PLAN_AND_SECTIONS",
+    "D3": "LOCAL_NUMERIC_SCREEN_ONLY",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "LOCAL_MESH_AND_REOPEN_SCREEN_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Hypothetical stage not discharge simulation; inflow and downstream receiving water not resolved. Large 1819m3 cut relative to reconstructed continuation; independent landform and outlet review required.",
+    "Exact V02 seams only, not full V47B scene seam. 62 edge samples include one shared corner (61 unique).",
+    "No official CG visual match, no native Blender, materials, forest objects, altar or game integration. No main merge/adoption."
+  ],
+  "next": "Establish downstream receiving surface and source-grounded long profile before further grading. Verify full V47B seam and independent D4; no speculative continuation beyond the patch."
+}
