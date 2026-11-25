@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "tests": {
+    "new_import": true,
+    "exact_reuse": true,
+    "hash_mismatch": true,
+    "size_mismatch": true,
+    "wrong_provider": true,
+    "path_traversal": true,
+    "absolute_path": true,
+    "bad_archive_hash": true,
+    "symlink": true,
+    "corrupted_cache": true,
+    "no_overwrite_corrupt": true,
+    "redirect_other_host": true,
+    "unknown_hash": true
+  },
+  "source_archive_sha256": "e19efb710e8e4ac19ba1e11ffaeb2764aca3b9a547b19058f52fafc42cec71c0",
+  "recovery_count": 10,
+  "reuse_count": 10,
+  "preview_sha256": "ea2b86ebc05339bc441d297a26dcb3d1712724dce451750ad272e20bac0ec034"
+}

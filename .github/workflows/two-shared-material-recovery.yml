@@ -1,0 +1,53 @@
+name: TWO shared material recovery
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+    paths:
+      - 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json'
+      - 'tools/map_blueprint/shared_materials_v01/material_cache.py'
+      - '.github/workflows/two-shared-material-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: two-shared-material-recovery-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check changed intake inputs only
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+          ACTION: ${{ github.event.action }}
+        shell: bash
+        run: |
+          if [[ "$ACTION" == synchronize ]]; then
+            git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            if git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' '.github/workflows/two-shared-material-recovery.yml'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+          fi
+          echo 'run=true' >> "$GITHUB_OUTPUT"
+      - name: Recover locked forest sources only
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python 'tools/map_blueprint/shared_materials_v01/material_cache.py' --catalog 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' --asset ph_forrest_ground_01 --asset ph_grassy_cobblestone --asset ph_rock_moss_set_01 --out "$RUNNER_TEMP/two-material-cache" --report "$RUNNER_TEMP/material-recovery.json"
+      - name: Preserve exact source candidate files and report
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-shared-material-forest-candidates
+          path: |
+            ${{ runner.temp }}/two-material-cache
+            ${{ runner.temp }}/material-recovery.json
+          retention-days: 14
+          if-no-files-found: error
