@@ -7,8 +7,9 @@ on:
         description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: parallel_next
+        default: wardrobe_export
         options:
+          - wardrobe_export
           - parallel_next
           - face_candidate
           - parallel_batch
@@ -41,7 +42,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || '["reopen"]')) }}
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || (inputs.mode == 'wardrobe_export' && '["C-wardrobe"]' || '["reopen"]'))) }}
     runs-on: macos-15
     timeout-minutes: 35
     env:
@@ -60,7 +61,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -71,15 +72,15 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -302,7 +303,7 @@ jobs:
           if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
           echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
       - name: Compile skirt alpha inspection before VRoid startup
-        if: inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe'
+        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export') && matrix.lane == 'C-wardrobe'
         shell: bash
         run: |
           set -euo pipefail
@@ -355,7 +356,7 @@ jobs:
           if "$row" "$RUNNER_TEMP/face-control-nose.png" '^Mouth Width$'; then exit 1; fi
           echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -376,7 +377,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -450,10 +451,10 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
-          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
@@ -1017,15 +1018,23 @@ jobs:
                 test "$ready" = 1 || { echo BLOCKED_TEXTURE_EDITOR_TRANSITION > evidence/module-status.txt; exit 1; }
                 if [ "$NEXT_BATCH" = true ]; then
                   # Source: actual C artifact15007343469, Uniform Skirt / Default Design.
-                  # Official VRoid shortcut Cmd+Shift+E exports the selected layer.
+                  # Actual context menu from artifact15009347382; select Export directly.
                   grep -Fq 'Uniform Skirt' evidence/skirt-texture-editor.txt
                   grep -Fq 'Default Design' evidence/skirt-texture-editor.txt
                   grep -Fq 'Texture Editor' evidence/skirt-texture-editor.txt
                   "$gui" click-label evidence/skirt-texture-editor.png 'Default Design' 'Uniform Skirt'
                   sleep 2
                   capture_state skirt-export-layer
-                  grep -Fq 'Default Design' evidence/skirt-export-layer.txt
-                  "$gui" key 14 cmd shift
+                  # The verified click opens a context menu that obscures the layer name.
+                  # Never use the adjacent Export Guide or any destructive menu item.
+                  python3 - evidence/skirt-export-layer.txt <<'PY'
+          import sys,pathlib
+          labels=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(labels.count(s)==1 for s in ("Texture Editor","Toggle Visibility","Export","Export Guide"))
+          assert sum(s in ("Uniform Skirt","v Uniform Skirt","∨ Uniform Skirt") for s in labels)==1
+          assert labels.index("Export Guide")==labels.index("Export")+1
+          PY
+                  "$gui" click-label evidence/skirt-export-layer.png Export 'Export Guide'
                   sleep 4
                   capture_state skirt-export-dialog
                   grep -Fq 'Save As' evidence/skirt-export-dialog.txt
@@ -1337,7 +1346,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
