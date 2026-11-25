@@ -6,6 +6,11 @@ on:
         description: Type PRESERVE_REVIEWED_PILOT for the two reviewed material archives
         required: true
         type: string
+      diagnose_only:
+        description: Read-only diagnosis (keep checked until preflight PASS)
+        required: true
+        type: boolean
+        default: true
 permissions:
   actions: read
   contents: read
@@ -24,9 +29,10 @@ jobs:
           persist-credentials: false
       - name: Test bridge guards without credentials
         run: python3 -m unittest discover -s tools/private-preservation -p test_public_preservation_bridge.py
-      - name: Transfer reviewed pilot and verify private readback
+      - name: Diagnose or transfer reviewed pilot
         env:
           CONFIRM_WRITE: ${{ inputs.confirm_write }}
+          DIAGNOSE_ONLY: ${{ inputs.diagnose_only }}
           SOURCE_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
         run: python3 tools/private-preservation/public_preservation_bridge.py
