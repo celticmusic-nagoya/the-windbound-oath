@@ -106,6 +106,14 @@ try{
  const cliffPhotos=cliffEntries.filter(photo).sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
  assert.equal(await review.getByRole('status').innerText(),'1 / '+cliffPhotos.length);
  assert.ok(await review.getByRole('button',{name:'← 前へ'}).isDisabled());
+ const zoomRegion=review.getByRole('region',{name:'画像拡大表示'});
+ await review.getByRole('button',{name:'拡大',exact:true}).click();
+ assert.equal(await review.locator('[aria-label="拡大率"]').innerText(),'150%');
+ assert.ok(await zoomRegion.evaluate(e=>e.scrollWidth>e.clientWidth),'zoom must permit horizontal inspection');
+ await review.getByRole('button',{name:'全体表示',exact:true}).click();
+ assert.equal(await review.locator('[aria-label="拡大率"]').innerText(),'100%');
+ assert.ok(await zoomRegion.evaluate(e=>e.scrollWidth<=e.clientWidth+1),'reset must fit image');
+
  await review.getByText('制作情報・QA・来歴',{exact:true}).click();
  assert.ok((await review.locator('details p').innerText()).includes(cliffPhotos[0].sha256));
  if(cliffPhotos.length>1){
