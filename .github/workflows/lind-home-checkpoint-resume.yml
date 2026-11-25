@@ -1,4 +1,4 @@
-name: HOME furniture visual review
+name: HOME isolated portal proxy correction
 on:
   push:
     branches: [feature/lind-village-world-integration-plan-01]
@@ -14,11 +14,10 @@ concurrency:
 jobs:
   resume:
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: d477176179af046db7ef86f3bdf8bbe92e47b1d2
           persist-credentials: false
       - name: Verify runner and restore immutable checkpoint
         env:
@@ -51,26 +50,16 @@ jobs:
           mkdir -p /tmp/blender /tmp/blueprint
           tar -xJf "$archive" -C /tmp/blender --strip-components=1
           /tmp/blender/blender -b --factory-startup --python-exit-code 1 --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
-      - name: Render only changed interior for independent visual QA
+      - name: Reopen exact checkpoint and correct only blocked portal proxy
         run: |
           set -euo pipefail
-          cat >/tmp/review.py <<'PY'
-          import bpy,sys,json
-          from pathlib import Path
-          sys.path.insert(0,str(Path.cwd()/'tools/map_blender/lind/home'))
-          import build_aidan_house as H
-          out=Path('/tmp/evidence')
-          s=bpy.context.scene
-          H.set_camera(s,'interior_bedside')
-          s.render.engine='CYCLES';s.cycles.device='CPU';s.cycles.samples=24;s.cycles.use_denoising=True
-          s.render.resolution_percentage=60
-          s.render.image_settings.file_format='PNG';s.render.filepath=str(out/'interior_bedside.png')
-          bpy.ops.render.render(write_still=True)
-          (out/'review.json').write_text(json.dumps(dict(source_artifact=14742392508,source_sha256='dff3a32df533c8786f3122e07cf681c18f4805bd913d750f04ce15b321b10fed',view='interior_bedside',samples=24,G2='NOT_RUN',G4='NOT_RUN',repeated_model_edits=0)))
-          PY
-          timeout 1800 /tmp/blender/blender -b --disable-autoexec /tmp/restored/home_furniture_candidate.blend --python-exit-code 1 --python /tmp/review.py
+          source=/tmp/restored/home_furniture_candidate.blend
+          echo 'dff3a32df533c8786f3122e07cf681c18f4805bd913d750f04ce15b321b10fed  /tmp/restored/home_furniture_candidate.blend' | sha256sum -c -
+          python3 -m py_compile tools/map_blender/lind/home/verify_split_porch_proxy.py
+          timeout 600 /tmp/blender/blender -b --disable-autoexec "$source" --python-exit-code 1 --python tools/map_blender/lind/home/verify_split_porch_proxy.py -- "$source" /tmp/evidence
           cd /tmp/evidence
-          sha256sum *.json *.png > SHA256SUMS
+          test -s portal-result.json
+          find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
