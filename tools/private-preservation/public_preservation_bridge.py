@@ -17,7 +17,7 @@ DEST = SOURCE + '-handoff'
 ENGINE = 'tools/preserve_reviewed_artifacts.py'
 ENGINE_BLOB = '56e8aa0c4f2e9972504d0149d0320632e13aece5'
 QUEUE = 'reports/preservation/PENDING_ORIGINAL_ARCHIVES_20261125.json'
-PILOT = (15018392749, 15020595762)
+PILOT = (14684514477, 14686298362, 14741951418)
 EXPECTED = dict(GITHUB_REPOSITORY=SOURCE, GITHUB_REF='refs/heads/main',
                 GITHUB_EVENT_NAME='workflow_dispatch', GITHUB_ACTOR='celticmusic-nagoya',
                 GITHUB_TRIGGERING_ACTOR='celticmusic-nagoya', CONFIRM_WRITE='PRESERVE_REVIEWED_PILOT')
