@@ -1,0 +1,158 @@
+{
+ "schema": "MORWEN_BODY_PROPORTION_BLUEPRINT_D1_D3_v1",
+ "status": "D1_D3_PROPOSAL_REQUIRES_INDEPENDENT_D4_NOT_ADOPTED",
+ "author": "Claude (independent QA lane); read-only, no native/Blender write",
+ "authority": {
+  "director_D0": "#427 comment 7176748634 (7.75 nominal, 7.5-8 range; hair shape Layer0, hair colour clothed master)",
+  "policy_pr": "#565 0fa256eb (not yet on main)"
+ },
+ "source": {
+  "layer0_archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+  "front": "7809.png sha256 b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed 384x1024",
+  "side": "7807.png 384x1024",
+  "alpha_threshold": 128,
+  "pixel_origin": "TOP_LEFT"
+ },
+ "limits": "2D projection of an illustration; not physical size; hidden geometry not inferred; skull crown under hair is an estimate.",
+ "layer0_landmarks_front_px": {
+  "hair_top": {
+   "y": 17,
+   "u": 1,
+   "method": "alpha bbox"
+  },
+  "skull_crown_est": {
+   "y": 31,
+   "u": 8,
+   "method": "hair top + estimated hair volume; HOLD until base mesh"
+  },
+  "chin": {
+   "y": 178,
+   "u": 3
+  },
+  "shoulder_outer": {
+   "y": 245,
+   "u": 8,
+   "width": 186
+  },
+  "bust_apex": {
+   "y": 285,
+   "u": 8
+  },
+  "waist_narrowest": {
+   "y": 370,
+   "u": 10,
+   "torso_width": 106
+  },
+  "hip_widest": {
+   "y": 480,
+   "u": 12,
+   "width": 202
+  },
+  "crotch": {
+   "y": 497,
+   "u": 5
+  },
+  "knee_centre": {
+   "y": 700,
+   "u": 12
+  },
+  "ankle": {
+   "y": 930,
+   "u": 10
+  },
+  "sole": {
+   "y": 1003,
+   "u": 3,
+   "note": "stockinged foot, no heel"
+  }
+ },
+ "layer0_side_px": {
+  "bust_depth_y285": 142,
+  "waist_depth_y370": 93,
+  "buttock_depth_y470": 136,
+  "note": "arm overlaps torso in side view; depth u ±10"
+ },
+ "layer0_ratios": {
+  "head_count_skull": 6.61,
+  "head_count_skull_range": [
+   6.17,
+   7.17
+  ],
+  "head_count_hair_inclusive": 6.12,
+  "landmark_fraction_of_chin_to_sole": {
+   "shoulder": 0.081,
+   "bust": 0.13,
+   "waist": 0.233,
+   "hip": 0.366,
+   "crotch": 0.387,
+   "knee": 0.633,
+   "ankle": 0.912
+  },
+  "width_over_chin_to_sole": {
+   "shoulder": 0.225,
+   "waist": 0.128,
+   "hip": 0.245
+  },
+  "hip_over_waist": 1.91,
+  "shoulder_over_hip": 0.92,
+  "leg_crotch_to_sole_over_crown_to_sole": 0.521
+ },
+ "D2_method_proposal": {
+  "rule": "Reach 7.75 by uniform head scale about the neck joint, keeping below-chin body segment ratios and widths of Layer0 (relative body design preserved, no isolated leg/torso stretch, facial identity unchanged because the whole head scales uniformly).",
+  "head_scale_from_layer0": 0.831,
+  "head_scale_range": [
+   0.77,
+   0.91
+  ],
+  "apply_to": "Measure the actual imported VRM base mesh first; compute s_actual = (chin_to_sole)/(6.75*crown_to_chin) on the mesh, not from Layer0.",
+  "neck": "After head scale, neck appears relatively thicker; neck-to-face width ratio is a D4 review item (HOLD), not fixed here.",
+  "apparent_hair_inclusive_head_count_after": 7.16
+ },
+ "D3_targets": [
+  {
+   "id": "MRW-BODY-01",
+   "measure": "crown(skull, no hair/hat) to sole / crown to chin, neutral A-pose, orthographic front, no heels",
+   "target": 7.75,
+   "tolerance": 0.1,
+   "unit": "ratio"
+  },
+  {
+   "id": "MRW-BODY-02",
+   "measure": "landmark fractions of chin-to-sole (shoulder, bust, waist, hip, crotch, knee, ankle)",
+   "target": "layer0_ratios.landmark_fraction_of_chin_to_sole",
+   "tolerance": 0.02,
+   "unit": "fraction"
+  },
+  {
+   "id": "MRW-BODY-03",
+   "measure": "front widths / chin-to-sole (shoulder, waist, hip)",
+   "target": "layer0_ratios.width_over_chin_to_sole",
+   "tolerance_relative": 0.08
+  },
+  {
+   "id": "MRW-BODY-04",
+   "measure": "hip/waist and shoulder/hip",
+   "target": [
+    1.91,
+    0.92
+   ],
+   "tolerance": [
+    0.15,
+    0.06
+   ]
+  },
+  {
+   "id": "MRW-BODY-05",
+   "measure": "leg (crotch to sole)/(crown to sole)",
+   "target_after_head_scale": 0.534,
+   "tolerance": 0.02
+  },
+  {
+   "id": "MRW-BODY-06",
+   "measure": "face identity: eye/mouth/nose positions as fractions of crown-chin unchanged vs VRM source",
+   "tolerance": 0.01
+  }
+ ],
+ "evaluation": "PASS if r+u<=t, OUTSIDE if r-u>t, else HOLD (AGENTS v6 §4). Physical height in metres is not fixed here.",
+ "D4": "NOT_RUN — requires independent design QA (ChatGPT/director), not this author."
+}
