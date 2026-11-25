@@ -4,6 +4,7 @@ on:
     paths:
       - 'tools/production-studio/**'
       - '.github/workflows/production-studio-sync-preview.yml'
+      - '.github/workflows/production-studio-publish.yml'
 permissions:
   contents: read
   actions: read
@@ -25,6 +26,7 @@ jobs:
           python -m py_compile discover-gallery.py artifact-sync.py stage-village.py
           node --check gallery-smoke.mjs
           bash -n sync-preview.sh
+          python -m unittest discover -s . -p test_publication_gate.py -v
           python - <<'PY'
           import runpy
           d=runpy.run_path('discover-gallery.py')
@@ -85,6 +87,10 @@ jobs:
                   assert actual==set(review['entries']), 'Review lost during retention'
                   print('Review retained:', review['artifact_id'], review['category'], sorted(actual))
           PY
+      - name: Verify public boundary against actual preview and live history
+        run: |
+          python tools/production-studio/publication-gate.py filter "$RUNNER_TEMP/studio-live-history/gallery-manifest.json" "$RUNNER_TEMP/studio-site/gallery-manifest.json" tools/production-studio/publication-approvals.json "$RUNNER_TEMP/public-delta.json"
+          python tools/production-studio/publication-gate.py verify "$RUNNER_TEMP/studio-live-history/gallery-manifest.json" "$RUNNER_TEMP/public-delta.json" "$RUNNER_TEMP/studio-live-history/gallery-manifest.json"
       - name: Verify actual gallery in mobile browser
         working-directory: tools/production-studio
         run: |
