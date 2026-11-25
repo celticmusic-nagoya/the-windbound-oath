@@ -11,7 +11,7 @@ on:
         type: boolean
         default: false
       frame_probe:
-        description: Read-only framing recovery from default camera; no edit or repeated iris test
+        description: Read-only front framing recovery; reuse three verified captures from previous run
         type: boolean
         default: false
 permissions:
@@ -142,6 +142,32 @@ jobs:
               data=z.read(item)
               assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
+          PY
+      - name: Restore three existing frame candidates
+        if: inputs.frame_probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14994500159/zip" > "$RUNNER_TEMP/prior-frames.zip"
+          echo "8e5091c14a547ad18e2ccd14a8aa08f324c879545f094a22707f7bd18378734b  $RUNNER_TEMP/prior-frames.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import hashlib, json, pathlib, os, zipfile
+          files = {
+              "frame-selected-left4.png": "d4dbc1ab4dd0e3eb9f77dc3fb5d92e2e8e9f81295e28d5695b72a527b0b6b24e",
+              "frame-selected-left8.png": "c190ea1867a37111a3523205ba6cd5973b94f21e8cfa47e37b36b002b1c2519f",
+              "frame-selected-right4.png": "bd35da1698406e445151f01c02045ee617d029bce589243b5512fcfd65e81eef"
+          }
+          p=pathlib.Path("evidence")
+          with zipfile.ZipFile(pathlib.Path(os.environ["RUNNER_TEMP"])/"prior-frames.zip") as z:
+              assert z.testzip() is None
+              assert z.read("input-model-sha256.txt").decode().split()[0]=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+              for name, expected in files.items():
+                  data=z.read(name)
+                  assert hashlib.sha256(data).hexdigest()==expected
+                  (p/name).write_bytes(data)
+          (p/"reused-frame-provenance.json").write_text(json.dumps(dict(run=45550276967,artifact=14994500159,files=files,scope="MARGIN_ONLY_NOT_CAMERA_CALIBRATION"),indent=2))
           PY
       - name: Download official DMG and inspect signature
         shell: bash
@@ -309,7 +335,7 @@ jobs:
             sleep 2
             echo "direction attempt action bbox_xmin bbox_ymin bbox_xmax bbox_ymax foreground margin" > evidence/frame-recovery-ledger.txt
             all=1
-            for direction in front left4 left8 right4; do
+            for direction in front; do
               "$gui" vroid-shortcut front
               case "$direction" in
                 left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
@@ -317,7 +343,7 @@ jobs:
                 right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
               esac
               action=default; last_y=0; pan_used=0; accepted=0
-              for attempt in 0 1 2 3 4 5; do
+              for attempt in 0 1 2 3; do
                 sleep 2
                 tag="reframe-$direction-$attempt"
                 capture_state "$tag"
@@ -336,20 +362,19 @@ jobs:
                   accepted=1
                   break
                 fi
-                [ "$attempt" -lt 5 ] || break
-                # If clipped below but ample space above, move camera upward once.
-                # A failed or reversed pan changes method to keyboard zoom, not repeated scrolling.
-                if [ "$pan_used" = 0 ] && [ "$ymax" -ge 693 ] && [ "$ymin" -ge 235 ]; then
+                [ "$attempt" -lt 3 ] || break
+                # Reuse the measured 85 px pan response once more only if the first pan moved upward.
+                if [ "$pan_used" -lt 2 ] && [ "$ymax" -ge 693 ] && [ "$ymin" -ge 235 ] && { [ "$pan_used" = 0 ] || { [ "$action" = pan_up ] && [ "$((last_y-ymin))" -ge 30 ]; }; }; then
                   last_y="$ymin"
                   "$gui" pan 0.50 0.57 0.50 0.37 0.5
-                  pan_used=1
+                  pan_used=$((pan_used+1))
                   action=pan_up
                 elif [ "$action" = pan_up ] && [ "$ymin" -gt "$((last_y+10))" ]; then
                   "$gui" pan 0.50 0.37 0.50 0.57 0.5
                   action=undo_reversed_pan
                 else
-                  "$gui" vroid-shortcut zoom-out
-                  action=keyboard_zoom_out
+                  echo NO_QUALIFIED_FURTHER_CAMERA_RESPONSE >> evidence/frame-recovery-ledger.txt
+                  break
                 fi
               done
               if [ "$accepted" != 1 ]; then all=0; fi
@@ -358,7 +383,9 @@ jobs:
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
             shasum -a 256 evidence/reframe-*.png > evidence/frame-recovery-sha256.txt
             if [ "$all" = 1 ]; then
-              echo FOUR_MARGIN_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              for view in front left4 left8 right4; do test -s "evidence/frame-selected-$view.png"; done
+              shasum -a 256 evidence/frame-selected-*.png > evidence/frame-selected-sha256.txt
+              echo FRONT_MARGIN_AND_THREE_REUSED_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
             else
               echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
               exit 1
