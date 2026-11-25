@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_write:
-        description: Type PRESERVE_REVIEWED_PILOT for the six reviewed VRoid evidence-only archives
+        description: Type PRESERVE_REVIEWED_PILOT for the final two reviewed VRoid native archives
         required: true
         type: string
       diagnose_only:
