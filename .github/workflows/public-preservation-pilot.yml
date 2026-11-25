@@ -1,0 +1,32 @@
+name: Private preservation pilot (public standard runner)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_write:
+        description: Type PRESERVE_REVIEWED_PILOT for the two reviewed material archives
+        required: true
+        type: string
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: private-preservation-public-pilot
+  cancel-in-progress: false
+jobs:
+  pilot:
+    if: ${{ github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event.repository.private == false && github.ref == 'refs/heads/main' && github.actor == 'celticmusic-nagoya' && github.triggering_actor == 'celticmusic-nagoya' && inputs.confirm_write == 'PRESERVE_REVIEWED_PILOT' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: two-private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Test bridge guards without credentials
+        run: python3 -m unittest discover -s tools/private-preservation -p test_public_preservation_bridge.py
+      - name: Transfer reviewed pilot and verify private readback
+        env:
+          CONFIRM_WRITE: ${{ inputs.confirm_write }}
+          SOURCE_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        run: python3 tools/private-preservation/public_preservation_bridge.py
