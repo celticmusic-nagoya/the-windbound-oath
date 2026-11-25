@@ -1,7 +1,12 @@
 "use strict";
-let publishedGalleryGeneration=0;
+let publishedGalleryGeneration=0,openGalleryCategory=null,pendingGalleryCategory=null;
+document.addEventListener("studio:open-gallery-category",event=>{
+ const id=event.detail;if(!["morwen","cliff","village"].includes(id))return;
+ if(openGalleryCategory)openGalleryCategory(id);
+ else{pendingGalleryCategory=id;document.getElementById("published-status").textContent="成果物一覧の取得待ち。必要に応じて成果物を更新してください。";}
+});
 async function loadPublishedGallery(){
- const generation=++publishedGalleryGeneration;
+ const generation=++publishedGalleryGeneration;openGalleryCategory=null;
  const area=document.getElementById("published-gallery"), status=document.getElementById("published-status");
  area.replaceChildren();
  try{
@@ -95,11 +100,19 @@ async function loadPublishedGallery(){
   const history=document.createElement("button");history.type="button";history.className="category-back";history.textContent="制作改訂履歴（HEAD別）";history.onclick=revisionHistory;area.append(history);
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
+ function projectShortcut(id){
+  if(!["morwen","cliff","village"].includes(id))return;
+  const button=document.createElement("button");button.type="button";button.className="category-back";button.textContent="この領域の制作状況へ";
+  button.onclick=()=>{
+   const card=document.getElementById("project-"+id),target=card?.querySelector("h3")||document.getElementById("projects-title");
+   target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:"start"});
+  };area.append(button);
+ }
  function subhome(id,title){
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
-  status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
+  projectShortcut(id);status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
   for(const [sub,label] of subcategories[id]){
    const entries=assigned.filter(x=>x.root===id&&x.sub===sub).map(x=>x.entry);
@@ -110,6 +123,7 @@ async function loadPublishedGallery(){
  area.replaceChildren();area.classList.remove("category-grid");
  navigation([{label:"制作領域",action:home},{label:title}]);
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
+ projectShortcut(id);
  const entries=[...(subset||groups.get(id))].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
  const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
  if(photos.length>=2){
@@ -169,7 +183,8 @@ async function loadPublishedGallery(){
  const apply=()=>{let count=0;for(const {tile,e} of tiles){tile.hidden=!matches(e);if(!tile.hidden)count++;}empty.hidden=count!==0||entries.length===0;status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;qaFilter.select.onchange=apply;adoptionFilter.select.onchange=apply;
  if(!entries.length){filter.hidden=true;search.hidden=true;qaFilter.select.hidden=true;adoptionFilter.select.hidden=true;clear.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
- home();
+ openGalleryCategory=id=>{const category=categories.find(([key])=>key===id);if(category){const title=category[1];if(id in subcategories)subhome(id,title);else detail(id,title);}};
+ if(pendingGalleryCategory){const id=pendingGalleryCategory;pendingGalleryCategory=null;openGalleryCategory(id);}else home();
  }catch(e){if(generation===publishedGalleryGeneration)status.textContent="同期一覧未取得: "+e.message;}
 }
 document.getElementById("refresh-published").addEventListener("click",loadPublishedGallery);
