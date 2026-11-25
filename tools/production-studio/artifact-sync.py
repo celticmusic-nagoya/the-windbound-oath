@@ -16,7 +16,7 @@ def stage(spec, source, dest):
             raise ValueError("invalid source commit")
         category = item.get("category", "cliff" if run == 44708204132 else "other")
         stage_name = item.get("stage", "未分類")
-        if category not in {"cliff", "morwen", "village", "other"} or not isinstance(stage_name, str) or not 1 <= len(stage_name) <= 80:
+        if category not in {"cliff", "morwen", "village", "blueprint", "other"} or not isinstance(stage_name, str) or not 1 <= len(stage_name) <= 80:
             raise ValueError("invalid gallery classification")
         archive = source / f"{artifact}.zip"
         with zipfile.ZipFile(archive) as z:
