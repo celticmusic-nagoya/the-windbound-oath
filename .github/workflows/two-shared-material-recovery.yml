@@ -11,8 +11,8 @@ on:
       source_set:
         description: Locked source set to recover
         type: choice
-        options: [ireland-dem, native-floor, native-art, native-density, native-pilot, fern-alpha, fern-bark, stump, forest]
-        default: ireland-dem
+        options: [ireland-river, ireland-dem, native-floor, native-art, native-density, native-pilot, fern-alpha, fern-bark, stump, forest]
+        default: ireland-river
 permissions:
   contents: read
   actions: read
@@ -45,9 +45,9 @@ jobs:
           fi
           echo 'run=true' >> "$GITHUB_OUTPUT"
       - name: Recover only selected locked sources
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') != 'native-pilot' && (inputs.source_set || 'ireland-dem') != 'native-density' && (inputs.source_set || 'ireland-dem') != 'native-art' && (inputs.source_set || 'ireland-dem') != 'native-floor' && (inputs.source_set || 'ireland-dem') != 'ireland-dem'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') != 'native-pilot' && (inputs.source_set || 'ireland-river') != 'native-density' && (inputs.source_set || 'ireland-river') != 'native-art' && (inputs.source_set || 'ireland-river') != 'native-floor' && (inputs.source_set || 'ireland-river') != 'ireland-dem' && (inputs.source_set || 'ireland-river') != 'ireland-river'
         env:
-          SOURCE_SET: ${{ inputs.source_set || 'ireland-dem' }}
+          SOURCE_SET: ${{ inputs.source_set || 'ireland-river' }}
         shell: bash
         run: |
           case "$SOURCE_SET" in
@@ -59,10 +59,10 @@ jobs:
           esac
           python 'tools/map_blueprint/shared_materials_v01/material_cache.py' --catalog 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' "${assets[@]}" --out "$RUNNER_TEMP/two-material-cache" --report "$RUNNER_TEMP/material-recovery.json"
       - name: Preserve exact source candidate files and report
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') != 'native-pilot' && (inputs.source_set || 'ireland-dem') != 'native-density' && (inputs.source_set || 'ireland-dem') != 'native-art' && (inputs.source_set || 'ireland-dem') != 'native-floor' && (inputs.source_set || 'ireland-dem') != 'ireland-dem'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') != 'native-pilot' && (inputs.source_set || 'ireland-river') != 'native-density' && (inputs.source_set || 'ireland-river') != 'native-art' && (inputs.source_set || 'ireland-river') != 'native-floor' && (inputs.source_set || 'ireland-river') != 'ireland-dem' && (inputs.source_set || 'ireland-river') != 'ireland-river'
         uses: actions/upload-artifact@v4
         with:
-          name: two-shared-material-${{ inputs.source_set || 'ireland-dem' }}-candidates
+          name: two-shared-material-${{ inputs.source_set || 'ireland-river' }}-candidates
           path: |
             ${{ runner.temp }}/two-material-cache
             ${{ runner.temp }}/material-recovery.json
@@ -70,7 +70,7 @@ jobs:
           if-no-files-found: error
 
       - name: Native pilot exact artifact intake
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-pilot'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-pilot'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -92,7 +92,7 @@ jobs:
           recover 15024936587 05cb8bcc0edf09943b21e6af6207e2eb1825b3c9c2268754f210f070b5218a0d
           echo 'V16_FIVE_ARCHIVES_SHA_PASS' > "$RUNNER_TEMP/v16-output/intake.txt"
       - name: Install approved Blender and render isolated subset
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-pilot'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-pilot'
         shell: bash
         run: |
           set -euo pipefail
@@ -101,7 +101,7 @@ jobs:
           bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_v16.py -- "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
       - name: Preserve native pilot and render evidence
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-pilot'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-pilot'
         uses: actions/upload-artifact@v4
         with:
           name: two-forest-v16-native-pilot
@@ -110,7 +110,7 @@ jobs:
           if-no-files-found: error
 
       - name: Recover verified pilot for native density study
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-density'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-density'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -123,7 +123,7 @@ jobs:
           unzip -q "$RUNNER_TEMP/v18-pilot.zip" -d "$RUNNER_TEMP/v18-input"
           echo 'V18_NATIVE_PILOT_ARCHIVE_SHA_PASS' > "$RUNNER_TEMP/v18-output/intake.txt"
       - name: Execute approved Blender density and lighting study
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-density'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-density'
         shell: bash
         run: |
           set -euo pipefail
@@ -134,7 +134,7 @@ jobs:
           test -f "$model"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_density_v18.py -- "$model" tools/map_blueprint/shared_materials_v01/v15c_vegetation_transforms_v18.txt "$RUNNER_TEMP/v18-output"
       - name: Preserve V18 native density and lighting evidence
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-density'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-density'
         uses: actions/upload-artifact@v4
         with:
           name: two-forest-v18-native-density
@@ -143,7 +143,7 @@ jobs:
           if-no-files-found: error
 
       - name: Recover V18 native checkpoint
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-art'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-art'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -165,7 +165,7 @@ jobs:
             echo OFFICIAL_CG_BYTES_UNVERIFIED > "$RUNNER_TEMP/v19-output/official_cg_status.txt"
           fi
       - name: Execute V19B corrected native forest art study
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-art'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-art'
         shell: bash
         run: |
           set -euo pipefail
@@ -174,7 +174,7 @@ jobs:
           bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_art_v19.py -- "$RUNNER_TEMP/v19-input/forest_v18_native_density.blend" "$RUNNER_TEMP/v19-output"
       - name: Preserve V19 native art evidence
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-art'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-art'
         uses: actions/upload-artifact@v4
         with:
           name: two-forest-v19b-native-art
@@ -183,7 +183,7 @@ jobs:
           if-no-files-found: error
 
       - name: Recover V19B native checkpoint and floor sources
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-floor'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-floor'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -204,7 +204,7 @@ jobs:
           recover 15023498109 1a83910660fe9c7ed3fa32ec4c18b00b99210fb056b7a8644bc93c6587376898
           echo V21_FOUR_ARCHIVES_SHA_PASS > "$RUNNER_TEMP/v21-output/intake.txt"
       - name: Native V21 forest floor reconstruction and diagnostic renders
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-floor'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-floor'
         shell: bash
         run: |
           set -euo pipefail
@@ -213,7 +213,7 @@ jobs:
           bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_floor_v21.py -- "$RUNNER_TEMP/v21-input/15029479327/forest_v19_native_art.blend" "$RUNNER_TEMP/v21-input" tools/map_blueprint/shared_materials_v01/floor_transforms_v21.txt "$RUNNER_TEMP/v21-output"
       - name: Preserve V21 native floor evidence
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'native-floor'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'native-floor'
         uses: actions/upload-artifact@v4
         with:
           name: two-forest-v21-native-floor
@@ -222,7 +222,7 @@ jobs:
           if-no-files-found: error
 
       - name: Acquire remaining southwest Irish terrain reference raster
-        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'ireland-dem'
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'ireland-dem'
         shell: bash
         run: |
           set -euo pipefail
@@ -231,10 +231,26 @@ jobs:
           sudo apt-get install -y -qq python3-gdal python3-numpy
           /usr/bin/python3 tools/map_blueprint/shared_materials_v01/ireland_dem_v24_southwest.py "$RUNNER_TEMP/v23-output"
       - name: Preserve exact DSM source and measured reference outputs
-        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-dem') == 'ireland-dem'
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'ireland-dem'
         uses: actions/upload-artifact@v4
         with:
           name: two-ireland-dem-v24-southwest
           path: ${{ runner.temp }}/v23-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Acquire bounded EPA river vector reference samples
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'ireland-river'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v26-river"
+          python tools/map_blueprint/shared_materials_v01/ireland_river_reference_v26.py "$RUNNER_TEMP/v26-river"
+      - name: Preserve river source and metrics
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'ireland-river') == 'ireland-river'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-ireland-river-reference-v26
+          path: ${{ runner.temp }}/v26-river
           retention-days: 14
           if-no-files-found: error
