@@ -206,11 +206,14 @@ loadAreaBlueprints();
  const batchStatus=node("p","未選択");batchStatus.id="anchor-batch-status";batchStatus.setAttribute("role","status");
  const batchList=node("div","");batchList.id="anchor-batch-results";
  const compareLabel=node("label"," 基準JSONと現在配置を比較（異なる改訂を許可）"),compareMode=node("input","");compareMode.type="checkbox";compareMode.id="anchor-batch-compare";compareLabel.prepend(compareMode);
- batch.append(compareLabel,batchLabel,batchInput,batchStatus,batchList);anchorPanel.append(batch);
+ const handoffButton=node("button","一括検査・修正候補JSONを書き出す");handoffButton.type="button";handoffButton.disabled=true;
+ let batchReceipt=null;
+ handoffButton.onclick=()=>{renderBatch();if(batchReceipt)downloadReceipt(batchReceipt,"two-anchor-handoff-r"+revision+".json");};
+ batch.append(compareLabel,batchLabel,batchInput,batchStatus,handoffButton,batchList);anchorPanel.append(batch);
  compareMode.addEventListener("change",renderBatch);
  let batchItems=[],batchGeneration=0,batchLoading=false,batchError="";
  function renderBatch(){
-  batchList.replaceChildren();
+  batchList.replaceChildren();batchReceipt=null;handoffButton.disabled=true;
   if(batchLoading){batchStatus.textContent="読込中";return;}
   if(batchError){batchStatus.textContent=batchError;return;}
   if(!batchItems.length){batchStatus.textContent="未選択";return;}
@@ -225,19 +228,28 @@ loadAreaBlueprints();
     const key=JSON.stringify({pair:indices.map((i,j)=>[i,local[j]]).sort((a,b)=>a[0]-b[0]),t:d.tolerance_m,u:d.uncertainty_m,baseline:compareMode.checked?indices.map((i,j)=>[i,...fields.map(k=>d.anchors[j].placement[k])]).sort((a,b)=>a[0]-b[0]):null});
     if(seen.has(key))throw Error("同一入力の重複");seen.add(key);
     const result=calculateAnchor(placements,local,d.tolerance_m,d.uncertainty_m);
-    counts[result.verdict]++;items.push({name:item.name,indices,result,baseline,baselineRevision:d.placement_revision,t:d.tolerance_m,u:d.uncertainty_m});
+    counts[result.verdict]++;items.push({name:item.name,indices,result,baseline,baselineRevision:d.placement_revision,t:d.tolerance_m,u:d.uncertainty_m,local,placements:placements.map(p=>({...p})),baselinePlacements:baseline?d.anchors.map(a=>Object.fromEntries([["id",a.area_id],...fields.map(k=>[k,a.placement[k]])])):null});
    }catch(e){counts.REJECTED++;items.push({name:item.name,error:e.message});}
   }
   const rank={OUTSIDE:0,HOLD:1,PASS:2};
-  items.sort((a,b)=>(rank[a.result?.verdict]??3)-(rank[b.result?.verdict]??3)||(b.result?.r??0)-(a.result?.r??0));
+  // Rank by verdict, then conservative excess over tolerance (not raw distance).
+  const excess=item=>item.result?item.result.r+item.u-item.t:0;
+  items.sort((a,b)=>(rank[a.result?.verdict]??3)-(rank[b.result?.verdict]??3)||excess(b)-excess(a));
+  const reportRows=[];
   for(const item of items){
    const line=node("article","");line.className="tile";line.dataset.verdict=item.result?.verdict??"REJECTED";line.append(node("strong",item.name));
-   if(item.error)line.append(node("p","REJECTED： "+item.error));
+   if(item.error){line.append(node("p","REJECTED： "+item.error));reportRows.push({file:item.name,verdict:"REJECTED",reason:item.error,action:"REVIEW_INPUT"});}
    else{const {r,verdict}=item.result,fmt=x=>Number(x.toPrecision(10)).toString();line.append(node("p",item.indices.map(i=>names[i]).join(" ↔ ")),node("p",verdict+" / r: "+fmt(r)+" m / t: "+fmt(item.t)+" m / u: "+fmt(item.u)+" m"));
+    const action=verdict==="OUTSIDE"?"REVIEW_PLACEMENT":verdict==="HOLD"?"REMEASURE":"NO_POSITION_ACTION";
+    const priority=verdict==="OUTSIDE"?1:verdict==="HOLD"?2:3;
+    line.append(node("p","修正優先度 "+priority+" / 許容差上限との差 "+fmt(excess(item))+" m / "+(priority===1?"配置・接続点を確認":priority===2?"再計測":"位置検査のみ合格")));
+    reportRows.push({file:item.name,area_ids:item.indices.map(i=>ids[i]),local_xyz_m:item.local,placement:item.placements,baseline_placement:item.baselinePlacements,baseline_revision:item.baseline?item.baselineRevision:null,tolerance_m:item.t,uncertainty_m:item.u,result:item.result,baseline_result:item.baseline,priority,action,upper_margin_m:excess(item)});
     if(item.baseline){const before=item.baseline,change=r-before.r,eps=before.eps+item.result.eps,uncertainty=2*item.u+eps;const trend=change>uncertainty?"増加":change< -uncertainty?"減少":"差を確定できない";line.dataset.trend=trend;line.append(node("p","基準 r"+item.baselineRevision+": "+before.verdict+" / "+fmt(before.r)+" m → 現在 r"+revision+": "+verdict+" / "+fmt(r)+" m"),node("p","残差差分: "+fmt(change)+" m / "+trend+"（同じ入力・t/u、差分不確かさ上限 2u）"));}
    }
    batchList.append(line);
   }
+  batchReceipt={schema:"two.studio.anchor_batch_handoff.v1",status:"PROVISIONAL",source_blob:source,coordinate_contract:coordinateContract,placement_revision:revision,mode:compareMode.checked?"BASELINE_COMPARE":"STRICT",placement:rows.map(r=>({...r})),counts,items:reportRows,qa_scope:"MANUAL_INPUT_POSITION_ONLY",independent_qa:"NOT_RUN",assignment:"UNASSIGNED"};
+  handoffButton.disabled=false;
   batchStatus.textContent=(compareMode.checked?"基準→現在の比較 / ":"厳密照合 / ")+"配置 revision "+revision+" / "+batchItems.length+" 件 / PASS "+counts.PASS+" / HOLD "+counts.HOLD+" / OUTSIDE "+counts.OUTSIDE+" / REJECTED "+counts.REJECTED+"（暫定位置検査のみ）";
  }
  batchInput.addEventListener("change",async()=>{
