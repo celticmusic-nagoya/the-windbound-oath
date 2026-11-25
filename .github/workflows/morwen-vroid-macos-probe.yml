@@ -472,6 +472,36 @@ jobs:
           PY
           python3 "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-sha.txt
           python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-pixel-sha.txt
+      - name: Compile UV guide inspector before VRoid startup
+        if: inputs.mode == 'wardrobe_guide'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/skirt-guide-profile.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          guard let im=NSBitmapImageRep(data:try Data(contentsOf:URL(fileURLWithPath:CommandLine.arguments[1]))) else { exit(2) }
+          let w=im.pixelsWide,h=im.pixelsHigh
+          guard w>0,h>0,w<=4096,h<=4096 else { exit(2) }
+          var rows=[[Int]](repeating:[0,0,0],count:h)
+          var cols=[[Int]](repeating:[0,0,0],count:w)
+          for y in 0..<h {
+              for x in 0..<w {
+                  guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { exit(2) }
+                  let a=c.alphaComponent
+                  if a>=0.5 {
+                      rows[y][0]+=1; cols[x][0]+=1
+                      let v=(c.redComponent+c.greenComponent+c.blueComponent)/3
+                      if v<0.25 { rows[y][1]+=1;cols[x][1]+=1 }
+                      if v>0.75 { rows[y][2]+=1;cols[x][2]+=1 }
+                  }
+              }
+          }
+          let result:[String:Any]=["scope":"UV guide aggregate profiles only; not an inferred island map","width":w,"height":h,"rows":rows,"columns":cols]
+          let data=try JSONSerialization.data(withJSONObject:result)
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-guide-profile.json"))
+          SWIFT
+          swiftc "$RUNNER_TEMP/skirt-guide-profile.swift" -o "$RUNNER_TEMP/skirt-guide-profile"
       - name: Restore native checkpoint
         if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
         env:
@@ -1281,30 +1311,7 @@ jobs:
           PY
                   "$RUNNER_TEMP/skirt-alpha" "$export_dir"
                   if [ "$WARDROBE_GUIDE" = true ]; then
-                    swift - "$export_dir/layer.png" <<'SWIFT'
-          import Cocoa
-          import Foundation
-          guard let im=NSBitmapImageRep(data:try Data(contentsOf:URL(fileURLWithPath:CommandLine.arguments[1]))) else { exit(2) }
-          let w=im.pixelsWide,h=im.pixelsHigh
-          guard w>0,h>0,w<=4096,h<=4096 else { exit(2) }
-          var rows=[[Int]](repeating:[0,0,0],count:h)
-          var cols=[[Int]](repeating:[0,0,0],count:w)
-          for y in 0..<h {
-              for x in 0..<w {
-                  guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { exit(2) }
-                  let a=c.alphaComponent
-                  if a>=0.5 {
-                      rows[y][0]+=1; cols[x][0]+=1
-                      let v=(c.redComponent+c.greenComponent+c.blueComponent)/3
-                      if v<0.25 { rows[y][1]+=1;cols[x][1]+=1 }
-                      if v>0.75 { rows[y][2]+=1;cols[x][2]+=1 }
-                  }
-              }
-          }
-          let result:[String:Any]=["scope":"UV guide aggregate profiles only; not an inferred island map","width":w,"height":h,"rows":rows,"columns":cols]
-          let data=try JSONSerialization.data(withJSONObject:result)
-          try data.write(to:URL(fileURLWithPath:"evidence/skirt-guide-profile.json"))
-          SWIFT
+                    "$RUNNER_TEMP/skirt-guide-profile" "$export_dir/layer.png"
                   fi
                   if [ "$WARDROBE_IMPORT" = true ]; then
                     python3 "$RUNNER_TEMP/skirt-verify.py" "$export_dir/layer.png" | tee evidence/skirt-import-pixel-sha.txt
