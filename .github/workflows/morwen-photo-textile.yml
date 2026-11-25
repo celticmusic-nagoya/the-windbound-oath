@@ -1,0 +1,37 @@
+name: Morwen photo-derived textile comparison
+on:
+  push:
+    branches: [asset/morwen-measured-textile-20261125]
+    paths: ['.github/workflows/morwen-photo-textile.yml']
+permissions:
+  contents: read
+concurrency:
+  group: morwen-photo-textile-comparison
+  cancel-in-progress: false
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify exact tested acquisition script
+        run: |
+          set -euo pipefail
+          echo '40735e039bc538e0d9e973bcd83f884a0f853f6f5fb03905b7812b7103ca2215  tools/production_qa/morwen_photo_textile_acquire.py' | sha256sum -c
+          python -m py_compile tools/production_qa/morwen_photo_textile_acquire.py
+          python -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
+          python tools/production_qa/morwen_photo_textile_acquire.py --self-test
+      - name: Acquire three exact 1K CC0 texture sets and compare
+        run: python tools/production_qa/morwen_photo_textile_acquire.py material-output
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: morwen-photo-textile-comparison-not-adopted
+          path: material-output/
+          if-no-files-found: warn
+          retention-days: 7
