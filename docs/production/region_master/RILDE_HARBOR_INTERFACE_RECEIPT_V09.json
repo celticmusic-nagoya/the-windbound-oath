@@ -1,0 +1,155 @@
+{
+  "schema": "two.region.harbor_interface_receipt.v09",
+  "parent": "bda6337db9c0b383d8cf5ca108ed839086fdd412",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "recovered_baseline": "5aade3829bcc608e19fe28b644d0ab8aa96dd7cc",
+    "harbor_v07": "066a67f364238bf82cf0007f998a11541b1cb836",
+    "harbor_v02": "1bb8cb6e4d92d54f090acc4b68ccf1ff5263d752",
+    "harbor_v08": "44d642692d296a71d70d31c1ec20b32f50c5d0e0"
+  },
+  "execution": "Local container Python, recovered GLB and V07/V02 exact SHA checked, actual south-edge vertices measured, isolated open road GLB exported and reopened; preview inspected. No Blender or Actions.",
+  "script_git_blob": "bf246630076e0b5dc8a5153f754d5de12825f7fa",
+  "qa": {
+    "status": "ISOLATED_INTERFACE_CALIBRATION_NOT_ADOPTED",
+    "inputs_sha256": [
+      "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+      "e9101ea9c35ac68d432a9449bba8c79b95da0456302a15d1c920e74ef2258470",
+      "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175"
+    ],
+    "checks": {
+      "village_boundary_vertices": 121,
+      "entry_samples": 13,
+      "entry_width_m": 3,
+      "before_max_seam_m": 0.000056799547175856446,
+      "after_max_seam_m": 0,
+      "reopened_entry_max_seam_m": 3.8146972691777137e-7,
+      "road_long_max_pct": 11.325551668410592,
+      "road_cross_max_pct": 2.000000000000539,
+      "unchanged_stations": 479,
+      "road_vertices": 6760,
+      "road_triangles": 12456,
+      "reopen_max_xyz_m": 0.0000076289508115223725,
+      "road_village_overlap_m2": 0,
+      "apron_end_width_m": 3.000000000000004,
+      "apron_end_height_residual_m": 0,
+      "village_mesh_unchanged": true
+    },
+    "seam_contract": {
+      "existing_edge_breakpoints_x_m": [
+        -140
+      ],
+      "required_insert_x_m": [
+        -141.5,
+        -141.25,
+        -141,
+        -140.75,
+        -140.5,
+        -140.25,
+        -139.75,
+        -139.5,
+        -139.25,
+        -139,
+        -138.75,
+        -138.5
+      ],
+      "entry_xyz_m": [
+        [
+          -141.5,
+          -125,
+          14.933350372314454
+        ],
+        [
+          -141.25,
+          -125,
+          14.93228530883789
+        ],
+        [
+          -141,
+          -125,
+          14.931220245361327
+        ],
+        [
+          -140.75,
+          -125,
+          14.930155181884766
+        ],
+        [
+          -140.5,
+          -125,
+          14.929090118408203
+        ],
+        [
+          -140.25,
+          -125,
+          14.928025054931641
+        ],
+        [
+          -140,
+          -125,
+          14.926959991455078
+        ],
+        [
+          -139.75,
+          -125,
+          14.925938987731934
+        ],
+        [
+          -139.5,
+          -125,
+          14.92491798400879
+        ],
+        [
+          -139.25,
+          -125,
+          14.923896980285644
+        ],
+        [
+          -139,
+          -125,
+          14.9228759765625
+        ],
+        [
+          -138.75,
+          -125,
+          14.921854972839355
+        ],
+        [
+          -138.5,
+          -125,
+          14.920833969116211
+        ]
+      ],
+      "operation": "Future D4-qualified split of adjacent village triangles at inserted vertices; no original edit",
+      "weld_status": "NOT_RUN_T_JUNCTION_REMAINS"
+    },
+    "design": {
+      "D0": "PARTIAL",
+      "D1": "PARTIAL_RECOVERED_BASELINE",
+      "D2": "PARTIAL_INTERFACE",
+      "D3": "HOLD_TERRAIN_EXTENSION_AND_WELD",
+      "D4": "NOT_RUN"
+    },
+    "gates": {
+      "G1": "BLOCKED",
+      "G2": "NOT_RUN",
+      "G3": "PARTIAL_CALIBRATION",
+      "G4": "NOT_RUN"
+    },
+    "limits": [
+      "Open road surface only; no supporting ground, cut/fill, collision, native or gameplay validation.",
+      "Actual recovered mesh is not original V03. Village edge remains unmodified; no topological weld.",
+      "Apron is a plan at +2 m, not native geometry."
+    ],
+    "outputs": {
+      "glb_sha256": "aad4dc31f70762de0a32182e99220869fe38db130644169f99604655b2349675",
+      "script_sha256": "f6fc34ee20a4936e1d11217a3dd93a992d370d4b849bf0e3837cea37236b3ab4",
+      "png_sha256": "601e2118747af33f87b8251aea5e649b18276012853c571e1b31214fad8dc5a8"
+    }
+  },
+  "reproduction": "Run script in scratch with recovered V03 GLB, V07 JSON, V02 JSON arguments, in that order. Exact SHA enforced. Binary outputs are attachments only.",
+  "next": "D4 independent design review for transition and supporting terrain, then isolated conforming subdivision and terrain cut/fill. Do not overwrite source or claim welded geometry."
+}
