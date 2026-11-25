@@ -106,6 +106,28 @@ try {
  assert.ok((await result.innerText()).includes('別の2エリア'));
  await anchor.getByRole('combobox',{name:'アンカー B エリア'}).selectOption('1');
  assert.equal(await result.getAttribute('data-verdict'),'HOLD');
+ // Export the full calculation context; re-import inputs only, never trust a saved verdict.
+ const receiptButton=anchor.getByRole('button',{name:'検査結果JSONを書き出す',exact:true});
+ const receiptDownloadPromise=page.waitForEvent('download');
+ await receiptButton.click();
+ const receiptDownload=await receiptDownloadPromise;
+ const receipt=JSON.parse(await (await import('node:fs/promises')).readFile(await receiptDownload.path(),'utf8'));
+ assert.equal(receipt.schema,'two.studio.anchor_residual_receipt.v1');
+ assert.equal(receipt.status,'PROVISIONAL');assert.equal(receipt.independent_qa,'NOT_RUN');
+ assert.equal(receipt.placement_revision,4);assert.equal(receipt.verdict,'HOLD');
+ assert.equal(receipt.residual_m,3);assert.equal(receipt.anchors[0].placement.yaw_deg,90);
+ assert.equal(receipt.anchors[0].local_xyz_m[0],10);assert.equal(receipt.uncertainty_m,0.2);
+ await tol.fill('4');assert.equal(await result.getAttribute('data-verdict'),'PASS');
+ const receiptInput=page.locator('#anchor-receipt-import');
+ await receiptInput.setInputFiles({name:'receipt.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...receipt,verdict:'PASS',residual_m:0}))});
+ await page.waitForFunction(()=>document.querySelector('#anchor-receipt-status').textContent.includes('再計算完了'));
+ assert.equal(await tol.inputValue(),'3');assert.equal(await result.getAttribute('data-verdict'),'HOLD');
+ const mismatch=structuredClone(receipt);mismatch.anchors[0].placement.x_m=999;
+ await receiptInput.setInputFiles({name:'mismatch.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(mismatch))});
+ await page.waitForFunction(()=>document.querySelector('#anchor-receipt-status').textContent.includes('読込失敗'));
+ assert.equal(await tol.inputValue(),'3');assert.equal(await result.getAttribute('data-verdict'),'HOLD');
+ await tol.fill('');assert.equal(await receiptButton.isDisabled(),true);
+ await tol.fill('3');
  await placement.screenshot({path:'qa-output/anchor-residual-mobile.png'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'placement mobile overflow');
  assert.equal(await page.locator('#projects article').count(),3);
