@@ -7,7 +7,7 @@ on:
         description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: parallel_ac
+        default: face_candidate
         options:
           - parallel_ac
           - wardrobe_export
@@ -350,7 +350,9 @@ jobs:
                   if rows.count(label)!=1: raise ValueError(f'nonunique {label}')
                   i=rows.index(label)
                   if i+1>=len(rows): raise ValueError(f'missing {label} value')
-                  v=rows[i+1].replace('−','-')
+                  j=i+1
+                  if rows[j]=='' and j+1<len(rows): j+=1
+                  v=rows[j].replace('−','-')
                   if not re.fullmatch(r'-?\d+\.\d{3}',v): raise ValueError(f'invalid {label} value')
                   result.append(v)
               return ' '.join(result)
@@ -382,6 +384,21 @@ jobs:
           "$row" "$img" '^Mouth Width$' | tee evidence/mouth-fixture-slider.txt
           test "$(cut -d ' ' -f1 evidence/mouth-fixture-slider.txt)" = -0.026
           if "$row" "$RUNNER_TEMP/face-control-nose.png" '^Mouth Width$'; then exit 1; fi
+          # Actual failed live response: exactly one empty OCR separator after Mouth Position (Y).
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15015543408/zip" > "$RUNNER_TEMP/mouth-response.zip"
+          echo "fc6d73a2937c7b769b7a4e6ac3da68a4598d502249cc835d3ddc4d69b2c46117  $RUNNER_TEMP/mouth-response.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"mouth-response.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"mouth-before.txt":"0b94abc8c186f0ba24f9e10551a6f623efa2341eeb4cbbab30125c9fa25295d9","mouth-after.txt":"9a7cd96ea81e20c356d304555f7bb69ad6bd4b0d2f50d8479fc5934de75beedd"}.items():
+                  data=z.read(n)
+                  assert hashlib.sha256(data).hexdigest()==h
+                  (p/n).write_bytes(data)
+          PY
+          test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-before.txt")" = '-0.026 0.000 0.000 0.000'
+          test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-after.txt")" = '0.044 0.000 0.000 0.000'
           echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
       - name: Restore native checkpoint
         if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac'
