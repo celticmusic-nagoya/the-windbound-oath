@@ -1,0 +1,55 @@
+name: TWO chat production intake
+on:
+  pull_request:
+    paths:
+      - 'tools/production_qa/*chat_production_intake.py'
+      - '.github/workflows/two-chat-production-intake.yml'
+  issue_comment:
+    types: [created]
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tools/production_qa -p test_chat_production_intake.py
+  observe:
+    if: github.event_name == 'issue_comment' && github.event.issue.number == 427 && github.event.issue.pull_request && startsWith(github.event.comment.body, '/two preflight MORWEN ')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    concurrency:
+      group: two-chat-morwen-observe
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Authenticate and collect existing read-only snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          actor=$(jq -er .comment.user.login "$GITHUB_EVENT_PATH")
+          [[ "$actor" =~ ^[A-Za-z0-9-]+$ ]]
+          export TWO_ACTOR_PERMISSION=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/$actor/permission" --jq .permission)
+          python3 tools/production_qa/chat_production_intake.py > evidence/request.json
+          jq -e 'type == "object" and .mode == "READ_ONLY"' evidence/request.json
+          head=$(gh api "repos/$GITHUB_REPOSITORY/pulls/427" --jq .head.sha)
+          test "$head" = "$(jq -er .head evidence/request.json)"
+          python3 tools/production_qa/collect_actions_snapshot.py --repo "$GITHUB_REPOSITORY" --complete > "$RUNNER_TEMP/snapshot.json"
+          jq '{scope,complete,run_count:(.runs|length),morwen:[.runs[]|select(.head_branch=="feature/morwen-artdirected-sculpt-20261119")|{run_id,event,status,conclusion,head_sha,path}]}' "$RUNNER_TEMP/snapshot.json" > evidence/snapshot-summary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chat-intake-readonly-${{ github.run_id }}
+          path: evidence/
+          retention-days: 7
