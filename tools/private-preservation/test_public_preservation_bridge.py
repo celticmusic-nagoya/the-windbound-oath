@@ -36,9 +36,9 @@ class BridgeTest(unittest.TestCase):
         for bad in (rows[1:],rows+[rows[0]], [dict(rows[0],rights='PENDING'),*rows[1:]]):
             with self.assertRaises(ValueError): b.select_pilot(dict(q,items=bad))
 
-    def test_evidence_batch_excludes_preserved_and_native_holds(self):
-        self.assertEqual(b.PILOT, (14792665964, 14988477398, 14998780697, 15003926824, 15022060664, 15023063410))
-        self.assertTrue(set(b.PILOT).isdisjoint((14684514477, 14686298362, 14741951418, 15018392749, 15020595762, 15003297779, 15018109141)))
+    def test_native_batch_excludes_all_previously_preserved(self):
+        self.assertEqual(b.PILOT, (15003297779, 15018109141))
+        self.assertTrue(set(b.PILOT).isdisjoint((14684514477, 14686298362, 14741951418, 15018392749, 15020595762, 14792665964, 14988477398, 14998780697, 15003926824, 15022060664, 15023063410)))
 
     def test_private_errors_and_receipts_not_logged(self):
         out=io.StringIO()
