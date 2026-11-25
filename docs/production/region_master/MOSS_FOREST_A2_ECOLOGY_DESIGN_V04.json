@@ -1,0 +1,46 @@
+{
+  "status": "PROVISIONAL_ENVELOPES_ONLY",
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "seed": 20261125,
+  "stage_m": 21.09699553361176,
+  "low_ground_reserve_m2": 1696.1337981900908,
+  "total_exclusion_m2": 3385.6120608292645,
+  "view_reserve_m2": 288.84103320376784,
+  "view_xy": [
+    [
+      500.8589869572925,
+      -342.5341254243298
+    ],
+    [
+      467.75,
+      -385.0
+    ]
+  ],
+  "counts": {
+    "deciduous": 36,
+    "forest_tall": 68,
+    "ancient_tree_reserve": 3,
+    "rock_reserve": 24,
+    "fern_cluster": 140,
+    "moss_patch": 180
+  },
+  "total": 451,
+  "min_pair_clearance_m": 0.1071977282333284,
+  "min_exclusion_clearance_m": 0.012942322187090016,
+  "max_source_grade_pct": 19.27868207028378,
+  "tree_candidate_lod0_triangles": 1235944,
+  "source_unchanged": true,
+  "limits": [
+    "No asset instancing or actual foliage mesh, centred envelope assumption not verified against mesh origins. Tree canopy disk and wind margin based on unapproved ECO manifest; ancient tree, rock, fern, moss dimensions authored placeholders for space reservation only.",
+    "View is plan reservation not actual 3D occlusion proof. Conservative all low-ground mask, not confirmed wet area. No actual ground-contact footprint, LOD, Android or D4."
+  ],
+  "outputs": {
+    "layout.py": "20956019b7bb900810202b65bb6d95e7b6829ca72b8f0ba2326f75d8732c76a3",
+    "placements.csv": "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394",
+    "a2_ecology_v04.png": "05cccb9901ce623ac8b87863736ba645228c98bbff3b89057e348285310162b9"
+  }
+}
