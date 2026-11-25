@@ -23,6 +23,18 @@ try {
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
  assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ // Local audit fixture tests the presentation contract, not asset QA.
+ const audit={schema:'two.cliff.image_space_geometry_audit.v01',checks:{point_count:8,feature_count:1},comparison_ready:false,reason:'fixture',qa:{G1:'BLOCKED',G2:'NOT_RUN',G3:'NOT_RUN',G4:'NOT_RUN'},required_render_contract:{tolerance_px:null,uncertainty_px:null},derived:[{id:'fixture_rim',point_count:8,polyline_length_px:608.628,world_metric:null}]};
+ const auditInput=page.locator('#blueprint-audit-file'),auditResult=page.locator('#blueprint-audit-result');
+ await auditInput.setInputFiles({name:'audit.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(audit))});
+ await page.waitForFunction(()=>document.querySelector('#blueprint-audit-result').textContent.includes('608.628 px'));
+ assert.ok((await auditResult.innerText()).includes('G1: BLOCKED'));
+ assert.ok((await auditResult.innerText()).includes('許容誤差(px): 未記録'));
+ assert.ok((await auditResult.innerText()).includes('実寸未確定'));
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ await auditInput.setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...audit,derived:[{...audit.derived[0],world_metric:42}]}))});
+ await page.waitForFunction(()=>document.querySelector('#blueprint-audit-result').textContent.includes('計測JSON検査失敗'));
+ assert.ok(!(await auditResult.innerText()).includes('608.628 px'));
  assert.equal(await page.locator('#projects article').count(),3);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  assert.equal(await page.locator('#local-title').evaluate(e=>e.open),false);
