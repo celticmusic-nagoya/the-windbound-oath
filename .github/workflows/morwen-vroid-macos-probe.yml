@@ -39,7 +39,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   reopen:
-    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      (github.ref == 'refs/heads/main' ||
+       (github.ref == 'refs/heads/codex/morwen-volatile-import-calibrated-20261125' &&
+        inputs.mode == 'wardrobe_import' && inputs.expected_main == '' &&
+        inputs.request_id == '' && github.run_attempt == 1))
     name: ${{ matrix.lane }}
     strategy:
       fail-fast: false
@@ -1044,6 +1049,9 @@ jobs:
             sha_before=$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)
             test "$sha_before" = "$MORWEN_EXPECTED_SHA256"
             test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
+            if [ "$WARDROBE_IMPORT" = true ]; then
+              printf '%s\n' "$sha_before" > evidence/skirt-native-before.txt
+            fi
             echo MODULE_EVIDENCE_PENDING > evidence/module-status.txt
             panel() {
               local tag="$1" tab="$2" anchor="$3" sig="$4"
@@ -1182,30 +1190,72 @@ jobs:
                     grep -Fq Cancel evidence/skirt-import-dialog.txt
                     grep -Fq Open evidence/skirt-import-dialog.txt
                     grep -Fq Documents evidence/skirt-import-dialog.txt
-                    # Actual run45615371028: Vision returns "- uv-grid.png" and "Open|".
-                    # Match the exact observed label, never click a filename substring.
-                    cat > "$RUNNER_TEMP/skirt-import-label.py" <<'PY'
-          import sys,pathlib
-          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().strip().split(" | ")]
-          assert rows.count("Texture Editor")==1 and rows.count("Cancel")==1,rows
-          assert any(s in ("Documents","# Documents") for s in rows),rows
-          files=[s for s in rows if s in ("uv-grid.png","- uv-grid.png")]
-          opens=[s for s in rows if s in ("Open","Open|")]
-          assert len(files)==1 and len(opens)==1,rows
-          assert sys.argv[2] in ("file","open")
-          print(files[0] if sys.argv[2]=="file" else opens[0])
+                    # Calibrated against actual 1024x768 Open panels from runs
+                    # 45622034124 (unselected) and 45618046492 (selected).
+                    cat > "$RUNNER_TEMP/skirt-import-panel.py" <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+
+          from PIL import Image
+
+          state, screenshot, target = sys.argv[1:]
+          target = Path(target)
+          image = Image.open(screenshot).convert("RGB")
+          assert image.size == (1024, 768), image.size
+
+          def white(rgb):
+              return min(rgb) >= 242
+
+          def active(rgb):
+              r, g, b = rgb
+              return r < 85 and 65 < g < 185 and b > 185 and b - g > 55
+
+          if state == "imported":
+              prior = Image.open(target).convert("RGB")
+              assert prior.size == image.size
+              bounds = (515, 353, 724, 455)
+              pairs = zip(prior.crop(bounds).getdata(), image.crop(bounds).getdata())
+              changed = sum(max(abs(a-b) for a, b in zip(old, new)) >= 12 for old, new in pairs)
+              area = (bounds[2] - bounds[0]) * (bounds[3] - bounds[1])
+              assert changed >= area // 5, (changed, area)
+              print(json.dumps({"state": state, "atlas_changed_pixels": changed, "atlas_pixels": area}))
+              sys.exit(0)
+
+          assert target.name == "uv-grid.png" and target.is_file() and not target.is_symlink()
+          visible = sorted(p.name for p in target.parent.iterdir() if not p.name.startswith("."))
+          assert visible == ["Morwen-resume.vroid", "uv-grid.png"], visible
+          assert white(image.getpixel((115, 160))) and white(image.getpixel((780, 550)))
+          row = [(270, 241), (280, 234), (465, 238)]
+          button = [(828, 556), (882, 555)]
+          if state == "before":
+              assert all(white(image.getpixel(p)) for p in row + button)
+              icon = image.getpixel((280, 243))
+              assert max(icon) < 170, icon
+          else:
+              assert state == "selected"
+              assert all(active(image.getpixel(p)) for p in row + button)
+          print(json.dumps({"state": state, "panel_pixels": list(image.size), "target": str(target),
+                            "row_selected": state == "selected", "open_enabled": state == "selected"}))
           PY
-                    file_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-dialog.txt file)
-                    "$gui" click-label evidence/skirt-import-dialog.png "$file_label" Cancel
+                    panel_check="$RUNNER_TEMP/skirt-import-panel.py"
+                    material_python="$RUNNER_TEMP/material-venv/bin/python"
+                    "$material_python" "$panel_check" before evidence/skirt-import-dialog.png "$target" > evidence/skirt-panel-before.json
+                    "$gui" click 0.322265625 0.3151041666666667
                     sleep 2
                     capture_state skirt-import-selected
-                    open_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-selected.txt open)
-                    "$gui" click-label evidence/skirt-import-selected.png "$open_label" Cancel
+                    grep -Fq Cancel evidence/skirt-import-selected.txt
+                    grep -Fq Documents evidence/skirt-import-selected.txt
+                    "$material_python" "$panel_check" selected evidence/skirt-import-selected.png "$target" > evidence/skirt-panel-selected.json
+                    cmp "$RUNNER_TEMP/uv-grid.png" "$target"
+                    "$gui" click 0.8359375 0.7278645833333333
                     sleep 5
                     capture_state skirt-import-preview
                     grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
                     grep -Fq 'Uniform Skirt' evidence/skirt-import-preview.txt
                     grep -Fq 'Default Design' evidence/skirt-import-preview.txt
+                    ! grep -Fq Cancel evidence/skirt-import-preview.txt
+                    "$material_python" "$panel_check" imported evidence/skirt-import-preview.png evidence/skirt-texture-editor.png > evidence/skirt-panel-imported.json
                     # Observe projection in the live editor; names denote requested shortcuts, not verified angles.
                     for view in front left4 left8 right4; do
                       "$gui" vroid-shortcut front
@@ -1341,6 +1391,10 @@ jobs:
             esac
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$sha_before"
             test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
+            if [ "$WARDROBE_IMPORT" = true ]; then
+              shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1 > evidence/skirt-native-after.txt
+              cmp evidence/skirt-native-before.txt evidence/skirt-native-after.txt
+            fi
             python3 - <<'PY'
           import os,pathlib,hashlib,json
           p=pathlib.Path("evidence")
@@ -1365,7 +1419,7 @@ jobs:
               name="skirt-guide-profile.json"
               hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           if os.environ["WARDROBE_IMPORT"]=="true":
-              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt"):
+              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt","skirt-native-before.txt","skirt-native-after.txt","skirt-panel-before.json","skirt-panel-selected.json","skirt-panel-imported.json"):
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
