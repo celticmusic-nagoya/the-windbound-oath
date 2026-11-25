@@ -1,0 +1,35 @@
+{
+  "schema": "two.region.moss_a2_ecology_joint_relayout_receipt.v09",
+  "parent": "6c09b5f6d4d392af3c26aad73cdcdc97bc0792b6",
+  "status": "FULL_COUNT_ENVELOPE_SCREEN_PASS_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v07": "e1a7c480b4afdc249bfe6a1d12e077d1cc31e576"
+  },
+  "outputs": {
+    "script_blob": "ac7803ebd99a0a1265ed60bf2610d664fe4fba54",
+    "qa_blob": "2110c507b3011ecbbda630201b0ccf30dbd8a841",
+    "v07_script_blob": "fb68e028d357cd9a75d928d9d586214a94076e04",
+    "script_sha256": "54ad4cdce56a0f6bc814e8cc86c40680ca82d65ffdd579fdb443f28a609d0749",
+    "qa_sha256": "0b3bd9614b4193bad2d346800a74ae727dd725cdcde8869f6f478634ea8b72fa",
+    "csv_sha256": "a488d0aa7c421fde2353acdea82f9fdec5fe1f6d52a3eb3ed3d13ac4cd599265",
+    "csv_local_git_fingerprint": "7515a91a67df56369bc66d21238adee4bc125dc7",
+    "png_sha256": "abce89b2bae0af8b9402fe0c2a4bc99389e2c444ab5d3926e53929d76eeda74c"
+  },
+  "execution": "Actual local Python; 1m grid, precomputed exclusion distances and vectorized clearance. Four attempts in two bounded groups. 18m halo 111 group members yielded 2 missing each; 35m halo 202 members yielded all 451 twice. Selected lowest total movement. 80 moved, max move 27.944m; unchanged outside group; analytic circle separation min .107198m, exclusion min .008847m, boundary min .30299m, source grade max 19.2787%, zero cylinder blockers for 3 target rays. Source SHA unchanged; plan inspected. Exact script and QA blobs match local fingerprints. CSV/PNG local. V07 source script backfilled for reproducibility.",
+  "decision": "Accept only numerical envelope screen as candidate, not independent D4. The small 8.85mm minimum exclusion clearance is not a robust actual-model tolerance; actual assets and camera still unknown. Next verify V07 junction partition and updated route/overlook LOD, resolve asset envelopes and robust margin before independent D4. No further density iteration without concrete failure. No native geometry or owner edits.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_JUNCTION_ACTUAL_ASSET_MARGIN_LOD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
