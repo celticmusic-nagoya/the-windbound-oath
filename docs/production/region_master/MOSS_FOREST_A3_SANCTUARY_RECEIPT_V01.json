@@ -1,0 +1,39 @@
+{
+  "schema": "two.region.moss_a3_sanctuary_receipt.v01",
+  "parent": "a4fc96f927b7ac4f8eca6683167eb53f229d2d00",
+  "status": "PROVISIONAL_SPATIAL_RESERVES_ONLY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a"
+  },
+  "inputs_sha256": [
+    "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "c3d6c314cc23f50012840a2b81414f46ea638ac6f7917f3ae557394e434d3f32"
+  ],
+  "outputs": {
+    "script_blob": "49dc438eff1bdd2760cbef13b269db6bef34ff8b",
+    "design_blob": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "script_sha256": "b4adf3246b4f9c298f4017050966e332af859caf29038468c3e305d726ce78cf",
+    "design_sha256": "3ab29ffddcaabce5a997e1ce65bd6c55e0f3df2d8e73f00049fb9c6474e9f65e",
+    "png_sha256": "7575400a8402fb0dffaad535d674bac992d3190c5abc17f40e29c84eb29f1f32"
+  },
+  "execution": "Actual local Python, first execution corrected empty intersection handling; successful rerun measured 42 arena, 14 barrier and 8 eligible tree candidates; all 42 arena and 8 eligible tree candidates passed provisional screening. Three inputs SHA verified unchanged. Source and full QA JSON exact blob match. Figure inspected. No native or Actions.",
+  "decision": "Provisional only: retain selected 10m-radius arena 314.1277m2, max grade 7.3117%, relief 1.1866m; barrier-to-arena clearance 11.9868m (station-center search margin ~12m, not certified >=12m physical clearance); tree root reserve radius 5m, road clearance 8.5m; altar approach existing V04 flat 24m2, not altar dimensions. No story or combat changes. Next derive obstacle-free movement/party and enemy position reserves and hero tree/altar sightline, camera and height sections; confirm actual gameplay requirements with owner before precision design. Keep A2 D4 request outstanding.",
+  "limits": [
+    "Reconstructed GLB, official CG not verified. Provisional spatial reservations and thresholds, not canon dimensions. Battle-space reserve includes existing road intentionally. Barrier placement does not establish functional one-way gate or prohibit bypass; event sequence and trigger integration unresolved. No actual tree, altar, arena mesh, Blender render, runtime, independent D4 or main merge."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_GAMEPLAY_CAMERA_AND_ASSET_DIMENSIONS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
