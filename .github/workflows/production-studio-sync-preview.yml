@@ -41,7 +41,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           STUDIO_PREVIEW_MODELS: '1'
-      - name: Verify isolated VRoid review import
+      - name: Verify isolated multi-domain review import
         run: |
           python - <<'PY'
           import json, os, pathlib
@@ -51,16 +51,22 @@ jobs:
           manifest=json.loads((root/'studio-site/gallery-manifest.json').read_text())
           for review in reviews:
               records=[x for x in manifest['entries'] if x.get('artifact_id')==review['artifact_id']]
-              assert {x['name'] for x in records}==set(review['entries']), 'VRoid review missing from staged gallery'
+              assert {x['name'] for x in records}==set(review['entries']), 'Review missing from staged gallery'
               assert all(x['head']==review['head'] and x['run_id']==review['run_id'] for x in records)
-              assert all(x['category']=='morwen' and x['qa']=='NOT_RUN' for x in records)
-              print('VRoid review staged:', review['artifact_id'], len(records))
+              assert all(x['category']==review['category'] and x['qa']=='NOT_RUN' and x['adoption']=='UNDETERMINED' for x in records), review['artifact_id']
+              assert all(x['sha256']==review['entry_sha256'][x['name']] for x in records) if 'entry_sha256' in review else True
+              print('Review staged:', review['artifact_id'], review['category'], len(records))
           if not reviews:
-              print('NOT_RUN: no eligible unexpired VRoid review found')
+              print('NOT_RUN: no eligible unexpired review found')
           PY
       - name: Verify retained snapshot before publication
         run: |
-          python tools/production-studio/merge-gallery.py tools/production-studio "$RUNNER_TEMP/studio-site" "$RUNNER_TEMP/retained"
+          set -euo pipefail
+          # Read the real published snapshot without modifying its branch.
+          git fetch --no-tags --depth=1 origin refs/heads/studio-published
+          git worktree add --detach "$RUNNER_TEMP/studio-live-history" FETCH_HEAD
+          git -C "$RUNNER_TEMP/studio-live-history" rev-parse HEAD
+          python tools/production-studio/merge-gallery.py "$RUNNER_TEMP/studio-live-history" "$RUNNER_TEMP/studio-site" "$RUNNER_TEMP/retained"
           cp "$RUNNER_TEMP/retained/gallery-manifest.json" "$RUNNER_TEMP/studio-site/"
           mkdir -p "$RUNNER_TEMP/studio-site/published"
           cp -r "$RUNNER_TEMP/retained/published/." "$RUNNER_TEMP/studio-site/published/"
@@ -69,11 +75,15 @@ jobs:
           root=pathlib.Path(os.environ['RUNNER_TEMP'])
           selection=json.loads((root/'studio-selection.json').read_text())
           entries=json.loads((root/'studio-site/gallery-manifest.json').read_text())['entries']
+          historical=json.loads((root/'studio-live-history/gallery-manifest.json').read_text())['entries']
+          preserved={x['sha256'] for x in historical}
+          assert preserved <= {x['sha256'] for x in entries}, 'Historical published bytes lost'
+          print('Published history preserved:', len(preserved), 'total preview:', len(entries))
           for review in selection:
               if review.get('stage','').endswith('/ preview only'):
                   actual={x['name'] for x in entries if x.get('artifact_id')==review['artifact_id']}
-                  assert actual==set(review['entries']), 'VRoid review lost during retention'
-                  print('VRoid retained:', review['artifact_id'], sorted(actual))
+                  assert actual==set(review['entries']), 'Review lost during retention'
+                  print('Review retained:', review['artifact_id'], review['category'], sorted(actual))
           PY
       - name: Verify actual gallery in mobile browser
         working-directory: tools/production-studio
