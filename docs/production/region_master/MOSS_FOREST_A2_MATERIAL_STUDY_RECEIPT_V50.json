@@ -1,0 +1,68 @@
+{
+  "schema": "two.region.a2_material_study.v50",
+  "parent": "6c71f0a5ab07764455516d9513d6ac722a16d48c",
+  "status": "LOCAL_GEOMETRY_PRESERVED_TEXTURE_PREVIEW_PASS_ART_AND_OUTLET_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "v49": "4bcb64dc10f64c97f87c1f4f073b92b79837f806",
+    "v48b": "36182b9ceb509d8500b68afbff602dd134212a66",
+    "v39": "173de657c4d0d627b57d05028679547b30c2fa47"
+  },
+  "recovery": {
+    "status": "HOLD_RECEIVER",
+    "checks": [
+      "No matching lower river scripts in current tree search",
+      "Library name search V28/V39/V44 empty",
+      "Google Drive exact-name filter and TWO search empty",
+      "Repository artifact listing endpoint rejected; latest workflow run 45719238957 has zero artifacts"
+    ],
+    "decision": "No speculative downstream excavation. Independent material study on SHA-verified V48B."
+  },
+  "scope": "No source geometry change. Original authored procedural, not photo-derived. V48B local origin and provisional dimensions retained; material-only test.",
+  "qa": {
+    "source_sha256": "dcb49712ab5cbd6988bd6b65398e235e007ec626b4b0bbb89482223f9ee21b8a",
+    "source_buffer_prefix_exact": true,
+    "vertices_faces_transforms_exact_after_reopen": true,
+    "ground_vertices": 861,
+    "ground_faces": 1600,
+    "water_vertices": 300,
+    "water_faces": 491,
+    "texture_dimensions": [
+      2048,
+      1024
+    ],
+    "roughness_range": [
+      0.46531616853333685,
+      0.934976994022076
+    ],
+    "texture_uncompressed_RGBA_MiB_without_mips": 24,
+    "maximum_sampled_water_depth_m": 0.40278810372589646,
+    "render": "Two matched VTK EGL views of reopened GLB, actual embedded BaseColor maps; roughness not rendered",
+    "self_art": "HOLD: improved depth/soil distinction, still broad flat-looking water, noisy procedural moss patches and bare edge. No hero terrain, photo-PBR, vegetation or physical water."
+  },
+  "outputs": {
+    "glb_sha256": "96db10299b95a598a78cb6fd0a7140a391fe3f8591e07de70247fa500ba76c09",
+    "ground_base_sha256": "77b67a96e00e0ce952960c80632ff086306f49bd050a66c9a04bcd10752e9127",
+    "ground_mr_sha256": "a68f25afdd7346148ce10a97a8b0252ae5d4a845832f39e531c88318e46b03d8",
+    "water_base_sha256": "2bdf7983e3ea7bf55f6623e0680177841068400fb261c9318c0ccda05f064055",
+    "build_sha256": "593a53d77ef0d3929555bcaf4ae8b888b4150c86297e8cbed32503e5de6e234e",
+    "render_sha256": "14d0a64d246150deff285e215a45cbf05c0479ddbd693210e3bccf281c022d47",
+    "qa_sha256": "6b4cacad33cad53a8ae531fd48267383707fd5dae6e263384f2987345e476489",
+    "comparison_sha256": "e2f9e08214bdbb3a2bcf86eb837d75cc3a3475dd36b6456fd5f51f07c930cd17",
+    "package_sha256": "c188bab38d9bcf7d182581f2e9e33bbc46235cb6594b5490eb585f63106eca3d",
+    "package_bytes": 9242629,
+    "zip_crc": "PASS",
+    "location": "ChatGPT local package only; binary and scripts not committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_RECEIVER_AND_CG",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_MATERIAL_GLB_REOPEN_PASS_NOT_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Recover exact C03 river archive via authenticated existing backup or original recipe, not repeated blind search. Independent material work: reuse verified photo-derived material artifacts and evaluate actual model/native scene, not repeated procedural swatches. No formal adoption/main merge."
+}
