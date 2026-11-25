@@ -1,0 +1,56 @@
+{
+  "schema": "two.region.forest_native_transition.v16",
+  "parent": "400f6d0922c94ec1c0164ef1838af6d6b357c02c",
+  "status": "NATIVE_PILOT_RUN_STARTED_FULL_INPUT_PREFLIGHT_PASS_NATIVE_OUTPUT_PENDING",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "design_gate": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "blender_policy": "47f678db0a270fc56ff9bc412427547dd1ba45b5",
+    "installer": "ba5336850900f90faaa2d33fd846aec9b57b4663",
+    "v15": "2ed01876b13ee1d20ee4ba0a714b3818c9859717",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "full_input": {
+    "source_sha256": "09366ffaf5b1f6657b1b9ca158c9681d0d52537a4a90bf94f7ac25ec6f2162f1",
+    "source_bytes": 47420560,
+    "geometry_nodes": 600,
+    "triangles": 828894,
+    "embedded_images": 28,
+    "external_uri": false,
+    "archives_sha_crc_pass": 5,
+    "script_sha256": "7dccc9bedd9c75e2815a5bb57d04e415e3730be728575c97c81674a08af0739e",
+    "script_blob": "15d2a4790a7d6698091a82b5e1e3fcd567087ba4",
+    "script_compile": "PASS",
+    "preflight_sha256": "bcbe4a32ce61b4445c537191ba90d1269d35ae294b0e1dcec06b21a75b678bc2",
+    "zip_sha256": "ab35c88f7cf53781edf0dd2aec2e75074adb7308abb5b0f40fc1e565c64a7dca",
+    "zip_bytes": 45872066,
+    "zip_crc_and_exact_source": "PASS",
+    "delivery": "Full GLB and ZIP remain local. Exact recipe committed/readback and matches local Git blob. No full-scene Blender execution."
+  },
+  "pilot": {
+    "script_blob": "9fb8e6985171fc87ec8f189a79be1c904d902d31",
+    "workflow_blob": "0eff88fa11879f393f89a829d189ed06a60ec1b3",
+    "run": 45625353014,
+    "run_head": "27f7f881b3c3ec9c6b480400d6e279ea6dcbf831",
+    "job": 139244316366,
+    "last_observed": "IN_PROGRESS checkout",
+    "artifact": "NOT_AVAILABLE",
+    "method": "Existing material recovery workflow, same-repository PR only, five exact artifact archive locks, official installer and native source mesh subset; two V15 evaluation cameras, Cycles CPU, pack/save/reopen, output artifact. No duplicate dispatch. Selected rounded V15C transforms, original source trees and stump LOD0, reconstructed terrain, box bark material; not geometrically equivalent to full V15C. No actual pilot render/native pass yet."
+  },
+  "blockers": [
+    "Local Blender/bpy absent; official checksum download via container.download failed. Existing GitHub connector lacks supported direct binary transfer from local 47MB GLB. No unsupported upload or external publication attempted. Native pilot pending actual runner and artifact validation. Official CG source comparison and D4 still unresolved."
+  ],
+  "next": "Inspect run 45625353014 jobs/logs/artifact at exact run head, verify archive SHA and read native QA/render, diagnose actual failures if any. Use native subset as lighting qualification only. Full V15C import requires verified transfer or reproducible full reconstruction; avoid repeated CPU placement and no premature G2/merge.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN",
+    "G3": "LOCAL_GLTF_PREFLIGHT_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  }
+}
