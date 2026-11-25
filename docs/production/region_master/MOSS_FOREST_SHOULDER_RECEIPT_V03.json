@@ -1,0 +1,106 @@
+{
+  "schema": "two.region.moss_forest_shoulder_receipt.v03",
+  "parent": "5ff574073436ed78335bed99a44e2487e036128f",
+  "status": "SAMPLED_SHOULDER_DESIGN_AND_ENDPOINT_SURVEY_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "gate_policy": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v02_receipt": "d3c22be28b559cf728060aab8239b62888fb5103",
+    "v02_design": "053220f5bb45e95aa31f3d4296f98d95f25d05e9"
+  },
+  "inputs_sha256": {
+    "a1": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d",
+    "a2": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "a3": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "v02_npz": "09d94cee74a58fcc09dd0999a9b091c60f540b899ebd8ea3a7c061c658746d5d"
+  },
+  "frame": "provisional m X east Y north Z up; canonical transform null",
+  "method": "Smoothstep taper of V02 edge height delta over each shoulder, .25 m transverse sampling, exact proposed triangle gradients; protect V02 road and source tile bytes. Root footprint exclusion = union of road and shoulders buffered by 1 m and clipped to source terrain. Endpoint disk survey uses original terrain triangles and .25 m grid; no altar or pad constructed.",
+  "attempts": [
+    {
+      "width_each_m": 0.5,
+      "max_grade_pct": 74.6389611626214,
+      "triangles_over_50": 1592,
+      "result": "FAIL"
+    },
+    {
+      "width_each_m": 1,
+      "max_grade_pct": 52.77862692113921,
+      "triangles_over_50": 387,
+      "result": "FAIL"
+    },
+    {
+      "width_each_m": 1.5,
+      "max_grade_pct": 38.70115864859319,
+      "triangles_over_50": 0,
+      "result": "PROPOSED_TRIANGLE_GRADE_PASS"
+    }
+  ],
+  "checks": {
+    "road_width_m": 2,
+    "shoulder_width_each_m": 1.5,
+    "combined_width_m": 5,
+    "station_count": 1632,
+    "road_samples": 14688,
+    "shoulder_samples": 22848,
+    "shoulder_triangles": 39144,
+    "max_grade_pct": 38.70115864859319,
+    "max_inner_sample_residual_m": 0,
+    "max_outer_sample_residual_m": 0,
+    "max_end_sample_residual_m": 0,
+    "outside_terrain_m2": 0,
+    "earthwork_plan_area_m2": 2037.5814021236897,
+    "root_reserve_m": 1,
+    "exclusion_area_m2": 2865.751057764855,
+    "inputs_unchanged": true,
+    "npz_reopen_exact": true
+  },
+  "endpoint_survey": {
+    "center_xy": [
+      690,
+      -490
+    ],
+    "radius_m": 6,
+    "area_m2": 113.08598103357986,
+    "triangles": 60,
+    "samples": 1793,
+    "height_range_m": [
+      27.51598606109619,
+      28.292395210266115
+    ],
+    "max_grade_pct": 6.694872959461172,
+    "area_above_10_pct_m2": 0,
+    "outside_terrain_m2": 0,
+    "status": "SURVEY_ONLY_NOT_ALTAR_PLACEMENT"
+  },
+  "outputs": {
+    "script_blob": "8b1539ebeeef2251bef3d5d814401a4a7f6c5231",
+    "script_sha256": "0c268436ba8d553a07d734cb356a398d0243427ee947fd3cf2bf32297b007658",
+    "design_json_sha256": "8e2e9c796c9b6ffd12bd55a646013e3d0d34de7f528da4b2b9db10657c51f98a",
+    "npz_sha256": "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "png_sha256": "3fe1460117f516dbec55309952e716348357ca10652ed84ad773a7d197be8662",
+    "delivery": "full design JSON (including 2572-point exclusion polygon), NPZ and PNG local attachments; exact generator and compact receipt committed"
+  },
+  "execution": "Actual Python, NumPy 2.3.5, trimesh 4.11.1, Shapely 2.1.2. Verified four SHA-pinned inputs before/after. Viewed produced chart. No Blender/Actions.",
+  "reproduction": "Use disposable scratch directory. Run python design_shoulders.py <folder with exact forest GLBs> <V02 NPZ>. V02 NPZ can be recreated by existing V02 generator and exact committed V01 input; verify SHA before use.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_CONTINUOUS_TERRAIN_AND_ENDPOINTS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "50% slope threshold and one-metre root reserve are provisional design choices, not geotechnical or species-specific claims.",
+    "Sampled outer boundary not continuous conforming terrain or native weld; no canopy/headroom or collision validation. No CG pixels or actual altar position/foundation.",
+    "Existing ECO and native owners untouched. No formal adoption/main merge."
+  ],
+  "next": "Measure plausible landing and clearing interfaces, recover formal altar CG/reference dimensions; independently review full trail D0-D4 before native terrain edits. Avoid repetitive micro-refinement."
+}
