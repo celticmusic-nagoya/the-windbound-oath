@@ -10,6 +10,7 @@ on:
         default: parallel_next
         options:
           - parallel_next
+          - face_candidate
           - parallel_batch
           - hair_review
           - hair_candidate
@@ -59,7 +60,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -70,14 +71,15 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
           PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
           NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -89,7 +91,7 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ] || [ "$HAIR_PROBE" = true ]; then
+          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ] || [ "$HAIR_PROBE" = true ] || [ "$FACE_PROBE" = true ]; then
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
@@ -325,8 +327,35 @@ jobs:
           try data.write(to:URL(fileURLWithPath:"evidence/skirt-alpha-row-bounds.json"))
           SWIFT
           swiftc "$RUNNER_TEMP/skirt-alpha.swift" -o "$RUNNER_TEMP/skirt-alpha"
+      - name: Preflight mouth controls on exact archived images
+        if: inputs.mode == 'face_candidate'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15007077087/zip" > "$RUNNER_TEMP/face-fixture.zip"
+          echo "55d76ca1388acf10a53953d498ff57a13b0a0a51346381416c91745c786757a8  $RUNNER_TEMP/face-fixture.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"face-fixture.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"face-control-mouth.png":"0d8f11ec03761fca8ad64869433339f4b12088967d80027d4fda729bcab068ce","face-control-nose.png":"256953b755f9315779ca5d7e52c1f5d74c3eb5c7c3ad56ae93a6258d6828d36d"}.items():
+                  b=z.read(n)
+                  assert hashlib.sha256(b).hexdigest()==h
+                  (p/n).write_bytes(b)
+          PY
+          row="$RUNNER_TEMP/face-row"
+          img="$RUNNER_TEMP/face-control-mouth.png"
+          test "$("$row" "$img" '^Mouth Width$' | cut -d ' ' -f1)" = -0.026
+          for pattern in '^Mouth Position \(Y\)$' '^Mouth Corners$' '^Mouth \(Z\)$'; do
+            test "$("$row" "$img" "$pattern" | cut -d ' ' -f1)" = 0.000
+          done
+          if "$row" "$RUNNER_TEMP/face-control-nose.png" '^Mouth Width$'; then exit 1; fi
+          echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -347,7 +376,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -421,7 +450,8 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' }}
           PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
           NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
@@ -629,7 +659,7 @@ jobs:
               echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
               exit 1
             fi
-          elif [ "$HAIR_PROBE" = true ] || [ "$PARALLEL" = true ]; then
+          elif [ "$HAIR_PROBE" = true ] || [ "$PARALLEL" = true ] || [ "$FACE_PROBE" = true ]; then
             : # Targeted module work below; no repeated generic framing or iris tests.
           else
             MORWEN_CAPTURE_MODE=rear-only
@@ -1073,6 +1103,64 @@ jobs:
           PY
             echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
           fi
+          if [ "$FACE_PROBE" = true ]; then
+            row="$RUNNER_TEMP/face-row"
+            sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
+            bash -n "$RUNNER_TEMP/session-helpers.sh"
+            source "$RUNNER_TEMP/session-helpers.sh"
+            mouth_values() {
+              local tag="$1" pattern hit
+              grep -Fq ' | Mouth |' "evidence/$tag.txt" || return 1
+              grep -Fq 'Parameters' "evidence/$tag.txt" || return 1
+              for pattern in '^Mouth Width$' '^Mouth Position \(Y\)$' '^Mouth Corners$' '^Mouth \(Z\)$'; do
+                hit=$("$row" "evidence/$tag.png" "$pattern") || return 1
+                printf '%s\n' "$hit" | cut -d ' ' -f1
+              done | paste -sd ' ' -
+            }
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            face_cat 0.792
+            "$gui" vroid-shortcut front
+            "$gui" zoom 0.50 0.42 6 0
+            sleep 2
+            capture_state mouth-before
+            baseline=$(mouth_values mouth-before)
+            test "$baseline" = '-0.026 0.000 0.000 0.000'
+            chmod u+w "$MORWEN_READONLY_NATIVE"
+            echo MOUTH_WIDTH_EXPLORATORY_EDIT_ATTEMPTED > evidence/mouth-status.txt
+            slider_by mouth-width '^Mouth Width$' 0.008
+            capture_state mouth-after
+            actual=$(mouth_values mouth-after)
+            python3 - "$baseline" "$actual" <<'PY'
+          import sys
+          from decimal import Decimal
+          a,b=[list(map(Decimal,s.split())) for s in sys.argv[1:]]
+          assert a==list(map(Decimal,("-0.026","0","0","0")))
+          assert len(b)==4 and Decimal("0.002")<=b[0]-a[0]<=Decimal("0.10") and a[1:]==b[1:]
+          PY
+            native_save
+            reopen_copy
+            face_cat 0.792
+            "$gui" vroid-shortcut front
+            "$gui" zoom 0.50 0.42 6 0
+            sleep 2
+            capture_state mouth-reopened
+            reopened=$(mouth_values mouth-reopened)
+            test "$actual" = "$reopened"
+            python3 - "$baseline" "$actual" "$reopened" <<'PY'
+          import hashlib,json,pathlib,sys,zipfile
+          p=pathlib.Path("evidence")
+          def sha(q):return hashlib.sha256(q.read_bytes()).hexdigest()
+          src=p/"input-model.vroid"; dst=p/"model.vroid"
+          assert sha(src)=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          with zipfile.ZipFile(src) as a,zipfile.ZipFile(dst) as b:
+              assert a.testzip() is None and b.testzip() is None
+              assert a.read("v1model/data.bin")!=b.read("v1model/data.bin")
+          assert sha(src)!=sha(dst)
+          v=[list(map(float,s.split())) for s in sys.argv[1:]]
+          (p/"mouth-candidate-receipt.json").write_text(json.dumps(dict(scope="EXPLORATORY_NOT_ADOPTED",target="Mouth Width",before=v[0],after=v[1],reopened=v[2],protected=["Mouth Position (Y)","Mouth Corners","Mouth (Z)"],source_sha256=sha(src),candidate_sha256=sha(dst),screenshots={n:sha(p/(n+".png")) for n in ("mouth-before","mouth-after","mouth-reopened")},limits=["Unregistered projection","Slider value not a physical dimension","Other module geometry and art QA pending"]),indent=2))
+          PY
+            echo MOUTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/mouth-status.txt
+          fi
       - name: Checkout trusted shared engines for control receipt
         if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         uses: actions/checkout@v4
@@ -1233,6 +1321,18 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
+      - name: Label face candidate or quarantine
+        if: always() && inputs.mode == 'face_candidate'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f evidence/model.vroid ]; then
+            if [ -s evidence/mouth-candidate-receipt.json ] && grep -qx MOUTH_CANDIDATE_REOPENED_REVIEW_REQUIRED evidence/mouth-status.txt; then
+              mv evidence/model.vroid evidence/face-mouth-candidate-not-adopted.vroid
+            else
+              mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
+            fi
+          fi
       - name: Upload review evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -1244,5 +1344,6 @@ jobs:
             evidence/*.json
             evidence/calibration-only-reopened-not-adopted.vroid
             evidence/hair-width-candidate-not-adopted.vroid
+            evidence/face-mouth-candidate-not-adopted.vroid
             evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
