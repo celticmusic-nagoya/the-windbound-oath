@@ -1,0 +1,141 @@
+{
+  "schema": "two.region.moss_forest_endpoints_bank_receipt.v06",
+  "parent": "11903d8256ccee375152d45a419ea538a06c4bdb",
+  "status": "BANK_PATH_DESIGN_CANDIDATE_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v03": "cd29e56b27b445e6a2e1b179483372145eed8733"
+  },
+  "inputs": {
+    "recovered_glb": "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "v03_npz": "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  },
+  "v04": {
+    "script_blob": "1bd0ba55bb547aaa427916156eecf00a17097690",
+    "script_sha256": "9409bea3b4f5b5b631ae144b1b2e01f05ba04414c53cb4e8daf684eae1ba08fa",
+    "json_sha256": "720f3a1598f266b2e0b4671feae76fce1b91ef852924960183c0c7b1ad246f16",
+    "npz_sha256": "c3d6c314cc23f50012840a2b81414f46ea638ac6f7917f3ae557394e434d3f32",
+    "png_sha256": "4b73ee733bc1ecf0f74e976216a6691f5426e14369614a6c20c3b14e9a6b278d",
+    "landing": {
+      "survey_count": 156,
+      "dry_count": 156,
+      "direct_pass_count": 0,
+      "near_start_long_pct": 101.37395407878826
+    },
+    "pad": {
+      "approach_length_m": 3,
+      "width_m": 6,
+      "length_m": 4,
+      "area_m2": 24,
+      "flat_z_m": 27.988129971478276,
+      "entry_residual_m": 0,
+      "flatness_m": 0,
+      "max_long_pct": 12.373184369788023,
+      "max_cross_pct": 6.382876915572025,
+      "max_correction_m": 0.22046375421287578,
+      "outside_terrain_m2": 0,
+      "prior_trail_overlap_m2": 0,
+      "samples": 609,
+      "triangles": 1120,
+      "center_xy": [
+        693.9431596631828,
+        -493.0743278729908
+      ]
+    },
+    "note": "Provisional pad only, not actual altar location or construction."
+  },
+  "v05": {
+    "script_blob": "0dae8ec1d7c5af054eed55cc28fe8475bab8a15b",
+    "script_sha256": "5cd0db0a0aa922394336a022f5edba476eee23b30666275580f0eee48dbac229",
+    "json_sha256": "01bf907c8d199687b149329d285f14175308c55245eeedb3a57d64acde1a14ae",
+    "png_sha256": "9e99aa06a19bbea08495f589d763fae919d50acb6b288952cc87ee49e1b221d9",
+    "domain_meshes": [
+      "RIVER_CORRIDOR",
+      "MOSS_FOREST_A1"
+    ],
+    "triangles": 32000,
+    "too_steep_triangles": 7180,
+    "necessary_scalar_limit_pct": 18.027756377319946,
+    "zero_width_reachable_candidates": 0,
+    "two_m_width_reachable_candidates": 0,
+    "components": 2,
+    "two_m_width_min_candidate_distance_m": 13.037762689772315,
+    "staging_min_max_grade_pct": 71.02085537170156,
+    "note": "Optimistic necessary scalar-grade connectivity; no proof outside two-tile domain, no runtime proof."
+  },
+  "v06": {
+    "script_blob": "6119c7407eb777daf814b5fef5c1b6447476687b",
+    "script_sha256": "b7de742846f96112d2e51f905a106afbe54d59775683bd91591a80f165ca9b81",
+    "json_sha256": "bdf7967fa9a2ad5825af731f62f40cfdaadc33617d1ad679433425546ae6980f",
+    "npz_sha256": "3aee7f0034968cc9fc96a610df15f96f7b0d93ff078bd19f7e8c79508a9079e6",
+    "png_sha256": "2a9aa98e53a560311e2d44533a4364ea13102abf2398939f2127176b2ae0a",
+    "attempts": [
+      {
+        "y0": -150,
+        "length_m": 100.23670281234708,
+        "long_pct": 13.201132322646083,
+        "cross_pct": 4.649458810504383,
+        "max_cut_m": 1.7149440409754177,
+        "max_fill_m": 0.7780485706764182,
+        "status": "PASS_PROPOSED_LATTICE"
+      },
+      {
+        "y0": -155,
+        "length_m": 95.494096518737,
+        "long_pct": 14.090155856519178,
+        "cross_pct": 4.979521899999354,
+        "max_cut_m": 1.852414672641526,
+        "max_fill_m": 0.8063489667582644,
+        "status": "PASS_PROPOSED_LATTICE"
+      },
+      {
+        "y0": -160,
+        "length_m": 90.76308240417517,
+        "long_pct": 15.358007487471045,
+        "cross_pct": 5.714134784840881,
+        "max_cut_m": 2.002012181418216,
+        "max_fill_m": 0.8038830525597973,
+        "status": "REJECT"
+      }
+    ],
+    "selected_launch_xy": [
+      332.8586311340332,
+      -150
+    ],
+    "rise_m": 10.304574224575504,
+    "width_m": 2,
+    "triangles": 6416,
+    "samples": 3618,
+    "wet_overlap_m2": 0,
+    "outside_m2": 0,
+    "entry_residual_m": 0,
+    "prior_trail_overlap_m2": 5.084821452783217e-14,
+    "source_unchanged": true,
+    "npz_reopen_exact_design_z": true
+  },
+  "execution": "Actual local Python; source checks before/after, exact script blobs verified, V05 and V06 charts inspected. No Blender/Actions. Full JSON and binary artifacts are local only; exact scripts reproduce results.",
+  "reproduction": [
+    "python survey_endpoints.py <recovered V03 GLB> <V03 shoulders NPZ>",
+    "python audit_bank.py <recovered V03 GLB> <V04 exact survey JSON>",
+    "python design_bank_route.py <recovered V03 GLB> <V04 exact survey JSON> <V03 shoulders NPZ>"
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_WATER_LANDING_SHOULDERS_AND_PAD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limits": [
+    "V06 is a proposed path lattice, not terrain edit; starting point five metres inland, not a water landing. Grade estimates use sampled tangent directions, not continuous exact PCHIP curvature certification. Actual shoulder/retaining treatment, landing shelf, river contact, drainage, altar reference/outer tie-ins and visual QA unresolved.",
+    "No formal adoption, main merge, or modifications to native/ECO owners."
+  ],
+  "next": "Survey V06 bank shoulder space and landing shelf feasibility against protected wet footprint, reject if terrain impacts incompatible; independent D4 before precision native changes."
+}
