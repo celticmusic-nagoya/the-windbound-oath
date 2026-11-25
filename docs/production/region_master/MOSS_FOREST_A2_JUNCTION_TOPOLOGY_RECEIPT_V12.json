@@ -1,0 +1,92 @@
+{
+  "schema": "two.region.moss_a2_junction_shared_topology_receipt.v12",
+  "parent": "e9c1666186c595fbbd92df7ce191f311e55544a6",
+  "status": "LOCAL_CONFORMING_DESIGN_PASS_HOLD_ART_AND_INTEGRATION",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v10": "e9254a08301a3c06ba4e41490710097b0bdfcb33"
+  },
+  "input_sha256": [
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "40f8ea9359aeb3cd69c742fb366728c89b1a80670059cd7e40a263a790db9c03",
+    "c5f529f863766221d1fddc561ef2e16bed15b1d70b8aa0683bbb706465022d0f"
+  ],
+  "criteria": {
+    "design_grid_m": 1e-8,
+    "outer_outline_test_buffer_m": 0.000001,
+    "small_face_diagnostic_area_m2": 0.000001,
+    "shape_diagnostic": 0.01,
+    "physical_tolerance": "unqualified; numeric screen only"
+  },
+  "method": "V11 noded overlay of both entire triangle partitions. V12 uses only V10 clipped spur edges plus main edges, polygonizes and constrained-triangulates, shared indices on 10nm computational grid with main-road Z priority; preserves protected main planes within floating precision. Main station interval 145.16687928895672–171.15200053861506m. No native edit.",
+  "comparison": {
+    "v11": {
+      "vertices": 6170,
+      "faces": 11431,
+      "shared_seam_vertices": 25,
+      "small_faces": 6,
+      "quality_below_0_01": 8,
+      "mesh_sha256": "76d5b96b3b00791ae011716a3dda7963f60fb319b66279727c67faa3e969d62d",
+      "script_sha256": "f57403c5bd055935d7bca5e5cd26026d452f2559127a2cfdfd7a395b4e4905d2",
+      "qa_sha256": "1b5e80b170197148c7429722d2e88d05db0f7cee5127b5e4f54e6e1006ce6f5c",
+      "png_sha256": "19227442a70778e6351481dcfc1443e5600edb33bcfb3a6c46bdc8f31041691e"
+    },
+    "v12": {
+      "vertices": 5188,
+      "faces": 9467,
+      "connected_components": 1,
+      "euler_characteristic": 1,
+      "shared_seam_vertices": 29,
+      "shared_seam_edges": 28,
+      "shared_seam_length_m": 2.031665887409881,
+      "nonmanifold_edges": 0,
+      "invalid_vertex_links": 0,
+      "interior_winding_errors": 0,
+      "boundary_degree_errors": 0,
+      "nonpositive_area_faces": 0,
+      "small_faces": 0,
+      "quality_below_0_01": 1,
+      "min_shape_quality": 0.008274355579841554,
+      "worst_face": 678,
+      "coverage_symdiff_m2": 3.384121014962644e-7,
+      "area_sum_minus_union_m2": -4.831690603168681e-13,
+      "boundary_outside_1um_m": 0,
+      "boundary_missing_1um_m": 0,
+      "max_main_vertex_height_change_m": 7.190834594439366e-10,
+      "max_spur_vertex_height_change_m": 0.00022555850726746485,
+      "global_and_local_float32_nonpositive_faces": 0,
+      "global_and_local_float32_unique_vertices": 5188
+    }
+  },
+  "outputs": {
+    "script_blob": "13e882b15ac7ae4dd8bdb30a3a5368c7f41c663b",
+    "precision_qa_blob": "c3fecc78ac20b5edc8c69369e1694ab553b7ffe2",
+    "v10_script_blob": "241dc97b753b47beb8156750e4b90ba738543137",
+    "script_sha256": "442889817283d3ce48b0c980175a689ff25a86476cf0fb6666573708fdd6879a",
+    "qa_sha256": "5dcfd379286bb101ddd05be53df68845f091e6654215d8799287f077e701a206",
+    "precision_script_sha256": "e9953d35190509db0231e7f00b045a660037d1be8bd2e256c13ae57e99e94d9d",
+    "precision_qa_sha256": "24e9664648ac33e60bf6945f599791d0be9c7ef0a1c9a72dbec83d312ea834ac",
+    "npz_sha256": "5e8c320afc4e5be6d856a9c6884c2533b240c39088bdc552c5bfd06fbe7a164e",
+    "png_sha256": "877cc5d2a54d9bf838cfc57632138a1e775a4ce71c88c2d0161a2fe3b9457fd8"
+  },
+  "execution": "Actual local Python; three exact SHA inputs unchanged, both variants executed and NPZ reopened, figures inspected. Separately implemented vertex-link and float32 diagnostic. Exact V12 source, precision QA and V10 source blobs verified. V11 and binary outputs retained locally.",
+  "reproduction": "python weld.py <V03 shoulders NPZ> <V07 spur NPZ> <V10 partition NPZ>",
+  "decision": "Retain V12 local design, no repeated micro-remeshing before applicable independent review. Face 678 is elongated (quality <0.01); flag for native retopology. Independent D4 dry-land scope review required; unresolved hydrology, asset dimensions and official CG are not silently waived. Move to independent A3 sacred grove composition while review pending.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_FULL_TERRAIN_NATIVE_AND_ASSETS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Local open-surface mesh design, not Blender model or welded full terrain. 1um outline screen is numerical not physical accuracy; no runtime collision, route pad, drainage, actual LOD or formal adoption. No main merge."
+  ]
+}
