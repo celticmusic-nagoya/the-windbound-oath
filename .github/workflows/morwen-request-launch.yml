@@ -99,6 +99,7 @@ jobs:
            if(q.mode==="wardrobe_import"&&["success","failure"].includes(prior.conclusion)&&prior.id===45605491226)return true;
            if(q.mode==="wardrobe_import"&&prior.conclusion==="success"&&prior.id===45611596057&&prior.display_title==="Morwen VRoid / wardrobe_guide request:7162063209"&&priorBlob==="101e730e217f7aab4a5209ba29fc6516fb470677"&&blob==="c684b6ecbc5be701a6906613aff67dd3dc1a4483")return true;
            if(q.mode==="wardrobe_import"&&prior.conclusion==="failure"&&prior.id===45615371028&&prior.display_title==="Morwen VRoid / wardrobe_import request:7162601723"&&priorBlob==="c684b6ecbc5be701a6906613aff67dd3dc1a4483"&&blob==="739f73d5cb54fad021205bac69d5bfc070e0447b")return true;
+           if(q.mode==="wardrobe_import"&&prior.conclusion==="success"&&prior.id===45618046492&&prior.display_title==="Morwen VRoid / wardrobe_import request:7162984254"&&priorBlob==="739f73d5cb54fad021205bac69d5bfc070e0447b"&&blob==="db7b9f4e3c03c0bef3b9085ba937ac22d04ead6e")return true;
            if(q.mode==="wardrobe_guide"&&prior.conclusion==="success"&&prior.id===45605491226)return true;
            if(q.mode==="wardrobe_guide"&&prior.conclusion==="failure"&&prior.id===45609778090&&prior.display_title==="Morwen VRoid / wardrobe_guide request:7161805577"&&priorBlob==="b8a1931ad47783b6bc81720016cf73a1b04cf9b7"&&blob==="101e730e217f7aab4a5209ba29fc6516fb470677")return true;
            throw Error("unqualified transition");
