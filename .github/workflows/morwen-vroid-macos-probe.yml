@@ -1723,7 +1723,7 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
-- name: Close editor before using protected transfer credential
+      - name: Close editor before using protected transfer credential
         if: success() && inputs.mode == 'vrm_export'
         shell: bash
         run: |
