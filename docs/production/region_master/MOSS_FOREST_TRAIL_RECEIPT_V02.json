@@ -1,0 +1,75 @@
+{
+  "schema": "two.region.moss_forest_trail_receipt.v02",
+  "parent": "ab62c3fe1502421d0a0a0c740600374c4ad41ebd",
+  "status": "ROUNDED_ALIGNMENT_HEIGHT_DESIGN_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v01": "1d3d7e49813c6e4c865823a9bfa941dd6dc74026",
+    "geography": "6943ac3ce21003b49e91c6d1cb5989aa6c02e7df"
+  },
+  "outputs": {
+    "script_blob": "827a7addd4925d8e1ead8baaa961ab86fe906b21",
+    "design_blob": "053220f5bb45e95aa31f3d4296f98d95f25d05e9",
+    "v01_exact_input_blob": "46add3eb6c8c422ef998f6265dbd1568cc75b9c7",
+    "script_sha256": "de7a8da63756612d65a99751c212c0efefb39543e4fa759b12b9b8eade6bead0",
+    "design_sha256": "7ce517eacb5dca9cd3ac419dbe3044048a2e351599e83fdd64c745402b5232f8",
+    "npz_sha256": "09d94cee74a58fcc09dd0999a9b091c60f540b899ebd8ea3a7c061c658746d5d",
+    "png_sha256": "da0cea00bd3b4ff24634790e7591b012b22e5dc950e6154cd60f6215d3ea2da6",
+    "binary_delivery": "local attachments only"
+  },
+  "attempts": [
+    {
+      "method": "unconstrained natural cubic spline on V01",
+      "result": "REJECT",
+      "at_1m_chord": {
+        "long_pct": 16.83250111994481,
+        "cross_pct": 12.07590272290388
+      }
+    },
+    {
+      "method": "32-direction heading-aware A* on 5m lattice, turn cost, 1.01m capsule",
+      "result": "no path at 0.5/0.2 percentage point margin and 35deg, or zero margin and 45deg; zero margin 65deg path exists but retains abrupt corners. Finite search, not proof of impossibility.",
+      "edges": 48312
+    },
+    {
+      "method": "three 12m circular fillet alternatives plus minimax graph-envelope grade correction",
+      "result": "selected mid [395,-260], smallest max correction among tested three; not global alignment optimum"
+    }
+  ],
+  "checks": {
+    "width_m": 2,
+    "length_m": 407.5166611364689,
+    "radius_m": 12,
+    "station_count": 1632,
+    "sample_count": 14688,
+    "changed_samples": 3508,
+    "triangle_long_bound_pct": 14.000000000003714,
+    "triangle_cross_bound_pct": 9.519537405339067,
+    "max_correction_m": 0.36006737637946173,
+    "endpoint_residual_m": 0,
+    "outside_terrain_m2": 0,
+    "original_inputs_unchanged": true,
+    "npz_reopen_exact_design_z": true
+  },
+  "reproduction": "Copy scripts to scratch. Run python design_v02.py <directory of three SHA-pinned forest GLBs> <exact V01 input JSON committed alongside>. NumPy 2.3.5, trimesh 4.11.1, Shapely 2.1.2; no native edit.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_CUT_FILL_TIE_IN_AND_ENDPOINTS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limits": [
+    "The proposed height lattice is not an edit to source terrain. Grade bounds apply to design triangles only. Actual ground requires conforming shoulder tie-in, cut/fill and continuity verification.",
+    "Proposed 12m radius, 2m width, grade limits and trail coordinates remain provisional. River landing and altar actual layout not established. No official CG pixels reviewed, no Blender/native, independent D4, or runtime QA.",
+    "ECO and WORLD native owners not modified; no adoption or main merge."
+  ],
+  "next": "Measure shoulder tie-in and clearing/vegetation exclusion on SHA-pinned terrain; independent D4 before precision production."
+}
