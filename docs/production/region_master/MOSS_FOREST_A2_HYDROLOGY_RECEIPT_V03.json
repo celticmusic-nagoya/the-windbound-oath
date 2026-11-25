@@ -1,0 +1,128 @@
+{
+  "schema": "two.region.moss_forest_a2_hydrology_receipt.v03",
+  "parent": "fb5117e99eb58790aefd43d56e3d0f6f1aa57bd3",
+  "status": "HOLD_UNRESOLVED_CATCHMENT_AND_DRAINAGE",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "a2_v02": "845a48ab8b63f83e16135baa3e1534ef1fddf0bc"
+  },
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "method": "Source mesh-edge steepest descent on river and three forest tiles; lumped triangle contributing areas; discrete minimax peak-elevation graph route excluding protected trail and interior of V02 patch. Exact linear clipping of source A2 triangles outside patch at four hypothetical hydrostatic levels; integrate affine ground difference over sink-connected polygons. No simulation.",
+  "checks": {
+    "unique_vertices": 22891,
+    "triangles": 44800,
+    "edges": 67690,
+    "source_seam_max_m": 0,
+    "inlet": {
+      "xy": [
+        480,
+        -385
+      ],
+      "ground_z_m": 23.574594497680664,
+      "design_stage_z_m": 23.29699553361176,
+      "contributing_area_m2": 212.5,
+      "terminal_xy": [
+        432.5,
+        -392.5
+      ],
+      "terminal_z_m": 20.15198516845703,
+      "terminal_type": "interior_sink"
+    },
+    "outlet": {
+      "xy": [
+        445,
+        -385
+      ],
+      "ground_z_m": 20.405874252319336,
+      "design_stage_z_m": 20.59699553361176,
+      "contributing_area_m2": 300,
+      "descent_trace_length_m": 17.071067811865476,
+      "terminal_xy": [
+        432.5,
+        -392.5
+      ]
+    },
+    "river_graph_route": {
+      "length_m": 232.5,
+      "minimum_peak_ground_m": 22.7240047454834,
+      "minimum_stage_excess_m": 2.1270092118716377,
+      "positive_rise_m": 2.5275211334228516
+    },
+    "pool": [
+      {
+        "stage_m": 20.59699553361176,
+        "area_m2": 836.3348546612035,
+        "volume_m3": 205.7545216614529,
+        "depth_m": 0.44501036515472947,
+        "south_boundary_contact_m": 30.50881560381299
+      },
+      {
+        "stage_m": 20.696995533611762,
+        "area_m2": 983.8611385437517,
+        "volume_m3": 296.83440692709974,
+        "depth_m": 0.5450103651547309,
+        "south_boundary_contact_m": 33.68762934624124
+      },
+      {
+        "stage_m": 20.84699553361176,
+        "area_m2": 1204.8459347332862,
+        "volume_m3": 460.9438355781825,
+        "depth_m": 0.6950103651547309,
+        "south_boundary_contact_m": 37.610623587615294
+      },
+      {
+        "stage_m": 21.09699553361176,
+        "area_m2": 1575.4968711709257,
+        "volume_m3": 808.2856024648448,
+        "depth_m": 0.9450103651547295,
+        "south_boundary_contact_m": 43.192387007934656
+      }
+    ],
+    "base_boundary_segment_xy": [
+      [
+        418.5384529704597,
+        -400
+      ],
+      [
+        449.04726857427266,
+        -400
+      ]
+    ],
+    "all_four_protected_overlap_m2": 0,
+    "inputs_unchanged": true
+  },
+  "outputs": {
+    "hydrology_script_sha256": "1df62cd8296362f2369bc4c2278e03dab55dc98a11bd93672b09f3be3b909ed3",
+    "hydrology_script_local_git_fingerprint": "d89f0ca3afabe0076ce7dbd880db7be50502def2",
+    "pool_script_sha256": "166c0000472081c92fd86070e638c71e236b6f03019d1e690cbb286b0d16dfff",
+    "pool_script_local_git_fingerprint": "74d9f8ba8cf0cf3ac15f96ea0bb712a51dd08324",
+    "hydrology_json_sha256": "46f7569da2d867e7d598297fc81058bf8574bcffde91cb61a6ec8aba6c20e85a",
+    "pool_json_sha256": "d4ff95e267fe570d9ebdedc1513a566ef857894d3d1a0a474e2509dd82695f0a",
+    "hydrology_png_sha256": "9cb717225e14305ef6d2f37af16e128a4b17f402318c3bcb8fa1ad53ace4c8b8",
+    "pool_png_sha256": "9e4dc5f4cf851b6d3f8e7e989ed870776d1c99965f4ea00b34b95f77d1a96239",
+    "delivery": "Local exact scripts/JSON/PNGs; compact receipt committed. Files surface has not yet exposed text output IDs; do not claim uploaded script blobs."
+  },
+  "execution": "Actual local Python, verified three source SHA before/after, executed both scripts and visually inspected first plot versions; regenerated charts with complete extents. No Blender, Actions or native changes.",
+  "decision": "Do not force river outlet by unreviewed terrain cuts. A2 southern unbuilt terrain is required to resolve drainage interface (base wet segment X 418.538–449.047 at Y=-400). Reserve candidate wet extent from tree/prop placement until hydrology reviewed. Next independent scope: A2 dry-land vegetation/landmark design using protected road and candidate wet-zone exclusion; no ECO owner asset writes.",
+  "limitations": [
+    "Graph is discretized and excludes unknown terrain; route length is one found route, not proven shortest. Contributing area is an approximate lumped mesh measure, not discharge. Water stage sensitivity is hypothetical, not a sealed pool or verified hydraulic flow. No official source CG, D4 or native production."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_SOUTH_BOUNDARY_AND_SOURCE",
+    "D2": "PARTIAL",
+    "D3": "HOLD_HYDROLOGY",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
