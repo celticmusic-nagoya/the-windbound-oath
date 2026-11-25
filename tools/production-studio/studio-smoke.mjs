@@ -88,7 +88,7 @@ try {
  await placement.screenshot({path:'qa-output/placement-overview-mobile.png'});
  // Anchor pair: incomplete data blocked, 90-degree rotation, vertical residual and conservative verdicts.
  const anchor=page.locator('#placement-anchor-check'),result=page.locator('#anchor-result');
- await anchor.locator('summary').click();
+ await anchor.locator(':scope > summary').click();
  assert.ok((await result.innerText()).includes('BLOCKED'));
  saved.revision=4;
  Object.assign(saved.areas[0],{x_m:0,y_m:0,z_m:0,yaw_deg:90});
