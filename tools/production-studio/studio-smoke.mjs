@@ -312,6 +312,22 @@ try {
  await page.locator('#model-file').setInputFiles({name:'diagnostic.glb',mimeType:'model/gltf-binary',buffer:b});
  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
  assert.equal(await page.locator('#model-view canvas').count(),1);
+ const nativeInput=page.locator('#native-sha-file'),nativeExpected=page.locator('#native-sha-expected'),nativeResult=page.locator('#native-sha-result');
+ for(const name of ['diagnostic.glb','diagnostic.vrm','diagnostic.vroid','diagnostic.blend']){
+  await nativeInput.setInputFiles({name,mimeType:'application/octet-stream',buffer:b});
+  await nativeExpected.fill(createHash('sha256').update(b).digest('hex'));
+  await page.locator('#native-sha-verify').click();
+  await page.waitForFunction(()=>document.querySelector('#native-sha-result').textContent.startsWith('PASS:'));
+  assert.ok((await nativeResult.innerText()).includes('バイト照合のみ・再読込未検証'));
+ }
+ await nativeExpected.fill('0'.repeat(64));assert.equal(await nativeResult.innerText(),'未照合');
+ await page.locator('#native-sha-verify').click();
+ await page.waitForFunction(()=>document.querySelector('#native-sha-result').textContent.startsWith('FAIL:'));
+ await nativeInput.setInputFiles({name:'invalid.txt',mimeType:'text/plain',buffer:b});
+ await page.locator('#native-sha-verify').click();
+ assert.ok((await nativeResult.innerText()).includes('対象形式'));
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'native SHA mobile overflow');
+
  await page.screenshot({path:'qa-output/mobile-diagnostic.png',fullPage:true});
  assert.deepEqual(errors,[]);
  console.log('PASS: mocked API, mobile width, SHA-256 match/mismatch, diagnostic GLB loader. Not actual asset QA.');
