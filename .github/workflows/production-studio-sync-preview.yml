@@ -93,7 +93,20 @@ jobs:
       - name: Verify public boundary against actual preview and live history
         run: |
           python tools/production-studio/publication-gate.py filter "$RUNNER_TEMP/studio-live-history/gallery-manifest.json" "$RUNNER_TEMP/studio-site/gallery-manifest.json" tools/production-studio/publication-approvals.json "$RUNNER_TEMP/public-delta.json"
-          python tools/production-studio/publication-gate.py verify "$RUNNER_TEMP/studio-live-history/gallery-manifest.json" "$RUNNER_TEMP/public-delta.json" "$RUNNER_TEMP/studio-live-history/gallery-manifest.json"
+          mkdir -p "$RUNNER_TEMP/approved-only/published"
+          cp "$RUNNER_TEMP/public-delta.json" "$RUNNER_TEMP/approved-only/gallery-manifest.json"
+          python - <<'PY'
+          import json,os,pathlib,shutil
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          history={e['sha256'] for e in json.loads((root/'studio-live-history/gallery-manifest.json').read_text())['entries']}
+          receipts=json.loads(pathlib.Path('tools/production-studio/publication-approvals.json').read_text())['entries']
+          delta=json.loads((root/'public-delta.json').read_text())['entries']
+          assert {e['sha256'] for e in delta}=={e['sha256'] for e in receipts}-history, 'Approved but missing staged source'
+          for e in delta:
+              shutil.copyfile(root/'studio-site'/e['path'],root/'approved-only'/e['path'])
+          PY
+          python tools/production-studio/merge-gallery.py "$RUNNER_TEMP/studio-live-history" "$RUNNER_TEMP/approved-only" "$RUNNER_TEMP/public-dry-run"
+          python tools/production-studio/publication-gate.py verify "$RUNNER_TEMP/studio-live-history/gallery-manifest.json" "$RUNNER_TEMP/public-delta.json" "$RUNNER_TEMP/public-dry-run/gallery-manifest.json"
       - name: Verify actual gallery in mobile browser
         working-directory: tools/production-studio
         run: |

@@ -64,12 +64,7 @@ jobs:
           mkdir -p published
           cp "$RUNNER_TEMP/retained/gallery-manifest.json" .
           cp -r "$RUNNER_TEMP/retained/published/." published/
-          python - <<'PY'
-          import pathlib,json
-          keep={e['path'] for e in json.loads(pathlib.Path('gallery-manifest.json').read_text())['entries']}
-          for p in pathlib.Path('published').iterdir():
-              if p.is_file() and str(p) not in keep:p.unlink()
-          PY
+          # Preserve all previously present files; never prune on publication.
           git add -- gallery-manifest.json published
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Publish verified production gallery snapshot'
