@@ -25,14 +25,15 @@ test("preservation list accepts only the exact public workflow and separates kno
  assert.equal(refreshDelay(true),300000);assert.equal(refreshDelay(false),900000);
 });
 test("visible automatic refresh, hidden pause, no overlap, error retains prior cards",async()=>{
- class El{constructor(){this.children=[];this.dataset={};this.style={};this.events={};this.textContent="";}setAttribute(){}append(...x){this.children.push(...x)}replaceChildren(){this.children=[]}before(...x){this.beforeItems=x}after(){}addEventListener(k,f){this.events[k]=f}}
+ class El{constructor(){this.children=[];this.dataset={};this.style={};this.events={};this.textContent="";}setAttribute(){}append(...x){this.children.push(...x)}replaceChildren(){this.children=[]}before(...x){this.beforeItems=x}after(...x){this.afterItems=x}addEventListener(k,f){this.events[k]=f}}
  const ids=Object.fromEntries(["recent-review-artifacts","recent-review-status","refresh-recent-review","recent-review-title"].map(k=>[k,new El()]));
  const doc={hidden:false,events:{},getElementById:k=>ids[k],createElement:()=>new El(),addEventListener(k,f){this.events[k]=f}};
  let calls=0,fail=false,timer=null,serial=0;
- const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
+ const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"feature/lind-ecology-01","lind-eco-53-candidate-evidence")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,"recent-review-artifacts.js"),"utf8"),sandbox);
  const flush=()=>new Promise(resolve=>setImmediate(resolve));await flush();
- assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,1);
+ assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,2);
+ const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
  const preservation=ids["recent-review-title"].beforeItems[3];assert.equal(preservation.children.length,1);
  assert.ok(timer.ms>=299000&&timer.ms<=300000);
  doc.hidden=true;doc.events.visibilitychange();assert.equal(timer,null);
@@ -40,4 +41,19 @@ test("visible automatic refresh, hidden pause, no overlap, error retains prior c
  fail=true;timer.fn();ids["refresh-recent-review"].events.click();await flush();
  assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(preservation.children.length,1);
  assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);assert.ok(timer.ms>=899000&&timer.ms<=900000);
+ category.value="";category.events.change();assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,2);assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);
+});
+
+test("ECO and measured material sources are recognized; filter before 30-row limit",()=>{
+ const eco=art(1,"feature/lind-ecology-01","lind-eco-53-candidate-evidence");
+ const pkg=art(2,"feature/lind-ecology-01","lind-eco-integration-v2-package");
+ const brass=art(3,"asset/morwen-measured-textile-20261125","morwen-brass-source-maps-not-adopted");
+ const gold=art(4,"asset/morwen-measured-textile-20261125","morwen-met-gold-thread-oa-sources-not-adopted");
+ const photo=art(5,"asset/morwen-measured-textile-20261125","morwen-photo-textile-comparison-not-adopted");
+ const unrelated=art(6,"feature/lind-ecology-01","unknown-source");
+ const data={artifacts:[eco,pkg,brass,gold,photo,unrelated,...Array.from({length:40},(_,i)=>art(100+i,"main","morwen-isolated-vroid-reopen-review"))]};
+ assert.equal(selectRecentArtifacts(data).length,30);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"リルド村・植生"),x=>x.id),[2,1]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"モルウェン・材質研究"),x=>x.id),[5,4,3]);
+ assert.equal(selectRecentArtifacts(data,"unknown").length,0);
 });
