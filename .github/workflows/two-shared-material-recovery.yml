@@ -11,8 +11,8 @@ on:
       source_set:
         description: Locked source set to recover
         type: choice
-        options: [fern-bark, stump, forest]
-        default: fern-bark
+        options: [fern-alpha, fern-bark, stump, forest]
+        default: fern-alpha
 permissions:
   contents: read
 concurrency:
@@ -46,10 +46,11 @@ jobs:
       - name: Recover only selected locked sources
         if: steps.scope.outputs.run == 'true'
         env:
-          SOURCE_SET: ${{ inputs.source_set || 'fern-bark' }}
+          SOURCE_SET: ${{ inputs.source_set || 'fern-alpha' }}
         shell: bash
         run: |
           case "$SOURCE_SET" in
+            fern-alpha) python 'tools/map_blueprint/shared_materials_v01/intake_fern_bark.py' "$RUNNER_TEMP/two-material-cache" "$RUNNER_TEMP/material-recovery.json" alpha; exit $? ;;
             fern-bark) python 'tools/map_blueprint/shared_materials_v01/intake_fern_bark.py' "$RUNNER_TEMP/two-material-cache" "$RUNNER_TEMP/material-recovery.json"; exit $? ;;
             stump) assets=(--asset ph_tree_stump_01) ;;
             forest) assets=(--asset ph_forrest_ground_01 --asset ph_grassy_cobblestone --asset ph_rock_moss_set_01) ;;
@@ -60,7 +61,7 @@ jobs:
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: two-shared-material-${{ inputs.source_set || 'fern-bark' }}-candidates
+          name: two-shared-material-${{ inputs.source_set || 'fern-alpha' }}-candidates
           path: |
             ${{ runner.temp }}/two-material-cache
             ${{ runner.temp }}/material-recovery.json
