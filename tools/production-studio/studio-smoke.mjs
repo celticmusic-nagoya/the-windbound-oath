@@ -161,6 +161,28 @@ try {
  assert.equal(handoff.items[2].action,'NO_POSITION_ACTION');
  assert.equal(handoff.items[3].action,'REVIEW_INPUT');
  assert.equal(handoff.items[0].area_ids[0],'RILDE_VILLAGE');
+// The existing Python engine contract consumes the actual browser export read-only.
+ const handoffBytes=await (await import('node:fs/promises')).readFile(await handoffDownload.path());
+ const check=JSON.parse(execFileSync('python3',['anchor-handoff-preflight.py',await handoffDownload.path()],{encoding:'utf8'}));
+ assert.equal(check.input_sha256,createHash('sha256').update(handoffBytes).digest('hex'));
+ assert.equal(check.factory_ready,false);assert.equal(check.native_observation,false);
+ assert.equal(check.items[0].evidence_class,'PROVISIONAL_DESIGN');
+ assert.equal(check.items[0].result.verdict,'OUTSIDE');
+ assert.equal(check.items[0].claimed_result_matches,true);
+ assert.equal(check.items[1].result.verdict,'HOLD');
+ assert.equal(check.items[2].result.verdict,'PASS');
+ assert.equal(check.items[3].verdict,'REJECTED');
+ const altered=structuredClone(handoff);altered.items[0].result.r=0;altered.items[0].result.verdict='PASS';
+ altered.items[1].placement[0].x_m=999;
+ const alteredPath='qa-output/altered-handoff-fixture.json';
+ await (await import('node:fs/promises')).writeFile(alteredPath,JSON.stringify(altered));
+ const checkedAltered=JSON.parse(execFileSync('python3',['anchor-handoff-preflight.py',alteredPath],{encoding:'utf8'}));
+ assert.equal(checkedAltered.items[0].claimed_result_matches,false);
+ assert.equal(checkedAltered.items[0].result.verdict,'OUTSIDE');
+ assert.equal(checkedAltered.items[0].action,'REVIEW_INPUT');
+ assert.equal(checkedAltered.items[1].verdict,'REJECTED');
+ assert.equal(checkedAltered.factory_ready,false);
+
  await east.fill('2');assert.ok((await batchStatus.innerText()).includes('未反映'));assert.equal(await batchResults.locator('article').count(),0);
  assert.equal(await handoffButton.isDisabled(),true);
  await east.fill('0');assert.ok((await batchStatus.innerText()).includes('REJECTED 2'));
@@ -194,6 +216,11 @@ try {
  assert.equal(comparison.items[0].result.r,1);
  assert.equal(comparison.items[0].placement[0].z_m,2);
  assert.equal(comparison.items[0].baseline_placement[0].z_m,0);
+ const checkComparison=JSON.parse(execFileSync('python3',['anchor-handoff-preflight.py',await comparisonDownload.path()],{encoding:'utf8'}));
+ assert.equal(checkComparison.items[0].baseline_result.r,3);
+ assert.equal(checkComparison.items[0].result.r,1);
+ assert.equal(checkComparison.items[0].claimed_result_matches,true);
+ assert.equal(checkComparison.factory_ready,false);
 
  await height.fill('');await placement.getByRole('button',{name:'配置案に反映',exact:true}).click();
  assert.ok((await batchResults.innerText()).includes('現在配置のXYZ・回転が未設定'));
