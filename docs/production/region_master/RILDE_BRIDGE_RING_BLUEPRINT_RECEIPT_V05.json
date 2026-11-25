@@ -1,0 +1,78 @@
+{
+  "schema": "two.region.bridge_ring_blueprint_receipt.v05",
+  "status": "DESIGN_CANDIDATE_SPRINGER_SUPPORT_HOLD",
+  "parent": "881fb0c2ecbeb54d0e33c027c5e026d740509327",
+  "owner_scope": "PR482 regional bridge interface and design only; no modifications to PR363 abutment assets",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "bank_v04": "5c03201d2e177ffa4dd7eb52d0d7e995e878b914",
+    "bridge_glb_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "world_cg_blob": "5abfe58fd4ba4b08a3ddce0181a9978190b0186f",
+    "world_cg_pixels": "UNAVAILABLE: base64 fetch returned empty",
+    "route363_head": "ba379c5be7b4a92b5c221b3de10fd8e5a657a6a9",
+    "route363_failure_ledger": "6f4c2ecfceabe734d026d69b6fae14a5881bbc39"
+  },
+  "measurement": {
+    "length_m": 60,
+    "opening_m": 28,
+    "rise_m": 12,
+    "inner_polyline_length_m": 40.889987354921836,
+    "clear_deck_m": 3.3,
+    "source_triangles": 5772
+  },
+  "proposed": {
+    "segments_per_elevation": 37,
+    "normal_thickness_m": 0.85,
+    "joint_arc_m": 0.025,
+    "min_deck_margin_m": 2.040001296997069,
+    "foundation_extent": null,
+    "through_bond_depth": null,
+    "canonical_transform": null
+  },
+  "polygon_audit": {
+    "valid": 37,
+    "max_pair_overlap_m2": 0,
+    "total_opening_intrusion_m2": 7.549369109615684e-17,
+    "min_adjacent_distance_m": 0.024868661425561878,
+    "outside_mass": [
+      {
+        "id": "V-01",
+        "area_m2": 0.2792683254803833
+      },
+      {
+        "id": "V-37",
+        "area_m2": 0.2828197649145691
+      }
+    ],
+    "verdict": "SPRINGER_SUPPORT_HOLD"
+  },
+  "execution": "Local Python compile and execute of measured design + Shapely polygon audit, preview inspected; no Blender or native asset modification",
+  "artifacts": {
+    "delivery": "Local attachments only; bytes not committed",
+    "sha256": {
+      "measure_arch.py": "be50288b073f2571b210a1e5caf7aabc049a73e6ba118933e1f10499e66a2d30",
+      "audit_ring.py": "c42293e81798ff803634984f9304ef60d2b80d7eac563be8266442debc9f0769",
+      "bridge_blueprint_v05.json": "e4cd7af3bd4c4636a301d6114ff951415012ebf9db7734cd857c302847fbe573",
+      "ring_polygon_audit.json": "49c1775dc81f289d9348a4bd65240b984fa3b5a59a9ddea49e24e8e5acf1a092",
+      "bridge_blueprint_v05.png": "8ab6855e859093c0d6818e57c79b38dd5f0cad19dd49eb92ec2ec790b84ae331",
+      "bridge_blueprint_v05.svg": "0e0480fc3caadcf4632d69b9ea6beb746bb94a41f1eb185bd376f9255697978f"
+    }
+  },
+  "design": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_SPRINGER_SUPPORT_AND_NATIVE_OPERATION",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NEW_MESH",
+    "G4": "NOT_RUN"
+  },
+  "next": "Resolve V-01/V-37 interface against actual bridge and river terrain before new masonry geometry; PR363 stopped scan-domain exact Boolean method remains stopped; use closed manually sculpted stones with explicit joints or qualified complete masonry asset. If actual ground and official CG unavailable, continue independent harbor design scope rather than repeat unchanged blocker. No formal adoption or main merge."
+}
