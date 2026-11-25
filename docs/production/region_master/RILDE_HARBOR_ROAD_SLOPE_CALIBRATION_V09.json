@@ -1,0 +1,70 @@
+{
+  "schema": "two.region.harbor_road_slope_calibration.v09",
+  "parent": "549542edc617776190d16e16dc1679f2a3fb2ffa",
+  "status": "ALTERNATIVE_SLOPE_CALIBRATION_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "recovered_v03": "5aade3829bcc608e19fe28b644d0ab8aa96dd7cc",
+    "harbor_v07": "066a67f364238bf82cf0007f998a11541b1cb836",
+    "parallel_interface": "65ae83999cd596d1d26709a83e36cd202db32774"
+  },
+  "sources": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "e9101ea9c35ac68d432a9449bba8c79b95da0456302a15d1c920e74ef2258470"
+  ],
+  "baseline": "reconstructed V03, not original",
+  "sample_count": 301,
+  "cross_sections": 520,
+  "trace_count": 13,
+  "source_faces_checked": 22800,
+  "before": {
+    "seam_max_m": 0.000056799547175856446,
+    "entry_slope_jump_pp": 0.9297579265908811,
+    "long_grade_max_pct": 11.325551668410592,
+    "cross_grade_max_pct": 2.000000000000539
+  },
+  "after": {
+    "seam_max_m": 1.7763568394002505e-15,
+    "entry_slope_jump_pp": 7.788908407135864e-14,
+    "long_grade_max_pct": 11.325551668410592,
+    "cross_grade_max_pct": 2.000000000000539
+  },
+  "max_height_correction_m": 0.0144388974624583,
+  "changed_sample_count": 533,
+  "unchanged_after_station_m": 10,
+  "mesh": {
+    "vertices": 6760,
+    "triangles": 12456,
+    "origin_m": [
+      -140,
+      -125,
+      0
+    ],
+    "roundtrip_error_m": 0.000003814156315229411
+  },
+  "outputs": {
+    "road_seam_diagnostic.glb": "3ace0fe1f65d1832e3a89b33f2167212f8853aecbbca864303ff2e3f12cbac5b",
+    "seam_audit.png": "cf05ee307c91c18ffddf53a99c8fe72747802bdef8fd9ddfce2bd5dd5731731f",
+    "road_sections_v09.npy": "6b937509815cd82b35ed6513ed7546c59bf13c3be97993203c52c3803c5e334e",
+    "audit_seam.py": "e3c0aff616433333fc78727138334e3564b6903b7d0cf812f7e0bed10cdb1cad"
+  },
+  "script_blob": "ee2820b557be91cf52f2cd29f6feebbac648d4ba",
+  "execution": "Local Python, actual source SHA verified before and after; verified actual face diagonal orientation, sampled slope transition, reopened diagnostic GLB. Fixed QA bookkeeping aliasing bug (H copy) and reran. Exact script Git blob verified. No Blender/Actions.",
+  "reconciliation": "Parallel HEAD 549542e contains separate elevation-only calibration and split contract. Preserve it; this supplementary test addresses sampled slope continuity. Do not combine either correction or perform weld twice. D4 must select a single operation and retain parallel 12 required split points.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL_RECOVERED",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ORIGINAL_AND_D4",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_DIAGNOSTIC",
+    "G4": "NOT_RUN"
+  },
+  "limitations": "No harbor terrain outside existing village; no road cut/fill, foundation, CG, native, or navigation QA. Slope matching is finite sampled, not continuous smoothness. Ribbon diagnostic only, not game mesh. Binary files local only. No merge/adoption.",
+  "next": "Independent D4 on one transition operation and supporting terrain; no repeated micro-refinement. Source CG and original V03 still unavailable."
+}
