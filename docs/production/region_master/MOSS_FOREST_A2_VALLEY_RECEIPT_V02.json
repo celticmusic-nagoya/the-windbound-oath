@@ -1,0 +1,95 @@
+{
+  "schema": "two.region.moss_forest_a2_valley_receipt.v02",
+  "parent": "e21c29e54a181d3e148dee0f6e0ed7f2ab26a8da",
+  "status": "LOCAL_WATERCOURSE_DESIGN_CANDIDATE_HOLD_HYDROLOGY_D4",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "gate_policy": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "frame": "provisional m X east Y north Z up; canonical transform unknown",
+  "scope": "A2 local valley watercourse and rock-step design; no modification of existing bank or forest trail",
+  "attempts": [
+    {
+      "id": "V01",
+      "method": "2m channel, 2m side shoulders, 2m fall, 0.25m depth",
+      "count": 288,
+      "pass": 0,
+      "best_shoulder_grade_pct": 74.20748897910062,
+      "script_sha256": "07a465803792e9d797fdc383995c6e0985f398138a4186c4b63aed9d4223de1f",
+      "script_local_git_fingerprint": "a1ae6163bd4f54e8016834427195324acfbd5ca2",
+      "json_sha256": "09a3d693ca362345facdcdaa592490d836484cc9edd1571f9cecec0c3cd8828f"
+    },
+    {
+      "id": "V02",
+      "method": "4/5/6m half-width, explicit 0.25m water stage, inner banks and 0.20m nominal crest freeboard; outer shoulder threshold 50% outside rock region",
+      "count": 648,
+      "pass": 189
+    }
+  ],
+  "selected": {
+    "start_xy": [
+      480,
+      -385
+    ],
+    "end_xy": [
+      445,
+      -385
+    ],
+    "length_m": 35,
+    "fall_station_m": 12.25,
+    "fall_m": 2,
+    "reach_grade_pct": 2,
+    "half_width_m": 5,
+    "water_stage_width_m": 2,
+    "water_depth_m": 0.25,
+    "min_bank_freeboard_m": 0.1999999999999993,
+    "ordinary_outer_shoulder_max_pct": 44.82366472540258,
+    "max_cut_m": 1.2274269975161687,
+    "max_fill_m": 1.135474423077092,
+    "approx_abs_change_m3": 89.81888151108895,
+    "protected_overlap_m2": 0,
+    "outer_sample_residual_m": 0,
+    "upstream_water_z_m": 23.29699553361176,
+    "downstream_water_z_m": 20.59699553361176,
+    "triangles": 11200,
+    "samples": 5781,
+    "folded_triangles": 0,
+    "min_signed_double_area_m2": 0.0625,
+    "water_stage_strictly_descending": true,
+    "upstream_end_max_ground_residual_m": 0.53189813,
+    "downstream_end_max_ground_residual_m": 0.40464705,
+    "max_water_stage_above_source_outer_boundary_m": 0.9278299604916462
+  },
+  "outputs": {
+    "script_blob": "9114ec9589d07aa335f0e5d4680cf3160cd0d604",
+    "script_sha256": "62fa91910f22822b6e9f1dbbdbbcc8bb1778bf334e4715d41c8d605d4c9d8676",
+    "json_sha256": "4fb3587ceaa805a2383b6b963cb886fc5c942504dafa572d4cb78d7ac7c61d95",
+    "npz_sha256": "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "png_sha256": "454b41aa12f3ebbd580df47612b372d6ee114031f7faa919907ca790bbe3e229",
+    "delivery": "full JSON/NPZ/PNG and V01 script local; exact V02 script and compact receipt committed"
+  },
+  "execution": "Actual local Python, exact source SHA before/after, NPZ reopen exact, plan visually inspected, signed triangle orientation and endpoint residual verified separately. No Blender or Actions.",
+  "reproduction": "python design_valley_v02.py <SHA-matched moss_forest_a2.glb> <V03 forest shoulders NPZ> in scratch copy",
+  "limitations": [
+    "Provisional dimensions and screening thresholds, not official measurements. 189 candidates pass only local screening, not hydrology or asset QA. Outer shoulder excludes rock fall and inner bank; no continuous conforming seam. End rows do not match ground and drainage outlet/inflow not demonstrated. Outer ground below proposed stage in places; bank crest is nominal design, not proof of flood containment. No actual plunge pool, sculpt, water simulation, vegetation, collision, source CG or independent D4."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_FLOW_INTERFACES",
+    "D2": "PARTIAL_LOCAL_WATERCOURSE",
+    "D3": "HOLD_ENDPOINTS_HYDROLOGY",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Determine A2 catchment and drainage route, plunge pool/outlet and upstream interface before precision modeling. Preserve previous bank review hold. No formal adoption or main merge."
+}
