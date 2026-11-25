@@ -259,6 +259,44 @@ loadAreaBlueprints();
   const next=await Promise.all(files.map(async file=>{try{if(file.size>65536)throw Error("64KiB上限");return {name:file.name,data:JSON.parse(await file.text())};}catch(e){return {name:file.name,error:e.message};}}));
   if(g!==batchGeneration)return;batchItems=next;batchLoading=false;renderBatch();
  });
+ // Read-only pairing of CLI preflight report with exact original handoff bytes.
+ const enginePanel=node("details","");enginePanel.id="anchor-engine-preflight";
+ enginePanel.append(node("summary","エンジン連携の事前検証結果"),node("p","#522 の出力JSONと元の一括検査JSONを選択し、入力SHA-256を照合します。署名・実行来歴・native実測は証明しません。現在の編集内容とは独立したスナップショットです。"));
+ const engineFile=(id,label)=>{const l=node("label",label),i=node("input","");i.type="file";i.accept=".json,application/json";i.id=id;l.htmlFor=id;enginePanel.append(l,i);return i;};
+ const engineOriginal=engineFile("engine-handoff-original","元の一括検査JSON"),engineReport=engineFile("engine-preflight-report","事前検証の出力JSON");
+ const engineStatus=node("p","未照合");engineStatus.id="engine-preflight-status";engineStatus.setAttribute("role","status");
+ const engineList=node("div","");engineList.id="engine-preflight-results";enginePanel.append(engineStatus,engineList);panel.append(enginePanel);
+ let engineGeneration=0;
+ async function readEngineReport(){
+  const g=++engineGeneration;engineList.replaceChildren();engineStatus.textContent="未照合";
+  const original=engineOriginal.files[0],report=engineReport.files[0];if(!original||!report)return;
+  engineStatus.textContent="照合中";
+  try{
+   if(original.size>524288||report.size>524288)throw Error("各512KiB上限");
+   const [raw,reportText]=await Promise.all([original.arrayBuffer(),report.text()]);
+   const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",raw)),v=>v.toString(16).padStart(2,"0")).join("");
+   if(g!==engineGeneration)return;
+   const d=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(raw)),p=JSON.parse(reportText);
+   if(d?.schema!=="two.studio.anchor_batch_handoff.v1"||d.status!=="PROVISIONAL"||d.source_blob!==source||!d.coordinate_contract||Object.keys(coordinateContract).some(k=>d.coordinate_contract[k]!==coordinateContract[k])||!Number.isSafeInteger(d.placement_revision)||d.placement_revision<0||!Array.isArray(d.items)||d.items.length<1||d.items.length>32)throw Error("元ファイル契約不一致");
+   if(p?.schema!=="two.studio.anchor_handoff_preflight.v1"||p.source_blob!==source||p.input_sha256!==hash||p.placement_revision!==d.placement_revision||p.factory_ready!==false||p.native_observation!==false||p.independent_qa!=="NOT_RUN"||!Array.isArray(p.items)||p.items.length!==d.items.length)throw Error("事前検証契約・入力SHA不一致");
+   const staged=[];
+   for(let j=0;j<p.items.length;j++){
+    const item=p.items[j];if(!item||item.index!==j)throw Error("項目番号不一致");
+    const tile=node("article","");tile.className="tile";
+    tile.append(node("strong","項目 "+(j+1)));
+    if(item.verdict==="REJECTED"){if(item.action!=="REVIEW_INPUT"||typeof item.reason!=="string")throw Error("拒否項目形式不正");tile.append(node("p","REJECTED / "+item.reason.slice(0,240)));staged.push(tile);continue;}
+    const result=item.result;
+    if(item.evidence_class!=="PROVISIONAL_DESIGN"||typeof item.claimed_result_matches!=="boolean"||!Array.isArray(item.area_ids)||item.area_ids.length!==2||item.area_ids[0]===item.area_ids[1]||!item.area_ids.every(id=>ids.includes(id))||!result||!["PASS","HOLD","OUTSIDE"].includes(result.verdict)||!Number.isFinite(result.r)||result.r<0||!Number.isFinite(item.tolerance_m)||item.tolerance_m<0||!Number.isFinite(item.uncertainty_m)||item.uncertainty_m<0)throw Error("事前検証項目形式不正");
+    const action=item.claimed_result_matches?{PASS:"NO_POSITION_ACTION",HOLD:"REMEASURE",OUTSIDE:"REVIEW_PLACEMENT"}[result.verdict]:"REVIEW_INPUT";
+    if(item.action!==action)throw Error("修正候補の状態不一致");
+    tile.append(node("p",item.area_ids.map(id=>names[ids.indexOf(id)]).join(" ↔ ")),node("p","出力申告: "+result.verdict+" / r "+result.r+" m / t "+item.tolerance_m+" m / u "+item.uncertainty_m+" m"),node("p",action+" / "+(item.claimed_result_matches?"保存判定一致（申告）":"保存判定不一致・入力確認")));
+    staged.push(tile);
+   }
+   engineStatus.textContent="入力SHA-256一致 / revision "+p.placement_revision+" / "+p.items.length+" 件。出力の実行来歴は未認証。Factory BLOCKED / native観測なし / 独立QA NOT_RUN";
+   engineList.append(node("p","入力SHA-256: "+hash),...staged);
+  }catch(e){if(g===engineGeneration){engineList.replaceChildren();engineStatus.textContent="照合失敗: "+e.message;}}
+ }
+ engineOriginal.addEventListener("change",readEngineReport);engineReport.addEventListener("change",readEngineReport);
  for(const input of inputs)input.addEventListener("input",renderBatch);
  function numberFrom(input){return input.value!==""&&!input.validity.badInput&&input.validity.valid&&Number.isFinite(input.valueAsNumber)?input.valueAsNumber:null;}
  function anchors(){
