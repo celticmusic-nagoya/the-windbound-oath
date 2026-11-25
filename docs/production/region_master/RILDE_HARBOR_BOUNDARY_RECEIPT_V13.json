@@ -1,0 +1,67 @@
+{
+  "schema": "two.region.harbor_boundary_receipt.v13",
+  "parent": "e6bb05e1c1ec86d255fa07d44986b4e61f5cf0a2",
+  "status": "SAMPLED_BOUNDARY_CONTRACT_NOT_ADOPTED",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v11": "14ac512a999de62d3ca7f4b040bf55d577ef93ce",
+    "v12": "1e23801f0e0d2830c52dc5c9efde17952cdec668",
+    "v12_receipt": "a2025cc84f82515a4c7579966bb191cfad1fdfe7"
+  },
+  "inputs_sha256": [
+    "1a866ca1770c8a2a480b6000596b6b5f98319473b703128963238df62979b7fb",
+    "d1e76b00a3f5e09b230f39af3cfa812b55255c5e60680b6e81316da1bbcdaf1c",
+    "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175"
+  ],
+  "checks": {
+    "old_fixed_count": 7681,
+    "new_fixed_count": 10057,
+    "boundary_samples": 2632,
+    "boundary_max_spacing_m": 0.025,
+    "boundary_max_deviation_from_flat_m": 0.0068560191178326235,
+    "explicit_boundary_residual_m": 0,
+    "fixed_pair_conflicts": 0,
+    "max_fixed_pair_excess_m": 0,
+    "raster_conflicts": 0,
+    "raster_samples": 55282,
+    "raster_envelope_max_excess_m": 0,
+    "neighbor_slope_samples": 218513,
+    "max_sampled_slope_pct": 50,
+    "neighbor_slope_exceed_count": 0,
+    "changed_raster_samples": 0,
+    "max_raster_change_m": 0,
+    "relaxation_iterations": 1,
+    "road_exact": true,
+    "input_unchanged": true,
+    "npz_reopen_exact": true
+  },
+  "method": "Replace landward apron conditions with explicit V12 height samples, preserve road and non-apron constraints, verify pairwise envelope compatibility and raster slope. No native geometry.",
+  "outputs": {
+    "script_blob": "ca6025d47ba39c0816b856f0cf729e886daa3592",
+    "script_sha256": "a8c0d946eb532aabe783a7f6f9b53574221380708c73323164dedc13121cc907",
+    "npz_sha256": "45b70e33301fe0bbd0bb80a465a53b6a82a5042bde44ca0b534e2135eaeef7f1",
+    "png_sha256": "90701380428477b016977ebd3a7885c565c6eff6b8f603470b9ee79a95fdb577",
+    "binary_delivery": "local attachments only"
+  },
+  "execution": "Actual Python NumPy/SciPy/Shapely, input hashes before/after, NPZ reopen exact, preview inspected; script blob matches local file. No Blender or Actions.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ORIGINAL_TERRAIN_AND_D4",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limits": [
+    "Explicit sampled boundary is not proof of continuous interpolated terrain or mesh weld.",
+    "No original harbor ground or approved CG; max assumed cut ~7m remains unvalidated.",
+    "50% is a proposed sample slope limit; no structural/foundation/drainage certification."
+  ],
+  "handoff": "Freeze this sampled design baseline; independent D4 reviewer must verify source provenance, V09 slope selection, V12 partition and V13 constraints, continuous triangulation and return-wall/shore transitions, visual appropriateness of assumed cut, and explicit operation/tolerance/protection. Do not label D4 PASS from author tests. No formal adoption or main merge. Switch to independent eligible scope while awaiting missing inputs."
+}
