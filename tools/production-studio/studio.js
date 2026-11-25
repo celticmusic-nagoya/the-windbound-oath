@@ -176,18 +176,72 @@ loadAreaBlueprints();
   try{
    if(selected.size>65536)throw Error("64KiB上限");
    const data=JSON.parse(await selected.text());if(g!==receiptGeneration)return;
+   const indices=validateReceipt(data);
+   if(pendingPlacement())throw Error("未反映の配置入力あり");
+   sides.forEach((s,i)=>{s.select.value=String(indices[i]);s.xyz.forEach((input,j)=>input.value=String(data.anchors[i].local_xyz_m[j]));});
+   tolerance.value=String(data.tolerance_m);uncertainty.value=String(data.uncertainty_m);anchors();
+   receiptStatus.textContent="入力復元・再計算完了。保存された判定は信用せず再計算しました。";
+  }catch(e){if(g===receiptGeneration)receiptStatus.textContent="検査結果読込失敗: "+e.message;}
+ });
+ function pendingPlacement(){return inputs.some((input,i)=>input.validity.badInput||(input.value===""?null:input.valueAsNumber)!==rows[current][fields[i]]);}
+ function validateReceipt(data){
    const cc=data?.coordinate_contract;
    if(data?.schema!==receiptSchema||data.status!=="PROVISIONAL"||data.source_blob!==source||!cc||Object.keys(coordinateContract).some(k=>cc[k]!==coordinateContract[k])||data.placement_revision!==revision||!Array.isArray(data.anchors)||data.anchors.length!==2)throw Error("検査契約・配置改訂不一致");
    const indices=data.anchors.map(a=>ids.indexOf(a?.area_id));
    if(indices.some(i=>i<0)||indices[0]===indices[1])throw Error("エリアID不正");
    const bounded=v=>typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=1000000;
    if(!data.anchors.every((a,i)=>Array.isArray(a.local_xyz_m)&&a.local_xyz_m.length===3&&a.local_xyz_m.every(bounded)&&a.placement&&fields.every(k=>a.placement[k]===rows[indices[i]][k]&&a.placement[k]!==null))||![data.tolerance_m,data.uncertainty_m].every(v=>bounded(v)&&v>=0))throw Error("座標・配置スナップショット不一致");
-   if(inputs.some((input,i)=>input.validity.badInput||(input.value===""?null:input.valueAsNumber)!==rows[current][fields[i]]))throw Error("未反映の配置入力あり");
-   sides.forEach((s,i)=>{s.select.value=String(indices[i]);s.xyz.forEach((input,j)=>input.value=String(data.anchors[i].local_xyz_m[j]));});
-   tolerance.value=String(data.tolerance_m);uncertainty.value=String(data.uncertainty_m);anchors();
-   receiptStatus.textContent="入力復元・再計算完了。保存された判定は信用せず再計算しました。";
-  }catch(e){if(g===receiptGeneration)receiptStatus.textContent="検査結果読込失敗: "+e.message;}
+  return indices;
+ }
+ function calculateAnchor(placements,local,t,u){
+  const world=placements.map((p,i)=>{const [x,y,z]=local[i],a=p.yaw_deg*Math.PI/180;return [p.x_m+x*Math.cos(a)-y*Math.sin(a),p.y_m+x*Math.sin(a)+y*Math.cos(a),p.z_m+z];});
+  const delta=world[1].map((v,i)=>v-world[0][i]),r=Math.hypot(...delta);
+  const eps=64*Number.EPSILON*Math.max(1,...world.flat().map(Math.abs),r,t??0,u??0);
+  const verdict=t===null||u===null?"BLOCKED":r+u<t-eps?"PASS":r-u>t+eps?"OUTSIDE":"HOLD";
+  return {world,delta,r,eps,verdict};
+ }
+ const batch=node("details","");batch.id="anchor-batch";
+ batch.append(node("summary","複数アンカー検査の一括比較"),node("p","同一配置案の検査JSONを最大32件・各64KiBまで選択。保存判定は採用せず再計算します。未反映入力は先に配置案へ反映してください。"));
+ const batchLabel=node("label","検査JSONを複数選択"),batchInput=node("input","");batchInput.type="file";batchInput.multiple=true;batchInput.accept=".json,application/json";batchInput.id="anchor-batch-import";batchLabel.htmlFor=batchInput.id;
+ const batchStatus=node("p","未選択");batchStatus.id="anchor-batch-status";batchStatus.setAttribute("role","status");
+ const batchList=node("div","");batchList.id="anchor-batch-results";
+ batch.append(batchLabel,batchInput,batchStatus,batchList);anchorPanel.append(batch);
+ let batchItems=[],batchGeneration=0,batchLoading=false,batchError="";
+ function renderBatch(){
+  batchList.replaceChildren();
+  if(batchLoading){batchStatus.textContent="読込中";return;}
+  if(batchError){batchStatus.textContent=batchError;return;}
+  if(!batchItems.length){batchStatus.textContent="未選択";return;}
+  if(pendingPlacement()){batchStatus.textContent="BLOCKED：未反映の配置入力あり";return;}
+  const counts={PASS:0,HOLD:0,OUTSIDE:0,REJECTED:0},seen=new Set(),items=[];
+  for(const item of batchItems){
+   try{
+    if(item.error)throw Error(item.error);
+    const d=item.data,indices=validateReceipt(d),local=d.anchors.map(a=>a.local_xyz_m),placements=indices.map(i=>rows[i]);
+    const key=JSON.stringify({pair:indices.map((i,j)=>[i,local[j]]).sort((a,b)=>a[0]-b[0]),t:d.tolerance_m,u:d.uncertainty_m});
+    if(seen.has(key))throw Error("同一入力の重複");seen.add(key);
+    const result=calculateAnchor(placements,local,d.tolerance_m,d.uncertainty_m);
+    counts[result.verdict]++;items.push({name:item.name,indices,result,t:d.tolerance_m,u:d.uncertainty_m});
+   }catch(e){counts.REJECTED++;items.push({name:item.name,error:e.message});}
+  }
+  const rank={OUTSIDE:0,HOLD:1,PASS:2};
+  items.sort((a,b)=>(rank[a.result?.verdict]??3)-(rank[b.result?.verdict]??3)||(b.result?.r??0)-(a.result?.r??0));
+  for(const item of items){
+   const line=node("article","");line.className="tile";line.dataset.verdict=item.result?.verdict??"REJECTED";line.append(node("strong",item.name));
+   if(item.error)line.append(node("p","REJECTED： "+item.error));
+   else{const {r,verdict}=item.result,fmt=x=>Number(x.toPrecision(10)).toString();line.append(node("p",item.indices.map(i=>names[i]).join(" ↔ ")),node("p",verdict+" / r: "+fmt(r)+" m / t: "+fmt(item.t)+" m / u: "+fmt(item.u)+" m"));}
+   batchList.append(line);
+  }
+  batchStatus.textContent="配置 revision "+revision+" / "+batchItems.length+" 件 / PASS "+counts.PASS+" / HOLD "+counts.HOLD+" / OUTSIDE "+counts.OUTSIDE+" / REJECTED "+counts.REJECTED+"（暫定位置検査のみ）";
+ }
+ batchInput.addEventListener("change",async()=>{
+  const g=++batchGeneration,files=Array.from(batchInput.files);batchItems=[];batchError="";batchLoading=false;
+  if(files.length>32){batchError="選択上限32件";renderBatch();return;}
+  batchLoading=true;renderBatch();
+  const next=await Promise.all(files.map(async file=>{try{if(file.size>65536)throw Error("64KiB上限");return {name:file.name,data:JSON.parse(await file.text())};}catch(e){return {name:file.name,error:e.message};}}));
+  if(g!==batchGeneration)return;batchItems=next;batchLoading=false;renderBatch();
  });
+ for(const input of inputs)input.addEventListener("input",renderBatch);
  function numberFrom(input){return input.value!==""&&!input.validity.badInput&&input.validity.valid&&Number.isFinite(input.valueAsNumber)?input.valueAsNumber:null;}
  function anchors(){
   anchorResult.replaceChildren();delete anchorResult.dataset.verdict;receipt=null;receiptButton.disabled=true;receiptStatus.textContent="";
@@ -196,14 +250,11 @@ loadAreaBlueprints();
   const local=sides.map(s=>s.xyz.map(numberFrom));
   const placements=indices.map(i=>rows[i]);
   if(local.some(v=>v.some(x=>x===null))||placements.some(p=>fields.some(k=>p[k]===null))){anchorResult.textContent="BLOCKED：両方の配置XYZ・回転とローカルアンカーXYZが必要です。";return;}
-  const world=placements.map((p,i)=>{const [x,y,z]=local[i],a=p.yaw_deg*Math.PI/180;return [p.x_m+x*Math.cos(a)-y*Math.sin(a),p.y_m+x*Math.sin(a)+y*Math.cos(a),p.z_m+z];});
-  const delta=world[1].map((v,i)=>v-world[0][i]),r=Math.hypot(...delta),t=numberFrom(tolerance),u=numberFrom(uncertainty);
+  const t=numberFrom(tolerance),u=numberFrom(uncertainty),{world,delta,r,eps,verdict}=calculateAnchor(placements,local,t,u);
   const fmt=x=>Number(x.toPrecision(10)).toString();
   anchorResult.append(node("p","配置 revision "+revision+" / A: "+world[0].map(fmt).join(", ")+" m / B: "+world[1].map(fmt).join(", ")+" m"),node("p","差分 B−A: "+delta.map(fmt).join(", ")+" m / 3D残差 r: "+fmt(r)+" m"));
   if(t===null||u===null){anchorResult.append(node("p","BLOCKED：許容誤差・合成不確かさを入力してください。"));return;}
   // Roundoff guard conservatively holds near the decision boundary.
-  const eps=64*Number.EPSILON*Math.max(1,...world.flat().map(Math.abs),r,t,u);
-  const verdict=r+u<t-eps?"PASS":r-u>t+eps?"OUTSIDE":"HOLD";
   anchorResult.dataset.verdict=verdict;
   receipt={schema:receiptSchema,status:"PROVISIONAL",source_blob:source,coordinate_contract:coordinateContract,placement_revision:revision,anchors:placements.map((p,i)=>({area_id:p.id,placement:{...p},local_xyz_m:local[i],world_xyz_m:world[i]})),delta_b_minus_a_m:delta,residual_m:r,tolerance_m:t,uncertainty_m:u,roundoff_guard_m:eps,verdict,qa_scope:"MANUAL_INPUT_POSITION_ONLY",independent_qa:"NOT_RUN"};
   receiptButton.disabled=false;
@@ -211,7 +262,7 @@ loadAreaBlueprints();
  }
  for(const input of [...sides.flatMap(s=>[s.select,...s.xyz]),tolerance,uncertainty])input.addEventListener("input",anchors);
 
- function render(){summary.replaceChildren();rows.forEach((r,i)=>{const l=node("li",(i+1)+". "+names[i]+": "+fields.map(k=>r[k]===null?"未設定":String(r[k])).join(" / "));summary.append(l);});status.textContent="配置案 revision "+revision+" / "+rows.filter(r=>fields.every(k=>r[k]!==null)).length+"/8 エリア入力済み / PROVISIONAL・未検証";overview();anchors();}
+ function render(){summary.replaceChildren();rows.forEach((r,i)=>{const l=node("li",(i+1)+". "+names[i]+": "+fields.map(k=>r[k]===null?"未設定":String(r[k])).join(" / "));summary.append(l);});status.textContent="配置案 revision "+revision+" / "+rows.filter(r=>fields.every(k=>r[k]!==null)).length+"/8 エリア入力済み / PROVISIONAL・未検証";overview();anchors();renderBatch();}
  function show(){inputs.forEach((input,i)=>input.value=rows[current][fields[i]]??"");render();}
  function commit(){const vals=inputs.map(input=>input.value===""?null:input.valueAsNumber);if(inputs.some(input=>input.validity.badInput)||vals.some((v,i)=>!valid(v,fields[i]))){status.textContent="入力範囲外または不正値。配置案は変更していません。";return false;}if(vals.some((v,i)=>v!==rows[current][fields[i]])){fields.forEach((k,i)=>rows[current][k]=vals[i]);revision++;}render();return true;}
  choose.addEventListener("change",()=>{if(!commit()){choose.value=String(current);return;}current=Number(choose.value);show();});
