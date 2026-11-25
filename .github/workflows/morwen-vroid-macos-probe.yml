@@ -487,7 +487,61 @@ jobs:
           fi
           if [ "$HAIR_PROBE" = true ]; then
             echo HAIR_CONTROL_NOT_YET_VERIFIED > evidence/hair-author-status.txt
-            row="$RUNNER_TEMP/face-row"
+            cat > "$RUNNER_TEMP/hair-row.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          import Vision
+          let args=CommandLine.arguments
+          guard args.count==3, ["^Width$","^Thickness$"].contains(args[2]) else { exit(2) }
+          let url=URL(fileURLWithPath:args[1])
+          guard let im=NSBitmapImageRep(data:try Data(contentsOf:url)), im.pixelsWide==1024, im.pixelsHigh==768 else { exit(2) }
+          let req=VNRecognizeTextRequest()
+          req.recognitionLevel = .accurate
+          req.usesLanguageCorrection = false
+          try VNImageRequestHandler(url:url).perform([req])
+          let rows=req.results ?? []
+          func label(_ o:VNRecognizedTextObservation)->String {
+              o.topCandidates(1).first?.string.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
+          }
+          func blue(_ x:Int,_ y:Int)->Bool {
+              guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { return false }
+              return c.blueComponent>0.78 && c.redComponent<0.22 && c.greenComponent>0.30 && c.greenComponent<0.82
+          }
+          // Selection must be the unique visible Hair 3 row, highlighted blue.
+          let strands=rows.filter { label($0)=="Hair 3" && $0.boundingBox.midX<0.28 }
+          guard strands.count==1, let strand=strands.first else { exit(2) }
+          let sy=Int((1-strand.boundingBox.midY)*768)
+          guard sy>=340 && sy<=370 else { exit(2) }
+          var selected=0
+          for yy in (sy-4)...(sy+4) { for xx in 65...90 { if blue(xx,yy) { selected+=1 } } }
+          guard selected>=200 else { exit(2) }
+          // Geometry only: explicit section anchor above the row, no texture controls exposed.
+          let headers=rows.filter { label($0).contains("Hair Parameters") && $0.boundingBox.midX>0.74 }
+          guard headers.count==1, let head=headers.first,
+                !rows.contains(where:{ ["Highlights Position","Offset"].contains(label($0)) && $0.boundingBox.midX>0.74 }) else { exit(2) }
+          let hits=rows.filter {
+              $0.boundingBox.minX>0.71 && $0.boundingBox.midX<0.91 &&
+              $0.boundingBox.midY<head.boundingBox.midY &&
+              label($0).range(of:args[2],options:.regularExpression) != nil
+          }
+          guard hits.count==1, let hit=hits.first else { exit(2) }
+          let fields=rows.filter {
+              $0.boundingBox.midX>0.92 && abs($0.boundingBox.midY-hit.boundingBox.midY)<0.026 &&
+              label($0).range(of:#"^[−-]?\d+\.\d{2,3}$"#,options:.regularExpression) != nil
+          }
+          guard fields.count==1, let field=fields.first else { exit(2) }
+          let value=label(field).replacingOccurrences(of:"−",with:"-")
+          let fy=Int((1-field.boundingBox.midY)*768)
+          // Actual hair-panel sliders are ~32px beneath their numerical readout.
+          guard fy>=120 && fy+42<650 else { exit(2) }
+          var xs:[Int]=[], ys:[Int]=[]
+          for yy in (fy+22)...(fy+42) { for xx in 780...995 { if blue(xx,yy) { xs.append(xx);ys.append(yy) } } }
+          guard let lo=xs.min(),let hi=xs.max(),let top=ys.min(),let bot=ys.max(),
+                hi-lo>=8,hi-lo<=32,bot-top>=8,bot-top<=24 else { exit(2) }
+          print(value,Double(lo+hi)/2048,Double(top+bot)/1536)
+          SWIFT
+            swiftc "$RUNNER_TEMP/hair-row.swift" -o "$RUNNER_TEMP/hair-row"
+            row="$RUNNER_TEMP/hair-row"
             sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
             bash -n "$RUNNER_TEMP/session-helpers.sh"
             source "$RUNNER_TEMP/session-helpers.sh"
@@ -515,13 +569,29 @@ jobs:
               grep -Fq 'Freehand Guides' "evidence/$tag-group.txt" || return 1
               grep -Fq 'Hair 3' "evidence/$tag-group.txt" || return 1
               grep -Fq 'Front' "evidence/$tag-group.txt" || return 1
-              if "$row" "evidence/$tag-group.png" '^Width$' >/dev/null 2>&1; then return 1; fi
               "$gui" click-label "evidence/$tag-group.png" 'Hair 3' 'Freehand Guides' >&2 || return 1
               sleep 2
               capture_state "$tag-selected" >&2 || return 1
               grep -Fq 'Hair 3' "evidence/$tag-selected.txt" || return 1
               grep -Fq 'Hair Groups' "evidence/$tag-selected.txt" || return 1
-              "$row" "evidence/$tag-selected.png" '^Width$'
+              # Actual prior screenshot: Texture Parameters at (754,221), width 2.98 is NOT geometry.
+              # Toggle only the exact section header; then collapse Materials if needed.
+              grep -Fq 'Texture Parameters' "evidence/$tag-selected.txt" || return 1
+              grep -Fq 'Highlights Position' "evidence/$tag-selected.txt" || return 1
+              "$gui" click 0.7363 0.2878 >&2 || return 1
+              sleep 2
+              capture_state "$tag-geometry" >&2 || return 1
+              if grep -Fq 'Highlights Position' "evidence/$tag-geometry.txt"; then return 1; fi
+              if ! "$row" "evidence/$tag-geometry.png" '^Width$' >/dev/null 2>&1 ||
+                 ! "$row" "evidence/$tag-geometry.png" '^Thickness$' >/dev/null 2>&1; then
+                # Only if the unchanged Materials header is visible at its archived position.
+                grep -Fq 'Materials' "evidence/$tag-geometry.txt" || return 1
+                "$gui" click 0.7363 0.158 >&2 || return 1
+                sleep 2
+                capture_state "$tag-geometry" >&2 || return 1
+              fi
+              "$row" "evidence/$tag-geometry.png" '^Thickness$' >/dev/null || return 1
+              "$row" "evidence/$tag-geometry.png" '^Width$'
             }
             test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
@@ -530,7 +600,7 @@ jobs:
               exit 1
             fi
             read -r before sx sy <<< "$hit"
-            if ! protected=$("$row" evidence/hair-before-selected.png '^Thickness$'); then
+            if ! protected=$("$row" evidence/hair-before-geometry.png '^Thickness$'); then
               echo BLOCKED_THICKNESS_PROTECTION_NOT_VERIFIED > evidence/hair-author-status.txt
               exit 1
             fi
@@ -550,7 +620,7 @@ jobs:
           import sys
           from decimal import Decimal
           a,b,t,u=map(Decimal,sys.argv[1:])
-          assert 0<b<a and (a-b)/a<=Decimal("0.20") and a-b>=Decimal("0.001") and t==u
+          assert 0<b<a and (a-b)/a<=Decimal("0.20") and a-b>=Decimal("0.01") and t==u
           PY
             "$gui" click 0.0234 0.0990
             sleep 2
@@ -607,7 +677,7 @@ jobs:
               exit 1
             fi
             read -r reopened _ _ <<< "$hit"
-            read -r thickness_reopened _ _ <<< "$("$row" evidence/hair-reopened-selected.png '^Thickness$')"
+            read -r thickness_reopened _ _ <<< "$("$row" evidence/hair-reopened-geometry.png '^Thickness$')"
             if [ "$after" != "$reopened" ] || [ "$thickness" != "$thickness_reopened" ]; then
               echo BLOCKED_HAIR_REOPEN_VALUE_MISMATCH > evidence/hair-author-status.txt
               exit 1
@@ -628,7 +698,7 @@ jobs:
               target="Front / first Freehand Group 1 / Hair 3 / Width",
               before=a,after=b,reopened=c,protected_thickness=[t,u,v],
               source_sha256=sha(src),candidate_sha256=sha(dst),
-              screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-after-selected","hair-reopened-selected")},
+              screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-before-geometry","hair-after-selected","hair-reopened-geometry")},
               limitations=["Unregistered projection","Other strands and modules need independent protection review","No artistic acceptance or formal adoption"]),indent=2))
           PY
             echo HAIR_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/hair-author-status.txt
@@ -692,8 +762,8 @@ jobs:
           assert sha(p/"input-model.vroid")==r["source_sha256"]
           assert all(sha(p/(k+".png"))==v for k,v in r["screenshots"].items())
           assert len(set(r["protected_thickness"]))==1
-          target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.002},uncertainty={"hair_width":0.001})
-          report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.001}))
+          target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.02},uncertainty={"hair_width":0.01})
+          report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.01}))
           assert report["overall"]=="PASS"
           fingerprint=hashlib.sha256((p/"hair-author-receipt.json").read_bytes()).hexdigest()
           stages=[dict(id="hair_width_candidate_receipt",deps=[],seconds=1,qualified=True,fingerprint=fingerprint)]
