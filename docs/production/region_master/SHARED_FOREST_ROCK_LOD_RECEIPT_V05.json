@@ -1,0 +1,52 @@
+{
+  "schema": "two.region.photo_rock_lod_receipt.v05",
+  "parent": "19c1f89c2c918465459a158416e79ce33e643f58",
+  "status": "LOD_CANDIDATE_NOT_G2_G4",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v04_receipt": "735689eb37f6664858d6f0a6e5cee3f4a7cd0156",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "input_sha256": "25d2273f16e37e94d6368e5ef109b03f02a5d1322ee946a1bf6784f0d1df1fb6",
+  "outputs": {
+    "script_sha256": "e5cf99540239fcee3af7c5172875762abd50ba04ea98a9b61176fea14e14070b",
+    "qa_sha256": "1b2aeb61a8d3aca12bb2b6d35d590a3062498aaf6a80ad8da3cf93eff7e3a37d",
+    "preview_sha256": "20c2c54c9eecb2f42271f4eab71303141bee42bac23abec7428849a8bb624b92",
+    "lod1_sha256": "da7a9d9c483403e817d92836d15af6a063fe79633d5da50bfb000aeaa203420b",
+    "lod2_sha256": "5e9f6a1f6e394c8429da0d5c30a89bfa537483096c9f5f2f39f0ea1c3d8c40a1",
+    "script_local_git_fingerprint": "ef3bcc0c54a34025a44351a7bd47b3cd65ce48e0",
+    "qa_local_git_fingerprint": "143e16c14f300b24d8a09cbfdb9f282d13b4764b",
+    "delivery": "Local GLBs, script, QA, preview. Receipt only until exact file bridge available."
+  },
+  "measurements": {
+    "source_instance_faces": 126254,
+    "lod1_instance_faces": 63122,
+    "lod2_instance_faces": 31558,
+    "lod1_bytes": 1241352,
+    "lod2_bytes": 894132,
+    "lod1_max_sampled_local_m": 0.04240575070975774,
+    "lod2_max_sampled_local_m": 0.06900424390600521,
+    "lod1_max_sampled_placed_m": 0.03053214051102557,
+    "lod2_max_sampled_placed_m": 0.04448614167377407,
+    "lod1_max_mesh_p95_local_m": 0.011768723625284461,
+    "lod2_max_mesh_p95_local_m": 0.0223597643731678,
+    "all_6_target_reached_each_level": true,
+    "reopen_nodes_each": 12,
+    "source_boundary_edges_exact": true,
+    "nonmanifold_and_duplicate_edge_face_counts_unchanged": true,
+    "euler_unchanged": true,
+    "retained_vertex_attributes_exact": true,
+    "embedded_images_exact": true,
+    "node_transforms_exact": true
+  },
+  "execution": "Actual local Python endpoint collapses, boundary/UV split/extrema locking, link and local normal/UV orientation constraints, 40-round cap. Six meshes per level; all targets reached. 2000 samples in each direction per mesh/level, 24-nearest triangle centroid candidates exact triangle projection. Source SHA unchanged, both GLBs reopened, embedded images compared exact, fixed orthographic basecolor diagnostic inspected. No Blender/Actions.",
+  "reproduction": "python lod.py <V04 a3_moss_rock_placement_study.glb>",
+  "limits": [
+    "Retained UV coordinates exact, interpolation and tangent basis may change. Source mesh has UV-split boundary edges; no claim of closed/manifold solid. Distances are sampled estimates, not certified global Hausdorff or continuous contact. Faceting in diagnostic especially LOD2; actual smooth-normal/PBR quality requires renderer. No dynamic LOD, runtime, Android, official CG, independent G2/D4, formal adoption or main merge."
+  ],
+  "decision": "Keep source LOD0 near camera. Screen distance/pixel error and visibility using actual candidate viewpoints; verify smooth shading/PBR and terrain contact before integration. Do not assume 75% fewer triangles equals FPS gain. No further decimation absent concrete QA findings."
+}
