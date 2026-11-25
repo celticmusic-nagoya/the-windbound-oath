@@ -1224,15 +1224,14 @@ jobs:
                     capture_state skirt-export-dialog
                     # Use only the visible, simple default filename and verified Documents destination.
                     export_name=$(python3 - evidence/skirt-export-dialog.txt <<'PY'
-          import pathlib,re,sys
+          import pathlib,sys
           rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
-          assert all(rows.count(s)==1 for s in ("Save As:","Where:","Documents","Cancel","Save","Texture Editor")),rows
-          i=rows.index("Save As:")
-          assert i+1<len(rows)
-          name=rows[i+1]
-          assert re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9 _-]{0,63}(?:\.png)?',name),name
-          assert name.lower() not in ("documents","save","cancel","layer","layer.png","where")
-          print(name if name.lower().endswith(".png") else name+".png")
+          # Actual run 45609778090: OCR emits Save As: | Tags: | Where: | guide | Documents.
+          # Only accept the observed guide basename, never an arbitrary OCR-derived path.
+          assert all(rows.count(s)==1 for s in ("Save As:","Tags:","Where:","Documents","Cancel","Save","Texture Editor")),rows
+          assert rows.count("guide")+rows.count("guide.png")==1,rows
+          assert rows.index("Cancel")<rows.index("Save"),rows
+          print("guide.png")
           PY
                     )
                     test -d "$HOME/Documents"
