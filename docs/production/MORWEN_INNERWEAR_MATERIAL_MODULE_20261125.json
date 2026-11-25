@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "scope": "INNERWEAR_MODULE_CANDIDATE_NOT_ADOPTED",
-  "authority": "Director request 2026-11-25: same quality as other wardrobe assets",
+  "authority": "Director clarification 2026-11-25: reproduce existing official Layer 0 four-view innerwear design, with equal wardrobe material quality. Supersedes provisional design proposal, not asset adoption.",
   "owner_pr": 427,
   "material_pr": 540,
   "prework": {
@@ -10,39 +10,46 @@
     "index_blob": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
     "registry_blob": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
     "rules_blob": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
-    "canon_status": "Uniform v3 protected; no specific innerwear design located in checked canon; new shape/color remain provisional",
+    "canon_status": "Uniform v3 remains protected. Official Layer 0 four-view is the controlling innerwear visual design per director clarification.",
     "canon_blobs": [
       "c20fc9b7ea7aaa0de7449e110463225dab07573e",
       "e1000869aaf232d989761d15c982ed798378b49d",
       "ec5940c2ca6466150810f93c7fc6a463ef7ebec3"
     ],
-    "native_active_run": 45618046492,
+    "native_active_run": null,
     "source_owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
-    "material_head_before": "96c896f3f0bd2a99aad4dd8d1dc7b3bedce03f51"
+    "material_head_before": "a291cb1ee2ff85f5b7500aed8918540ad49319e9",
+    "latest_native_run": {
+      "id": 45618046492,
+      "status": "completed",
+      "conclusion": "success",
+      "scope": "outer skirt UV diagnostic; artifact not independently inspected in this turn"
+    }
   },
   "modules": [
     {
       "id": "MOR-INNER-UPPER",
-      "role": "Functional opaque upper undergarment, separately editable",
-      "material": "MOR-INNER-KNIT"
+      "role": "Reproduce Layer 0 upper garment shape, gold ornament, purple central ornament, straps and rear clasp"
     },
     {
       "id": "MOR-INNER-LOWER",
-      "role": "Functional opaque lower undergarment, separately editable",
-      "material": "MOR-INNER-KNIT"
+      "role": "Reproduce Layer 0 lower garment silhouette, purple color, front/rear gold motifs and scalloped border"
     },
     {
-      "id": "MOR-INNER-LINING",
-      "role": "Inner lining / coverage layer",
-      "material": "MOR-INNER-WOVEN"
+      "id": "MOR-INNER-GARTER-R",
+      "role": "Reproduce single right-side strap, adjusters and buckle; do not mirror"
+    },
+    {
+      "id": "MOR-INNER-STOCKINGS",
+      "role": "Reproduce dark purple stockings and top bands"
     },
     {
       "id": "MOR-INNER-EDGE",
-      "role": "Seam, stitching and elastic edge; separate material masks"
+      "role": "Separate ornamental embroidery-like details, border, stitching and elastic masks; no unobserved decoration"
     },
     {
       "id": "MOR-INNER-HARDWARE",
-      "role": "Small functional closures where design requires; reuse verified accessory candidates only after fit QA"
+      "role": "Separate observed closures, metal fittings and central jewel-like detail; material type provisional"
     }
   ],
   "sources": [
@@ -67,29 +74,30 @@
     "normal": "tangent OpenGL, non-color",
     "roughness": "linear non-color",
     "metalness": "0 for cloth; hardware separate",
-    "opacity": "opaque functional coverage",
+    "opacity": "Match observed coverage and stocking appearance; no invented transparency; material/opacity model pending tests.",
     "height": "optional only where supported"
   },
   "design": {
-    "shape": "unresolved pending native fit and source-grounded drawings",
-    "color": "candidate-only, existing palette may be used as starting point, no new canon",
-    "visibility": "under outer garment; maintain ordinary coverage in motion; no change to official exterior",
+    "shape": "Follow verified Layer 0 visible silhouettes and garment features; native fit and exact dimensions still require measurement.",
+    "color": "Derive visible colors from Layer 0 itself; do not substitute outer uniform palette or new colorway.",
+    "visibility": "Layer 0 reference fidelity and ordinary outer garment coverage; no changes to official outer design.",
     "native_first": true,
     "blender": "only qualified post-native stage",
     "uv": "no inferred mapping; exact atlas and verified mask required",
     "rig": "match existing body rig and deformation, protect body and outer clothing"
   },
   "qa": {
-    "D0": "source/owner recorded; acquisition pending",
+    "D0": "Official reference acquisition and 4/4 SHA PASS; PBR source acquisition pending",
     "D1": "module interface specified, actual fit pending",
-    "D2": "BLOCKED pending actual native template and drawings",
+    "D2": "PARTIAL: source views reviewed, garment-specific measurement drawing and actual native template pending",
     "D3": "BLOCKED pending exact UV, dimensions, fit and tolerance",
     "D4": "NOT_RUN",
-    "G1": "pending source hashes and design review",
+    "G1": "Official design input verified; candidate design/asset conformity not yet evaluated",
     "G2": "NOT_RUN",
     "G3": "NOT_RUN",
     "G4": "NOT_RUN",
     "checks": [
+      "Four-view Layer 0 shape, color, ornamental motif, hardware and asymmetric strap fidelity",
       "source SHA and license",
       "matched material swatches, near/mid/far visual QA",
       "no outer silhouette changes or unwanted exposure",
@@ -100,9 +108,53 @@
   },
   "limits": [
     "No actual model application or final adoption",
-    "No hidden geometry inferred",
+    "No hidden geometry or fabric composition inferred as canon",
     "Do not mutate active native checkpoint",
     "No paid source acquisition",
-    "Local direct download failed DNS; hosted acquisition is next"
-  ]
+    "PBR material candidates not acquired; comparison only until measured"
+  ],
+  "layer0": {
+    "artifact_id": 14602858760,
+    "run_id": 44679568515,
+    "archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+    "crc": "PASS",
+    "image_size_px": [
+      384,
+      1024
+    ],
+    "sha_match": "4/4",
+    "visual_review": "actual contact sheet reviewed; do not redistribute reference images",
+    "landmarks_blob": "93eefba2426f33b5033d07ba7d7c751a99a12292",
+    "blueprint_blob": "ea55e2bcaf5cddc4af3b012e738d075a83ae66b1",
+    "views": {
+      "front": {
+        "file": "7809.png",
+        "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      },
+      "right": {
+        "file": "7807.png",
+        "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737"
+      },
+      "back": {
+        "file": "7810.png",
+        "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"
+      },
+      "left": {
+        "file": "7808.png",
+        "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"
+      }
+    },
+    "observed_design": [
+      "Deep purple upper and lower garments with gold ornamental embroidery-like motifs",
+      "Upper front central purple jewel-like ornament with gold border",
+      "Upper rear strap and gold-toned clasp",
+      "Scalloped ornamental edges",
+      "One asymmetric garter on character right, purple strap with gold-toned adjusters and buckle; front image left / rear image right",
+      "Dark purple thigh-high stockings with darker top bands, fully covered feet"
+    ],
+    "unresolved": [
+      "Fabric fiber composition and reflectance are not determined by illustration",
+      "Actual seam construction, hidden lining and UV topology not specified; do not invent canon"
+    ]
+  }
 }
