@@ -1,0 +1,70 @@
+{
+  "scope": "DIRECTOR_APPROVED_SYNTHETIC_MATERIAL_REFERENCE_ONLY",
+  "date": "2026-11-26",
+  "main": "3f0c821a20da4cd407758a5d66500e2c9dd22d37",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "1719b35826bb8ca492762d396285ce5a8a2db94c",
+  "authority": "Director approved the two latest generated sheets for interim material use, fine design corrections later. No canon replacement, measurement authority, formal 3D adoption or publication.",
+  "sources": [
+    {
+      "id": "layer0",
+      "generator": "OpenAI image generation",
+      "gen_id": "8fc17ca8-3599-4efc-9c54-4bddb50a4b55",
+      "sha256": "dd5123270e60c0a1d1cc695a26bb17cd9336808351af142604eb9ccc20749973",
+      "size": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "outfit",
+      "generator": "OpenAI image generation",
+      "gen_id": "3c7a8842-fde2-4dd2-9306-3ba07385287f",
+      "sha256": "0d98f9e26959e77ebc30486c871efede00b658977f650669dec7a169bac6e957",
+      "size": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "method": "Use authorized synthetic imagery as material study. Do not label as real photographs or measured scan. Unknown-right third-party photos remain observation-only; independent reconstruction without copying expressive pixels/design. Formal design and UV masks remain controlling.",
+  "outputs": {
+    "crops": [
+      "face",
+      "iris",
+      "gold_thread",
+      "clasp",
+      "garter_hardware",
+      "stocking",
+      "hat_flower",
+      "academy_emblem",
+      "cape_embroidery",
+      "leather_bag",
+      "vials",
+      "belt",
+      "boots",
+      "plaid"
+    ],
+    "trial_maps": [
+      "stocking_micro",
+      "leather_micro"
+    ],
+    "map_method": "High-pass grayscale approximated normals, mirrored tiles, assigned basecolor and constant trial roughness. V1 visual inspection found plaid line/leather seam contamination; V2 removed plaid maps, narrowed leather crop. Gold motifs and facial shape are observation references only; not copied into model.",
+    "script_sha256": "3ab0a1862ba0a1f4372d05a60ee811171054bdd6159ae9dfb72f569dbeeebeda",
+    "receipt_sha256": "d7849b25e376d720dc2eb8195fd4b865861038f4eec809265498a8ed698532a7",
+    "comparison_sha256": "0851563a612bba06ad008cade62e270471fbd3062bd26070f4bb2ebebee08f2d",
+    "zip_sha256": "ff30e018e72d307589e2d1ba26debe52e59ba75b7e22109f2b5b5244c6fac31c",
+    "storage": "Local source originals and ZIP; repository metadata only, no public image upload."
+  },
+  "qa": {
+    "source_sha": "2/2 PASS",
+    "reopen": "20 crop/map PNGs + comparison PASS",
+    "repeat": "22/22 byte exact",
+    "zip_crc": "23 entries PASS",
+    "visual": "14 crops reviewed. Generated views include oblique rather than true left side; conflicting height/garter/stocking/eyeglasses and other unverified details; not valid for geometry measurements. No independent art QA."
+  },
+  "next": "Use exact native UV and protected motif masks; prioritize actual garment application and native shape diagnostics. No repeated isolated swatches. G2 skirt FAIL unchanged, G3/G4 actual model NOT_RUN."
+}
