@@ -1,0 +1,322 @@
+{
+  "schema": "two.region.top_down_reconciliation.v22",
+  "status": "LOCAL_ENVELOPE_COMPATIBILITY_PASS_WORLD_METRIC_HOLD",
+  "director_precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+  "inputs": [
+    {
+      "path": "docs/production/region_master/RILDE_AREA_FIRST_PLAN_V03.json",
+      "git_blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb"
+    },
+    {
+      "path": "docs/production/region_master/RILDE_CORE_AREA_SURFACES_V01.json",
+      "git_blob": "21b2804db198aaf9429f5f959d68a955e5839593"
+    },
+    {
+      "path": "docs/production/region_master/RILDE_EXPANSION_SURFACES_V02.json",
+      "git_blob": "dc06678c3ac274b2d2b63de0926b42bde9758504"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_HIERARCHICAL_ATLAS_V01.json",
+      "git_blob": "a40c72b68678f00fdcf1e1a5992c894a509e4f35"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_KINGDOM_MAP_CANDIDATE_V01.json",
+      "git_blob": "d05478e6da41ace5022b622f985d63fcbacb740c"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_W02_C01_COASTLINE_CANDIDATE_V01.json",
+      "git_blob": "72e1e488bbe4c92fc5d473139d8eb1d00d07b084"
+    },
+    {
+      "path": "docs/production/region_master/MOSS_FOREST_A3_SANCTUARY_DESIGN_V01.json",
+      "git_blob": "d640ef49f81531cc2b714b7d25150747c982f450"
+    }
+  ],
+  "reference_frame": {
+    "assumed_scale_m_per_schematic_unit": 100,
+    "reason": "Existing V01 core construction convention, not calibrated metric scale",
+    "world_transform": null,
+    "vertical_datum": null
+  },
+  "area_results": [
+    {
+      "id": "RILDE_VILLAGE",
+      "envelope_m": [
+        -150,
+        -125,
+        150,
+        125
+      ],
+      "local_tile_bounds_m": [
+        -150,
+        -125,
+        150,
+        112.5
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 95,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        -6.25
+      ]
+    },
+    {
+      "id": "COASTAL_MEADOW",
+      "envelope_m": [
+        -150,
+        100,
+        150,
+        300
+      ],
+      "local_tile_bounds_m": [
+        -150,
+        112.5,
+        150,
+        300
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 93.75,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        6.25
+      ]
+    },
+    {
+      "id": "RIVER_CORRIDOR",
+      "envelope_m": [
+        225,
+        -250,
+        375,
+        250
+      ],
+      "local_tile_bounds_m": [
+        225,
+        -250,
+        375,
+        250
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 100,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "MOSS_FOREST_A1",
+      "envelope_m": [
+        300,
+        -300,
+        500,
+        -100
+      ],
+      "local_tile_bounds_m": [
+        375,
+        -300,
+        500,
+        -100
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 62.5,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        37.5,
+        0
+      ]
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "envelope_m": [
+        400,
+        -400,
+        600,
+        -200
+      ],
+      "local_tile_bounds_m": [
+        400,
+        -400,
+        600,
+        -300
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 50,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        -50
+      ]
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "envelope_m": [
+        500,
+        -500,
+        700,
+        -300
+      ],
+      "local_tile_bounds_m": [
+        500,
+        -500,
+        700,
+        -400
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 50,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        -50
+      ]
+    },
+    {
+      "id": "DUNVAR_FORTRESS",
+      "envelope_m": [
+        -125,
+        475,
+        125,
+        725
+      ],
+      "local_tile_bounds_m": [
+        -125,
+        475,
+        125,
+        725
+      ],
+      "within": true,
+      "plan_envelope_coverage_pct": 100,
+      "tile_outside_m2": 0,
+      "anchor_in_tile": true,
+      "centroid_delta_from_schematic_anchor_m": [
+        0,
+        0
+      ]
+    }
+  ],
+  "forest_height_ranges": [
+    {
+      "id": "MOSS_FOREST_A1",
+      "authored_height_range_m": [
+        13.478994880956174,
+        25.209076988295017
+      ]
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "authored_height_range_m": [
+        20.15198438056962,
+        36.75281024872652
+      ]
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "authored_height_range_m": [
+        23.84299423353013,
+        36.76740902879253
+      ]
+    }
+  ],
+  "missing_area_tiles": [
+    "WINDWAITING_CLIFF"
+  ],
+  "seams": [
+    {
+      "a": "RIVER_CORRIDOR",
+      "b": "MOSS_FOREST_A1",
+      "samples": 61,
+      "max_xyz_delta_m": 9.486438052874746e-7
+    },
+    {
+      "a": "MOSS_FOREST_A1",
+      "b": "MOSS_FOREST_A2",
+      "samples": 41,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "MOSS_FOREST_A2",
+      "b": "MOSS_FOREST_A3",
+      "samples": 41,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "COASTAL_MEADOW",
+      "b": "IF07_FORT_CONNECTOR",
+      "samples": 21,
+      "max_xyz_delta_m": 9.525617485905968e-7
+    },
+    {
+      "a": "IF07_FORT_CONNECTOR",
+      "b": "DUNVAR_FORTRESS",
+      "samples": 21,
+      "max_xyz_delta_m": 0
+    }
+  ],
+  "altar": {
+    "schematic_locator_in_work_frame": [
+      700,
+      -500
+    ],
+    "reserved_pad_xy_m": [
+      693.9431596631828,
+      -493.0743278729908
+    ],
+    "delta_m": 9.200557009036372,
+    "classification": "schematic locator versus provisional pad; not a measured design error"
+  },
+  "unresolved": {
+    "world_to_region_transform": null,
+    "kingdom_metric_scale": null,
+    "river_mouth": "NOT_BUILT",
+    "fort_connector": {
+      "sampled_centerline_grade_max_percent": 23.26952112849483,
+      "goal_percent": 15,
+      "status": "FAIL_PROVISIONAL_GRADE_GOAL",
+      "next": "regrade or switchback; preserve existing meadow seam and avoid treating geometry as navigation proof"
+    },
+    "old_CG": "historical only; not geometry or layout authority"
+  },
+  "v21": {
+    "run": 45631347949,
+    "artifact": 15032255249,
+    "archive_sha256": "5a1b341e455e7cbfda7d13716e8888f119a92380f727cd53511a4be5983e3d61",
+    "native_sha256": "69789159a2f0502706fb0d1bc0e9f3a62fdb68dfea852fc81ee2b0d7ee86ce05",
+    "mesh_objects": 479,
+    "triangles": 926746,
+    "packed_images": 34,
+    "geometry_transform_protection": 394,
+    "qa_status": "HOLD",
+    "protected_zone_intrusion_m": [
+      {
+        "name": "V21_R_002",
+        "gap": -0.21348104145198743
+      },
+      {
+        "name": "V21_R_008",
+        "gap": -0.14331462754618673
+      },
+      {
+        "name": "V21_R_011",
+        "gap": -1.2648504665445959
+      }
+    ],
+    "decision": "Preserve candidate; no location-specific correction until current design reservation is verified."
+  },
+  "gates": {
+    "local_envelope_containment": "PASS",
+    "world_metric": "BLOCKED",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "V21_NATIVE_REOPEN_PASS_PLACEMENT_HOLD",
+    "G4": "NOT_RUN"
+  },
+  "next": "Verify actual Ireland reference DSM/DTM source and licence; establish world-to-region scale and C02/C03 constraints; reconcile region-to-area transforms, then refine terrain; reusable assets independent."
+}
