@@ -50,8 +50,9 @@ jobs:
           reviews=[x for x in selection if x.get('stage','').endswith('/ preview only')]
           manifest=json.loads((root/'studio-site/gallery-manifest.json').read_text())
           for review in reviews:
-              records=[x for x in manifest['entries'] if x['artifact_id']==review['artifact_id']]
-              assert records, 'VRoid review missing from staged gallery'
+              records=[x for x in manifest['entries'] if x.get('artifact_id')==review['artifact_id']]
+              assert {x['name'] for x in records}==set(review['entries']), 'VRoid review missing from staged gallery'
+              assert all(x['head']==review['head'] and x['run_id']==review['run_id'] for x in records)
               assert all(x['category']=='morwen' and x['qa']=='NOT_RUN' for x in records)
               print('VRoid review staged:', review['artifact_id'], len(records))
           if not reviews:
@@ -63,6 +64,17 @@ jobs:
           cp "$RUNNER_TEMP/retained/gallery-manifest.json" "$RUNNER_TEMP/studio-site/"
           mkdir -p "$RUNNER_TEMP/studio-site/published"
           cp -r "$RUNNER_TEMP/retained/published/." "$RUNNER_TEMP/studio-site/published/"
+          python - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          selection=json.loads((root/'studio-selection.json').read_text())
+          entries=json.loads((root/'studio-site/gallery-manifest.json').read_text())['entries']
+          for review in selection:
+              if review.get('stage','').endswith('/ preview only'):
+                  actual={x['name'] for x in entries if x.get('artifact_id')==review['artifact_id']}
+                  assert actual==set(review['entries']), 'VRoid review lost during retention'
+                  print('VRoid retained:', review['artifact_id'], sorted(actual))
+          PY
       - name: Verify actual gallery in mobile browser
         working-directory: tools/production-studio
         run: |
