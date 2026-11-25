@@ -1,0 +1,115 @@
+{
+  "schema": "two.region.river_landing_v31",
+  "status": "LOWER_WATER_REPAIR_PASS_LANDING_DESIGN_HOLD_CUT_FILL",
+  "parent": "065ded08e211238867aaf3d6d755f9ec39297d14",
+  "dependencies": {
+    "v30b_receipt": "f8eba35b67c6e928ec6b22623bacfc8384737f44",
+    "source_glb_sha256": "bcf32a6d1ba71902af240efc6e756e066ee445aa3d6c9990129ed72e1da087c3",
+    "trail_v02": "053220f5bb45e95aa31f3d4296f98d95f25d05e9",
+    "landing_method_stop": "7f6bb9af6091cbe77f8270268b8c170444a840de",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "repair": {
+    "face_index": 7328,
+    "reason": "Inverted sliver completely covered in projected XY by neighboring faces; flipping would retain overlap. Remove exactly one face.",
+    "projected_face_area_m2": 0.0000074319541454315186,
+    "uncovered_m2": 1.8010732363799158e-17,
+    "whole_projected_water_footprint_symmetric_difference_m2": 0,
+    "all_vertices_exact": true,
+    "other_five_meshes_exact": true,
+    "remaining_lower_water_components": 1,
+    "nonmanifold_edges_lower_water": 0,
+    "all_six_meshes_positive_upward_nonzero_area": true,
+    "triangles": 86701,
+    "reopen": "PASS exact vertices and intended faces; original unchanged"
+  },
+  "landing": {
+    "frame": "provisional authored local metres",
+    "control_points": [
+      [
+        348,
+        -237
+      ],
+      [
+        356,
+        -246
+      ],
+      [
+        373,
+        -246
+      ],
+      [
+        375,
+        -238
+      ],
+      [
+        363,
+        -232
+      ],
+      [
+        351,
+        -232
+      ],
+      [
+        349,
+        -224
+      ],
+      [
+        364,
+        -215
+      ],
+      [
+        375,
+        -211
+      ],
+      [
+        383,
+        -219
+      ],
+      [
+        380,
+        -230
+      ]
+    ],
+    "radius_m": 4,
+    "width_m": 2,
+    "stations": 483,
+    "length_m": 117.89074040992297,
+    "endpoint_z_m": [
+      4.456,
+      19.00705909729004
+    ],
+    "max_triangle_grade_pct": 13.36484768407595,
+    "wet_gap_m": 2.51086560742662,
+    "protected_route_proxy_overlap_m2": 0,
+    "protected_route_proxy_exception": "8m radius around join; not verified exact trail geometry",
+    "outside_existing_tiles_m2": 0,
+    "projected_self_overlap_m2": 0,
+    "max_sampled_cut_m": 11.994077589507055,
+    "max_sampled_fill_m": 6.507611427427943,
+    "reopen_max_coordinate_error_m": 0.000015257885479513789,
+    "decision": "Reject direct construction despite grade design pass. Large cut/fill, switchback spacing and tie-in not resolved; actual land surface unchanged. No water-to-dry shelf connector or actual path collision."
+  },
+  "outputs": {
+    "repaired_glb_sha256": "ac8ad8a14cc5b30712a11d7694dfd22a97714cfedb394e06554fbba046549dd6",
+    "alignment_glb_sha256": "02dbabe3e43adcda607a515e71a19170bfae363b6b6d50eb2e6e2734306f4046",
+    "sheet_sha256": "697f54d476a9491dbcafad40cf040a6d1b85601c79a98509a60c5bb3e94d336a",
+    "script_sha256": "1c2ac1e4e9d843a523e151ea0c5ad14290f48631b9d6bd5cb3a7c97e37e91210",
+    "qa_sha256": "92a297e3a9f232d3ffbbea44c0c425dc56f96ca7c82feb027e4e2a488249f755",
+    "package_sha256": "aaa207614c9fe944fac9d387579f8a021b52b92ae3de1aaf302517999b8ec2b5",
+    "zip_crc": "PASS",
+    "location": "ChatGPT local attachments, no binary commit"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_FORMAL_METRIC_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "SIX_MESH_LOCAL_GLB_REPAIR_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Stop repeated path-only and narrow-bank alterations. Joint area-scale terrain and alignment design with alternative landing positions, exact trail endpoint constraints and explicit cut/fill and shoulder QA. Independent native water/material study may proceed in isolation; no formal adoption or main merge."
+}
