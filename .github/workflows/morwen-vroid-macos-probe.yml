@@ -404,36 +404,36 @@ jobs:
           test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-before.txt")" = '-0.026 0.000 0.000 0.000'
           test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-after.txt")" = '0.044 0.000 0.000 0.000'
           echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
-      - name: Generate exact plaid candidate and verify decoder before startup
+      - name: Generate exact UV diagnostic grid and verify decoder before startup
         if: inputs.mode == 'wardrobe_import'
         shell: bash
         run: |
           set -euo pipefail
           cat > "$RUNNER_TEMP/skirt-recipe.py" <<'PY'
-          import hashlib, math, struct, sys, zlib
+          import hashlib, struct, sys, zlib
           from pathlib import Path
-          N=512
-          COLORS=((129,52,150),(163,73,191),(68,27,95),(231,169,153))
-          LAYERS=((1,0,.50,.40,.52),(1,1,.50,.37,.30),(2,0,.235,.075,.66),(2,1,.24,.085,.63),(2,0,.735,.045,.48),(2,1,.74,.055,.45),(3,0,.49,.018,.82),(3,1,.46,.016,.77),(3,1,.55,.016,.77))
-          factors=[[min(1,max(0,(w/2+1/N-abs((i/N-c+.5)%1-.5))*N))*a for i in range(N)] for _,_,c,w,a in LAYERS]
-          wave=[math.sin(2*math.pi*128*i/N) for i in range(N)]
+          W,H=1024,512
+          HUES=((230,48,55),(239,130,36),(232,209,42),(65,180,73),(30,185,192),(54,91,226),(152,64,220),(225,60,157))
+          LEVELS=(1.0,.78,.57,.36)
           rows=[]
-          for y in range(N):
+          for y in range(H):
               row=bytearray()
-              for x in range(N):
-                  rgb=list(COLORS[0])
-                  for (col,axis,*_),factor in zip(LAYERS,factors):
-                      q=factor[y if axis else x]
-                      rgb=[v*(1-q)+t*q for v,t in zip(rgb,COLORS[col])]
-                  row.extend([max(0,min(255,round(v+wave[x]*wave[y]*1.8))) for v in rgb]+[255])
-              rows.append(bytes(row)*2)
-          digest=hashlib.sha256(b''.join(rows)).hexdigest()
-          assert digest=='cdebf9c8f521085d9dc389f41c719d2b2d2a9e1c64ec49f3f4b58af66e2d36ff', digest
+              for x in range(W):
+                  c,r=x//128,y//128;u,v=x%128,y%128
+                  rgb=tuple(round(k*LEVELS[r]) for k in HUES[c])
+                  if u<3 or v<3 or u>=125 or v>=125: rgb=(14,14,14)
+                  elif 10<=u<22 and 10<=v<22: rgb=(255,255,255)
+                  elif 44<=v<57 and 12<=u<12+12*(c+1): rgb=(255,255,255)
+                  elif 80<=v<93 and 12<=u<12+24*(r+1): rgb=(16,16,16)
+                  row.extend((*rgb,255))
+              rows.append(bytes(row))
+          pixels=b''.join(rows)
+          assert hashlib.sha256(pixels).hexdigest()=='b7e62a61c9f58611e0abe455d43ab442f4fcf5a342ec026879887556038c3f26'
           def chunk(tag,data):
               return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
-          png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1024,512,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b''.join(b'\0'+r for r in rows),9))+chunk(b'IEND',b'')
+          png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',W,H,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b''.join(b'\0'+r for r in rows),9))+chunk(b'IEND',b'')
           with Path(sys.argv[1]).open('xb') as f: f.write(png)
-          print(digest,hashlib.sha256(png).hexdigest())
+          print(hashlib.sha256(pixels).hexdigest(),hashlib.sha256(png).hexdigest())
           PY
           cat > "$RUNNER_TEMP/skirt-verify.py" <<'PY'
           import hashlib,struct,zlib,sys
@@ -468,10 +468,10 @@ jobs:
                   row[i]=(row[i]+q)&255
               out.append(bytes(row));prev=row
           h=hashlib.sha256(b''.join(out)).hexdigest();print(h)
-          assert h=='cdebf9c8f521085d9dc389f41c719d2b2d2a9e1c64ec49f3f4b58af66e2d36ff'
+          assert h=='b7e62a61c9f58611e0abe455d43ab442f4fcf5a342ec026879887556038c3f26'
           PY
-          python3 "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-sha.txt
-          python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/morwen-skirt-candidate.png" | tee evidence/skirt-generated-pixel-sha.txt
+          python3 "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-sha.txt
+          python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-pixel-sha.txt
       - name: Compile UV guide inspector before VRoid startup
         if: inputs.mode == 'wardrobe_guide'
         shell: bash
@@ -1185,11 +1185,11 @@ jobs:
           PY
                   if [ "$WARDROBE_IMPORT" = true ]; then
                     # Import into isolated volatile editor only. Never accept an unidentified dialog.
-                    target="$HOME/Documents/morwen-skirt-candidate.png"
+                    target="$HOME/Documents/uv-grid.png"
                     test ! -e "$target"
                     test ! -L "$target"
-                    cp "$RUNNER_TEMP/morwen-skirt-candidate.png" "$target"
-                    cmp "$RUNNER_TEMP/morwen-skirt-candidate.png" "$target"
+                    cp "$RUNNER_TEMP/uv-grid.png" "$target"
+                    cmp "$RUNNER_TEMP/uv-grid.png" "$target"
                     "$gui" click-label evidence/skirt-export-layer.png Import 'Import from Closet'
                     sleep 4
                     capture_state skirt-import-dialog
@@ -1197,15 +1197,33 @@ jobs:
                     grep -Fq Open evidence/skirt-import-dialog.txt
                     grep -Fq Documents evidence/skirt-import-dialog.txt
                     # Require a uniquely visible filename; no guessed coordinates or blind keyboard.
-                    "$gui" click-label evidence/skirt-import-dialog.png morwen-skirt-candidate.png Cancel
+                    "$gui" click-label evidence/skirt-import-dialog.png uv-grid.png Cancel
                     sleep 2
                     capture_state skirt-import-selected
-                    grep -Fq morwen-skirt-candidate.png evidence/skirt-import-selected.txt
+                    grep -Fq uv-grid.png evidence/skirt-import-selected.txt
                     "$gui" click-label evidence/skirt-import-selected.png Open Cancel
                     sleep 5
                     capture_state skirt-import-preview
                     grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
                     grep -Fq 'Uniform Skirt' evidence/skirt-import-preview.txt
+                    grep -Fq 'Default Design' evidence/skirt-import-preview.txt
+                    # Observe projection in the live editor; names denote requested shortcuts, not verified angles.
+                    for view in front left4 left8 right4; do
+                      "$gui" vroid-shortcut front
+                      case "$view" in
+                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
+                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
+                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                      esac
+                      sleep 2
+                      capture_state "skirt-uv-$view"
+                      grep -Fq 'Texture Editor' "evidence/skirt-uv-$view.txt"
+                      grep -Fq 'Uniform Skirt' "evidence/skirt-uv-$view.txt"
+                    done
+                    "$gui" vroid-shortcut front
+                    sleep 2
+                    capture_state skirt-import-preview
+                    grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
                     grep -Fq 'Default Design' evidence/skirt-import-preview.txt
                     "$gui" click-label evidence/skirt-import-preview.png 'Default Design' 'Uniform Skirt'
                     sleep 2
@@ -1334,7 +1352,7 @@ jobs:
               "C-wardrobe":["outfit-tops","outfit-bottoms","outfit-neckwear","outfit-socks","outfit-shoes","skirt-template","skirt-texture-editor"]
           }[lane]
           if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor","skirt-export-layer","skirt-export-dialog","skirt-export-destination","skirt-export-complete"]
-          if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview"]
+          if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview","skirt-uv-front","skirt-uv-left4","skirt-uv-left8","skirt-uv-right4"]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -1352,7 +1370,7 @@ jobs:
                   hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
           parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
           assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
-          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_TEXTURE_IMPORT_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
+          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_UV_DIAGNOSTIC_IMPORT_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
           PY
             echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
           fi
