@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Choose one mode (hair_candidate is the current production step)"
+        description: "Choose one mode (hair_review uses the saved hair candidate)"
         type: choice
         required: true
-        default: hair_candidate
+        default: hair_review
         options:
+          - hair_review
           - hair_candidate
           - front_frame
           - reopen_only
@@ -47,7 +48,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            test "$MODE" = hair_candidate
+            case "$MODE" in hair_candidate|hair_review) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -57,12 +58,13 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -260,6 +262,7 @@ jobs:
           "$RUNNER_TEMP/hair-save-guard" "$RUNNER_TEMP/save-fixture.png" | tee evidence/hair-save-preflight.txt
           grep -qx 'Front checked Back unchecked' evidence/hair-save-preflight.txt
       - name: Restore native checkpoint
+        if: inputs.mode != 'hair_review'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -278,6 +281,31 @@ jobs:
               data=z.read(item)
               assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
+          PY
+      - name: Restore exact saved hair candidate for read-only comparison
+        if: inputs.mode == 'hair_review'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15003297779/zip" > "$RUNNER_TEMP/hair-review.zip"
+          echo "b1c9b7b61433b17c4caa160f0558461386edb0b6440b9740f6652e89565a6482  $RUNNER_TEMP/hair-review.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,io,pathlib,hashlib,json
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"hair-review.zip") as z:
+              assert z.testzip() is None
+              r=json.loads(z.read("hair-author-receipt.json"))
+              data=z.read("hair-width-candidate-not-adopted.vroid")
+              assert hashlib.sha256(data).hexdigest()==r["candidate_sha256"]=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+              assert r["source_sha256"]=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+              assert (r["before"],r["after"],r["reopened"])==(.03,.02,.02)
+              assert r["protected_thickness"]==[.05]*3
+              assert json.loads(z.read("hair-shared-engine-qa.json"))["overall"]=="PASS"
+              assert zipfile.ZipFile(io.BytesIO(data)).testzip() is None
+              (p/"Morwen-resume.vroid").write_bytes(data)
+              pathlib.Path("evidence/hair-review-source.json").write_text(json.dumps(dict(run=45572622840,artifact=15003297779,native_sha256=r["candidate_sha256"],scope="READ_ONLY_NOT_ADOPTED"),indent=2))
           PY
       - name: Restore three existing frame candidates
         if: inputs.mode == 'front_frame'
@@ -328,7 +356,8 @@ jobs:
         timeout-minutes: 22
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' }}
           HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
         shell: bash
         run: |
@@ -463,6 +492,7 @@ jobs:
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
+          if [ "$HAIR_REVIEW" = true ]; then MORWEN_EXPECTED_SHA256=55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541; fi
           if [ "$FRAME_PROBE" = true ]; then
             test "$NATIVE_PROBE" != true
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
@@ -472,7 +502,9 @@ jobs:
             sleep 2
             echo "direction attempt action bbox_xmin bbox_ymin bbox_xmax bbox_ymax foreground margin" > evidence/frame-recovery-ledger.txt
             all=1
-            for direction in front; do
+            directions="front"
+            if [ "$HAIR_REVIEW" = true ]; then directions="front left4 left8 right4"; fi
+            for direction in $directions; do
               "$gui" vroid-shortcut front
               case "$direction" in
                 left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
@@ -522,7 +554,11 @@ jobs:
             if [ "$all" = 1 ]; then
               for view in front left4 left8 right4; do test -s "evidence/frame-selected-$view.png"; done
               shasum -a 256 evidence/frame-selected-*.png > evidence/frame-selected-sha256.txt
-              echo FRONT_MARGIN_AND_THREE_REUSED_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              if [ "$HAIR_REVIEW" = true ]; then
+                echo SAVED_HAIR_FOUR_FRESH_CAPTURES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              else
+                echo FRONT_MARGIN_AND_THREE_REUSED_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              fi
             else
               echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
               exit 1
