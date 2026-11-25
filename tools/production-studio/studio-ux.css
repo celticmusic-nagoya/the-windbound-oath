@@ -1,0 +1,34 @@
+/* Studio UX follow-up: additive presentation layer, no manifest or publication changes. */
+:root{--studio-muted:#c2d2cf;--studio-focus:#f3d79e}
+html{scroll-padding-top:1rem}
+body{overflow-x:clip}
+.skip-link{position:absolute;top:-100px;left:12px;z-index:1000;background:#f3d79e;color:#132024;padding:12px 16px;border-radius:10px;font-weight:700}
+.skip-link:focus{top:12px}
+.section-lead{color:var(--studio-muted);max-width:65ch;margin-top:-.25rem}
+#published-title{margin-bottom:.5rem}
+#published-status,#area-blueprints-status{color:var(--studio-muted);font-size:.9rem}
+#published-gallery .category-card{gap:10px;text-align:left;transition:border-color .15s ease,background-color .15s ease}
+#published-gallery .category-card:hover{border-color:#b6a57c;background:#263637}
+#published-gallery .category-card strong{font-size:clamp(.94rem,2.5vw,1.08rem);line-height:1.4}
+#published-gallery .category-card small{color:var(--studio-muted);font-size:.83rem}
+#published-gallery .category-card img{aspect-ratio:4/3;object-fit:contain}
+#published-gallery .tile{display:flex;flex-direction:column;gap:8px;min-width:0}
+#published-gallery .tile p{margin:0;line-height:1.55}
+#published-gallery .tile img{aspect-ratio:4/3;object-fit:contain}
+#published-gallery .tile a{overflow-wrap:anywhere}
+#published-gallery .gallery-preservation{font-size:.78rem;color:var(--studio-muted)}
+#published-gallery .category-back{background:#293a3a;color:#f2e4c5;border:1px solid #64726b}
+#published-gallery .gallery-search{font-size:1rem}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--studio-focus);outline-offset:3px}
+@media(max-width:480px){#published-gallery.category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#published-gallery .category-card{padding:10px}#published-gallery .tile{padding:12px}#published-gallery .category-card strong{font-size:.92rem}#published-gallery .category-card img{aspect-ratio:1/1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}#published-gallery .category-card{transition:none}}
+
+/* Navigation and explicit QA/adoption status are independent of visual approval. */
+#published-gallery .gallery-breadcrumb{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px;color:var(--studio-muted);font-size:.9rem;min-width:0}
+#published-gallery .gallery-breadcrumb button{min-height:44px;padding:8px 10px;background:#293a3a;color:#edf2ef;border:1px solid #64726b}
+#published-gallery .gallery-breadcrumb strong{color:#f2e4c5;overflow-wrap:anywhere}
+#published-gallery .tile h3{font-size:1rem;line-height:1.5;overflow-wrap:anywhere;margin:0}
+#published-gallery .gallery-meta{display:flex;flex-wrap:wrap;gap:6px}
+#published-gallery .gallery-chip{display:inline-flex;align-items:center;min-height:30px;padding:4px 8px;background:#283a3b;border:1px solid #60716e;border-radius:7px;font-size:.77rem;overflow-wrap:anywhere;max-width:100%}
+
+#published-gallery [hidden]{display:none!important}

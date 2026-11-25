@@ -1,4 +1,22 @@
+## Director decision — Production-First v6.0 (2026-11-25)
+Read the [v6 executable startup rules](../../AGENTS.md#production-first-v60--director-approved-2026-11-25-read-this-first) first. Director's latest explicit task instruction prevails within its scope. ChatGPT leads execution; Codex/Claude are optional, not fixed dependencies. c/ok require actual eligible work and verification, not acknowledgement. Unadopted candidates may be revised in recoverable commits/work copies; protect active writers and canonical originals. Reviewed ordinary scoped main integration is authorized; formal adoption and protected/irreversible actions remain separately gated. Infrastructure and policy migration are support work, never global production prerequisites. Use existing qualified engine paths only; preserve technical requirements and independent applicable QA. Historical administrative wording below is subordinate to v6. No production runtime qualification or asset adoption is asserted by this policy change.
+
+
+## Continuity update: director-approved autonomous authority and safe quota handoff v5 (2026-11-24)
+Read [scoped authority and handoff policy](docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md). c/ok advance approved reversible work; latest scoped approval supersedes obsolete administrative HOLD. Quota-driven reassignment requires verified writer cessation, CAS release/qualified expiry, new fencing and checkpoint restore; otherwise continue isolated independent work. Policy adoption is not runtime auto-failover PASS; never force reclaim or bypass G1–G4/irreversible approvals.
+# Cross-agent ownership and quota fallback — director approved 2026-11-23
+
+**Cross-AI milestone sync:** consult [CROSS_AI_PROGRESS_INDEX.md](CROSS_AI_PROGRESS_INDEX.md) and [shared synchronization policy](../policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md) before resuming. Owner PR remains authoritative; index is a verified snapshot, not a lease or QA PASS.
+
+Read [cross-agent ownership and quota fallback](../policy/CROSS_AGENT_OWNERSHIP_AND_QUOTA_FALLBACK_20261123.md). Claude owns shared Blueprint Engine; Codex retains #468 long-run engine; character/map owners retain actual blueprints and native production; ChatGPT coordinates and owns Production Studio. Quota limits do not grant writer authority. Require STOP_ACK, CAS/lease/fencing and checkpoint verification before any takeover; otherwise SYNC_UNVERIFIED, read-only independent work only. Automatic cross-agent failover NOT_RUN; existing G1–G4 and adoption gates unchanged.
+
 # Current mandatory entry — Production OS v1.0 (2026-11-21)
+
+## Mandatory continuity and readiness (2026-11-23)
+Read [../policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md](../policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md). Owner/live evidence synchronization, stale-candidate rejection and scoped production readiness gates are mandatory for all agents and automations. Historical pointers are not work orders; incomplete infrastructure is tracked to actual verification. Existing qualified independent production continues.
+
+## Director decision — multi-stage production batches (2026-11-22)
+Apply [shared batch policy](../policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md) to all character and environment owners. Policy approved; adapter/runtime verification pending. Viewport-first editing, dynamic batches, selective QA and checkpoint resume required; authenticated live review bridge NOT_RUN. Long productive free-runner sessions, durable incremental checkpoints and snapshot-based QA approved; actual adapters NOT_RUN. Deliverable-driven area/character/NPC factory targets and P0/P1 priorities approved; production-bearing vertical slice required. Existing ownership and adoption gates unchanged.
 
 ## Shared wardrobe research (2026-11-21)
 Read [character wardrobe research](CHARACTER_WARDROBE_RESEARCH_20261121.md) before garment work; VRoid native layers/texture first, pattern-based and XWear candidates require qualification. Research only; owner #427 and existing adoption gates unchanged.
@@ -101,3 +119,8 @@ All AI follow AGENTS.md recoverable save failure policy. Preserve originals, ret
 
 ## Director-approved shared Morwen blueprint publication — 2026-11-21
 All AI agents read main `tools/morwen_authored_sculpt/precision_blueprint_v2.json`, `layer0_landmarks_v1.json`, and [blueprint handoff](MORWEN_LAYER0_PRECISION_BLUEPRINT_CODEX_HANDOFF_20261120.md) before character authoring. Director explicitly authorizes main merges of current and future blueprint-only data, diagrams, reproducible analysis scripts and QA documentation after scope/provenance review. Share via a dedicated blueprint-only PR; no unfinished mesh, VRoid workflow, canon change or asset adoption is authorized. Preserve candidate/estimated/NOT_RUN labels; sync updates from owning PR #427 without overwriting newer work. Local-only images and rig data must be registered when their exact bytes are available. Continue VRoid recovery independently.
+
+Mandatory all-AI autonomous failure recovery: see [AGENTS.md](../../AGENTS.md) and [Causal Retry v3](../policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md), including exact-byte preflight, diagnosis, bounded repair and verified continuation. Director approved 2026-11-21. No asset adoption or runtime PASS implied.
+
+## Executable blueprint and full-deliverable closure — 2026-11-22
+Director-approved mandatory extension to [multi-stage batches](../policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md): complete target inventory including gaps, exact blueprint SHA bound to qualified operation and measured residual, continuous full-deliverable session up to verified free six-hour limit with reserve, causal recovery and checkpoint resume. #427 and #421 owners implement on existing branches; policy is not runtime qualification or asset adoption.

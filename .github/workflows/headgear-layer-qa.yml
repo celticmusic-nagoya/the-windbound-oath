@@ -1,6 +1,12 @@
 name: Headgear layer candidate QA
 on:
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'js/field/field-headgear-layers.js'
       - 'tests/moss/test_field_headgear_layers.js'

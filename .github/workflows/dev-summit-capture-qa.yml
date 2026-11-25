@@ -7,6 +7,12 @@ on:
       - 'tests/moss/dev_summit_capture.test.js'
       - '.github/workflows/dev-summit-capture-qa.yml'
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'

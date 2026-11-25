@@ -8,6 +8,8 @@
     "historical evidence only"
   ],
   "active": [
+    "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
+    "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
     "docs/policy/TWO_PRODUCTION_OS_V1.md",
     "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md",
     "docs/policy/CONTINUOUS_3D_AUTHORING_AND_WORLD_EXPANSION_20261121.md",
@@ -18,12 +20,54 @@
     "docs/policy/HIGH_END_3D_CHARACTER_AND_WORLD_PRODUCTION_V1_1.md",
     "docs/policy/ACTIVE_PRODUCTION_DIRECTIVES_20261121.md",
     "docs/policy/TOKEN_EFFICIENCY_POLICY_V1.md",
-    "docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md"
+    "docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md",
+    "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md",
+    "docs/policy/BLENDER_530_UNIFICATION_20261122.md",
+    "docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md",
+    "docs/policy/CROSS_AGENT_OWNERSHIP_AND_QUOTA_FALLBACK_20261123.md",
+    "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
+    "docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md"
   ],
   "superseded": [
     "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md",
     "docs/design/FIELD_HD_PIXEL_OFFICIAL_PIPELINE.md",
     "docs/design/FIELD_VISUAL_OVERHAUL_20261108.md"
   ],
-  "historical_scope": "Superseded documents are not production instructions; preserve shipped runtime and source evidence. Other older documents are reference only unless explicitly approved and consistent."
+  "historical_scope": "Superseded documents are not production instructions; preserve shipped runtime and source evidence. Other older documents are reference only unless explicitly approved and consistent.",
+  "delivery_closure": {
+    "approved": "2026-11-24",
+    "policy": "AGENTS.md#mandatory-main-delivery-closure-director-approved-2026-11-24",
+    "historical_conflicts": "inactive",
+    "scope": "all agents and automations"
+  },
+  "autonomous_handoff_v5": {
+    "approved": "2026-11-24",
+    "policy": "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
+    "status": "POLICY_APPROVED_RUNTIME_NOT_VERIFIED",
+    "shorthand": [
+      "c",
+      "ok",
+      "qa",
+      "sync",
+      "status"
+    ],
+    "writer_transfer_requires": [
+      "verified_stop",
+      "valid_lease_release_or_qualified_expiry",
+      "CAS_new_fencing",
+      "checkpoint_restore",
+      "independent_qa"
+    ],
+    "forced_reclaim_requires_separate_approval": true
+  },
+  "qualified_engines_v45": {
+    "approved": "2026-11-24",
+    "policy": "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
+    "short_verified_scope": "ENABLED_WITH_ASSET_PREFLIGHT",
+    "long_run": "NOT_RUN",
+    "deadline_recovery": "NOT_RUN",
+    "automatic_writer_takeover": "NOT_RUN",
+    "production_native_write": "ASSET_SCOPE_GATED",
+    "cache_493": "INDEPENDENT_QA_PENDING"
+  }
 }

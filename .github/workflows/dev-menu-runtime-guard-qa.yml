@@ -7,6 +7,12 @@ on:
       - 'tests/moss/dev_menu_runtime_guard.test.js'
       - '.github/workflows/dev-menu-runtime-guard-qa.yml'
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'

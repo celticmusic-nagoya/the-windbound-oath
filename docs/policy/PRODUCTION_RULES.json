@@ -2,7 +2,7 @@
   "version": "1.0",
   "implementation_status": "POLICY_ONLY",
   "approval_required": [
-    "main_merge",
+    "main_merge_outside_approved_delivery_scope",
     "formal_adoption",
     "canon_change",
     "destructive_deletion",
@@ -29,7 +29,63 @@
     "policy": "v3",
     "reassess_after_same_cause_failures": 2,
     "hard_cap": null,
-    "evidence_required": true
+    "evidence_required": true,
+    "autonomous_recovery": {
+      "required": true,
+      "exact_byte_preflight_required": true,
+      "diagnose_from_logs_and_artifacts": true,
+      "unchanged_failed_revision_retry": false,
+      "preserve_checkpoint": true,
+      "continue_safe_work_without_routine_approval": true,
+      "verify_execution_and_outputs": true,
+      "gui": {
+        "required": true,
+        "scope": "all_game_development",
+        "methods": [
+          "native_api",
+          "keyboard",
+          "mouse_click",
+          "drag",
+          "scroll",
+          "menu",
+          "accessibility"
+        ],
+        "verify_pre_and_post_state": true,
+        "calibrated_coordinates": true,
+        "diagnose_in_session": true,
+        "evidence_based_alternate_operation": true,
+        "bounded_attempts": true,
+        "quarantine_ambiguous_mutation": true,
+        "verify_undo_or_reopen": true,
+        "continue_independent_stages": true,
+        "unknown_dialog_confirmation": false,
+        "status": "POLICY_APPROVED_RUNTIME_QUALIFICATION_REQUIRED",
+        "control_recognition": {
+          "required": true,
+          "diagnostics": [
+            "label_variants",
+            "ocr_segmentation",
+            "scroll_position",
+            "focus",
+            "viewport_scaling",
+            "accessibility"
+          ],
+          "alternate_locators": [
+            "exact_label",
+            "normalized_label",
+            "accessibility",
+            "bounded_scroll",
+            "calibrated_anchor_relative"
+          ],
+          "unique_target_and_postcondition": true,
+          "disposable_response_calibration": true,
+          "distinguish_recognition_and_mutation_failure": true,
+          "persist_versioned_evidence": true,
+          "continue_independent_modules": true,
+          "never_promote_calibration": true
+        }
+      }
+    }
   },
   "ownership": {
     "one_writer_per_conflicting_file": true,
@@ -41,7 +97,118 @@
     "checkpoint_reopen": true,
     "hash_reuse": true,
     "milestone_first": true,
-    "avoid_duplicate_ci": true
+    "avoid_duplicate_ci": true,
+    "multi_stage_batches": {
+      "required": true,
+      "policy": "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md",
+      "character_phases": [
+        [
+          "face",
+          "hair",
+          "body"
+        ],
+        [
+          "wardrobe",
+          "equipment"
+        ]
+      ],
+      "world_phases": [
+        [
+          "terrain",
+          "rock",
+          "architecture",
+          "interfaces"
+        ],
+        [
+          "materials",
+          "vegetation",
+          "props",
+          "lighting"
+        ],
+        [
+          "collision",
+          "traversal",
+          "optimization",
+          "integration"
+        ]
+      ],
+      "target_minutes": [
+        60,
+        120
+      ],
+      "continue_independent_stages": true,
+      "checkpoint_each_milestone": true,
+      "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION",
+      "viewport_first": {
+        "required": true,
+        "matched_blueprint_checks": true,
+        "correct_in_session": true,
+        "selective_downstream_qa": true,
+        "final_render_required": true,
+        "checkpoint_resume": true,
+        "dynamic_dependency_batches": true,
+        "efficiency_metrics": true,
+        "live_review": "UNVERIFIED_OPTIONAL",
+        "authenticated_allowlisted_commands": true,
+        "bounded_wait": true,
+        "timeout_checkpoint_resume": true,
+        "adapter_status": "NOT_RUN",
+        "short_wait_required": false
+      },
+      "session_budget": {
+        "planning_minutes": [
+          60,
+          120
+        ],
+        "planning_target_is_hard_cap": false,
+        "standard_public_runner_max_minutes": 360,
+        "verify_billing_and_effective_timeout": true,
+        "reserve_checkpoint_upload_time": true,
+        "productive_long_session_allowed": true,
+        "genuine_review_wait_allowed": true,
+        "artificial_keepalive": false
+      },
+      "efficiency": {
+        "incremental_durable_checkpoints": true,
+        "immutable_snapshot_qa": true,
+        "stale_feedback_rejection": true,
+        "dirty_dependency_checks": true,
+        "matched_render_optimization_trials": true,
+        "quality_adjusted_metrics": true,
+        "status": "NOT_RUN"
+      },
+      "deliverable_driven": {
+        "required": true,
+        "targets": {
+          "world": "one_coherent_area_candidate",
+          "character": "one_complete_character_candidate",
+          "npc_batch_planning_count": [
+            3,
+            5
+          ]
+        },
+        "vroid_first": true,
+        "allow_dependency_based_session_split": true,
+        "p0": [
+          "session_controller",
+          "blueprint_engine",
+          "qa_engine",
+          "ai_orchestration",
+          "character_factory",
+          "world_factory"
+        ],
+        "p1": [
+          "npc_factory",
+          "material_factory",
+          "render_engine",
+          "asset_library"
+        ],
+        "reuse_production_os": true,
+        "require_actual_native_outputs": true,
+        "require_verified_vertical_slice": true,
+        "status": "POLICY_APPROVED_RUNTIME_NOT_RUN"
+      }
+    }
   },
   "provisional_local_coordinates": true,
   "measures": [
@@ -126,6 +293,83 @@
     "matched_preview_qa": true,
     "independent_modules_may_continue": true,
     "policy": "docs/policy/TWO_PRODUCTION_OS_V1.md",
-    "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION"
+    "status": "APPROVED_POLICY_VERIFY_IMPLEMENTATION",
+    "executable_contract": {
+      "required": true,
+      "scope": "all_workstreams",
+      "inventory_missing_information": true,
+      "target_ids": true,
+      "source_hash_binding": true,
+      "qualified_operations": true,
+      "preflight_exact_bytes": true,
+      "matched_measurement_residuals": true,
+      "full_deliverable_batch": true,
+      "character_modules": [
+        "face",
+        "body",
+        "hair",
+        "wardrobe",
+        "equipment"
+      ],
+      "max_standard_free_job_minutes": 360,
+      "reserve_checkpoint_upload": true,
+      "continue_independent_stages": true,
+      "causal_recovery": true,
+      "verified_auto_launch": true,
+      "stop_on_single_operation": false,
+      "formal_adoption_separate": true,
+      "status": "POLICY_APPROVED_RUNTIME_NOT_RUN",
+      "policy": "docs/policy/MULTI_STAGE_PRODUCTION_BATCHES_20261122.md"
+    }
+  },
+  "continuity_readiness": {
+    "policy": "docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md",
+    "owner_sync_required": true,
+    "all_event_pagination_required": true,
+    "unknown_state": "SYNC_UNVERIFIED",
+    "stale_candidate_recovery": false,
+    "affected_scope_only": true,
+    "production_verified_requires_actual_native_edit_cross_run_restore_and_qa": true,
+    "policy_is_runtime_pass": false,
+    "track_open_dependencies_to_closure": true
+  },
+  "delivery_closure": {
+    "approved": "2026-11-24",
+    "status": "POLICY_ONLY",
+    "default_scoped_main_integration_authorized": true,
+    "required": [
+      "implementation",
+      "applicable_qa",
+      "review",
+      "authorized_merge",
+      "main_readback",
+      "applicable_runtime_verification"
+    ],
+    "states": [
+      "REGISTERED",
+      "IMPLEMENTED",
+      "QA_PENDING",
+      "MERGE_PENDING",
+      "MERGED",
+      "VERIFIED",
+      "BLOCKED"
+    ],
+    "exceptions": [
+      "formal_adoption",
+      "canon_change",
+      "protected_production_asset_change",
+      "destructive_deletion",
+      "publication",
+      "added_cost",
+      "forced_lease_reclaim",
+      "unrelated_merge",
+      "draft_only",
+      "research_only"
+    ],
+    "direct_main_commit": false,
+    "blocker_remediation_required": true,
+    "reassess_after_unchanged_next_steps": 2,
+    "continue_independent_work": true,
+    "latest_approved_priority": true
   }
 }

@@ -1,0 +1,73 @@
+name: Production Studio publish gallery
+on:
+  schedule:
+    - cron: '27 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/production-studio/**', '.github/workflows/production-studio-publish.yml']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: studio-published
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Stage verified production gallery
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash tools/production-studio/sync-preview.sh
+      - name: Preserve verified historical copies
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/old-gallery"
+          if git ls-remote --exit-code --heads origin studio-published; then
+            git fetch origin studio-published
+            git worktree add --detach "$RUNNER_TEMP/history" FETCH_HEAD
+            cp -r "$RUNNER_TEMP/history/gallery-manifest.json" "$RUNNER_TEMP/history/published" "$RUNNER_TEMP/old-gallery/"
+          else
+            cp -r tools/production-studio/gallery-manifest.json tools/production-studio/published "$RUNNER_TEMP/old-gallery/"
+          fi
+          python tools/production-studio/merge-gallery.py "$RUNNER_TEMP/old-gallery" "$RUNNER_TEMP/studio-site" "$RUNNER_TEMP/retained"
+          cp "$RUNNER_TEMP/retained/gallery-manifest.json" "$RUNNER_TEMP/studio-site/"
+          cp -r "$RUNNER_TEMP/retained/published/." "$RUNNER_TEMP/studio-site/published/"
+      - name: Validate retained images in browser
+        working-directory: tools/production-studio
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
+          npx playwright install --with-deps chromium
+          node gallery-smoke.mjs
+      - name: Publish dedicated branch only
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if test -d "$RUNNER_TEMP/history"; then
+            cd "$RUNNER_TEMP/history"
+          else
+            git worktree add --detach "$RUNNER_TEMP/history" HEAD
+            cd "$RUNNER_TEMP/history"
+            git switch --orphan studio-gallery-initial
+          fi
+          mkdir -p published
+          cp "$RUNNER_TEMP/retained/gallery-manifest.json" .
+          cp -r "$RUNNER_TEMP/retained/published/." published/
+          python - <<'PY'
+          import pathlib,json
+          keep={e['path'] for e in json.loads(pathlib.Path('gallery-manifest.json').read_text())['entries']}
+          for p in pathlib.Path('published').iterdir():
+              if p.is_file() and str(p) not in keep:p.unlink()
+          PY
+          git add -- gallery-manifest.json published
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Publish verified production gallery snapshot'
+          git push origin HEAD:refs/heads/studio-published

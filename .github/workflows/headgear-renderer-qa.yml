@@ -1,6 +1,12 @@
 name: Headgear renderer candidate QA
 on:
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'js/field/field-headgear-renderer.js'
       - 'dev/headgear-preview/**'

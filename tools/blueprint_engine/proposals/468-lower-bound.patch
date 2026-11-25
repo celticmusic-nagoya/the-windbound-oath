@@ -1,0 +1,278 @@
+diff --git a/tools/production_qa/shared_blueprint_contract.py b/tools/production_qa/shared_blueprint_contract.py
+index d98b9db..f5037b9 100644
+--- a/tools/production_qa/shared_blueprint_contract.py
++++ b/tools/production_qa/shared_blueprint_contract.py
+@@ -47,6 +47,50 @@ def metric_state(residual, tolerance, uncertainty):
+     return "HOLD"
+ 
+ 
++def constrained_state(target, key, residual, uncertainty):
++    """Shared judgement for one metric (#468 Factory, observation check, #485 display).
++
++    Two-sided (default, unchanged): metric_state(|r|, t, u).
++    Lower bound (key in target["lower_bound"], L = values[key], r = x - L):
++    r - u >= 0 PASS, r + u < 0 OUTSIDE, otherwise HOLD.
++    """
++    if key in (target.get("lower_bound") or {}):
++        if residual - uncertainty >= 0:
++            return "PASS"
++        if residual + uncertainty < 0:
++            return "OUTSIDE"
++        return "HOLD"
++    return metric_state(residual, target["tolerances"][key], uncertainty)
++
++
++def deficit(target, key, residual):
++    """Distance from acceptance used to detect worsening; moving further above a
++    lower bound is never a worsening."""
++    if key in (target.get("lower_bound") or {}):
++        return max(0.0, -residual)
++    return abs(residual)
++
++
++def lower_bound_issues(target):
++    bounds = target.get("lower_bound")
++    if bounds is None:
++        return []
++    values = target.get("values")
++    tolerances = target.get("tolerances")
++    if (not isinstance(bounds, dict) or not bounds or not isinstance(values, dict)
++            or not isinstance(tolerances, dict)):
++        return ["lower_bound"]
++    corrections = target.get("corrections") or {}
++    if not isinstance(corrections, dict):
++        return ["lower_bound"]
++    issues = []
++    for key, lower in bounds.items():
++        if (key not in values or not finite(lower) or lower != values[key]
++                or tolerances.get(key) != 0 or key in corrections):
++            issues.append("lower_bound:" + str(key))
++    return issues
++
++
+ def target_issues(target, request):
+     if not isinstance(target, dict) or not matches_digest(target.get("sha256")) or (
+             target["sha256"] != request.get("reference_sha256")):
+@@ -96,6 +140,7 @@ def target_issues(target, request):
+     if (not isinstance(protected, dict) or not present(protected.get("scope_id"))
+             or not matches_digest(protected.get("baseline_sha256"))):
+         issues.append("protected_scope")
++    issues += lower_bound_issues(target)
+     dependencies = request.get("dependency_hashes")
+     if (not isinstance(dependencies, dict)
+             or not all(present(key) and matches_digest(value) for key, value in dependencies.items())
+@@ -136,7 +181,7 @@ def measurement_issues(target, request, observation):
+         expected = actual[key] - desired
+         if not finite(expected) or not math.isclose(residuals[key], expected, rel_tol=1e-9, abs_tol=1e-12):
+             issues.append(f"residual:{key}")
+-        elif metric_state(expected, target["tolerances"][key],
+-                          uncertainty[key] + target["uncertainty"][key]) != "PASS":
++        elif constrained_state(target, key, expected,
++                               uncertainty[key] + target["uncertainty"][key]) != "PASS":
+             issues.append(f"tolerance:{key}")
+     return issues
+diff --git a/tools/production_qa/shared_factory_stage.py b/tools/production_qa/shared_factory_stage.py
+index 135ea6f..2bce0bc 100644
+--- a/tools/production_qa/shared_factory_stage.py
++++ b/tools/production_qa/shared_factory_stage.py
+@@ -11,13 +11,14 @@ from tempfile import mkdtemp
+ import time
+ 
+ from session_plan import sha
+-from shared_blueprint_contract import finite, measurement_issues, metric_state, target_issues
++from shared_blueprint_contract import (constrained_state, deficit, finite, measurement_issues,
++                                      target_issues)
+ 
+ 
+ def correction_states(target, observation):
+     return {
+-        key: metric_state(residual, target["tolerances"][key],
+-                          target["uncertainty"][key] + observation["uncertainty"][key])
++        key: constrained_state(target, key, residual,
++                               target["uncertainty"][key] + observation["uncertainty"][key])
+         for key, residual in observation["residuals"].items()
+     }
+ 
+@@ -83,10 +84,11 @@ def correct_items(adapter, native, target, observed, issues, perform, observe, j
+             if ((key not in rule["affects"] and abs(delta) > uncertainty)
+                     or (states[key] == "PASS" and after_states[key] != "PASS")
+                     or (states[key] == "HOLD" and after_states[key] == "OUTSIDE")
+-                    or (key != choice and abs(updated["residuals"][key])
+-                        > abs(observed["residuals"][key]) + uncertainty)):
++                    or (key != choice and deficit(target, key, updated["residuals"][key])
++                        > deficit(target, key, observed["residuals"][key]) + uncertainty)):
+                 raise RuntimeError("correction interfered with metric: " + key)
+-        if abs(updated["residuals"][choice]) >= abs(observed["residuals"][choice]):
++        if (deficit(target, choice, updated["residuals"][choice])
++                >= deficit(target, choice, observed["residuals"][choice])):
+             raise RuntimeError("correction did not reduce its measured residual")
+         observed = updated
+     return issues
+@@ -173,7 +175,8 @@ def execute_factory_stage(root, source, stage, target, request, adapter, deadlin
+             journal.append(dict(phase="initial_measure", observation=observed, issues=issues))
+             issues = correct_items(adapter, native, target, observed, issues, perform, observe, journal)
+         elif issues and all(issue.startswith("tolerance:") for issue in issues) and all(
+-            abs(observed["residuals"][key]) > target["tolerances"][key]
++            key not in (target.get("lower_bound") or {})
++            and abs(observed["residuals"][key]) > target["tolerances"][key]
+             + target["uncertainty"][key] + observed["uncertainty"][key]
+             for _, key in (issue.split(":", 1) for issue in issues)
+         ):
+diff --git a/tools/production_qa/test_shared_lower_bound.py b/tools/production_qa/test_shared_lower_bound.py
+new file mode 100644
+index 0000000..e5ff40f
+--- /dev/null
++++ b/tools/production_qa/test_shared_lower_bound.py
+@@ -0,0 +1,152 @@
++"""One-sided lower-bound metrics (#468 contract extension proposed from #485).
++
++Two-sided targets keep their behaviour and contract SHA; lower-bound metrics use
++r = x - L: r - u >= 0 PASS, r + u < 0 OUTSIDE, otherwise HOLD. Movement further
++above the bound is never a worsening; lower-bound metrics are not auto-corrected.
++"""
++from copy import deepcopy
++import itertools
++import json
++import unittest
++
++from shared_blueprint_contract import (constrained_state, deficit, digest_record,
++                                       measurement_issues, metric_state, target_issues)
++import test_shared_blueprint_contract as contract_fixture
++import test_shared_item_correction as factory_fixture
++
++
++class LowerBoundContractTests(contract_fixture.BlueprintContractTests):
++    def bounded(self, lower=1.0):
++        target = deepcopy(self.target)
++        target["values"]["clearance"] = lower
++        target["tolerances"]["clearance"] = 0
++        target["uncertainty"]["clearance"] = .001
++        target["lower_bound"] = {"clearance": lower}
++        return target
++
++    def observe(self, target, x, u=.002):
++        obs = deepcopy(self.observation)
++        obs["actual"]["clearance"] = x
++        obs["residuals"]["clearance"] = x - target["values"]["clearance"]
++        obs["uncertainty"]["clearance"] = u
++        obs["target_contract_sha256"] = digest_record(target)
++        return obs
++
++    def test_boundaries(self):
++        t = {"lower_bound": {"k": 1.0}, "tolerances": {"k": 0}}
++        for r, u, state in ((0, 0, "PASS"), (.25, .25, "PASS"), (10, .5, "PASS"),
++                            (.125, .25, "HOLD"), (-.25, .25, "HOLD"), (-.375, .25, "OUTSIDE")):
++            with self.subTest(r=r, u=u):
++                self.assertEqual(constrained_state(t, "k", r, u), state)
++
++    def test_two_sided_behaviour_and_contract_sha_unchanged(self):
++        before = digest_record(self.target)
++        self.assertEqual(target_issues(self.target, self.req), [])
++        self.assertEqual(digest_record(self.target), before)
++        self.assertNotIn("lower_bound", self.target)
++        grid = (-.5, -.25, 0, .125, .25, .5)
++        for r, t, u in itertools.product(grid, (0, .25, .5), (0, .125, .25)):
++            self.assertEqual(constrained_state({"tolerances": {"k": t}}, "k", r, u),
++                             metric_state(r, t, u))
++
++    def test_valid_bound_accepts_values_above_lower_bound(self):
++        target = self.bounded()
++        self.assertEqual(target_issues(target, self.req), [])
++        self.assertEqual(measurement_issues(target, self.req, self.observe(target, 1.66)), [])
++        # u = .001 (target) + .002 (observation): PASS needs x - 1.0 >= .003
++        self.assertEqual(measurement_issues(target, self.req, self.observe(target, 1.004)), [])
++        self.assertIn("tolerance:clearance",                       # HOLD
++                      measurement_issues(target, self.req, self.observe(target, 1.002)))
++        self.assertIn("tolerance:clearance",
++                      measurement_issues(target, self.req, self.observe(target, 0.9)))
++
++    def test_invalid_bound_specifications_are_rejected(self):
++        cases = []
++        for mutate in (lambda t: t.update(lower_bound=[]),
++                       lambda t: t.update(lower_bound={}),
++                       lambda t: t["lower_bound"].update(missing=1.0),
++                       lambda t: t["lower_bound"].update(clearance=1.5),
++                       lambda t: t["lower_bound"].update(clearance=float("inf")),
++                       lambda t: t["tolerances"].update(clearance=.1),
++                       lambda t: t.update(corrections={"clearance": {}}, intersection_limit=0)):
++            target = self.bounded()
++            mutate(target)
++            cases.append(target)
++        for target in cases:
++            with self.subTest(target=json.dumps(target.get("lower_bound"), default=str)):
++                self.assertTrue([i for i in target_issues(target, self.req)
++                                 if i.startswith(("lower_bound", "correction"))])
++
++    def test_deficit_ignores_movement_above_bound(self):
++        target = self.bounded()
++        self.assertEqual(deficit(target, "clearance", .66), 0)
++        self.assertEqual(deficit(target, "clearance", -.2), .2)
++        self.assertEqual(deficit(target, "span", -.2), .2)
++
++
++class LowerBoundFactoryTests(factory_fixture.ItemCorrectionTests):
++    def setUp(self):
++        super().setUp()
++        values = json.loads(self.source.read_text())
++        values["clearance"] = 1.66
++        self.source.write_text(json.dumps(values))
++        from session_plan import sha
++        self.request["source_sha256"] = self.target["source_sha256"] = sha(self.source)
++        self.target["values"]["clearance"] = 1.0
++        self.target["tolerances"]["clearance"] = 0
++        self.target["uncertainty"]["clearance"] = 0
++        self.target["lower_bound"] = {"clearance": 1.0}
++        self.target["corrections"]["length"]["affects"].append("clearance")
++        self.clearance_step = .1
++        self.width_fixed = True
++
++    def measure(self, native, target, *, deadline):
++        observed = super().measure(native, target, deadline=deadline)
++        observed["uncertainty"]["clearance"] = .001
++        observed["uncertainty"]["width"] = .005
++        return observed
++
++    reopen = measure
++
++    def correct_metric(self, native, target, key, amount, *, deadline):
++        applied = super().correct_metric(native, target, key, amount, deadline=deadline)
++        values = json.loads(native.read_text())
++        values["clearance"] += self.clearance_step
++        native.write_text(json.dumps(values))
++        return applied
++
++    def test_increase_above_lower_bound_is_not_interference(self):
++        checkpoint = self.execute()
++        self.assertTrue(checkpoint["reopened"])
++        self.assertIn("length", self.calls)
++
++    def test_drop_below_lower_bound_is_interference(self):
++        self.clearance_step = -.7
++        with self.assertRaisesRegex(RuntimeError, "interfered with metric: clearance"):
++            self.execute()
++
++    def test_lower_bound_outside_is_not_auto_corrected(self):
++        del self.target["corrections"]
++        del self.target["intersection_limit"]
++        values = json.loads(self.source.read_text())
++        values.update(length=1.0, clearance=.5)
++        self.source.write_text(json.dumps(values))
++        from session_plan import sha
++        self.request["source_sha256"] = self.target["source_sha256"] = sha(self.source)
++        self.correct = lambda *a, **k: self.calls.append("unrestricted-correct")
++        with self.assertRaisesRegex(RuntimeError, "tolerance:clearance"):
++            self.execute()
++        self.assertNotIn("unrestricted-correct", self.calls)
++
++
++# Inherited fixture tests run again under the lower-bound fixtures; keep only new ones.
++for name in [n for n in dir(LowerBoundContractTests) if n.startswith("test_")
++             and n not in LowerBoundContractTests.__dict__]:
++    setattr(LowerBoundContractTests, name, None)
++for name in [n for n in dir(LowerBoundFactoryTests) if n.startswith("test_")
++             and n not in LowerBoundFactoryTests.__dict__]:
++    setattr(LowerBoundFactoryTests, name, None)
++
++
++if __name__ == "__main__":
++    unittest.main()

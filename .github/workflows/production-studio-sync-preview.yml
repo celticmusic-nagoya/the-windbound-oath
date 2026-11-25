@@ -1,0 +1,62 @@
+name: Production Studio sync preview
+on:
+  pull_request:
+    paths:
+      - 'tools/production-studio/**'
+      - '.github/workflows/production-studio-sync-preview.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: studio-sync-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate model discovery and exact script syntax
+        working-directory: tools/production-studio
+        run: |
+          python -m py_compile discover-gallery.py artifact-sync.py stage-village.py
+          node --check gallery-smoke.mjs
+          bash -n sync-preview.sh
+          python - <<'PY'
+          import runpy
+          d=runpy.run_path('discover-gallery.py')
+          assert d['model_allowed']('export/model.glb')
+          assert d['model_allowed']('checkpoint/models/model.vrm')
+          for p in ['../models/x.glb','/models/x.glb','native/x.blend','models/x.png','x.glb']:
+              assert not d['model_allowed'](p), p
+          PY
+      - run: bash tools/production-studio/sync-preview.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STUDIO_PREVIEW_MODELS: '1'
+      - name: Verify retained snapshot before publication
+        run: |
+          python tools/production-studio/merge-gallery.py tools/production-studio "$RUNNER_TEMP/studio-site" "$RUNNER_TEMP/retained"
+          cp "$RUNNER_TEMP/retained/gallery-manifest.json" "$RUNNER_TEMP/studio-site/"
+          mkdir -p "$RUNNER_TEMP/studio-site/published"
+          cp -r "$RUNNER_TEMP/retained/published/." "$RUNNER_TEMP/studio-site/published/"
+      - name: Verify actual gallery in mobile browser
+        working-directory: tools/production-studio
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
+          npx playwright install --with-deps chromium
+          node gallery-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: studio-gallery-qa
+          path: tools/production-studio/gallery-qa/
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-sync-preview
+          path: ${{ runner.temp }}/studio-site/
+          if-no-files-found: error

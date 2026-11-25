@@ -1,98 +1,52 @@
 name: Morwen VRoid macOS compatibility probe
 on:
   workflow_dispatch:
+    inputs:
+      poll_probe:
+        description: Read-only two-command reception test in the same macOS job
+        type: boolean
+        default: false
 permissions:
   contents: read
   actions: read
+  pull-requests: read
 concurrency:
   group: morwen-vroid-macos-probe
   cancel-in-progress: false
 jobs:
-  probe:
+  reopen:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
     runs-on: macos-15
-    timeout-minutes: 60
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: feature/morwen-artdirected-sculpt-20261119
+          ref: 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
           persist-credentials: false
-      - name: Compile shared GUI controls
+      - name: Record checkout and compile existing GUI controls
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p evidence
+          git rev-parse HEAD > evidence/checkout-sha.txt
+          grep -qx 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb evidence/checkout-sha.txt
+          bash -n tools/production_qa/morwen_readonly_capture.sh
+          if grep -nF '\\n' tools/production_qa/morwen_readonly_capture.sh; then
+            echo 'BLOCKED_MALFORMED_CHECKSUM_ESCAPE' >&2
+            exit 1
+          fi
+          bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-          "$RUNNER_TEMP/two-gui" screenshot evidence/gui-compile-screen.png
-          "$RUNNER_TEMP/two-gui" ocr evidence/gui-compile-screen.png > evidence/gui-compile-ocr.txt
-          cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
-          import Foundation
-          import Vision
-          import AppKit
-          let request = VNRecognizeTextRequest()
-          request.recognitionLevel = .accurate
-          request.usesLanguageCorrection = false
-          let args = CommandLine.arguments
-          try VNImageRequestHandler(url: URL(fileURLWithPath: args[1])).perform([request])
-          let rows = request.results ?? []
-          let labels = rows.filter {
-              $0.boundingBox.minX > 0.71 && $0.boundingBox.midX < 0.91
-                  && $0.topCandidates(1).first?.string
-                      .trimmingCharacters(in: .whitespacesAndNewlines)
-                      .range(of: args[2], options: [.regularExpression, .caseInsensitive]) != nil
-          }
-          guard labels.count == 1, let label = labels.first else { exit(2) }
-          let fields = rows.filter {
-              $0.boundingBox.midX > 0.92
-                  && abs($0.boundingBox.midY - label.boundingBox.midY) < 0.018
-                  && $0.topCandidates(1).first?.string.range(
-                      of: #"^[−-]?\d+\.\d{3}$"#, options: .regularExpression
-                  ) != nil
-          }
-          guard fields.count == 1, let field = fields.first,
-                let value = field.topCandidates(1).first?.string else { exit(2) }
-          let png = try Data(contentsOf: URL(fileURLWithPath: args[1]))
-          guard let image = NSBitmapImageRep(data: png) else { exit(2) }
-          let w = image.pixelsWide, h = image.pixelsHigh
-          let fieldY = 1 - field.boundingBox.midY
-          let expectedY = Int(fieldY * Double(h)) + Int(Double(h) * 0.031)
-          guard expectedY + 9 < h else { exit(2) }
-          var xs: [Int] = [], ys: [Int] = []
-          for y in (expectedY - 9)...(expectedY + 9) {
-              for x in Int(Double(w) * 0.72)...Int(Double(w) * 0.981) {
-                  guard let c = image.colorAt(x: x, y: y)?.usingColorSpace(NSColorSpace.deviceRGB) else { continue }
-                  if c.blueComponent > 0.78 && c.redComponent < 0.22
-                      && c.greenComponent > 0.30 && c.greenComponent < 0.82 {
-                      xs.append(x)
-                      ys.append(y)
-                  }
-              }
-          }
-          guard let minX = xs.min(), let maxX = xs.max(), maxX - minX <= 35,
-                let minY = ys.min(), let maxY = ys.max() else { exit(2) }
-          print(value.replacingOccurrences(of: "−", with: "-"),
-                Double(minX + maxX) / (2 * Double(w)),
-                Double(minY + maxY) / (2 * Double(h)))
-          SWIFT
-          swiftc "$RUNNER_TEMP/face-row.swift" -o "$RUNNER_TEMP/face-row"
-      - name: Environment
-        run: |
-          mkdir -p evidence
-          sw_vers > evidence/environment.txt
-          uname -m >> evidence/environment.txt
-          df -h >> evidence/environment.txt
-          system_profiler SPDisplaysDataType >> evidence/environment.txt
-      - name: Cache verified installer download
-        uses: actions/cache@v4
-        with:
-          path: ${{ runner.temp }}/vroid.dmg
-          key: vroid-macos-arm64-2.16.0-d3d8900b6397e9ed7
       - name: Restore native checkpoint
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          # ChatGPT lease: resume batch-3 candidate (run 44875972332).
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14696650765/zip" > "$RUNNER_TEMP/checkpoint.zip"
-          echo "9fb186d6c5c24e72029b7b0433db3b942d40bdcd3900e5d01419d796a69d2619  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
+          # Resume the indexed face checkpoint; fail closed on unavailable or expired artifact.
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14729674867" --jq 'select(.expired == false) | .id' | grep -qx 14729674867
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/14729674867/zip" > "$RUNNER_TEMP/checkpoint.zip"
+          echo "08cd55927436dc25d8bfb3ec01c620a43b19976bb577f0d4433fb483121241dc  $RUNNER_TEMP/checkpoint.zip" | shasum -a 256 -c
           python3 - <<'PY'
           import os, zipfile, pathlib, hashlib
           p=pathlib.Path(os.environ["RUNNER_TEMP"])
@@ -100,7 +54,7 @@ jobs:
               item=z.getinfo("model.vroid")
               assert 0 < item.file_size < 100_000_000
               data=z.read(item)
-              assert hashlib.sha256(data).hexdigest()=="2ac3bc51ff8f2a1c19be76bd2e50e416d0b35faaad0812b3b475b6592602a519"
+              assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Download official DMG and inspect signature
@@ -123,6 +77,7 @@ jobs:
           ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
           hdiutil detach "$RUNNER_TEMP/vroid-mount"
       - name: Launch signed application and collect evidence
+        timeout-minutes: 12
         shell: bash
         run: |
           set -euo pipefail
@@ -199,6 +154,7 @@ jobs:
           test ! -e "$HOME/Documents/Morwen-resume.vroid"
           cp "$RUNNER_TEMP/Morwen-resume.vroid" "$HOME/Documents/Morwen-resume.vroid"
           cmp "$RUNNER_TEMP/Morwen-resume.vroid" "$HOME/Documents/Morwen-resume.vroid"
+          chmod a-w "$HOME/Documents/Morwen-resume.vroid"
           reopen_native() {
             local attempt before after
             for attempt in 1 2 3; do
@@ -252,134 +208,65 @@ jobs:
             fi
           fi
           screencapture -x evidence/final-recovery-screen.png || true
-          # OCR the parameter row and its numeric field in the right-hand panel.
-          row="$RUNNER_TEMP/face-row"
-          select_face_panel() {
-            "$gui" click 0.095 0.099
-            "$gui" click 0.023 "$1"
-            sleep 1
-          }
-          locate_row() {
-            local tag="$1" pattern="$2" attempt hit
-            local limit=2
-            if [[ "$tag" == chin-* ]]; then limit=21; fi
-            for ((attempt=0; attempt<=limit; attempt++)); do
-              capture_state "$tag-$attempt"
-              grep -Eiq 'Face.*Hairstyle.*Body.*Outfit' "evidence/$tag-$attempt.txt" || return 1
-              if hit=$("$row" "evidence/$tag-$attempt.png" "$pattern"); then
-                printf '%s %s\n' "$attempt" "$hit"
-                return 0
-              fi
-              "$gui" scroll 0.89 0.68 -9 0
-              sleep 1
-            done
-            return 1
-          }
-          drag_row() {
-            local x="$1" y="$2" delta="$3" destination
-            destination=$(awk -v x="$x" -v n="$delta" 'BEGIN { print x+n }')
-            "$gui" slider "$x" "$y" "$destination" "$y" 0.5
-            sleep 1
-          }
-          edit_row() {
-            local tag="$1" pattern="$2" delta="$3" hit attempt x y before after previous
-            local correction="${4:-}"
-            if ! hit=$(locate_row "$tag-before" "$pattern"); then
-              echo "$tag CONTROL_NOT_VERIFIED" >> evidence/face-edits.txt
-              return 1
-            fi
-            read -r attempt before x y <<< "$hit"
-            drag_row "$x" "$y" "$delta"
-            capture_state "$tag-after"
-            if ! hit=$("$row" "evidence/$tag-after.png" "$pattern"); then
-              echo "$tag VALUE_NOT_VERIFIED" >> evidence/face-edits.txt
-              return 1
-            fi
-            read -r after x y <<< "$hit"
-            printf '%s %s %s\n' "$tag" "$before" "$after" >> evidence/face-edits.txt
-            [ "$before" != "$after" ] || return 1
-            if [ -n "$correction" ]; then
-              previous="$after"
-              capture_views midpoint
-              drag_row "$x" "$y" "$correction"
-              capture_state "$tag-corrected"
-              hit=$("$row" "evidence/$tag-corrected.png" "$pattern") || return 1
-              read -r after x y <<< "$hit"
-              printf '%s-corrected %s %s\n' "$tag" "$previous" "$after" >> evidence/face-edits.txt
-              [ "$previous" != "$after" ] || return 1
-            fi
-            printf '%s\n' "$after" > "evidence/$tag-saved-value.txt"
-          }
-          capture_views() {
-            local stage="$1" n
-            "$gui" vroid-shortcut front
-            sleep 1
-            capture_state "face-$stage-front"
-            for n in 1 2 3; do "$gui" vroid-shortcut turn-left; done
-            sleep 1
-            capture_state "face-$stage-left"
-            "$gui" vroid-shortcut front
-            for n in 1 2 3; do "$gui" vroid-shortcut turn-right; done
-            sleep 1
-            capture_state "face-$stage-right"
-            "$gui" vroid-shortcut front
-            sleep 1
-          }
-          check_row() {
-            local tag="$1" pattern="$2" hit attempt value x y
-            hit=$(locate_row "$tag-reopened" "$pattern") || return 1
-            read -r attempt value x y <<< "$hit"
-            [ "$value" = "$(cat "evidence/$tag-saved-value.txt")" ]
-          }
-          try_saved_copy() {
-            local candidate="$1"
-            [ -s "$candidate" ] || return 1
-            # A ZIP timestamp or thumbnail change alone does not establish edited model data.
-            python3 - "$candidate" <<'PY'
-          import sys, zipfile
-          with zipfile.ZipFile("evidence/input-model.vroid") as source, zipfile.ZipFile(sys.argv[1]) as result:
-              if result.testzip() is not None or result.read("v1model/data.bin") == source.read("v1model/data.bin"):
-                  sys.exit(1)
+          grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
+          MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
+          MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
+          MORWEN_CAPTURE_MODE=rear-only
+          source tools/production_qa/morwen_readonly_capture.sh
+      - name: Receive two read-only probe instructions in this session
+        if: inputs.poll_probe
+        timeout-minutes: 4
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime as dt, json, os, pathlib, subprocess, time
+          started = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
+          since = started.isoformat().replace("+00:00", "Z")
+          run, attempt = os.environ["GITHUB_RUN_ID"], os.environ["GITHUB_RUN_ATTEMPT"]
+          prefix = f"TWO-MORWEN-POLL-PROBE v1 run={run} attempt={attempt} head=3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb seq="
+          wanted = {prefix + str(i): i for i in (1, 2)}
+          for body in wanted:
+              print("SEND EXACTLY:", body, flush=True)
+          accepted, seen = {}, set()
+          deadline = time.monotonic() + 180
+          while time.monotonic() < deadline and len(accepted) < 2:
+              raw = subprocess.check_output(
+                  ["gh", "api", "--method", "GET", "repos/celticmusic-nagoya/the-windbound-oath/issues/427/comments",
+                   "-f", "since="+since, "-F", "per_page=100", "--paginate", "--slurp"],
+                  timeout=min(15, max(1, deadline-time.monotonic())), text=True)
+              for page in json.loads(raw):
+                  for item in page:
+                      cid = item.get("id")
+                      if type(cid) is not int or cid <= 0 or cid in seen:
+                          continue
+                      seen.add(cid)
+                      if item.get("user", {}).get("id") != 315379131 or item.get("author_association") != "OWNER":
+                          continue
+                      created = item.get("created_at", "")
+                      if created != item.get("updated_at") or created <= since:
+                          continue
+                      seq = wanted.get(item.get("body"))
+                      if seq and seq not in accepted:
+                          accepted[seq] = cid
+                          print(f"READ_ONLY_RECEIVED seq={seq} comment={cid}", flush=True)
+              if len(accepted) < 2:
+                  time.sleep(min(10, max(0, deadline-time.monotonic())))
+          receipt = {"run": run, "attempt": attempt, "accepted": accepted,
+                     "scope": "READ_ONLY_NO_NATIVE_EDIT_NO_PRODUCTION_CAS",
+                     "status": "PASS" if len(accepted) == 2 else "BLOCKED"}
+          pathlib.Path("evidence/poll-probe.txt").write_text(json.dumps(receipt, sort_keys=True))
+          if len(accepted) != 2:
+              raise SystemExit("Two live probe instructions not received")
           PY
-          }
-          if ! grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt; then
-            echo BLOCKED_SOURCE_REOPEN > evidence/authoring-status.txt
-            exit 1
-          fi
-          echo NATIVE_CHECKPOINT_REOPENED > evidence/reopen-status.txt
-          MORWEN_SESSION_MODE=edit
-          # shellcheck source=/dev/null
-          source tools/production_qa/morwen_vroid_session.sh
-          echo VRM_DEFERRED_NATIVE_ART_QA > evidence/vrm-status.txt
-          pid="$(pgrep -x "$exe" | head -n 1 || true)"
-          if [ -f "$RUNNER_TEMP/vroid-player.log" ]; then
-            cp "$RUNNER_TEMP/vroid-player.log" evidence/player.log
-          fi
-          ps -axo pid,comm > evidence/processes.txt
-          if [ -d "$HOME/Library/Logs" ]; then
-            find "$HOME/Library/Logs" -maxdepth 4 -name Player.log -exec cp {} evidence/ \;
-          fi
-          screencapture -x evidence/screen.png || true
-          if [ -d "$HOME/Library/Logs/DiagnosticReports" ]; then
-            find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -iname '*vroid*' -exec cp {} evidence/ \;
-          fi
-          if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
-            echo PROCESS_ALIVE > evidence/status.txt
-            kill "$pid" || true
-          else
-            set +e
-            false
-            rc=$?
-            set -e
-            echo "PROCESS_EXITED $rc" > evidence/status.txt
-            exit 1
-          fi
-          test -s evidence/screen.png
-          test -s evidence/model.vroid
-      - name: Upload diagnostics
+      - name: Upload review evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: morwen-native-editor-checkpoint-not-adopted
-          path: evidence/
+          name: morwen-isolated-vroid-reopen-review
+          path: |
+            evidence/*.png
+            evidence/*.txt
           retention-days: 7

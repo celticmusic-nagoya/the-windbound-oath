@@ -9,6 +9,12 @@ on:
       - 'tests/moss/approved_story_cg_sequence.test.js'
       - '.github/workflows/approved-story-cg-sequence-qa.yml'
   push:
+    branches-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
+    tags-ignore:
+      - 'two-asset-lease/v1/**'
+      - 'two-checkpoint/v1/**'
     paths:
       - 'index.html'
       - 'dev-fresh-20261108.html'

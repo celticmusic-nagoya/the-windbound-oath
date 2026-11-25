@@ -1,0 +1,96 @@
+name: HOME isolated P0 native production
+on:
+  push:
+    branches: [infra/shared-native-session-20261122]
+    paths:
+      - .github/workflows/two-home-p0-isolated.yml
+      - tools/production_qa/home_p0/phase.json
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-home-p0-isolated
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: tools/production_qa
+      PULSE_SERVER: unix:/tmp/two-no-pulse-socket
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - uses: actions/checkout@v4
+        with:
+          ref: 133cdf7e76417e1127d88129deb900939901e220
+          path: owner-design
+          persist-credentials: false
+          sparse-checkout: docs/production
+      - name: Authenticate and verify the fixed input
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          mkdir -p /tmp/home-source /tmp/home-output
+          phase=tools/production_qa/home_p0/phase.json
+          artifact="$(jq -er '.artifact' "$phase")"
+          producing_run="$(jq -er '.run' "$phase")"
+          zip_sha="$(jq -er '.zip_sha256' "$phase")"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact"             --jq '[.workflow_run.id,.expired,.digest] | @tsv' > /tmp/home-artifact-metadata
+          test "$(cat /tmp/home-artifact-metadata)" = "$(printf '%s\tfalse\tsha256:%s' "$producing_run" "$zip_sha")"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact/zip" > /tmp/home-input.zip 2> /tmp/home-download-error || {
+            echo "::error::Cannot download the authenticated HOME archive"
+            exit 1
+          }
+          echo "$zip_sha  /tmp/home-input.zip" | sha256sum -c
+          unzip -q /tmp/home-input.zip -d /tmp/home-source
+          (cd /tmp/home-source && sha256sum -c SHA256SUMS)
+      - name: Install and qualify the official free Blender build
+        run: bash tools/production_qa/install_blender_530.sh /tmp/home-blender
+      - name: Reserve an isolated writer and edit the verified native copy
+        run: |
+          set -euo pipefail
+          phase=tools/production_qa/home_p0/phase.json
+          mode="$(jq -er '.mode' "$phase")"
+          expected="$(jq -er '.native_sha256' "$phase")"
+          case "$mode" in
+            create) source=/tmp/home-source/home_furniture_candidate.blend ;;
+            restore) source=/tmp/home-source/home-p0.blend ;;
+            *) exit 2 ;;
+          esac
+          fence=tools/production_qa/home_p0/isolated_fence.py
+          python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json open
+          edit() {
+            timeout -k 20s "$1" /tmp/home-blender/blender -b -noaudio --disable-autoexec \
+              --python-exit-code 9 --python tools/production_qa/home_p0/home_bedding.py -- \
+              "$2" "$source" owner-design/docs/production/lind/home/interior-bed-target.v1.json \
+              owner-design/docs/production/LIND_INTEGRATED_ARCHITECTURE_BLUEPRINT_20261121.md \
+              /tmp/home-output "$3"
+          }
+          if [[ "$mode" == restore ]]; then
+            if edit 1m restore "$(printf '%064d' 0)" > /tmp/home-sha-negative.log 2>&1; then exit 1; fi
+            grep -q 'AssertionError: P0_NATIVE_SHA_MISMATCH' /tmp/home-sha-negative.log
+            test ! -e /tmp/home-output/home-p0.blend
+            if edit 1m interrupt "$expected" > /tmp/home-interruption.log 2>&1; then exit 1; fi
+            grep -q 'RuntimeError: P0_INTENTIONAL_INTERRUPTION_BEFORE_WRITE' /tmp/home-interruption.log
+            test ! -e /tmp/home-output/home-p0.blend
+            python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json owned
+            echo "P0_INTERRUPTED_RESTORE_RETAINED_FENCE"
+          fi
+          edit 12m "$mode" "$expected"
+          python3 "$fence" /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json owned
+          (cd /tmp/home-output && sha256sum home-p0.blend preview.png qa.json > SHA256SUMS)
+          cat /tmp/home-output/qa.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-home-p0-${{ github.run_id }}
+          path: /tmp/home-output
+          if-no-files-found: error
+          retention-days: 90
+      - name: Release only the isolated verified writer after upload
+        run: python3 tools/production_qa/home_p0/isolated_fence.py /tmp/home-p0-isolated.git LIND-HOME /tmp/home-lease.json close
