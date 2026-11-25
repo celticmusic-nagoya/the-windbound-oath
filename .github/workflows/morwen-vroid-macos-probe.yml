@@ -223,10 +223,22 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import datetime as dt, json, os, pathlib, subprocess, time
-          started = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
-          since = started.isoformat().replace("+00:00", "Z")
           run, attempt = os.environ["GITHUB_RUN_ID"], os.environ["GITHUB_RUN_ATTEMPT"]
-          prefix = f"TWO-MORWEN-POLL-PROBE v1 run={run} attempt={attempt} head=3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb seq="
+          # Allow instructions queued during this exact manually dispatched run, not only after GUI startup.
+          # No command can change the native file; acceptance is a read-only receipt.
+          meta = json.loads(subprocess.check_output(
+              ["gh", "api", "--method", "GET", "repos/celticmusic-nagoya/the-windbound-oath/actions/runs/"+run],
+              timeout=15, text=True))
+          if (str(meta.get("id")) != run or str(meta.get("run_attempt")) != attempt
+              or meta.get("event") != "workflow_dispatch" or meta.get("head_branch") != "main"
+              or meta.get("head_sha") != os.environ["GITHUB_SHA"]):
+              raise SystemExit("Run identity not verified")
+          cutoff = meta["created_at"] if attempt == "1" else meta["run_started_at"]
+          started = dt.datetime.fromisoformat(cutoff.replace("Z", "+00:00"))
+          if started > dt.datetime.now(dt.timezone.utc):
+              raise SystemExit("Run timestamp in future")
+          since = (started - dt.timedelta(seconds=1)).isoformat().replace("+00:00", "Z")
+          prefix = f"TWO-MORWEN-POLL-PROBE v2 run={run} attempt={attempt} head=3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb seq="
           wanted = {prefix + str(i): i for i in (1, 2)}
           for body in wanted:
               print("SEND EXACTLY:", body, flush=True)
@@ -246,7 +258,7 @@ jobs:
                       if item.get("user", {}).get("id") != 315379131 or item.get("author_association") != "OWNER":
                           continue
                       created = item.get("created_at", "")
-                      if created != item.get("updated_at") or created <= since:
+                      if created != item.get("updated_at") or created < cutoff:
                           continue
                       seq = wanted.get(item.get("body"))
                       if seq and seq not in accepted:
@@ -255,7 +267,7 @@ jobs:
               if len(accepted) < 2:
                   time.sleep(min(10, max(0, deadline-time.monotonic())))
           receipt = {"run": run, "attempt": attempt, "accepted": accepted,
-                     "scope": "READ_ONLY_NO_NATIVE_EDIT_NO_PRODUCTION_CAS",
+                     "cutoff": cutoff, "scope": "READ_ONLY_NO_NATIVE_EDIT_NO_PRODUCTION_CAS",
                      "status": "PASS" if len(accepted) == 2 else "BLOCKED"}
           pathlib.Path("evidence/poll-probe.txt").write_text(json.dumps(receipt, sort_keys=True))
           if len(accepted) != 2:
