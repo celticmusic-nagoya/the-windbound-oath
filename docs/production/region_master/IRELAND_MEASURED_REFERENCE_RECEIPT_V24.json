@@ -1,0 +1,103 @@
+{
+  "schema": "two.region.ireland_measured_reference.v24",
+  "status": "CLARE_REFERENCE_RASTER_AND_MESH_PASS_SOUTHWEST_PENDING",
+  "parent": "db9053d076d3fa0060cf0df611b928263b41171b",
+  "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+  "policies": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "region_owner": "8e800246b16125506c46a051588b7ad18905ace6",
+    "cliff_owner": "58cf4ea27ca800dc4cd236149b5035c4f324ba54",
+    "ecology_owner": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "v23": {
+    "run": 45635918803,
+    "job": 139282103509,
+    "conclusion": "failure",
+    "cause_evidence": "assert count>0 after layer.GetFeatureCount() before fully closing GeoJSON writer; recovered closed JSON contains 221 valid features. Failure confined to premature count validation; raw tile and projected crop recovered. Writer-count diagnosis supported by output, exact driver internal count not logged.",
+    "artifact": 15032169797,
+    "archive_sha256": "6c289cb8ac4b3a0737514b6ac8dfea169f732250fe988a4af342b472e4eac098",
+    "archive_crc": "PASS",
+    "source": {
+      "url": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N52_00_W010_00_DEM/Copernicus_DSM_COG_10_N52_00_W010_00_DEM.tif",
+      "bytes": 22788418,
+      "sha256": "6c353a7c94a7b73f827265367844c536a786e015e5c78be4cc407c78a44f7a66",
+      "crs": "EPSG:4326",
+      "shape": [
+        3600,
+        2400
+      ],
+      "source_range_m": [
+        -31.406291961669922,
+        1002.3636474609375
+      ],
+      "vertical_datum": "EGM2008 per provider; no embedded vertical CRS verified",
+      "data_kind": "DSM not bare-earth DTM",
+      "license_notice_sha256": "069bf3fd7e96f82a339403dac02cef32905ca95ff55839166f472994b3f40a3c",
+      "tile_list_sha256": "10604e3052c98a09e9216f1a8f0a555a04148419757575f783d4937fd44316dc"
+    },
+    "crop": {
+      "sha256": "34e41d558f772b8d9b9499c321d430bc5bd53ab203f4efc3902ae6f11d48c1bb",
+      "crs": "EPSG:32629",
+      "shape": [
+        516,
+        563
+      ],
+      "valid_samples": 290508,
+      "grid_m": 30,
+      "range_m": [
+        -2.3680412769317627,
+        251.5603485107422
+      ],
+      "contours": 221,
+      "contour_sha256": "a2f8dd085af8b00c197bcfd93e74f226268d616dbe61407dc529fa32ce89f735"
+    }
+  },
+  "reference_mesh": {
+    "status": "PASS_LOCAL_REFERENCE_ONLY",
+    "vertices": 290508,
+    "triangles": 578860,
+    "exact_reopen_vertices_faces": true,
+    "positive_up_normals_and_face_area": true,
+    "utm_origin_m": [
+      462976.65422380297,
+      5871185.210123914
+    ],
+    "gltf_axes": "X east, Y elevation, Z south",
+    "land_screen": "DSM>5m excluding outer pixel; not validated land mask",
+    "slope_degrees_p50_p95": [
+      3.3706774804665214,
+      10.215967176883991
+    ],
+    "glb_sha256": "87f288a22decc13cf69bad5b47e4314bf548ac5b94483dacb2ad1b426f0e0095",
+    "sheet_sha256": "5a02e6a836439ecb5cbf0149b8a32b6a9d5276925e80b7efc49d46b6288741e8",
+    "local_executed_script_sha256": "df773b1274653c659a2000a4c0b1e69061d52acdb85ef0ceb324aad79b86f269",
+    "package_sha256": "a9553969236bc1bc833a4aaa78cc1ddcc82dac45fa92071cfbe3a06ad113681f",
+    "package_bytes": 5725098,
+    "location": "Local ChatGPT attachments; raw source in exact V23 GitHub artifact; derivative package includes source notice and executed script. Not committed binary."
+  },
+  "v24": {
+    "run": 45637268935,
+    "head": "db9053d076d3fa0060cf0df611b928263b41171b",
+    "last_observed": "pending",
+    "script_blob": "7ba5d4a4854e740376875cf221cbf05408ed5415",
+    "workflow_blob": "6d5e997c13647a7e804db9aa7fb4771fcc432902",
+    "method": "Only remaining N51 W010 source tile, verified listed in recovered tileList; reopen JSON after writer closure; check contour validity and count. No repeat of acquired Clare tile."
+  },
+  "policy551": {
+    "head": "648bf84c52ad55a2652f13f98327579ee3006922",
+    "review": "NOT_RECORDED",
+    "merged": false
+  },
+  "gates": {
+    "reference_data": "CLARE_PASS_SOUTHWEST_PENDING",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_FICTIONAL_WORLD_METRIC",
+    "G2": "NOT_RUN",
+    "G3": "REFERENCE_GLB_EXACT_REOPEN_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Verify V24 source and actual southwest crop, compare source metrics to current fictional regional design; derive explicitly provisional C02 profile targets without direct copying or invented world-scale calibration. Preserve older CG historical only. No new billing or publication."
+}
