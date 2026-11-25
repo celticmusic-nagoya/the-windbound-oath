@@ -14,14 +14,25 @@ const RULES=[
  ["feature/lind-home-01",/^(?:home|aidan|lind-home)/i,"リルド村・エイダン家",""],
  ["feature/lind-buildings-01",/^(?:lind|rild|building)/i,"リルド村・建築",""],
  [CLIFF,/^(?:c11-|lind-cliff|windwaiting)/i,"風待ちの崖",""],
+ ["feature/lind-ecology-01",/^lind-eco-(?:53-candidate-evidence|integration-v2-package)$/,"リルド村・植生","eco_,renders/"],
+ ["asset/morwen-measured-textile-20261125",/^morwen-(?:photo-textile-comparison|brass-source-maps|met-gold-thread-oa-sources)-not-adopted$/,"モルウェン・材質研究",""],
  ["infra/native-env-qualification-20261123",/^two-hairharpy-volume-/,"モルウェン・ヘア技術",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^(?:ireland|two-shared|lind|world|area)/i,"地図・エリア設計",""],
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
+const CATEGORIES=[...new Set(RULES.map(r=>r[2]))];
+const SOURCE_LINKS=[
+ ["リルド村・植生","/pull/357"],
+ ["モルウェン・材質研究","/pull/540"],
+ ["モルウェン・顔／髪","/pull/427"],
+ ["風待ちの崖","/pull/421"],
+ ["リルド村・エイダン家","/pull/364"],
+ ["地図・エリア設計","/pull/482"]
+];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
 const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000;
 const PRESERVATION_WORKFLOW=".github/workflows/public-preservation-pilot.yml";
-const preservationLabel=id=>id===45706894871?"自動保全":id===45710690152?"独立復元":"保全／復元（実行種別はログ参照）";
+const preservationLabel=id=>[45706894871,45712121342].includes(id)?"自動保全":[45710690152,45713758086].includes(id)?"独立復元":"保全／復元（実行種別はログ参照）";
 function selectPreservationRuns(data){
  if(!Array.isArray(data?.workflow_runs))throw Error("保全Actions一覧形式不正");
  const seen=new Set(),rows=[];
@@ -36,7 +47,7 @@ function selectPreservationRuns(data){
  return rows.sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||b.id-a.id).slice(0,5);
 }
 function refreshDelay(success){return success?REFRESH_MS:RETRY_MS;}
-function selectRecentArtifacts(data){
+function selectRecentArtifacts(data,category=""){
  if(!Array.isArray(data?.artifacts))throw Error("Artifact一覧形式不正");
  const seen=new Set(), rows=[];
  for(const a of data.artifacts.slice(0,100)){
@@ -46,7 +57,7 @@ function selectRecentArtifacts(data){
      !isId(w.repository_id)||w.repository_id!==w.head_repository_id||
      a.expired!==false||!isId(a.size_in_bytes)||!Number.isFinite(Date.parse(a.created_at)))continue;
   const rule=RULES.find(([branch,pattern])=>w.head_branch===branch&&pattern.test(a.name));
-  if(!rule)continue;
+  if(!rule||(category&&rule[2]!==category))continue;
   seen.add(a.id);
   rows.push({id:a.id,run:w.id,name:a.name,head:w.head_sha,category:rule[2],filter:rule[3],
     created:a.created_at,expires:a.expires_at||"",bytes:a.size_in_bytes,
@@ -67,8 +78,15 @@ const preservationArea=make("section","");preservationArea.className="grid";
 preservationArea.setAttribute("aria-labelledby",preservationHeading.id);
 heading.before(preservationHeading,make("p","実行結果のみ表示。非公開原本・保全台帳・認証情報は取得しません。保存成功は正式採用やGUI再読込の証明ではありません。"),preservationStatus,preservationArea);
 const cadence=make("p","表示中は5分ごとに自動更新。通信失敗時は15分間隔に抑制し、前回の結果を保持します。");
-cadence.className="note";refresh.after(cadence);
-let generation=0,timer=null,nextDue=0,busy=false;
+cadence.className="note";
+const categoryLabel=make("label","制作領域で絞り込み");
+const categorySelect=make("select","");categorySelect.id="recent-review-category";categoryLabel.htmlFor=categorySelect.id;
+for(const name of ["",...CATEGORIES]){const option=make("option",name||"すべての制作領域");option.value=name;categorySelect.append(option);}
+categorySelect.value="";
+const sources=make("p","過去の成果物・一覧未検出時： ");sources.className="note";
+for(const [name,path] of SOURCE_LINKS){const link=make("a",name+" / 担当PR");link.href=GH+path;link.rel="noopener noreferrer";sources.append(link,make("span","　"));}
+refresh.after(cadence,categoryLabel,categorySelect,sources);
+let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastError="";
 function schedule(){
  if(timer!==null)clearTimeout(timer);
  timer=null;
@@ -91,15 +109,10 @@ async function updatePreservation(){
   preservationStatus.textContent=rows.length+" 件 / "+new Date().toLocaleString("ja-JP")+"（公開実行情報）";return true;
  }catch(e){preservationStatus.textContent="更新失敗: "+e.message+"。前回取得分を保持。";return false;}
 }
-async function update(){
- if(busy||document.hidden)return;
- busy=true;if(timer!==null)clearTimeout(timer);timer=null;
- const g=++generation;refresh.disabled=true;status.textContent="最新Artifactの公開メタデータを取得中";
- const preservation=updatePreservation();let success=false;
- try{
-  const rows=selectRecentArtifacts(await publicJson("/actions/artifacts?per_page=100"));
-  if(g!==generation)return;
-  area.replaceChildren();
+function renderRecent(){
+ if(!snapshot)return;
+ const rows=selectRecentArtifacts(snapshot,categorySelect.value);
+ area.replaceChildren();
   for(const x of rows){
    const card=make("article","");card.className="tile";card.dataset.artifactId=String(x.id);
    card.style.overflowWrap="anywhere";card.append(make("h3",x.category),make("p",x.name),make("p","制作日時 "+new Date(x.created).toLocaleString("ja-JP")+" / HEAD "+x.head.slice(0,12)),make("p","未公開候補・内容／QA／採用未判定（公開メタデータ）"));
@@ -120,9 +133,21 @@ async function update(){
    }else card.append(make("p","128 MiB超：GitHubで取得後、端末上で展開してください。"));
    area.append(card);
   }
-  status.textContent=rows.length+" 件（直近100 Artifact中、既知の制作元・期限内のみ、最大30件）／ "+new Date().toLocaleString("ja-JP")+(rows.length?"":"。対象未検出の場合は下記の制作元を確認。");
-  success=true;
- }catch(e){if(g===generation)status.textContent="最新一覧取得失敗: "+e.message+"。前回取得分を保持。下記の制作元Actionsから確認できます。";}
+ status.textContent=rows.length+" 件（直近100 Artifact中、既知の制作元・期限内のみ、選択領域ごと最大30件）／ "+lastSuccess+(rows.length?"":"。対象未検出の場合は担当PRを確認。")+(lastError?" / 更新失敗: "+lastError+"。前回取得分を保持。":"");
+}
+categorySelect.addEventListener("change",renderRecent);
+async function update(){
+ if(busy||document.hidden)return;
+ busy=true;if(timer!==null)clearTimeout(timer);timer=null;
+ const g=++generation;refresh.disabled=true;status.textContent="最新Artifactの公開メタデータを取得中";
+ const preservation=updatePreservation();let success=false;
+ try{
+  const data=await publicJson("/actions/artifacts?per_page=100");
+  if(g!==generation)return;
+  selectRecentArtifacts(data); // Validate before replacing the prior snapshot.
+  snapshot=data;lastSuccess=new Date().toLocaleString("ja-JP");lastError="";
+  renderRecent();success=true;
+ }catch(e){if(g===generation){lastError=e.message;status.textContent="最新一覧取得失敗: "+lastError+"。前回取得分を保持。担当PRから確認できます。";}}
  finally{
   const preservationSuccess=await preservation;
   if(g===generation){refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess);schedule();}
