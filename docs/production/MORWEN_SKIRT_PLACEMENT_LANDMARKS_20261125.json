@@ -1,0 +1,262 @@
+{
+  "scope": "SOURCE_IMAGE_LANDMARKS_ONLY",
+  "archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+  "manifest_match": 5,
+  "coordinate_frame": {
+    "reference_width": 600,
+    "reference_height": 900,
+    "origin": "top-left",
+    "unit": "resampled image px",
+    "manual_visual_uncertainty_px": 4,
+    "not_metric_or_uv": true
+  },
+  "views": [
+    {
+      "name": "Master / oblique",
+      "source_path": "assets/companions/morwen/master/morwen-full-body-v3.png",
+      "source_sha256": "96a88e1deb86734fc18b5d762bad6d5c33b9a481cdbf76d45d954e92a875f990",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "crop_reference_px": [
+        180,
+        365,
+        470,
+        600
+      ],
+      "anchors": {
+        "P1": {
+          "reference_px": [
+            343,
+            480
+          ],
+          "source_px": [
+            585.39,
+            819.2
+          ]
+        },
+        "D1": {
+          "reference_px": [
+            391,
+            478
+          ],
+          "source_px": [
+            667.31,
+            815.79
+          ]
+        },
+        "G1": {
+          "reference_px": [
+            389,
+            510
+          ],
+          "source_px": [
+            663.89,
+            870.4
+          ]
+        },
+        "G2": {
+          "reference_px": [
+            390,
+            515
+          ],
+          "source_px": [
+            665.6,
+            878.93
+          ]
+        },
+        "O1": {
+          "reference_px": [
+            249,
+            468
+          ],
+          "source_px": [
+            424.96,
+            798.72
+          ]
+        }
+      },
+      "rear_visible": null
+    },
+    {
+      "name": "Profile / facing left",
+      "source_path": "assets/official/characters/morwen/turnaround/file_0000000035a0820989d20c639724cc25.png",
+      "source_sha256": "d858c428c64007596302057453f414dd43c580bc1546b9578c3d1dfb0af17591",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "crop_reference_px": [
+        145,
+        340,
+        435,
+        575
+      ],
+      "anchors": {
+        "P1": {
+          "reference_px": [
+            186,
+            457
+          ],
+          "source_px": [
+            317.44,
+            779.95
+          ]
+        },
+        "D1": {
+          "reference_px": [
+            218,
+            445
+          ],
+          "source_px": [
+            372.05,
+            759.47
+          ]
+        },
+        "G1": {
+          "reference_px": [
+            299,
+            479
+          ],
+          "source_px": [
+            510.29,
+            817.49
+          ]
+        },
+        "G2": {
+          "reference_px": [
+            300,
+            486
+          ],
+          "source_px": [
+            512,
+            829.44
+          ]
+        },
+        "O1": {
+          "reference_px": [
+            249,
+            476
+          ],
+          "source_px": [
+            424.96,
+            812.37
+          ]
+        }
+      },
+      "rear_visible": null
+    },
+    {
+      "name": "Profile / facing right",
+      "source_path": "assets/official/characters/morwen/turnaround/file_00000000a6308211aaeeb9e2482c2e83.png",
+      "source_sha256": "7eeff76ac07f631c14cb536e0e08346cfe815247a88520fb5a68cf0e877e5548",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "crop_reference_px": [
+        180,
+        350,
+        470,
+        585
+      ],
+      "anchors": {
+        "P1": {
+          "reference_px": [
+            423,
+            480
+          ],
+          "source_px": [
+            721.92,
+            819.2
+          ]
+        },
+        "D1": {
+          "reference_px": [
+            389,
+            480
+          ],
+          "source_px": [
+            663.89,
+            819.2
+          ]
+        },
+        "G1": {
+          "reference_px": [
+            396,
+            499
+          ],
+          "source_px": [
+            675.84,
+            851.63
+          ]
+        },
+        "G2": {
+          "reference_px": [
+            397,
+            507
+          ],
+          "source_px": [
+            677.55,
+            865.28
+          ]
+        },
+        "O1": {
+          "reference_px": [
+            296,
+            460
+          ],
+          "source_px": [
+            505.17,
+            785.07
+          ]
+        }
+      },
+      "rear_visible": null
+    },
+    {
+      "name": "Rear / skirt obscured",
+      "source_path": "assets/official/characters/morwen/turnaround/file_00000000055481f8bac7574e5cab00dc.png",
+      "source_sha256": "9cf2f27448303aa60c603f0f32a7baada234fec8cae5108bf8103a9ae7547e69",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "crop_reference_px": [
+        150,
+        485,
+        440,
+        720
+      ],
+      "anchors": {
+        "O2": {
+          "reference_px": [
+            300,
+            610
+          ],
+          "source_px": [
+            512,
+            1041.07
+          ]
+        }
+      },
+      "rear_visible": false
+    }
+  ],
+  "legend": {
+    "P1": "Visible plaid",
+    "D1": "Visible dark pleat",
+    "G1": "Upper gold line",
+    "G2": "Lower gold line",
+    "O1": "Accessory / arm occlusion",
+    "O2": "Cape occlusion; skirt unresolved"
+  },
+  "unresolved": [
+    "Rear skirt is hidden by cape; no inferred design.",
+    "Master is oblique, not a true orthographic front.",
+    "Skirt pleat depth, hidden geometry, exact UV mapping and physical dimensions not measured.",
+    "Gold stripe landmarks are illustrative visible points, not global stripe widths."
+  ],
+  "review_sha256": "38c2e985b5a21de0ca29ec6994ece8f9caf6bb8821d31d52d1d2f04ab477a694"
+}
