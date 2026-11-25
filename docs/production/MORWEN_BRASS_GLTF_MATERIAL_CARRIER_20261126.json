@@ -1,0 +1,38 @@
+{
+  "scope": "GLTF_MATERIAL_TRANSPORT_FIXTURE_NOT_MORWEN_MODEL",
+  "main": "f7ba98e4dd458fbf7f3fd34eb3aef424382fbfbe",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "2645da019a1db61dbb2c17d32a0d0fb293b039b7",
+  "source": {
+    "url": "https://polyhaven.com/a/brass_pan_01",
+    "license": "CC0",
+    "scan_provenance": "UNVERIFIED",
+    "source_artifact": 15042068159,
+    "source_archive_sha256": "b7532af15c4fe647c408eafcbdbde4db54df7e7752596e49d560aa35aa4274c1",
+    "patch_zip_sha256": "730e365304c7ded4a3af8e8dc89ba030b038cae9a59f88341429ae6e31e38677",
+    "patch_receipt_sha256": "7414b280e818cf05279c3a4b22b991f97d16c47f908fa230f877703e2241d9be"
+  },
+  "method": "Preserve basecolor and tangent GL normal PNG bytes; pack roughness exact G, metallic exact B, neutral R255 (no AO bound). Standard glTF2 PBR metallic-roughness, three embedded images, neutral 4-vertex 2-triangle quad as transport fixture only. No native model or shader changes.",
+  "qa": {
+    "source_maps_byte_and_pixel_hash": "4/4 PASS",
+    "embedded_png_exact": "3/3 PASS",
+    "trimesh_independent_readback": "3/3 texture pixel arrays exact; 4 vertices 2 faces",
+    "repeat": "5/5 output files exact",
+    "negative_tests": "2/2 corrupted source and existing output rejected",
+    "zip_crc": "PASS 6 entries"
+  },
+  "outputs": {
+    "glb_sha256": "3dc702d9701a12ff2fce94fea81e9431177849fcc6a2022196e27a7594c6f9c1",
+    "glb_bytes": 8756,
+    "orm_sha256": "a314dc5e6e072f856f323bbb49e95863897896a80178958d7d1405033f6a866f",
+    "script_sha256": "4218e853c3265a7b5b52741c7679b44033d80875fd932d4499f8d146dcd95cf6",
+    "receipt_sha256": "0cb1dcef77e712a8f344ca48555eebca2461ce6a0891c4270a9b48013b1706fd",
+    "zip_sha256": "1d9737d6ec385eb89a805e5fce98216a6b07b1b2993af25d95a1e14099c0fd59",
+    "storage": "Local ZIP includes script and GLB, repository summary only."
+  },
+  "limits": "Search found explicitly photo-scanned industrial metals but not qualified clean gold/brass for this purpose. No unsuitable source adopted. Existing source scan method remains unverified. No glTF official validator or actual renderer run, no native UV or game integration. G2-G4 NOT_RUN for this candidate, skirt FAIL unchanged.",
+  "next": "Native owner use exact capture diagnostic and advance actual model; apply carrier material only after qualified native readiness and actual hardware UV validation. No duplicate isolated swatches or native dispatch, no adoption or merge."
+}
