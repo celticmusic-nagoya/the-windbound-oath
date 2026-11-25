@@ -1,0 +1,89 @@
+name: Aidan Asset Prep QA (MAP-ASSET-PREP-01)
+on:
+  pull_request:
+    paths:
+      - 'docs/map-production/**'
+      - 'tools/map_production/**'
+      - 'tests/test_aidan_asset_ledger.py'
+      - '.github/workflows/aidan-asset-prep-qa.yml'
+  workflow_dispatch:
+    inputs:
+      online:
+        description: 'Re-query providers and re-download P1 maps to verify SHA-256 lock'
+        type: boolean
+        default: false
+      blender_pin:
+        description: 'Download pinned Blender LTS, verify SHA-256, run 32x32 Cycles smoke'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m pip install --quiet pytest
+      - name: Ledger schema / license / canon reference SHA
+        run: python3 tools/map_production/aidan_asset_ledger.py validate
+      - name: Unit tests
+        run: python3 -m pytest -q tests/test_aidan_asset_ledger.py
+      - name: Protected approved assets unchanged in this PR
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --depth=1 origin "${{ github.base_ref }}"
+          if git diff --name-only FETCH_HEAD HEAD | grep -E '^(assets/approved/|img/|data/maps/)'; then
+            echo "FAIL: protected paths changed"; exit 1; fi
+          echo "PASS: no protected asset paths changed"
+  online:
+    if: github.event_name == 'workflow_dispatch' && inputs.online
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Provider metadata drift
+        run: python3 tools/map_production/aidan_asset_ledger.py check-online --report "$RUNNER_TEMP/online.json"
+      - name: Re-download locked set (P1-P2 CC0) and compare SHA-256 lock
+        run: |
+          python3 tools/map_production/aidan_asset_ledger.py fetch --locked-set \
+            --out "$RUNNER_TEMP/assets" --lock "$RUNNER_TEMP/lock.json" \
+            --expect-lock docs/map-production/aidan_asset_sha256.lock.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aidan-asset-online-check
+          path: |
+            ${{ runner.temp }}/online.json
+            ${{ runner.temp }}/lock.json
+          if-no-files-found: warn
+          retention-days: 7
+  blender-pin:
+    if: github.event_name == 'workflow_dispatch' && inputs.blender_pin
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download pinned Blender and verify SHA-256
+        run: |
+          URL=$(python3 -c "import json;print(json.load(open('docs/map-production/aidan_blender_config.json'))['blender']['recommended']['url'])")
+          SHA=$(python3 -c "import json;print(json.load(open('docs/map-production/aidan_blender_config.json'))['blender']['recommended']['sha256'])")
+          curl -fsSL -o "$RUNNER_TEMP/blender.tar.xz" "$URL"
+          echo "$SHA  $RUNNER_TEMP/blender.tar.xz" | sha256sum -c -
+          sudo apt-get update -qq && sudo apt-get install -y -qq libxi6 libxxf86vm1 libxfixes3 libxrender1 libgl1 libxkbcommon0 libsm6
+          tar -xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
+          echo "BLENDER=$(ls -d $RUNNER_TEMP/blender-*-linux-x64)/blender" >> "$GITHUB_ENV"
+      - name: Version + 32x32 Cycles smoke (no denoise)
+        run: |
+          "$BLENDER" -b --factory-startup --python-expr "
+          import bpy,sys
+          s=bpy.context.scene;s.render.engine='CYCLES';s.cycles.samples=4;s.cycles.use_denoising=False
+          s.render.resolution_x=s.render.resolution_y=32;s.render.filepath='/tmp/smoke.png'
+          bpy.ops.mesh.primitive_cube_add();bpy.ops.object.camera_add(location=(4,-4,3));s.camera=bpy.context.object
+          bpy.ops.render.render(write_still=True);print('BLENDER_PIN_SMOKE_PASS',bpy.app.version_string)"
