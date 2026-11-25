@@ -7,8 +7,9 @@ on:
         description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: parallel_batch
+        default: parallel_next
         options:
+          - parallel_next
           - parallel_batch
           - hair_review
           - hair_candidate
@@ -39,11 +40,12 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || '["reopen"]') }}
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || '["reopen"]')) }}
     runs-on: macos-15
     timeout-minutes: 35
     env:
       LANE: ${{ matrix.lane }}
+      HAIR_STRAND: ${{ inputs.mode == 'parallel_next' && 'Hair 7' || 'Hair 3' }}
     steps:
       - name: Verify automatic launch identity before checkout
         env:
@@ -57,7 +59,7 @@ jobs:
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
             test "$GITHUB_RUN_ATTEMPT" = 1
-            case "$MODE" in hair_candidate|hair_review|parallel_batch) ;; *) exit 1 ;; esac
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next) ;; *) exit 1 ;; esac
           fi
       - uses: actions/checkout@v4
         with:
@@ -68,13 +70,14 @@ jobs:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' }}
-          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -182,10 +185,12 @@ jobs:
               return c.blueComponent>0.78 && c.redComponent<0.22 && c.greenComponent>0.30 && c.greenComponent<0.82
           }
           // Selection must be the unique visible Hair 3 row, highlighted blue.
-          let strands=rows.filter { label($0)=="Hair 3" && $0.boundingBox.midX<0.28 }
+          let target=ProcessInfo.processInfo.environment["HAIR_STRAND"] ?? "Hair 3"
+          guard ["Hair 3","Hair 7"].contains(target) else { exit(2) }
+          let strands=rows.filter { label($0)==target && $0.boundingBox.midX<0.28 }
           guard strands.count==1, let strand=strands.first else { exit(2) }
           let sy=Int((1-strand.boundingBox.midY)*768)
-          guard sy>=340 && sy<=370 else { exit(2) }
+          guard (target=="Hair 3" ? (340...370).contains(sy) : (460...490).contains(sy)) else { exit(2) }
           var selected=0
           for yy in (sy-4)...(sy+4) { for xx in 65...90 { if blue(xx,yy) { selected+=1 } } }
           guard selected>=200 else { exit(2) }
@@ -252,7 +257,7 @@ jobs:
             swiftc "$RUNNER_TEMP/hair-save-guard.swift" -o "$RUNNER_TEMP/hair-save-guard"
           fi
       - name: Verify hair save guard on actual archived dialog before VRoid startup
-        if: inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -271,8 +276,31 @@ jobs:
           PY
           "$RUNNER_TEMP/hair-save-guard" "$RUNNER_TEMP/save-fixture.png" | tee evidence/hair-save-preflight.txt
           grep -qx 'Front checked Back unchecked' evidence/hair-save-preflight.txt
+      - name: Preflight Hair 7 locator against exact positive and negative images
+        if: inputs.mode == 'parallel_next' && matrix.lane == 'B-hair'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15006373919/zip" > "$RUNNER_TEMP/hair7-fixture.zip"
+          echo "ee214f69d25ae600c23f0a4063d137fd5de628f956072d5a418bc24379037e94  $RUNNER_TEMP/hair7-fixture.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"hair7-fixture.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"hair-7-geometry.png":"0a48567b4f834c6b5cddef833fbcbb85098c3516fb9de9612e3e93b9915533ab","hair-6-geometry.png":"36151a158820aab2cf740243e4f7e177b90d64e90207be29f4452e8d3d54bba8"}.items():
+                  data=z.read(n)
+                  assert hashlib.sha256(data).hexdigest()==h
+                  (p/n).write_bytes(data)
+          PY
+          test "$("$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-7-geometry.png" '^Width$' | cut -d ' ' -f1)" = 0.03
+          test "$("$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-7-geometry.png" '^Thickness$' | cut -d ' ' -f1)" = 0.04
+          if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
+          echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch'
+        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -293,7 +321,7 @@ jobs:
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
       - name: Restore exact saved hair candidate for read-only comparison
-        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch'
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -367,9 +395,10 @@ jobs:
         env:
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
-          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' }}
-          PARALLEL: ${{ inputs.mode == 'parallel_batch' }}
-          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || (inputs.mode == 'parallel_next' && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
@@ -693,12 +722,12 @@ jobs:
               sleep 2
               capture_state "$tag-group" >&2 || return 1
               grep -Fq 'Freehand Guides' "evidence/$tag-group.txt" || return 1
-              grep -Fq 'Hair 3' "evidence/$tag-group.txt" || return 1
+              grep -Fq "$HAIR_STRAND" "evidence/$tag-group.txt" || return 1
               grep -Fq 'Front' "evidence/$tag-group.txt" || return 1
-              "$gui" click-label "evidence/$tag-group.png" 'Hair 3' 'Freehand Guides' >&2 || return 1
+              "$gui" click-label "evidence/$tag-group.png" "$HAIR_STRAND" 'Freehand Guides' >&2 || return 1
               sleep 2
               capture_state "$tag-selected" >&2 || return 1
-              grep -Fq 'Hair 3' "evidence/$tag-selected.txt" || return 1
+              grep -Fq "$HAIR_STRAND" "evidence/$tag-selected.txt" || return 1
               grep -Fq 'Hair Groups' "evidence/$tag-selected.txt" || return 1
               # Actual prior screenshot: Texture Parameters at (754,221), width 2.98 is NOT geometry.
               # Toggle only the exact section header; then collapse Materials if needed.
@@ -732,7 +761,9 @@ jobs:
             fi
             read -r thickness _ _ <<< "$protected"
             # Exact observed baseline, not a general percentage-based correction.
-            if [ "$before" != 0.03 ] || [ "$thickness" != 0.05 ]; then
+            expected_thickness=0.05
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then expected_thickness=0.04; fi
+            if [ "$before" != 0.03 ] || [ "$thickness" != "$expected_thickness" ]; then
               echo BLOCKED_HAIR_OBSERVED_BASELINE_MISMATCH > evidence/hair-author-status.txt
               exit 1
             fi
@@ -748,10 +779,11 @@ jobs:
             read -r after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Width$')"
             read -r thickness_after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Thickness$')"
             python3 - "$before" "$after" "$thickness" "$thickness_after" <<'PY'
-          import sys
+          import sys,os
           from decimal import Decimal
           a,b,t,u=map(Decimal,sys.argv[1:])
-          assert (a,b,t,u)==tuple(map(Decimal,("0.03","0.02","0.05","0.05"))), "not the observed one-display-step candidate"
+          expected="0.04" if os.environ["HAIR_STRAND"]=="Hair 7" else "0.05"
+          assert (a,b,t,u)==tuple(map(Decimal,("0.03","0.02",expected,expected))), "unexpected one-display-step response"
           PY
             "$gui" click 0.0234 0.0990
             sleep 2
@@ -780,12 +812,22 @@ jobs:
               echo BLOCKED_HAIR_REOPEN_VALUE_MISMATCH > evidence/hair-author-status.txt
               exit 1
             fi
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then
+              "$gui" click-label evidence/hair-reopened-geometry.png 'Hair 3' 'Freehand Guides'
+              sleep 2
+              capture_state hair3-protected-reopened
+              read -r w3 _ _ <<< "$(HAIR_STRAND='Hair 3' "$row" evidence/hair3-protected-reopened.png '^Width$')"
+              read -r t3 _ _ <<< "$(HAIR_STRAND='Hair 3' "$row" evidence/hair3-protected-reopened.png '^Thickness$')"
+              test "$w3" = 0.02 && test "$t3" = 0.05
+              echo "Hair 3 width=$w3 thickness=$t3" > evidence/hair3-protection.txt
+            fi
             python3 - "$before" "$after" "$reopened" "$thickness" "$thickness_after" "$thickness_reopened" <<'PY'
-          import hashlib,json,pathlib,sys,zipfile
+          import hashlib,json,pathlib,sys,zipfile,os
           p=pathlib.Path("evidence")
           def sha(q): return hashlib.sha256(q.read_bytes()).hexdigest()
           src=p/"input-model.vroid"; dst=p/"model.vroid"
-          assert sha(src)=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+          expected_source={"Hair 3":"9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574","Hair 7":"55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"}[os.environ["HAIR_STRAND"]]
+          assert sha(src)==expected_source
           with zipfile.ZipFile(src) as a,zipfile.ZipFile(dst) as b:
               assert a.testzip() is None and b.testzip() is None
               assert a.read("v1model/data.bin")!=b.read("v1model/data.bin")
@@ -793,7 +835,7 @@ jobs:
           a,b,c,t,u,v=map(float,sys.argv[1:])
           (p/"hair-author-receipt.json").write_text(json.dumps(dict(
               status="SINGLE_STRAND_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED",
-              target="Front / first Freehand Group 1 / Hair 3 / Width",
+              target="Front / first Freehand Group 1 / "+os.environ["HAIR_STRAND"]+" / Width",
               before=a,after=b,reopened=c,protected_thickness=[t,u,v],
               source_sha256=sha(src),candidate_sha256=sha(dst),
               screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-before-geometry","hair-after-selected","hair-reopened-geometry")},
@@ -886,6 +928,7 @@ jobs:
                 ;;
               C-wardrobe)
                 panel outfit-top Outfit Body 'Whole Sets|Tops|Bottoms|Shoes'
+                if [ "$NEXT_BATCH" != true ]; then
                 for entry in tops:0.232 bottoms:0.294 neckwear:0.419 socks:0.669 shoes:0.732; do
                   tag=$(echo "$entry" | cut -d: -f1); yy=$(echo "$entry" | cut -d: -f2)
                   "$gui" click 0.023 "$yy"
@@ -894,15 +937,24 @@ jobs:
                   grep -Fq 'Morwen-resume.vroid' "evidence/outfit-$tag.txt"
                   ! dialog_visible "outfit-$tag"
                 done
+                fi
                 "$gui" click 0.023 0.294
                 sleep 2
                 capture_state skirt-template
                 grep -Fq Bottoms evidence/skirt-template.txt
                 grep -Fq 'Edit Texture' evidence/skirt-template.txt
                 "$gui" click-label evidence/skirt-template.png 'Edit Texture' Bottoms
-                sleep 4
-                capture_state skirt-texture-editor
-                grep -Eiq 'Layers|UV Guide|Texture Editor|Default Image' evidence/skirt-texture-editor.txt
+                ready=0
+                for delay in 4 10 20 30; do
+                  sleep "$delay"
+                  capture_state "skirt-texture-wait-$delay"
+                  if grep -Eiq 'Layers|UV Guide|Texture Editor|Default Image' "evidence/skirt-texture-wait-$delay.txt"; then
+                    cp "evidence/skirt-texture-wait-$delay.png" evidence/skirt-texture-editor.png
+                    cp "evidence/skirt-texture-wait-$delay.txt" evidence/skirt-texture-editor.txt
+                    ready=1; break
+                  fi
+                done
+                test "$ready" = 1 || { echo BLOCKED_TEXTURE_EDITOR_TRANSITION > evidence/module-status.txt; exit 1; }
                 ;;
               *) exit 1 ;;
             esac
@@ -917,6 +969,7 @@ jobs:
               "B-hair":["hair-group"]+[f"hair-{s}-{k}" for s in (6,7,11) for k in ("selected","geometry")],
               "C-wardrobe":["outfit-tops","outfit-bottoms","outfit-neckwear","outfit-socks","outfit-shoes","skirt-template","skirt-texture-editor"]
           }[lane]
+          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor"]
           hashes={}
           for tag in required:
               for ext in (".png",".txt"):
@@ -930,7 +983,7 @@ jobs:
             echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
           fi
       - name: Checkout trusted shared engines for control receipt
-        if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -971,7 +1024,7 @@ jobs:
           (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
           PY
       - name: Validate hair candidate receipt with shared engines
-        if: inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         env:
           PYTHONPATH: ${{ github.workspace }}/shared-main/tools
         shell: bash
@@ -989,7 +1042,12 @@ jobs:
           assert all(sha(p/(k+".png"))==v for k,v in r["screenshots"].items())
           assert r["scope"]=="OBSERVED_ONE_DISPLAY_STEP_EXPLORATORY_CANDIDATE"
           assert (r["before"],r["after"],r["reopened"])==(0.03,0.02,0.02)
-          assert r["protected_thickness"]==[0.05,0.05,0.05]
+          if r["target"].endswith("Hair 7 / Width"):
+              assert r["protected_thickness"]==[0.04]*3
+              assert (p/"hair3-protection.txt").read_text().strip()=="Hair 3 width=0.02 thickness=0.05"
+              assert r["source_sha256"]=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          else:
+              assert r["protected_thickness"]==[0.05]*3
           target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.02},uncertainty={"hair_width":0.01})
           report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.01}))
           assert report["overall"]=="PASS"
@@ -1073,7 +1131,7 @@ jobs:
             fi
           fi
       - name: Label hair candidate or quarantine
-        if: always() && inputs.mode == 'hair_candidate'
+        if: always() && (inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair'))
         shell: bash
         run: |
           set -euo pipefail
@@ -1088,7 +1146,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.mode == 'parallel_batch' && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
