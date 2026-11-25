@@ -28,6 +28,8 @@ jobs:
           ref: 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
           persist-credentials: false
       - name: Record checkout and compile existing GUI controls
+        env:
+          NATIVE_PROBE: ${{ inputs.native_probe }}
         shell: bash
         run: |
           set -euo pipefail
@@ -41,6 +43,7 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
+          if [ "$NATIVE_PROBE" = true ]; then
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
@@ -113,6 +116,7 @@ jobs:
           exit(count >= 1500 && ymax-ymin >= 120 && margin >= 12 ? 0 : 1)
           SWIFT
           swiftc "$RUNNER_TEMP/frame-margin.swift" -o "$RUNNER_TEMP/frame-margin"
+          fi
       - name: Restore native checkpoint
         env:
           GH_TOKEN: ${{ github.token }}
@@ -296,7 +300,7 @@ jobs:
             sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
             bash -n "$RUNNER_TEMP/session-helpers.sh"
             source "$RUNNER_TEMP/session-helpers.sh"
-            echo FRAME_PROBE_REVIEW_REQUIRED > evidence/frame-probe-status.txt
+            echo FRAME_MARGIN_NOT_ESTABLISHED_REVIEW_REQUIRED > evidence/frame-probe-status.txt
             for attempt in 1 2 3 4; do
               "$gui" vroid-shortcut face
               "$gui" vroid-shortcut front
@@ -317,6 +321,7 @@ jobs:
                   echo BLOCKED_UNKNOWN_VIEWPORT > evidence/frame-probe-status.txt
                   exit 1
                 fi
+                printf "%s " "$tag" >> evidence/frame-margin.txt
                 "$RUNNER_TEMP/frame-margin" "evidence/$tag.png" >> evidence/frame-margin.txt || good=0
               done
               if [ "$good" = 1 ]; then
@@ -325,6 +330,7 @@ jobs:
               fi
             done
             "$gui" vroid-shortcut front
+            shasum -a 256 evidence/frame-*.png > evidence/frame-probe-sha256.txt
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
             face_cat "$CAT_IRIS"
             capture_state native-probe-before
@@ -399,6 +405,11 @@ jobs:
           record=json.loads((p/"native-probe.json").read_text())
           assert record["status"]=="DISPOSABLE_CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ADOPTED"
           assert sha(p/"model.vroid")==record["native_sha256"]
+          assert sha(p/"input-model.vroid")==record["source_sha256"]=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+          assert record["native_sha256"]!=record["source_sha256"]
+          assert record["protected_iris_y"]==[0.194]*3
+          assert record["before"]==0.141 and record["after"]==record["reopened"]
+          assert 0.002 < record["after"]-record["before"] <= 0.15
           assert all(sha(p/(k+".png"))==v for k,v in record["screenshots"].items())
           target=dict(values={"iris_x":record["after"]},tolerances={"iris_x":0.002},uncertainty={"iris_x":0.001})
           report=evaluate(target,dict(actual={"iris_x":record["reopened"]},uncertainty={"iris_x":0.001}))
@@ -470,6 +481,18 @@ jobs:
           if len(accepted) != 2:
               raise SystemExit("Two live probe instructions not received")
           PY
+      - name: Label disposable native output
+        if: always() && inputs.native_probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f evidence/model.vroid ]; then
+            if [ -s evidence/shared-engine-control-qa.json ] && grep -qx CONTROL_RESPONSE_REOPEN_VERIFIED_NOT_ART_QA evidence/native-probe-status.txt; then
+              mv evidence/model.vroid evidence/calibration-only-reopened-not-adopted.vroid
+            else
+              mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
+            fi
+          fi
       - name: Upload review evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -479,5 +502,6 @@ jobs:
             evidence/*.png
             evidence/*.txt
             evidence/*.json
-            evidence/model.vroid
+            evidence/calibration-only-reopened-not-adopted.vroid
+            evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
