@@ -1,0 +1,24 @@
+{
+  "asset": "Morwen",
+  "date": "2026-11-18",
+  "reference_branch": "feature/morwen-rebuild-01",
+  "reference_pr": 419,
+  "reference_root": "tools/blender/production_mesh_08/references",
+  "source_evidence": [
+    "tools/blender/production_mesh_08/layer0_reference_manifest.json",
+    "docs/qa/morwen-rebuild-01/packed-reference-audit.json",
+    "docs/qa/morwen-rebuild-01/reference-scene/REOPEN_QA.json"
+  ],
+  "four_views": [
+    {"view":"front","filename":"7809.png","sha256_reported":"b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed","git_blob_sha1":"6b53d095b8a58deec1583e9d978bdb491a814cd1"},
+    {"view":"right","filename":"7807.png","sha256_reported":"9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737","git_blob_sha1":"20ec4325d2d488efa1539681fec6c61fadfdb4a8"},
+    {"view":"back","filename":"7810.png","sha256_reported":"b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f","git_blob_sha1":"9fa67918b0ba59931552972c198d98a04edc58eb"},
+    {"view":"left","filename":"7808.png","sha256_reported":"69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa","git_blob_sha1":"96b5f0864317aa52d86a000aaa9de5569d15958c"}
+  ],
+  "retrieval": "all four source files fetched successfully through GitHub connector as base64 on PR #419 branch",
+  "hash_provenance": "SHA-256 from prior PR #419 audit; not independently recomputed in current pass",
+  "dimensions_from_prior_audit": [384,1024],
+  "visual_review_current_pass": "NOT_RUN",
+  "reuse_policy": "reference images and audit metadata only; reject failed sculpt/cage/quad patch geometry",
+  "gates": {"G1":"PARTIAL_REFERENCE_FOUND_VISUAL_NOT_RUN","G2":"NOT_RUN","G3":"NOT_RUN","G4":"NOT_RUN"}
+}

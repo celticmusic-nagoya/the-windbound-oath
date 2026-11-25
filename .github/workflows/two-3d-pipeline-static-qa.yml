@@ -1,0 +1,39 @@
+name: TWO 3D pipeline static QA
+on:
+  push:
+    branches: [feature/morwen-authored-sculpt-20261118]
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/two-3d-pipeline-static-qa.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/two-3d-pipeline-static-qa.yml
+permissions:
+  contents: read
+jobs:
+  syntax-and-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile Blender scripts without executing bpy
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/morwen_authored_sculpt/build_head_study.py tools/morwen_authored_sculpt/npr_pipeline.py
+      - name: Verify no external paid API, canonical overwrite, or auto-merge
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tools/morwen_authored_sculpt/npr_pipeline.py').read_text()
+          assert 'export_scene.gltf' in p
+          assert 'ShaderNodeShaderToRGB' in p
+          assert 'INVERTED_HULL_PREVIEW' in p
+          assert 'NOT_CANONICAL' in p
+          assert 'bpy.ops.import_scene.fbx' in p and 'bpy.ops.import_scene.gltf' in p
+          print('NPR_STATIC_CONTRACT_PASS')
+          PY

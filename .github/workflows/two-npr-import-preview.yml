@@ -1,0 +1,144 @@
+name: TWO NPR import preview and portable glTF candidate
+on:
+  push:
+    branches:
+      - feature/morwen-authored-sculpt-20261118
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/two-npr-import-preview.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/two-npr-import-preview.yml
+  workflow_dispatch:
+    inputs:
+      input_model:
+        description: 'Optional repository-relative .glb/.gltf/.fbx; empty uses temporary Morwen head study'
+        required: false
+        type: string
+        default: ''
+# Preserve the running asset job; coalesce redundant pending runs per ref.
+concurrency:
+  group: morwen-npr-preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate optional input
+        shell: bash
+        env:
+          INPUT_MODEL: ${{ inputs.input_model }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,pathlib
+          root=pathlib.Path.cwd().resolve()
+          raw=os.environ.get('INPUT_MODEL','').strip()
+          if not raw:
+              print('TEMPORARY_HEAD_STUDY_INPUT')
+          else:
+              p=(root/raw).resolve()
+              assert p.is_relative_to(root) and p.is_file(), 'BLOCKED: input must exist in repository'
+              assert p.suffix.lower() in ('.glb','.gltf','.fbx'), 'BLOCKED: unsupported input'
+              with open(os.environ['GITHUB_ENV'],'a') as f:f.write('TWO_INPUT_MODEL='+str(p)+'\n')
+          PY
+      - name: Install checksum-verified Blender 5.2.4
+        shell: bash
+        run: bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Install Mesa software OpenGL runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0 libgl1-mesa-dri mesa-utils
+          ldconfig -p | grep -F libEGL.so.1
+      - name: Generate temporary Morwen study GLB (no repository binaries)
+        if: env.TWO_INPUT_MODEL == ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-npr-candidate/source
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_head_study.py -- /tmp/two-npr-candidate/source --export-only
+          test -s /tmp/two-npr-candidate/source/morwen_head_study.glb
+          echo 'TWO_INPUT_MODEL=/tmp/two-npr-candidate/source/morwen_head_study.glb' >> "$GITHUB_ENV"
+      - name: Attempt Eevee NPR preview
+        id: eevee
+        continue-on-error: true
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          GALLIUM_DRIVER: llvmpipe
+          EGL_PLATFORM: surfaceless
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-npr-candidate/npr
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/npr_pipeline.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/npr
+          for f in front.png right.png back.png left.png face_closeup.png portable_original_materials.glb NPR_REVIEW_UNAPPROVED.blend manifest.json; do
+            test -s "/tmp/two-npr-candidate/npr/$f"
+          done
+      - name: Fallback to CPU Cycles PBR-only review
+        if: steps.eevee.outcome == 'failure'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/two-npr-candidate/pbr_fallback
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/npr_pipeline.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/pbr_fallback --pbr-fallback
+          for f in front.png right.png back.png left.png face_closeup.png portable_original_materials.glb manifest.json; do
+            test -s "/tmp/two-npr-candidate/pbr_fallback/$f"
+          done
+      - name: Reimport and compare portable GLB
+        if: steps.eevee.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/qa_glb_roundtrip.py -- "$TWO_INPUT_MODEL" /tmp/two-npr-candidate/npr/portable_original_materials.glb /tmp/two-npr-candidate/roundtrip_QA.json
+      - name: Record separate QA outcomes
+        if: always()
+        shell: bash
+        env:
+          EEVEE_OUTCOME: ${{ steps.eevee.outcome }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path('/tmp/two-npr-candidate');root.mkdir(parents=True,exist_ok=True)
+          e=os.environ.get('EEVEE_OUTCOME','unknown')
+          p=root/('npr' if e=='success' else 'pbr_fallback')
+          required=('front.png','right.png','back.png','left.png','face_closeup.png','portable_original_materials.glb','manifest.json')
+          files={f:(p/f).is_file() and (p/f).stat().st_size>0 for f in required}
+          qa={'npr':'RENDERED_UNVERIFIED' if e=='success' else 'SKIPPED_HEADLESS_EGL_OR_RENDER_FAILURE',
+              'pbr_fallback':'NOT_RUN' if e=='success' else ('RENDERED_UNVERIFIED' if all(files.values()) else 'FAIL'),
+              'output_files':files,'G1':'BLOCKED_CANONICAL_MATCH','G2':'NOT_RUN_INDEPENDENT_ART',
+              'G3':'NOT_RUN_ROUNDTRIP','G4':'NOT_RUN_GAME_ENGINE'}
+          roundtrip=root/'roundtrip_QA.json'
+          if roundtrip.is_file():
+              try:
+                  checks=json.loads(roundtrip.read_text())
+                  expected=('geometry_check','material_name_check','pbr_material_value_check')
+                  qa['roundtrip_checks']={key:checks.get(key,'MISSING') for key in expected}
+                  qa['G3']='PARTIAL_PASS_SEE_ROUNDTRIP_QA' if all(checks.get(key)=='PASS' for key in expected) and str(checks.get('G3','')).startswith('PARTIAL_PASS') else 'FAIL_ROUNDTRIP'
+              except (OSError,ValueError,TypeError) as exc:
+                  qa['G3']='FAIL_INVALID_ROUNDTRIP_QA'
+                  qa['roundtrip_parse_error']=str(exc)
+          if e=='success' and not all(files.values()):
+              qa['npr']='FAIL_MISSING_REQUIRED_OUTPUTS'
+              qa['G3']='FAIL_MISSING_REQUIRED_OUTPUTS'
+          (root/'pipeline_QA.json').write_text(json.dumps(qa,indent=2)+'\n')
+          print(json.dumps(qa))
+          PY
+      - name: Upload technical candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-npr-unapproved-preview
+          path: /tmp/two-npr-candidate/
+          if-no-files-found: warn
+          retention-days: 14

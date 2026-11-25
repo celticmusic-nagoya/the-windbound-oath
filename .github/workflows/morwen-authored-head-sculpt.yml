@@ -1,0 +1,72 @@
+name: Morwen authored head sculpt candidate Blender 5.2.4
+on:
+  push:
+    branches:
+      - feature/morwen-authored-sculpt-20261118
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/morwen-authored-head-sculpt.yml
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - tools/morwen_authored_sculpt/**
+      - .github/workflows/morwen-authored-head-sculpt.yml
+# Preserve the running asset job; coalesce redundant pending runs per ref.
+concurrency:
+  group: morwen-head-sculpt-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+jobs:
+  authored-head-study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install checksum-verified Blender 5.2.4
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/production_qa/install_blender_524.sh /tmp/two-blender/app
+      - name: Install Linux rendering libraries for CPU Cycles
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libopengl0 libxkbcommon0
+          ldconfig -p | grep -F 'libEGL.so.1'
+          ldconfig -p | grep -F 'libGL.so.1'
+      - name: Generate real editable candidate head study and 5 rendered views
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/morwen-authored-head
+          LIBGL_ALWAYS_SOFTWARE=1 /tmp/two-blender/app/blender -b --factory-startup --python tools/morwen_authored_sculpt/build_head_study.py -- /tmp/morwen-authored-head
+          test -s /tmp/morwen-authored-head/MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend
+          test -s /tmp/morwen-authored-head/QA.json
+      - name: Reopen actual .blend and audit outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/two-blender/app/blender -b /tmp/morwen-authored-head/MORWEN_HEAD_SCULPT_STUDY_UNAPPROVED.blend --python-expr 'import bpy; assert bpy.context.scene.get("status")=="UNAPPROVED_ORIGINAL_HEAD_SURFACE_STUDY"; assert len([o for o in bpy.data.objects if o.type=="MESH"])>=4; print("HEAD_STUDY_REOPEN_PASS")'
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('/tmp/morwen-authored-head')
+          d=json.loads((p/'QA.json').read_text())
+          assert len(d['renders'])==5
+          assert all((p/name).stat().st_size>1000 for name in d['renders'])
+          assert d['G2']=='NOT_RUN_INDEPENDENT_ART'
+          print('OUTPUT_MANIFEST_PASS',len(d['renders']))
+          PY
+      - name: Preserve source candidate and reproducible evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: morwen-authored-head-study-unapproved
+          path: /tmp/morwen-authored-head/
+          if-no-files-found: warn
+          retention-days: 14
