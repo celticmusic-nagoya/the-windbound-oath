@@ -1,0 +1,152 @@
+{
+  "scope": "ISOLATED_CPU_GGX_MATERIAL_SPHERE_NOT_GARMENT_OR_RUNTIME",
+  "source_artifact": 15026208724,
+  "source_run": 45624991144,
+  "source_archive_sha256": "9a904f93c5514043fbd5d7136715d0a80d7af28ffcb588a351f1c8f5265c0426",
+  "verified_inputs": "15/15 source byte, pixel and metadata hashes; ZIP CRC PASS",
+  "method": {
+    "sphere_resolution": 384,
+    "uv_repeats": 2,
+    "physical_scale": "unknown; same normalized UV, not matched real fabric scale",
+    "palette": [
+      52,
+      38,
+      60
+    ],
+    "lighting": {
+      "front": [
+        {
+          "dir": [
+            -0.55,
+            0.75,
+            0.65
+          ],
+          "intensity": 3
+        },
+        {
+          "dir": [
+            0.65,
+            0.25,
+            0.65
+          ],
+          "intensity": 1.2
+        },
+        {
+          "dir": [
+            0.1,
+            -0.8,
+            0.45
+          ],
+          "intensity": 0.55
+        }
+      ],
+      "grazing": [
+        {
+          "dir": [
+            -0.92,
+            0.28,
+            0.18
+          ],
+          "intensity": 3
+        },
+        {
+          "dir": [
+            0.65,
+            0.25,
+            0.65
+          ],
+          "intensity": 0.45
+        }
+      ]
+    },
+    "tone_map": "Reinhard",
+    "normal": "tangent OpenGL decoded RGB8, normalized; original precision source retained",
+    "metric": "mean absolute RGB difference (0-255), full interior sphere pixels after BOX downsample; no physical distance calibration",
+    "footprints_px": [
+      384,
+      192,
+      96,
+      48,
+      24
+    ]
+  },
+  "assets": {
+    "poly_wool_herringbone": {
+      "roughness_mean": 0.8610745870567127,
+      "normal_effect": [
+        1.9848194450494403,
+        1.2043992043992044,
+        0.6954577968526466,
+        0.532991202346041,
+        0.42616033755274263
+      ],
+      "full_vs_uniform": [
+        3.5935880123709545,
+        2.035919035919036,
+        1.0768359561278016,
+        0.694770283479961,
+        0.49156118143459915
+      ],
+      "visual": "strongest visible weave; compare as uniform/cape candidate"
+    },
+    "stretch_poplin": {
+      "roughness_mean": 0.8081571613653054,
+      "normal_effect": [
+        0.7208621916336339,
+        0.5346320346320347,
+        0.3783381020505484,
+        0.2138318670576735,
+        0.1550632911392405
+      ],
+      "full_vs_uniform": [
+        1.0295552554776322,
+        0.7582923832923834,
+        0.4741893180734382,
+        0.2570869990224829,
+        0.1571729957805907
+      ],
+      "visual": "smooth; fine shirt/lining candidate"
+    },
+    "cotton_jersey": {
+      "roughness_mean": 0.8016784657460546,
+      "normal_effect": [
+        1.0610017278680433,
+        0.6728091728091729,
+        0.4911778731521221,
+        0.3812316715542522,
+        0.2721518987341772
+      ],
+      "full_vs_uniform": [
+        1.559103251005503,
+        0.9936527436527437,
+        0.6844301382927992,
+        0.4987781036168133,
+        0.3850210970464135
+      ],
+      "visual": "subtle knit; innerwear candidate, fiber not established by canon"
+    }
+  },
+  "outputs": {
+    "lighting_comparison_sha256": "529b22e2cc798982db6b9d63f6704ff0e87ec533c764e29016c5485592947cc1",
+    "distance_comparison_sha256": "616dea0cd9c93ba081e298b6930ee373686f2cc371a8170aa82850aac4221dff",
+    "local_script_sha256": "c79a39369934ea12ff16c75385767b18b2ebac6b7b40c6d0740d6a73af57d6fe",
+    "local_receipt_sha256": "b6a69a7c85ed8459ab2a8d2de2d7412a06bd9d7a7202fcc140bd4d20f4f94147",
+    "repeat": "receipt byte-identical, 9 individual renders and both sheets SHA match",
+    "storage": "local session only; script and outputs not committed"
+  },
+  "qa": {
+    "source_integrity": "PASS",
+    "reopen": "PASS",
+    "repeat": "PASS",
+    "G2": "NOT_RUN garment; self review isolated spheres only",
+    "G3": "NOT_RUN native",
+    "G4": "NOT_RUN actual runtime"
+  },
+  "limitations": [
+    "Nearest texture lookup at 384px then box downsample; not GPU mipmap or moving-camera aliasing test",
+    "No cloth sheen/fuzz BRDF, no drape geometry, no exact garment UV",
+    "Dark common palette not a Layer0 color measurement",
+    "Distance sheet labels refer to input footprint, not displayed panel size; 384 and 192 thumbnails reduced to 128px",
+    "No native edits or adoption; Codex integration scope protected"
+  ]
+}
