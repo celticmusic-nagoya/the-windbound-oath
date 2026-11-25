@@ -36,12 +36,52 @@ def preview_vroid(selection,known,saved):
                 return
             target.unlink()
 
+# Exact producer receipts from the owning workflows. These are preview-only,
+# not publication authorization; unknown archives stay outside this list.
+PREVIEW_RECEIPTS = (
+    (45572622840, 15003297779, "41fac9e455910104a6d4b6121387f3d5da5b76e9", "main", "morwen-vroid-macos-probe.yml", "morwen-isolated-vroid-reopen-review", "morwen", "VRoid hair candidate / preview only", r"(?:evidence/)?hair-(?:before-selected|after-selected|reopened-geometry)\.png"),
+    (45561010173, 14998780697, "3924c3708e5ed94efd898037664bb03141cfc285", "main", "morwen-vroid-macos-probe.yml", "morwen-isolated-vroid-reopen-review", "morwen", "VRoid selected framing / preview only", r"(?:evidence/)?frame-selected-(?:front|left4|left8|right4)\.png"),
+    (44979340529, 14737506262, "cf0443ad1085d27f90127854ed48c9b168d87195", "feature/lind-cliff-rock-art-study-20261118", "lind-cliff-c11-method-e.yml", "c11-method-e-cf0443ad1085d27f90127854ed48c9b168d87195", "cliff", "C11 Method E / preview only", r"review/c11_(?:front|oblique|low)\.png"),
+    (45028139012, 14756099327, "f7855075bd013ea10040111d8f67249f5f19d5f8", "feature/lind-village-world-integration-plan-01", "lind-bed-drape-isolated.yml", "isolated-bed-drape-45028139012", "village", "HOME isolated bed fixture / preview only", r"drape\.png"),
+)
+
+def preview_receipts(selection, known, saved):
+    for rid, aid, head, branch, workflow, name, cat, stage, pattern in PREVIEW_RECEIPTS:
+        if aid in known:
+            continue
+        run=api(f"repos/{REPO}/actions/runs/{rid}")
+        if (run.get("head_sha")!=head or run.get("head_branch")!=branch or
+            run.get("path")!=f".github/workflows/{workflow}" or run.get("conclusion")!="success" or
+            (run.get("head_repository") or {}).get("full_name")!=REPO):
+            raise ValueError(f"producer receipt mismatch: {rid}")
+        a=api(f"repos/{REPO}/actions/artifacts/{aid}")
+        if a.get("expired"):
+            print(f"NOT_RUN expired preview receipt {aid}")
+            continue
+        if (a.get("name")!=name or a.get("workflow_run",{}).get("id")!=rid or
+            a.get("workflow_run",{}).get("head_sha")!=head or not 0<a["size_in_bytes"]<=32*1024*1024):
+            raise ValueError(f"artifact receipt mismatch: {aid}")
+        target=saved/f"{aid}.zip"
+        with target.open("wb") as out:
+            subprocess.run(["gh","api",f"repos/{REPO}/actions/artifacts/{aid}/zip"],stdout=out,check=True)
+        with target.open("rb") as stream:
+            if "sha256:"+hashlib.file_digest(stream,"sha256").hexdigest()!=a.get("digest"):
+                raise ValueError(f"archive digest mismatch: {aid}")
+        with zipfile.ZipFile(target) as z:
+            entries=sorted(i.filename for i in z.infolist() if 0<i.file_size<=8*1024*1024 and re.fullmatch(pattern,i.filename))
+            if not entries or len(entries)!=len(set(entries)) or len(entries)>8:
+                raise ValueError(f"missing or ambiguous preview images: {aid}")
+            entry_sha256={n:hashlib.sha256(z.read(n)).hexdigest() for n in entries}
+        selection.append(dict(run_id=rid,artifact_id=aid,head=head,category=cat,stage=stage,cover=entries[0],entries=entries,entry_sha256=entry_sha256,artifact_digest=a["digest"]))
+        known.add(aid)
+
 def discover():
     selection=json.loads(pathlib.Path(__file__).with_name("sync-selection.json").read_text())
     known={x["artifact_id"] for x in selection}
     saved=ROOT/"studio-zips";saved.mkdir(exist_ok=True)
     if os.environ.get("STUDIO_PREVIEW_MODELS")=="1":
         preview_vroid(selection,known,saved)
+        preview_receipts(selection,known,saved)
     for branch,cat in BRANCHES.items():
         runs=api(f"repos/{REPO}/actions/runs?branch={branch}&status=success&per_page=3")["workflow_runs"]
         found=False
