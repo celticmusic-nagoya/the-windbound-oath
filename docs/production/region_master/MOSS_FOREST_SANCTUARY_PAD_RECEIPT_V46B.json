@@ -1,0 +1,114 @@
+{
+  "schema": "two.region.moss_forest_sanctuary_pad.v46b",
+  "status": "LOCAL_FLAT_PAD_AND_TOPOLOGY_PASS_APPROACH_HOLD",
+  "parent": "13456948422ddc0e53607dac41475f13b2f9b877",
+  "dependencies": {
+    "v45d_receipt": "289817f02e4b2fb2b21d4530123465b5264c79d8",
+    "v45d_glb_sha256": "b8ba6c29ebc75816943988956e9ed5b68e66b1d746481844be8fece2b93fe1bc",
+    "route_audit_sha256": "96c2d87f51ca8f431f6e47c869c888726fccf636da56f25d88a186dc9ff59c55",
+    "endpoint_v04_script": "1bd0ba55bb547aaa427916156eecf00a17097690",
+    "sanctuary": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "landmarks": "246095359e151284e447a30c203d33f36cedbe77",
+    "surface": "acbbffca333b087ee3dc93fd89da4c6940ff2792",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "scope": "Isolated local design feasibility trial, no native production, no V45D replacement. Exact V04 flat target, approach dimensions and V05 footprint. Provisional metres, GLTF origin [500,0,400].",
+  "target": {
+    "trail_end_xy": [
+      690,
+      -490
+    ],
+    "axis_d": [
+      0.788631932636555,
+      -0.6148655745981655
+    ],
+    "axis_n": [
+      0.6148655745981655,
+      0.788631932636555
+    ],
+    "flat_length_m": 4,
+    "width_m": 6,
+    "area_m2": 24,
+    "target_z_m": 27.988129971478276,
+    "approach_length_m": 3,
+    "approach_start_width_m": 5,
+    "shoulder_blend_m": 1.5,
+    "numeric_guard_m": 0.001
+  },
+  "trials": {
+    "a": {
+      "method": "Clip 15 source faces against padded flat boundary, constrained triangulation and smoothstep height blend. No global tolerance weld.",
+      "faces": 137572,
+      "vertices": 69077,
+      "changed_vertices": 31,
+      "max_change_m": 0.22054290771484375,
+      "max_changed_face_grade_pct": 64.37853290674583,
+      "decision": "Shoulder exceeds provisional 50% screen."
+    },
+    "b": {
+      "method": "Constrained local eight-height least squares, 16 directional gradient bounds. Combined approach and shoulder solve failed; shoulder-only solve converged.",
+      "additional_correction_m": 0.028520584106445312,
+      "shoulder_max_pct": 48.34462761444189,
+      "approach_max_long_pct": 20.51723166815229,
+      "approach_max_cross_pct": 17.152162396752857,
+      "approach_area_m2": 16.499999964936766,
+      "approach_faces": 45,
+      "approach_pass": false,
+      "cut_approx_m3": 3.044917469934428,
+      "fill_approx_m3": 3.694953573917628,
+      "decision": "Retain pad feasibility candidate, do not accept full approach. Next approach requires explicit conforming ramp breaklines rather than repeated height fitting."
+    }
+  },
+  "qa": {
+    "flat_area_covered_m2": 24,
+    "flat_height_range_m": 0,
+    "flat_target_residual_m": 5.979797315092128e-7,
+    "body_area_m2": 2.8800000000002317,
+    "interaction_area_m2": 3.449999999999976,
+    "body_interaction_flat_grade_pct": 0,
+    "original_external_edges_exact": 580,
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0,
+    "local_footprint_symdiff_m2": 0,
+    "source_and_output_area_m2": 65000,
+    "readback_exact": true,
+    "road_core_2m_changed_face_overlap_m2": 0,
+    "full_5m_ribbon_changed_faces": 11,
+    "full_ribbon_overlap_m2": 0.000007955754274616823,
+    "max_height_delta_at_overlap_m": 1.1062915206139223e-7,
+    "limits": "Full 5m ribbon not exact face preservation; measured microscopic seam overlap. No navigation or physical measurement claim."
+  },
+  "render": {
+    "method": "Two matched VTK offscreen views of actual reopened GLBs; geometry diagnostic vertex colors only",
+    "self_review": "Flat zone visible; interpolation of diagnostic vertex colors creates irregular surrounding border, not finished material. No altar body or vegetation."
+  },
+  "outputs": {
+    "glb_sha256": "96a4da5b97136246060223dd60b2504e7246ff782a8fefa6046ab1555fc9ac7d",
+    "build_sha256": "6fff5bc851768279bebb7e9fb5c7d7efef753bf7fc294abfcece99cb970da648",
+    "optimization_sha256": "c8689df695ba74c3929c6364af0de5436ca624679bdbf929879960dc8fc947ec",
+    "verify_sha256": "c198781af3699c5e422cc1dded09d27d9d7a49513aef8893f82a99a27b1be9cc",
+    "guard_sha256": "4d017164bba3af4e341d2f4efeb4d3aa07962a5f73530073f866db0a3b524e40",
+    "qa_sha256": "c4c2c4594cdeb2f7a688dd430f3d93700c653d982ee6c310a591e075248ee156",
+    "optimization_qa_sha256": "2fa5d4b60237acdc3aeba5a30d7707ba7faa76d38d9aa0ffaae1d8bbe9d536bd",
+    "verify_qa_sha256": "f7e2f860b4e65e572973e6df266b22db704ff998ae9d380f0d57cdd2b4f54acf",
+    "guard_qa_sha256": "86afb283c6e170554886f450596e8528f533c85f215fbb291cc88149e9906ccc",
+    "sheet_sha256": "425360688b119507fefe56ec8acf738bd51ae28b19d370981c23bdae26955c00",
+    "comparison_sha256": "35f1eed60d42bf974777661fe61dbd3a87911e8f5114aa9ed74e5e0fadd97430",
+    "package_sha256": "bd47074dc96e1eb2722f6abd85d734c39afc0ef33987bfba9c27cf1e17793bd1",
+    "package_bytes": 2630516,
+    "zip_crc": "PASS",
+    "location": "ChatGPT local attachments; no binary committed."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_APPROACH_LANDING_HYDROLOGY",
+    "G2": "HOLD_GEOMETRY_ONLY",
+    "G3": "LOCAL_PAD_TOPOLOGY_PASS_APPROACH_FAIL_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Explicit approach ribbon and ramp side tie-in breaklines; no further same height-only solver retry. A2 southern drainage remains separate eligible scope. No altar body, native Blender, formal adoption, publication, main merge."
+}
