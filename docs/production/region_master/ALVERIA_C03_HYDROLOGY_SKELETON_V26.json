@@ -1,0 +1,275 @@
+{
+  "schema": "two.world.hydrology_skeleton.v26",
+  "status": "AUTHORED_TOPOLOGY_CANDIDATE_NOT_CANON",
+  "sources": [
+    {
+      "name": "ALVERIA_W02_C01_COASTLINE_CANDIDATE_V01.json",
+      "blob": "72e1e488bbe4c92fc5d473139d8eb1d00d07b084"
+    },
+    {
+      "name": "ALVERIA_KINGDOM_MAP_CANDIDATE_V01.json",
+      "blob": "d05478e6da41ace5022b622f985d63fcbacb740c"
+    },
+    {
+      "name": "RILDE_AREA_FIRST_PLAN_V03.json",
+      "blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb"
+    },
+    {
+      "name": "RILDE_C03_RIVER_NETWORK_DESIGN_V26.json",
+      "blob": "dc2051c9e9b876d262c08f557e8816ece8e12ba2"
+    }
+  ],
+  "reference": "Shannon drainage hierarchy; Inagh coastal outlet; Blackwater and Caragh tributary/valley archetypes. No real coordinate copying; actual GIS geometry pending.",
+  "frame": {
+    "x": "east",
+    "y": "north",
+    "height": "dimensionless relative water ordering only",
+    "metric_scale": null,
+    "region_transform": null
+  },
+  "rivers": [
+    {
+      "id": "W-RILDE",
+      "kind": "trunk",
+      "points": [
+        [
+          28,
+          66,
+          1
+        ],
+        [
+          26.4,
+          61,
+          0.76
+        ],
+        [
+          24.6,
+          54,
+          0.46
+        ],
+        [
+          24,
+          50,
+          0.31
+        ],
+        [
+          21,
+          47,
+          0.12
+        ],
+        [
+          17.5,
+          46,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "W-RILDE-T1",
+      "kind": "tributary",
+      "join": "W-RILDE",
+      "points": [
+        [
+          31,
+          61,
+          0.93
+        ],
+        [
+          28,
+          58,
+          0.68
+        ],
+        [
+          24.6,
+          54,
+          0.46
+        ]
+      ]
+    },
+    {
+      "id": "W-CENTRAL",
+      "kind": "trunk",
+      "points": [
+        [
+          33,
+          85,
+          1
+        ],
+        [
+          34,
+          75,
+          0.77
+        ],
+        [
+          38,
+          65,
+          0.58
+        ],
+        [
+          38,
+          55,
+          0.39
+        ],
+        [
+          36,
+          45,
+          0.24
+        ],
+        [
+          32,
+          33,
+          0.14
+        ],
+        [
+          24,
+          30,
+          0.06
+        ],
+        [
+          15.5,
+          26,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "W-CENTRAL-T1",
+      "kind": "tributary",
+      "join": "W-CENTRAL",
+      "points": [
+        [
+          49,
+          75,
+          1
+        ],
+        [
+          45,
+          69,
+          0.82
+        ],
+        [
+          38,
+          65,
+          0.58
+        ]
+      ]
+    },
+    {
+      "id": "W-EAST",
+      "kind": "trunk",
+      "points": [
+        [
+          61,
+          78,
+          1
+        ],
+        [
+          65,
+          65,
+          0.76
+        ],
+        [
+          74,
+          58,
+          0.51
+        ],
+        [
+          82,
+          49,
+          0.23
+        ],
+        [
+          91.5,
+          47.5,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "W-EAST-T1",
+      "kind": "tributary",
+      "join": "W-EAST",
+      "points": [
+        [
+          79,
+          71,
+          0.94
+        ],
+        [
+          76,
+          64,
+          0.72
+        ],
+        [
+          74,
+          58,
+          0.51
+        ]
+      ]
+    },
+    {
+      "id": "W-SOUTH",
+      "kind": "trunk",
+      "points": [
+        [
+          58,
+          59,
+          1
+        ],
+        [
+          56,
+          45,
+          0.74
+        ],
+        [
+          60,
+          34,
+          0.45
+        ],
+        [
+          64,
+          22,
+          0.17
+        ],
+        [
+          61,
+          11.5,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "W-SOUTH-T1",
+      "kind": "tributary",
+      "join": "W-SOUTH",
+      "points": [
+        [
+          47,
+          42,
+          0.9
+        ],
+        [
+          53,
+          38,
+          0.7
+        ],
+        [
+          60,
+          34,
+          0.45
+        ]
+      ]
+    }
+  ],
+  "qa": {
+    "all_reaches_inside_land": true,
+    "all_trunks_coast_outlets": true,
+    "monotone_relative_water": true,
+    "tributary_joins_exact": true,
+    "proper_crossings": []
+  },
+  "limitations": [
+    "No terrain-derived watershed or flow accumulation, no true elevations or discharge; political border/route crossings not yet validated.",
+    "Rilde locator vicinity only; region to world transform unresolved; candidate network names are IDs, not canon."
+  ]
+}
