@@ -1,0 +1,40 @@
+{
+  "scope": "A_COLOR_ONLY_COMPARISON_CANDIDATE_NOT_ADOPTED",
+  "main": "3f0c821a20da4cd407758a5d66500e2c9dd22d37",
+  "agents_blob": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "0ff47671481cffbf2665a247692b3cb426e454cd",
+  "source": {
+    "additional_image": "9665.png",
+    "sha256": "4cdc03855a747ade241fa96f96d83e097143e841dc03f6a9a02ce25b5a800c7b",
+    "formal_archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+    "formal_images": "5/5 exact SHA",
+    "prior_A_rgba": "eae608424f24c14c946b7d94f70282076a66a436dd989ed92589ad12c04e8efd",
+    "dark_source_png": "7b5558f4d6a548cd15e7803161532c8fbad5e98b25ffc49e094ae646a882ae83"
+  },
+  "method": "Exact previous A geometry and inherited scan variation. Modify non-gold non-hem pixels in existing panel only. 75% official palette / 25% synthetic appearance anchors, authored trial not albedo measurement. Base RGB92,55,112; bright RGB153,99,175. Preserve A/B baseline, no B modification.",
+  "qa": {
+    "changed_pixels": 84600,
+    "protected_pixels": 439688,
+    "alpha_exact": true,
+    "gold_hem_exact": true,
+    "prior_A_median_saturation": 0.503030303030303,
+    "new_A_median_saturation": 0.45695364238410596,
+    "repeat": "3/3 byte exact",
+    "zip_crc": "4 entries PASS",
+    "visual": "New A is more muted than baseline. Does not establish art improvement; retain A as provisional baseline and V3 for color comparison only. Screen saturation not comparable to atlas."
+  },
+  "outputs": {
+    "png_sha256": "cc0e05f9908934350ec279d6e4da7cbc17100c6db32c0df37467f653ecdc35d2",
+    "rgba_sha256": "cff14a10098bc42109bb7cbe555db29b7c8d4d0d4ff2acafe113aa7ec59c8e6c",
+    "comparison_sha256": "a005849ac1cf115d693359604462cff9f5735642e35a024841bf841026261293",
+    "receipt_sha256": "09c964a79cd38d2ae9d9b5f04360eec3c13904626ec4a20d25c575439b8431a8",
+    "script_sha256": "dc4c0ffc791d5114a8d1d0b703eb8d3ba299244493c0057592ec2f4d1290c8e8",
+    "zip_sha256": "68b543b7c173661fc049f9be33daa9a49a151f2f680bc6a7fdf23c184ac6798a",
+    "storage": "local ZIP; repository record only"
+  },
+  "next": "No more isolated color revisions until native preview and actual UV/geometry. G2 FAIL remains, native application and G3/G4 NOT_RUN. No dispatch, main merge or adoption."
+}
