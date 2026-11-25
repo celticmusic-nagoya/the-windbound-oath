@@ -1,0 +1,63 @@
+{
+  "schema": "two.region.moss_forest_area_landform_receipt.v12",
+  "parent": "cb87d8329270689bd789bdee968ae42a5275f22c",
+  "status": "AREA_SCALE_DESIGN_HOLD_EXCESSIVE_CUT_AND_UNRESOLVED_SHORE",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v11": "7f6bb9af6091cbe77f8270268b8c170444a840de"
+  },
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "outputs": {
+    "script_blob": "9ea46b647ae076ee16eb61f44f5496d54e9f980f",
+    "design_blob": "740a6dcaff5eaba624b941b8ab3bafb20757b81e",
+    "script_sha256": "6312f5d89db7d384265501a3deafa3ec9a33173f1ec5841881a25fa79690a44f",
+    "design_sha256": "c966e0baeba851f06d10649e2f704634ceb2b798a775d6b3c0c06dda6f094e2d",
+    "npz_sha256": "64d072db0db134f88d42fb60e52f02aca3d41366b4cb3e2e8fb6cd87277eaeaf",
+    "png_sha256": "f3a67bc0bd73182d6b19fc4ec3f6169c1cb74668a48f26aec06408548c755d7f",
+    "v11_script_blob": "7583e923cb3bd2a86bf7f055570d1b43fd439c44",
+    "binary_delivery": "local attachments only"
+  },
+  "execution": "Actual local Python. Nine route/support combinations, selected y=-125 and 45% support envelope; inputs SHA matched before/after, NPZ reopened exactly, figure visually inspected. Exact V12 script/JSON and V11 script blobs match container Git fingerprints. No Blender or Actions.",
+  "checks": {
+    "route_length_m": 117.16839596528804,
+    "long_bound_pct": 11.621595560986519,
+    "cross_bound_pct": 0.6300122220179772,
+    "folds": 0,
+    "wet_overlap_m2": 0,
+    "old_overlap_m2": 0,
+    "outside_m2": 0,
+    "protected_sample_conflicts": 0,
+    "protected_samples": 2227,
+    "grid_samples": 71145,
+    "changed_samples": 17097,
+    "changed_support_triangles": 31958,
+    "support_max_grade_pct": 88.25701770312804,
+    "support_triangles_above_50_pct": 225,
+    "max_cut_m": 7.028647014548138,
+    "approx_cut_m3": 7021.917489625548,
+    "endpoint_residual_m": 0,
+    "fixed_residual_m": 0
+  },
+  "decision": "HOLD area-scale redesign: excessive assumed correction and slope exceedance, no continuous shoreline-to-path or road-support partition. Stop repeated local or wide grading loops on reconstructed schematic terrain. Retain V02/V03 trail, V04 pad and V09–V12 evidence, request independent D4 and narrative/world interface clarification before any native change. Continue independent eligible A2 valley/waterfall or other environment scope without duplicate writers. No story teleportation assumed.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_LANDING_INTERFACE",
+    "D2": "PARTIAL",
+    "D3": "HOLD_AREA_LANDFORM",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Cut estimates are against reconstructed artificial terrain, not real DEM or actual earthworks. Road/terrain overlap remains a design diagnostic, not conforming mesh. Only sampled protected heights; shoreline launch is 3m inland, not a verified landing. No continuous curvature, water-flow or runtime proof.",
+    "V11 full JSON and binary outputs remain local; partial text export did not match exact file length and was excluded. No formal adoption, main merge or protected edits."
+  ]
+}
