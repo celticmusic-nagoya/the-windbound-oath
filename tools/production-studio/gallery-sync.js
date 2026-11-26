@@ -59,7 +59,7 @@ async function loadPublishedGallery(automatic=false){
  return tile;
  }
  const categories=[["cliff","風待ちの崖"],["morwen","モルウェン"],["village","リルド村"],["world","世界・自然／遺構"],["blueprint","設計図"],["map","地図・配置図"],["other","その他"]];
- const subcategories={morwen:[["hair","ヘアアセット"],["body","身体・顔"],["wardrobe","衣装・装備"],["general","全体・その他"]],world:[["tree","樹木"],["forest","森林"],["sanctuary","聖域"],["ruin","遺跡"],["general","世界・その他"]],village:[["aidan","エイダンの家"],["inn","宿屋"],["buildings","その他の建築"],["general","村全体・その他"]]};
+ const subcategories={morwen:[["hair","ヘアアセット"],["body","身体・顔"],["wardrobe","衣装・装備"],["general","全体・その他"]],world:[["plant","植物・草花"],["tree","樹木"],["forest","森林"],["river","河川・水辺"],["terrain","地形"],["sanctuary","聖域"],["ruin","遺跡"],["general","世界・その他"]],village:[["aidan","エイダンの家"],["inn","宿屋"],["buildings","その他の建築"],["general","村全体・その他"]]};
  // Prefer explicit, publisher-provided subcategory. Legacy manifests may only carry a top-level category.
  const classify=e=>{
   const explicit=String(e.subcategory||"").toLowerCase();
@@ -71,7 +71,7 @@ async function loadPublishedGallery(automatic=false){
   const blueprint=/blueprint|design[-_ ]?sheet|設計図|四面図|寸法図|断面図/.test(raw);
   const map=/\bmap\b|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw);
   // Only explicit world categories or unambiguous world production names override legacy "other".
-  const worldKind=/(?:^|[^a-z])(?:ruins?)(?:[^a-z]|$)|遺跡/.test(raw)?"ruin":/(?:^|[^a-z])sanctuary(?:[^a-z]|$)|聖域/.test(raw)?"sanctuary":/(?:^|[^a-z])forest(?:[^a-z]|$)|森林/.test(raw)?"forest":/(?:^|[^a-z])(?:hero[-_ ]tree|trees?)(?:[^a-z]|$)|樹木/.test(raw)?"tree":"";
+  const worldKind=/(?:^|[^a-z])(?:ruins?)(?:[^a-z]|$)|遺跡/.test(raw)?"ruin":/(?:^|[^a-z])sanctuary(?:[^a-z]|$)|聖域/.test(raw)?"sanctuary":/(?:^|[^a-z])forest(?:[^a-z]|$)|森林/.test(raw)?"forest":/(?:^|[^a-z])(?:hero[-_ ]tree|trees?)(?:[^a-z]|$)|樹木/.test(raw)?"tree":/(?:^|[^a-z])(?:river|waterway|waterside)(?:[^a-z]|$)|河川|水辺/.test(raw)?"river":/(?:^|[^a-z])(?:terrain|dem)(?:[^a-z]|$)|地形/.test(raw)?"terrain":/(?:^|[^a-z])(?:plant|grass|fern|flower|vegetation)(?:[^a-z]|$)|植物|草花/.test(raw)?"plant":"";
   const root=top==="other"?(blueprint?"blueprint":map?"map":hair?"morwen":aidan||inn?"village":worldKind?"world":"other"):top;
   const allowed=subcategories[root]||[];
   let sub=allowed.some(([id])=>id===explicit)?explicit:"";
@@ -129,7 +129,7 @@ async function loadPublishedGallery(automatic=false){
   navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
   status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
-  if(id==="world"){const note=document.createElement("p");note.textContent="制作途中・未採用も掲載（権利・内容確認済みの画像）。画像未掲載の証跡は直近制作成果物から確認できます。";note.style.gridColumn="1/-1";area.append(note);}
+  if(id==="world"){const note=document.createElement("p");note.textContent="制作途中・未採用も掲載（権利・内容確認済みの画像）。画像未掲載の証跡は直近制作成果物から確認できます。";note.style.gridColumn="1/-1";area.append(note);const links=document.createElement("p");links.style.gridColumn="1/-1";for(const [label,path] of [["植生統合・樹木の制作記録","/actions/runs/44730162099"],["森林V21の制作記録","/actions/runs/45631347949"],["河川V26：EPA参照データ（CC BY 4.0・完成レンダーなし）","/actions/runs/45641788138"]]){const link=document.createElement("a");link.href="https://github.com/celticmusic-nagoya/the-windbound-oath"+path;link.textContent=label;link.rel="noopener noreferrer";links.append(link,document.createTextNode("　"));}area.append(links);}
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
   for(const [sub,label] of subcategories[id]){
    const entries=assigned.filter(x=>x.root===id&&x.sub===sub).map(x=>x.entry);
