@@ -562,6 +562,7 @@ jobs:
           assert approved["staging"] == "RUNNER_TEMP_OWNER_ONLY"
           assert drop.stat().st_mode & 0o077 == 0
           PY
+          gh auth setup-git --hostname github.com
           gh api "repos/$GITHUB_REPOSITORY/issues/comments/$REQUEST_ID" > "$RUNNER_TEMP/transfer-request.json"
           python3 - <<'PY'
           import json, os, pathlib
@@ -594,6 +595,7 @@ jobs:
       - name: Restore preserved native checkpoint from existing private Release
         if: success() && inputs.mode == 'vrm_export'
         env:
+          GH_TOKEN: ${{ github.token }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           REQUEST_ID: ${{ inputs.request_id }}
@@ -678,6 +680,7 @@ jobs:
         timeout-minutes: 22
         env:
           TRANSFER_MODE: ${{ inputs.mode == 'vrm_export' }}
+          GH_TOKEN: ${{ inputs.mode == 'vrm_export' && github.token || '' }}
           REQUEST_ID: ${{ inputs.request_id }}
           TRANSFER_FENCE: ${{ inputs.transfer_fence }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
@@ -1736,8 +1739,10 @@ jobs:
             exit 1
           fi
       - name: Transfer candidate directly to reviewed private handoff
+        id: private-transfer
         if: success() && inputs.mode == 'vrm_export'
         env:
+          GH_TOKEN: ${{ github.token }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           REQUEST_ID: ${{ inputs.request_id }}
@@ -1751,6 +1756,15 @@ jobs:
           test -n "$DEST_TOKEN"
           out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
           "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py "$out/Morwen-transfer.zip" "$out/private-release-receipt.json"
+          python3 - "$out/private-release-receipt.json" <<'PY'
+          import json, os, re, sys
+          with open(sys.argv[1]) as f:
+              result=json.load(f)
+          assert result["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED" and result["run_id"]==os.environ["GITHUB_RUN_ID"]
+          assert re.fullmatch(r"[0-9a-f]{64}",result["sha256"])
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("zip_sha="+result["sha256"]+"\n")
+          PY
       - name: Upload review evidence
         if: always() && inputs.mode != 'vrm_export'
         uses: actions/upload-artifact@v4
@@ -1778,5 +1792,73 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 45
     environment: two-private-preservation
+    outputs:
+      zip_sha: ${{ steps.private-transfer.outputs.zip_sha }}
     env: *morwen_worker_env
     steps: *morwen_worker_steps
+  blender-transfer-protected:
+    needs: vrm-export-protected
+    if: success() && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: two-private-preservation
+    env:
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+      PYTHONPATH: tools/production_qa:tools/private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify same run-bound fence on Blender runner
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$PRODUCER_ZIP_SHA" =~ ^[0-9a-f]{64}$ ]]
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import await_bound
+          e=os.environ
+          token=await_bound("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"])
+          with open(e["GITHUB_ENV"],"a") as f:
+              f.write("MORWEN_BOUND_FENCE="+token+"\n")
+          PY
+      - name: Receive exact private VRM
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/receive_morwen_transfer.py "$PRODUCER_ZIP_SHA" "$RUNNER_TEMP/morwen-blender-input"
+      - name: Import save reopen and render using existing Blender runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          source="$RUNNER_TEMP/morwen-blender-input"
+          expected="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["vrm_sha256"])' "$source/input-receipt.json")"
+          if ! bash tools/production_qa/run_blender_transfer.sh "$source/Morwen-transfer.vrm" "$expected" "$RUNNER_TEMP/morwen-blender-output" > "$RUNNER_TEMP/morwen-blender.log" 2>&1; then
+            echo BLENDER_IMPORT_OR_RENDER_BLOCKED_PRIVATE_LOG
+            exit 1
+          fi
+      - name: Preserve editable blend and renders via existing private transfer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/preserve_blender_transfer.py "$RUNNER_TEMP/morwen-blender-input" "$RUNNER_TEMP/morwen-blender-output" "$PRODUCER_ZIP_SHA"
