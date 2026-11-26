@@ -73,7 +73,7 @@ test("sanctuary and future versioned world evidence are visible without weakenin
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
  assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,11]);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[11]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[11]);
 });
 
 test("world namespace catches actual new naming orders and unversioned candidates without crossing branches",()=>{
@@ -83,4 +83,10 @@ test("world namespace catches actual new naming orders and unversioned candidate
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075731907);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596]);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[31]);
+});
+
+test("actual river and DEM sources and botanical candidates remain distinct",()=>{
+ const branch="docs/ireland-world-source-grounded-plan-20261123";
+ const rows=selectRecentArtifacts({artifacts:[art(15036275709,branch,"two-ireland-river-reference-v26"),art(15033082981,branch,"two-ireland-dem-v24-southwest"),art(1,branch,"two-fern-v65-candidate")]});
+ assert.deepEqual(Array.from(rows,x=>x.category),["世界・河川／水辺","世界・地形","世界・植物／草花"]);
 });
