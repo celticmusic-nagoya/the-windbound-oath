@@ -114,8 +114,11 @@ coll=bpy.data.collections.new('V10 scenic vegetation');scene.collection.children
 # Asymmetric groups outside existing footprint, plus the empty southern strip of east/west extension.
 centers=[(-49,18),(-25,25),(-6,30),(20,25),(42,24),(57,15),(-44,-17),(-12,-22),(28,-22),(50,-19)]
 for idx,(cx,cy) in enumerate(centers):
-    for j in range(5):
-        kind='tree' if j<2 else 'shrub';t=templates[kind];mesh=t.data;mesh.calc_loop_triangles()
+    group_counts={'tree':0,'shrub':0}
+    for j in range(65):
+        kind='tree' if j<50 else 'shrub'
+        if group_counts[kind]>=(2 if kind=='tree' else 3):continue
+        t=templates[kind];mesh=t.data;mesh.calc_loop_triangles()
         x=cx+rng.uniform(-5,5);y=cy+rng.uniform(-4,4)
         s=rng.uniform(.78,1.18) if kind=='tree' else rng.uniform(.8,1.4)
         lin=Matrix.Rotation(rng.uniform(0,math.tau),4,'Z')@Matrix.Scale(s,4)@t.matrix_world.to_3x3().to_4x4()
@@ -123,14 +126,16 @@ for idx,(cx,cy) in enumerate(centers):
         bx=(x+lo[0],x+hi[0],y+lo[1],y+hi[1])
         if bx[0]<xs[0]+.1 or bx[1]>xs[-1]-.1 or bx[2]<ys[0]+.1 or bx[3]>ys[-1]-.1:continue
         if not(bx[1]<xmin-.3 or bx[0]>xmax+.3 or bx[3]<ymin-.3 or bx[2]>ymax+.3):continue
-        if min(abs(p-curve(x)) for p in (bx[2],bx[3],y))<4.8+max(abs(lo[0]),abs(hi[0]))*.25:continue
+        rlo=min(curve(bx[0]),curve(bx[1]));rhi=max(curve(bx[0]),curve(bx[1]))
+        if not (bx[3]<rlo-4.8 or bx[2]>rhi+4.8):continue
         if any(math.hypot(x-p['x'],y-p['y'])<(3 if kind=='tree' and p['kind']=='tree' else 1.1) for p in placements):continue
         low=[p for p in pts if p.z<=lo[2]+.025];heights=[ground_hit(x+p.x,y+p.y) for p in low]
         if not heights or any(v is None for v in heights):continue
-        offsets=[a-p.z for a,p in zip(heights,low)];z=max(offsets)-.01;rr=[z-a for a in offsets]
-        if max(map(abs,rr))>.10:continue
+        offsets=[a-p.z for a,p in zip(heights,low)];z=(max(offsets)+min(offsets))/2-.005;rr=[z-a for a in offsets]
+        if max(map(abs,rr))>.099999:continue
         o=bpy.data.objects.new('V10_'+kind+'_%03d'%len(placements),mesh);coll.objects.link(o);o.matrix_world=Matrix.Translation(Vector((x,y,z)))@lin
-        placements.append(dict(name=o.name,kind=kind,x=x,y=y,z=z,root_max=max(rr),triangles=len(mesh.loop_triangles)));rootres.extend(rr)
+        placements.append(dict(name=o.name,kind=kind,x=x,y=y,z=z,root_max=max(rr),triangles=len(mesh.loop_triangles)));rootres.extend(rr);group_counts[kind]+=1
+    print('GROUP_PLACEMENT',idx,group_counts,flush=True)
 assert sum(p['kind']=='tree' for p in placements)>=8 and len(placements)>=20,placements
 bpy.context.view_layer.update();assert snap()==old and sha(src)==lock
 sys.path[:0]=[str(engine/'tools'),str(engine/'tools/production_qa')]
