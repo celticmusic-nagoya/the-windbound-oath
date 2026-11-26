@@ -1,0 +1,37 @@
+name: TWO ENV493 comment transport probe
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  pull-requests: read
+jobs:
+  receipt:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 493 &&
+      github.event.issue.pull_request != null &&
+      github.event.sender.id == 315379131 &&
+      github.event.comment.user.id == 315379131 &&
+      github.event.comment.body == '/two-env493 probe 1925346751f72fec70a11eed99f9b6b63d2114c9'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify current PR head and record transport receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          with open(os.environ["GITHUB_EVENT_PATH"]) as f:
+              event = json.load(f)
+          req = urllib.request.Request(
+              "https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/pulls/493",
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"})
+          with urllib.request.urlopen(req, timeout=15) as response:
+              pr = json.load(response)
+          assert pr["state"] == "open"
+          assert pr["head"]["sha"] == "1925346751f72fec70a11eed99f9b6b63d2114c9"
+          assert event["sender"]["id"] == event["comment"]["user"]["id"] == 315379131
+          assert event["comment"]["body"] == "/two-env493 probe 1925346751f72fec70a11eed99f9b6b63d2114c9"
+          print(json.dumps({"scope": "transport-only", "comment_id": event["comment"]["id"], "sender_id": event["sender"]["id"], "head": pr["head"]["sha"], "run_id": os.environ["GITHUB_RUN_ID"]}))
+          PY
