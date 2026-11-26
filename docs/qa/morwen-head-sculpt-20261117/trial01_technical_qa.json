@@ -1,0 +1,263 @@
+{
+  "status": "FAIL_TECHNICAL_SCREEN",
+  "checks": {
+    "source_unchanged": true,
+    "reopen": true,
+    "mesh_nonempty": true,
+    "closed_nondegenerate_base_meshes": false,
+    "five_or_more_views": true,
+    "anatomical_ratio_self_review": true,
+    "rgba_frame_visibility": false
+  },
+  "head_count": 7.749997013650178,
+  "mesh_defects": [
+    {
+      "object": "Glasses_bridge",
+      "vertices": 36,
+      "faces": 24,
+      "boundary_edges": 24,
+      "nonmanifold_edges": 24,
+      "degenerate_faces": 0
+    },
+    {
+      "object": "Glasses_temple_-1",
+      "vertices": 48,
+      "faces": 36,
+      "boundary_edges": 24,
+      "nonmanifold_edges": 24,
+      "degenerate_faces": 0
+    },
+    {
+      "object": "Glasses_temple_1",
+      "vertices": 48,
+      "faces": 36,
+      "boundary_edges": 24,
+      "nonmanifold_edges": 24,
+      "degenerate_faces": 0
+    }
+  ],
+  "renders": [
+    {
+      "file": "front.png",
+      "sha256": "3352ab703c35e802e3dc70572af9043606c42fedf2f348e0b1fd2361589a4e49",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 226373,
+      "coverage": 0.3837975396050347,
+      "bbox": [
+        0,
+        144,
+        767,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.01029716441448406,
+      "black_crush_fraction": 0.004567682541645868,
+      "pass": false
+    },
+    {
+      "file": "back.png",
+      "sha256": "8e73cf425cf086ae904fb4831cad55f380bd7de2a06344288bf23ea0f89fcf97",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 226379,
+      "coverage": 0.3838077121310764,
+      "bbox": [
+        0,
+        144,
+        767,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.0012324464725084923,
+      "black_crush_fraction": 4.417370869206066e-05,
+      "pass": false
+    },
+    {
+      "file": "character_left.png",
+      "sha256": "45d7f0fab7a8b92e5abfc55fa9ad4632c1525d404c4910c22b963669adce5c5e",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 224594,
+      "coverage": 0.3807813856336806,
+      "bbox": [
+        145,
+        144,
+        613,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.00010685948867734668,
+      "black_crush_fraction": 0.0012422415558741551,
+      "pass": false
+    },
+    {
+      "file": "character_right.png",
+      "sha256": "8cccefe9a11498c26feb3c7f23eca4cb3eef5c79c94361c7896856583158a47e",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 224585,
+      "coverage": 0.3807661268446181,
+      "bbox": [
+        154,
+        144,
+        622,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.004853396264220673,
+      "black_crush_fraction": 0.0015628826502215197,
+      "pass": false
+    },
+    {
+      "file": "three_quarter.png",
+      "sha256": "ff4463d8ad3583aca55b763d4203a0091fef882d2510ed9352fc77677037c543",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 237355,
+      "coverage": 0.4024166531032986,
+      "bbox": [
+        68,
+        146,
+        767,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.0020096479956183775,
+      "black_crush_fraction": 0.007014809041309431,
+      "pass": false
+    },
+    {
+      "file": "three_quarter_other.png",
+      "sha256": "65767be57da0d1dbeb1eb86d2aaa27db8e9fde27a938315833ae50e3a76b7d95",
+      "mode": "RGBA",
+      "size": [
+        768,
+        768
+      ],
+      "nonzero_alpha_pixels": 238072,
+      "coverage": 0.4036322699652778,
+      "bbox": [
+        0,
+        146,
+        699,
+        767
+      ],
+      "margin_pass": false,
+      "white_clip_fraction": 0.013210289324238046,
+      "black_crush_fraction": 0.004074397661211734,
+      "pass": false
+    },
+    {
+      "file": "body_front.png",
+      "sha256": "004dc21d47a20095f39c0a03eaa2fc754538b6cf5cd18ff2b05d81444a85f8d2",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 117247,
+      "coverage": 0.19083170572916666,
+      "bbox": [
+        107,
+        64,
+        532,
+        890
+      ],
+      "margin_pass": true,
+      "white_clip_fraction": 0.0012878794340153692,
+      "black_crush_fraction": 0.00022175407473112318,
+      "pass": true
+    },
+    {
+      "file": "body_back.png",
+      "sha256": "a236247b957b4b7e80e1b34fc6faf1f205a82fd152311ff90b5ecd0073bdee25",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 117236,
+      "coverage": 0.19081380208333334,
+      "bbox": [
+        107,
+        64,
+        532,
+        890
+      ],
+      "margin_pass": true,
+      "white_clip_fraction": 5.970862192500597e-05,
+      "black_crush_fraction": 0.0,
+      "pass": true
+    },
+    {
+      "file": "body_character_left.png",
+      "sha256": "c6e71daf4494254a5ba8a8476efda8cc287a4a16b6f89373a162a06138d0e6c0",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 67266,
+      "coverage": 0.109482421875,
+      "bbox": [
+        251,
+        64,
+        387,
+        890
+      ],
+      "margin_pass": true,
+      "white_clip_fraction": 1.4866351500014867e-05,
+      "black_crush_fraction": 0.00010406446050010406,
+      "pass": true
+    },
+    {
+      "file": "body_character_right.png",
+      "sha256": "3f354562bca6d6df8b229a6eb3dac9790137416e2bcb0c754554cf04cd258eb1",
+      "mode": "RGBA",
+      "size": [
+        640,
+        960
+      ],
+      "nonzero_alpha_pixels": 67252,
+      "coverage": 0.10945963541666667,
+      "bbox": [
+        252,
+        64,
+        388,
+        890
+      ],
+      "margin_pass": true,
+      "white_clip_fraction": 0.0008178195444001666,
+      "black_crush_fraction": 0.00023791114018913937,
+      "pass": true
+    }
+  ],
+  "scope_limitations": [
+    "Self-reviewed anatomical vertices; independent confirmation pending",
+    "Normals recalculated; manifold screen is not a self-intersection or rigging test",
+    "Eyeball/socket, glasses/skin and hair intersections require visual review",
+    "No independent art acceptance or game/Android test"
+  ],
+  "gates": {
+    "G1": "BLOCKED: source SHA PASS, candidate fidelity not accepted",
+    "G2": "NOT_RUN: independent art QA; self visual findings in report",
+    "G3": "FAIL",
+    "G4": "NOT_RUN"
+  }
+}
