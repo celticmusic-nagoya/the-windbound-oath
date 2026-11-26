@@ -1,0 +1,123 @@
+{
+  "schema": "two.region.a3.irish_floor_recovery.v72",
+  "parent": "4d2eef11c30ac3024e73f508b82e92ad6f6e8528",
+  "status": "V71_NATIVE_CHECKPOINT_AND_SOURCE_BYTES_VERIFIED_RENDER_ONLY_RECOVERY_REQUESTED",
+  "prework": {
+    "main_head": "2f5195c0787a9a323e6dc14f8764476cf01727f4",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_IRISH_FLOOR_RENDER_ONLY_V72",
+    "owner_pr": 482,
+    "owner_head": "4d2eef11c30ac3024e73f508b82e92ad6f6e8528",
+    "writer_lease_fencing_evidence": "Immutable V71 checkpoint, read-only render, completed prior run. No shared native write or takeover. CAS.",
+    "dependency_shas": {
+      "v71": "5a8797ecf1be159425f0f1bc1068f223c559e6eb",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "V69 and V71 original native bytes, all source maps, frozen V68 design, canon and runtime",
+    "stage": "Recover verified saved checkpoint and render only; source acquisition verification",
+    "acceptance_criteria": "Archive CRC and SHA, native SHA and exact QA, 168 linked instances and transforms verified after reopen, two matched renders. No re-placement or save.",
+    "preflight_checks": "Actual job log reviewed, both artifacts downloaded and CRC/SHA verified, provider file size MD5 SHA all 8 matched; native SHA exact.",
+    "result": "READY_RENDER_ONLY_RECOVERY",
+    "blockers": [
+      "V71 render failed after successful save and reopen",
+      "Independent D4 and G2 remain unverified",
+      "Triangle budget prevented two patches",
+      "No runtime placement"
+    ],
+    "checkpoint": "V71 immutable native artifact"
+  },
+  "failure": {
+    "run": 45740778504,
+    "job": 139644949869,
+    "error": "ReferenceError: StructRNA of type Object has been removed, line 173 ground -> ray -> terrain.matrix_world. Stale Blender Object after open_mainfile.",
+    "causal_change": "Load exact saved V71 checkpoint; reacquire all Blender IDs after open_mainfile; do not redo placement, source intake, or native save. Verify linked mesh and transforms then render."
+  },
+  "native": {
+    "artifact": 15081142222,
+    "archive_sha256": "7939b66c6d00c78974f77f6837d497b1977e6f6aceca987a9f79cbc7f65cd314",
+    "native_sha256": "745f3739cf5360b113267003a21b61d0c812abeb7dfb3eecd66a2e558f2bf6bc",
+    "qa_sha256": "9aff33210642ddb3acdae13912ad6fe73321382f6073eff8d5b9177d1804013f",
+    "native_bytes": 107997829,
+    "protected_meshes": 523,
+    "placed": 168,
+    "counts": {
+      "rock": 18,
+      "stump": 6,
+      "fern": 60,
+      "moss": 84
+    },
+    "patches_complete": 6,
+    "patches_empty": [
+      "P07",
+      "P08"
+    ],
+    "triangle_count": 599719,
+    "triangle_by_kind": {
+      "stump": 246276,
+      "rock": 200115,
+      "fern": 96208,
+      "moss": 57120
+    },
+    "budget": 600000,
+    "rejections": {
+      "protected": 55,
+      "existing_or_new_footprint": 231,
+      "triangle_budget": 2688
+    },
+    "min_reserve_gap_m": 0.18094441458192945,
+    "min_obstacle_gap_m": 0.0473734952787065,
+    "root_residual_range_m": [
+      -0.055,
+      0.07414573028683663
+    ],
+    "original_data_reuse": true,
+    "limits": "No rendered V71, exact prior saved candidate only."
+  },
+  "sources": {
+    "job": 139644949739,
+    "artifact": 15080758554,
+    "archive_sha256": "54a89abb4f9851c39d63624921567c402bf0c908a4781402911d3a5153f3d79b",
+    "report_sha256": "623601e878a514654e35081796db6ea1b49b46c4ef26bf0f2f549d41e803d00d",
+    "verified_files": 8,
+    "total_bytes": 9503194,
+    "dead_tree_trunk": {
+      "gltf_sha256": "8baaf1ff66ba1f79acdceed0dc3797a882990a3abb10b18abe56762f34c26e39",
+      "vertices": 52593,
+      "triangles": 101802,
+      "source_bounds_m": [
+        [
+          -1.5391005277633667,
+          -0.02773353084921837,
+          -0.17080287635326385
+        ],
+        [
+          1.5119144916534424,
+          0.2626980245113373,
+          0.10672463476657867
+        ]
+      ],
+      "license": "CC0 candidate source; capture location not certified"
+    },
+    "forest_leaves_02": {
+      "diff": "9c38b2b151a0415457a6914966422cfca5a546c94674442e5395e0b1e908a196",
+      "normal": "af0346114834c347a8d6a138f6ea16a97b0bec8d6e4db32c24f1c7e482163235",
+      "rough": "ed2dd60a10242640b1738760015cfae85c8526a79dbf5da563fdffdf30828eae"
+    },
+    "status": "BYTE_VERIFIED_NOT_INCORPORATED"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G2": "NOT_RUN_V71_RENDER",
+    "G3": "SCOPED_NATIVE_SAVE_REOPEN_PASS_RENDER_FAILED",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect recovery renders, address high stump triangle cost with existing qualified LOD or bounded optimization before further placement. Do not rerun unchanged placement; no adoption or main merge."
+}

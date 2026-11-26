@@ -17,6 +17,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
       - 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'
       - 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'
+      - 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -51,6 +52,10 @@ jobs:
         run: |
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            # V72 render-only recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             # V71 isolated composition and source intake only.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py' 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
@@ -759,5 +764,49 @@ jobs:
         with:
           name: two-v71-irish-source-intake
           path: ${{ runner.temp }}/v71-sources
+          retention-days: 14
+          if-no-files-found: error
+
+  v72-floor-render-recovery:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V72 render recovery scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V71 checkpoint and render only
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v72-in" "$RUNNER_TEMP/v72-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15081142222/zip" > "$RUNNER_TEMP/v72.zip"
+          printf '%s  %s\n' 7939b66c6d00c78974f77f6837d497b1977e6f6aceca987a9f79cbc7f65cd314 "$RUNNER_TEMP/v72.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v72.zip"
+          unzip -q "$RUNNER_TEMP/v72.zip" -d "$RUNNER_TEMP/v72-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py' -- "$RUNNER_TEMP/v72-in/v71_irish_floor_feasibility.blend" "$RUNNER_TEMP/v72-out"
+      - name: Preserve matched render evidence only
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v72-floor-render-recovery
+          path: ${{ runner.temp }}/v72-out
           retention-days: 14
           if-no-files-found: error
