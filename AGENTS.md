@@ -1,5 +1,9 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## Director-approved Studio work-in-progress publication (2026-11-26)
+
+For Production Studio only, the director explicitly authorizes routine gallery publication of in-progress production images, including HOLD/FAIL/NOT_RUN and unadopted candidates, without individual director approval. Agents shall inspect actual content and verified provenance, check applicable rights, and register exact source/entry SHA publication receipts under this standing authorization. Unknown rights, redistribution restrictions, private canon, secrets, incidental desktop/dialog captures, raw third-party assets and native originals remain excluded; no automatic rights assertion from names or CI. Use existing gallery staging, SHA checks and publication boundary. Preserve QA/adoption labels and published history. Do not rerender solely for Studio. This scope does not authorize formal adoption, public native/archive redistribution, new expenditure or unrelated publication.
+
 ## Director-approved Morwen early Blender transfer (2026-11-26)
 
 For Morwen #427, [early Blender transfer](docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md) supersedes conflicting VRoid-native completion-before-export wording below and in the older VRoid-first policy. Preserve the verified VRoid base/checkpoints, export and validate actual VRM on an isolated copy, then use Blender as the main authoring environment. Director-approved Morwen visual targets: 7.75 heads nominal, Layer 0 hair shape, official clothed design dark violet hair color; synthetic photo-style material reference only. D0–D4, G1–G4, licensing, protected originals, writer safety, spending and adoption requirements remain. No automatic extension to other characters.
