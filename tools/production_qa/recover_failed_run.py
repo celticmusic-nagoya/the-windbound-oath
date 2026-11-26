@@ -122,6 +122,26 @@ def recover(api, remote_ref, compare_delete, run_id, apply=False):
     need(remote_ref(evidence['ref']) is None, 'lease absent readback not confirmed; reconcile')
     return dict(evidence, status='RELEASED')
 
+def recovery_receipt(api, remote_ref, compare_delete, run_id, apply=False):
+    """Return a safe diagnostic even when transport or malformed evidence fails."""
+    attempted = False
+
+    def tracked_delete(asset, token):
+        nonlocal attempted
+        attempted = True
+        return compare_delete(asset, token)
+
+    try:
+        return recover(api, remote_ref, tracked_delete, run_id, apply), 0
+    except Hold as exc:
+        reason = str(exc)
+    except (OSError, subprocess.SubprocessError, ValueError, TypeError, KeyError, AttributeError) as exc:
+        # Never publish transport payloads, command arguments, or tag messages.
+        reason = 'evidence or transport error: ' + type(exc).__name__
+    return dict(status='HOLD', run_id=run_id, reason=reason,
+                release_attempted=attempted,
+                lease_outcome='RECONCILE_REQUIRED' if attempted else 'NO_RELEASE_ATTEMPTED'), 2
+
 def main():
     def api(path):
         return json.loads(subprocess.check_output(['gh', 'api', path], text=True, timeout=20))
@@ -146,11 +166,9 @@ def main():
         run_id = int(event['inputs']['run_id']); apply = False
     else:
         raise Hold('unsupported trigger')
-    try:
-        print(json.dumps(recover(api, remote_ref, compare_delete, run_id, apply), sort_keys=True))
-    except Hold as exc:
-        print(json.dumps({'status':'HOLD', 'run_id':run_id, 'reason':str(exc)}))
-        sys.exit(2)
+    receipt, exit_code = recovery_receipt(api, remote_ref, compare_delete, run_id, apply)
+    print(json.dumps(receipt, sort_keys=True))
+    sys.exit(exit_code)
 
 if __name__ == '__main__':
     main()

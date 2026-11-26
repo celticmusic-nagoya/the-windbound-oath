@@ -1,5 +1,5 @@
 import copy, json, subprocess, tempfile, pathlib, unittest
-from recover_failed_run import recover, Hold, ROUTES, REPO, RID, BOT, OWNER, ref_for
+from recover_failed_run import recover, recovery_receipt, Hold, ROUTES, REPO, RID, BOT, OWNER, ref_for
 
 class RecoveryTests(unittest.TestCase):
     def setUp(self):
@@ -67,5 +67,55 @@ class RecoveryTests(unittest.TestCase):
         self.data[self.activepaths[0]]={'total_count':0}; self.assertRaises(Hold,self.invoke)
     def test_actor_login(self):
         self.data[self.runpath]['actor']['login']='other'; self.assertRaises(Hold,self.invoke)
+
+    def test_receipt_dry_run(self):
+        receipt, status = recovery_receipt(self.api, self.refs.get, self.delete, self.run, False)
+        self.assertEqual((receipt['status'], status), ('DRY_RUN_ELIGIBLE', 0))
+        self.assertFalse(self.calls)
+
+    def test_receipt_malformed_evidence(self):
+        self.data[self.runpath] = None
+        receipt, status = recovery_receipt(self.api, self.refs.get, self.delete, self.run, True)
+        self.assertEqual((receipt['status'], status), ('HOLD', 2))
+        self.assertEqual(receipt['lease_outcome'], 'NO_RELEASE_ATTEMPTED')
+        self.assertFalse(self.calls)
+
+    def test_receipt_malformed_tag_json(self):
+        self.data[self.tagpath]['message'] = 'malformed PRIVATE-FIXTURE'
+        receipt, status = recovery_receipt(self.api, self.refs.get, self.delete, self.run, True)
+        self.assertEqual(status, 2)
+        self.assertNotIn('PRIVATE-FIXTURE', json.dumps(receipt))
+        self.assertFalse(self.calls)
+
+    def test_receipt_transport_timeout(self):
+        def timeout(path):
+            raise subprocess.TimeoutExpired(['private-command-fixture'], 20)
+        receipt, status = recovery_receipt(timeout, self.refs.get, self.delete, self.run, True)
+        self.assertEqual(status, 2)
+        self.assertEqual(receipt['lease_outcome'], 'NO_RELEASE_ATTEMPTED')
+        self.assertNotIn('private-command-fixture', json.dumps(receipt))
+        self.assertFalse(self.calls)
+
+    def test_receipt_release_timeout_after_delete(self):
+        def uncertain(asset, token):
+            self.delete(asset, token)
+            raise subprocess.TimeoutExpired(['private-command-fixture'], 30)
+        receipt, status = recovery_receipt(self.api, self.refs.get, uncertain, self.run, True)
+        self.assertEqual(status, 2)
+        self.assertTrue(receipt['release_attempted'])
+        self.assertEqual(receipt['lease_outcome'], 'RECONCILE_REQUIRED')
+        self.assertEqual(len(self.calls), 1)
+        self.assertNotIn('private-command-fixture', json.dumps(receipt))
+
+    def test_receipt_failed_readback(self):
+        receipt, status = recovery_receipt(self.api, self.refs.get, lambda a,t: None, self.run, True)
+        self.assertEqual(status, 2)
+        self.assertTrue(receipt['release_attempted'])
+        self.assertEqual(receipt['lease_outcome'], 'RECONCILE_REQUIRED')
+
+    def test_receipt_success(self):
+        receipt, status = recovery_receipt(self.api, self.refs.get, self.delete, self.run, True)
+        self.assertEqual((receipt['status'], status), ('RELEASED', 0))
+        self.assertEqual(len(self.calls), 1)
 
 if __name__=='__main__': unittest.main(verbosity=2)
