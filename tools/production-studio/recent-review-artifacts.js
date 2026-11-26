@@ -18,6 +18,8 @@ const RULES=[
  ["asset/morwen-measured-textile-20261125",/^morwen-(?:photo-textile-comparison|brass-source-maps|met-gold-thread-oa-sources)-not-adopted$/,"モルウェン・材質研究",""],
  ["infra/native-env-qualification-20261123",/^two-hairharpy-volume-/,"モルウェン・ヘア技術",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:hero-tree-v\d+-island-source|forest-v\d+-native-virtual-qa)$/,"世界・樹木／森林",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-sanctuary-v\d+-native-composition$/,"世界・聖域",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-[a-z][a-z0-9-]{0,80}-v\d+-[a-z][a-z0-9-]{0,80}$/,"世界・新規制作証跡（未分類）",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^(?:ireland|two-shared|lind|world|area)/i,"地図・エリア設計",""],
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
@@ -29,6 +31,8 @@ const SOURCE_LINKS=[
  ["風待ちの崖","/pull/421"],
  ["リルド村・エイダン家","/pull/364"],
  ["世界・樹木／森林","/pull/482"],
+ ["世界・聖域","/pull/482"],
+ ["世界・新規制作証跡（未分類）","/pull/482"],
  ["地図・エリア設計","/pull/482"]
 ];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
