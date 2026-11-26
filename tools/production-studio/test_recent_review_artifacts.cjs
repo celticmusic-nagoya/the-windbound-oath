@@ -29,23 +29,23 @@ test("visible automatic refresh, hidden pause, no overlap, error retains prior c
  const ids=Object.fromEntries(["recent-review-artifacts","recent-review-status","refresh-recent-review","recent-review-title"].map(k=>[k,new El()]));
  const doc={hidden:false,events:{},getElementById:k=>ids[k],createElement:()=>new El(),addEventListener(k,f){this.events[k]=f}};
  let calls=0,fail=false,timer=null,serial=0;
- const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"feature/lind-ecology-01","lind-eco-53-candidate-evidence")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
+ const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:url.includes("/actions/runs?")?{workflow_runs:[]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"feature/lind-ecology-01","lind-eco-53-candidate-evidence")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,"recent-review-artifacts.js"),"utf8"),sandbox);
  const flush=()=>new Promise(resolve=>setImmediate(resolve));await flush();
- assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,2);
- const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
+ assert.equal(calls,3);assert.equal(ids["recent-review-artifacts"].children.length,2);
+ const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,3);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
  const buttons=ids["refresh-recent-review"].afterItems[4];const search=ids["refresh-recent-review"].afterItems[6];
  const allButton=buttons.children.find(e=>e.dataset.category==="");allButton.events.click();assert.equal(ids["recent-review-artifacts"].children.length,2);
  search.value="eco";search.events.input();assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
- search.value="";search.events.input();category.value="リルド村・植生";category.events.change();assert.equal(calls,2);
+ search.value="";search.events.input();category.value="リルド村・植生";category.events.change();assert.equal(calls,3);
  const preservation=ids["recent-review-title"].beforeItems[3];assert.equal(preservation.children.length,1);
  assert.ok(timer.ms>=299000&&timer.ms<=300000);
  doc.hidden=true;doc.events.visibilitychange();assert.equal(timer,null);
  doc.hidden=false;doc.events.visibilitychange();assert.ok(timer);
  fail=true;timer.fn();ids["refresh-recent-review"].events.click();await flush();
- assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(preservation.children.length,1);
+ assert.equal(calls,6);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(preservation.children.length,1);
  assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);assert.ok(timer.ms>=899000&&timer.ms<=900000);
- category.value="";category.events.change();assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,2);assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);
+ category.value="";category.events.change();assert.equal(calls,6);assert.equal(ids["recent-review-artifacts"].children.length,2);assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);
 });
 
 test("ECO and measured material sources are recognized; filter before 30-row limit",()=>{
@@ -89,4 +89,23 @@ test("actual river and DEM sources and botanical candidates remain distinct",()=
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const rows=selectRecentArtifacts({artifacts:[art(15036275709,branch,"two-ireland-river-reference-v26"),art(15033082981,branch,"two-ireland-dem-v24-southwest"),art(1,branch,"two-fern-v65-candidate")]});
  assert.deepEqual(Array.from(rows,x=>x.category),["世界・河川／水辺","世界・地形","世界・植物／草花"]);
+});
+
+const {selectLiveRuns,swipeDirection,inferCategory}=context.module.exports;
+test("actual repository fallback retains new WIP metadata without allowing arbitrary forks",()=>{
+ const branch="feature/new-battle-ui";
+ const real=art(201,branch,"battle-ui-wip",{workflow_run:{...art(201,branch,"battle-ui-wip").workflow_run,repository_id:1408120919,head_repository_id:1408120919}});
+ const unknown=art(202,"feature/new","fresh-candidate",{workflow_run:{...real.workflow_run,id:302,head_branch:"feature/new"}});
+ const fork={...real,id:203,workflow_run:{...real.workflow_run,head_repository_id:2}};
+ const unsafe={...real,id:204,name:"../private"};
+ const rows=selectRecentArtifacts({artifacts:[real,unknown,fork,unsafe]},"",100);
+ assert.equal(rows.length,2);assert.equal(rows[0].category,"その他・未分類");assert.equal(rows[1].category,"ゲーム・UI／実装");assert.ok(rows.every(x=>x.metadataOnly));
+});
+test("active and completed public runs classified, no fork/no-op or invalid path",()=>{
+ const rows=selectLiveRuns({workflow_runs:[run(21,{name:"Morwen VRoid / vrm_export",path:".github/workflows/morwen-vroid-macos-probe.yml",status:"in_progress",conclusion:null}),run(22,{name:"Forest render",path:".github/workflows/forest.yml"}),run(23,{status:"queued",conclusion:null,name:"World terrain",path:".github/workflows/terrain.yml"}),run(24,{head_repository:{full_name:"other/repo"}}),run(25,{name:"Morwen scoped comment launch",conclusion:"skipped"}),run(26,{path:"../invalid.yml"})]});
+ assert.deepEqual(Array.from(rows,x=>x.id),[23,21,22]);assert.equal(rows[1].category,"モルウェン・Blender移行／造形");assert.equal(rows[2].category,"世界・森林");
+ assert.throws(()=>selectLiveRuns({artifacts:[]}));
+});
+test("swipe threshold preserves vertical scroll, tiny gestures and both directions",()=>{
+ assert.equal(swipeDirection(-80,10),1);assert.equal(swipeDirection(80,10),-1);assert.equal(swipeDirection(30,0),0);assert.equal(swipeDirection(60,80),0);assert.equal(swipeDirection(-60,55),0);
 });
