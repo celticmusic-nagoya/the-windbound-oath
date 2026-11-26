@@ -6,6 +6,8 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link rel="icon" type="image/png" href="img/field/lind/props/lind_sign.png">
+<script src="js/runtime-environment.js?v=20261126dev01"></script>
+<style>html:not(.windbound-dev) #devBtn,html:not(.windbound-dev) #devPanel,html:not(.windbound-dev) #devBuildIndicator,html:not(.windbound-dev) .dev-only-command{display:none!important}</style>
 <script src="js/field/field-movement.js?v=20261011-quality-g"></script>
 <script src="js/field/field-navigation.js"></script>
 <script src="js/field/field-height.js?v=20261012p1"></script>
@@ -32,7 +34,7 @@
 <script src="js/loading-view.js?v=20261025input"></script>
 <script>
 // Reserve cold-start title input before any gameplay handlers are registered.
-{const q=new URLSearchParams(location.search);if(q.get('title')!=='0'&&q.get('legacyVillage')!=='1'){LoadingInput.lock('title');document.documentElement.classList.add('title-on');}}
+{const q=new URLSearchParams(location.search);if(!window.WINDBOUND_DEV||(q.get('title')!=='0'&&q.get('legacyVillage')!=='1')){LoadingInput.lock('title');document.documentElement.classList.add('title-on');}}
 </script>
 <!-- BUG-STARTUP-01: the title cover must apply from the first paint. css/title-screen.css is linked at the end of <body>, so on a slow
      connection (Android Chrome) the body (old village field) painted before that rule arrived. Same rule, moved up; nothing else changes. -->
@@ -758,7 +760,7 @@ function updateNormalCommands(){
  setNormalCommandDrawer(Boolean(window.InputManager&&InputManager.autoOpen('normal')));
  const a=normalActor==='aidan';
  ['nAtk','nSkill','nHeal','nPrayer','nWindbloom','nWindDance','nGuard','nItem','nDevKill'].forEach(id=>$('#'+id)?.classList.remove('v2-visible'));
- $('#nDevKill')?.classList.add('v2-visible');
+ if(window.WINDBOUND_DEV)$('#nDevKill')?.classList.add('v2-visible');
  ['nAtk','nGuard','nItem'].forEach(id=>$('#'+id).classList.add('v2-visible'));
  if(a){$('#nSkill').classList.add('v2-visible')}
  else{['nHeal','nPrayer','nWindbloom'].forEach(id=>$('#'+id).classList.add('v2-visible'))}
@@ -1311,7 +1313,7 @@ function syncRaiderCommandClasses(){
    const rwd=$('#rbWindDance');if(rwd){const v=window.WindDance&&WindDance.commandVisible();rwd.hidden=!v;rwd.classList.toggle('rb-visible',!!v);rwd.disabled=!!v&&rbFMP<WindDance.mp()}
  }
 
- $('#rbDevKill')?.classList.add('rb-visible');
+ if(window.WINDBOUND_DEV)$('#rbDevKill')?.classList.add('rb-visible');
  $('#rbWindbloom').disabled=rbFMP<8;$('#rbSkill').disabled=rbTP<30;
  $('#rbHeal').disabled=rbFMP<8;
  $('#rbRuneSkill').disabled=rbFMP<6;
@@ -1683,6 +1685,7 @@ function devResetScreens(ownerToken){
  $('#devPanel').style.display='none';
 }
 function devJump(key){
+ if(!window.WINDBOUND_DEV)return false;
  devResetScreens();
  if(key==='cliff_summit'){
    storyStage=3;
@@ -1733,6 +1736,7 @@ function devJump(key){
  }
  renderJournal();popObjective();
 }
+if(window.WINDBOUND_DEV){
 // Reconcile DEV buttons if a later legacy runtime script rewrites their DOM.
 const devGridEl=$('#devGrid');
 const renderDevEvents=()=>{
@@ -1781,10 +1785,11 @@ devGridEl.addEventListener('click',e=>{
  });
 },true);
 $('#devGrid').onclick=e=>{const b=e.target.closest('[data-jump]');if(b)devJump(b.dataset.jump)};
+}
 
 // v0.23 opening: Aidan begins his day inside his own house, beside the bed.
 (function startAtHome(){
- if(!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
+ if(!window.WINDBOUND_DEV||!/[?&]legacyVillage=1/.test(location.search)){   // new village hosts the opening (js/field/rilde-village.js); ?legacyVillage=1 keeps the old DOM village
    const scheduled=LoadCoordinator.generation;
    const launch=()=>{if(window.RildeVillage&&RildeVillage.enabled())return LoadCoordinator.boot(token=>RildeVillage.startOpening(token));};
    const go=()=>{if(scheduled!==LoadCoordinator.generation)return;if(window.TitleScreen)TitleScreen.begin(launch);else return launch();};
@@ -2128,9 +2133,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/prologue-combat.js?v=20261027rematch"></script>
 <script src="js/battle-critical-presentation.js"></script>
 <script src="js/prologue-progress.js?v=20261025continue"></script>
-<script src="js/prologue-dev.js?v=20261012c"></script>
+<script src="js/prologue-dev.js?v=20261126dev01"></script>
 <script src="js/dev/perf-meter.js?v=20261012p1"></script>
-<script src="js/dev/motion-test.js?v=20261019am1"></script>
+<script src="js/dev/motion-test.js?v=20261126dev01"></script>
 <script src="js/field/field-culling.js"></script>
 <script src="js/field/forest-scatter.js"></script>
 <script src="js/field/forest-layer.js"></script>
@@ -2144,9 +2149,9 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/field/field-walkers.js?v=20261103walk02"></script>
 <script src="js/field/field-monsters.js?v=20261103walk01"></script>
 <script src="js/field/fiona-field-assets.js?v=20261012z"></script>
-<script src="js/field/moss-forest-runtime.js?v=20261104down4"></script>
+<script src="js/field/moss-forest-runtime.js?v=20261126dev01"></script>
 <script src="js/field/moss-forest-story.js?v=20261025continue"></script>
-<script src="js/field/rilde-village.js?v=20261101rewards26b"></script>
+<script src="js/field/rilde-village.js?v=20261126dev01"></script>
 <script src="js/training-checkpoint.js"></script>
 <script src="js/data/item-data.js?v=20261101rewards26b"></script>
 <script src="js/data/equipment-data.js?v=20261013eq"></script>
@@ -2225,6 +2230,6 @@ const v66DJ=devJump;devJump=function(k){const r=v66DJ(k);syncStoryEquipment();re
 <script src="js/input-manager.js?v=20261025input"></script>
 <script src="js/battle-loading.js?v=20261027rematch"></script>
 <script src="js/save-continue.js?v=20261025continue"></script>
-<script src="js/title-screen.js?v=20261027aidanv2"></script>
+<script src="js/title-screen.js?v=20261126dev01"></script>
 <link rel="stylesheet" href="css/title-screen.css?v=20261028portraitfinal">
 </body></html>

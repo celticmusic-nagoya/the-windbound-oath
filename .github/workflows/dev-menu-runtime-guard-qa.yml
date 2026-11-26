@@ -3,6 +3,13 @@ on:
   pull_request:
     paths:
       - 'index.html'
+      - 'js/runtime-environment.js'
+      - 'js/prologue-dev.js'
+      - 'js/dev/motion-test.js'
+      - 'js/title-screen.js'
+      - 'js/field/rilde-village.js'
+      - 'js/field/moss-forest-runtime.js'
+      - 'tests/moss/public_dev_environment.test.js'
       - 'dev-fresh-20261108.html'
       - 'tests/moss/dev_menu_runtime_guard.test.js'
       - '.github/workflows/dev-menu-runtime-guard-qa.yml'
@@ -15,6 +22,13 @@ on:
       - 'two-checkpoint/v1/**'
     paths:
       - 'index.html'
+      - 'js/runtime-environment.js'
+      - 'js/prologue-dev.js'
+      - 'js/dev/motion-test.js'
+      - 'js/title-screen.js'
+      - 'js/field/rilde-village.js'
+      - 'js/field/moss-forest-runtime.js'
+      - 'tests/moss/public_dev_environment.test.js'
       - 'dev-fresh-20261108.html'
       - 'tests/moss/dev_menu_runtime_guard.test.js'
       - '.github/workflows/dev-menu-runtime-guard-qa.yml'
@@ -27,3 +41,4 @@ jobs:
         with:
           node-version: '22'
       - run: node tests/moss/dev_menu_runtime_guard.test.js
+      - run: node tests/moss/public_dev_environment.test.js
