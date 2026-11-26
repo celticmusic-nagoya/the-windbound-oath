@@ -35,6 +35,9 @@ jobs:
             python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
           done
   reviewed-launch-contract:
+    permissions:
+      contents: read
+      actions: read
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     steps:
@@ -57,3 +60,27 @@ jobs:
           assert hashlib.sha256((root / "vrm-export-profile.json").read_bytes()).hexdigest() == contract["profile_sha256"]
           print("CANDIDATE_DIGEST_MATCH")
           PY
+      - name: Read-only live prior-run API compatibility
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node <<'JS'
+          const {execFileSync}=require("node:child_process");
+          const {selectPrior,ACTIVE,PATH}=require("./tools/production_qa/reviewed_launch_contract.cjs");
+          const repo="repos/"+process.env.GITHUB_REPOSITORY;
+          const wf=repo+"/actions/workflows/"+PATH.split("/").pop();
+          function api(path){return JSON.parse(execFileSync("gh",["api",path],{encoding:"utf8",timeout:10000,maxBuffer:5000000}));}
+          try {
+            const list=api(wf+"/runs?branch=main&per_page=1");
+            const id=list.workflow_runs?.[0]?.id;
+            if(!Number.isSafeInteger(id)||id<=0)throw Error("latest prior missing");
+            const detail=api(repo+"/actions/runs/"+id);
+            const jobs=api(repo+"/actions/runs/"+id+"/attempts/1/jobs?per_page=100");
+            const active=Object.fromEntries(ACTIVE.map(s=>[s,api(wf+"/runs?status="+s+"&per_page=1")]));
+            console.log("LIVE_PRIOR_READ_ONLY_PASS",selectPrior(list,detail,jobs,active));
+          } catch(e) {
+            // Live state may change during PR QA. Do not equate HOLD to launch eligibility.
+            console.log("LIVE_PRIOR_READ_ONLY_HOLD",e.message.split("\n")[0]);
+          }
+          JS
