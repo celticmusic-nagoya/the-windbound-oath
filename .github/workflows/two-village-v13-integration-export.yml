@@ -1,0 +1,52 @@
+name: TWO village V13 exact integration export
+on:
+  pull_request:
+    types: [synchronize]
+    paths: ['tools/map_blender/lind/home/export_village_v13_integration.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-v13-integration-export
+  cancel-in-progress: false
+jobs:
+  export:
+    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/export_village_v13_integration.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa
+      - name: Restore exact V13 and export selected visible meshes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v13" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15116460812/zip" > "$RUNNER_TEMP/v13.zip"
+          printf '%s  %s\n' f564317fb154c7ef6ed47f55d22b331d73ff9799e859a436ef212f5f77c98a6d "$RUNNER_TEMP/v13.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v13.zip"
+          unzip -q "$RUNNER_TEMP/v13.zip" -d "$RUNNER_TEMP/v13"
+          python3 -m py_compile 'tools/map_blender/lind/home/export_village_v13_integration.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/export_village_v13_integration.py' -- "$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend" "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: village-v13-integration-export
+          path: ${{ runner.temp }}/out
+          if-no-files-found: error
+          retention-days: 14
