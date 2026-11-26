@@ -5,12 +5,12 @@ Requires authenticated git remote and canonical asset ID.
 import subprocess,uuid,re,time
 from shared_asset_reservation import ref_for
 
-def git(*args,stdin=None,deadline=None):
+def git(*args,stdin=None,deadline=None,cwd=None):
     timeout = None if deadline is None else deadline - time.monotonic()
     if timeout is not None and timeout <= 0:
         raise TimeoutError("checkpoint Git deadline exhausted")
     return subprocess.run(['git',*args],input=stdin,text=True,capture_output=True,check=True,
-                          timeout=timeout).stdout.strip()
+                          timeout=timeout,cwd=cwd).stdout.strip()
 
 def acquire(remote,asset,commit):
     if not re.fullmatch(r'[0-9a-f]{40}',commit):raise ValueError('commit SHA required')
@@ -24,10 +24,10 @@ def lease_object(commit, *, deadline=None):
     nonce=uuid.uuid4().hex
     return git('mktag',stdin=f'object {commit}\ntype commit\ntag two-lease-{nonce}\ntagger TWO lease <lease@invalid> 1700000000 +0000\n\n{nonce}\n',deadline=deadline)
 
-def assert_owned(remote,asset,obj,*,deadline=None):
+def assert_owned(remote,asset,obj,*,deadline=None,cwd=None):
     if not re.fullmatch(r'[0-9a-f]{40}',obj):raise ValueError('lease object required')
     ref=ref_for(asset)
-    if git('ls-remote','--refs',remote,ref,deadline=deadline)!=f'{obj}\t{ref}':raise RuntimeError('lease lost')
+    if git('ls-remote','--refs',remote,ref,deadline=deadline,cwd=cwd)!=f'{obj}\t{ref}':raise RuntimeError('lease lost')
 
 def assert_reservation(remote, asset, token, commit):
     """Bind the dispatch-time reservation to the exact revision being executed."""
