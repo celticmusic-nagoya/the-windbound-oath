@@ -81,8 +81,10 @@ def qualify(api, run_id):
              'active or ambiguous worker inventory')
     ref = ref_for(route['asset'])
     matches = api(f'{base}/git/matching-refs/{ref[5:]}')
+    need(isinstance(matches, list), 'malformed lease inventory')
     if not matches:
-        return None
+        return dict(asset=route['asset'], ref=ref, token=None, run_id=run_id,
+                    revision=revision, request=request, attempt=1, phase='PRE_NATIVE_WRITE')
     need(len(matches) == 1 and matches[0].get('ref') == ref, 'ambiguous lease')
     obj = matches[0].get('object', {})
     token = obj.get('sha')
@@ -109,8 +111,9 @@ def qualify(api, run_id):
 
 def recover(api, remote_ref, compare_delete, run_id, apply=False):
     evidence = qualify(api, run_id)
-    if evidence is None:
-        return {'status': 'NO_LEASE_API', 'run_id': run_id}
+    if evidence['token'] is None:
+        need(remote_ref(evidence['ref']) is None, 'API and Git disagree on lease absence')
+        return dict(evidence, status='NO_LEASE_CONFIRMED')
     need(remote_ref(evidence['ref']) == evidence['token'], 'lease changed before release')
     if not apply:
         return dict(evidence, status='DRY_RUN_ELIGIBLE')
