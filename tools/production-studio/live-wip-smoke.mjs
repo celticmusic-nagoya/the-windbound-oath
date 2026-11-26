@@ -1,0 +1,77 @@
+import {chromium} from "playwright";
+import {spawn} from "node:child_process";
+import {mkdir} from "node:fs/promises";
+import assert from "node:assert/strict";
+const server=spawn("python3",["-m","http.server","8767","--bind","127.0.0.1"],{stdio:"ignore"});
+let browser;
+const repo="celticmusic-nagoya/the-windbound-oath";
+try{
+ for(let i=0;i<40;i++){try{if((await fetch("http://127.0.0.1:8767/")).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));}
+ browser=await chromium.launch({args:["--use-angle=swiftshader","--enable-unsafe-swiftshader"]});
+ const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,hasTouch:true,isMobile:true,reducedMotion:"reduce"});
+ const errors=[];page.on("pageerror",e=>errors.push(e.message));
+ const sha="a".repeat(40),now="2026-11-26T08:00:00Z";
+ const run=(id,name,status,path,branch="main")=>({id,name,status,conclusion:status==="completed"?"success":null,path,head_sha:sha,head_branch:branch,repository:{full_name:repo},head_repository:{full_name:repo},updated_at:now});
+ const artifact=(id,name,branch)=>({id,name,expired:false,size_in_bytes:100,created_at:now,workflow_run:{id:200+id,head_branch:branch,head_sha:sha,repository_id:1408120919,head_repository_id:1408120919}});
+ let fail=false;
+ await page.route("https://api.github.com/**",route=>{
+  const u=new URL(route.request().url());
+  if(u.pathname.endsWith("/actions/artifacts"))return fail?route.fulfill({status:403}):route.fulfill({json:{artifacts:[artifact(1,"morwen-isolated-vroid-reopen-review","main"),artifact(2,"forest-wip-v99","feature/world-forest"),artifact(3,"fresh-candidate","feature/new-asset")]}});
+  if(u.pathname.endsWith("/actions/runs")&&u.searchParams.get("per_page")==="100")return fail?route.fulfill({status:403}):route.fulfill({json:{workflow_runs:[run(401,"Morwen VRoid / vrm_export","in_progress",".github/workflows/morwen-vroid-macos-probe.yml"),run(402,"Forest render","completed",".github/workflows/forest.yml","feature/world-forest")]}});
+  if(u.pathname.includes("/pulls/"))return route.fulfill({json:{state:"open",head:{sha,ref:"main"}}});
+  if(u.pathname.endsWith("/pulls"))return route.fulfill({json:[]});
+  return route.fulfill({json:{workflow_runs:[],artifacts:[]}});
+ });
+ await page.route("https://raw.githubusercontent.com/**",r=>r.fulfill({status:404}));
+ await page.goto("http://127.0.0.1:8767/index.html");
+ await page.waitForFunction(()=>document.querySelectorAll("#recent-live-runs article").length===2&&document.querySelectorAll("#recent-review-artifacts article").length===3);
+ assert.match(await page.locator("#recent-live-runs").innerText(),/制作中/);
+ assert.match(await page.locator("#recent-review-artifacts").innerText(),/その他・未分類/);
+ const category=page.locator("#recent-review-category");
+ await page.locator("#recent-category-grid button").filter({hasText:"モルウェン・Blender移行／造形"}).click();
+ assert.equal(await page.locator("#recent-live-runs article").count(),1);
+ assert.equal(await page.locator("#recent-review-artifacts article").count(),0);
+ const before=await category.inputValue();
+ const gesture=async(locator,dx,dy)=>{
+  await locator.scrollIntoViewIfNeeded();const b=await locator.boundingBox();assert.ok(b);
+  const x=Math.min(365,Math.max(24,b.x+b.width*.72)),y=Math.min(810,Math.max(24,b.y+b.height*.5));
+  const session=await page.context().newCDPSession(page);
+  await session.send("Input.dispatchTouchEvent",{type:"touchStart",touchPoints:[{x,y}]});
+  for(let i=1;i<=5;i++){await session.send("Input.dispatchTouchEvent",{type:"touchMove",touchPoints:[{x:x+dx*i/5,y:y+dy*i/5}]});await page.waitForTimeout(25);}
+  await session.send("Input.dispatchTouchEvent",{type:"touchEnd",touchPoints:[]});await session.detach();
+ };
+ await gesture(page.locator("#recent-live-runs article h4"),-100,2);
+ await page.waitForFunction(v=>document.querySelector("#recent-review-category").value!==v,before);
+ const after=await category.inputValue();assert.notEqual(after,before);
+ await page.locator("#recent-category-grid button[data-category='']").click();
+ await gesture(page.locator("#recent-live-runs article h4").first(),0,95);
+ assert.equal(await category.inputValue(),"","vertical scroll must not switch category");
+ await page.locator("#recent-review-search").fill("forest");
+ assert.equal(await page.locator("#recent-review-artifacts article").count(),1);
+ assert.equal(await page.locator("#recent-live-runs article").count(),1);
+ fail=true;await page.locator("#refresh-recent-review").click();
+ await page.waitForFunction(()=>document.querySelector("#recent-review-status").textContent.includes("前回取得分を保持"));
+ assert.equal(await page.locator("#recent-review-search").inputValue(),"forest");
+ assert.equal(await page.locator("#recent-live-runs article").count(),1);
+ assert.equal(await page.locator("#recent-review-artifacts article").count(),1);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),"mobile overflow");
+ await page.locator("#recent-review-search").fill("");
+ await mkdir("qa-output",{recursive:true});await page.locator("#recent-live-runs").screenshot({path:"qa-output/live-wip-mobile.png"});
+ // Verify the actual existing gallery lightbox with touch navigation.
+ await page.getByRole("button",{name:"全成果物・新着順",exact:true}).click();
+ const photos=page.locator("#published-gallery .gallery-image-button");
+ assert.ok(await photos.count()>=2);await photos.first().click();
+ const dialog=page.locator(".gallery-lightbox[open]");
+ const next=dialog.getByRole("button",{name:"次へ →",exact:true});assert.equal(await next.isEnabled(),true);
+ const viewport=dialog.locator('[aria-label="画像拡大表示"]');
+ await viewport.locator("img").evaluate(img=>img.decode());
+ const original=await viewport.locator("img").getAttribute("src");
+ await gesture(viewport,-100,0);
+ await page.waitForFunction(src=>document.querySelector('.gallery-lightbox[open] [aria-label="画像拡大表示"] img').getAttribute("src")!==src,original);
+ await dialog.getByRole("button",{name:"拡大",exact:true}).click();
+ const zoomed=await viewport.locator("img").getAttribute("src");await gesture(viewport,100,0);
+ assert.equal(await viewport.locator("img").getAttribute("src"),zoomed,"zoomed image must pan, not switch");
+ await dialog.getByRole("button",{name:"閉じる",exact:true}).click();
+ assert.deepEqual(errors,[]);
+ console.log("PASS: live category counts, unknown metadata, active runs, horizontal/vertical gestures, stale data, gallery swipe and zoom");
+}finally{await browser?.close();server.kill();}
