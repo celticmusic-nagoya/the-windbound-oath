@@ -70,17 +70,17 @@ try{
  await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:[null,{...manifest.entries[0],name:{unexpected:"object"}},{...manifest.entries[0],stage:[]},...manifest.entries]}}));
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
- assert.equal(await page.locator('.category-card').count(),6,'malformed metadata crashed gallery');
+ assert.equal(await page.locator('.category-card').count(),7,'malformed metadata crashed gallery');
  await page.unroute('**/gallery-manifest.json');
- assert.equal(await page.locator('.category-card').count(),6);
+ assert.equal(await page.locator('.category-card').count(),7);
  // Category cards may legitimately have no cover when the manifest only contains 3D files.
- assert.ok(await page.locator('#published-gallery img').count()<=6);
+ assert.ok(await page.locator('#published-gallery img').count()<=7);
  // Every category containing a published image must render its thumbnail.
- const categoryOrder=['cliff','morwen','village','blueprint','map','other'];
+ const categoryOrder=['cliff','morwen','village','world','blueprint','map','other'];
  const categoryCards=page.locator('.category-card');
  const categoryOf=e=>{
   const raw=[e.name,e.stage,e.asset_id,e.source_path].filter(Boolean).join(' ').toLowerCase();
-  const top=['cliff','morwen','village','blueprint','map','other'].includes(e.category)?e.category:isCliff(e)?'cliff':'other';
+  const top=['cliff','morwen','village','world','blueprint','map','other'].includes(e.category)?e.category:isCliff(e)?'cliff':'other';
   if(top!=='other')return top;
   if(/blueprint|design[-_ ]?sheet|設計図|四面図|寸法図|断面図/.test(raw))return 'blueprint';
   if(/(^|[^a-z])map([^a-z]|$)|site[-_ ]?plan|layout[-_ ]?plan|地図|配置図|平面図|俯瞰図/.test(raw))return 'map';
@@ -95,6 +95,23 @@ try{
   if(hasImage)assert.equal(await categoryCards.nth(i).locator('img').count(),1,'missing category cover: '+id);
  }
 
+ // World categories are separate even before any additional publication is approved.
+ await page.locator('#published-gallery').getByRole('button',{name:/世界・自然／遺構/}).click();
+ for(const label of ['樹木','森林','聖域','遺跡'])assert.equal(await page.locator('#published-gallery .category-card').filter({hasText:label}).count(),1);
+ await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ const worldFixtures=['tree','forest','sanctuary','ruin'].map((subcategory,i)=>({...manifest.entries[0],name:'world-fixture-'+subcategory,category:'world',subcategory,created_at:'2026-11-26T00:00:0'+i+'Z'}));
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:worldFixtures}}));
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('4 件'));
+ await page.locator('#published-gallery').getByRole('button',{name:/世界・自然／遺構/}).click();
+ for(const [subcategory,label] of [['tree','樹木'],['forest','森林'],['sanctuary','聖域'],['ruin','遺跡']]){
+  await page.locator('#published-gallery .category-card').filter({hasText:label}).click();
+  assert.deepEqual(await page.locator('#published-gallery article h3').allTextContents(),['world-fixture-'+subcategory]);
+  await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ }
+ await page.unroute('**/gallery-manifest.json');
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  // UX regression: bundled stylesheet, breadcrumbs, 390px layout and QA metadata.
  const uxCss=await page.request.get('http://127.0.0.1:8766/studio-ux.css');
  assert.equal(uxCss.status(),200,'UX stylesheet missing from published bundle');
