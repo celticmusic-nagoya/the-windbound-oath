@@ -14,6 +14,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py'
       - 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py'
       - 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -48,6 +49,10 @@ jobs:
         run: |
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            # V69 isolated terrain color correction only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             # V64 ruin material intake only.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
@@ -628,5 +633,49 @@ jobs:
         with:
           name: two-v64-ruin-materials
           path: ${{ runner.temp }}/v64-materials
+          retention-days: 14
+          if-no-files-found: error
+
+  v69-terrain-color:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V69 audit scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V58 and repair missing shader input
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v69-in" "$RUNNER_TEMP/v69-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15075731907/zip" > "$RUNNER_TEMP/v69.zip"
+          printf '%s  %s\n' 1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e "$RUNNER_TEMP/v69.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v69.zip"
+          unzip -q "$RUNNER_TEMP/v69.zip" -d "$RUNNER_TEMP/v69-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py' -- "$RUNNER_TEMP/v69-in/v58_scenic_composition.blend" "$RUNNER_TEMP/v69-out"
+      - name: Preserve isolated corrected native and matched renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v69-terrain-color
+          path: ${{ runner.temp }}/v69-out
           retention-days: 14
           if-no-files-found: error
