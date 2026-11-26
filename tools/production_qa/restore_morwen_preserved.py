@@ -64,7 +64,9 @@ def restore(api, token, stage=lambda _: None):
     return read_native(raw)
 
 
-def main(stage=lambda _: None):
+def main(stage=lambda _: None, *, source='private_release'):
+    # Alternate source is an explicit reviewed caller choice; CLI remains private-only.
+    require(source in ('private_release', 'actions_artifact'), 'unknown restore source')
     stage('WORKER_IDENTITY')
     from release_transport import request
     from morwen_transfer_claim import verify
@@ -73,6 +75,7 @@ def main(stage=lambda _: None):
             env.get('GITHUB_REF') == 'refs/heads/main' and env.get('GITHUB_EVENT_NAME') == 'workflow_dispatch' and
             env.get('GITHUB_RUN_ATTEMPT') == '1' and env.get('GITHUB_ACTOR_ID') == '41898282' and
             env.get('MORWEN_PRIVATE_TRANSFER_APPROVED') == 'true', 'worker identity')
+    require(bool(env.get('DEST_TOKEN')), 'private read credential required')
     def fence():
         verify('origin', env['TRANSFER_ASSET'], env['MORWEN_BOUND_FENCE'], env['GITHUB_SHA'],
                env['REQUEST_ID'], env['GITHUB_RUN_ID'], env['GITHUB_RUN_ATTEMPT'])
@@ -82,7 +85,14 @@ def main(stage=lambda _: None):
     require(not os.path.lexists(target), 'existing native output')
     stage('FENCE_BEFORE_RESTORE')
     fence()
-    native = restore(request, env['DEST_TOKEN'], stage)
+    if source == 'private_release':
+        native = restore(request, env['DEST_TOKEN'], stage)
+    else:
+        from restore_morwen_artifact_preflight import load, bounded_gh
+        require(bool(env.get('GH_TOKEN')), 'artifact read credential required')
+        native = load(lambda p: json.loads(bounded_gh(p, 2 * 1024 * 1024, 30)),
+                      lambda p, n: bounded_gh(p, n, 90), stage=stage)
+    require(sha(native) == NATIVE_SHA, 'verified native identity before save')
     stage('FENCE_BEFORE_LOCAL_SAVE')
     fence()
     stage('LOCAL_EXCLUSIVE_SAVE')
