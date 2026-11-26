@@ -24,6 +24,7 @@ import re
 import subprocess
 import sys
 import time
+import zipfile
 from PIL import Image
 
 SOURCE = "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
@@ -69,6 +70,40 @@ def state_ok(image, text, anchors):
     require(all(anchor.casefold() in text.casefold() for anchor in anchors), "unexpected dialog state")
 
 
+METADATA_FIELDS = (
+    ("name", 451, (267, 429, 743, 473)),
+    ("version", 545, (267, 523, 743, 567)),
+    ("creator", 639, (267, 617, 743, 663)),
+)
+DIALOG_BOX = (250, 65, 760, 675)
+EDITOR_TITLE = "VRoid Studio 2.16.0 - Morwen-resume.vroid"
+
+
+def dialog_flags(image, text):
+    anchors = ("VRM Settings", "Avatar Name", "Version", "Creators")
+    return (image.size == (1024, 768), EDITOR_TITLE in text,
+            tuple(a.casefold() in text.casefold() for a in anchors))
+
+
+def field_matches(ocr, value):
+    return ocr.strip() == value
+
+
+def write_diagnostic(private_dir, field, phase, flags, dialog, dialog_ocr, crop, field_ocr):
+    path = private_dir / "Morwen-metadata-diagnostic.zip"
+    with path.open("xb") as output, zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("diagnostic.json", json.dumps(dict(field=field, phase=phase,
+                         dimensions=flags[0], title=flags[1], anchors=flags[2],
+                         source_sha256=SOURCE)))
+        archive.writestr("dialog.png", dialog.read_bytes())
+        archive.writestr("dialog.txt", dialog_ocr)
+        if crop is not None:
+            archive.writestr("field.png", crop.read_bytes())
+            archive.writestr("field.txt", field_ocr)
+    with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env:
+        env.write("MORWEN_METADATA_DIAGNOSTICS=true\n")
+
+
 def main():
     gui, native, out, profile_path, private_dir, scripts = sys.argv[1:]
     native, out, private_dir = map(Path, (native, out, private_dir))
@@ -92,10 +127,17 @@ def main():
         subprocess.run([gui, *map(str, args)], check=True)
     def click(x, y):
         send("click", x / 1024, y / 768)
-    def observe(name):
+    def ocr(path):
+        return subprocess.check_output([gui, "ocr", str(path)], text=True)
+    def diagnostic_ocr(path):
+        try:
+            return ocr(path)
+        except subprocess.CalledProcessError:
+            return ""
+    def observe(name, read_ocr=ocr):
         path = out / (name + ".png")
         send("screenshot", path)
-        text = subprocess.check_output([gui, "ocr", str(path)], text=True)
+        text = read_ocr(path)
         path.with_suffix(".txt").write_text(text)
         with Image.open(path) as im:
             im = im.convert("RGB")
@@ -152,12 +194,39 @@ def main():
     send("click-label", p, "Export", "Export Info")
     im = await_metadata()
     require(blue(im, 286, 189), "VRM1.0 selection not verified")
-    for y, value in ((451, meta["name"]), (545, meta["version"]), (639, meta["authors"][0])):
-        click(500, y)
-        send("key", 0, "cmd")
-        send("text", value)
-        time.sleep(0.4)
-    _, _, _ = shot("vrm-metadata-filled", "VRM Settings", meta["name"], meta["version"], meta["authors"][0])
+    values = dict(name=meta["name"], version=meta["version"], creator=meta["authors"][0])
+    dialog = out / "metadata-dialog.png"
+    im.crop(DIALOG_BOX).save(dialog)
+    for field, y, region in METADATA_FIELDS:
+        for phase in ("before", "after"):
+            if phase == "after":
+                click(500, y)
+                send("key", 0, "cmd")
+                send("text", values[field])
+                # Blur on the non-interactive Avatar Information heading.
+                click(320, 273)
+                time.sleep(0.7)
+            _, text, im = observe(f"metadata-{field}-{phase}", diagnostic_ocr)
+            flags = dialog_flags(im, text)
+            ready = flags[0] and flags[1] and all(flags[2]) and blue(im, 286, 189)
+            crop = None
+            field_ocr = ""
+            matched = False
+            if ready:
+                im.crop(DIALOG_BOX).save(dialog)
+                crop = out / f"metadata-{field}-{phase}-roi.png"
+                im.crop(region).save(crop)
+                if phase == "after":
+                    field_ocr = diagnostic_ocr(crop)
+                matched = phase == "before" or field_matches(field_ocr, values[field])
+            print("VRM_METADATA_FIELD", field, phase, "dimensions", int(flags[0]),
+                  "title", int(flags[1]), "anchors", "".join(str(int(v)) for v in flags[2]),
+                  "match", int(matched), flush=True)
+            if not matched:
+                if dialog.is_file():
+                    write_diagnostic(private_dir, field, phase, flags, dialog,
+                                     diagnostic_ocr(dialog), crop, field_ocr)
+                raise SystemExit(f"VRM_METADATA_FIELD_{field.upper()}_{phase.upper()}_BLOCKED")
     for _ in range(12):
         send("scroll", 650 / 1024, 650 / 768, -12, 0)
         time.sleep(0.15)

@@ -1752,7 +1752,8 @@ jobs:
             fi
           fi
       - name: Close editor before using protected transfer credential
-        if: success() && inputs.mode == 'vrm_export'
+        id: close-transfer-editor
+        if: inputs.mode == 'vrm_export' && (success() || (failure() && env.MORWEN_METADATA_DIAGNOSTICS == 'true'))
         shell: bash
         run: |
           set -euo pipefail
@@ -1765,6 +1766,21 @@ jobs:
             echo PRIVATE_TRANSFER_BLOCKED_EDITOR_STILL_RUNNING
             exit 1
           fi
+      - name: Preserve cropped metadata failure evidence privately
+        if: failure() && inputs.mode == 'vrm_export' && env.MORWEN_METADATA_DIAGNOSTICS == 'true' && steps.close-transfer-editor.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py --metadata-diagnostic "$out/Morwen-metadata-diagnostic.zip" "$out/private-metadata-diagnostic-receipt.json"
       - name: Transfer candidate directly to reviewed private handoff
         id: private-transfer
         if: success() && inputs.mode == 'vrm_export'

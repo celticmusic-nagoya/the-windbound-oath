@@ -5,6 +5,7 @@ import hashlib
 import io
 import json
 import re
+import struct
 import zipfile
 from pathlib import Path
 import os
@@ -14,6 +15,7 @@ DEST = 'celticmusic-nagoya/the-windbound-oath-handoff'
 BASE = 'https://api.github.com/repos/' + DEST
 SOURCE = 'acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a'
 CAP = 128 * 1024 * 1024
+DIAGNOSTIC_CAP = 2 * 1024 * 1024
 NAMES = {'Morwen-transfer.vrm', 'transfer-receipt.json', 'SHA256SUMS.json',
          *('views/'+v+'.png' for v in ('front','left4','left8','right4'))}
 
@@ -50,13 +52,38 @@ def transfer(raw, token, run_id, revision, request_id, api, *, expected_source=S
     return publish_package(raw, token, run_id, revision, request_id, api, kind='vrm')
 
 
+def metadata_diagnostic(raw):
+    require(0 < len(raw) <= DIAGNOSTIC_CAP, 'diagnostic size')
+    expected = {'diagnostic.json', 'dialog.png', 'dialog.txt'}
+    field_files = {'field.png', 'field.txt'}
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        names = archive.namelist()
+        require(len(names) == len(set(names)) and set(names) in (expected, expected | field_files),
+                'diagnostic inventory')
+        require(sum(i.file_size for i in archive.infolist()) <= DIAGNOSTIC_CAP
+                and archive.testzip() is None, 'diagnostic integrity')
+        receipt = json.loads(archive.read('diagnostic.json'))
+        require(receipt.get('source_sha256') == SOURCE
+                and receipt.get('field') in ('name', 'version', 'creator')
+                and receipt.get('phase') in ('before', 'after'), 'diagnostic source or stage')
+        for name, size in [('dialog.png', (510, 610)), ('field.png', (476, 46 if receipt['field'] == 'creator' else 44))]:
+            if name in names:
+                header = archive.read(name)[:24]
+                require(header[:16] == b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR'
+                        and struct.unpack('>II', header[16:]) == size, 'diagnostic crop dimensions')
+
+
 def publish_package(raw, token, run_id, revision, request_id, api, *, kind):
     """Transport only; caller must validate the exact package before invoking."""
     require(bool(token) and all(re.fullmatch(r'[1-9][0-9]{0,19}', v) for v in (run_id, request_id)) and re.fullmatch(r'[0-9a-f]{40}',revision), 'identity')
-    require(0 < len(raw) <= CAP and kind in ('vrm', 'blend'), 'package size or kind')
+    require(0 < len(raw) <= CAP and kind in ('vrm', 'blend', 'metadata-diagnostic'), 'package size or kind')
     digest = sha(raw)
-    tag = ('morwen-transfer-run-' if kind == 'vrm' else 'morwen-blender-run-') + run_id
-    name = 'Morwen-transfer.zip' if kind == 'vrm' else 'Morwen-blender.zip'
+    prefix, name = {
+        'vrm': ('morwen-transfer-run-', 'Morwen-transfer.zip'),
+        'blend': ('morwen-blender-run-', 'Morwen-blender.zip'),
+        'metadata-diagnostic': ('morwen-metadata-diagnostic-run-', 'Morwen-metadata-diagnostic.zip'),
+    }[kind]
+    tag = prefix + run_id
     repo = api(token,'GET',BASE)
     require(repo.get('full_name') == DEST and repo.get('private') is True, 'destination not private')
     ref = api(token,'GET',BASE+'/git/ref/heads/main')
@@ -109,8 +136,12 @@ def main():
             and env.get('GITHUB_EVENT_NAME') == 'workflow_dispatch'
             and env.get('GITHUB_RUN_ATTEMPT') == '1'
             and env.get('GITHUB_ACTOR_ID') == '41898282', 'protected stage identity')
-    require(len(sys.argv) == 3, 'usage: transfer_private_release.py PACKAGE NEW_RECEIPT')
-    path, receipt = map(Path,sys.argv[1:])
+    args = sys.argv[1:]
+    diagnostic = args[:1] == ['--metadata-diagnostic']
+    if diagnostic:
+        args = args[1:]
+    require(len(args) == 2, 'usage: transfer_private_release.py [--metadata-diagnostic] PACKAGE NEW_RECEIPT')
+    path, receipt = map(Path, args)
     require(path.is_file() and not path.is_symlink() and path.parent.stat().st_mode & 0o077 == 0
             and receipt.parent.resolve() == path.parent.resolve() and not os.path.lexists(receipt), 'private input/output')
     def fence():
@@ -121,7 +152,13 @@ def main():
         if method in ('POST','PATCH'):
             fence()
         return request(token,method,url,*args,**kwargs)
-    result = transfer(path.read_bytes(),env['DEST_TOKEN'],env['GITHUB_RUN_ID'],env['GITHUB_SHA'],env['REQUEST_ID'],guarded_api)
+    raw = path.read_bytes()
+    identity = (env['DEST_TOKEN'], env['GITHUB_RUN_ID'], env['GITHUB_SHA'], env['REQUEST_ID'], guarded_api)
+    if diagnostic:
+        metadata_diagnostic(raw)
+        result = publish_package(raw, *identity, kind='metadata-diagnostic')
+    else:
+        result = transfer(raw, *identity)
     fence()
     with receipt.open('x',encoding='utf-8') as f:
         json.dump(result,f,indent=2)
