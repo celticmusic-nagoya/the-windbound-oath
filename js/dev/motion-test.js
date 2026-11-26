@@ -8,6 +8,7 @@
  *   素材納品済み・未実装 / 正式採用待ち = config 'extra' (delivered material the game cannot use yet); 未納品 = nothing. */
 (() => {
   'use strict';
+  if (window.WINDBOUND_DEV !== true) return;
   const LABEL = {impl: '多コマ実装済み', still: '静止画のみ', delivered: '素材納品済み・未実装', pending: '正式採用待ち', none: '未納品'};
   const STATE_JA = {draw: '抜刀(開幕)', ready: '構え(開幕)', entry: '登場', idle: '待機', attack: '攻撃', skill: 'スキル', wind: '風の一閃', charge: '溜め', item: 'アイテム', guard: '防御', evade: '回避', damage: '被弾', low_hp: '瀕死', ko: 'KO', victory: '勝利', winddance: '風の舞', prayer: '風の祈り', heal: '回復', blessing: '加護', rune: 'ルーン', call: '呼び声', corruption: '異常化', enrage: '激昂'};
   const SCRIPT = document.currentScript && document.currentScript.src;

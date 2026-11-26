@@ -1,5 +1,9 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## Director-approved game delivery channels (2026-11-26)
+
+Use [RawGitHack main](https://raw.githack.com/celticmusic-nagoya/the-windbound-oath/main/index.html) for development gameplay checks. Keep the [public GitHub Pages game](https://celticmusic-nagoya.github.io/the-windbound-oath/) free of DEV UI and developer commands, even with development URL flags. Preserve local loopback for automated/local QA; do not treat the client-side channel gate as authentication. Keep game and SAVE behavior compatible; preserve existing asset review and publication rules.
+
 ## Director-approved shared qualified execution routes (2026-11-26)
 
 Applies to all AI agents, automation and production workstreams. Before creating an environment or requesting another credential, reuse the existing qualified GitHub Actions runner, authenticated transport, installer, tool cache, checkpoint and owner route whenever their verified scope matches the task. Existing private-transfer credentials are standing-authorized for necessary private transfer, restoration and preservation within their existing authorized access boundaries; do not repeatedly request approval for that reuse. Never expose secret values, distribute administrator credentials, expand repository or credential privileges, or bypass protected-environment review. GitHub repository permission, connector operation availability, and actual runtime qualification are distinct.
