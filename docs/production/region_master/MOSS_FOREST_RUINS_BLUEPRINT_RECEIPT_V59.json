@@ -1,0 +1,70 @@
+{
+  "schema": "two.region.a3.ruins_blueprint_receipt.v59",
+  "parent": "2c761bcfdc64eb2bf0c287fcc20ad216724473f8",
+  "status": "V58_NATIVE_VERIFIED_V59_2D_REFERENCE_AND_DIMENSIONAL_DESIGN_CANDIDATE_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v58": "bfdc1d8d55700c5f6fc2e74230a34c7752c3d439",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "v06": "acbbffca333b087ee3dc93fd89da4c6940ff2792",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "v58": {
+    "run": 45727897696,
+    "artifact": 15075731907,
+    "archive_sha256": "1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e",
+    "native_sha256": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a",
+    "crc": "PASS",
+    "output_sha_checks": "8/8",
+    "protected_meshes": 495,
+    "mesh_objects": 523,
+    "grove_placed": 26,
+    "grove_rejected": 0,
+    "third_placed": true,
+    "third_root_gap_m": 8.491008125677771,
+    "third_reservation_gap_m": 4.0014753977802116,
+    "third_root_sample_range_m": [
+      -0.06573295593261719,
+      0.18124961853027344
+    ],
+    "seam_samples": 33,
+    "seam_delta_m": 0,
+    "packed_images": 38,
+    "external_images": 0,
+    "art": "HOLD. Background trees added but tile material dark discontinuity, empty foreground, repetitive forest edge, simple altar proxy; no new native changes."
+  },
+  "v59": {
+    "reference_run": 45729087247,
+    "artifact": 15076007596,
+    "archive_sha256": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+    "source_count": 21,
+    "source_crc": "PASS",
+    "source_visual_inspection": "18 field sprites and official altar event art inspected, current map and runtime actual text read.",
+    "design_spec": "MOSS_FOREST_RUINS_BLUEPRINT_DESIGN_V59.json",
+    "local_output_sha256": {
+      "2d_assets.png": "fadc3ea93e34829d850ac01ea463b740058be41f30b0d8012c7081d2a5bd38fd",
+      "altar_source.png": "1244f5ecc35f3ddcadef58400ad7a1be79bead762c486352827b0a70cdf4aa40",
+      "altar_blueprint.png": "001384225f72f0a70e76fbd1c9362abfcf9063c540bbb1082f0cee97876c5870",
+      "gate_blueprint.png": "469a34273a943aa6cb0c0a14c522be7403a959fcecab863903a5bd3f7e4f2896",
+      "small_blueprint.png": "a5f2363860ca4841dde5c2d50292cbcfc06c9640ac9648107ef678c465227832",
+      "details_blueprint.png": "a24acdb9317c75cc558e0823624589acac754d1ca88f09eb49012b46f84f57cb",
+      "interfaces.png": "bf0464aaa33a8fdca59db4ecba0faeba4b83089f2229bec17bd2fa6a8e71c16e",
+      "interfaces.json": "3e36a4cc93a092c140ca66091705a3b3e20d5a0f5a3bc5a54bf7f28081684058",
+      "blueprint_v59.json": "dc7e0484973c909f7bbfd0c91445b80f89c6dd7bd304f3fa067f0556bc45d26b",
+      "blueprint.py": "c72cfea4d08a343b4799a7625ea032306bdc6d85cc7fd5174c7cac7f6e9d8bc9",
+      "details.py": "afe591684cad08143c40263f831ce3c225c1a90111cd666f011cc195cd59ee6e",
+      "interfaces.py": "6bb495d65ce9d0d662bf3cf097439e70d516d912df97edf7671032f7a32d3825",
+      "v58_comparison.png": "aa2f230945f086a17c8903a7cc2dc6e9ce920b1c2ec8df229f2e76aba488e2d1"
+    },
+    "package_sha256": "92a950e43b1696865a9cd8f2d1241f6db14875938c4c937da79ee53eef8a31ce",
+    "package_bytes": 10963960,
+    "package_crc": "PASS",
+    "py_compile": "PASS",
+    "execution_note": "Detail script first failed variable shadowing, fixed file path and reran successfully. Source locked, no model production. Compact parameter spec in Git, full rings, drawings, code and source archive copies in local ZIP."
+  },
+  "next": "Close altar 8x8 pad feasibility and event deck/access contract, small ruins reverse/section and actual broken masonry design, surface wear/motif operation targets. Independent D4 review before new precision Blender authoring. No canon change, no merge."
+}
