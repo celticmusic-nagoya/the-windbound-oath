@@ -4,7 +4,7 @@ import re
 import time
 import uuid
 
-from shared_asset_lease import git, ref_for, assert_owned
+from shared_asset_lease import git, ref_for, assert_owned, release
 
 
 def binding(asset, revision, request, run=None, attempt=None):
@@ -103,3 +103,20 @@ def await_bound(remote, asset, reservation, revision, request, run, attempt, tim
         if remaining > 0:
             time.sleep(min(0.5, remaining))
     raise TimeoutError("launcher did not bind reservation to this run")
+
+
+def complete(remote, asset, reservation, revision, request, run, attempt, receipt):
+    """Only after both worker jobs terminated successfully and private byte readback."""
+    if not isinstance(receipt, dict) or receipt.get("scope") != "PRIVATE_CANDIDATE_READBACK_VERIFIED" or receipt.get("adoption") != "NOT_ADOPTED":
+        raise ValueError("durable private receipt required")
+    if receipt.get("run_id") != run or receipt.get("request_id") != request:
+        raise ValueError("receipt run/request mismatch")
+    if not re.fullmatch(r"[0-9a-f]{64}", receipt.get("sha256", "")):
+        raise ValueError("receipt digest required")
+    if any(type(receipt.get(k)) is not int or receipt[k] <= 0 for k in ("release_id", "asset_id", "bytes")) or receipt["bytes"] > 128 * 1024 * 1024:
+        raise ValueError("receipt identity or size")
+    token = await_bound(remote, asset, reservation, revision, request, run, attempt)
+    # Use the established compare-and-delete; never remove another owner's tag.
+    release(remote, asset, token)
+    if git("ls-remote", "--refs", remote, ref_for(asset)):
+        raise RuntimeError("lease not absent after completion; reconcile without retry")
