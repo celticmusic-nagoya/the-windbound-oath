@@ -25,7 +25,7 @@ class RecoveryTests(unittest.TestCase):
     def test_release_only_matching(self):
         self.assertEqual(self.invoke()['status'],'RELEASED'); self.assertEqual(self.refs,{ref_for('OTHER'):'e'*40})
     def test_dry_run(self): self.assertEqual(self.invoke(False)['status'],'DRY_RUN_ELIGIBLE'); self.assertFalse(self.calls)
-    def test_absent(self): self.data[self.refpath]=[]; self.assertEqual(self.invoke()['status'],'NO_LEASE'); self.assertFalse(self.calls)
+    def test_absent(self): self.data[self.refpath]=[]; self.assertEqual(self.invoke()['status'],'NO_LEASE_API'); self.assertFalse(self.calls)
     def test_active(self): self.data[self.runpath]['status']='in_progress'; self.assertRaises(Hold,self.invoke); self.assertFalse(self.calls)
     def test_rerun(self): self.data[self.runpath]['run_attempt']=2; self.assertRaises(Hold,self.invoke)
     def test_fork(self): self.data[self.runpath]['head_repository']['id']=99; self.assertRaises(Hold,self.invoke)

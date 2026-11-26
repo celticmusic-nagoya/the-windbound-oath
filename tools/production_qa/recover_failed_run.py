@@ -98,7 +98,7 @@ def qualify(api, run_id):
 def recover(api, remote_ref, compare_delete, run_id, apply=False):
     evidence = qualify(api, run_id)
     if evidence is None:
-        return {'status': 'NO_LEASE', 'run_id': run_id}
+        return {'status': 'NO_LEASE_API', 'run_id': run_id}
     need(remote_ref(evidence['ref']) == evidence['token'], 'lease changed before release')
     if not apply:
         return dict(evidence, status='DRY_RUN_ELIGIBLE')
@@ -119,7 +119,8 @@ def main():
         return parts[0]
     def compare_delete(asset, token):
         # Invoke the existing CAS routine with a bounded subprocess, not REST DELETE.
-        subprocess.run([sys.executable, '-c', 'from shared_asset_lease import release; import sys; release("origin",sys.argv[1],sys.argv[2])', asset, token], check=True, timeout=30)
+        subprocess.run([sys.executable, '-c', 'from shared_asset_lease import release; import sys; release("origin",sys.argv[1],sys.argv[2])', asset, token], check=True, timeout=30,
+                       cwd=os.path.dirname(os.path.abspath(__file__)))
     event = json.load(open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8'))
     need(os.environ.get('GITHUB_REPOSITORY') == REPO, 'wrong recovery repository')
     if os.environ.get('GITHUB_EVENT_NAME') == 'workflow_run':
