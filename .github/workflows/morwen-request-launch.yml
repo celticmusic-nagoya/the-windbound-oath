@@ -220,7 +220,7 @@ jobs:
           if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved before reserve");
           if(latestPrior()!==prior)throw Error("prior moved before reserve");
           const reservation=cas("reserve",head,request);
-          if(api(repo+"/git/ref/heads/main").object.sha!==head||latestPrior()!==prior)throw Error("main or prior moved after reserve; reconcile");
+          if(latestPrior()!==prior||api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main or prior moved after reserve; reconcile");
           execFileSync("gh",["api","--method","POST",wf+"/dispatches","--input","-"],{input:JSON.stringify({ref:"main",inputs:{mode:"vrm_export",expected_main:head,request_id:request,transfer_fence:reservation}}),encoding:"utf8",timeout:20000});
           for(let i=0;i<12;i++){
             const matches=api(wf+"/runs?per_page=20").workflow_runs.filter(x=>x.display_title===title);
