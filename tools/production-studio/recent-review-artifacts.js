@@ -17,9 +17,11 @@ const RULES=[
  ["feature/lind-ecology-01",/^lind-eco-(?:53-candidate-evidence|integration-v2-package)$/,"リルド村・植生","eco_,renders/"],
  ["asset/morwen-measured-textile-20261125",/^morwen-(?:photo-textile-comparison|brass-source-maps|met-gold-thread-oa-sources)-not-adopted$/,"モルウェン・材質研究",""],
  ["infra/native-env-qualification-20261123",/^two-hairharpy-volume-/,"モルウェン・ヘア技術",""],
- ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:hero-tree-v\d+-island-source|forest-v\d+-native-virtual-qa)$/,"世界・樹木／森林",""],
- ["docs/ireland-world-source-grounded-plan-20261123",/^two-sanctuary-v\d+-native-composition$/,"世界・聖域",""],
- ["docs/ireland-world-source-grounded-plan-20261123",/^two-[a-z][a-z0-9-]{0,80}-v\d+-[a-z][a-z0-9-]{0,80}$/,"世界・新規制作証跡（未分類）",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:v\d+-)?(?:hero-tree|tree|trees)(?:-|$)/,"世界・樹木",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:v\d+-)?forest(?:-|$)/,"世界・森林",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:v\d+-)?sanctuary(?:-|$)/,"世界・聖域",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:v\d+-)?ruins?(?:-|$)/,"世界・遺跡",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-[a-z0-9][a-z0-9-]{0,159}$/,"世界・新規制作証跡（未分類）",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^(?:ireland|two-shared|lind|world|area)/i,"地図・エリア設計",""],
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
@@ -30,7 +32,9 @@ const SOURCE_LINKS=[
  ["モルウェン・顔／髪","/pull/427"],
  ["風待ちの崖","/pull/421"],
  ["リルド村・エイダン家","/pull/364"],
- ["世界・樹木／森林","/pull/482"],
+ ["世界・樹木","/pull/482"],
+ ["世界・森林","/pull/482"],
+ ["世界・遺跡","/pull/482"],
  ["世界・聖域","/pull/482"],
  ["世界・新規制作証跡（未分類）","/pull/482"],
  ["地図・エリア設計","/pull/482"]
@@ -53,7 +57,7 @@ function selectPreservationRuns(data){
  return rows.sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||b.id-a.id).slice(0,5);
 }
 function refreshDelay(success){return success?REFRESH_MS:RETRY_MS;}
-function selectRecentArtifacts(data,category=""){
+function selectRecentArtifacts(data,category="",limit=30){
  if(!Array.isArray(data?.artifacts))throw Error("Artifact一覧形式不正");
  const seen=new Set(), rows=[];
  for(const a of data.artifacts.slice(0,100)){
@@ -62,14 +66,15 @@ function selectRecentArtifacts(data,category=""){
      typeof w.head_branch!=="string"||!/^[a-f0-9]{40}$/.test(w.head_sha||"")||
      !isId(w.repository_id)||w.repository_id!==w.head_repository_id||
      a.expired!==false||!isId(a.size_in_bytes)||!Number.isFinite(Date.parse(a.created_at)))continue;
-  const rule=RULES.find(([branch,pattern])=>w.head_branch===branch&&pattern.test(a.name));
+  if(w.head_branch==="docs/ireland-world-source-grounded-plan-20261123"&&a.name.startsWith("two-")&&!/^two-[a-z0-9][a-z0-9-]{0,159}$/i.test(a.name))continue;
+ const rule=RULES.find(([branch,pattern])=>w.head_branch===branch&&pattern.test(a.name));
   if(!rule||(category&&rule[2]!==category))continue;
   seen.add(a.id);
   rows.push({id:a.id,run:w.id,name:a.name,head:w.head_sha,category:rule[2],filter:rule[3],
     created:a.created_at,expires:a.expires_at||"",bytes:a.size_in_bytes,
     digest:/^sha256:[a-f0-9]{64}$/.test(a.digest||"")?a.digest:""});
  }
- return rows.sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id).slice(0,30);
+ return rows.sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id).slice(0,limit);
 }
 if(typeof module!=="undefined")module.exports={selectRecentArtifacts,selectPreservationRuns,refreshDelay};
 if(typeof document==="undefined")return;
@@ -91,7 +96,9 @@ for(const name of ["",...CATEGORIES]){const option=make("option",name||"すべ�
 categorySelect.value="";
 const sources=make("p","過去の成果物・一覧未検出時： ");sources.className="note";
 for(const [name,path] of SOURCE_LINKS){const link=make("a",name+" / 担当PR");link.href=GH+path;link.rel="noopener noreferrer";sources.append(link,make("span","　"));}
-refresh.after(cadence,categoryLabel,categorySelect,sources);
+const categoryGrid=make("div","");categoryGrid.id="recent-category-grid";categoryGrid.className="recent-category-grid";categoryGrid.setAttribute("aria-label","制作領域別の成果物件数");
+const searchLabel=make("label","制作成果物を検索");const search=make("input","");search.type="search";search.id="recent-review-search";search.placeholder="名称・バージョン・HEAD・Artifact ID";searchLabel.htmlFor=search.id;
+refresh.after(cadence,categoryLabel,categorySelect,sources,categoryGrid,searchLabel,search);
 let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastError="";
 function schedule(){
  if(timer!==null)clearTimeout(timer);
@@ -117,7 +124,16 @@ async function updatePreservation(){
 }
 function renderRecent(){
  if(!snapshot)return;
- const rows=selectRecentArtifacts(snapshot,categorySelect.value);
+ const all=selectRecentArtifacts(snapshot,"",100);
+ const counts=new Map();for(const x of all)counts.set(x.category,(counts.get(x.category)||0)+1);
+ categoryGrid.replaceChildren();
+ for(const name of ["",...CATEGORIES]){
+  if(name&&!counts.has(name)&&!name.startsWith("世界・"))continue;
+  const button=make("button",(name||"すべて")+"（"+(name?counts.get(name)||0:all.length)+"件）");button.type="button";button.dataset.category=name;button.setAttribute("aria-pressed",String(categorySelect.value===name));
+  button.addEventListener("click",()=>{categorySelect.value=name;renderRecent();});categoryGrid.append(button);
+ }
+ const query=String(search.value||"").trim().toLowerCase();
+ const rows=all.filter(x=>(!categorySelect.value||x.category===categorySelect.value)&&(!query||[x.name,x.category,x.head,x.id,x.run].join(" ").toLowerCase().includes(query))).slice(0,30);
  area.replaceChildren();
   for(const x of rows){
    const card=make("article","");card.className="tile";card.dataset.artifactId=String(x.id);
@@ -142,6 +158,7 @@ function renderRecent(){
  status.textContent=rows.length+" 件（直近100 Artifact中、既知の制作元・期限内のみ、選択領域ごと最大30件）／ "+lastSuccess+(rows.length?"":"。対象未検出の場合は担当PRを確認。")+(lastError?" / 更新失敗: "+lastError+"。前回取得分を保持。":"");
 }
 categorySelect.addEventListener("change",renderRecent);
+search.addEventListener("input",renderRecent);
 async function update(){
  if(busy||document.hidden)return;
  busy=true;if(timer!==null)clearTimeout(timer);timer=null;

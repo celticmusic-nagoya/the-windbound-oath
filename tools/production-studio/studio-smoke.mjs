@@ -20,6 +20,7 @@ try {
   const url=new URL(route.request().url());
   if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
+  if(url.pathname.endsWith('/actions/artifacts'))return route.fulfill({json:{artifacts:['two-hero-tree-v55-island-source','two-forest-v52-native-virtual-qa','two-sanctuary-v58-native-scenery','two-v59-ruin-2d-references'].map((name,i)=>({id:15000000+i,name,expired:false,size_in_bytes:100,created_at:'2026-11-26T00:00:00Z',workflow_run:{id:200+i,head_branch:'docs/ireland-world-source-grounded-plan-20261123',head_sha:fixtureHead,repository_id:1408120919,head_repository_id:1408120919}}))}});
   if(url.pathname.endsWith('/artifacts'))return route.fulfill({json:{total_count:1,artifacts:[{id:123,name:'fixture artifact',expired:false,expires_at:'2026-12-01T00:00:00Z'}]}});
   return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
  });
@@ -340,6 +341,23 @@ try {
  await page.evaluate(()=>refreshOverview(true));
  assert.match(await page.locator('#status').innerText(),/前回表示を保持/);
  assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
+ await page.waitForFunction(()=>document.querySelectorAll('#recent-review-artifacts [data-artifact-id]').length===4);
+ const recentGrid=page.locator('#recent-category-grid');
+ for(const label of ['世界・樹木','世界・森林','世界・聖域','世界・遺跡']){
+  const button=recentGrid.locator('button').filter({hasText:label});
+  assert.match(await button.innerText(),/1件/);
+  await button.click();
+  assert.equal(await page.locator('#recent-review-artifacts article').count(),1);
+  assert.equal(await page.locator('#recent-review-artifacts article h3').innerText(),label);
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+ }
+ await recentGrid.locator('button[data-category=""]').click();
+ await page.locator('#recent-review-search').fill('v59');
+ assert.equal(await page.locator('#recent-review-artifacts article').count(),1);
+ assert.match(await page.locator('#recent-review-artifacts article').innerText(),/two-v59-ruin-2d-references/);
+ await page.locator('#recent-review-search').fill('');
+ assert.equal(await page.locator('#recent-review-artifacts article').count(),4);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'recent category controls overflow');
  assert.deepEqual(errors,[]);
  console.log('PASS: mocked API, mobile width, SHA-256 match/mismatch, diagnostic GLB loader. Not actual asset QA.');
 }finally{await browser?.close();server.kill();}
