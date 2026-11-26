@@ -97,14 +97,14 @@ try{
 
  // World categories are separate even before any additional publication is approved.
  await page.locator('#published-gallery').getByRole('button',{name:/世界・自然／遺構/}).click();
- for(const label of ['樹木','森林','聖域','遺跡'])assert.equal(await page.locator('#published-gallery .category-card').filter({hasText:label}).count(),1);
+ for(const label of ['植物・草花','樹木','森林','河川・水辺','地形','聖域','遺跡'])assert.equal(await page.locator('#published-gallery .category-card').filter({hasText:label}).count(),1);
  await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
- const worldFixtures=['tree','forest','sanctuary','ruin'].map((subcategory,i)=>({...manifest.entries[0],name:'world-fixture-'+subcategory,category:'world',subcategory,created_at:'2026-11-26T00:00:0'+i+'Z'}));
+ const worldFixtures=['plant','tree','forest','river','terrain','sanctuary','ruin'].map((subcategory,i)=>({...manifest.entries[0],name:'world-fixture-'+subcategory,category:'world',subcategory,created_at:'2026-11-26T00:00:0'+i+'Z'}));
  await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:worldFixtures}}));
  await page.locator('#refresh-published').click();
- await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('4 件'));
+ await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('7 件'));
  await page.locator('#published-gallery').getByRole('button',{name:/世界・自然／遺構/}).click();
- for(const [subcategory,label] of [['tree','樹木'],['forest','森林'],['sanctuary','聖域'],['ruin','遺跡']]){
+ for(const [subcategory,label] of [['plant','植物・草花'],['tree','樹木'],['forest','森林'],['river','河川・水辺'],['terrain','地形'],['sanctuary','聖域'],['ruin','遺跡']]){
   await page.locator('#published-gallery .category-card').filter({hasText:label}).click();
   assert.deepEqual(await page.locator('#published-gallery article h3').allTextContents(),['world-fixture-'+subcategory]);
   await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
