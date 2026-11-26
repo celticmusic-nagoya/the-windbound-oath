@@ -46,11 +46,17 @@ def package(raw, expected_source=SOURCE):
 
 def transfer(raw, token, run_id, revision, request_id, api, *, expected_source=SOURCE):
     """api is the existing bounded HTTPS request function; no retries or overwrite."""
-    require(bool(token) and all(re.fullmatch(r'[1-9][0-9]{0,19}', v) for v in (run_id, request_id)) and re.fullmatch(r'[0-9a-f]{40}',revision), 'identity')
     package(raw, expected_source)
+    return publish_package(raw, token, run_id, revision, request_id, api, kind='vrm')
+
+
+def publish_package(raw, token, run_id, revision, request_id, api, *, kind):
+    """Transport only; caller must validate the exact package before invoking."""
+    require(bool(token) and all(re.fullmatch(r'[1-9][0-9]{0,19}', v) for v in (run_id, request_id)) and re.fullmatch(r'[0-9a-f]{40}',revision), 'identity')
+    require(0 < len(raw) <= CAP and kind in ('vrm', 'blend'), 'package size or kind')
     digest = sha(raw)
-    tag = 'morwen-transfer-run-' + run_id
-    name = 'Morwen-transfer.zip'
+    tag = ('morwen-transfer-run-' if kind == 'vrm' else 'morwen-blender-run-') + run_id
+    name = 'Morwen-transfer.zip' if kind == 'vrm' else 'Morwen-blender.zip'
     repo = api(token,'GET',BASE)
     require(repo.get('full_name') == DEST and repo.get('private') is True, 'destination not private')
     ref = api(token,'GET',BASE+'/git/ref/heads/main')
