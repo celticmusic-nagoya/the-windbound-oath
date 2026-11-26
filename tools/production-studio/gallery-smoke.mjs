@@ -108,7 +108,7 @@ try{
   await page.locator('#published-gallery .category-card').filter({hasText:label}).click();
   assert.deepEqual(await page.locator('#published-gallery article h3').allTextContents(),['world-fixture-'+subcategory]);
   assert.ok(await page.locator('.gallery-design-links a').count()>0);
-  if(subcategory==='river'){assert.match(await page.locator('.gallery-design-links').innerText(),/下流メッシュV28/);assert.ok(await page.locator('.gallery-design-links a').first().getAttribute('href').then(s=>s.includes('4621f79db703a2fd70cfd597b4b73703a9bb5fe4')));}
+  if(subcategory==='river'){assert.match(await page.locator('.gallery-design-links').innerText(),/下流メッシュV28/);assert.match(await page.locator('.gallery-design-links').innerText(),/水深・材質V34/);assert.ok(await page.locator('.gallery-design-links a').first().getAttribute('href').then(s=>s.includes('3440af1b22a9c87c55237bab25921aa20aa80d34')));}
   await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
  }
  await page.unroute('**/gallery-manifest.json');
