@@ -1,11 +1,11 @@
 {
-  "review_state": "CANDIDATE_NOT_APPROVED",
+  "review_state": "PRIVATE_SCOPE_REVIEWED_INTEGRATION_PENDING",
   "app_version": "2.16.0",
   "sequence": "M01-44733016182-v1",
   "source_sha256": "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a",
   "source_archive_sha256": "b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588",
-  "asset_id": null,
-  "license_review_ref": null,
+  "asset_id": "MORWEN",
+  "license_review_ref": "https://github.com/celticmusic-nagoya/the-windbound-oath-handoff/pull/18#issuecomment-7179163285",
   "private_destination": "celticmusic-nagoya/the-windbound-oath-handoff",
   "staging": "RUNNER_TEMP_OWNER_ONLY",
   "expected_meta": {
@@ -25,8 +25,8 @@
     "allowAntisocialOrHateUsage": false
   },
   "notes": [
-    "Historical M01 author and restricted metadata are a proposal, not a new grant or license review.",
-    "Set exact canonical asset key and separate review reference only after owner/license verification.",
+    "Existing restricted M01 metadata retained for an owner-only noncommercial export and Blender verification candidate.",
+    "Private source provenance review is limited in scope; no third-party distribution, commercial use or adoption clearance.",
     "Do not rename to active vrm-export-profile.json or set launch variables until independent integration review."
   ]
 }
