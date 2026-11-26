@@ -60,6 +60,39 @@ jobs:
           assert hashlib.sha256((root / "vrm-export-profile.json").read_bytes()).hexdigest() == contract["profile_sha256"]
           print("CANDIDATE_DIGEST_MATCH")
           PY
+      - name: Validate actual launcher and worker script syntax
+        run: |
+          python3 - <<'PY'
+          import pathlib, subprocess, tempfile
+          def script(path, name):
+              lines = pathlib.Path(path).read_text().splitlines()
+              start = [i for i, l in enumerate(lines) if l.strip() == "- name: " + name]
+              assert len(start) == 1, name
+              end = next((i for i in range(start[0]+1, len(lines)) if lines[i].startswith("      - ")), len(lines))
+              block = lines[start[0]:end]
+              run = [i for i,l in enumerate(block) if l == "        run: |"]
+              assert len(run) == 1, name
+              body = block[run[0]+1:]
+              body = [l[10:] if l.startswith("          ") else "" for l in body]
+              return "\n".join(body)+"\n"
+          launch = script(".github/workflows/morwen-request-launch.yml", "Reserve and bind reviewed VRM dispatch once")
+          worker = script(".github/workflows/morwen-vroid-macos-probe.yml", "Verify reviewed transfer fence and exact checkpoint profile")
+          for label, body in [("launcher",launch),("worker",worker)]:
+              subprocess.run(["bash","-n"],input=body,text=True,check=True)
+              print("BASH_SYNTAX_PASS",label)
+          js = launch.split("node <<'JS'\n",1)[1].split("\nJS\n",1)[0]
+          with tempfile.TemporaryDirectory() as tmp:
+              p=pathlib.Path(tmp)/"launch.cjs"
+              p.write_text(js)
+              subprocess.run(["node","--check",str(p)],check=True)
+          print("NODE_SYNTAX_PASS")
+          # The contract reader and subsequent Python verification heredocs must compile.
+          blocks=worker.split("<<'PY'\n")[1:]
+          assert len(blocks) >= 3
+          for i,b in enumerate(blocks):
+              compile(b.split("\nPY\n",1)[0],f"worker-heredoc-{i}","exec")
+          print("PYTHON_HEREDOC_SYNTAX_PASS",len(blocks))
+          PY
       - name: Read-only live prior-run API compatibility
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         env:
