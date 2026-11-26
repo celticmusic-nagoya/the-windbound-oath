@@ -102,6 +102,8 @@ async function loadAreaBlueprints(){
  const image=node("img","");
  image.alt="物語接続図 v0.4（実測地形ではありません）";
  image.loading="lazy";
+ image.width=1420;image.height=360;
+ image.style.width="100%";image.style.height="auto";
  image.referrerPolicy="no-referrer";
  image.src="https://raw.githubusercontent.com/"+repo+"/83c612079128c308baf021ad22f53498ae611ecf/docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg";
  image.addEventListener("error",()=>{image.remove();preview.append(node("p","SVGプレビュー取得不可。上記の原本リンクから確認してください。"));});
