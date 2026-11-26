@@ -1,0 +1,87 @@
+{
+  "schema": "two.region.sanctuary.scenic.v58",
+  "parent": "658ee8b638ec5e44df1223e9a9d42772373c2024",
+  "status": "V57_NATIVE_VERIFIED_V58_SCENIC_EXTENSION_LOCAL_PASS_NATIVE_REQUESTED",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v57": "a72e3f0f5cf3c42cfbf63c87499c912208c72701",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e",
+    "official_cg_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+  },
+  "v57": {
+    "run": 45726850614,
+    "artifact": 15075315647,
+    "archive_sha256": "fd7808276992a14169fe772a6f60535853a72dae3122bc09f003e0cc318327d3",
+    "native_sha256": "1b17e3196479142ddb4258586f3d9b953f33fde4d3b7a504dc32f5cdacbac6ee",
+    "crc": "PASS",
+    "output_sha_checks": "6/6",
+    "protected_meshes": 479,
+    "mesh_objects": 495,
+    "packed_images": 44,
+    "external_images": 0,
+    "root_gaps_m": [
+      8.291681823205433,
+      0.1319653452104557
+    ],
+    "root_sample_ranges_m": [
+      [
+        -0.09421539306640625,
+        0.19043350219726562
+      ],
+      [
+        -0.12175750732421875,
+        0.22024154663085938
+      ]
+    ],
+    "art_review": "HOLD: exposed horizon behind altar from actual tile edge, no enclosing canopy, broad empty foreground, placeholder altar, weak framing. Source original protected."
+  },
+  "v58_local": {
+    "scope": "Scenic-only extension beyond A3, not official adjacent terrain. No existing mesh changes. Use V02 analytic height recipe extrapolation and exact existing source lattice boundary. D4 not run.",
+    "extension_vertices": 705,
+    "extension_triangles": 1288,
+    "seam_samples": 33,
+    "max_seam_delta_m": 0,
+    "third": {
+      "local_xyz": [
+        92,
+        -105,
+        28.70697135925293
+      ],
+      "extra_yaw_deg": 270,
+      "altar_distance_m": 12.082943563451112,
+      "crown_gap_m": 3.6159276509265075,
+      "root_gap_m": 7.416719608471052,
+      "second_crown_gap_m": 14.253460476969293,
+      "candidate_count": 1240
+    },
+    "background_proposals": 26,
+    "outputs": {
+      "layout_script_sha256": "205f587717e2c26649c1dfb11f4c11bc5923bc9b41c14cea67fdccacaaaf57a5",
+      "layout_json_sha256": "9ae3b4a2d9c22364f2938fdeaac88616ba583d47d2cab84d9796007347ffcb28",
+      "layout_png_sha256": "d7cf533a1c27a22187e6727bc1bf25a480e54be4510fffc96c89305e92769cdb",
+      "extension_glb_sha256": "2e557724020da3c7f7ed63f31423e0f213b29bce4ec66c609d291f70be66481a",
+      "v57_comparison_sha256": "49dd8c00d5a3d3ee8fbdf5dda447b532b5b419d97b230a280338ea47550a71d7"
+    }
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py",
+    "workflow": ".github/workflows/two-shared-material-recovery.yml",
+    "scope": "Exact V57 native recovery, 495 existing mesh fingerprint protected, separate terrain extension, linked third tree and screened background existing tree templates, matched geometry before/after and separate lighting comparison, save/reopen. Root gap screen only, no scene placement acceptance."
+  },
+  "gates": {
+    "D1": "PARTIAL_SCENIC",
+    "D2": "PARTIAL",
+    "D3": "HOLD_WORLD_BOUNDARY",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "SELF_HOLD_V57_V58_NATIVE_PENDING",
+    "G3": "V57_NATIVE_REOPEN_PASS_V58_LOCAL_EXTENSION_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Read V58 native artifact and review actual matched render; resolve real adjacent terrain and V47B pad, not use extrapolation as canonical. No formal adoption/main merge."
+}
