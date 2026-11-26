@@ -33,3 +33,17 @@
 
 /* Cross-agent handoff readiness: accessible and mobile-first, no false PASS state. */
 #handoff-cards{margin-top:12px}#handoff-cards .handoff-card{min-width:0}#handoff-cards dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;border-top:1px solid var(--line);padding-top:12px;font-size:.86rem}#handoff-cards dt{color:#c4d4d0}#handoff-cards dd{margin:0;color:#edc99a;font-weight:600;text-align:right}#handoff-cards p{overflow-wrap:anywhere}#handoff-status{margin:12px 0;color:#b3c4c1}
+
+/* Live WIP: separate run evidence from persisted artifacts, responsive controls. */
+.recent-swipe-bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.recent-swipe-bar button{flex:1;min-width:0;background:#293a3a;color:#f1e0b8;border:1px solid #64726b}
+#recent-live-runs,#recent-review-artifacts{touch-action:pan-y pinch-zoom}
+#recent-live-runs .live-run-card{display:flex;flex-direction:column;gap:6px;min-width:0}
+#recent-live-runs h4,#recent-live-runs p{margin:0;overflow-wrap:anywhere}
+.live-run-state{align-self:flex-start;border:1px solid #71837d;background:#293b3a;border-radius:7px;padding:5px 9px;font-size:.82rem;font-weight:700}
+.live-run-state[data-state=in_progress]{border-color:#93b99d;color:#c9e7d0}
+#recent-review-category{min-height:44px;max-width:100%;width:100%;padding:8px;background:#192629;color:#edf2ef;border:1px solid #64726b;border-radius:8px;font:inherit}
+#recent-category-grid{max-width:100%;min-width:0}
+#recent-category-grid button{font-size:.86rem}
+.gallery-lightbox [aria-label="画像拡大表示"]{touch-action:pan-x pan-y pinch-zoom}
+@media(max-width:600px){.studio-nav{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding-bottom:6px}.studio-nav a{flex:0 0 auto;scroll-snap-align:start}.recent-category-grid{display:grid!important;grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:minmax(145px,65%);overflow-x:auto;scroll-snap-type:x proximity;padding:4px 2px 8px;scrollbar-width:thin}.recent-category-grid button{scroll-snap-align:start;min-height:64px}#recent-live-runs{grid-template-columns:minmax(0,1fr)}}
