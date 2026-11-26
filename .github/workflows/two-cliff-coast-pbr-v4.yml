@@ -1,0 +1,55 @@
+name: TWO isolated cliff coast PBR V4
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths: ['tools/map_blender/lind/scenic_coast_pbr_v4.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-cliff-coast-pbr-v4
+  cancel-in-progress: false
+jobs:
+  scenic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/scenic_coast_pbr_v4.py
+            tools/production_qa/install_blender_530.sh
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa/install_blender_530.sh
+      - name: Restore native and photo sources
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v3" "$RUNNER_TEMP/photos" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15094872492/zip" > "$RUNNER_TEMP/v3.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14670447492/zip" > "$RUNNER_TEMP/photos.zip"
+          printf '%s  %s\n' f6d8e4d50a6255ba09656aac9059c604c590d132fd0dfb2e8877eb722b725f28 "$RUNNER_TEMP/v3.zip" 4edaab28ebde25b29537edd86aa4a6f284d062fa7e71a6b7fa2c900818014b6e "$RUNNER_TEMP/photos.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v3.zip"
+          unzip -tq "$RUNNER_TEMP/photos.zip"
+          unzip -q "$RUNNER_TEMP/v3.zip" -d "$RUNNER_TEMP/v3"
+          unzip -q "$RUNNER_TEMP/photos.zip" -d "$RUNNER_TEMP/photos"
+          python3 -m py_compile 'tools/map_blender/lind/scenic_coast_pbr_v4.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/scenic_coast_pbr_v4.py' -- "$RUNNER_TEMP/v3/cliff_ridge_v3_UNAPPROVED.blend" "$RUNNER_TEMP/photos" "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-cliff-coast-pbr-v4
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
