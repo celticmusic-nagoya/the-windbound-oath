@@ -1,0 +1,41 @@
+name: TWO scoped failed-run recovery
+on:
+  workflow_run:
+    workflows: [Morwen VRoid macOS compatibility probe]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Completed run ID (dry-run only)
+        required: true
+        type: string
+permissions:
+  actions: read
+  contents: write
+  pull-requests: read
+concurrency:
+  group: two-scoped-failure-recovery
+  cancel-in-progress: false
+jobs:
+  recover:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+        contains(fromJSON('["failure","cancelled","timed_out","startup_failure"]'), github.event.workflow_run.conclusion))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify exact completed run and release only qualified fence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TWO_FAILURE_RECOVERY_ENABLED: ${{ vars.TWO_FAILURE_RECOVERY_ENABLED }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          gh auth setup-git --hostname github.com
+          python3 tools/production_qa/recover_failed_run.py
