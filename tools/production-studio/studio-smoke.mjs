@@ -50,6 +50,8 @@ try {
  await page.waitForFunction(()=>document.querySelector('#local-title').open===false);
  // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
  const blueprint=page.locator('#area-blueprints .blueprint-preview img');
+ await blueprint.waitFor({state:'attached'});
+ await blueprint.scrollIntoViewIfNeeded();
  await blueprint.waitFor({state:'visible'});
  await blueprint.evaluate(e=>e.decode());
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
