@@ -36,8 +36,15 @@ def read_binding(remote, asset, token, expected, deadline, reservation=None):
     args = ["fetch", "--no-tags", "--no-recurse-submodules"]
     if shallow == "true":
         args.append("--depth=1")
-    git(*args, remote, ref, deadline=deadline, cwd=cwd)
-    tag = git("cat-file", "tag", token, deadline=deadline, cwd=cwd)
+    # Reuse only the exact immutable object, not a cached ownership decision.
+    # Remote ownership remains checked before and after the full binding.
+    local = git("--no-replace-objects", "cat-file", "--batch-check=%(objectname) %(objecttype)",
+                stdin=token + "\n", deadline=deadline, cwd=cwd)
+    if local == token + " missing":
+        git(*args, remote, ref, deadline=deadline, cwd=cwd)
+    elif local != token + " tag":
+        raise RuntimeError("unexpected local lease object")
+    tag = git("--no-replace-objects", "cat-file", "tag", token, deadline=deadline, cwd=cwd)
     header, body = tag.split("\n\n", 1)
     lines = header.splitlines()
     if lines[:2] != ["object " + expected["revision"], "type commit"]:
