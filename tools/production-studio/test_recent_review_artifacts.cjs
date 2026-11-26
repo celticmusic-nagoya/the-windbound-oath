@@ -34,6 +34,10 @@ test("visible automatic refresh, hidden pause, no overlap, error retains prior c
  const flush=()=>new Promise(resolve=>setImmediate(resolve));await flush();
  assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,2);
  const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,2);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
+ const buttons=ids["refresh-recent-review"].afterItems[4];const search=ids["refresh-recent-review"].afterItems[6];
+ const allButton=buttons.children.find(e=>e.dataset.category==="");allButton.events.click();assert.equal(ids["recent-review-artifacts"].children.length,2);
+ search.value="eco";search.events.input();assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
+ search.value="";search.events.input();category.value="リルド村・植生";category.events.change();assert.equal(calls,2);
  const preservation=ids["recent-review-title"].beforeItems[3];assert.equal(preservation.children.length,1);
  assert.ok(timer.ms>=299000&&timer.ms<=300000);
  doc.hidden=true;doc.events.visibilitychange();assert.equal(timer,null);
@@ -60,8 +64,8 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
 
 test("observed current hero-tree and native forest evidence is discoverable, with branch and name constraints",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
- const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]}, "世界・樹木／森林");
- assert.deepEqual(Array.from(rows,x=>x.id),[15073087704,15072796460]);
+ const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]});
+ assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・森林"]);
 });
 
 test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
@@ -69,7 +73,7 @@ test("sanctuary and future versioned world evidence are visible without weakenin
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
  assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,11]);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[13,11]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[11]);
 });
 
 test("world namespace catches actual new naming orders and unversioned candidates without crossing branches",()=>{
@@ -77,5 +81,6 @@ test("world namespace catches actual new naming orders and unversioned candidate
  const data={artifacts:[art(15076007596,branch,"two-v59-ruin-2d-references"),art(15075731907,branch,"two-sanctuary-v58-native-scenery"),art(31,branch,"two-unversioned-prototype"),art(32,"other","two-v59-ruin-2d-references"),art(33,branch,"two-../unsafe"),art(34,branch,"two-"+'a'.repeat(161)),art(35,branch,"two-fork",{workflow_run:{...art(35,branch,"two-fork").workflow_run,head_repository_id:2}})]};
  assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,31]);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075731907);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[15076007596,31]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[31]);
 });
