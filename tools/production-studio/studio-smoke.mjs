@@ -55,6 +55,19 @@ try {
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
  assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ // Eight areas: coarse evidence estimate, no fake full-area completion, source links and stale HEAD.
+ const progress=page.locator('#area-progress');
+ assert.equal(await progress.locator('.area-progress-card').count(),8);
+ assert.deepEqual(await progress.locator('progress').evaluateAll(es=>es.map(e=>e.value)),[45,45,45,35,20,45,45,10]);
+ const river=progress.locator('[data-area-id="RIVER_CORRIDOR"]');
+ await river.locator('summary').click();
+ assert.match(await river.innerText(),/ゲーム統合： 未確認/);
+ assert.match(await river.getByRole('link',{name:'下流メッシュ V28'}).getAttribute('href'),/4621f79db703a2fd70cfd597b4b73703a9bb5fe4.*V28.json$/);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:'d'.repeat(40)}}]})));
+ assert.match(await river.locator('.area-progress-freshness').innerText(),/再評価要/);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),35);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'area progress overflow');
+ await progress.screenshot({path:'qa-output/area-progress-mobile.png'});
  // Local audit fixture tests the presentation contract, not asset QA.
  const audit={schema:'two.cliff.image_space_geometry_audit.v01',checks:{point_count:8,feature_count:1},comparison_ready:false,reason:'fixture',qa:{G1:'BLOCKED',G2:'NOT_RUN',G3:'NOT_RUN',G4:'NOT_RUN'},required_render_contract:{tolerance_px:null,uncertainty_px:null},derived:[{id:'fixture_rim',point_count:8,polyline_length_px:608.628,world_metric:null}]};
  const auditInput=page.locator('#blueprint-audit-file'),auditResult=page.locator('#blueprint-audit-result');
