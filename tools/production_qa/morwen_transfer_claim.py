@@ -22,7 +22,7 @@ def binding(asset, revision, request, run=None, attempt=None):
                 request=request, run=run, attempt=attempt)
 
 
-def read_binding(remote, asset, token, expected, deadline):
+def read_binding(remote, asset, token, expected, deadline, reservation=None):
     ref = ref_for(asset)
     assert_owned(remote, asset, token, deadline=deadline)
     git("fetch", "--no-tags", remote, ref, deadline=deadline)
@@ -33,6 +33,10 @@ def read_binding(remote, asset, token, expected, deadline):
         raise RuntimeError("lease revision mismatch")
     actual = json.loads(body)
     nonce = actual.pop("nonce", "")
+    if expected["run"] is not None:
+        parent = actual.pop("reservation", "")
+        if not re.fullmatch(r"[0-9a-f]{40}", parent) or (reservation is not None and parent != reservation):
+            raise RuntimeError("lease predecessor reservation mismatch")
     if not re.fullmatch(r"[0-9a-f]{32}", nonce) or actual != expected:
         raise RuntimeError("lease request/run binding mismatch")
     assert_owned(remote, asset, token, deadline=deadline)
@@ -62,7 +66,7 @@ def claim(remote, asset, token, revision, request, run, attempt):
     deadline = time.monotonic() + 45
     expected = binding(asset, revision, request, run, attempt)
     read_binding(remote, asset, token, binding(asset, revision, request), deadline)
-    return replace(remote, asset, token, expected, deadline)
+    return replace(remote, asset, token, dict(expected, reservation=token), deadline)
 
 
 def verify(remote, asset, token, revision, request, run, attempt):
@@ -84,7 +88,7 @@ def await_bound(remote, asset, reservation, revision, request, run, attempt, tim
             raise RuntimeError("transfer reservation missing or ambiguous")
         token = match.group(1)
         if token != reservation:
-            read_binding(remote, asset, token, expected, deadline)
+            read_binding(remote, asset, token, expected, deadline, reservation=reservation)
             return token
         # The exact unconsumed reservation is the only permissible wait state.
         try:
