@@ -85,7 +85,7 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' || inputs.mode == 'vrm_export' }}
           HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
           PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
