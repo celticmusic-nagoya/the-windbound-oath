@@ -203,8 +203,8 @@ jobs:
           for(const status of ["queued","in_progress","waiting","requested","pending"]){if(api(wf+"/runs?status="+status+"&per_page=1").total_count!==0)throw Error("active worker");}
           const title="Morwen VRoid / vrm_export request:"+request;
           if(api(wf+"/runs?per_page=100").workflow_runs.some(x=>x.display_title===title))throw Error("request already dispatched");
-          const artifact=api(repo+"/actions/artifacts/15018109141");
-          if(artifact.expired!==false||artifact.workflow_run?.id!==45605491226||artifact.digest!=="sha256:b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588")throw Error("verified source unavailable");
+          // The protected worker reads the exact private preservation Release and checks its bytes before GUI launch.
+          if(reviewed.source_archive_sha256!=="b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588")throw Error("preserved archive profile mismatch");
           function cas(op,...args){
             const code="import sys; from morwen_transfer_claim import reserve,claim; print({'reserve':reserve,'claim':claim}[sys.argv[1]](*sys.argv[2:]))";
             const token=execFileSync("python3",["-c",code,op,"origin",env.TRANSFER_ASSET,...args],{encoding:"utf8",timeout:50000}).trim();
