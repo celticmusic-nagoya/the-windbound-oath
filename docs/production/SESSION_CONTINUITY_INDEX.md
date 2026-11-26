@@ -1,3 +1,7 @@
+## Director decision — shared qualified execution routes (2026-11-26)
+
+Apply [shared qualified execution routes](../../AGENTS.md#director-approved-shared-qualified-execution-routes-2026-11-26) across every workstream and AI. Reuse existing qualified runners, authenticated transports and checkpoints; standing authorization for necessary existing private-transfer credential reuse stays within established access boundaries. Missing connector capability is not a grant of rights: route the exact operation to an already-authorized executor with verified inputs and owner/fence checks. Reuse #493 environment work where qualified; do not make unfinished infrastructure a production gate. Automatic cross-agent launch and newly granted permissions are NOT_VERIFIED.
+
 ## Director decision — Morwen early Blender transfer (2026-11-26)
 Read [early Blender transfer](../policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md). Morwen #427 changes from VRoid-native completion-before-export to verified VRoid base → isolated VRM export → qualified Blender main authoring. Director-approved visual targets: 7.75 heads nominal (7.5–8 direction), Layer 0 hair shape, official clothed design dark violet hair color; generated photo-style images material reference only. Existing C1/legwear/garter assets remain reusable; not native-export prerequisites. Latest source and writer qualification must be verified; no current transfer PASS or asset adoption. Other characters unchanged.
 
