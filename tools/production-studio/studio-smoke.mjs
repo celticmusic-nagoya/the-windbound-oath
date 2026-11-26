@@ -15,9 +15,10 @@ try {
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const fixtureBranch='feature/fixture',fixtureHead='a'.repeat(40),previousHead='b'.repeat(40);
  const mockRun=(id,sha,status,conclusion,branch=fixtureBranch)=>({id,name:'fixture run '+id,head_sha:sha,head_branch:branch,status,conclusion,updated_at:'2026-11-25T00:00:00Z'});
- let bulkFail=false;const liveHead='c'.repeat(40);
+ let bulkFail=false;let evidenceFixture=[];const liveHead='c'.repeat(40);
  await page.route('https://api.github.com/**',route=>{
   const url=new URL(route.request().url());
+  if(url.pathname.endsWith('/contents/docs/production/region_master'))return route.fulfill({json:evidenceFixture});
   if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
   if(url.pathname.endsWith('/actions/artifacts'))return route.fulfill({json:{artifacts:['two-hero-tree-v55-island-source','two-forest-v52-native-virtual-qa','two-sanctuary-v58-native-scenery','two-v59-ruin-2d-references'].map((name,i)=>({id:15000000+i,name,expired:false,size_in_bytes:100,created_at:'2026-11-26T00:00:00Z',workflow_run:{id:200+i,head_branch:'docs/ireland-world-source-grounded-plan-20261123',head_sha:fixtureHead,repository_id:1408120919,head_repository_id:1408120919}}))}});
@@ -53,6 +54,7 @@ try {
  await blueprint.waitFor({state:'attached'});
  await blueprint.scrollIntoViewIfNeeded();
  await blueprint.waitFor({state:'visible'});
+ await page.waitForFunction(()=>{const image=document.querySelector("#area-blueprints .blueprint-preview img");return image?.complete&&image.naturalWidth===1420;});
  await blueprint.evaluate(e=>e.decode());
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
  assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
@@ -60,14 +62,35 @@ try {
  // Eight areas: coarse evidence estimate, no fake full-area completion, source links and stale HEAD.
  const progress=page.locator('#area-progress');
  assert.equal(await progress.locator('.area-progress-card').count(),8);
- assert.deepEqual(await progress.locator('progress').evaluateAll(es=>es.map(e=>e.value)),[45,45,45,35,20,45,45,10]);
+ assert.deepEqual(await progress.locator('progress').evaluateAll(es=>es.map(e=>e.value)),[45,45,45,45,35,45,45,10]);
  const river=progress.locator('[data-area-id="RIVER_CORRIDOR"]');
- await river.locator('summary').click();
+ await river.locator('summary').first().click();
  assert.match(await river.innerText(),/ゲーム統合： 未確認/);
- assert.match(await river.getByRole('link',{name:'下流メッシュ V28'}).getAttribute('href'),/4621f79db703a2fd70cfd597b4b73703a9bb5fe4.*V28.json$/);
+ assert.match(await river.getByRole('link',{name:'下流メッシュ V28'}).getAttribute('href'),/3440af1b22a9c87c55237bab25921aa20aa80d34.*V28.json$/);
+ assert.equal(await progress.locator('.area-module').count(),29);
+ await river.locator('.area-modules > summary').click();
+ evidenceFixture=await page.evaluate(()=>Object.entries(AREA_BASELINE_FILES).map(([name,sha])=>({name,sha,type:"file"})));
+ evidenceFixture.push({name:"RILDE_C03_NEW_RECEIPT_V99.json",sha:"e".repeat(40),type:"file"});
+ evidenceFixture.find(x=>x.name==="RILDE_C03_DEPTH_WATER_RECEIPT_V34.json").sha="f".repeat(40);
  await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:'d'.repeat(40)}}]})));
+ await page.waitForFunction(()=>document.querySelector('#area-new-evidence summary').textContent.includes('2件'));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 35%/);
+ assert.match(await river.locator('[data-source="RILDE_C03_DEPTH_WATER_RECEIPT_V34.json"] .module-evidence-status').innerText(),/前回評価を保持/);
+ assert.equal(await page.locator('#area-new-evidence a').count(),2);
+ assert.match(await page.locator('#area-new-evidence a').last().getAttribute('href'),/d{40}/);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:AREA_SNAPSHOT.heads[482]}}]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 45%/);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:'d'.repeat(40)}}]})));
+
  assert.match(await river.locator('.area-progress-freshness').innerText(),/再評価要/);
- assert.equal(await river.locator('progress').evaluate(e=>e.value),35);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/未照合/);
+ assert.equal(await river.locator('.area-module[data-source][data-verified="yes"]').count(),0);
+ assert.match(await page.locator('#area-new-evidence summary').innerText(),/未照合/);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:AREA_SNAPSHOT.heads[482]}}]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 45%/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'area progress overflow');
  await progress.screenshot({path:'qa-output/area-progress-mobile.png'});
  // Local audit fixture tests the presentation contract, not asset QA.
