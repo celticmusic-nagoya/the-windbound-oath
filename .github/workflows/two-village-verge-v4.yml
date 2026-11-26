@@ -1,0 +1,59 @@
+name: TWO isolated scenic native two-village-verge-v4
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - 'tools/map_blender/lind/ecology/village_verge_v4.py'
+      - '.github/workflows/two-village-verge-v4.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-verge-v4-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  scenic:
+    if: github.event.pull_request.number == 357 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          lfs: true
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/ecology/village_verge_v4.py
+            assets/candidates/LIND-ECO-01/integration_v2
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Execute bounded isolated native candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/out"
+          python3 -m py_compile 'tools/map_blender/lind/ecology/village_verge_v4.py'
+          mkdir -p "$RUNNER_TEMP/v3"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15091340643/zip" > "$RUNNER_TEMP/v3.zip"
+          printf '%s  %s\n' 3ce27dc5368218cbeb318cebcb87d482f00af734c7a8394dea18e6df0aeefb07 "$RUNNER_TEMP/v3.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v3.zip"
+          unzip -q "$RUNNER_TEMP/v3.zip" -d "$RUNNER_TEMP/v3"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blender/lind/ecology/village_verge_v4.py' -- "$RUNNER_TEMP/v3/village_verge_v3_UNAPPROVED.blend" assets/candidates/LIND-ECO-01/integration_v2 "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-verge-v4
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
