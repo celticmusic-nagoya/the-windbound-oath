@@ -61,4 +61,89 @@ class Transport(unittest.TestCase):
     def test_bounded_failure(self):
         with self.assertRaises(ValueError):self.call("import sys; print('synthetic diagnostic',file=sys.stderr);sys.exit(1)")
 
+
+class FencedRestore(unittest.TestCase):
+    def setUp(self):
+        import types
+        import contextlib
+        from unittest.mock import Mock
+        import restore_morwen_preserved as restore
+        self.r=restore
+        self.stack=contextlib.ExitStack()
+        self.addCleanup(self.stack.close)
+        self.tmp=self.stack.enter_context(tempfile.TemporaryDirectory())
+        self.target=pathlib.Path(self.tmp)/'Morwen-resume.vroid'
+        self.data=b'synthetic native fixture'
+        self.events=[]
+        self.verify=Mock(side_effect=lambda *a:self.events.append('fence'))
+        self.private=Mock(return_value=self.data)
+        self.load=Mock(side_effect=lambda *a,**kw:self.events.append('artifact') or self.data)
+        self.env=dict(GITHUB_REPOSITORY=m.REPO,GITHUB_REF='refs/heads/main',
+            GITHUB_EVENT_NAME='workflow_dispatch',GITHUB_RUN_ATTEMPT='1',
+            GITHUB_ACTOR_ID='41898282',MORWEN_PRIVATE_TRANSFER_APPROVED='true',
+            RUNNER_TEMP=self.tmp,TRANSFER_ASSET='fixture',MORWEN_BOUND_FENCE='fixture',
+            GITHUB_SHA='fixture',REQUEST_ID='fixture',GITHUB_RUN_ID='fixture',
+            GH_TOKEN='synthetic',DEST_TOKEN='synthetic')
+        self.stack.enter_context(patch.dict(os.environ,self.env,clear=True))
+        self.stack.enter_context(patch.dict(sys.modules,{
+            'release_transport':types.SimpleNamespace(request=Mock()),
+            'morwen_transfer_claim':types.SimpleNamespace(verify=self.verify)}))
+        self.stack.enter_context(patch.object(restore,'restore',self.private))
+        self.stack.enter_context(patch.object(restore,'NATIVE_SHA',hashlib.sha256(self.data).hexdigest()))
+        self.stack.enter_context(patch.object(m,'load',self.load))
+        prior=os.umask(0o077); self.addCleanup(os.umask,prior)
+    def go(self,source='actions_artifact'):
+        self.r.main(self.events.append,source=source)
+    def test_alternate_uses_same_fences_and_exclusive_save(self):
+        self.go()
+        self.assertEqual(self.target.read_bytes(),self.data)
+        self.assertEqual([e for e in self.events if e in ('fence','artifact')],['fence','artifact','fence','fence'])
+        self.private.assert_not_called()
+        self.assertEqual(self.target.stat().st_mode & 0o777,0o600)
+    def test_default_still_private(self):
+        self.r.main()
+        self.private.assert_called_once()
+        self.load.assert_not_called()
+        self.assertEqual(self.target.read_bytes(),self.data)
+    def test_unknown_source(self):
+        with self.assertRaises(ValueError):self.go('auto')
+        self.verify.assert_not_called(); self.load.assert_not_called()
+    def test_unapproved_worker(self):
+        os.environ['MORWEN_PRIVATE_TRANSFER_APPROVED']='false'
+        with self.assertRaises(ValueError):self.go()
+        self.verify.assert_not_called(); self.load.assert_not_called()
+    def test_missing_private_credential(self):
+        del os.environ['DEST_TOKEN']
+        with self.assertRaises(ValueError):self.go()
+        self.load.assert_not_called()
+    def test_missing_artifact_credential(self):
+        del os.environ['GH_TOKEN']
+        with self.assertRaises(ValueError):self.go()
+        self.load.assert_not_called(); self.private.assert_not_called()
+    def test_existing_target_untouched(self):
+        self.target.write_bytes(b'protected')
+        with self.assertRaises(ValueError):self.go()
+        self.assertEqual(self.target.read_bytes(),b'protected')
+        self.load.assert_not_called()
+    def test_no_fallback_on_failure(self):
+        self.load.side_effect=TimeoutError('fixture')
+        with self.assertRaises(TimeoutError):self.go()
+        self.private.assert_not_called(); self.assertFalse(self.target.exists())
+    def test_bad_native_rejected_before_save(self):
+        self.load.side_effect=None; self.load.return_value=b'bad'
+        with self.assertRaises(ValueError):self.go()
+        self.assertFalse(self.target.exists()); self.assertEqual(self.verify.call_count,1)
+    def test_first_fence_failure(self):
+        self.verify.side_effect=ValueError('fixture')
+        with self.assertRaises(ValueError):self.go()
+        self.load.assert_not_called(); self.assertFalse(self.target.exists())
+    def test_second_fence_failure(self):
+        self.verify.side_effect=[None,ValueError('fixture')]
+        with self.assertRaises(ValueError):self.go()
+        self.assertFalse(self.target.exists())
+    def test_final_fence_failure_does_not_report_success(self):
+        self.verify.side_effect=[None,None,ValueError('fixture')]
+        with self.assertRaises(ValueError):self.go()
+        self.assertEqual(self.target.read_bytes(),self.data)
+
 if __name__=='__main__':unittest.main()
