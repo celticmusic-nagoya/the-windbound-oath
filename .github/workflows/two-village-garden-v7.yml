@@ -1,7 +1,7 @@
 name: TWO isolated village garden V7
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
     paths: ['tools/map_blender/lind/home/village_garden_v7.py']
 permissions:
   contents: read
@@ -11,13 +11,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   garden:
-    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: |
             tools/map_blender/lind/home/village_garden_v7.py
