@@ -75,11 +75,28 @@ for p in placements:
             z=hit(x,y);assert z is not None;samples.append(z)
     p['foundation_min']=min(samples);p['foundation_max']=max(samples);foundation+=samples
 assert max(map(abs,foundation))<=.08,max(map(abs,foundation))
-# Protect existing ecology near terrain changes; no new contact checks on unrelated vegetation.
+# Check actual root vertices rather than the whole crown bounding box, which over-rejected V10_tree_033.
+# Maintain the V10 .10 BU contact limit. Only a scoped Z translation may change an affected plant.
+ecology_checks=[];ecology_moved=[]
 for o in scene.objects:
     if o.type!='MESH' or not o.name.startswith(('V10_tree_','V10_shrub_')):continue
-    a,b=box([o])
-    assert all(not (a[0]-2.5<=x<=b[0]+2.5 and a[1]-2.5<=y<=b[1]+2.5) for _,x,y,_,_ in changed),(o.name,a,b)
+    pts=[o.matrix_world@v.co for v in o.data.vertices]
+    floor=min(p.z for p in pts);roots=[p for p in pts if p.z<=floor+.025]
+    assert roots
+    values=[hit(p.x,p.y) for p in roots];assert all(z is not None for z in values),o.name
+    offsets=[z-p.z for p,z in zip(roots,values)]
+    before=max(map(abs,offsets));dz=0.0
+    if before>.099999:
+        dz=(min(offsets)+max(offsets))/2-.005
+        assert abs(dz)<=.5 and max(abs(dz-r) for r in offsets)<=.099999,(o.name,before,dz,offsets)
+        T=Matrix.Translation(Vector((0,0,dz)));o.matrix_world=T@o.matrix_world
+        moved[o.name]=tuple(tuple(row) for row in o.matrix_world)
+        ecology_moved.append(o.name)
+    after=max(abs(dz-r) for r in offsets)
+    assert after<=.099999,(o.name,after)
+    ecology_checks.append(dict(name=o.name,samples=len(roots),before=before,after=after,z_delta=dz))
+bpy.context.view_layer.update()
+print('ECOLOGY_ROOT_READBACK',json.dumps(ecology_checks),flush=True)
 # Sample centreline against actual building mesh bounds (conservative aggregate AABB); terrain only, not runtime collision.
 bounds={k:box(v) for k,v in groups.items()}
 def curve(x):return -8*smooth((-32.5-x)/27.5)+9*smooth((x-42.5)/30)
@@ -109,7 +126,7 @@ dest=out/'village_streetscape_v11_UNAPPROVED.blend';assert not dest.exists()
 bpy.ops.file.pack_all();bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True);bpy.ops.wm.open_mainfile(filepath=str(dest.resolve()),load_ui=False);scene=bpy.context.scene;outer=bpy.data.objects['V10_perimeter_heightfield']
 verify();assert sha(src)==lock
 assert all(abs(outer.data.vertices[i].co.z-z)<1e-7 for i,_,_,_,z in changed)
-q=dict(status='SCENIC_TWO_SIDED_STREET_FEASIBILITY',source_sha256=lock,moved_groups=placements,moved_meshes=len(moved),changed_outer_vertices=len(changed),protected_meshes=len(old)-len(moved)-1,foundation_samples=len(foundation),route_samples=len(route),actual=actual,engine_metrics=metrics,native_reopen='PASS',limits=['Provisional local BU; no canonical layout or scale. Two unadopted building groups repositioned, original V10 unchanged. Only outer grade Z edited under foundations.','Route XY building AABB clearance and terrain slope proxy, not actual collision, portal or Android QA. G1/D4/G2/G4 unresolved.'])
+q=dict(status='SCENIC_TWO_SIDED_STREET_FEASIBILITY',source_sha256=lock,moved_groups=placements,moved_meshes=len(moved)-len(ecology_moved),ecology_moved=ecology_moved,ecology_checks=ecology_checks,changed_outer_vertices=len(changed),protected_meshes=len(old)-len(moved)-1,foundation_samples=len(foundation),route_samples=len(route),actual=actual,engine_metrics=metrics,native_reopen='PASS',limits=['Provisional local BU; no canonical layout or scale. Two unadopted building groups repositioned, original V10 unchanged. Only outer grade Z edited under foundations; existing plant transforms may be corrected in Z if actual root contacts exceed .10 BU.','Route XY building AABB clearance and terrain slope proxy, not actual collision, portal or Android QA. G1/D4/G2/G4 unresolved.'])
 (out/'route_samples.json').write_text(json.dumps(dict(units='provisional BU',columns=['x','y','z','building_AABB_clearance'],samples=route),indent=2))
 def finish():
     q['outputs']={p.name:sha(p) for p in out.iterdir() if p.suffix in ('.blend','.png') or p.name=='route_samples.json'}

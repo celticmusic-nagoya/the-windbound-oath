@@ -41,9 +41,25 @@ jobs:
           unzip -q "$RUNNER_TEMP/v10.zip" -d "$RUNNER_TEMP/v10"
           python3 -m py_compile 'tools/map_blender/lind/home/village_streetscape_v11.py'
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          sudo apt-get install -y -qq python3-pil libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
           bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_streetscape_v11.py' -- "$RUNNER_TEMP/v10/village_landscape_v10_UNAPPROVED.blend" "$RUNNER_TEMP/out" "$PWD/engine"
+      - name: Android-compatible JPEG previews, preserve verified PNG originals
+        run: |
+          /usr/bin/python3 - "$RUNNER_TEMP/out" <<'PY'
+          import hashlib,json,sys
+          from pathlib import Path
+          from PIL import Image
+          out=Path(sys.argv[1]);q=json.loads((out/'qa.json').read_text())
+          for p in sorted(out.glob('*.png')):
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==q['outputs'][p.name]
+              with Image.open(p) as im:
+                  im=im.convert('RGB');im.thumbnail((1600,1000))
+                  jpg=p.with_suffix('.jpg');im.save(jpg,'JPEG',quality=92,subsampling=0,optimize=True)
+              with Image.open(jpg) as im:im.verify()
+              q['outputs'][jpg.name]=hashlib.sha256(jpg.read_bytes()).hexdigest()
+          (out/'qa.json').write_text(json.dumps(q,indent=2)+'\n')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
