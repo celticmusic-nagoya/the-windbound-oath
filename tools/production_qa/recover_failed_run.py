@@ -43,7 +43,8 @@ def qualify(api, run_id):
          run.get('status') == 'completed' and run.get('conclusion') in FAILED and
          run.get('head_branch') == 'main' and run.get('event') == 'workflow_dispatch' and
          run.get('path') == route['path'] and run.get('repository', {}).get('id') == RID and
-         run.get('head_repository', {}).get('id') == RID and run.get('actor', {}).get('id') == BOT,
+         run.get('head_repository', {}).get('id') == RID and run.get('actor', {}).get('id') == BOT and
+         run.get('actor', {}).get('login') == 'github-actions[bot]',
          'run identity or termination not qualified')
     revision = run.get('head_sha')
     need(sha(revision), 'invalid revision')
@@ -62,7 +63,7 @@ def qualify(api, run_id):
     response = api(f'{base}/actions/runs/{run_id}/attempts/1/jobs?per_page=100')
     jobs = response.get('jobs', [])
     need(len(jobs) == response.get('total_count') and len(jobs) == 4 and
-         all(j.get('status') == 'completed' and j.get('run_id') == run_id for j in jobs),
+         all(j.get('status') == 'completed' and j.get('run_id') == run_id and j.get('run_attempt') == 1 for j in jobs),
          'incomplete or unexpected job inventory')
     primary = [j for j in jobs if j.get('name') == route['job']]
     others = [j for j in jobs if j.get('name') != route['job']]
@@ -74,6 +75,10 @@ def qualify(api, run_id):
         found = [s for s in steps if s.get('name') == name]
         need(len(found) == 1 and found[0].get('status') == 'completed' and
              found[0].get('conclusion') == 'skipped', 'native/private write phase not proven skipped')
+    for status in ('queued', 'in_progress', 'waiting', 'requested', 'pending'):
+        active = api(f'{base}/actions/workflows/{run["workflow_id"]}/runs?status={status}&per_page=1')
+        need(active.get('total_count') == 0 and active.get('workflow_runs') == [],
+             'active or ambiguous worker inventory')
     ref = ref_for(route['asset'])
     matches = api(f'{base}/git/matching-refs/{ref[5:]}')
     if not matches:
@@ -92,8 +97,15 @@ def qualify(api, run_id):
     nonce = body.pop('nonce', None)
     need(sha(parent) and isinstance(nonce, str) and re.fullmatch(r'[0-9a-f]{32}', nonce) and
          body == expected, 'lease run binding mismatch')
+    prior = api(f'{base}/git/tags/{parent}')
+    need(prior.get('sha') == parent and prior.get('object', {}).get('sha') == revision and
+         prior.get('object', {}).get('type') == 'commit', 'reservation object mismatch')
+    reserved = json.loads(prior['message'])
+    prior_nonce = reserved.pop('nonce', None)
+    need(isinstance(prior_nonce, str) and re.fullmatch(r'[0-9a-f]{32}', prior_nonce) and
+         reserved == dict(expected, run=None, attempt=None), 'reservation lineage mismatch')
     return dict(asset=route['asset'], ref=ref, token=token, run_id=run_id,
-                revision=revision, request=request, attempt=1, phase='PRE_NATIVE_WRITE')
+                revision=revision, request=request, attempt=1, reservation=parent, phase='PRE_NATIVE_WRITE')
 
 def recover(api, remote_ref, compare_delete, run_id, apply=False):
     evidence = qualify(api, run_id)
