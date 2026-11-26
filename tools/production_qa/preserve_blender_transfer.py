@@ -108,6 +108,7 @@ def main():
         return api(token,method,url,*args,**kwargs)
     result = publish_package(data,env['DEST_TOKEN'],env['GITHUB_RUN_ID'],env['GITHUB_SHA'],env['REQUEST_ID'],guarded,kind='blend')
     fence()
+    result.update(kind='blend', revision=env['GITHUB_SHA'], source_archive_sha256=sys.argv[3])
     with (root/'private-blender-receipt.json').open('x',encoding='utf-8') as output:
         json.dump(result,output,indent=2)
 
