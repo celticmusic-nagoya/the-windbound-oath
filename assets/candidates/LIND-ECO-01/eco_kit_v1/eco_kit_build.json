@@ -1,0 +1,816 @@
+{
+ "task_id": "LIND-ECO-01",
+ "candidate_id": "eco_kit_v1",
+ "seed": 20261116,
+ "blender_version": "5.3.0",
+ "script_sha256": {
+  "build_eco_assets.py": "08fdefbd5756c5fd85a8d21e6dc31517b4768ac41c2adb70280ab431ce9cca88",
+  "eco_assets.py": "72f5abd615f64cb2188b8cc14dc06b4bb2862f1f560b513cd27c5fe983b52084",
+  "eco_lib.py": "bae17b06ff4bd54a8b524793ba7f329b28c877efb070e1771df6bde0eb12f3ff",
+  "postprocess_eco.py": "77c0c332d6af80e21b6b1d6547fcb986973b0049ea2b3284df4f350cd4fb15e1",
+  "qa_eco.py": "d2e12d4af3627a9d79ad916dae999eab514e80322379cae23ba4e4f4fed14bea",
+  "render_eco.py": "18aad0f90cedb7686e255c89acdbd5ce72a91a2ad5444c223cd5ba1b34fc2516",
+  "write_manifest.py": "03a3fa0f29cf9584629f62a10f83d04d1ef338a3675fbd941d5e5bb8edc97572"
+ },
+ "channels": {
+  "wind_property": "scene['lind_wind_strength']",
+  "water_property": "scene['lind_water_flow']",
+  "wind_ctrl": "LIND_WIND_CTRL",
+  "water_ctrl": "LIND_WATER_CTRL",
+  "wind_group": "LIND_WindSway",
+  "water_group": "LIND_WaterFlow"
+ },
+ "assets": [
+  {
+   "id": "eco_tree_deciduous_a",
+   "category": "tree",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_tree",
+   "params": {
+    "preset": "deciduous"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bark",
+    "M_eco_leafcard_oak"
+   ],
+   "triangles": 10647,
+   "vertices": 9412,
+   "dimensions_m": [
+    7.001,
+    7.195,
+    6.003
+   ],
+   "wind": {
+    "amplitude_m": 0.22,
+    "frequency_hz": 0.32,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "46e21961d43b53dcf586fe154bb44472b5527153746c2b83d64899040d2a476a",
+   "info": {
+    "branches": 175,
+    "leaf_cards": 1191,
+    "apples": 0,
+    "lobes": 12,
+    "max_depth": 4,
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "oak",
+    "height_m": 5.949
+   }
+  },
+  {
+   "id": "eco_tree_apple_a",
+   "category": "tree",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_tree",
+   "params": {
+    "preset": "apple"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bark",
+    "M_eco_leafcard_apple",
+    "M_eco_apple"
+   ],
+   "triangles": 7829,
+   "vertices": 5914,
+   "dimensions_m": [
+    5.634,
+    4.601,
+    3.889
+   ],
+   "wind": {
+    "amplitude_m": 0.16,
+    "frequency_hz": 0.36,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "e7b3331b97e8cb178d3bba9a16722ef5bd38c60663fab9c0a62040851cce3047",
+   "info": {
+    "branches": 133,
+    "leaf_cards": 482,
+    "apples": 34,
+    "lobes": 8,
+    "max_depth": 4,
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "apple",
+    "height_m": 3.84
+   }
+  },
+  {
+   "id": "eco_tree_forest_tall_a",
+   "category": "tree",
+   "status": "PROCEDURAL_CANDIDATE_UNREVIEWED_VARIANT",
+   "generator": "build_tree",
+   "params": {
+    "preset": "forest_tall"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bark",
+    "M_eco_leafcard_beech"
+   ],
+   "triangles": 12539,
+   "vertices": 10471,
+   "dimensions_m": [
+    6.454,
+    6.286,
+    7.908
+   ],
+   "wind": {
+    "amplitude_m": 0.28,
+    "frequency_hz": 0.28,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "e6b25246f116b59b5f52f143e6bee96180de9c8f1ed8bdaa9210a73b47e7e6ae",
+   "info": {
+    "branches": 248,
+    "leaf_cards": 1160,
+    "apples": 0,
+    "lobes": 8,
+    "max_depth": 4,
+    "leaf_mode": "TREE-L3 lobed cluster crown, shell cards, lobe-normal transfer",
+    "leaf_texture": "beech",
+    "height_m": 7.851
+   }
+  },
+  {
+   "id": "eco_tree_conifer_a",
+   "category": "tree",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_conifer",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bark",
+    "M_eco_leafcard_needle"
+   ],
+   "triangles": 19122,
+   "vertices": 22043,
+   "dimensions_m": [
+    7.089,
+    7.035,
+    8.022
+   ],
+   "wind": {
+    "amplitude_m": 0.2,
+    "frequency_hz": 0.25,
+    "flutter": 0.25,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "09794df452db689a9e55ac7b98f76c203f2f05a002379cbdbc697d6dcc785502",
+   "info": {
+    "whorls": 22,
+    "leaf_cards": 3002,
+    "height_m": 8.022,
+    "leaf_mode": "alpha_spray_cards",
+    "leaf_texture": "needle"
+   }
+  },
+  {
+   "id": "eco_grass_tuft_short",
+   "category": "grass",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_grass",
+   "params": {
+    "preset": "tuft_short"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 2652,
+   "vertices": 2334,
+   "dimensions_m": [
+    0.388,
+    0.367,
+    0.233
+   ],
+   "wind": {
+    "amplitude_m": 0.05,
+    "frequency_hz": 0.7,
+    "flutter": 0.35,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "48fc6ae892ad0cdfb20b9f8910c9dc59e7979bc5a82d160b4f9db0769a6c9513",
+   "info": {
+    "tillers": 6,
+    "blades": 90,
+    "seed_stems": 0,
+    "dry_blades": 8,
+    "basal_ring": 48,
+    "height_m": 0.232,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_grass_meadow",
+   "category": "grass",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_grass",
+   "params": {
+    "preset": "meadow"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 3838,
+   "vertices": 3176,
+   "dimensions_m": [
+    0.57,
+    0.806,
+    0.735
+   ],
+   "wind": {
+    "amplitude_m": 0.08,
+    "frequency_hz": 0.6,
+    "flutter": 0.35,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "05b16ce9a5b59f0464d3fa823d82134d9155e5f0e1dd51f6341f63c927eac325",
+   "info": {
+    "tillers": 6,
+    "blades": 98,
+    "seed_stems": 5,
+    "dry_blades": 19,
+    "basal_ring": 58,
+    "height_m": 0.734,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_grass_tall_lax",
+   "category": "grass",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_grass",
+   "params": {
+    "preset": "tall_lax"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 4840,
+   "vertices": 4117,
+   "dimensions_m": [
+    1.035,
+    1.193,
+    1.049
+   ],
+   "wind": {
+    "amplitude_m": 0.12,
+    "frequency_hz": 0.55,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "c3fb3f6b66c9f10b5f36129e5adb1f390af01b986a4ffef5f3305758153277bb",
+   "info": {
+    "tillers": 4,
+    "blades": 160,
+    "seed_stems": 3,
+    "dry_blades": 39,
+    "basal_ring": 57,
+    "height_m": 1.048,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_grass_coastal_dune",
+   "category": "grass",
+   "status": "PROCEDURAL_CANDIDATE_UNREVIEWED_VARIANT",
+   "generator": "build_grass",
+   "params": {
+    "preset": "coastal_dune"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 4132,
+   "vertices": 3470,
+   "dimensions_m": [
+    0.895,
+    0.677,
+    0.808
+   ],
+   "wind": {
+    "amplitude_m": 0.09,
+    "frequency_hz": 0.6,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "ddd894eb1d605cdc1c8fc8e5cdaa65ab6b7137cf153ca6e4431217c13d5d6221",
+   "info": {
+    "tillers": 4,
+    "blades": 118,
+    "seed_stems": 4,
+    "dry_blades": 34,
+    "basal_ring": 60,
+    "height_m": 0.808,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_reed_riverside",
+   "category": "riverside",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_grass",
+   "params": {
+    "preset": "reed"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 2510,
+   "vertices": 2061,
+   "dimensions_m": [
+    1.44,
+    1.332,
+    1.556
+   ],
+   "wind": {
+    "amplitude_m": 0.14,
+    "frequency_hz": 0.5,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "b101271920b2a6006908ce62f2817edb9a78d7a95941deb1802000dae104fffc",
+   "info": {
+    "tillers": 4,
+    "blades": 62,
+    "seed_stems": 4,
+    "dry_blades": 11,
+    "basal_ring": 47,
+    "height_m": 1.555,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_sedge_bank",
+   "category": "riverside",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_grass",
+   "params": {
+    "preset": "sedge"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_grass"
+   ],
+   "triangles": 3002,
+   "vertices": 2557,
+   "dimensions_m": [
+    1.027,
+    0.969,
+    0.988
+   ],
+   "wind": {
+    "amplitude_m": 0.1,
+    "frequency_hz": 0.5,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "9ef1d0bb27e44bb4215d1512171d954729af05915c00c225e79e35525fc2c7d8",
+   "info": {
+    "tillers": 6,
+    "blades": 92,
+    "seed_stems": 2,
+    "dry_blades": 6,
+    "basal_ring": 45,
+    "height_m": 0.987,
+    "method": "ECO-G2 fused basal ring + tillers + clump AO"
+   }
+  },
+  {
+   "id": "eco_rocks_river",
+   "category": "riverside",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_rock_set",
+   "params": {
+    "kind": "river"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_rock"
+   ],
+   "triangles": 8960,
+   "vertices": 4494,
+   "dimensions_m": [
+    2.441,
+    1.37,
+    0.335
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "a889987333b0fdabc64b7ba35b1d5f58489e3226af200af35d8373eed73dee13",
+   "info": {
+    "kind": "river",
+    "rocks": 7,
+    "height_m": 0.283
+   }
+  },
+  {
+   "id": "eco_rocks_coastal",
+   "category": "coastal",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_rock_set",
+   "params": {
+    "kind": "coastal"
+   },
+   "seed": 20261116,
+   "materials": [
+    "M_eco_rock"
+   ],
+   "triangles": 17920,
+   "vertices": 8970,
+   "dimensions_m": [
+    5.017,
+    3.075,
+    1.863
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "8749ba728209808897f9b0d8963ae81afd7c841b77f9f4fd6bbaa71347300fd1",
+   "info": {
+    "kind": "coastal",
+    "rocks": 5,
+    "height_m": 1.653
+   }
+  },
+  {
+   "id": "eco_river_water",
+   "category": "water",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_river_water",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_water"
+   ],
+   "triangles": 3840,
+   "vertices": 2057,
+   "dimensions_m": [
+    5.005,
+    14.654,
+    0.0
+   ],
+   "wind": null,
+   "water": {
+    "modifier": "LIND_Water",
+    "node_group": "LIND_WaterFlow",
+    "channel": "lind_water_flow"
+   },
+   "geometry_sha256": "fda6caa086a74699fd260cf2b444a9b8e20add03a5fc72bdab7649e80f8f4c47",
+   "info": {
+    "length_m": 14.0,
+    "width_m": 3.0,
+    "flow_attrs": [
+     "flow_u",
+     "flow_v"
+    ]
+   }
+  },
+  {
+   "id": "eco_river_bank",
+   "category": "water",
+   "status": "MODULE_PREVIEW_TERRAIN_NOT_WORLD",
+   "generator": "build_river_bank",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bank",
+    "M_eco_preview_ground"
+   ],
+   "triangles": 3360,
+   "vertices": 1815,
+   "dimensions_m": [
+    16.463,
+    17.161,
+    0.927
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "ac2c1eeff3a50c4848bd14b6ca1c5bb68b98a40f1dd5d4509747fc58537cad63",
+   "info": {
+    "length_m": 14.0,
+    "status_note": "module-local preview banks; not world terrain"
+   }
+  },
+  {
+   "id": "eco_wheat_patch",
+   "category": "field",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_wheat_patch",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_wheat"
+   ],
+   "triangles": 59902,
+   "vertices": 42717,
+   "dimensions_m": [
+    3.445,
+    2.094,
+    1.274
+   ],
+   "wind": {
+    "amplitude_m": 0.1,
+    "frequency_hz": 0.5,
+    "flutter": 0.25,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "18eb8059a04cc3735de6f64c14f1c50fd71a86fb7496e99871661360e7bda8ca",
+   "info": {
+    "stalks": 491,
+    "size_m": [
+     3.2,
+     2.0
+    ],
+    "density_per_m2": 110.0,
+    "height_m": 1.273
+   }
+  },
+  {
+   "id": "eco_vegetable_rows",
+   "category": "field",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_vegetable_rows",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_crop",
+    "M_eco_soil"
+   ],
+   "triangles": 19122,
+   "vertices": 19392,
+   "dimensions_m": [
+    3.356,
+    2.406,
+    0.291
+   ],
+   "wind": {
+    "amplitude_m": 0.03,
+    "frequency_hz": 0.6,
+    "flutter": 0.4,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "c37f5e937628fef0436805499a8608673fe0acbe6a521b20231ca26cb85b939e",
+   "info": {
+    "rows": 5,
+    "cabbage": 11,
+    "carrot": 33,
+    "lettuce": 8,
+    "weeds": 160,
+    "size_m": [
+     3.0,
+     2.0
+    ]
+   }
+  },
+  {
+   "id": "eco_flower_patch",
+   "category": "field",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_flower_patch",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_flower"
+   ],
+   "triangles": 44952,
+   "vertices": 45303,
+   "dimensions_m": [
+    2.403,
+    1.625,
+    0.866
+   ],
+   "wind": {
+    "amplitude_m": 0.06,
+    "frequency_hz": 0.6,
+    "flutter": 0.35,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "d070dac8744a258dcb01448924d96bb138edb70ad76b04808e1c875a21ea8e59",
+   "info": {
+    "daisy": 52,
+    "poppy": 55,
+    "spike": 81,
+    "turf_blades": 900,
+    "size_m": [
+     2.4,
+     1.4
+    ]
+   }
+  },
+  {
+   "id": "eco_hedgerow",
+   "category": "boundary",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_hedgerow",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_bark",
+    "M_eco_leafcard_oak"
+   ],
+   "triangles": 5016,
+   "vertices": 4848,
+   "dimensions_m": [
+    4.95,
+    1.617,
+    1.693
+   ],
+   "wind": {
+    "amplitude_m": 0.06,
+    "frequency_hz": 0.45,
+    "flutter": 0.35,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "a7cd6468bdf91b7b41289cdf0349fcb4224828c48683fef0df1388f10397d778",
+   "info": {
+    "length_m": 4.0,
+    "height_m": 1.3,
+    "leaf_cards": 322,
+    "method": "cluster-card shell"
+   }
+  },
+  {
+   "id": "eco_fence_post_rail",
+   "category": "boundary",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_fence",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_wood_post",
+    "M_eco_wood_rail"
+   ],
+   "triangles": 592,
+   "vertices": 360,
+   "dimensions_m": [
+    6.629,
+    0.236,
+    1.204
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "c15890de6e36e7f09e5dc1f79ab3d7d7f922383e187989059ddac27f027a55be",
+   "info": {
+    "posts": 4,
+    "length_m": 6.6,
+    "rail_section": "split quad ~11x7 cm"
+   }
+  },
+  {
+   "id": "eco_haystack",
+   "category": "farm_prop",
+   "status": "PROCEDURAL_CANDIDATE",
+   "generator": "build_haystack",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_hay",
+    "M_eco_wood"
+   ],
+   "triangles": 7218,
+   "vertices": 11734,
+   "dimensions_m": [
+    3.238,
+    3.142,
+    2.737
+   ],
+   "wind": {
+    "amplitude_m": 0.05,
+    "frequency_hz": 0.5,
+    "flutter": 0.2,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "water": null,
+   "geometry_sha256": "4d3ec2054d4497816537917eb2431811a7328e82e470d04dea8e8fdc769b7385",
+   "info": {
+    "strands": 2200,
+    "height_m": 2.45,
+    "radius_m": 1.0
+   }
+  },
+  {
+   "id": "eco_chicken_hen_blockout",
+   "category": "livestock",
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART",
+   "generator": "build_chicken",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_plumage"
+   ],
+   "triangles": 5232,
+   "vertices": 2771,
+   "dimensions_m": [
+    0.218,
+    0.5,
+    0.406
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "474ad60c94f5f59417c98d85bd8fd7c39e0b6728dd8c72b2b6d21a5888878ce7",
+   "info": {
+    "height_m": 0.407,
+    "status_note": "STRUCTURAL_BLOCKOUT_NOT_ART (metaball form; slab wings/tail, no plumage, no rig)"
+   }
+  },
+  {
+   "id": "eco_cow_blockout",
+   "category": "livestock",
+   "status": "STRUCTURAL_BLOCKOUT_NOT_ART",
+   "generator": "build_cow_blockout",
+   "params": {},
+   "seed": 20261116,
+   "materials": [
+    "M_eco_blockout"
+   ],
+   "triangles": 6897,
+   "vertices": 3472,
+   "dimensions_m": [
+    0.511,
+    2.583,
+    1.231
+   ],
+   "wind": null,
+   "water": null,
+   "geometry_sha256": "6064525ce3c4c39306e66c2f0ab1710c550dc97c6040c2b78b65bff50ed2a01b",
+   "info": {
+    "height_m": 1.284,
+    "status_note": "STRUCTURAL_BLOCKOUT_NOT_ART"
+   }
+  },
+  {
+   "id": "eco_grass_card_lod1",
+   "category": "grass_lod1",
+   "status": "LOD1_CARD_CANDIDATE",
+   "generator": "make_grass_card_mesh",
+   "seed": 20261116,
+   "triangles": 6,
+   "vertices": 12,
+   "materials": [
+    "M_eco_grass_card_lod1"
+   ],
+   "texture": "assets/candidates/LIND-ECO-01/eco_kit_v1/textures/grass_card_lod1.png",
+   "texture_sha256": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290",
+   "wind": {
+    "amplitude_m": 0.08,
+    "frequency_hz": 0.6,
+    "flutter": 0.3,
+    "modifier": "LIND_Wind",
+    "node_group": "LIND_WindSway"
+   },
+   "geometry_sha256": "06d7b2ea9139bd0c0597f83c98ca4185717ac60a0979dc08792a26179368c7b2"
+  }
+ ],
+ "combined_geometry_sha256": "7dd26ab268083a201d5c99d5abccc51af18d75b26e772809bf66d206942279a3",
+ "textures_sha256": {
+  "leaf_cluster_oak.png": "b757ed344c4ad164acf2b975f0b376d396a2630d6654d301bb9a52081fc99323",
+  "leaf_cluster_apple.png": "b1c3ff3a57dc15d2b155ac53b3f32d730ba21262f6e91c479ebac7535e0de763",
+  "leaf_cluster_beech.png": "ddf57989e4414b446bd16cf60796f9f52bebee539c63ceae37a5282a8cd8365c",
+  "leaf_spray_needle.png": "d5fefff7bfb40a4cfde12d94bf2295af32b76f1f8c976b926c667bc04cd01d14",
+  "grass_card_lod1.png": "a7c04540c4611d66324a8ccbe5dc0ea2b62fe61f91bd28952a4aad8f23b7b290"
+ },
+ "blend": {
+  "path": "/tmp/lind_eco/eco_kit_v1.blend",
+  "sha256": "40e8f29a613dc99f5b47e2595a0830f04e321dd56c5d722c7817854d995b09cd",
+  "bytes": 6202750,
+  "note": "binary not byte-deterministic (timestamps); geometry hashes are"
+ }
+}

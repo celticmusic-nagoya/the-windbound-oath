@@ -1,0 +1,113 @@
+name: LIND ECO Blender 5.3 candidate render and QA
+on:
+  push:
+    branches: [feature/lind-ecology-01]
+    paths:
+      - '.github/workflows/lind-eco-53-render-qa.yml'
+      - 'tools/map_blender/lind/ecology/eco_assets.py'
+      - 'tools/map_blender/lind/ecology/render_eco.py'
+  workflow_dispatch:
+    inputs:
+      shot:
+        description: Render scope (small first to avoid duplicate expensive work)
+        required: true
+        default: lineup_small
+        type: choice
+        options:
+          - lineup_small
+          - lineup_large
+          - closeup
+          - coastal_sward
+          - coastal_sward_v2
+          - all
+permissions:
+  contents: read
+concurrency:
+  group: lind-eco-53-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  candidate-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          persist-credentials: false
+      - name: Install Blender 5.3.0 with official SHA256 verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          rows=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  h=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(h)!=1: raise SystemExit("Invalid official checksum row")
+                  rows.append(h[0].lower())
+          if len(rows)!=1: raise SystemExit("Official checksum missing or ambiguous")
+          Path(sys.argv[2]).write_text(f"{rows[0]}  {sys.argv[3]}\n")
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+          rm -rf "$work"
+      - name: Install Pillow into isolated Blender Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          BLENDER_PY="$(find /tmp/two-blender53 -path '*/python/bin/python3*' -type f -executable | sort | head -n 1)"
+          test -n "$BLENDER_PY"
+          "$BLENDER_PY" -m ensurepip --upgrade
+          "$BLENDER_PY" -m pip install --disable-pip-version-check --no-cache-dir 'Pillow==11.3.0'
+          "$BLENDER_PY" -c 'from PIL import Image; print("Pillow available to Blender")'
+      - name: Build candidate ecology geometry
+        run: |
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/build_eco_assets.py -- --out /tmp/lind_eco
+      - name: Isolate current run from historical render provenance
+        run: |
+          # The checkout is ephemeral. Keep tracked historical evidence untouched in Git;
+          # do not mix old geometry SHA records with a freshly rebuilt candidate.
+          rm -f assets/candidates/LIND-ECO-01/eco_kit_v1/renders/renders.json
+          rm -rf /tmp/lind-eco-current-run
+      - name: Render selected evidence views
+        env:
+          SHOT: ${{ inputs.shot || 'coastal_sward_v2' }}
+        run: |
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/render_eco.py -- --shot "$SHOT"
+      - name: Verify rendered PNG hashes against manifest
+        run: |
+          python3 tools/map_blender/lind/ecology/audit_render_provenance.py
+      - name: Stage only current-run evidence for upload
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, shutil
+          root=pathlib.Path("assets/candidates/LIND-ECO-01/eco_kit_v1/renders")
+          out=pathlib.Path("/tmp/lind-eco-current-run")
+          out.mkdir(exist_ok=True)
+          reg=root/"renders.json"
+          if reg.is_file() and pathlib.Path('/tmp/lind_eco/eco_kit_build.json').is_file():
+              shutil.copy2(reg,out/reg.name)
+              for name in json.loads(reg.read_text()).get("files",{}):
+                  p=root/name
+                  if p.is_file(): shutil.copy2(p,out/name)
+          PY
+      - name: Upload candidate render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-eco-53-candidate-evidence
+          path: |
+            /tmp/lind_eco/eco_kit_build.json
+            /tmp/lind-eco-current-run/
+          retention-days: 7
+          if-no-files-found: warn

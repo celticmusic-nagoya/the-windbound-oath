@@ -1,0 +1,104 @@
+name: LIND ECO integration v2 package (Blender 5.3)
+on:
+  push:
+    branches: [feature/lind-ecology-01]
+    paths:
+      - '.github/workflows/lind-eco-integration-v2.yml'
+      - 'tools/map_blender/lind/ecology/eco_integration_v2.py'
+      - 'tools/map_blender/lind/ecology/eco_integration_v2_render.py'
+      - 'tools/map_blender/lind/ecology/package_integration_v2.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lind-eco-int-v2-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  integration-package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          persist-credentials: false
+      - name: Install Blender 5.3.0 with official SHA256 verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          base="https://mirror.blender.org/release/Blender5.3"
+          name="blender-5.3.0-linux-x64.tar.xz"
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 90 "$base/blender-5.3.0.sha256" -o "$work/checksums"
+          python3 - "$work/checksums" "$work/expected.sha256" "$name" <<'PY'
+          import re,sys
+          from pathlib import Path
+          rows=[]
+          for line in Path(sys.argv[1]).read_text().splitlines():
+              if sys.argv[3] in line:
+                  h=re.findall(r'(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])',line)
+                  if len(h)!=1: raise SystemExit("Invalid official checksum row")
+                  rows.append(h[0].lower())
+          if len(rows)!=1: raise SystemExit("Official checksum missing or ambiguous")
+          Path(sys.argv[2]).write_text(f"{rows[0]}  {sys.argv[3]}\n")
+          PY
+          curl --fail --location --retry 0 --connect-timeout 20 --max-time 540 "$base/$name" -o "$work/$name"
+          (cd "$work" && sha256sum -c expected.sha256)
+          mkdir -p /tmp/two-blender53
+          tar -xJf "$work/$name" -C /tmp/two-blender53 --strip-components=1
+          /tmp/two-blender53/blender -b --factory-startup --python-expr 'import bpy; assert tuple(bpy.app.version)==(5,3,0)'
+          rm -rf "$work"
+      - name: Install Pillow into isolated Blender Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          BLENDER_PY="$(find /tmp/two-blender53 -path '*/python/bin/python3*' -type f -executable | sort | head -n 1)"
+          test -n "$BLENDER_PY"
+          "$BLENDER_PY" -m ensurepip --upgrade
+          "$BLENDER_PY" -m pip install --disable-pip-version-check --no-cache-dir 'Pillow==11.3.0'
+          "$BLENDER_PY" -c 'from PIL import Image; print("Pillow available to Blender")'
+      - name: Build reused ecology kit (deterministic)
+        run: |
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/build_eco_assets.py -- --out /tmp/lind_eco
+      - name: Build integration v2 package (selection, new assets, game materials, LODs, GLB)
+        run: |
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/eco_integration_v2.py -- \
+            --kit /tmp/lind_eco/eco_kit_v1.blend --kit-json /tmp/lind_eco/eco_kit_build.json --out /tmp/lind_eco_v2 --impostor-samples 16
+      - name: Render evaluation views (game materials)
+        run: |
+          /tmp/two-blender53/blender -b --factory-startup --python-exit-code 1 --python tools/map_blender/lind/ecology/eco_integration_v2_render.py -- \
+            --pkg /tmp/lind_eco_v2 --shot all --samples 24
+      - name: Technical QA, CG colour measurement, placement rules, SHA256SUMS
+        run: |
+          python3 -m pip install --disable-pip-version-check --no-cache-dir 'Pillow==11.3.0' 'numpy<3'
+          python3 tools/map_blender/lind/ecology/package_integration_v2.py --pkg /tmp/lind_eco_v2
+          python3 - <<'PY'
+          import json, sys
+          ci = json.load(open('/tmp/lind_eco_v2/integration_build.json'))
+          repo = json.load(open('assets/candidates/LIND-ECO-01/integration_v2/integration_build.json'))
+          bad = []
+          if ci['kit_combined_geometry_sha256'] != repo['kit_combined_geometry_sha256']:
+              bad.append('kit combined geometry')
+          for k, v in repo['new_assets'].items():
+              if ci['new_assets'][k]['geometry_sha256'] != v['geometry_sha256']:
+                  bad.append(k)
+          for k, v in repo['packaged'].items():
+              for a, b in zip(v['lods'], ci['packaged'][k]['lods']):
+                  # collapse-decimated bark (tree/shrub LOD1) is float-tie sensitive across CPUs
+                  # (run 44729458641: hedgerow LOD1 1317 vs 1316); allow 1 %, exact elsewhere
+                  tol = int(0.01 * a['tris']) if (a['lod'] == 1 and v['category'] in ('tree', 'shrub')) else 0
+                  if abs(a['tris'] - b['tris']) > tol:
+                      bad.append(f"{k} LOD{a['lod']} tris {a['tris']} vs {b['tris']}")
+          qa = json.load(open('/tmp/lind_eco_v2/tech_qa_v2.json'))
+          print('geometry determinism vs committed package:', 'PASS' if not bad else 'FAIL ' + str(bad))
+          print('tech QA', qa['summary'])
+          sys.exit(1 if bad or qa['summary']['FAIL'] else 0)
+          PY
+      - name: Upload integration package artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lind-eco-integration-v2-package
+          path: /tmp/lind_eco_v2/
+          retention-days: 30
+          if-no-files-found: error
