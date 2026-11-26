@@ -1,0 +1,220 @@
+{
+  "schema": "two.region.a3.small_ruins.weathering_blueprint.v67",
+  "parent": "3440af1b22a9c87c55237bab25921aa20aa80d34",
+  "status": "DETAILED_SURFACE_TARGETS_DELIVERED_D4_HOLD",
+  "prework": {
+    "main_head": "92e547298612ca5d69d207136312635a60c63d45",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SMALL_RUINS_V67_SURFACE_DESIGN",
+    "owner_pr": 482,
+    "owner_head": "3440af1b22a9c87c55237bab25921aa20aa80d34",
+    "writer_lease_fencing_evidence": "Isolated local design coordinate tables only; no native scene mutation or lease takeover; non-force CAS.",
+    "source_sha256": {
+      "v63": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+      "v64": "00eed401791c425126b2a5d47c3ae73fea90d183fa40b550864384a051ccbc3a",
+      "v65": "276691c1d57d9daf41a3d14d6da8761d24f397ecfb858009135bbb89e80f55e2",
+      "refs": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+      "pbr": "b2ca93d43c849745e454980b3473dcaca8e2b075d15621c50cf0f18832b25ee5"
+    },
+    "dependency_shas": {
+      "v66": "4cf2f9a42fe885f6a772fb206208661c34f24d58",
+      "v65": "7b9cda557ea4eba6b21170a82b35b197a5872c86",
+      "v64": "6891eaa983a22c8eb70e7723da5e0286b0d014a8",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "V63/V64 front planes and entire bottom, height, original source files, V58 scene, prior candidates, runtime",
+    "stage": "D2/D3 executable surface design targets",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED",
+      "D1": "LOCAL_ONLY",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "21 exact source files, zero front/base/height coordinate residual, inside prior convex envelope 1e-8m, positive face-normal dot, watertight consistent winding, projected glyph/fracture coverage error <1e-8m2 and minimum residual thickness >.05m. No native edit.",
+    "preflight_checks": "SHA of V63/64/65 and source archives, reference Git blob/size/SHA256/CRC, local exact triangulation and rear projection overlays, py_compile and ZIP CRC, owning PR HEAD.",
+    "result": "READY_DESIGN_ONLY",
+    "blockers": [
+      "independent D4 not received",
+      "source oblique fallen fragment and rubble composition",
+      "front-side silhouette still too regular; ivy/actual material bake and self intersection unresolved"
+    ],
+    "checkpoint": "V66 unchanged"
+  },
+  "design": {
+    "frame": "De-yawed local XYZ meters; yaw restored at placement only.",
+    "source_files_verified": 21,
+    "base_triangles": 212,
+    "target_triangles": 13568,
+    "method": "Subdivide each original triangle by shared edge midpoint 3 times; protect all original front vertex indices j=0,1 and entire z=0 ring, propagate protection to midpoint of any two protected vertices. Interpolate section-center XY at vertex z, subtract toward center horizontally only. Field = sum A*exp(-((x-cx)^2+(y-cy)^2+(z/H-h)^2)/(2*s^2)) + rough_amp*(.5+.5*sin(29*x+17*y+11*z)*cos(13*x-23*y+19*z)). Multiply by clamp((y-front_y(z))/.1,0,1)*clamp(z/.14,0,1), clamp to .32 times radial distance, protected=0. No change to height, entire original front triangles, base and convex reserve. Exact face winding, minimum face areas and posterior cutter clearance checked. Authored values are not inferred physical dimensions from sprites.",
+    "chip_rows_format": "[cx_m,cy_m,normalized_height,sigma_numeric,amplitude_m]",
+    "modules": [
+      {
+        "id": "RUNE-S01",
+        "chips": [
+          [
+            0.32,
+            0.62,
+            0.16,
+            0.25,
+            0.069
+          ],
+          [
+            -0.35,
+            -0.09,
+            0.79,
+            0.18,
+            0.057
+          ],
+          [
+            0.09,
+            0.38,
+            0.87,
+            0.16,
+            0.048
+          ]
+        ],
+        "rough_amp": 0.018,
+        "faces": 5888,
+        "vertices": 2946,
+        "moved_vertices": 2332,
+        "protected_vertices": 613,
+        "max_displacement_m": 0.06160691804277408,
+        "min_normal_dot": 0.8454312687875958,
+        "volume_before_m3": 0.4538418333333334,
+        "volume_after_m3": 0.41363434201438637,
+        "min_glyph_thickness_m": 0.282861164728778,
+        "min_fracture_thickness_m": 0.3015045884510854
+      },
+      {
+        "id": "BOUND-S01",
+        "chips": [
+          [
+            0.22,
+            0.18,
+            0.79,
+            0.2,
+            0.057
+          ],
+          [
+            -0.25,
+            0.1,
+            0.46,
+            0.2,
+            0.046
+          ],
+          [
+            0.04,
+            0.28,
+            0.9,
+            0.18,
+            0.041
+          ]
+        ],
+        "rough_amp": 0.014,
+        "faces": 3840,
+        "vertices": 1922,
+        "moved_vertices": 1452,
+        "protected_vertices": 469,
+        "max_displacement_m": 0.07626158518675683,
+        "min_normal_dot": 0.891121268707847,
+        "volume_before_m3": 0.20735599999999996,
+        "volume_after_m3": 0.1789976327799885,
+        "min_glyph_thickness_m": 0.3372601381365504,
+        "min_fracture_thickness_m": 0.28458960249765175
+      },
+      {
+        "id": "FRAG-S01",
+        "chips": [
+          [
+            0.42,
+            0.24,
+            0.61,
+            0.23,
+            0.075
+          ],
+          [
+            -0.42,
+            0.25,
+            0.78,
+            0.22,
+            0.064
+          ],
+          [
+            0.08,
+            0.29,
+            0.95,
+            0.19,
+            0.052
+          ]
+        ],
+        "rough_amp": 0.022,
+        "faces": 3840,
+        "vertices": 1922,
+        "moved_vertices": 1452,
+        "protected_vertices": 469,
+        "max_displacement_m": 0.09332486757186942,
+        "min_normal_dot": 0.7197991479669215,
+        "volume_before_m3": 0.44913866666666663,
+        "volume_after_m3": 0.4082974651958138,
+        "min_glyph_thickness_m": 0.48864412591248685,
+        "min_fracture_thickness_m": 0.4392786142172015
+      }
+    ],
+    "checks": {
+      "front_residual_m": 0,
+      "base_residual_m": 0,
+      "height_residual_m": 0,
+      "max_convex_envelope_outside_m": 2.220446049250313e-16,
+      "all_watertight": true,
+      "all_winding_consistent": true,
+      "max_cut_projected_coverage_error_m2": 1.0408340855860843e-17,
+      "cut_clearance_method": "Intersect exact refined front/rear projected triangles with buffered glyph/crack masks; evaluate linear depth difference at every clipped polygon vertex; full area coverage. No actual cuts or self-intersection certificate."
+    },
+    "material_contract": {
+      "status": "DESIGN_ONLY",
+      "method": "Object-space position based 3-axis projection, continuous position-dependent blend weights, shared phase across UV charts; linear diffuse and roughness blend, convert normal directions into object space then final baked tangent frames. Native bake and seam test not executed.",
+      "proposed_seam_thresholds": {
+        "mean_rgb_abs": 0.02,
+        "p95_rgb_abs": 0.05
+      },
+      "previous_V66_seams": "Measured mean approximately .092-.097, p95 .223-.229; not corrected in this turn."
+    },
+    "visual_review": "Surface target diagram actually inspected. Side variation is visible but front still too smooth/planar. 2D fragment is obliquely fallen carved slab surrounded by rubble; local base design is a truncated block. Do not classify as source-fidelity PASS. No fabricated physical measurements."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v67.py": "3f05a8bf90053d1307739b0788e88d843b321f6929bdbd945bde057fe32ad254",
+      "check_clearance.py": "ac97c91cc143f3faf1c3d44f21dd854d52bbccee76665f5df4f5739681fbcafc",
+      "weathering_v67.json": "509a60d4416480309fdf683c8c8fdb199115bf6f5e3571a722affdb740d98131",
+      "weathering_blueprint.png": "9984037387141ae9bb878cdbe91d2b3d56f4c06ea8c1ecf9da4717713686f37f"
+    },
+    "package_sha256": "96ead065e1411cef381beb9cb5bb10d45180c1510d6f1a507576ba65a2ea35fc",
+    "package_bytes": 1437467,
+    "CRC": "PASS",
+    "py_compile": "PASS",
+    "location": "Full target vertex tables and source-bound code in local conversation package; compact reproducible parameter recipe in PR. No public distribution."
+  },
+  "gates": {
+    "D0": "VERIFIED",
+    "D1": "LOCAL_SCOPE_GLOBAL_HOLD",
+    "D2": "PARTIAL_SURFACE_TARGETS_FRAGMENT_COMPOSITION_IVY",
+    "D3": "DESIGN_SCREEN_PASS_NATIVE_UNCERTAINTY",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN_PRECISION",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat small incremental surface deformation or standalone material swatches. Resolve the fallen fragment composition with separate rigid local pose and rubble/contact design, or switch to a separate eligible module; independent D4 required before precision authoring. No formal adoption or main merge."
+}
