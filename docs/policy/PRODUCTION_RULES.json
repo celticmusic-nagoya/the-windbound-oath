@@ -411,7 +411,7 @@
     "source_preservation_required": true,
     "actual_transfer_qa_required": true,
     "other_character_policy_unchanged": true,
-    "runtime": "NOT_RUN",
+    "runtime": "VERIFIED_SCOPED_TECHNICAL_TRANSFER_PASS",
     "visual_targets": {
       "nominal_head_count": 7.75,
       "design_range": [
@@ -430,6 +430,18 @@
       "style": "stylized_anime_high_fidelity_materials",
       "synthetic_images": "material_reference_only",
       "measurement_and_qa": "NOT_RUN"
-    }
+    },
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "run_id": 45779704407
+  },
+  "verified_execution_reuse": {
+    "scope": "all agents and automations",
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "reuse_qualified_components": true,
+    "asset_specific_qualification_required": true,
+    "retain_private_originals_and_receipts": true,
+    "avoid_unnecessary_reexport": true,
+    "temporary_artifact_expiry_check": true,
+    "formal_adoption_or_blanket_permission": false
   }
 }
