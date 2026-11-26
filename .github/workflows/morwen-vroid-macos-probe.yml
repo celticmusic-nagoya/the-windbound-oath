@@ -1802,6 +1802,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     environment: two-private-preservation
+    outputs:
+      completion_receipt: ${{ steps.preserve-blender.outputs.completion_receipt }}
     env:
       TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
       REQUEST_ID: ${{ inputs.request_id }}
@@ -1854,6 +1856,7 @@ jobs:
             exit 1
           fi
       - name: Preserve editable blend and renders via existing private transfer
+        id: preserve-blender
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
@@ -1862,3 +1865,50 @@ jobs:
           set -euo pipefail
           umask 077
           python3 tools/production_qa/preserve_blender_transfer.py "$RUNNER_TEMP/morwen-blender-input" "$RUNNER_TEMP/morwen-blender-output" "$PRODUCER_ZIP_SHA"
+          python3 - "$RUNNER_TEMP/morwen-blender-output/private-blender-receipt.json" <<'PY'
+          import json, os, sys
+          with open(sys.argv[1]) as f:
+              receipt=json.load(f)
+          assert receipt["kind"]=="blend" and receipt["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED"
+          assert receipt["source_archive_sha256"]==os.environ["PRODUCER_ZIP_SHA"]
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("completion_receipt="+json.dumps(receipt,separators=(",",":"))+"\n")
+          PY
+  complete-morwen-transfer:
+    needs: [vrm-export-protected, blender-transfer-protected]
+    if: success() && needs.vrm-export-protected.result == 'success' && needs.blender-transfer-protected.result == 'success' && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: tools/production_qa
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      EXPECTED_MAIN: ${{ inputs.expected_main }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      COMPLETION_RECEIPT: ${{ needs.blender-transfer-protected.outputs.completion_receipt }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Release only the exact completed run reservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$TRANSFER_ASSET" = MORWEN
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import json, os
+          from morwen_transfer_claim import complete
+          e=os.environ
+          complete("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"],e["PRODUCER_ZIP_SHA"],json.loads(e["COMPLETION_RECEIPT"]))
+          print("MORWEN_EXACT_COMPLETION_RELEASE_PASS")
+          PY
