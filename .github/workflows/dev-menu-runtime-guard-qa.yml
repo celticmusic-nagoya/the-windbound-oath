@@ -46,7 +46,8 @@ jobs:
       - run: node tests/moss/public_dev_environment.test.js
   deployed-browser:
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    # Playwright 1.55 supports Ubuntu 24.04, not the current ubuntu-latest (26.04).
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
