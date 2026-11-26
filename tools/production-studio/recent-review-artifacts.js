@@ -18,8 +18,8 @@ const RULES=[
  ["asset/morwen-measured-textile-20261125",/^morwen-(?:photo-textile-comparison|brass-source-maps|met-gold-thread-oa-sources)-not-adopted$/,"モルウェン・材質研究",""],
  ["infra/native-env-qualification-20261123",/^two-hairharpy-volume-/,"モルウェン・ヘア技術",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:hero-tree-v\d+-island-source|forest-v\d+-native-virtual-qa)$/,"世界・樹木／森林",""],
- ["docs/ireland-world-source-grounded-plan-20261123",/^two-sanctuary-v\d+-native-composition$/,"世界・聖域",""],
- ["docs/ireland-world-source-grounded-plan-20261123",/^two-[a-z][a-z0-9-]{0,80}-v\d+-[a-z][a-z0-9-]{0,80}$/,"世界・新規制作証跡（未分類）",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-sanctuary-v\d+-native-(?:composition|scenery)$/,"世界・聖域",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-[a-z0-9][a-z0-9-]{0,159}$/,"世界・新規制作証跡（未分類）",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^(?:ireland|two-shared|lind|world|area)/i,"地図・エリア設計",""],
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
