@@ -1,0 +1,224 @@
+{
+  "schema": "two.region.a3.altar.masonry_blueprint.v62",
+  "parent": "25eeb38bd526b1e5500ebb3312e3102c8acb28ab",
+  "status": "MASONRY_SUPPORT_DETAILED_DESIGN_AND_NATIVE_AUDIT_EVIDENCE_D4_HOLD",
+  "prework": {
+    "main_head": "f0ecfaad2554876e96f5aaf941276b2d6430efc0",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "production_os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6"
+    },
+    "effective_rules": "v6 production-first, blueprint before precision production, latest Studio publication exception not invoked; preserve sources and candidate status",
+    "scope_id": "A3_ALT_TERRACE_V62",
+    "owner_pr": 482,
+    "owner_head": "25eeb38bd526b1e5500ebb3312e3102c8acb28ab",
+    "writer_lease_fencing_evidence": "Independent local design only, no shared native writer or lease takeover. Non-force CAS branch update.",
+    "stage": "D2/D3 design and read-only native evidence",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED",
+      "D1": "PARTIAL_NATIVE_EVENT_HOLD",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "Exact local TIN coverage; zero positive-area course overlaps; shared joints; support coverage >=.99; burial >=.12m; original pad/ramp/ruin coordinates unchanged; no precision native mutation",
+    "preflight_checks": "Source SHA, V61 exact native artifact CRC/SHA, local syntax and polygon checks, draft PR HEAD CAS",
+    "result": "READY_DESIGN_ONLY",
+    "blockers": [
+      "D4 independent",
+      "final V47B and adjacent world ground",
+      "event height and exact collision"
+    ],
+    "protected_scope": "All native originals, canonical sources, V60 ruin and V61 pad/ramp design",
+    "checkpoint": "V61 receipt and V58 native; no source save",
+    "next_stage": "Exact conflict classification then independent design review; not precision production"
+  },
+  "dependencies": {
+    "v61": "ac7d6da856d9640813fade31eb149608ad02d852",
+    "v60": "aaa80fa8d33c8cadc525aac052ce8b153fd598f1",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "inputs": {
+    "terrace_v61_sha256": "baba27db67d700c21ebec2247d3abb5e43361cdbd935ad3aab3b8419efbb28bf",
+    "blueprint_v60_sha256": "dc4128c622127707cec3ddcdf57b805124f839d39f03086ae93a770d4e43eaa2",
+    "terrain_sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "unchanged": true
+  },
+  "native_v61": {
+    "run": 45731286378,
+    "job": 139613633313,
+    "artifact": 15077471039,
+    "archive_sha256": "0c1b30a88db44549704b20fb6c8fb911451fec5734a1bdc711a1eded13869195",
+    "crc": "PASS",
+    "native_sha256": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a",
+    "mesh_count": 523,
+    "candidate_objects_checked": 13,
+    "pad_sample_count": 1089,
+    "pad_ground_range_m": [
+      27.67131805419922,
+      28.289215087890625
+    ],
+    "minimum_platform_clearance_m": 0.05078491210937486,
+    "approach_seam_residuals_m": [
+      0.000006246210183746825,
+      0.000006215900171469002,
+      0.000004170381124879441
+    ],
+    "replaceable_old_proxy_hits": 10,
+    "unexpected_hits": [
+      {
+        "name": "V58_SCENIC_GROVE_00",
+        "pad_triangles": 1
+      }
+    ],
+    "classification": "HOLD conservative pad box intersection; exact triangle position and actual proposed mesh/locomotion intersection unverified. No deletion or move."
+  },
+  "design": {
+    "frame": "V61 right-handed, x transverse y approach, z absolute",
+    "platform_z_m": 28.34,
+    "cap_underside_z_m": 28.29,
+    "course_joint_z_m": 28.07,
+    "wall_thickness_m": 0.35,
+    "plan_segments": [
+      [
+        "L",
+        -4,
+        -3.65,
+        -4,
+        4,
+        "y"
+      ],
+      [
+        "R",
+        3.65,
+        4,
+        -4,
+        4,
+        "y"
+      ],
+      [
+        "B",
+        -3.65,
+        3.65,
+        3.65,
+        4,
+        "x"
+      ],
+      [
+        "FL",
+        -3.65,
+        -1.5,
+        -4,
+        -3.65,
+        "x"
+      ],
+      [
+        "FR",
+        1.5,
+        3.65,
+        -4,
+        -3.65,
+        "x"
+      ]
+    ],
+    "recipe": {
+      "seed": 2026112662,
+      "random": "Python random.Random; iterate segments in declared order, lower then upper course; n=ceil(length/.66), base=linspace(a,b,n+1). Lower internal cuts uniform(-.055,.055) offsets to base, upper internal cuts midpoints of base intervals plus uniform(-.04,.04), endpoints unchanged. Each internal cut uses four independent uniform(-.035,.035) shifts in longitudinal coordinate at transverse linspace(t0,t1,4), endpoints of band use zero offsets; adjacent polygons use same path reversed. Iterate all cuts before constructing stones.",
+      "lower": "z bottom=min(exact TIN footprint min-.12, joint-.14); upper surface=joint",
+      "upper": "joint to cap underside, exact shared polygon joints, no through-gap",
+      "core": "pad minus wall union, clip against every exact source TIN triangle, lower=ground-.12, upper=28.29",
+      "ramp": "V61 exact 4 planar ramp triangles, clip with source TIN, lower=ground-.12 upper=original ramp plane; top unchanged",
+      "surface": "Provisional continuous .05m walk cap above core and wall, no change to collision surface. Stone face recess .006m and bevel <=.012m only on exposed faces; native cutter not validated. No structural load calculation."
+    },
+    "counts": {
+      "stones": 97,
+      "lower": 46,
+      "upper": 51,
+      "upper_spanning_two_or_more": 41,
+      "core_patches": 33,
+      "ramp_patches": 33
+    },
+    "per_band": [
+      [
+        "L",
+        13,
+        14
+      ],
+      [
+        "R",
+        13,
+        14
+      ],
+      [
+        "B",
+        12,
+        13
+      ],
+      [
+        "FL",
+        4,
+        5
+      ],
+      [
+        "FR",
+        4,
+        5
+      ]
+    ],
+    "checks": {
+      "min_upper_bearing_fraction": 0.9999999999999997,
+      "min_burial_m": 0.120000000000001,
+      "wall_area_m2": 9.660000000000004,
+      "core_area_m2": 54.339999999999996,
+      "wall_core_overlap_m2": 0,
+      "union_area_m2": 64,
+      "core_volume_m3": 23.084310481506602,
+      "ramp_volume_m3": 5.702508330253831,
+      "core_thickness_range_m": [
+        0.14622556387763908,
+        0.7105350075802974
+      ],
+      "ramp_thickness_range_m": [
+        0.120000000000001,
+        0.6292413431352024
+      ],
+      "ramp_start_residual_m": 0,
+      "ramp_end_residual_m": 0,
+      "access_obstacle_count_design": 0,
+      "interaction_area_m2": 3.4499999999999997
+    },
+    "limitations": "Local plan and support design only. 10 upper end stones contact single underlying stone; corner bands are butt joints, not fully bonded. Continuous cap requires finished surface and collision review. V60 gate silhouette, material wear/ivy and actual cuts still partial. No native new meshes or load physics."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v62.py": "3c2eb5506765fc0b8e24c857614299c5e05f8e4ade65079d597b0d994136843a",
+      "masonry_v62.json": "69abe22b3ad8596bb7efb32e639b000d33dba768018ff85ceac261ac3af4d204",
+      "masonry_blueprint.png": "82d4dbd75ab6f390b08d02fdde41bdc19ee156fafe79ce94f540cd2fd09178a0",
+      "qa.json": "bef954198d4d9c063193dfcd57a6073420fce5c6841cc7f0b2c6e6fde1e8659f",
+      "v61_native_audit.json": "4b4dad74cd70f77f2821a3c58860891f5f92264d493bebb3299af4cbacdbe81c"
+    },
+    "package_sha256": "9929d395f660513e7faa60ce217ccae7cc576811c1ef94a4f161d6f3bd309a37",
+    "bytes": 242889,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Local detailed blueprint attachments and compact reproducible recipe in PR. Native QA artifact authenticated."
+  },
+  "gates": {
+    "D0": "VERIFIED",
+    "D1": "HOLD_NATIVE_CONFLICT_EVENT_FINAL_TERRAIN",
+    "D2": "PARTIAL_DETAILED_MASONRY_SUPPORT",
+    "D3": "PARTIAL_NATIVE_MEASUREMENTS",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Classify exact V58 grove triangle intersection against candidate geometry, identify event/height/collision contract, close independent design QA per asset scope; no new precision authoring until relevant D4. Do not repeat skirt/stone-count variants or remove existing objects."
+}
