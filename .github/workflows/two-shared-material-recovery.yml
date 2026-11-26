@@ -15,6 +15,8 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py'
       - 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py'
       - 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -49,6 +51,10 @@ jobs:
         run: |
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            # V71 isolated composition and source intake only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py' 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             # V69 isolated terrain color correction only.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
@@ -677,5 +683,81 @@ jobs:
         with:
           name: two-v69-terrain-color
           path: ${{ runner.temp }}/v69-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v71-irish-floor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V71 floor scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V69 and test existing forest kit placement
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v71-in" "$RUNNER_TEMP/v71-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15080696517/zip" > "$RUNNER_TEMP/v71.zip"
+          printf '%s  %s\n' 754bb7fb9929c03cc3395987c2dfa595ec618f8045ace92c8311914ec672208c "$RUNNER_TEMP/v71.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v71.zip"
+          unzip -q "$RUNNER_TEMP/v71.zip" -d "$RUNNER_TEMP/v71-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py' -- "$RUNNER_TEMP/v71-in/v69_terrain_color_recovery.blend" "$RUNNER_TEMP/v71-out"
+      - name: Preserve isolated composition and matched renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v71-irish-floor
+          path: ${{ runner.temp }}/v71-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v71-irish-source-intake:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V71 source scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Acquire CC0 deadwood and damp ground source candidates
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py' "$RUNNER_TEMP/v71-sources" "$RUNNER_TEMP/v71-sources/report.json"
+      - name: Preserve provider-verified source candidates
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v71-irish-source-intake
+          path: ${{ runner.temp }}/v71-sources
           retention-days: 14
           if-no-files-found: error
