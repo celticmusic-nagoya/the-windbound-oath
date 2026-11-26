@@ -1,0 +1,80 @@
+name: TWO scoped failed-run recovery
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/two-failure-recovery.yml'
+      - 'tools/production_qa/recover_failed_run.py'
+      - 'tools/production_qa/test_recover_failed_run.py'
+      - 'tools/production_qa/shared_asset_lease.py'
+      - 'tools/production_qa/shared_asset_reservation.py'
+  workflow_run:
+    workflows: [Morwen VRoid macOS compatibility probe]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Completed run ID (dry-run only)
+        required: true
+        type: string
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+concurrency:
+  group: two-scoped-failure-recovery
+  cancel-in-progress: false
+jobs:
+  read-only-regression:
+    if: github.event_name == 'pull_request' && github.repository == 'celticmusic-nagoya/the-windbound-oath'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Run failure recovery regression tests without repository writes
+        run: python3 tools/production_qa/test_recover_failed_run.py
+  historical-dry-run:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Inspect requested historical run with read-only permissions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          gh auth setup-git --hostname github.com
+          python3 tools/production_qa/recover_failed_run.py
+  recover:
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: read
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_run' &&
+      contains(fromJSON('["failure","cancelled","timed_out","startup_failure"]'), github.event.workflow_run.conclusion)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify exact completed run and release only qualified fence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TWO_FAILURE_RECOVERY_ENABLED: ${{ vars.TWO_FAILURE_RECOVERY_ENABLED }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          gh auth setup-git --hostname github.com
+          python3 tools/production_qa/recover_failed_run.py
