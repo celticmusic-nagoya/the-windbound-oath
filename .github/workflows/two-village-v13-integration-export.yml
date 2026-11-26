@@ -63,65 +63,101 @@ jobs:
         with:
           path: ${{ runner.temp }}/two-env-cache
           key: ${{ steps.identity.outputs.key }}
-      - name: Verify exact cache or isolated cold fallback
-        id: blender
+      - name: Record environment decision
         env:
+          KEY: ${{ steps.identity.outputs.key }}
+          ELIGIBLE: ${{ steps.identity.outputs.eligible }}
           CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
+        run: |
+          jq -n --arg image "$ImageVersion" --arg key "$KEY" --arg eligible "$ELIGIBLE" --arg hit "$CACHE_HIT" '{image:$image,key:$key,eligible:($eligible=="true"),cache_hit:($hit=="true"),status:"PENDING",cli_installer_calls:0,pip_install_calls:0}' > "$RUNNER_TEMP/reuse.json"
+      - name: Verify exact warm cache without cold retry
+        if: steps.restore.outputs.cache-hit == 'true'
+        id: warm
+        env:
+          KEY: ${{ steps.identity.outputs.key }}
         run: |
           set -euo pipefail
           cache="$RUNNER_TEMP/two-env-cache"
-          fallback="$RUNNER_TEMP/two-env-fallback"
-          report="$RUNNER_TEMP/reuse.json"
-          flags=()
-          rejected_layout=false
-          readonly=false
-          if [[ "$CACHE_HIT" == true ]]; then
-            test "$(id -u)" != 0
-            if [[ -d "$cache/app" && ! -L "$cache" && ! -L "$cache/app" ]]; then
-              sudo mount --bind "$cache/app" "$cache/app"
-              sudo mount -o remount,bind,ro "$cache/app"
-              options=$(findmnt -n -o OPTIONS --mountpoint "$cache/app")
-              grep -Eq '(^|,)ro(,|$)' <<< "$options"
-              test ! -w "$cache/app/blender"
-              readonly=true
-              flags=(--cache-hit)
-            else
-              rejected_layout=true
-            fi
-          fi
-          python engine/tools/production_qa/environment_reuse/ensure.py --cache "$cache" --fallback "$fallback" --report "$report" "${flags[@]}"
-          jq --argjson rejected "$rejected_layout" --argjson readonly "$readonly" --argjson uid "$(id -u)" \
-            '. + {read_only_cache_mount: $readonly, execution_uid: $uid} | if $rejected then .cache_state="REJECTED" else . end' "$report" > "$RUNNER_TEMP/reuse-record.json"
-          mv "$RUNNER_TEMP/reuse-record.json" "$report"
-          jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 and .read_only_cache_mount and .execution_uid > 0 and .trusted_manifest_match else .installer_calls == 1 end)' "$report"
-      - name: Check cache save eligibility (same branch scope)
-        id: headroom
-        if: steps.identity.outputs.eligible == 'true' && steps.restore.outputs.cache-hit != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          if [[ ! -e "$RUNNER_TEMP/two-env-cache" && ! -L "$RUNNER_TEMP/two-env-cache" ]] &&
-             jq -e '.cache_state == "MISS" and .trusted_manifest_match and .native_reopen' "$RUNNER_TEMP/reuse.json" &&
-             usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes) &&
-             [[ "$usage" =~ ^[0-9]{1,11}$ ]] &&
-             (( usage + 2 * 1024**3 + 256 * 1024**2 <= 10 * 1024**3 )); then
-            cp -a -- "$RUNNER_TEMP/two-env-fallback" "$RUNNER_TEMP/two-env-cache"
-            echo "allowed=true" >> "$GITHUB_OUTPUT"
-          fi
-      - uses: actions/cache/save@v4
-        if: steps.headroom.outputs.allowed == 'true'
+          test "$(id -u)" != 0
+          test -d "$cache/app" && test ! -L "$cache" && test ! -L "$cache/app"
+          sudo mount --bind "$cache/app" "$cache/app"
+          sudo mount -o remount,bind,ro "$cache/app"
+          findmnt -n -o OPTIONS --mountpoint "$cache/app" | grep -Eq '(^|,)ro(,|$)'
+          test ! -w "$cache/app/blender"
+          expected=$(PYTHONPATH=engine/tools/production_qa/environment_reuse python -c 'import sys; from ensure import trusted_proof; print(trusted_proof(sys.argv[1])["manifest_sha256"])' "$KEY")
+          python engine/tools/production_qa/environment_reuse/manager.py warm --root "$cache" --expected "$expected" --report "$RUNNER_TEMP/warm-proof.json"
+          jq -e --arg key "$KEY" --arg sha "$expected" '.key==$key and .manifest_sha256==$sha and .installer_calls==0 and .native_reopen and .version=="5.3.0" and .build=="02f0899d78e3"' "$RUNNER_TEMP/warm-proof.json"
+          jq --slurpfile proof "$RUNNER_TEMP/warm-proof.json" '. + {status:"WARM_VERIFIED",route:"EXACT_CACHE",proof:$proof[0]}' "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/receipt.tmp"
+          mv "$RUNNER_TEMP/receipt.tmp" "$RUNNER_TEMP/reuse.json"
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.warm.outputs.ready != 'true'
         with:
-          path: ${{ runner.temp }}/two-env-cache
-          key: ${{ steps.identity.outputs.key }}
-      - name: Export selected visible meshes using verified Blender
-        env:
-          BLENDER: ${{ steps.blender.outputs.blender }}
+          python-version: '3.13'
+      - name: Qualify existing Blueprint Engine bpy route for export
+        if: steps.warm.outputs.ready != 'true'
         run: |
           set -euo pipefail
-          python3 -m py_compile 'tools/map_blender/lind/home/export_village_v13_integration.py'
-          test -x "$BLENDER"
-          "$BLENDER" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/export_village_v13_integration.py' -- "$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend" "$RUNNER_TEMP/out"
+          started=$SECONDS
+          jq '. + {status:"BPY_SETUP_STARTED",route:"BPY_WHEEL",pip_install_calls:1}' "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/receipt.tmp"
+          mv "$RUNNER_TEMP/receipt.tmp" "$RUNNER_TEMP/reuse.json"
+          timeout 180s python -m pip --isolated install --index-url https://pypi.org/simple --only-binary=:all: --timeout 30 --retries 0 bpy==5.3.0 pillow==12.3.0
+          python -I - "$RUNNER_TEMP" <<'PYTHON'
+          import bpy, sys, struct, json
+          from pathlib import Path
+          root = Path(sys.argv[1])
+          assert bpy.app.version_string == '5.3.0' and bpy.app.build_hash.decode() == '02f0899d78e3'
+          bpy.ops.wm.read_factory_settings(use_empty=True)
+          bpy.context.preferences.filepaths.use_scripts_auto_execute = False
+          mesh = bpy.data.meshes.new('qualification_triangle')
+          mesh.from_pydata([(0,0,0),(1,0,0),(0,1,0)], [], [(0,1,2)])
+          obj = bpy.data.objects.new('qualification_triangle', mesh)
+          bpy.context.collection.objects.link(obj)
+          fixture = root / 'qualification.blend'
+          bpy.ops.wm.save_as_mainfile(filepath=str(fixture))
+          bpy.ops.wm.open_mainfile(filepath=str(fixture), load_ui=False, use_scripts=False)
+          assert len(bpy.data.objects['qualification_triangle'].data.vertices) == 3
+          obj = bpy.data.objects['qualification_triangle']
+          obj.select_set(True)
+          bpy.context.view_layer.objects.active = obj
+          target = root / 'qualification.glb'
+          assert 'FINISHED' in bpy.ops.export_scene.gltf(filepath=str(target), export_format='GLB', use_selection=True)
+          data = target.read_bytes()
+          magic, version, length = struct.unpack_from('<4sII', data)
+          size, kind = struct.unpack_from('<I4s', data, 12)
+          assert magic == b'glTF' and version == 2 and length == len(data) and kind == b'JSON'
+          doc = json.loads(data[20:20+size])
+          primitive = doc['meshes'][0]['primitives'][0]
+          assert doc['accessors'][primitive['attributes']['POSITION']]['count'] == 3
+          print('BPY_FIXTURE_SAVE_REOPEN_EXPORT_PASS', flush=True)
+          PYTHON
+          jq --argjson elapsed "$((SECONDS-started))" '. + {status:"BPY_FIXTURE_VERIFIED",version:"5.3.0",build:"02f0899d78e3",fixture_reopen_export:true,elapsed_seconds:$elapsed}' "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/receipt.tmp"
+          mv "$RUNNER_TEMP/receipt.tmp" "$RUNNER_TEMP/reuse.json"
+      - name: Export selected visible meshes using verified route
+        env:
+          WARM_READY: ${{ steps.warm.outputs.ready }}
+        run: |
+          set -euo pipefail
+          script=tools/map_blender/lind/home/export_village_v13_integration.py
+          native="$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend"
+          chmod a-w "$native"
+          python3 -m py_compile "$script"
+          rc=0
+          if [[ "$WARM_READY" == true ]]; then
+            "$RUNNER_TEMP/two-env-cache/app/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python "$script" -- "$native" "$RUNNER_TEMP/out" || rc=$?
+          else
+            python -I - "$script" -- "$native" "$RUNNER_TEMP/out" <<'PYTHON' || rc=$?
+          import bpy, sys, runpy
+          assert bpy.app.version_string == '5.3.0' and bpy.app.build_hash.decode() == '02f0899d78e3'
+          bpy.ops.wm.read_factory_settings(use_empty=True)
+          bpy.context.preferences.filepaths.use_scripts_auto_execute = False
+          runpy.run_path(sys.argv[1], run_name='__main__')
+          PYTHON
+          fi
+          printf '%s  %s\n' c7abc4d59ea235be0aa785239a7b55563ad608afc9428fbd81207d282cd34691 "$native" | sha256sum -c -
+          jq --argjson rc "$rc" '. + {source_sha_verified_after:true,export_exit_code:$rc,status:(if $rc==0 then "EXPORT_COMPLETED" else "EXPORT_FAILED" end)}' "$RUNNER_TEMP/reuse.json" > "$RUNNER_TEMP/receipt.tmp"
+          mv "$RUNNER_TEMP/receipt.tmp" "$RUNNER_TEMP/reuse.json"
+          exit "$rc"
       - uses: actions/upload-artifact@v4
         if: success()
         with:
