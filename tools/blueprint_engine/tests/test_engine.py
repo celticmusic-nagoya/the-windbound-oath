@@ -281,6 +281,66 @@ class ImageAdapterFactoryTests(unittest.TestCase):
             self.assertIn("x.json", (Path(d) / "SHA256SUMS").read_text())
 
 
+class MeasurementDeadlineTests(unittest.TestCase):
+    def adapters(self):
+        from blueprint_engine.measure import VrmFaceAdapter
+        return (BlenderAdapter({}, "s"), VrmFaceAdapter({}, "s"))
+
+    def test_expired_deadline_never_launches(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run") as run:
+                    with self.assertRaises(TimeoutError):
+                        adapter.raw(src, deadline=time.monotonic() - 1)
+                    run.assert_not_called()
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_timeout_cleans_disposable_process_files(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            def fail(args, **kwargs):
+                self.assertGreater(kwargs["timeout"], 0)
+                Path(args[-1]).write_text("partial")
+                raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run", side_effect=fail):
+                    with self.assertRaises(subprocess.TimeoutExpired):
+                        adapter.raw(src, deadline=time.monotonic() + 30)
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+                    self.assertEqual(src.read_bytes(), b"fixture")
+
+    def test_subsecond_budget_and_success_cleanup(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            def succeed(args, **kwargs):
+                self.assertEqual(kwargs["timeout"], .25)
+                Path(args[-1]).write_text('{"is_dirty": false}')
+                return subprocess.CompletedProcess(args, 0, "", "")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.time.monotonic", return_value=10), patch("blueprint_engine.measure.subprocess.run", side_effect=succeed):
+                    self.assertEqual(adapter.raw(src, deadline=10.25), {"is_dirty": False})
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_expiry_during_hash_prevents_launch(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.time.monotonic", side_effect=[10, 11]), patch("blueprint_engine.measure.subprocess.run") as run:
+                    with self.assertRaises(TimeoutError):
+                        adapter.raw(src, deadline=10.5)
+                    run.assert_not_called()
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+
 MAKE_BLEND = """
 import bpy, sys
 bpy.ops.wm.read_factory_settings(use_empty=True)

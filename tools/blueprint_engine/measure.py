@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+from tempfile import TemporaryDirectory
 
 from PIL import Image
 
@@ -27,6 +28,35 @@ def _write_evidence(native, label, record):
     path = Path(native).parent / f"measure-{label}-{time.monotonic_ns()}.json"
     path.write_text(json.dumps(record, sort_keys=True, indent=1, allow_nan=False) + "\n")
     return path
+
+
+def _remaining_timeout(timeout, deadline):
+    if deadline is None:
+        return timeout
+    remaining = deadline - time.monotonic()
+    if not finite(remaining) or remaining <= 0:
+        raise TimeoutError("native measurement deadline exhausted")
+    return min(timeout, remaining)
+
+
+def _native_raw(native, script, python, spec_data, timeout, deadline, label, *, env=None):
+    """Isolate disposable process files; never launch after a known deadline."""
+    _remaining_timeout(timeout, deadline)
+    before = file_sha256(native)
+    with TemporaryDirectory(prefix="two-measure-", dir=Path(native).parent) as directory:
+        spec = Path(directory) / "spec.json"
+        out = Path(directory) / "raw.json"
+        spec.write_text(json.dumps(spec_data))
+        proc = subprocess.run([*python, str(script), str(native), str(spec), str(out)],
+                              capture_output=True, text=True,
+                              timeout=_remaining_timeout(timeout, deadline), env=env)
+        if file_sha256(native) != before:
+            raise RuntimeError(label + " measurement modified the native file")
+        if proc.returncode != 0 or not out.is_file():
+            raise RuntimeError(label + " measurement failed: " + proc.stderr[-2000:])
+        raw = json.loads(out.read_text())
+        _remaining_timeout(timeout, deadline)
+        return raw
 
 
 class _Adapter:
@@ -139,23 +169,10 @@ class BlenderAdapter(_Adapter):
         self.components = list(components)
 
     def raw(self, native, deadline=None):
-        out_dir = Path(native).parent
-        spec = out_dir / f"spec-{time.monotonic_ns()}.json"
-        out = out_dir / f"raw-{time.monotonic_ns()}.json"
-        spec.write_text(json.dumps(dict(evaluated=self.evaluated, components=self.components)))
-        timeout = self.timeout if deadline is None else max(1, min(self.timeout,
-                                                                   deadline - time.monotonic()))
-        before = file_sha256(native)
-        proc = subprocess.run([*self.python, str(BLENDER_SCRIPT), str(native), str(spec), str(out)],
-                              capture_output=True, text=True, timeout=timeout,
-                              env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
-        if proc.returncode != 0 or not out.is_file():
-            raise RuntimeError("blender measurement failed: " + proc.stderr[-2000:])
-        if file_sha256(native) != before:
-            raise RuntimeError("blender measurement modified the native file")
-        raw = json.loads(out.read_text())
-        spec.unlink()
-        out.unlink()
+        raw = _native_raw(native, BLENDER_SCRIPT, self.python,
+                          dict(evaluated=self.evaluated, components=self.components),
+                          self.timeout, deadline, "blender",
+                          env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
         if raw.get("is_dirty"):
             raise RuntimeError("native reported dirty state after read-only open")
         return raw
@@ -215,22 +232,8 @@ class VrmFaceAdapter(_Adapter):
         self.timeout = timeout
 
     def raw(self, native, deadline=None):
-        out_dir = Path(native).parent
-        spec = out_dir / f"spec-{time.monotonic_ns()}.json"
-        out = out_dir / f"raw-{time.monotonic_ns()}.json"
-        spec.write_text("{}")
-        before = file_sha256(native)
-        timeout = self.timeout if deadline is None else max(1, min(self.timeout,
-                                                                   deadline - time.monotonic()))
-        proc = subprocess.run([*self.python, str(self.script), str(native), str(spec), str(out)],
-                              capture_output=True, text=True, timeout=timeout)
-        if proc.returncode != 0 or not out.is_file():
-            raise RuntimeError("vrm face measurement failed: " + (proc.stderr + proc.stdout)[-2000:])
-        if file_sha256(native) != before:
-            raise RuntimeError("vrm face measurement modified the native file")
-        raw = json.loads(out.read_text())
-        spec.unlink()
-        out.unlink()
+        raw = _native_raw(native, self.script, self.python, {},
+                          self.timeout, deadline, "vrm face")
         if raw.get("is_dirty") or raw.get("nonzero_shape_keys"):
             raise RuntimeError("face not in basis/clean state: " + repr(raw.get("nonzero_shape_keys")))
         return raw
