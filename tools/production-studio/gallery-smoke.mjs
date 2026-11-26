@@ -23,6 +23,28 @@ try{
  await page.goto('http://127.0.0.1:8766/');
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
 
+ // Automatic gallery refresh must preserve an active search and survive a failed fetch.
+ await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
+ const liveSearch=page.getByRole('searchbox',{name:'成果物検索'});
+ await liveSearch.fill('qa-live-fixture');
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:manifest.entries.slice(0,-1)}}));
+ await page.evaluate(()=>loadPublishedGallery(true));
+ assert.equal(await liveSearch.inputValue(),'qa-live-fixture');
+ assert.match(await page.locator('#published-live-status').innerText(),/新しい一覧あり/);
+ await page.unroute('**/gallery-manifest.json');
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({status:503}));
+ await page.evaluate(()=>loadPublishedGallery(true));
+ assert.equal(await liveSearch.inputValue(),'qa-live-fixture');
+ assert.match(await page.locator('#published-live-status').innerText(),/前回取得分を保持/);
+ await page.unroute('**/gallery-manifest.json');
+ await page.getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:manifest.entries.slice(0,-1)}}));
+ await page.evaluate(()=>loadPublishedGallery(true));
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length-1);
+ await page.unroute('**/gallery-manifest.json');
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+
  // Race regression: the first refresh is delayed and carries a stale, shorter manifest.
  // The second refresh must win, even if the older response arrives last.
  let refreshCount=0;
