@@ -1,0 +1,55 @@
+name: TWO isolated scenic native two-cliff-ridge-v3
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - 'tools/map_blender/lind/scenic_ridge_v3.py'
+      - '.github/workflows/two-cliff-ridge-v3.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-cliff-ridge-v3-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  scenic:
+    if: github.event.pull_request.number == 421 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          lfs: true
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/scenic_ridge_v3.py
+            assets/candidates/lind/windwaiting-cliff-playable/composition-v1
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Execute bounded isolated native candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/out"
+          python3 -m py_compile 'tools/map_blender/lind/scenic_ridge_v3.py'
+          printf '%s  %s\n' 0597cad96ac6507997efe2c2a0ddaf144bf7b9b7e690fd54999ccd643d42d5cd assets/candidates/lind/windwaiting-cliff-playable/composition-v1/composition_UNAPPROVED.blend | sha256sum -c -
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blender/lind/scenic_ridge_v3.py' -- assets/candidates/lind/windwaiting-cliff-playable/composition-v1/composition_UNAPPROVED.blend "$RUNNER_TEMP/out" "$PWD/engine"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-cliff-ridge-v3
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
