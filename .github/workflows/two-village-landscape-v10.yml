@@ -1,0 +1,56 @@
+name: TWO isolated village landscape V10
+on:
+  pull_request:
+    types: [synchronize]
+    paths: ['tools/map_blender/lind/home/village_landscape_v10.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-landscape-v10
+  cancel-in-progress: false
+jobs:
+  landscape:
+    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_landscape_v10.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Restore exact scenic checkpoint and ECO source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v9" "$RUNNER_TEMP/eco" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15111096722/zip" > "$RUNNER_TEMP/v9.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14626605689/zip" > "$RUNNER_TEMP/eco.zip"
+          printf '%s  %s\n' f4d13eef80b55b1d4e93dd44c7d0a55d2be1aa75f76819d191f23f9f390e71f0 "$RUNNER_TEMP/v9.zip" 1b4ca357cf2e959f73d8ae627f541694015f3fec4753259f91f84c423abb0705 "$RUNNER_TEMP/eco.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v9.zip"
+          unzip -tq "$RUNNER_TEMP/eco.zip"
+          unzip -q "$RUNNER_TEMP/v9.zip" -d "$RUNNER_TEMP/v9"
+          unzip -q "$RUNNER_TEMP/eco.zip" -d "$RUNNER_TEMP/eco"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_landscape_v10.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_landscape_v10.py' -- "$RUNNER_TEMP/v9/village_market_context_v9_UNAPPROVED.blend" "$RUNNER_TEMP/eco" "$RUNNER_TEMP/out" "$PWD/engine"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-landscape-v10
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
