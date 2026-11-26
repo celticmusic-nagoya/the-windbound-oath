@@ -1,5 +1,11 @@
 name: TWO scoped failed-run recovery
 on:
+  push:
+    branches: [candidate/morwen-artifact-source-preflight-20261126]
+    paths:
+      - '.github/workflows/two-failure-recovery.yml'
+      - 'tools/production_qa/restore_morwen_artifact_preflight.py'
+      - 'tools/production_qa/test_restore_morwen_artifact_preflight.py'
   pull_request:
     branches: [main]
     paths:
@@ -28,6 +34,27 @@ concurrency:
   group: two-scoped-failure-recovery
   cancel-in-progress: false
 jobs:
+  candidate-artifact-byte-preflight:
+    if: github.event_name == 'push' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/candidate/morwen-artifact-source-preflight-20261126'
+    runs-on: macos-15
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Run isolated transport regression
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 tools/production_qa/test_restore_morwen_artifact_preflight.py
+      - name: Validate pinned existing artifact in memory only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/production_qa/restore_morwen_artifact_preflight.py
   read-only-regression:
     if: github.event_name == 'pull_request' && github.repository == 'celticmusic-nagoya/the-windbound-oath'
     runs-on: ubuntu-latest
