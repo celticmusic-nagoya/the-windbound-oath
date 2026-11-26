@@ -193,7 +193,7 @@ jobs:
           const blob=api(repo+"/contents/.github/workflows/morwen-vroid-macos-probe.yml?ref="+head).sha;
           const contract=JSON.parse(fs.readFileSync(".github/morwen/reviewed-launch-contract.json","utf8"));
           const profile=fs.readFileSync(".github/morwen/vrm-export-profile.json");
-          verifyContract(contract,blob,profile,env.TRANSFER_ASSET);
+          verifyContract(contract,blob,profile,env.TRANSFER_ASSET,path=>execFileSync("git",["hash-object",path],{encoding:"utf8",timeout:10000}).trim());
           const reviewed=JSON.parse(profile);
           if(!/^[A-Z0-9][A-Z0-9_-]{2,100}$/.test(env.TRANSFER_ASSET||"")||reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_destination!=="celticmusic-nagoya/the-windbound-oath-handoff"||reviewed.staging!=="RUNNER_TEMP_OWNER_ONLY"||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
           function latestPrior(){

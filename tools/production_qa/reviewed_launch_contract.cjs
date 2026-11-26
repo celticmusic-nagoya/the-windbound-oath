@@ -3,8 +3,9 @@
 const crypto = require("node:crypto");
 const PATH = ".github/workflows/morwen-vroid-macos-probe.yml";
 const ACTIVE = ["queued","in_progress","waiting","requested","pending"];
+const DEPENDENCIES = [".github/workflows/morwen-request-launch.yml","tools/private-preservation/release_transport.py","tools/production_qa/capture_transfer_views.sh","tools/production_qa/import_vrm_transfer.py","tools/production_qa/install_blender_530.sh","tools/production_qa/morwen_transfer_claim.py","tools/production_qa/pack_transfer.py","tools/production_qa/preserve_blender_transfer.py","tools/production_qa/receive_morwen_transfer.py","tools/production_qa/render_transfer_views.py","tools/production_qa/restore_morwen_artifact_preflight.py","tools/production_qa/restore_morwen_preserved.py","tools/production_qa/reviewed_launch_contract.cjs","tools/production_qa/run_blender_transfer.sh","tools/production_qa/shared_asset_lease.py","tools/production_qa/shared_asset_reservation.py","tools/production_qa/transfer_private_release.py","tools/production_qa/verify_transfer_output.py","tools/production_qa/vrm_export_session.sh"];
 function need(ok, message) { if (!ok) throw Error(message); }
-function verifyContract(contract, blob, profile, asset) {
+function verifyContract(contract, blob, profile, asset, blobFor) {
   need(contract && contract.schema === "two-reviewed-launch-v1" &&
     contract.review_state === "REVIEWED_FOR_OWNER_LAUNCH", "launch contract not reviewed");
   need(asset === "MORWEN" && contract.asset_id === asset &&
@@ -12,6 +13,10 @@ function verifyContract(contract, blob, profile, asset) {
   need(/^[0-9a-f]{40}$/.test(contract.worker_blob) && contract.worker_blob === blob, "worker review missing");
   need(/^[0-9a-f]{64}$/.test(contract.profile_sha256) &&
     crypto.createHash("sha256").update(profile).digest("hex") === contract.profile_sha256, "profile review missing");
+  need(["private_release","actions_artifact"].includes(contract.restore_source), "restore source not reviewed");
+  const deps=contract.dependency_blobs;
+  need(deps && typeof deps==="object" && !Array.isArray(deps) && Object.keys(deps).length===DEPENDENCIES.length && typeof blobFor==="function", "dependency inventory");
+  for (const path of DEPENDENCIES) need(/^[0-9a-f]{40}$/.test(deps[path]) && blobFor(path)===deps[path], "dependency review missing: "+path);
 }
 function selectPrior(list, detail, jobs, active) {
   need(list && Array.isArray(list.workflow_runs) && list.workflow_runs.length === 1, "missing latest prior run");
@@ -37,4 +42,4 @@ function selectPrior(list, detail, jobs, active) {
     Array.isArray(active[s]?.workflow_runs) && active[s].workflow_runs.length===0), "active or uncertain worker");
   return p.id;
 }
-module.exports={verifyContract,selectPrior,ACTIVE,PATH};
+module.exports={verifyContract,selectPrior,ACTIVE,PATH,DEPENDENCIES};
