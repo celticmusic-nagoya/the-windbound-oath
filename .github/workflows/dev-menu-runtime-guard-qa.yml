@@ -44,7 +44,7 @@ jobs:
           node-version: '22'
       - run: node tests/moss/dev_menu_runtime_guard.test.js
       - run: node tests/moss/public_dev_environment.test.js
-  deployed-browser:
+  checkout-browser:
     if: github.event_name == 'pull_request'
     # Playwright 1.55 supports Ubuntu 24.04, not the current ubuntu-latest (26.04).
     runs-on: ubuntu-24.04
@@ -57,10 +57,11 @@ jobs:
       - run: python -m py_compile tests/moss/public_dev_browser.py
       - run: python -m pip install playwright==1.55.0
       - run: python -m playwright install --with-deps chromium
+      # Candidate bytes, not mutable live deployments; --live is a separate manual check.
       - run: python tests/moss/public_dev_browser.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: public-dev-browser-qa
+          name: public-dev-checkout-browser-qa
           path: browser-dev-qa/
           if-no-files-found: ignore
