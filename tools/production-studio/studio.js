@@ -472,8 +472,26 @@ byId("images").addEventListener("change",()=>{const selected=Array.from(byId("im
 window.addEventListener("pagehide",clearGallery);
 
 async function loadArtifacts(run,card,button){
- button.disabled=true;card.querySelector(".artifact-results")?.remove();const area=node("div","取得中");area.className="artifact-results";area.setAttribute("role","status");card.append(area);
- try{const data=await read("/actions/runs/"+Number(run.id)+"/artifacts?per_page=100");area.replaceChildren();area.append(node("p","取得 "+data.artifacts.length+" / "+data.total_count+" 件（最大100件）"));
- for(const a of data.artifacts){tile(area,a.name,["Artifact ID: "+a.id,"生成HEAD: "+run.head_sha,"期限: "+a.expires_at,a.expired?"期限切れ":"未期限切れ",a.digest?"配布元digest: "+a.digest:"配布元digest未取得","ダウンロード内容・SHA照合未実施"],a.expired?[]:[["GitHubで取得（ログインが必要な場合あり）","/actions/runs/"+run.id+"/artifacts/"+a.id]]);}
- }catch(e){area.textContent="取得失敗: "+e.message;button.disabled=false;}
+ if(button.disabled)return;
+ button.disabled=true;
+ card.querySelector(":scope > .artifact-results")?.remove();const area=node("div","取得中");area.className="artifact-results";area.setAttribute("role","status");card.append(area);
+ try{
+  if(!Number.isSafeInteger(run.id)||run.id<=0||!/^[a-f0-9]{40}$/.test(run.head_sha||""))throw Error("実行ID・HEAD不正");
+  const data=await read("/actions/runs/"+run.id+"/artifacts?per_page=100");
+  if(!Array.isArray(data?.artifacts)||data.artifacts.length>100||!Number.isSafeInteger(data.total_count)||data.total_count<data.artifacts.length)throw Error("成果物一覧形式不正");
+  const seen=new Set();
+  for(const a of data.artifacts){
+   if(!a||!Number.isSafeInteger(a.id)||a.id<=0||seen.has(a.id)||typeof a.name!=="string"||!a.name.trim())throw Error("成果物ID・名称不正");
+   seen.add(a.id);
+   if(a.workflow_run!=null&&(a.workflow_run.id!==run.id||a.workflow_run.head_sha!==run.head_sha))throw Error("成果物のrun・HEAD不一致");
+  }
+  area.replaceChildren();area.append(node("p","取得 "+data.artifacts.length+" / "+data.total_count+" 件（最大100件） / "+new Date().toLocaleString("ja-JP")));
+  for(const a of data.artifacts){
+   const expires=Date.parse(a.expires_at),known=typeof a.expired==="boolean"&&Number.isFinite(expires),expired=a.expired===true||(Number.isFinite(expires)&&expires<=Date.now()),downloadable=known&&!expired;
+   const digest=typeof a.digest==="string"&&/^sha256:[a-f0-9]{64}$/.test(a.digest)?a.digest:null;
+   tile(area,a.name,["Artifact ID: "+a.id,"生成HEAD: "+run.head_sha,"期限: "+(Number.isFinite(expires)?a.expires_at:"未確認"),expired?"期限切れ":known?"取得時点で未期限切れ":"期限情報未確認・取得リンク保留",Number.isSafeInteger(a.size_in_bytes)&&a.size_in_bytes>=0?"サイズ: "+(a.size_in_bytes/1048576).toFixed(2)+" MiB":"サイズ未取得",a.workflow_run?"応答のrun・HEAD一致":"run別一覧から取得（個別来歴未取得）",digest?"配布元digest: "+digest:"配布元digest未取得／形式不正","ダウンロード内容・SHA照合未実施"],downloadable?[["GitHubで取得（ログインが必要な場合あり）","/actions/runs/"+run.id+"/artifacts/"+a.id]]:[]);
+  }
+  if(!data.artifacts.length)area.append(node("p","取得範囲に成果物なし（未生成・期限・削除等は別途確認）"));
+ }catch(e){area.textContent="取得失敗: "+e.message;}
+ finally{button.disabled=false;button.textContent="成果物一覧を再取得";}
 }

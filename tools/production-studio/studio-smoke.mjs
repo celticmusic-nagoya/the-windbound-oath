@@ -15,14 +15,21 @@ try {
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const fixtureBranch='feature/fixture',fixtureHead='a'.repeat(40),previousHead='b'.repeat(40);
  const mockRun=(id,sha,status,conclusion,branch=fixtureBranch)=>({id,name:'fixture run '+id,head_sha:sha,head_branch:branch,status,conclusion,updated_at:'2026-11-25T00:00:00Z'});
- let bulkFail=false;let evidenceFixture=[];const liveHead='c'.repeat(40);
+ let bulkFail=false;let artifactMode='valid';let evidenceFixture=[];const liveHead='c'.repeat(40);
  await page.route('https://api.github.com/**',route=>{
   const url=new URL(route.request().url());
   if(url.pathname.endsWith('/contents/docs/production/region_master'))return route.fulfill({json:evidenceFixture});
   if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
   if(url.pathname.endsWith('/actions/artifacts'))return route.fulfill({json:{artifacts:['two-hero-tree-v55-island-source','two-forest-v52-native-virtual-qa','two-sanctuary-v58-native-scenery','two-v59-ruin-2d-references'].map((name,i)=>({id:15000000+i,name,expired:false,size_in_bytes:100,created_at:'2026-11-26T00:00:00Z',workflow_run:{id:200+i,head_branch:'docs/ireland-world-source-grounded-plan-20261123',head_sha:fixtureHead,repository_id:1408120919,head_repository_id:1408120919}}))}});
-  if(url.pathname.endsWith('/artifacts'))return route.fulfill({json:{total_count:1,artifacts:[{id:123,name:'fixture artifact',expired:false,expires_at:'2026-12-01T00:00:00Z'}]}});
+  if(url.pathname.endsWith('/artifacts')){
+   const a={id:123,name:'fixture artifact',expired:false,expires_at:new Date(Date.now()+86400000).toISOString(),size_in_bytes:1048576};
+   if(artifactMode==='invalid')return route.fulfill({json:{total_count:2,artifacts:[a,a]}});
+   if(artifactMode==='mismatch')return route.fulfill({json:{total_count:1,artifacts:[{...a,workflow_run:{id:999,head_sha:previousHead}}]}});
+   if(artifactMode==='unknown')return route.fulfill({json:{total_count:1,artifacts:[{...a,expires_at:null}]}});
+   if(artifactMode==='expired')return route.fulfill({json:{total_count:1,artifacts:[{...a,expires_at:'2000-01-01T00:00:00Z'}]}});
+   return route.fulfill({json:{total_count:1,artifacts:[a]}});
+  }
   return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
  });
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
@@ -41,6 +48,15 @@ try {
  await prior.locator('.artifact-results').getByText('fixture artifact',{exact:true}).waitFor();
  assert.ok((await prior.locator('.artifact-results').innerText()).includes(previousHead));
  assert.equal(await prior.locator('.artifact-results a').getAttribute('href'),'https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/3/artifacts/123');
+ const reloadArtifact=prior.getByRole('button',{name:'成果物一覧を再取得',exact:true});
+ for(const [mode,expected] of [['invalid','成果物ID・名称不正'],['mismatch','成果物のrun・HEAD不一致'],['unknown','期限情報未確認'],['expired','期限切れ']]){
+  artifactMode=mode;await reloadArtifact.click();
+  await prior.locator('.artifact-results').getByText(expected,{exact:false}).waitFor();
+  assert.equal(await prior.locator('.artifact-results a').count(),0);
+ }
+ artifactMode='valid';await reloadArtifact.click();
+ await prior.locator('.artifact-results a').waitFor();
+ assert.ok((await prior.locator('.artifact-results').innerText()).includes('1.00 MiB'));
  await prior.locator(':scope > summary').press('Enter');
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'project runs mobile overflow');
  // Pointer check before the long inspection. Test the summary label rather than its blank right-hand area.
