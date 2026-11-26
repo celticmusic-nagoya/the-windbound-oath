@@ -1,0 +1,226 @@
+{
+  "schema": "two.region.a3.altar.terrace.v61",
+  "parent": "fd8a5e81f1c2ed0b7f9dc2eef3123bf3a5d77309",
+  "status": "EXACT_RECONSTRUCTED_TIN_INTERFACE_DESIGN_SCREEN_PASS_NATIVE_SURVEY_REQUESTED_D4_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "v60": "aaa80fa8d33c8cadc525aac052ce8b153fd598f1",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "source": {
+    "v60_local_sha256": "dc4128c622127707cec3ddcdf57b805124f839d39f03086ae93a770d4e43eaa2",
+    "terrain_sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "reference_archive_sha256": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+    "v58_native_sha256": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a"
+  },
+  "method": "Exact piecewise planar intersections of original V02 TIN and design polygons, not sampled raster-only. Raised terrace with intentional foundation burial instead of terrain cut or uniform slope. No native or terrain edits. Select shortest approach with 3 percentage-point margin from provisional 15% grade threshold (<=12%).",
+  "design": {
+    "frame": {
+      "origin_a3": [
+        93.9431596631828,
+        -93.0743278729908
+      ],
+      "matrix": [
+        [
+          -0.6148655745981655,
+          0.788631932636555
+        ],
+        [
+          -0.788631932636555,
+          -0.6148655745981655
+        ]
+      ]
+    },
+    "pad": {
+      "bounds": [
+        -4,
+        -4,
+        4,
+        4
+      ],
+      "old_z": 27.988129971478276,
+      "new_z": 28.34,
+      "ground_range": [
+        27.671313213939268,
+        28.289208652384872
+      ],
+      "clearance_range": [
+        0.050791347615128046,
+        0.6686867860607322
+      ],
+      "outside_tile_m2": 0,
+      "wall_thickness": 0.35,
+      "wall_plan_area": 9.66,
+      "wall_envelopes": 77,
+      "foundation_burial": 0.12,
+      "wall_segments": [
+        [
+          "L",
+          -4,
+          -3.65,
+          -4,
+          4,
+          "y"
+        ],
+        [
+          "R",
+          3.65,
+          4,
+          -4,
+          4,
+          "y"
+        ],
+        [
+          "B",
+          -3.65,
+          3.65,
+          3.65,
+          4,
+          "x"
+        ],
+        [
+          "FL",
+          -3.65,
+          -1.5,
+          -4,
+          -3.65,
+          "x"
+        ],
+        [
+          "FR",
+          1.5,
+          3.65,
+          -4,
+          -3.65,
+          "x"
+        ]
+      ],
+      "wall_rule": "Split each side longitudinally into ceil(length/.60) equal segments; lower z exact segment TIN minimum minus .12; if bottom<top-.40 split at top-.30; top at 28.34. Envelopes only, not staggered finished masonry.",
+      "access_obstacle_ids": [],
+      "interaction_area": 3.45,
+      "deck_z": 28.88,
+      "step_rise": 0.18,
+      "step_tread": 0.3,
+      "all_asset_local_coordinates_preserved": true
+    },
+    "approach": {
+      "width": 3,
+      "length": 6,
+      "start_y": -10,
+      "end_y": -4,
+      "vertices": [
+        [
+          -1.5,
+          -10,
+          27.728204203008566
+        ],
+        [
+          -1.5,
+          -4,
+          28.34
+        ],
+        [
+          0.7282584552,
+          -10,
+          27.870255930095922
+        ],
+        [
+          0.7282584552,
+          -4,
+          28.34
+        ],
+        [
+          1.5,
+          -10,
+          27.918704630888406
+        ],
+        [
+          1.5,
+          -4,
+          28.34
+        ]
+      ],
+      "triangles": [
+        [
+          0,
+          2,
+          3
+        ],
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          2,
+          4,
+          5
+        ],
+        [
+          2,
+          5,
+          3
+        ]
+      ],
+      "max_resultant_grade_pct": 10.19659661652386,
+      "max_cross_grade_pct": 6.375011245031226,
+      "min_surface_minus_ground_m": -1.7763568394002505e-15,
+      "max_surface_minus_ground_m": 0.5092413431352025,
+      "outside_tile_m2": 0,
+      "candidates_max_grade_pct": [
+        14.819163104403641,
+        13.018386481521588,
+        10.19659661652386,
+        9.621801663004781,
+        10.014007617747604
+      ],
+      "candidate_lengths_m": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    }
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py",
+    "source_artifact": 15075731907,
+    "scope": "Read-only exact V58 native terrain ray samples and conservative 3D box triangle clipping; no native save, no production geometry. Separate old intended proxy overlaps."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v61.py": "958645832ec61359e093487893a63f59386f94c702c764b49323a01d97fb7b1b",
+      "terrace_v61.json": "baba27db67d700c21ebec2247d3abb5e43361cdbd935ad3aab3b8419efbb28bf",
+      "terrace_blueprint.png": "66d048f58ab2a7f370c37cefb9877f4a72e9d5723d6baf8957a7443a1738a0dc",
+      "screen.json": "ad954dd5eb6dd44bc6aefaa441a7198ebed7ff8b744cc3737acc5bbf4114dfa2"
+    },
+    "package_sha256": "d46b62a7cc5a071ac5094be418f9b23ee399162502a80d5c0bbc6d6701961af4",
+    "bytes": 228169,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Local full parameter JSON and drawings; compact recipe and native survey script in PR."
+  },
+  "limits": [
+    "New absolute terrace and deck height are authored candidates, not final event placement. V47B actual pad, world adjacency, event height and sword interface not resolved. Original source preserved.",
+    "Foundations and approach side support are design envelopes; no actual masonry/structural load analysis, irregular facing, filled core or navigation collision. D4 independent not run."
+  ],
+  "gates": {
+    "D0": "VERIFIED_SOURCE",
+    "D1": "PARTIAL_TERRACE_TIN_PASS_NATIVE_EVENT_HOLD",
+    "D2": "PARTIAL_WALL_RAMP_DESIGN",
+    "D3": "PARTIAL_NATIVE_UNCERTAINTY",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect native survey result and separate replaceable proxies from actual obstacles. Close staggered masonry, access collision and event height design, request independent D4, then precision Blender production. No formal adoption/main merge."
+}
