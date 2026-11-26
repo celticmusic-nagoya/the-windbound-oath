@@ -1,9 +1,22 @@
 "use strict";
-let publishedGalleryGeneration=0;
-async function loadPublishedGallery(){
+let publishedGalleryGeneration=0,publishedGalleryActive=0,publishedGalleryTimer=null,publishedGalleryDue=0;
+let publishedGalleryKey=null,publishedGalleryView="home",publishedGalleryRemote=false;
+const publishedGalleryLive=document.createElement("p");
+publishedGalleryLive.id="published-live-status";publishedGalleryLive.className="note";publishedGalleryLive.setAttribute("role","status");
+document.getElementById("published-status").after(publishedGalleryLive);
+function schedulePublishedGallery(){
+ if(publishedGalleryTimer!==null)clearTimeout(publishedGalleryTimer);
+ publishedGalleryTimer=null;
+ if(!document.hidden&&publishedGalleryActive===0)publishedGalleryTimer=setTimeout(()=>loadPublishedGallery(true),Math.max(0,publishedGalleryDue-Date.now()));
+}
+async function loadPublishedGallery(automatic=false){
+ if(automatic&&(document.hidden||publishedGalleryActive>0))return;
  const generation=++publishedGalleryGeneration;
+ publishedGalleryActive++;
+ if(publishedGalleryTimer!==null)clearTimeout(publishedGalleryTimer);
+ publishedGalleryTimer=null;
  const area=document.getElementById("published-gallery"), status=document.getElementById("published-status");
- area.replaceChildren();
+ let success=false;
  try{
  let base="./";
  let response;
@@ -11,6 +24,7 @@ async function loadPublishedGallery(){
  const remote="https://raw.githubusercontent.com/celticmusic-nagoya/the-windbound-oath/studio-published/";
  try{response=await fetch(remote+"gallery-manifest.json",{cache:"no-store",credentials:"omit",signal:AbortSignal.timeout(8000)});if(response.ok)base=remote;}catch{}
  }
+ if(!response?.ok&&publishedGalleryRemote)throw Error("公開同期元に接続できません");
  if(!response?.ok)response=await fetch("./gallery-manifest.json",{cache:"no-store",credentials:"omit",signal:AbortSignal.timeout(8000)});
  if(!response.ok)throw Error("HTTP "+response.status);
  const manifest=await response.json();
@@ -25,6 +39,15 @@ async function loadPublishedGallery(){
  if(["stage","asset_id","source_path","category","subcategory","head","created_at"].some(k=>e[k]!=null&&typeof e[k]!=="string"))continue;
  valid.push(e);
  }
+ const key=JSON.stringify([base,valid]);
+ const stamp=new Date().toLocaleString("ja-JP");
+ const source=base==="./"&&location.hostname==="celticmusic-nagoya.github.io"?"同梱版（最新同期未確認）":"公開一覧";
+ const note=source+" / 最終照会 "+stamp+" / 表示中は1分ごとに自動照会";
+ if(base!=="./")publishedGalleryRemote=true;
+ success=true;
+ if(automatic&&key===publishedGalleryKey){publishedGalleryLive.textContent=note+" / 変更なし";return;}
+ if(automatic&&publishedGalleryKey!==null&&publishedGalleryView!=="home"){publishedGalleryLive.textContent=note+" / 新しい一覧あり。閲覧中の内容を保持しています。「成果物を更新」で反映。";return;}
+ publishedGalleryKey=key;publishedGalleryLive.textContent=note+" / "+valid.length+" 件";
  function renderEntry(e){
  const tile=document.createElement("article");tile.className="tile";
  const label=document.createElement("h3");label.textContent=e.name;tile.append(label);
@@ -68,6 +91,7 @@ async function loadPublishedGallery(){
  function navigation(items){const nav=document.createElement("nav");nav.className="gallery-breadcrumb";nav.setAttribute("aria-label","成果物の階層");items.forEach((item,i)=>{if(i){const sep=document.createElement("span");sep.textContent=" / ";sep.setAttribute("aria-hidden","true");nav.append(sep);}if(item.action){const b=document.createElement("button");b.type="button";b.textContent=item.label;b.onclick=item.action;nav.append(b);}else{const current=document.createElement("strong");current.textContent=item.label;current.setAttribute("aria-current","page");nav.append(current);}});area.append(nav);}
  // Exact HEAD grouping: only published manifest entries, never infer a revision from a filename.
  function revisionHistory(){
+  publishedGalleryView="history";
   area.replaceChildren();area.classList.remove("category-grid");
   navigation([{label:"制作領域",action:home},{label:"制作改訂履歴"}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
@@ -88,6 +112,7 @@ async function loadPublishedGallery(){
   }
  }
  function home(){
+  publishedGalleryView="home";
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域"}]);
   status.textContent=valid.length+" 件 / カテゴリから閲覧";
@@ -96,6 +121,7 @@ async function loadPublishedGallery(){
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
  function subhome(id,title){
+  publishedGalleryView="sub";
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
@@ -107,6 +133,7 @@ async function loadPublishedGallery(){
   }
  }
  function detail(id,title,goBack=home,subset=null){
+ publishedGalleryView="detail";
  area.replaceChildren();area.classList.remove("category-grid");
  navigation([{label:"制作領域",action:home},{label:title}]);
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
@@ -170,7 +197,9 @@ async function loadPublishedGallery(){
  if(!entries.length){filter.hidden=true;search.hidden=true;qaFilter.select.hidden=true;adoptionFilter.select.hidden=true;clear.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
  home();
- }catch(e){if(generation===publishedGalleryGeneration)status.textContent="同期一覧未取得: "+e.message;}
+ }catch(e){if(generation===publishedGalleryGeneration){publishedGalleryLive.textContent="更新失敗: "+e.message+" / 前回取得分を保持。";if(publishedGalleryKey===null)status.textContent="同期一覧未取得: "+e.message;}}
+ finally{publishedGalleryActive--;if(generation===publishedGalleryGeneration)publishedGalleryDue=Date.now()+(success?60000:300000);schedulePublishedGallery();}
 }
-document.getElementById("refresh-published").addEventListener("click",loadPublishedGallery);
+document.getElementById("refresh-published").addEventListener("click",()=>loadPublishedGallery(false));
+document.addEventListener("visibilitychange",schedulePublishedGallery);
 loadPublishedGallery();

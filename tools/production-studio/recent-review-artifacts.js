@@ -17,6 +17,7 @@ const RULES=[
  ["feature/lind-ecology-01",/^lind-eco-(?:53-candidate-evidence|integration-v2-package)$/,"リルド村・植生","eco_,renders/"],
  ["asset/morwen-measured-textile-20261125",/^morwen-(?:photo-textile-comparison|brass-source-maps|met-gold-thread-oa-sources)-not-adopted$/,"モルウェン・材質研究",""],
  ["infra/native-env-qualification-20261123",/^two-hairharpy-volume-/,"モルウェン・ヘア技術",""],
+ ["docs/ireland-world-source-grounded-plan-20261123",/^two-(?:hero-tree-v\d+-island-source|forest-v\d+-native-virtual-qa)$/,"世界・樹木／森林",""],
  ["docs/ireland-world-source-grounded-plan-20261123",/^(?:ireland|two-shared|lind|world|area)/i,"地図・エリア設計",""],
  ["feature/studio-sync-coverage-20261125",/^studio-sync-preview$/,"内部ギャラリー履歴","published/"],
 ];
@@ -27,12 +28,13 @@ const SOURCE_LINKS=[
  ["モルウェン・顔／髪","/pull/427"],
  ["風待ちの崖","/pull/421"],
  ["リルド村・エイダン家","/pull/364"],
+ ["世界・樹木／森林","/pull/482"],
  ["地図・エリア設計","/pull/482"]
 ];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
 const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000;
 const PRESERVATION_WORKFLOW=".github/workflows/public-preservation-pilot.yml";
-const preservationLabel=id=>[45706894871,45712121342].includes(id)?"自動保全":[45710690152,45713758086].includes(id)?"独立復元":"保全／復元（実行種別はログ参照）";
+const preservationLabel=id=>[45706894871,45712121342,45717409074,45721456382].includes(id)?"自動保全":[45710690152,45713758086,45717635993,45722898390].includes(id)?"独立復元":"保全／復元（実行種別はログ参照）";
 function selectPreservationRuns(data){
  if(!Array.isArray(data?.workflow_runs))throw Error("保全Actions一覧形式不正");
  const seen=new Set(),rows=[];

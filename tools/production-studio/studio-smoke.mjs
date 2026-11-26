@@ -15,8 +15,10 @@ try {
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const fixtureBranch='feature/fixture',fixtureHead='a'.repeat(40),previousHead='b'.repeat(40);
  const mockRun=(id,sha,status,conclusion,branch=fixtureBranch)=>({id,name:'fixture run '+id,head_sha:sha,head_branch:branch,status,conclusion,updated_at:'2026-11-25T00:00:00Z'});
+ let bulkFail=false;const liveHead='c'.repeat(40);
  await page.route('https://api.github.com/**',route=>{
   const url=new URL(route.request().url());
+  if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
   if(url.pathname.endsWith('/artifacts'))return route.fulfill({json:{total_count:1,artifacts:[{id:123,name:'fixture artifact',expired:false,expires_at:'2026-12-01T00:00:00Z'}]}});
   return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
@@ -329,6 +331,15 @@ try {
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'native SHA mobile overflow');
 
  await page.screenshot({path:'qa-output/mobile-diagnostic.png',fullPage:true});
+ await page.waitForFunction(()=>!document.querySelector('#refresh').disabled&&!document.querySelector('#handoff-refresh').disabled);
+ await page.evaluate(()=>refreshOverview(true));
+ assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
+ assert.match(await page.locator('#handoff-status').innerText(),/自動PR取得 6\/6/);
+ assert.match(await page.locator('#handoff-cards').innerText(),new RegExp(liveHead));
+ bulkFail=true;
+ await page.evaluate(()=>refreshOverview(true));
+ assert.match(await page.locator('#status').innerText(),/前回表示を保持/);
+ assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
  assert.deepEqual(errors,[]);
  console.log('PASS: mocked API, mobile width, SHA-256 match/mismatch, diagnostic GLB loader. Not actual asset QA.');
 }finally{await browser?.close();server.kill();}

@@ -75,6 +75,15 @@
   }catch(e){if(current===generation)status.textContent="取得失敗: "+e.message;}
   finally{if(current===generation)button.disabled=false;}
  }
+ // Share the overview's bounded bulk PR poll rather than issuing six more requests.
+ window.addEventListener("studio-live-pulls",event=>{
+  if(button.disabled||!Array.isArray(event.detail))return;
+  const records=owners.map(o=>event.detail.find(p=>p.number===o.id&&/^[a-f0-9]{40}$/.test(p.head?.sha||"")&&["open","closed"].includes(p.state)));
+  if(records.some(p=>!p)){status.textContent="自動取得範囲外の担当PRあり。前回表示を保持。個別手動取得可。";return;}
+  area.replaceChildren();
+  owners.forEach((o,i)=>addCard(o,{status:"fulfilled",value:{...records[i],merged:!!records[i].merged_at||records[i].merged===true}}));
+  status.textContent="自動PR取得 "+owners.length+"/"+owners.length+" / "+new Date().toLocaleString("ja-JP")+" / 書き込み可否は全件SYNC_UNVERIFIED";
+ });
  button.addEventListener("click",refresh);
  refresh();
 })();
