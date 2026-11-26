@@ -1,0 +1,76 @@
+name: TWO CG-led village stone paving V12
+on:
+  pull_request:
+    types: [synchronize]
+    paths: ['tools/map_blender/lind/home/village_cg_paving_v12.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-cg-paving-v12
+  cancel-in-progress: false
+jobs:
+  paving:
+    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_cg_paving_v12.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa
+      - uses: actions/checkout@v4
+        with:
+          ref: cb0c880d1e638bad1f8855a8bedbe17d11a8c16f
+          path: canon
+          persist-credentials: false
+          sparse-checkout: |
+            assets/approved/world/rilde_village.png
+          sparse-checkout-cone-mode: false
+      - name: Restore exact V10 and approved day CG
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v10" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15112692260/zip" > "$RUNNER_TEMP/v10.zip"
+          printf '%s  %s\n' c7ed01320d6e73846823526cd3feb4ba67b8b40dff58660f3a1f85c21419a3fc "$RUNNER_TEMP/v10.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v10.zip"
+          unzip -q "$RUNNER_TEMP/v10.zip" -d "$RUNNER_TEMP/v10"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_cg_paving_v12.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pil libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_cg_paving_v12.py' -- "$RUNNER_TEMP/v10/village_landscape_v10_UNAPPROVED.blend" "$PWD/canon/assets/approved/world/rilde_village.png" "$RUNNER_TEMP/out" "$PWD/engine"
+      - name: JPEG previews
+        run: |
+          /usr/bin/python3 - "$RUNNER_TEMP/out" <<'PY'
+          import hashlib,json,sys
+          from pathlib import Path
+          from PIL import Image
+          p=Path(sys.argv[1]);q=json.loads((p/'qa.json').read_text())
+          for f in sorted(p.glob('*.png')):
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==q['outputs'][f.name]
+              with Image.open(f) as im:
+                  im=im.convert('RGB');im.thumbnail((1600,1000));im.save(f.with_suffix('.jpg'),'JPEG',quality=92,subsampling=0,optimize=True)
+              j=f.with_suffix('.jpg')
+              with Image.open(j) as im:im.verify()
+              q['outputs'][j.name]=hashlib.sha256(j.read_bytes()).hexdigest()
+          (p/'qa.json').write_text(json.dumps(q,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-cg-paving-v12
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
