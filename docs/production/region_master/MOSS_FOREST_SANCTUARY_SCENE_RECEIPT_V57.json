@@ -1,0 +1,84 @@
+{
+  "schema": "two.region.sanctuary.scene.v57",
+  "parent": "cb1adf3d922946fdfcd81c8436838bc20f7647e2",
+  "status": "ACTUAL_SCAN_LAYOUT_SCREEN_NATIVE_COMPOSITION_REQUESTED",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v56": "0ae3de21886fdacfb86a97edbbf09fae62ccc5a7",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "v01": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "layout": {
+    "status": "LOCAL_SCENE_LAYOUT_FEASIBILITY_NOT_D4",
+    "frame": "A3 local east/north/up; world offset [600,-400,0]",
+    "inputs": {
+      "terrain": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+      "tree": "986c89e0753feac3a3c78a97bb2ef94abccf467aec6def8ba1b7cef5fdf3b8ea",
+      "arch": "a5f02a04f82f519ac980f363a4a136343baa543446292b831eec22eaa8a99444",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "native": "69789159a2f0502706fb0d1bc0e9f3a62fdb68dfea852fc81ee2b0d7ee86ce05"
+    },
+    "hero": {
+      "local_xyz": [
+        45.876293383167,
+        -75.88676445659047,
+        28.65092586909119
+      ],
+      "crown_plan_gap_m": 4.653939859821719,
+      "root_plan_gap_m": 10.608676682827763
+    },
+    "second": {
+      "local_xyz": [
+        94,
+        -81,
+        27.257185363769533
+      ],
+      "extra_yaw_deg": 90,
+      "crown_plan_gap_m": 0.9387028446517091,
+      "root_plan_gap_m": 6.010483803827404,
+      "first_crown_gap_m": 35.383574776957595,
+      "known_floor_point_gap_m": 18.18584730897193,
+      "altar_distance_m": 12.074461661224165,
+      "candidates": 666
+    },
+    "hero_to_altar_m": 51.047389455031905,
+    "pad": {
+      "center_local_xy": [
+        93.9431596631828,
+        -93.0743278729908
+      ],
+      "target_z": 27.988129971478276,
+      "source_delta_min_m": -0.22046375421286868,
+      "source_delta_max_m": 0.2154320042211424
+    },
+    "method": "Actual V56 transformed POSITION hulls, exact A3 source lattice interpolation, 1m second position grid / 4 yaw choices. V21 route proxy, arena circle, conservative 5m barrier circle, V46B pad, known 85 floor center points only. Not native hull/collision acceptance. CG visually inspected, no physical dimensions inferred."
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py",
+    "workflow": ".github/workflows/two-shared-material-recovery.yml",
+    "source_artifacts": [
+      15032255249,
+      15073087704
+    ],
+    "scope": "V21 independent copy, keep all 479 source mesh geometry/transforms/render flags. Two full scan proxies with source alpha correction, simplified V05 altar body and V53 ring proxies, two matched baseline/candidate cameras and candidate elevated view. Actual root gap and sampled terrain residual report; no source overwrite, no terrain correction, no placement acceptance."
+  },
+  "limits": [
+    "Existing hero remains 51m from altar; paired framing unlike CG, source scan species and crown mismatch. Second location and lights are authored study choices. Final V47B terrain and C03 receiver not recovered. Existing native vegetation may overlap. No D4, independent G2, runtime or formal adoption."
+  ],
+  "gates": {
+    "D1": "PARTIAL_LAYOUT_FEASIBILITY",
+    "D2": "PARTIAL_PLAN_SECTION",
+    "D3": "HOLD_NATIVE_CLEARANCES",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "NOT_RUN_NATIVE_STUDY_PENDING",
+    "G3": "NOT_RUN_NATIVE_STUDY_PENDING",
+    "G4": "NOT_RUN"
+  }
+}
