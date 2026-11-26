@@ -57,3 +57,9 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"モルウェン・材質研究"),x=>x.id),[5,4,3]);
  assert.equal(selectRecentArtifacts(data,"unknown").length,0);
 });
+
+test("observed current hero-tree and native forest evidence is discoverable, with branch and name constraints",()=>{
+ const branch="docs/ireland-world-source-grounded-plan-20261123";
+ const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]}, "世界・樹木／森林");
+ assert.deepEqual(Array.from(rows,x=>x.id),[15073087704,15072796460]);
+});
