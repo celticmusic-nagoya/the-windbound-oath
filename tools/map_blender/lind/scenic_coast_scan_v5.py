@@ -25,20 +25,33 @@ coast_bvh=bvh(coast)
 # Remove only new unused source dependencies before packing; preserve all existing scene datablocks.
 templates={};source_stats={}
 for filename,name,count in [(rock,'rock_07_LOD3',929),(boulder,'boulder_01_LOD3',4134)]:
-    pre_mats=set(bpy.data.materials);pre_imgs=set(bpy.data.images);pre_meshes=set(bpy.data.meshes)
+    pre_ids=set(bpy.data.user_map())
     with bpy.data.libraries.load(str(filename.resolve()),link=False) as (a,b):
         assert name in a.objects,a.objects;b.objects=[name]
     raw=b.objects[0];assert raw.type=='MESH' and len(raw.data.vertices)==count
-    srcmesh=raw.data;mesh=srcmesh.copy();mesh.name='V5_scan_template_'+name
-    mesh.materials.clear()
-    assert srcmesh not in pre_meshes and not raw.users_collection
-    bpy.data.objects.remove(raw,do_unlink=True)
-    assert srcmesh.users==0 or (srcmesh.use_fake_user and srcmesh.users==1)
-    bpy.data.meshes.remove(srcmesh)
-    for datablocks,pre in [(bpy.data.materials,pre_mats),(bpy.data.images,pre_imgs)]:
-        for item in list(set(datablocks)-pre):
-            assert item.users==0 or (item.use_fake_user and item.users==1),(item.name,item.users)
-            datablocks.remove(item)
+    imported=set(bpy.data.user_map())-pre_ids
+    assert raw in imported and raw.data in imported and not raw.users_collection
+    # Reconstruct geometry/UV into a clean derivative, so no source node-group or material reference survives.
+    original=raw.data
+    mesh=bpy.data.meshes.new('V5_scan_template_'+name)
+    mesh.from_pydata([v.co.copy() for v in original.vertices],[],[tuple(p.vertices) for p in original.polygons])
+    mesh.update()
+    for p,q in zip(mesh.polygons,original.polygons):
+        p.use_smooth=q.use_smooth
+        assert tuple(p.vertices)==tuple(q.vertices)
+    for layer in original.uv_layers:
+        uv=mesh.uv_layers.new(name=layer.name)
+        assert len(uv.data)==len(layer.data)
+        for i,item in enumerate(layer.data):uv.data[i].uv=item.uv
+    user_map=bpy.data.user_map()
+    external={f'{i.bl_rna.identifier}:{i.name}':[f'{u.bl_rna.identifier}:{u.name}' for u in user_map.get(i,set()) if u not in imported] for i in imported}
+    external={k:v for k,v in external.items() if v}
+    print('SCAN_DEPENDENCY_EXTERNAL',json.dumps(external),flush=True)
+    assert not external,external
+    removed=sorted(f'{i.bl_rna.identifier}:{i.name}' for i in imported)
+    bpy.data.batch_remove(ids=tuple(imported))
+    assert pre_ids.issubset(set(bpy.data.user_map()))
+    print('SCAN_DEPENDENCY_BATCH_REMOVED',json.dumps(removed),flush=True)
     pts=[v.co.copy() for v in mesh.vertices];lo=Vector(tuple(min(v[i] for v in pts) for i in range(3)));hi=Vector(tuple(max(v[i] for v in pts) for i in range(3)));assert min(hi-lo)>0
     for v in mesh.vertices:
         v.co=Vector(((v.co.x-(lo.x+hi.x)/2)/(hi.x-lo.x),(v.co.y-(lo.y+hi.y)/2)/(hi.y-lo.y),(v.co.z-lo.z)/(hi.z-lo.z)))
