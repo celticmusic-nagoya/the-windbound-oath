@@ -1,5 +1,9 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## Director-approved verified production route reuse (2026-11-26)
+
+All agents and automations must consult [verified VRoid → Blender execution and causal recovery](docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md) before equivalent production or recovery. Real run 45779704407 proves Morwen's scoped signed macOS VRoid 2.16.0 → private VRM 1.0 → Linux Blender 5.3.0 / VRM add-on 4.10.5 → editable save/reopen, renders, private readback and exact lease release. Reuse the preserved Blender baseline for Morwen instead of re-exporting unnecessarily. Reuse qualified components and documented causal fixes for other assets only after asset-specific source, rights, owner/fence and execution qualification; no credential expansion or blanket permissions. Temporary artifacts are not durable preservation; recheck expiry. Technical transfer success does not constitute independent full G1–G4, formal adoption or publication authority.
+
 ## Director-approved game delivery channels (2026-11-26)
 
 Use [RawGitHack main](https://raw.githack.com/celticmusic-nagoya/the-windbound-oath/main/index.html) for development gameplay checks. Keep the [public GitHub Pages game](https://celticmusic-nagoya.github.io/the-windbound-oath/) free of DEV UI and developer commands, even with development URL flags. Preserve local loopback for automated/local QA; do not treat the client-side channel gate as authentication. Keep game and SAVE behavior compatible; preserve existing asset review and publication rules.
