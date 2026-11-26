@@ -146,10 +146,12 @@ def inventory(bpy):
             shape_keys = mesh.shape_keys
             meshes[obj.name] = dict(vertices=len(mesh.vertices), polygons=len(mesh.polygons),
                 uv_layers=[layer.name for layer in mesh.uv_layers],
+                uv_loop_counts={layer.name: len(layer.uv) for layer in mesh.uv_layers},
                 materials=[slot.material.name if slot.material else None for slot in obj.material_slots],
                 morphs=[key.name for key in shape_keys.key_blocks][1:] if shape_keys else [],
                 skin_groups=[group.name for group in obj.vertex_groups],
                 weighted_vertices=sum(any(g.weight > 0 for g in v.groups) for v in mesh.vertices),
+                max_influences=max((sum(g.weight > 0 for g in v.groups) for v in mesh.vertices), default=0),
                 rigs=[m.object.name for m in obj.modifiers if m.type == "ARMATURE" and m.object])
         elif obj.type == "ARMATURE":
             ext = getattr(obj.data, "vrm_addon_extension", None)
@@ -159,6 +161,90 @@ def inventory(bpy):
                    sha256(p.packed_file.data).hexdigest() for p in im.packed_files))
               for im in bpy.data.images if im.source not in {"GENERATED", "VIEWER"}}
     return dict(meshes=meshes, armatures=armatures, images=images)
+
+
+def verify_vrm1_rig(bpy, raw):
+    """Audit actual imported targets and reversible pose response after reopen."""
+    json_length, = struct.unpack_from("<I", raw, 12)
+    model = json.loads(raw[20:20 + json_length])
+    vrm = model["extensions"]["VRMC_vrm"]
+    rig, = [obj for obj in bpy.context.scene.objects if obj.type == "ARMATURE"]
+    extension = rig.data.vrm_addon_extension
+    human = extension.vrm1.humanoid.human_bones
+    mapping = {}
+    for name in vrm["humanoid"]["humanBones"]:
+        attribute = "".join("_" + c.lower() if c.isupper() else c for c in name)
+        bone_name = getattr(human, attribute).node.bone_name
+        if bone_name not in rig.pose.bones:
+            raise RuntimeError(f"missing imported humanoid assignment: {name}")
+        mapping[name] = bone_name
+    if len(set(mapping.values())) != len(mapping):
+        raise RuntimeError("imported humanoid assignments overlap")
+
+    expressions = extension.vrm1.expressions.all_name_to_expression_dict()
+    expression_bindings = {}
+    for category in ("preset", "custom"):
+        for name, source in vrm.get("expressions", {}).get(category, {}).items():
+            targets = []
+            for bind in expressions[name].morph_target_binds:
+                obj = bpy.data.objects.get(bind.node.mesh_object_name)
+                if not obj or obj.type != "MESH" or not obj.data.shape_keys or bind.index not in obj.data.shape_keys.key_blocks:
+                    raise RuntimeError(f"invalid imported morph binding: {name}")
+                targets.append(dict(mesh=obj.name, shape_key=bind.index, weight=bind.weight))
+            if len(targets) != len(source.get("morphTargetBinds", [])):
+                raise RuntimeError(f"morph binding count changed: {name}")
+            expression_bindings[name] = targets
+
+    def evaluated_points(obj, indices):
+        mesh = obj.evaluated_get(bpy.context.evaluated_depsgraph_get()).data
+        return [mesh.vertices[index].co.copy() for index in indices]
+
+    deformation = {}
+    from mathutils import Euler
+    for name in ("head", "leftUpperArm", "rightUpperArm", "leftUpperLeg", "rightUpperLeg"):
+        bone = rig.pose.bones[mapping[name]]
+        samples = []
+        for obj in bpy.context.scene.objects:
+            if obj.type != "MESH" or not any(m.type == "ARMATURE" and m.object == rig for m in obj.modifiers):
+                continue
+            group = obj.vertex_groups.get(bone.name)
+            if group is None:
+                continue
+            indices = [v.index for v in obj.data.vertices
+                       if any(w.group == group.index and w.weight >= 0.5 for w in v.groups)]
+            if indices:
+                samples.append((obj, indices, evaluated_points(obj, indices)))
+        original = bone.matrix_basis.copy()
+        try:
+            bone.matrix_basis = original @ Euler((0.3, 0, 0)).to_matrix().to_4x4()
+            bpy.context.view_layer.update()
+            moved = max(((before - after).length for obj, indices, points in samples
+                         for before, after in zip(points, evaluated_points(obj, indices))), default=0)
+        finally:
+            bone.matrix_basis = original
+            bpy.context.view_layer.update()
+        if moved <= 1e-5:
+            raise RuntimeError(f"no weighted deformation response: {name}")
+        deformation[name] = dict(sample_vertices=sum(len(indices) for _, indices, _ in samples),
+                                 max_displacement_local_units=moved)
+
+    spring = extension.spring_bone1
+    source_spring = model["extensions"].get("VRMC_springBone", {})
+    spring_counts = {key: dict(source=len(source_spring.get(key, [])), imported=len(items))
+                     for key, items in (("springs", spring.springs), ("colliders", spring.colliders),
+                                        ("colliderGroups", spring.collider_groups))}
+    packed_hashes = {sha256(p.packed_file.data).hexdigest()
+                     for image in bpy.data.images for p in image.packed_files}
+    embedded_images = []
+    for image in model["images"]:
+        view = model["bufferViews"][image["bufferView"]]
+        start = 28 + json_length + view.get("byteOffset", 0)
+        digest = sha256(raw[start:start + view["byteLength"]]).hexdigest()
+        embedded_images.append(dict(name=image.get("name"), sha256=digest,
+                                    exact_packed_match=digest in packed_hashes))
+    return dict(humanoid_mapping=mapping, morph_bindings=expression_bindings,
+                spring_counts=spring_counts, weighted_pose_probe=deformation,
+                embedded_images=embedded_images)
 
 
 def main():
@@ -200,13 +286,15 @@ def main():
     after = inventory(bpy)
     if before != after or sha256(source.read_bytes()).hexdigest() != expected:
         raise RuntimeError("inventory or source bytes changed on reopen")
+    rig_probe = verify_vrm1_rig(bpy, raw)
     with report.open("x", encoding="utf-8") as output:
         json.dump(dict(scope="STRUCTURAL_IMPORT_AND_REOPEN_NOT_ART_ACCEPTANCE",
                        blender=bpy.app.version_string, addon="4.10.5",
                        vrm_sha256=expected, blend_sha256=sha256(blend.read_bytes()).hexdigest(),
-                       source=metadata, saved_and_reopened=after,
-                       pending=["source-to-import exact humanoid/expression/hair correspondence",
-                                "matched renders and deformation test"]),
+                       source=metadata, saved_and_reopened=after, rig_probe=rig_probe,
+                       pending=["per-texture decoded pixels and material mapping",
+                                "full pose and expression visual QA",
+                                "source framing and reference comparison"]),
                   output, indent=2)
 
 

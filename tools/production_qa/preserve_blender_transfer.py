@@ -11,7 +11,7 @@ import zlib
 
 from transfer_private_release import CAP, SOURCE, publish_package, require, sha
 
-VIEWS = ('minus-y', 'plus-x', 'plus-y', 'minus-x')
+VIEWS = ('minus-y', 'plus-x', 'plus-y', 'minus-x', 'face-front', 'hair-three-quarter')
 
 
 def png_ok(raw):
@@ -70,7 +70,7 @@ def build(source, root, run, request, revision, archive_sha):
         raw = read_regular(views/(name+'.png'))
         require(png_ok(raw), 'invalid render PNG')
         files['views/'+name+'.png'] = raw
-    require(len({sha(files['views/'+v+'.png']) for v in VIEWS}) == 4, 'duplicate render')
+    require(len({sha(files['views/'+v+'.png']) for v in VIEWS}) == len(VIEWS), 'duplicate render')
     files['SHA256SUMS.json'] = (json.dumps({k:sha(v) for k,v in files.items()},sort_keys=True,indent=2)+'\n').encode()
     require(sum(map(len,files.values())) <= CAP, 'uncompressed package budget')
     buf = io.BytesIO()

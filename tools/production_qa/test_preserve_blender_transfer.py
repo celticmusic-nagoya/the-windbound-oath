@@ -35,7 +35,7 @@ with tempfile.TemporaryDirectory() as td:
     def invoke(): return build(source,root,'42','99',rev,archive)
     raw=invoke(); cases=['package exact bytes']
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
-        assert len(z.namelist())==8 and z.testzip() is None and z.read('Morwen-transfer.blend')==blend
+        assert len(z.namelist())==len(VIEWS)+4 and z.testzip() is None and z.read('Morwen-transfer.blend')==blend
         assert all(sha(z.read(k))==d for k,d in json.loads(z.read('SHA256SUMS.json')).items())
     def reject(label,fn):
         try: fn()

@@ -43,13 +43,21 @@ for view in front left4 left8 right4; do
     grep -Fq 'Morwen-resume.vroid' "$out/$view.txt"
     grep -Eq 'Face|Hairstyle|Body|Outfit' "$out/$view.txt"
     if grep -Eq 'Recently Edited|Texture Editor|Cancel' "$out/$view.txt"; then exit 1; fi
-    if result=$("$frame_margin" "$out/$view.png"); then good=1; else good=0; fi
+    good=1
+    if result=$("$frame_margin" "$out/$view.png"); then
+      :
+    else
+      status=$?
+      test "$status" = 1
+      good=0
+    fi
     read -r label xmin ymin xmax ymax foreground count margin_label margin <<< "$result"
     test "$label" = bbox && test "$foreground" = foreground_pixels && test "$margin_label" = margin
     for value in "$xmin" "$ymin" "$xmax" "$ymax" "$count" "$margin"; do
       [[ "$value" =~ ^[0-9]+$ ]] || exit 1
     done
     printf '%s %s %s %s %s %s %s %s %s %s\n' "$view" "$attempt" "$action" "$xmin" "$ymin" "$xmax" "$ymax" "$count" "$margin" "$good" >> "$out/frame-margin.txt"
+    if [ "$count" = 0 ]; then break; fi
     if [ "$good" = 1 ] || [ "$attempt" = 3 ]; then break; fi
     if [ "$pan_used" -lt 2 ] && [ "$ymax" -ge 693 ] && [ "$ymin" -ge 235 ] && { [ "$pan_used" = 0 ] || { [ "$action" = pan_up ] && [ "$((last_y-ymin))" -ge 30 ]; }; }; then
       last_y="$ymin"

@@ -42,14 +42,17 @@ def verify(out, model, source, export_provenance):
             raise ValueError("unknown capture state")
         attempt, xmin, ymin, xmax, ymax, count, margin, good = map(
             int, (attempt, xmin, ymin, xmax, ymax, count, margin, good))
-        if not (0 <= attempt <= 3 and 298 <= xmin <= xmax <= 725
-                and 104 <= ymin <= ymax <= 705 and 0 <= count <= 428 * 602
-                and margin == min(xmin - 298, 725 - xmax, ymin - 104, 705 - ymax)
-                and good == int(count >= 1500 and ymax-ymin >= 120 and margin >= 12)):
+        no_foreground = (xmin, ymin, xmax, ymax, count, margin, good) == (725, 705, 298, 104, 0, 427, 0)
+        bounded = (298 <= xmin <= xmax <= 725 and 104 <= ymin <= ymax <= 705
+                   and 0 < count <= (xmax - xmin + 1) * (ymax - ymin + 1)
+                   and margin == min(xmin - 298, 725 - xmax, ymin - 104, 705 - ymax)
+                   and good == int(count >= 1500 and ymax-ymin >= 120 and margin >= 12))
+        if not 0 <= attempt <= 3 or not (no_foreground or bounded):
             raise ValueError("invalid capture margin receipt")
         rows.append(dict(view=view, attempt=attempt, action=action,
-                         bbox=[xmin,ymin,xmax,ymax], foreground_pixels=count,
-                         margin=margin, margin_pass=bool(good)))
+                         bbox=None if no_foreground else [xmin, ymin, xmax, ymax],
+                         foreground_pixels=count, margin=None if no_foreground else margin,
+                         margin_pass=bool(good)))
     final = {}
     for view in VIEWS:
         attempts = [r for r in rows if r["view"] == view]
