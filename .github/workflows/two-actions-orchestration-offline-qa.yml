@@ -1,6 +1,16 @@
 name: TWO Actions orchestration offline unit QA
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/two-actions-orchestration-offline-qa.yml'
+      - '.github/workflows/morwen-request-launch.yml'
+      - '.github/workflows/morwen-vroid-macos-probe.yml'
+      - '.github/morwen/reviewed-launch-contract.json'
+      - '.github/morwen/vrm-export-profile.json'
+      - 'tools/production_qa/reviewed_launch_contract.cjs'
+      - 'tools/production_qa/test_reviewed_launch_contract.cjs'
 permissions:
   contents: read
 concurrency:
@@ -8,6 +18,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   offline-unit-tests:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -23,3 +34,26 @@ jobs:
           for name in classify_actions_jobs audit_actions_ledger collect_actions_snapshot reconcile_actions_snapshot verify_actions_artifact inspect_actions_artifact_metadata download_actions_artifact; do
             python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
           done
+  reviewed-launch-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test exact launch digest and prior-run selection
+        run: node --test tools/production_qa/test_reviewed_launch_contract.cjs
+      - name: Check candidate pins against checked-out files
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, subprocess
+          root = pathlib.Path(".github/morwen")
+          contract = json.loads((root / "reviewed-launch-contract.json").read_text())
+          assert contract["schema"] == "two-reviewed-launch-v1"
+          assert contract["asset_id"] == "MORWEN"
+          assert contract["review_state"] in ("CANDIDATE_REVIEW_REQUIRED", "REVIEWED_FOR_OWNER_LAUNCH")
+          assert contract["worker_path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          assert subprocess.check_output(["git", "hash-object", contract["worker_path"]], text=True).strip() == contract["worker_blob"]
+          assert hashlib.sha256((root / "vrm-export-profile.json").read_bytes()).hexdigest() == contract["profile_sha256"]
+          print("CANDIDATE_DIGEST_MATCH")
+          PY
