@@ -55,7 +55,7 @@ for x,y in candidates:
     if any(not(footprint[1]<q[0] or footprint[0]>q[1] or footprint[3]<q[2] or footprint[2]>q[3]) for q in reserve):continue
     hs=[height(x+p.x-cx,y+p.y-cy) for p in pts]
     if any(h is None for h in hs):continue
-    data=mesh.copy();data.name='V6 conform turf %03d'%len(rows)
+    data=mesh.copy();data.name='V6_conform_turf_%03d'%len(rows)
     newcoords=[(x+p.x-cx,y+p.y-cy,h+p.z-zmin-.006) for p,h in zip(pts,hs)]
     for v,co in zip(data.vertices,newcoords):v.co=co
     data.update()
@@ -65,7 +65,11 @@ for x,y in candidates:
     residual=[newcoords[i][2]-hs[i] for i in root_ids];roots.extend(residual);tris+=nt
     rows.append(dict(name=o.name,center=[x,y],bounds=footprint,root_samples=len(root_ids),root_min=min(residual),root_max=max(residual),triangles=nt))
 assert len(rows)>=20 and max(map(abs,roots))<=.025
-bpy.context.view_layer.update();assert snap()==old and sha(src)==lock
+bpy.context.view_layer.update()
+current=snap()
+diff=dict(added=sorted(set(current)-set(old)),missing=sorted(set(old)-set(current)),changed=sorted(k for k in old.keys() & current.keys() if old[k]!=current[k]))
+print('PROTECTED_DIFF',json.dumps(diff),flush=True)
+assert not any(diff.values()) and sha(src)==lock, diff
 # Use source camera as saved and render exact street/entry/oblique views from V5.
 sys.path[:0]=[str(engine/'tools'),str(engine/'tools/production_qa')]
 from blueprint_engine.residual import evaluate
@@ -75,6 +79,7 @@ dest=out/'village_turf_context_v6_UNAPPROVED.blend';assert not dest.exists()
 bpy.ops.file.pack_all();bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True)
 bpy.ops.wm.open_mainfile(filepath=str(dest.resolve()),load_ui=False);scene=bpy.context.scene
 assert snap()==old and sha(src)==lock and all(bpy.data.objects.get(row['name']) for row in rows)
+assert len([o for o in scene.objects if o.name.startswith('V6_') and o.type=='MESH'])==len(rows)
 q=dict(status='ISOLATED_CONFORMING_TURF_FEASIBILITY',source_sha256=lock,protected_meshes=len(old),source_template=template_name,turf_inventory=inventory,count=len(rows),added_triangles=tris,root_samples=len(roots),actual=actual,engine_metrics=metrics,placement=rows,house_reservation=house,native_reopen='PASS',limits=['Local provisional units only, no surveyed world or collision. Root residual measured on authored mesh and ground raycast before save, not independent G3. Source turf geometry deliberately deformed in new copies, not adopted.','No GLB export or runtime tests. Stone walls and additional village buildings not yet implemented.'])
 def finish():
     q['outputs']={p.name:sha(p) for p in out.iterdir() if p.suffix in ('.blend','.png')}
