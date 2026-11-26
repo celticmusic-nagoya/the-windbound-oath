@@ -1,0 +1,349 @@
+{
+  "schema": "two.region.a3.fallen_ruin.cluster_blueprint.v68",
+  "parent": "0d827534c8cbf6035eab1cfa7791319ac8088303",
+  "status": "LOCAL_FALLEN_CLUSTER_COMPOSITION_DESIGN_DELIVERED_D4_HOLD",
+  "prework": {
+    "main_head": "9fa081fb2b3bc6e0a957995a397ccffb98230ced",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_FALLEN_RUIN_LOCAL_CLUSTER_V68",
+    "owner_pr": 482,
+    "owner_head": "0d827534c8cbf6035eab1cfa7791319ac8088303",
+    "writer_lease_fencing_evidence": "Independent local coordinate design only, no shared native writer or lease takeover; expected HEAD CAS; prior run jobs completed before commit.",
+    "source_sha256": {
+      "v67": "509a60d4416480309fdf683c8c8fdb199115bf6f5e3571a722affdb740d98131",
+      "v63": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+      "v65": "276691c1d57d9daf41a3d14d6da8761d24f397ecfb858009135bbb89e80f55e2",
+      "refs": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependencies": {
+      "v67": "ad43c33237cad7bca078abff37a56e840b527e95",
+      "v66": "4cf2f9a42fe885f6a772fb206208661c34f24d58",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All V67 source geometry and original 2D reference, official CG, V58 native scene, V62 terrace, runtime",
+    "stage": "D1/D2/D3 local composition design only",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED",
+      "D1": "LOCAL_ONLY",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "Source SHA locks, rigid pose inverse residual <1e-9m, no positive support plane penetration >1e-9m, exact support roof coverage and no positive-area support overlap, COM inside projected support hull, rubble reserve gap >=.035m, closed consistently wound components. No precision native edit.",
+    "preflight_checks": "Read latest main and authenticated handoff, 21 source files Git SHA1/size/SHA256, original CG hash and visual crop, local geometry assertions, py_compile and archive CRC, expected HEAD.",
+    "result": "READY_DESIGN_ONLY",
+    "blockers": [
+      "Independent D4 absent",
+      "Actual sculpting and carved face readability",
+      "Native contact, final terrain, physics and runtime collision",
+      "Actual plants/ivy/material seam bake"
+    ],
+    "checkpoint": "V67 unchanged"
+  },
+  "design": {
+    "source": "img/field/moss/art/ruins_stone_02.png, blob b09c4d412d180a5b835b141e27ea61dddb9e565e, visually re-opened; original oblique inscribed slab with surrounding moss-covered rubble; CG forest shrine is composition reference only",
+    "frame": "Independent flat local ground z=0, XYZ meters; no canonical world placement",
+    "slab": {
+      "source_id": "FRAG-S01",
+      "euler_xyz_deg": [
+        -30,
+        24,
+        8
+      ],
+      "rotation": [
+        [
+          0.9046548960473726,
+          -0.32191659596742417,
+          0.27922969809507014
+        ],
+        [
+          0.12714095420810295,
+          0.8292939041412817,
+          0.5441569611032869
+        ],
+        [
+          -0.40673664307580026,
+          -0.45677272882130043,
+          0.7911535738303734
+        ]
+      ],
+      "translation_m": [
+        0,
+        0,
+        0.4172107024981163
+      ],
+      "vertices": 1922,
+      "faces": 3840,
+      "volume_m3": 0.408297465195814,
+      "center_of_mass_xyz": [
+        0.06643255866140331,
+        0.15516429109200702,
+        0.6494612287807242
+      ],
+      "bounds_xyz": [
+        [
+          -0.6749431633419968,
+          -0.36974473984739903,
+          0.025000000000000022
+        ],
+        [
+          0.7005577499872416,
+          0.5819539309282982,
+          1.1692095487279044
+        ]
+      ],
+      "inverse_residual_m": 4.440892098500626e-16,
+      "method": "Exact V67 source rigid pose; all local engraving and fracture coordinates preserved."
+    },
+    "support": {
+      "initial_method": "Four independent small supports yielded pillar-like air gaps, visually rejected",
+      "selected_method": "Three contiguous irregular-seam stones below exact preserved local z=0 underside plane; original underside convex polygon inset .018m; split by two shared polylines; projected top exactly on transformed plane, base z=-.08m; constrained Delaunay cap and side triangulation; no positive-area overlaps.",
+      "seams": [
+        [
+          [
+            -0.24,
+            -1
+          ],
+          [
+            -0.24,
+            -0.24
+          ],
+          [
+            -0.18,
+            -0.08
+          ],
+          [
+            -0.25,
+            0.09
+          ],
+          [
+            -0.21,
+            0.24
+          ],
+          [
+            -0.21,
+            1
+          ]
+        ],
+        [
+          [
+            0.22,
+            -1
+          ],
+          [
+            0.22,
+            -0.24
+          ],
+          [
+            0.17,
+            -0.1
+          ],
+          [
+            0.25,
+            0.06
+          ],
+          [
+            0.2,
+            0.24
+          ],
+          [
+            0.2,
+            1
+          ]
+        ]
+      ],
+      "count": 3,
+      "projected_area_m2": 0.674022921450354,
+      "surface_area_m2": 0.8519495376694932,
+      "COM_margin_m": 0.15177207041056037,
+      "max_plane_penetration_m": 5.888981646625423e-17,
+      "top_z_ranges_m": [
+        [
+          0.34640912428714965,
+          0.7981669308676793
+        ],
+        [
+          0.17964710062607156,
+          0.671043770093193
+        ],
+        [
+          0.03625447412855326,
+          0.483944914278325
+        ]
+      ],
+      "limits": "Geometric contact/support only. No structural strength, friction or static equilibrium certification. Visually still too planar and rectangular."
+    },
+    "rubble": {
+      "count": 9,
+      "rows": [
+        [
+          -0.92,
+          -0.22,
+          0.24,
+          0.2,
+          0.3,
+          -13
+        ],
+        [
+          -0.71,
+          -0.58,
+          0.25,
+          0.2,
+          0.22,
+          24
+        ],
+        [
+          -0.18,
+          -0.63,
+          0.22,
+          0.19,
+          0.17,
+          -8
+        ],
+        [
+          0.34,
+          -0.65,
+          0.25,
+          0.18,
+          0.26,
+          12
+        ],
+        [
+          0.82,
+          -0.35,
+          0.2,
+          0.17,
+          0.22,
+          -17
+        ],
+        [
+          0.94,
+          0.2,
+          0.2,
+          0.24,
+          0.31,
+          30
+        ],
+        [
+          0.57,
+          0.76,
+          0.25,
+          0.2,
+          0.35,
+          7
+        ],
+        [
+          -0.43,
+          0.8,
+          0.27,
+          0.22,
+          0.41,
+          -24
+        ],
+        [
+          -0.97,
+          0.46,
+          0.2,
+          0.21,
+          0.34,
+          11
+        ]
+      ],
+      "format": "center x,y, radii x,y, height, yaw deg",
+      "method": "Eight angular vertices, radius multiplier 1+.09*sin(j*2.7+i+4), move centers outward in .015m increments until min convex reserve gap >=.035m, three rings z=-.08,.42H,H*(.80+.13*sin(j*2.3+i)), scales 1,.91,.56; upper ring offset [.023,-.014], center crown at H. Verify actual convex footprint gap and closed geometry.",
+      "minimum_gap_m": 0.03685047778580755,
+      "moss_anchor_count": 9,
+      "moss_radius_m": 0.05
+    },
+    "plants": {
+      "count": 7,
+      "rows": [
+        [
+          -1.1,
+          -0.7,
+          0.13
+        ],
+        [
+          -0.5,
+          -0.94,
+          0.12
+        ],
+        [
+          0.12,
+          -0.95,
+          0.14
+        ],
+        [
+          0.9,
+          -0.8,
+          0.12
+        ],
+        [
+          1.22,
+          0.5,
+          0.14
+        ],
+        [
+          -0.7,
+          1.1,
+          0.14
+        ],
+        [
+          -1.25,
+          0.1,
+          0.13
+        ]
+      ],
+      "method": "Move outward .02m until disk >=.025m from existing reserves. Ground z=0. Actual vegetation assets unselected."
+    },
+    "reserve_bounds_xy": [
+      -1.38,
+      -1.1098423275524925,
+      1.36,
+      1.24
+    ],
+    "walk_reserve_xy": [
+      -1.5,
+      -2,
+      1.5,
+      -1.15
+    ],
+    "walk_gap_m": 0.04015767244750745,
+    "visual_review": "Actual coordinate diagram inspected. Slanted slab and rubble cluster recognizable but still clean, support bed planar and rubble spacing too uniform; 2D original more naturally embedded. No actual carved glyphs, moss/ivy or PBR; do not call G2 PASS."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v68.py": "42346ca638db9097546336824ec15c71b9f423411de5c9fbff8549d482fa2b31",
+      "cluster_v68.json": "093ab6e2bd10926d1b91597722a39f143ef9223b07a75082d4a79d8ef3d3073d",
+      "fallen_cluster_blueprint.png": "83c0995c267662b568f36333a31a461c1d3a726c324644c83df98712d54f6500"
+    },
+    "package_sha256": "3ca6fbea970782456154187e5711f8e694fe5325c44355a0e54e237e4c3763de",
+    "bytes": 640279,
+    "CRC": "PASS",
+    "py_compile": "PASS",
+    "location": "Exact local design coordinates and code in conversation package; compact reconstruction recipe in existing PR."
+  },
+  "gates": {
+    "D0": "VERIFIED",
+    "D1": "LOCAL_COMPOSITION_WORLD_HOLD",
+    "D2": "PARTIAL_CLUSTER_SURFACE_AND_PLANTS",
+    "D3": "DESIGN_GEOMETRIC_SUPPORT_PASS_NATIVE_UNCERTAINTY",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Freeze current local geometry design and send scoped independent D4 review with exact files. Do not loop more local shape variants. If D4 unavailable, pivot to a genuinely independent eligible production task; no precision model or adoption before applicable gate."
+}
