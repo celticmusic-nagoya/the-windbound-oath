@@ -92,15 +92,53 @@ def main():
         subprocess.run([gui, *map(str, args)], check=True)
     def click(x, y):
         send("click", x / 1024, y / 768)
-    def shot(name, *anchors):
+    def observe(name):
         path = out / (name + ".png")
         send("screenshot", path)
         text = subprocess.check_output([gui, "ocr", str(path)], text=True)
         path.with_suffix(".txt").write_text(text)
         with Image.open(path) as im:
             im = im.convert("RGB")
+        return path, text, im
+    def shot(name, *anchors):
+        path, text, im = observe(name)
         state_ok(im, text, anchors)
         return path, text, im
+    def metadata_state(text, im):
+        # Never log raw private OCR or click through an unknown modal.
+        anchors = ("VRM Settings", "Export Format", "VRM1.0", "Avatar Name", "Creators")
+        title = "VRoid Studio 2.16.0 - Morwen-resume.vroid" in text
+        present = [a.casefold() in text.casefold() for a in anchors]
+        options = (all(a in text for a in ("Export as VRM", "Export Info", "Reduce Polygons", "Reduce Materials", "Reduce Bones"))
+                   and [s.strip() for s in text.split("|")].count("Export") == 1)
+        qualified = title and im.size == (1024, 768)
+        if qualified and all(present):
+            return "METADATA", present
+        if qualified and not any(present) and options and all(blue(im,x,250) for x in (780,820,930,970)):
+            return "OPTIONS_STILL_VISIBLE", present
+        return "UNRECOGNIZED", present
+    def await_metadata():
+        # The first run stopped after the options click. Observe before deciding
+        # whether a different, historically verified button locator is safe.
+        for phase in range(2):
+            states = []
+            for attempt in range(5):
+                time.sleep(3)
+                _, text, im = observe(f"vrm-metadata-{phase}-{attempt}")
+                state, present = metadata_state(text, im)
+                states.append(state)
+                print("VRM_METADATA_OBSERVATION", phase, attempt, state,
+                      "anchors", "".join("1" if v else "0" for v in present), flush=True)
+                if state == "METADATA":
+                    return im
+            if phase == 0 and states == ["OPTIONS_STILL_VISIBLE"] * 5:
+                source_ok()
+                # Historical 1024x768 options screen: blue button x743..1008 y236..264.
+                # Four blue samples + unique exact OCR label + no metadata anchors required.
+                click(876, 250)
+            else:
+                break
+        raise SystemExit("VRM_METADATA_NOT_VERIFIED_NO_FURTHER_INPUT")
     source_ok()
     _, _, im = shot("export-editor", "Face", "Hairstyle", "Body", "Outfit")
     click(927, 77)
@@ -112,8 +150,7 @@ def main():
     require("VRM Settings" not in t and [s.strip() for s in t.split("|")].count("Export") == 1,
             "options Export is not unique")
     send("click-label", p, "Export", "Export Info")
-    time.sleep(8)
-    _, _, im = shot("vrm-metadata", "VRM Settings", "Export Format", "VRM1.0", "Avatar Name", "Creators")
+    im = await_metadata()
     require(blue(im, 286, 189), "VRM1.0 selection not verified")
     for y, value in ((451, meta["name"]), (545, meta["version"]), (639, meta["authors"][0])):
         click(500, y)
