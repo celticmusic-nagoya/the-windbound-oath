@@ -1,7 +1,7 @@
 name: TWO isolated village landscape V10
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
     paths: ['tools/map_blender/lind/home/village_landscape_v10.py']
 permissions:
   contents: read
@@ -11,13 +11,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   landscape:
-    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: |
             tools/map_blender/lind/home/village_landscape_v10.py
