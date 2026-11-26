@@ -134,3 +134,98 @@ jobs:
           for(let i=0;i<12;i++){const a=api(wf+"/runs?per_page=10").workflow_runs.filter(x=>x.display_title==="Morwen VRoid / "+q.mode+" request:"+q.id);if(a.length===1){console.log("TARGET_RUN",a[0].id);process.exit(0);}if(a.length>1)throw Error("duplicate target runs");Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,2500);}
           throw Error("dispatch receipt not visible; reconcile, do not retry");
           JS
+
+  accept-vrm-transfer:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 427 && github.event.issue.pull_request &&
+      github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
+      github.event.comment.author_association == 'OWNER' &&
+      startsWith(github.event.comment.body, '/two-morwen-launch vrm_export main=') &&
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: read
+      actions: write
+    concurrency:
+      group: morwen-scoped-comment-launch
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Reserve and bind reviewed VRM dispatch once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: tools/production_qa
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
+          REVIEWED_WORKER_BLOB: ${{ vars.MORWEN_VRM_WORKER_BLOB }}
+          REVIEWED_PREVIOUS_RUN: ${{ vars.MORWEN_VRM_PREVIOUS_RUN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          gh auth setup-git --hostname github.com
+          node <<'JS'
+          const fs=require("node:fs"),{execFileSync}=require("node:child_process"),crypto=require("node:crypto");
+          function validate(e,attempt,now,revision,live,pr) {
+            const c=e.comment||{}, age=now-Date.parse(c.created_at);
+            if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1"||!Number.isFinite(age)||age<0||age>600000)throw Error("request identity");
+            if(!/^[0-9a-f]{40}$/.test(revision)||c.body!=="/two-morwen-launch vrm_export main="+revision)throw Error("request revision");
+            if(live.id!==c.id||live.body!==c.body||live.created_at!==c.created_at||live.updated_at!==c.updated_at||live.user?.id!==315379131||live.author_association!=="OWNER"||live.issue_url!=="https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/issues/427")throw Error("live comment differs");
+            if(pr.state!=="open"||pr.head?.sha!=="df986c7e0549871940deb26f65f7a54f58658211")throw Error("owner HEAD differs");
+            return String(c.id);
+          }
+          function target(run,revision,request) {
+            if(!Number.isSafeInteger(run.id)||run.id<=0||run.run_attempt!==1||run.event!=="workflow_dispatch"||run.head_branch!=="main"||run.head_sha!==revision||run.path!==".github/workflows/morwen-vroid-macos-probe.yml"||run.display_title!=="Morwen VRoid / vrm_export request:"+request||run.repository?.id!==1408120919||run.head_repository?.id!==1408120919||run.actor?.id!==41898282||run.actor?.login!=="github-actions[bot]"||!["queued","in_progress","waiting","requested","pending"].includes(run.status))throw Error("wrong target run");
+            return String(run.id);
+          }
+          const env=process.env, repo="repos/celticmusic-nagoya/the-windbound-oath";
+          const wf=repo+"/actions/workflows/morwen-vroid-macos-probe.yml";
+          function api(p){return JSON.parse(execFileSync("gh",["api",p],{encoding:"utf8",timeout:20000,maxBuffer:5000000}));}
+          const e=JSON.parse(fs.readFileSync(env.GITHUB_EVENT_PATH,"utf8"));
+          const head=api(repo+"/git/ref/heads/main").object.sha;
+          if(head!==env.GITHUB_SHA)throw Error("main moved");
+          const request=validate(e,env.GITHUB_RUN_ATTEMPT,Date.now(),head,api(repo+"/issues/comments/"+e.comment.id),api(repo+"/pulls/427"));
+          const blob=api(repo+"/contents/.github/workflows/morwen-vroid-macos-probe.yml?ref="+head).sha;
+          if(!/^[0-9a-f]{40}$/.test(env.REVIEWED_WORKER_BLOB)||blob!==env.REVIEWED_WORKER_BLOB)throw Error("worker review missing");
+          const profile=fs.readFileSync(".github/morwen/vrm-export-profile.json");
+          if(!/^[0-9a-f]{64}$/.test(env.PROFILE_SHA256)||crypto.createHash("sha256").update(profile).digest("hex")!==env.PROFILE_SHA256)throw Error("profile review missing");
+          const reviewed=JSON.parse(profile);
+          if(!/^[A-Z0-9][A-Z0-9_-]{2,100}$/.test(env.TRANSFER_ASSET||"")||reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_destination!=="celticmusic-nagoya/the-windbound-oath-handoff"||reviewed.staging!=="RUNNER_TEMP_OWNER_ONLY"||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
+          const prior=api(wf+"/runs?branch=main&per_page=1").workflow_runs[0];
+          if(!prior||String(prior.id)!==env.REVIEWED_PREVIOUS_RUN||prior.status!=="completed")throw Error("prior run changed");
+          for(const status of ["queued","in_progress","waiting","requested","pending"]){if(api(wf+"/runs?status="+status+"&per_page=1").total_count!==0)throw Error("active worker");}
+          const title="Morwen VRoid / vrm_export request:"+request;
+          if(api(wf+"/runs?per_page=100").workflow_runs.some(x=>x.display_title===title))throw Error("request already dispatched");
+          // The protected worker reads the exact private preservation Release and checks its bytes before GUI launch.
+          if(reviewed.source_archive_sha256!=="b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588")throw Error("preserved archive profile mismatch");
+          function cas(op,...args){
+            const code="import sys; from morwen_transfer_claim import reserve,claim; print({'reserve':reserve,'claim':claim}[sys.argv[1]](*sys.argv[2:]))";
+            const token=execFileSync("python3",["-c",code,op,"origin",env.TRANSFER_ASSET,...args],{encoding:"utf8",timeout:50000}).trim();
+            if(!/^[0-9a-f]{40}$/.test(token))throw Error("CAS receipt invalid");
+            return token;
+          }
+          if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved before reserve");
+          const reservation=cas("reserve",head,request);
+          if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved after reserve; reconcile");
+          execFileSync("gh",["api","--method","POST",wf+"/dispatches","--input","-"],{input:JSON.stringify({ref:"main",inputs:{mode:"vrm_export",expected_main:head,request_id:request,transfer_fence:reservation}}),encoding:"utf8",timeout:20000});
+          for(let i=0;i<12;i++){
+            const matches=api(wf+"/runs?per_page=20").workflow_runs.filter(x=>x.display_title===title);
+            if(matches.length>1)throw Error("ambiguous target; no retry");
+            if(matches.length===1){
+              const id=target(matches[0],head,request);
+              const confirmed=target(api(repo+"/actions/runs/"+id),head,request);
+              if(id!==confirmed)throw Error("target changed");
+              cas("claim",reservation,head,request,id,"1");
+              console.log("BOUND_TARGET_RUN",id);process.exit(0);
+            }
+            Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,2500);
+          }
+          throw Error("dispatch receipt not visible; preserve reservation and reconcile; no retry");
+          JS

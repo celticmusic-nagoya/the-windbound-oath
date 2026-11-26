@@ -10,6 +10,7 @@ on:
         default: wardrobe_guide
         options:
           - wardrobe_guide
+          - vrm_export
           - wardrobe_import
           - parallel_ac
           - wardrobe_export
@@ -30,6 +31,10 @@ on:
         description: Internal comment ID; empty for manual runs
         type: string
         default: ''
+      transfer_fence:
+        description: Rotated fence produced by the reviewed control job
+        type: string
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -39,19 +44,19 @@ concurrency:
   cancel-in-progress: false
 jobs:
   reopen:
-    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && inputs.mode != 'vrm_export'
     name: ${{ matrix.lane }}
-    strategy:
+    strategy: &morwen_worker_strategy
       fail-fast: false
       max-parallel: 3
       matrix:
         lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
-    env:
+    env: &morwen_worker_env
       LANE: ${{ matrix.lane }}
       HAIR_STRAND: ${{ inputs.mode == 'parallel_next' && 'Hair 7' || 'Hair 3' }}
-    steps:
+    steps: &morwen_worker_steps
       - name: Verify automatic launch identity before checkout
         env:
           EXPECTED_MAIN: ${{ inputs.expected_main }}
@@ -60,6 +65,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ "$MODE" = vrm_export ]; then
+            test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+            [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            exit 0
+          fi
           if [ -n "$EXPECTED_MAIN" ] || [ -n "$REQUEST_ID" ]; then
             test "$EXPECTED_MAIN" = "$GITHUB_SHA"
             [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
@@ -74,7 +85,7 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' || inputs.mode == 'vrm_export' }}
           HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
           FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
           PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
@@ -85,7 +96,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in vrm_export|wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -489,7 +500,7 @@ jobs:
           SWIFT
           swiftc "$RUNNER_TEMP/skirt-guide-profile.swift" -o "$RUNNER_TEMP/skirt-guide-profile"
       - name: Restore native checkpoint
-        if: inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
+        if: inputs.mode != 'vrm_export' && inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -509,6 +520,92 @@ jobs:
               assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
           PY
+      - uses: actions/checkout@v4
+        if: inputs.mode == 'vrm_export'
+        with:
+          ref: ${{ github.sha }}
+          path: transfer-control
+          persist-credentials: false
+      - name: Verify reviewed transfer fence and exact checkpoint profile
+        if: inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          REQUEST_ACTOR: ${{ github.actor_id }}
+          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$REQUEST_ACTOR" = 41898282 # github-actions[bot]; owner checked separately
+          [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          test -n "$TRANSFER_ASSET"
+          PRIVATE_DROP="$RUNNER_TEMP/morwen-private-transfer"
+          mkdir -m 700 "$PRIVATE_DROP"
+          printf 'PRIVATE_DROP=%s\n' "$PRIVATE_DROP" >> "$GITHUB_ENV"
+          python3 -m venv "$RUNNER_TEMP/transfer-venv"
+          "$RUNNER_TEMP/transfer-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0
+          profile=transfer-control/.github/morwen/vrm-export-profile.json
+          printf '%s  %s\n' "$PROFILE_SHA256" "$profile" | shasum -a 256 -c
+          python3 - "$profile" "$PRIVATE_DROP" <<'PY'
+          import json, os, pathlib, sys
+          approved = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          drop = pathlib.Path(sys.argv[2]).resolve(strict=True)
+          assert approved["source_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
+          assert approved["source_archive_sha256"] == "b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588"
+          assert approved["asset_id"] == os.environ["TRANSFER_ASSET"]
+          assert drop.is_absolute() and drop == (pathlib.Path(os.environ["RUNNER_TEMP"]) / "morwen-private-transfer").resolve()
+          assert approved["private_destination"] == "celticmusic-nagoya/the-windbound-oath-handoff"
+          assert approved["staging"] == "RUNNER_TEMP_OWNER_ONLY"
+          assert drop.stat().st_mode & 0o077 == 0
+          PY
+          gh auth setup-git --hostname github.com
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$REQUEST_ID" > "$RUNNER_TEMP/transfer-request.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"])
+          comment = json.loads((p/"transfer-request.json").read_bytes())
+          repo = os.environ["GITHUB_REPOSITORY"]
+          assert comment["issue_url"] == f"https://api.github.com/repos/{repo}/issues/427"
+          assert comment["user"]["id"] == 315379131 and comment["author_association"] == "OWNER"
+          assert comment["created_at"] == comment["updated_at"]
+          assert comment["body"] == f'/two-morwen-launch vrm_export main={os.environ["GITHUB_SHA"]}'
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/transfer-run.json"
+          PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import json, os, pathlib
+          from morwen_transfer_claim import await_bound
+          env = os.environ
+          run = json.loads((pathlib.Path(env["RUNNER_TEMP"])/"transfer-run.json").read_bytes())
+          assert run["id"] == int(env["GITHUB_RUN_ID"]) and run["run_attempt"] == 1
+          assert run["event"] == "workflow_dispatch" and run["head_branch"] == "main"
+          assert run["head_sha"] == env["GITHUB_SHA"]
+          assert run["path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          assert run["display_title"] == "Morwen VRoid / vrm_export request:" + env["REQUEST_ID"]
+          assert run["repository"]["id"] == 1408120919 and run["head_repository"]["id"] == 1408120919
+          assert run["actor"]["id"] == 41898282 and run["actor"]["login"] == "github-actions[bot]"
+          token = await_bound("origin", env["TRANSFER_ASSET"], env["TRANSFER_FENCE"],
+                              env["GITHUB_SHA"], env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          with open(env["GITHUB_ENV"], "a", encoding="utf-8") as f:
+              f.write("MORWEN_BOUND_FENCE=" + token + "\n")
+          PY
+      - name: Restore preserved native checkpoint from existing private Release
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/restore_morwen_preserved.py
       - name: Restore exact saved hair candidate for read-only comparison
         if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
         env:
@@ -582,6 +679,11 @@ jobs:
       - name: Launch signed application and collect evidence
         timeout-minutes: 22
         env:
+          TRANSFER_MODE: ${{ inputs.mode == 'vrm_export' }}
+          GH_TOKEN: ${{ inputs.mode == 'vrm_export' && github.token || '' }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
           FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
           HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
@@ -594,6 +696,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          verify_transfer_run() {
+            PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import verify
+          env = os.environ
+          verify("origin", env["TRANSFER_ASSET"], env["MORWEN_BOUND_FENCE"], env["GITHUB_SHA"],
+                 env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          PY
+          }
+          if [ "$TRANSFER_MODE" = true ]; then verify_transfer_run; fi
           app="$RUNNER_TEMP/VRoidStudio.app"
           /usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist" > evidence/version.txt
           exe="$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")"
@@ -723,6 +835,20 @@ jobs:
           screencapture -x evidence/final-recovery-screen.png || true
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
+          if [ "$TRANSFER_MODE" = true ]; then
+            verify_transfer_run
+            export MORWEN_TRANSFER_PYTHON="$RUNNER_TEMP/transfer-venv/bin/python"
+            out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+            mkdir -m 700 "$out"
+            bash transfer-control/tools/production_qa/vrm_export_session.sh "$gui" \
+              "$MORWEN_READONLY_NATIVE" "$out/views" "$out" \
+              transfer-control/.github/morwen/vrm-export-profile.json
+            cmp "$MORWEN_READONLY_NATIVE" evidence/input-model.vroid
+            verify_transfer_run
+            "$MORWEN_TRANSFER_PYTHON" transfer-control/tools/production_qa/pack_transfer.py "$out" "$out/Morwen-transfer.zip" > "$out/package-receipt.json"
+            verify_transfer_run
+            exit 0
+          fi
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
           if [ "$HAIR_REVIEW" = true ]; then MORWEN_EXPECTED_SHA256=55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541; fi
           if [ "$FRAME_PROBE" = true ]; then
@@ -1598,8 +1724,49 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
+      - name: Close editor before using protected transfer credential
+        if: success() && inputs.mode == 'vrm_export'
+        shell: bash
+        run: |
+          set -euo pipefail
+          osascript -e 'tell application id "net.pixiv.vroid.macosx" to quit' >/dev/null 2>&1 || true
+          for i in $(seq 1 15); do
+            if ! pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then break; fi
+            sleep 2
+          done
+          if pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then
+            echo PRIVATE_TRANSFER_BLOCKED_EDITOR_STILL_RUNNING
+            exit 1
+          fi
+      - name: Transfer candidate directly to reviewed private handoff
+        id: private-transfer
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$MORWEN_PRIVATE_TRANSFER_APPROVED" = true
+          test -n "$DEST_TOKEN"
+          out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py "$out/Morwen-transfer.zip" "$out/private-release-receipt.json"
+          python3 - "$out/private-release-receipt.json" <<'PY'
+          import json, os, re, sys
+          with open(sys.argv[1]) as f:
+              result=json.load(f)
+          assert result["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED" and result["run_id"]==os.environ["GITHUB_RUN_ID"]
+          assert re.fullmatch(r"[0-9a-f]{64}",result["sha256"])
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("zip_sha="+result["sha256"]+"\n")
+          PY
       - name: Upload review evidence
-        if: always()
+        if: always() && inputs.mode != 'vrm_export'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
@@ -1612,3 +1779,136 @@ jobs:
             evidence/face-mouth-candidate-not-adopted.vroid
             evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
+  vrm-export-protected:
+    # A separate job reuses the exact worker steps, not a second engine.
+    # The pre-existing environment is only requested by this reviewed mode.
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' && inputs.mode == 'vrm_export' &&
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    name: VRM export and private transfer
+    strategy: *morwen_worker_strategy
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: two-private-preservation
+    outputs:
+      zip_sha: ${{ steps.private-transfer.outputs.zip_sha }}
+    env: *morwen_worker_env
+    steps: *morwen_worker_steps
+  blender-transfer-protected:
+    needs: vrm-export-protected
+    if: success() && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: two-private-preservation
+    outputs:
+      completion_receipt: ${{ steps.preserve-blender.outputs.completion_receipt }}
+    env:
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+      PYTHONPATH: tools/production_qa:tools/private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify same run-bound fence on Blender runner
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$PRODUCER_ZIP_SHA" =~ ^[0-9a-f]{64}$ ]]
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import await_bound
+          e=os.environ
+          token=await_bound("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"])
+          with open(e["GITHUB_ENV"],"a") as f:
+              f.write("MORWEN_BOUND_FENCE="+token+"\n")
+          PY
+      - name: Receive exact private VRM
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/receive_morwen_transfer.py "$PRODUCER_ZIP_SHA" "$RUNNER_TEMP/morwen-blender-input"
+      - name: Import save reopen and render using existing Blender runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          source="$RUNNER_TEMP/morwen-blender-input"
+          expected="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["vrm_sha256"])' "$source/input-receipt.json")"
+          if ! bash tools/production_qa/run_blender_transfer.sh "$source/Morwen-transfer.vrm" "$expected" "$RUNNER_TEMP/morwen-blender-output" > "$RUNNER_TEMP/morwen-blender.log" 2>&1; then
+            echo BLENDER_IMPORT_OR_RENDER_BLOCKED_PRIVATE_LOG
+            exit 1
+          fi
+      - name: Preserve editable blend and renders via existing private transfer
+        id: preserve-blender
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/preserve_blender_transfer.py "$RUNNER_TEMP/morwen-blender-input" "$RUNNER_TEMP/morwen-blender-output" "$PRODUCER_ZIP_SHA"
+          python3 - "$RUNNER_TEMP/morwen-blender-output/private-blender-receipt.json" <<'PY'
+          import json, os, sys
+          with open(sys.argv[1]) as f:
+              receipt=json.load(f)
+          assert receipt["kind"]=="blend" and receipt["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED"
+          assert receipt["source_archive_sha256"]==os.environ["PRODUCER_ZIP_SHA"]
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("completion_receipt="+json.dumps(receipt,separators=(",",":"))+"\n")
+          PY
+  complete-morwen-transfer:
+    needs: [vrm-export-protected, blender-transfer-protected]
+    if: success() && needs.vrm-export-protected.result == 'success' && needs.blender-transfer-protected.result == 'success' && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: tools/production_qa
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      EXPECTED_MAIN: ${{ inputs.expected_main }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      COMPLETION_RECEIPT: ${{ needs.blender-transfer-protected.outputs.completion_receipt }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Release only the exact completed run reservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$TRANSFER_ASSET" = MORWEN
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import json, os
+          from morwen_transfer_claim import complete
+          e=os.environ
+          complete("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"],e["PRODUCER_ZIP_SHA"],json.loads(e["COMPLETION_RECEIPT"]))
+          print("MORWEN_EXACT_COMPLETION_RELEASE_PASS")
+          PY
