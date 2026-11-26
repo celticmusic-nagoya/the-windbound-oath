@@ -63,3 +63,11 @@ test("observed current hero-tree and native forest evidence is discoverable, wit
  const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]}, "世界・樹木／森林");
  assert.deepEqual(Array.from(rows,x=>x.id),[15073087704,15072796460]);
 });
+
+test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
+ const branch="docs/ireland-world-source-grounded-plan-20261123";
+ const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,11]);
+ assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
+ assert.equal(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）")[0].id,11);
+});
