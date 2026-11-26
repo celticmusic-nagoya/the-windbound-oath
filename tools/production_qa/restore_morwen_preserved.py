@@ -3,6 +3,7 @@ import hashlib
 import io
 import json
 import os
+import subprocess
 from pathlib import Path
 import zipfile
 
@@ -41,10 +42,12 @@ def read_native(raw):
     return native
 
 
-def restore(api, token):
+def restore(api, token, stage=lambda _: None):
     require(bool(token), 'private read credential required')
+    stage('PRIVATE_REPO_METADATA')
     repo = api(token, 'GET', BASE)
     require(repo.get('full_name') == DEST and repo.get('private') is True, 'destination privacy')
+    stage('PRIVATE_RELEASE_METADATA')
     release = api(token, 'GET', BASE + '/releases/tags/' + TAG)
     require(release.get('id') == RELEASE_ID and release.get('tag_name') == TAG and
             release.get('draft') is False and release.get('prerelease') is True and
@@ -55,11 +58,14 @@ def restore(api, token):
     require(asset.get('id') == ASSET_ID and asset.get('name') == '15018109141.zip' and
             asset.get('state') == 'uploaded' and asset.get('size') == ARCHIVE_BYTES and
             asset.get('digest') == 'sha256:' + ARCHIVE_SHA, 'asset identity')
+    stage('PRIVATE_ARCHIVE_DOWNLOAD')
     raw = api(token, 'GET', BASE + f'/releases/assets/{ASSET_ID}', binary=True, limit=ARCHIVE_BYTES)
+    stage('ARCHIVE_NATIVE_INTEGRITY')
     return read_native(raw)
 
 
-def main():
+def main(stage=lambda _: None):
+    stage('WORKER_IDENTITY')
     from release_transport import request
     from morwen_transfer_claim import verify
     env = os.environ
@@ -70,25 +76,51 @@ def main():
     def fence():
         verify('origin', env['TRANSFER_ASSET'], env['MORWEN_BOUND_FENCE'], env['GITHUB_SHA'],
                env['REQUEST_ID'], env['GITHUB_RUN_ID'], env['GITHUB_RUN_ATTEMPT'])
+    stage('DISPOSABLE_TARGET_PREFLIGHT')
     root = Path(env['RUNNER_TEMP']).resolve(strict=True)
     target = root / 'Morwen-resume.vroid'
     require(not os.path.lexists(target), 'existing native output')
+    stage('FENCE_BEFORE_RESTORE')
     fence()
-    native = restore(request, env['DEST_TOKEN'])
+    native = restore(request, env['DEST_TOKEN'], stage)
+    stage('FENCE_BEFORE_LOCAL_SAVE')
     fence()
+    stage('LOCAL_EXCLUSIVE_SAVE')
     os.umask(0o077)
     with target.open('xb') as output:
         output.write(native)
         output.flush()
         os.fsync(output.fileno())
+    stage('LOCAL_SAVE_READBACK')
     require(sha(target.read_bytes()) == NATIVE_SHA, 'restore readback')
+    stage('FENCE_AFTER_LOCAL_SAVE')
     fence()
 
 
 if __name__ == '__main__':
+    current = ['STARTUP']
+    def stage(name):
+        current[0] = name
+        print('PRIVATE_CHECKPOINT_STAGE', name, flush=True)
     try:
-        main()
-    except Exception:
-        print('PRIVATE_CHECKPOINT_RESTORE_BLOCKED_NO_RETRY')
+        main(stage)
+    except Exception as exc:
+        from release_transport import TransportError
+        # Never print exception text, URL, environment, raw output or secrets.
+        if isinstance(exc, (TimeoutError, subprocess.TimeoutExpired)):
+            kind = 'TIMEOUT'
+        elif isinstance(exc, subprocess.CalledProcessError):
+            kind = 'GIT_COMMAND_FAILED'
+        elif isinstance(exc, TransportError):
+            kind = 'TRANSPORT_HTTP_' + str(exc.status)
+        elif isinstance(exc, (ValueError, KeyError, zipfile.BadZipFile)):
+            kind = 'VALIDATION_FAILED'
+        elif isinstance(exc, OSError):
+            kind = 'LOCAL_IO_FAILED'
+        elif isinstance(exc, RuntimeError):
+            kind = 'FENCE_OR_RUNTIME_FAILED'
+        else:
+            kind = 'UNCLASSIFIED'
+        print('PRIVATE_CHECKPOINT_RESTORE_BLOCKED_NO_RETRY', current[0], kind, flush=True)
         raise SystemExit(1) from None
     print('PRIVATE_CHECKPOINT_RESTORE_VERIFIED')

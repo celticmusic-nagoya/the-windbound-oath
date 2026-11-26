@@ -4,6 +4,8 @@ import pathlib
 import subprocess
 import tempfile
 import time
+import morwen_transfer_claim as claim_module
+from unittest.mock import patch
 from morwen_transfer_claim import binding, reserve, claim, read_binding, await_bound, verify
 from shared_asset_reservation import ref_for
 
@@ -58,6 +60,17 @@ def main():
                 read_binding("origin", asset, tok, exp, time.monotonic()+10, reservation)
                 assert pathlib.Path.cwd() == root
             read(work); cases.append("scoped shallow binding")
+            original_git = claim_module.git
+            calls = []
+            def observe(*args, **kwargs):
+                calls.append(args)
+                return original_git(*args, **kwargs)
+            with patch.object(claim_module, "git", observe):
+                read(work)
+            assert not any(args[0] == "fetch" for args in calls)
+            assert any("cat-file" in args for args in calls)
+            cases.append("cached exact object avoids repeated fetch")
+            reject("cached object wrong run", lambda: read(work, exp=dict(expected, run="67892")), cases)
             assert git(root, "rev-parse", "HEAD") == old_head
             assert git(work, "show-ref") == old_refs
             assert git(work, "rev-list", "--count", "HEAD") == "1"
