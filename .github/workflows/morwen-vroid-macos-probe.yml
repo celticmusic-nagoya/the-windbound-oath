@@ -526,7 +526,7 @@ jobs:
           ref: ${{ github.sha }}
           path: transfer-control
           persist-credentials: false
-      - name: Verify reviewed transfer fence and restore exact face and hair checkpoint
+      - name: Verify reviewed transfer fence and exact checkpoint profile
         if: inputs.mode == 'vrm_export'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -555,6 +555,7 @@ jobs:
           approved = json.loads(pathlib.Path(sys.argv[1]).read_text())
           drop = pathlib.Path(sys.argv[2]).resolve(strict=True)
           assert approved["source_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
+          assert approved["source_archive_sha256"] == "b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588"
           assert approved["asset_id"] == os.environ["TRANSFER_ASSET"]
           assert drop.is_absolute() and drop == (pathlib.Path(os.environ["RUNNER_TEMP"]) / "morwen-private-transfer").resolve()
           assert approved["private_destination"] == "celticmusic-nagoya/the-windbound-oath-handoff"
@@ -590,22 +591,19 @@ jobs:
           with open(env["GITHUB_ENV"], "a", encoding="utf-8") as f:
               f.write("MORWEN_BOUND_FENCE=" + token + "\n")
           PY
-          artifact=15018109141
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact" --jq 'select(.expired == false and .workflow_run.id == 45605491226) | .id' | grep -qx "$artifact"
-          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact/zip" > "$RUNNER_TEMP/face-transfer.zip"
-          printf '%s  %s\n' b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588 "$RUNNER_TEMP/face-transfer.zip" | shasum -a 256 -c
-          python3 - <<'PY'
-          import hashlib, json, os, pathlib, zipfile
-          p = pathlib.Path(os.environ["RUNNER_TEMP"])
-          with zipfile.ZipFile(p/"face-transfer.zip") as z:
-              assert z.testzip() is None
-              source = z.read("face-mouth-candidate-not-adopted.vroid")
-              receipt = json.loads(z.read("mouth-candidate-receipt.json"))
-              assert hashlib.sha256(source).hexdigest() == receipt["candidate_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
-              assert receipt["source_sha256"] == "55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
-          with (p/"Morwen-resume.vroid").open("xb") as f:
-              f.write(source)
-          PY
+      - name: Restore preserved native checkpoint from existing private Release
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/restore_morwen_preserved.py
       - name: Restore exact saved hair candidate for read-only comparison
         if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
         env:
