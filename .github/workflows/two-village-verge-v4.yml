@@ -1,25 +1,23 @@
 name: TWO isolated scenic native two-village-verge-v4
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches: [feature/lind-ecology-01]
     paths:
       - 'tools/map_blender/lind/ecology/village_verge_v4.py'
-      - '.github/workflows/two-village-verge-v4.yml'
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: two-village-verge-v4-${{ github.event.pull_request.number }}
+  group: two-village-verge-v4-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   scenic:
-    if: github.event.pull_request.number == 357 && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 28
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           lfs: true
           persist-credentials: false
           sparse-checkout: |
