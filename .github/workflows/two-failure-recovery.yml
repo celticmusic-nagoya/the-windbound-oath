@@ -1,5 +1,13 @@
 name: TWO scoped failed-run recovery
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/two-failure-recovery.yml'
+      - 'tools/production_qa/recover_failed_run.py'
+      - 'tools/production_qa/test_recover_failed_run.py'
+      - 'tools/production_qa/shared_asset_lease.py'
+      - 'tools/production_qa/shared_asset_reservation.py'
   workflow_run:
     workflows: [Morwen VRoid macOS compatibility probe]
     types: [completed]
@@ -11,13 +19,55 @@ on:
         type: string
 permissions:
   actions: read
-  contents: write
+  contents: read
   pull-requests: read
 concurrency:
   group: two-scoped-failure-recovery
   cancel-in-progress: false
 jobs:
+  read-only-regression:
+    if: github.event_name == 'pull_request' && github.repository == 'celticmusic-nagoya/the-windbound-oath'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Run failure recovery regression tests without repository writes
+        run: python3 tools/production_qa/test_recover_failed_run.py
+      - name: Probe historical completed run API without releasing any fence
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: tools/production_qa
+        run: |
+          set -euo pipefail
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import json, subprocess
+          from recover_failed_run import recover, Hold, sha
+          def api(path):
+              return json.loads(subprocess.check_output(['gh','api',path],text=True,timeout=20))
+          def remote_ref(ref):
+              raw=subprocess.check_output(['git','ls-remote','--refs','origin',ref],text=True,timeout=20).strip()
+              if not raw: return None
+              token, name=raw.split('\t')
+              assert sha(token) and name==ref
+              return token
+          def no_delete(*args):
+              raise AssertionError('dry-run must not call CAS delete')
+          try:
+              result=recover(api,remote_ref,no_delete,45751699070,apply=False)
+              print('HISTORICAL_DRY_RUN',result['status'])
+          except Hold as exc:
+              print('HISTORICAL_DRY_RUN_HOLD',str(exc))
+              raise
+          PY
   recover:
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: read
     if: >-
       github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
       github.ref == 'refs/heads/main' &&
