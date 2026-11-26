@@ -534,13 +534,27 @@ jobs:
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           REQUEST_ID: ${{ inputs.request_id }}
           REQUEST_ACTOR: ${{ github.actor_id }}
-          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           test "$REQUEST_ACTOR" = 41898282 # github-actions[bot]; owner checked separately
           [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -C transfer-control rev-parse HEAD)" = "$GITHUB_SHA"
+          PROFILE_SHA256=$(python3 - <<'PY'
+          import json, pathlib, subprocess, os, re
+          root = pathlib.Path("transfer-control")
+          contract = json.loads((root / ".github/morwen/reviewed-launch-contract.json").read_text())
+          assert contract["schema"] == "two-reviewed-launch-v1"
+          assert contract["review_state"] == "REVIEWED_FOR_OWNER_LAUNCH"
+          assert contract["asset_id"] == os.environ["TRANSFER_ASSET"] == "MORWEN"
+          assert contract["worker_path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          worker = subprocess.check_output(["git", "-C", str(root), "hash-object", contract["worker_path"]], text=True).strip()
+          assert worker == contract["worker_blob"]
+          assert re.fullmatch(r"[0-9a-f]{64}", contract["profile_sha256"])
+          print(contract["profile_sha256"])
+          PY
+          )
           [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
           test -n "$TRANSFER_ASSET"
           PRIVATE_DROP="$RUNNER_TEMP/morwen-private-transfer"
