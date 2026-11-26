@@ -47,6 +47,8 @@ jobs:
       - name: Verify live production metadata refresh
         run: node --test test_recent_review_artifacts.cjs
       - run: node studio-smoke.mjs
+      - name: Verify live WIP and mobile touch navigation
+        run: node live-wip-smoke.mjs
       - name: Verify committed Pages files
         run: STUDIO_ROOT="$PWD" node gallery-smoke.mjs
       - uses: actions/upload-artifact@v4
