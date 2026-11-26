@@ -1,8 +1,10 @@
 name: TWO village V13 exact integration export
 on:
-  pull_request:
-    types: [synchronize]
-    paths: ['tools/map_blender/lind/home/export_village_v13_integration.py']
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths:
+      - '.github/workflows/two-village-v13-integration-export.yml'
+      - 'tools/map_blender/lind/home/export_village_v13_integration.py'
 permissions:
   contents: read
   actions: read
@@ -11,24 +13,24 @@ concurrency:
   cancel-in-progress: false
 jobs:
   export:
-    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/feature/lind-village-world-integration-plan-01'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: |
             tools/map_blender/lind/home/export_village_v13_integration.py
       - uses: actions/checkout@v4
         with:
-          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          ref: 1925346751f72fec70a11eed99f9b6b63d2114c9
           path: engine
           persist-credentials: false
           sparse-checkout: |
             tools/production_qa
-      - name: Restore exact V13 and export selected visible meshes
+      - name: Restore exact V13
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -38,11 +40,88 @@ jobs:
           printf '%s  %s\n' f564317fb154c7ef6ed47f55d22b331d73ff9799e859a436ef212f5f77c98a6d "$RUNNER_TEMP/v13.zip" | sha256sum -c -
           unzip -tq "$RUNNER_TEMP/v13.zip"
           unzip -q "$RUNNER_TEMP/v13.zip" -d "$RUNNER_TEMP/v13"
-          python3 -m py_compile 'tools/map_blender/lind/home/export_village_v13_integration.py'
+          printf '%s  %s\n' c7abc4d59ea235be0aa785239a7b55563ad608afc9428fbd81207d282cd34691 "$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend" | sha256sum -c -
+      - name: Prepare dependencies and identify qualified environment
+        id: identity
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$GITHUB_REPOSITORY" = celticmusic-nagoya/the-windbound-oath
           sudo apt-get update -qq
           sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
-          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
-          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/export_village_v13_integration.py' -- "$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend" "$RUNNER_TEMP/out"
+          key=$(python engine/tools/production_qa/environment_reuse/manager.py key)
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+          PYTHONPATH=engine/tools/production_qa/environment_reuse python - "$key" <<'PYTHON' >> "$GITHUB_OUTPUT"
+          import sys
+          from ensure import trusted_proof
+          if trusted_proof(sys.argv[1]) is not None:
+              print("eligible=true")
+          PYTHON
+      - uses: actions/cache/restore@v4
+        if: steps.identity.outputs.eligible == 'true'
+        id: restore
+        with:
+          path: ${{ runner.temp }}/two-env-cache
+          key: ${{ steps.identity.outputs.key }}
+      - name: Verify exact cache or isolated cold fallback
+        id: blender
+        env:
+          CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
+        run: |
+          set -euo pipefail
+          cache="$RUNNER_TEMP/two-env-cache"
+          fallback="$RUNNER_TEMP/two-env-fallback"
+          report="$RUNNER_TEMP/reuse.json"
+          flags=()
+          rejected_layout=false
+          readonly=false
+          if [[ "$CACHE_HIT" == true ]]; then
+            test "$(id -u)" != 0
+            if [[ -d "$cache/app" && ! -L "$cache" && ! -L "$cache/app" ]]; then
+              sudo mount --bind "$cache/app" "$cache/app"
+              sudo mount -o remount,bind,ro "$cache/app"
+              options=$(findmnt -n -o OPTIONS --mountpoint "$cache/app")
+              grep -Eq '(^|,)ro(,|$)' <<< "$options"
+              test ! -w "$cache/app/blender"
+              readonly=true
+              flags=(--cache-hit)
+            else
+              rejected_layout=true
+            fi
+          fi
+          python engine/tools/production_qa/environment_reuse/ensure.py --cache "$cache" --fallback "$fallback" --report "$report" "${flags[@]}"
+          jq --argjson rejected "$rejected_layout" --argjson readonly "$readonly" --argjson uid "$(id -u)" \
+            '. + {read_only_cache_mount: $readonly, execution_uid: $uid} | if $rejected then .cache_state="REJECTED" else . end' "$report" > "$RUNNER_TEMP/reuse-record.json"
+          mv "$RUNNER_TEMP/reuse-record.json" "$report"
+          jq -e '.native_reopen and (if .cache_state == "HIT" then .installer_calls == 0 and .read_only_cache_mount and .execution_uid > 0 and .trusted_manifest_match else .installer_calls == 1 end)' "$report"
+      - name: Check cache save eligibility (same branch scope)
+        id: headroom
+        if: steps.identity.outputs.eligible == 'true' && steps.restore.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [[ ! -e "$RUNNER_TEMP/two-env-cache" && ! -L "$RUNNER_TEMP/two-env-cache" ]] &&
+             jq -e '.cache_state == "MISS" and .trusted_manifest_match and .native_reopen' "$RUNNER_TEMP/reuse.json" &&
+             usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes) &&
+             [[ "$usage" =~ ^[0-9]{1,11}$ ]] &&
+             (( usage + 2 * 1024**3 + 256 * 1024**2 <= 10 * 1024**3 )); then
+            cp -a -- "$RUNNER_TEMP/two-env-fallback" "$RUNNER_TEMP/two-env-cache"
+            echo "allowed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/cache/save@v4
+        if: steps.headroom.outputs.allowed == 'true'
+        with:
+          path: ${{ runner.temp }}/two-env-cache
+          key: ${{ steps.identity.outputs.key }}
+      - name: Export selected visible meshes using verified Blender
+        env:
+          BLENDER: ${{ steps.blender.outputs.blender }}
+        run: |
+          set -euo pipefail
+          python3 -m py_compile 'tools/map_blender/lind/home/export_village_v13_integration.py'
+          test -x "$BLENDER"
+          "$BLENDER" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/export_village_v13_integration.py' -- "$RUNNER_TEMP/v13/village_cg_plaza_v13_UNAPPROVED.blend" "$RUNNER_TEMP/out"
       - uses: actions/upload-artifact@v4
         if: success()
         with:
@@ -50,3 +129,17 @@ jobs:
           path: ${{ runner.temp }}/out
           if-no-files-found: error
           retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: village-v13-environment-receipt
+          path: ${{ runner.temp }}/reuse.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Unmount read-only cache
+        if: always()
+        run: |
+          set -euo pipefail
+          if [[ -d "$RUNNER_TEMP/two-env-cache/app" && ! -L "$RUNNER_TEMP/two-env-cache" && ! -L "$RUNNER_TEMP/two-env-cache/app" ]] && mountpoint -q "$RUNNER_TEMP/two-env-cache/app"; then
+            sudo umount "$RUNNER_TEMP/two-env-cache/app"
+          fi
