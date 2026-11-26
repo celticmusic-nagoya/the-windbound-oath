@@ -1,0 +1,53 @@
+name: TWO isolated cliff scan shoulders V5
+on:
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
+    paths: ['tools/map_blender/lind/scenic_coast_scan_v5.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-cliff-coast-scan-v5
+  cancel-in-progress: false
+jobs:
+  scenic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/scenic_coast_scan_v5.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa/install_blender_530.sh
+      - name: Restore exact native and scanned geometry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v4" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15100240799/zip" > "$RUNNER_TEMP/v4.zip"
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/rock_07/rock_07_1k.blend' -o "$RUNNER_TEMP/rock.blend"
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/boulder_01/boulder_01_1k.blend' -o "$RUNNER_TEMP/boulder.blend"
+          printf '%s  %s\n' 5d73cd8a4942ec6f6210914183fd2604d12c8f9b639bab6dfd82bf0425692516 "$RUNNER_TEMP/v4.zip" da8010774291c5d0acfbcc3b82b367be06c5ed0926640147de5f17371ef227d1 "$RUNNER_TEMP/rock.blend" 8f8004fb52ebd00c4702a50873ac799e7bd7a0bea3415f2d8bc9986e1c58e371 "$RUNNER_TEMP/boulder.blend" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v4.zip"
+          unzip -q "$RUNNER_TEMP/v4.zip" -d "$RUNNER_TEMP/v4"
+          python3 -m py_compile 'tools/map_blender/lind/scenic_coast_scan_v5.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/scenic_coast_scan_v5.py' -- "$RUNNER_TEMP/v4/cliff_coast_pbr_v4_UNAPPROVED.blend" "$RUNNER_TEMP/rock.blend" "$RUNNER_TEMP/boulder.blend" "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-cliff-coast-scan-v5
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
