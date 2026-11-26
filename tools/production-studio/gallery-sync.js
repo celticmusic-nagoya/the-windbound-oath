@@ -48,12 +48,30 @@ async function loadPublishedGallery(automatic=false){
  if(automatic&&key===publishedGalleryKey){publishedGalleryLive.textContent=note+" / 変更なし";return;}
  if(automatic&&publishedGalleryKey!==null&&publishedGalleryView!=="home"){publishedGalleryLive.textContent=note+" / 新しい一覧あり。閲覧中の内容を保持しています。「成果物を更新」で反映。";return;}
  publishedGalleryKey=key;publishedGalleryLive.textContent=note+" / "+valid.length+" 件";
+ const repoUrl="https://github.com/celticmusic-nagoya/the-windbound-oath";
+ function provenance(e,parent){
+  const add=(label,url,cls)=>{const a=document.createElement("a");a.textContent=label;a.href=url;a.className=cls;a.rel="noopener noreferrer";parent.append(a);};
+  const note=document.createElement("p");note.className="gallery-source-expiry";
+  const git=e.source_type==="git"&&/^[a-f0-9]{40}$/.test(e.head||"")&&typeof e.source_path==="string"&&/^assets\/candidates\/LIND-(HOME|BUILD)-01\/[\w./-]+\.png$/.test(e.source_path)&&e.source_path.split("/").every(part=>part&&part!=="."&&part!=="..");
+  if(git){
+   add("生成元 Git成果物",repoUrl+"/blob/"+e.head+"/"+e.source_path,"gallery-source-link");
+   note.textContent="Git原本参照（Artifact期限なし・原本の存在は未再検証）";
+  }else if(e.source_type!=="git"&&Number.isSafeInteger(e.run_id)&&e.run_id>0&&Number.isSafeInteger(e.artifact_id)&&e.artifact_id>0){
+   const expiry=typeof e.expires_at==="string"?Date.parse(e.expires_at):NaN;
+   const elapsed=Number.isFinite(expiry)&&expiry<=Date.now();
+   note.textContent=Number.isFinite(expiry)?"原Artifact期限（記録）: "+e.expires_at+(elapsed?" / 経過済み（公開画像は保持）":" / 現在の可用性は未照会"):"原Artifact期限未記録（可用性未確認）";
+   if(elapsed)add("生成元 Actions記録",repoUrl+"/actions/runs/"+e.run_id,"gallery-source-link");
+   else add("生成元 Artifact（可用性未確認）",repoUrl+"/actions/runs/"+e.run_id+"/artifacts/"+e.artifact_id,"gallery-source-link");
+  }else note.textContent="生成元の識別情報未確認（リンクなし）";
+  parent.append(note);
+  if(typeof e.review_ref==="string"&&/^https:\/\/github\.com\/celticmusic-nagoya\/the-windbound-oath\/(?:pull\/[1-9]\d*(?:#issuecomment-[1-9]\d*)?|blob\/[a-f0-9]{40}\/AGENTS\.md#director-approved-studio-work-in-progress-publication-2026-11-26)$/.test(e.review_ref))add("公開・レビュー根拠",e.review_ref,"gallery-review-link");
+ }
  function renderEntry(e){
  const tile=document.createElement("article");tile.className="tile";
  const label=document.createElement("h3");label.textContent=e.name;tile.append(label);
  const meta=document.createElement("div");meta.className="gallery-meta";for(const [key,value] of [["QA",e.qa],["採用",e.adoption]]){const chip=document.createElement("span");chip.className="gallery-chip";chip.textContent=key+": "+value;meta.append(chip);}tile.append(meta);
  const preservation=document.createElement("p");preservation.className="gallery-preservation";preservation.textContent="原Artifact保全: "+(e.preservation_status==="PRESERVED_AND_READBACK_VERIFIED"?"manifest申告：再取得SHA検証済み（独立未検証）":e.preservation_status==="PRESERVATION_BLOCKED"?"権利確認待ち・未保全":"未検証（公開画像と原ZIPの保全は別）");tile.append(preservation);
- const source=document.createElement("a");source.href="https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/"+Number(e.run_id)+"/artifacts/"+Number(e.artifact_id);source.textContent="生成元 Artifact";if(e.source_type==="git"&&/^[a-f0-9]{40}$/.test(e.head)&&/^assets\/candidates\/LIND-(HOME|BUILD)-01\/[\w./-]+\.png$/.test(e.source_path)&&!e.source_path.split("/").includes("..")){source.href="https://github.com/celticmusic-nagoya/the-windbound-oath/blob/"+e.head+"/"+e.source_path;source.textContent="生成元 Git成果物";}tile.append(source);
+ provenance(e,tile);
  if(/\.(png|jpe?g)$/.test(e.path)){const img=document.createElement("img");img.src=base+e.path;img.loading="lazy";img.alt=e.name;tile.prepend(img);}
  else {const button=document.createElement("button");button.textContent="3D表示";button.onclick=async()=>{button.disabled=true;try{const res=await fetch(base+e.path,{credentials:"omit"});if(!res.ok)throw Error("HTTP "+res.status);const reader=res.body.getReader();let size=0;const parts=[];try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>e.bytes)throw Error("容量不一致");parts.push(value);}}finally{await reader.cancel();}const blob=new Blob(parts);const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer())),x=>x.toString(16).padStart(2,"0")).join("");if(size!==e.bytes||hash!==e.sha256)throw Error("SHA不一致");const input=document.getElementById("model-file"),dt=new DataTransfer();const panel=input.closest("details");if(panel)panel.open=true;dt.items.add(new File([blob],e.path.split("/").pop()));input.files=dt.files;input.dispatchEvent(new Event("change"));document.getElementById("model-view").scrollIntoView({block:"center"});}catch(err){status.textContent="モデル取得失敗: "+err.message;}finally{button.disabled=false;}};tile.append(button);}
  return tile;
@@ -197,9 +215,9 @@ async function loadPublishedGallery(automatic=false){
  const zoomLabel=document.createElement("span");zoomLabel.setAttribute("aria-label","拡大率");bar.append(zoomLabel);
  function setZoom(value){zoom=Math.max(1,Math.min(4,value));full.style.width=(zoom*100)+"%";full.style.maxWidth=zoom===1?"100%":"none";full.style.maxHeight=zoom===1?"58vh":"none";zoomLabel.textContent=Math.round(zoom*100)+"%";zoomOut.disabled=zoom===1;zoomIn.disabled=zoom===4;reset.disabled=zoom===1;if(zoom===1){viewport.scrollTop=0;viewport.scrollLeft=0;}}
 
- const info=document.createElement("details");const summary=document.createElement("summary");summary.textContent="制作情報・QA・来歴";const meta=document.createElement("p");meta.style.overflowWrap="anywhere";info.append(summary,meta);
+ const info=document.createElement("details");const summary=document.createElement("summary");summary.textContent="制作情報・QA・来歴";const meta=document.createElement("p");meta.style.overflowWrap="anywhere";const provenancePanel=document.createElement("div");info.append(summary,meta,provenancePanel);
  const original=document.createElement("a");original.textContent="元画像を開く";original.target="_blank";original.rel="noopener noreferrer";
- function update(){const p=visiblePhotos[index];heading.textContent=p.name;setZoom(1);full.src=base+p.path;full.alt=p.name;original.href=full.src;count.textContent=(index+1)+" / "+visiblePhotos.length;prev.disabled=index===0;next.disabled=index===visiblePhotos.length-1;meta.textContent="制作段階: "+(p.stage||"未分類")+" / QA: "+p.qa+" / 採用: "+p.adoption+" / HEAD: "+(p.head||"未記録")+" / SHA-256: "+p.sha256+" / run: "+(p.run_id??"未記録")+" / Artifact: "+(p.artifact_id??"未記録");}
+ function update(){const p=visiblePhotos[index];heading.textContent=p.name;setZoom(1);full.src=base+p.path;full.alt=p.name;original.href=full.src;count.textContent=(index+1)+" / "+visiblePhotos.length;prev.disabled=index===0;next.disabled=index===visiblePhotos.length-1;meta.textContent="制作段階: "+(p.stage||"未分類")+" / QA: "+p.qa+" / 採用: "+p.adoption+" / HEAD: "+(p.head||"未記録")+" / SHA-256: "+p.sha256+" / run: "+(p.run_id??"未記録")+" / Artifact: "+(p.artifact_id??"未記録");provenancePanel.replaceChildren();provenance(p,provenancePanel);}
  function move(delta){const target=index+delta;if(target>=0&&target<visiblePhotos.length){index=target;update();}}
  dialog.addEventListener("keydown",event=>{if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||viewport.contains(event.target))return;if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();move(event.key==="ArrowLeft"?-1:1);}});
  dialog.append(bar,heading,viewport,original,info);update();dialog.addEventListener("close",()=>{dialog.remove();if(open.isConnected)open.focus();});document.body.append(dialog);dialog.showModal();close.focus();

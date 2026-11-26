@@ -152,6 +152,38 @@ try{
  await page.unroute('**/gallery-manifest.json');
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+ // Provenance fixtures: known expiry is not live availability; malformed links must not escape the repository.
+ const sourceFixture=manifest.entries.find(photo);
+ const provenanceBase='https://github.com/celticmusic-nagoya/the-windbound-oath';
+ const variants=[
+  {...sourceFixture,name:'expiry past',source_type:'artifact',run_id:123,artifact_id:456,expires_at:'2000-01-01T00:00:00Z',review_ref:provenanceBase+'/pull/599#issuecomment-123'},
+  {...sourceFixture,name:'expiry unknown',source_type:'artifact',run_id:123,artifact_id:456,expires_at:null,review_ref:'https://example.org/fake'},
+  {...sourceFixture,name:'invalid identity',source_type:'artifact',run_id:null,artifact_id:456,review_ref:'javascript:alert(1)'},
+  {...sourceFixture,name:'git source',source_type:'git',head:'a'.repeat(40),source_path:'assets/candidates/LIND-HOME-01/test.png'},
+  {...sourceFixture,name:'git unsafe',source_type:'git',head:'a'.repeat(40),source_path:'assets/candidates/LIND-HOME-01/../test.png'},
+ ];
+ await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:variants}}));
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(()=>document.querySelector('#published-status').textContent.startsWith('5 件'));
+ await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
+ const sourceCard=name=>page.locator('#published-gallery article').filter({has:page.getByRole('heading',{name,exact:true})});
+ assert.equal(await sourceCard('expiry past').locator('.gallery-source-link').getAttribute('href'),provenanceBase+'/actions/runs/123');
+ assert.match(await sourceCard('expiry past').locator('.gallery-source-expiry').innerText(),/経過済み/);
+ assert.equal(await sourceCard('expiry past').locator('.gallery-review-link').getAttribute('href'),provenanceBase+'/pull/599#issuecomment-123');
+ assert.match(await sourceCard('expiry unknown').locator('.gallery-source-expiry').innerText(),/期限未記録/);
+ assert.equal(await sourceCard('expiry unknown').locator('.gallery-review-link').count(),0);
+ assert.equal(await sourceCard('invalid identity').locator('.gallery-source-link').count(),0);
+ assert.equal(await sourceCard('invalid identity').locator('.gallery-review-link').count(),0);
+ assert.equal(await sourceCard('git source').locator('.gallery-source-link').getAttribute('href'),provenanceBase+'/blob/'+'a'.repeat(40)+'/assets/candidates/LIND-HOME-01/test.png');
+ assert.equal(await sourceCard('git unsafe').locator('.gallery-source-link').count(),0);
+ await sourceCard('expiry past').locator('.gallery-image-button').click();
+ const sourceDialog=page.getByRole('dialog',{name:'成果物画像レビュー'});
+ await sourceDialog.locator('summary').click();
+ assert.equal(await sourceDialog.locator('.gallery-review-link').getAttribute('href'),provenanceBase+'/pull/599#issuecomment-123');
+ await sourceDialog.getByRole('button',{name:'閉じる',exact:true}).click();
+ await page.unroute('**/gallery-manifest.json');
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
  // Global recent view and exact independent QA/adoption filters.
  await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
  const allTiles=page.locator('#published-gallery article');
