@@ -575,6 +575,9 @@ jobs:
           assert comment["body"] == f'/two-morwen-launch vrm_export main={os.environ["GITHUB_SHA"]}'
           PY
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/transfer-run.json"
+          export MORWEN_TRANSFER_GIT_DIR="$GITHUB_WORKSPACE/transfer-control"
+          test "$(git -C "$MORWEN_TRANSFER_GIT_DIR" rev-parse HEAD)" = "$GITHUB_SHA"
+          printf 'MORWEN_TRANSFER_GIT_DIR=%s\n' "$MORWEN_TRANSFER_GIT_DIR" >> "$GITHUB_ENV"
           PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
           import json, os, pathlib
           from morwen_transfer_claim import await_bound

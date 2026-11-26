@@ -1,5 +1,6 @@
 """Candidate adapter for the existing Git CAS lease; no live writer takeover."""
 import json
+import os
 import re
 import time
 import uuid
@@ -24,9 +25,19 @@ def binding(asset, revision, request, run=None, attempt=None):
 
 def read_binding(remote, asset, token, expected, deadline, reservation=None):
     ref = ref_for(asset)
-    assert_owned(remote, asset, token, deadline=deadline)
-    git("fetch", "--no-tags", remote, ref, deadline=deadline)
-    tag = git("cat-file", "tag", token, deadline=deadline)
+    cwd = os.environ.get("MORWEN_TRANSFER_GIT_DIR") or None
+    if cwd is not None:
+        if git("rev-parse", "HEAD", deadline=deadline, cwd=cwd) != expected["revision"]:
+            raise RuntimeError("transfer checkout revision mismatch")
+    assert_owned(remote, asset, token, deadline=deadline, cwd=cwd)
+    shallow = git("rev-parse", "--is-shallow-repository", deadline=deadline, cwd=cwd)
+    if shallow not in ("true", "false"):
+        raise RuntimeError("unknown shallow repository status")
+    args = ["fetch", "--no-tags", "--no-recurse-submodules"]
+    if shallow == "true":
+        args.append("--depth=1")
+    git(*args, remote, ref, deadline=deadline, cwd=cwd)
+    tag = git("cat-file", "tag", token, deadline=deadline, cwd=cwd)
     header, body = tag.split("\n\n", 1)
     lines = header.splitlines()
     if lines[:2] != ["object " + expected["revision"], "type commit"]:
@@ -39,7 +50,7 @@ def read_binding(remote, asset, token, expected, deadline, reservation=None):
             raise RuntimeError("lease predecessor reservation mismatch")
     if not re.fullmatch(r"[0-9a-f]{32}", nonce) or actual != expected:
         raise RuntimeError("lease request/run binding mismatch")
-    assert_owned(remote, asset, token, deadline=deadline)
+    assert_owned(remote, asset, token, deadline=deadline, cwd=cwd)
 
 
 def replace(remote, asset, previous, expected, deadline):
@@ -80,9 +91,10 @@ def await_bound(remote, asset, reservation, revision, request, run, attempt, tim
     if not re.fullmatch(r"[0-9a-f]{40}", reservation) or not 0 < timeout <= 120:
         raise ValueError("invalid reservation or wait limit")
     ref = ref_for(asset)
+    cwd = os.environ.get("MORWEN_TRANSFER_GIT_DIR") or None
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
-        current = git("ls-remote", "--refs", remote, ref, deadline=deadline)
+        current = git("ls-remote", "--refs", remote, ref, deadline=deadline, cwd=cwd)
         match = re.fullmatch(r"([0-9a-f]{40})\t" + re.escape(ref), current)
         if not match:
             raise RuntimeError("transfer reservation missing or ambiguous")
@@ -95,7 +107,7 @@ def await_bound(remote, asset, reservation, revision, request, run, attempt, tim
             read_binding(remote, asset, token, binding(asset, revision, request), deadline)
         except RuntimeError:
             # A legitimate CAS handoff may race the read. Re-read once; fail on other errors.
-            updated = git("ls-remote", "--refs", remote, ref, deadline=deadline)
+            updated = git("ls-remote", "--refs", remote, ref, deadline=deadline, cwd=cwd)
             if updated == current:
                 raise
             continue
