@@ -107,6 +107,8 @@ try{
  for(const [subcategory,label] of [['plant','植物・草花'],['tree','樹木'],['forest','森林'],['river','河川・水辺'],['terrain','地形'],['sanctuary','聖域'],['ruin','遺跡']]){
   await page.locator('#published-gallery .category-card').filter({hasText:label}).click();
   assert.deepEqual(await page.locator('#published-gallery article h3').allTextContents(),['world-fixture-'+subcategory]);
+  assert.ok(await page.locator('.gallery-design-links a').count()>0);
+  if(subcategory==='river'){assert.match(await page.locator('.gallery-design-links').innerText(),/下流メッシュV28/);assert.ok(await page.locator('.gallery-design-links a').first().getAttribute('href').then(s=>s.includes('4621f79db703a2fd70cfd597b4b73703a9bb5fe4')));}
   await page.locator('#published-gallery').getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
  }
  await page.unroute('**/gallery-manifest.json');
