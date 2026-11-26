@@ -67,7 +67,15 @@ test("observed current hero-tree and native forest evidence is discoverable, wit
 test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
- assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,11]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,11]);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
- assert.equal(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）")[0].id,11);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[13,11]);
+});
+
+test("world namespace catches actual new naming orders and unversioned candidates without crossing branches",()=>{
+ const branch="docs/ireland-world-source-grounded-plan-20261123";
+ const data={artifacts:[art(15076007596,branch,"two-v59-ruin-2d-references"),art(15075731907,branch,"two-sanctuary-v58-native-scenery"),art(31,branch,"two-unversioned-prototype"),art(32,"other","two-v59-ruin-2d-references"),art(33,branch,"two-../unsafe"),art(34,branch,"two-"+'a'.repeat(161)),art(35,branch,"two-fork",{workflow_run:{...art(35,branch,"two-fork").workflow_run,head_repository_id:2}})]};
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,31]);
+ assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075731907);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[15076007596,31]);
 });
