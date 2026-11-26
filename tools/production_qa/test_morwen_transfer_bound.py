@@ -26,6 +26,8 @@ with tempfile.TemporaryDirectory() as tmp:
     out,err=worker.communicate(timeout=10); assert worker.returncode==0,err; assert token==out.strip(); cases.append('wait then verified real CAS handoff')
     verify(remote,asset,token,rev,request,run,'1'); cases.append('current bound token verified')
     assert await_bound(remote,asset,initial,rev,request,run,'1',3)==token; cases.append('already bound')
+    reject('wrong original reservation',lambda:await_bound(remote,asset,'a'*40,rev,request,run,'1',3))
+    reject('bound token supplied as reservation',lambda:await_bound(remote,asset,token,rev,request,run,'1',3))
     reject('other run',lambda:await_bound(remote,asset,initial,rev,request,'67891','1',3))
     reject('other revision',lambda:await_bound(remote,asset,initial,'0'*40,request,run,'1',3))
     reject('invalid timeout',lambda:await_bound(remote,asset,initial,rev,request,run,'1',121))
