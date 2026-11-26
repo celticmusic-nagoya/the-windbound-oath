@@ -89,6 +89,47 @@ def field_matches(ocr, value):
     return ocr.strip() == value
 
 
+def blank_field(image):
+    # The observed empty fields are near-uniform light gray. Do not append
+    # to text that Vision cannot read.
+    for low, high in image.getextrema():
+        if low < 235 or high - low > 10:
+            return False
+    return True
+
+
+def enter_empty_field(y, value):
+    # Reuse the input event sequence observed in successful run 44733016182.
+    # Wait for focus before emitting a single Unicode key-down event.
+    script = """
+import CoreGraphics
+import Foundation
+let display = CGDisplayBounds(CGMainDisplayID())
+let source = CGEventSource(stateID: .combinedSessionState)
+let env = ProcessInfo.processInfo.environment
+guard let row = env["MORWEN_INPUT_ROW"], let y = Double(row),
+      let value = env["MORWEN_INPUT_VALUE"] else { exit(1) }
+let point = CGPoint(x: display.minX + 500 * display.width / 1024,
+                    y: display.minY + CGFloat(y) * display.height / 768)
+for kind in [CGEventType.mouseMoved, .leftMouseDown, .leftMouseUp] {
+    guard let event = CGEvent(mouseEventSource: source, mouseType: kind,
+                              mouseCursorPosition: point, mouseButton: .left) else { exit(1) }
+    event.post(tap: .cgSessionEventTap)
+    usleep(200000)
+}
+guard let key = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true) else { exit(1) }
+let utf16 = Array(value.utf16)
+utf16.withUnsafeBufferPointer {
+    key.keyboardSetUnicodeString(stringLength: utf16.count, unicodeString: $0.baseAddress)
+}
+key.post(tap: .cgSessionEventTap)
+usleep(400000)
+"""
+    environment = dict(os.environ, MORWEN_INPUT_ROW=str(y), MORWEN_INPUT_VALUE=value)
+    return subprocess.run(["swift", "-e", script], env=environment,
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+
+
 def write_diagnostic(private_dir, field, phase, flags, dialog, dialog_ocr, crop, field_ocr):
     path = private_dir / "Morwen-metadata-diagnostic.zip"
     with path.open("xb") as output, zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -199,13 +240,13 @@ def main():
     im.crop(DIALOG_BOX).save(dialog)
     for field, y, region in METADATA_FIELDS:
         for phase in ("before", "after"):
-            if phase == "after":
-                click(500, y)
-                send("key", 0, "cmd")
-                send("text", values[field])
-                # Blur on the non-interactive Avatar Information heading.
-                click(320, 273)
-                time.sleep(0.7)
+            input_sent = True
+            if phase == "after" and not already_matches:
+                input_sent = enter_empty_field(y, values[field])
+                if input_sent:
+                    # Blur on the non-interactive Avatar Information heading.
+                    click(320, 273)
+                    time.sleep(0.7)
             _, text, im = observe(f"metadata-{field}-{phase}", diagnostic_ocr)
             flags = dialog_flags(im, text)
             ready = flags[0] and flags[1] and all(flags[2]) and blue(im, 286, 189)
@@ -215,13 +256,15 @@ def main():
             if ready:
                 im.crop(DIALOG_BOX).save(dialog)
                 crop = out / f"metadata-{field}-{phase}-roi.png"
-                im.crop(region).save(crop)
-                if phase == "after":
-                    field_ocr = diagnostic_ocr(crop)
-                matched = phase == "before" or field_matches(field_ocr, values[field])
+                field_image = im.crop(region)
+                field_image.save(crop)
+                field_ocr = diagnostic_ocr(crop)
+                already_matches = field_matches(field_ocr, values[field])
+                matched = input_sent and (already_matches or
+                                           (phase == "before" and not field_ocr.strip() and blank_field(field_image)))
             print("VRM_METADATA_FIELD", field, phase, "dimensions", int(flags[0]),
                   "title", int(flags[1]), "anchors", "".join(str(int(v)) for v in flags[2]),
-                  "match", int(matched), flush=True)
+                  "input", int(input_sent), "match", int(matched), flush=True)
             if not matched:
                 if dialog.is_file():
                     write_diagnostic(private_dir, field, phase, flags, dialog,
