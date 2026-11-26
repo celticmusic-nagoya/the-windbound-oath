@@ -129,7 +129,7 @@ async function loadPublishedGallery(automatic=false){
   navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
   status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
-  if(id==="world"){const note=document.createElement("p");note.textContent="公開承認済みのみ。未公開候補は下の直近制作成果物でカテゴリ別に確認できます。";note.style.gridColumn="1/-1";area.append(note);}
+  if(id==="world"){const note=document.createElement("p");note.textContent="制作途中・未採用も掲載（権利・内容確認済みの画像）。画像未掲載の証跡は直近制作成果物から確認できます。";note.style.gridColumn="1/-1";area.append(note);}
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
   for(const [sub,label] of subcategories[id]){
    const entries=assigned.filter(x=>x.root===id&&x.sub===sub).map(x=>x.entry);
