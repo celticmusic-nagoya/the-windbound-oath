@@ -32,13 +32,22 @@ with sync_playwright() as p:
                 page.on("response", lambda r: env_responses.append(r) if "/js/runtime-environment.js" in r.url else None)
                 document = page.goto(url, wait_until="domcontentloaded", timeout=90000)
                 assert document and document.ok, f"HTML status {document.status if document else None}"
-                # RawGitHack's third-party-content acknowledgement is a real user-visible step.
-                # Only accept the known confirmation page for our exact approved repository URL.
-                if enabled and page.url == DEV and page.get_by_role("heading", name="One more step", exact=True).is_visible():
-                    expect(page.get_by_text(DEV, exact=True)).to_be_visible()
-                    page.screenshot(path=str(OUT / (name + "-confirmation.png")))
-                    with page.expect_response(lambda r: "/js/runtime-environment.js" in r.url, timeout=90000):
-                        page.get_by_text("Open the page", exact=True).click()
+                # Observe actual visible text, not an assumed heading role or instant visibility.
+                if enabled:
+                    page.wait_for_function(
+                        "() => typeof window.WINDBOUND_DEV === 'boolean' || "
+                        "(document.body.innerText.includes('One more step') && document.body.innerText.includes('Open the page'))",
+                        timeout=30000,
+                    )
+                    if not page.evaluate("typeof window.WINDBOUND_DEV === 'boolean'"):
+                        assert page.url == DEV, f"unexpected confirmation URL: {page.url}"
+                        assert DEV in page.locator("body").inner_text(), "unexpected confirmation target"
+                        page.screenshot(path=str(OUT / (name + "-confirmation.png")))
+                        button = page.get_by_text("Open the page", exact=True)
+                        expect(button).to_be_visible(timeout=15000)
+                        print(name, "confirmation observed; clicking normal user control", flush=True)
+                        button.click(timeout=15000)
+                        print(name, "confirmation clicked", flush=True)
                 page.wait_for_function("typeof window.WINDBOUND_DEV === 'boolean'", timeout=60000)
                 assert env_responses, "no runtime-environment.js response"
                 env = env_responses[-1]
@@ -71,7 +80,11 @@ with sync_playwright() as p:
                 results.append({"case": name, "status": "PASS", "script_sha256": actual, "url": page.url})
             except Exception as e:
                 errors.append(name + ": " + str(e))
-                results.append({"case": name, "status": "FAIL", "error": str(e), "page_errors": errors_js, "url": page.url})
+                try:
+                    diagnostic = page.evaluate("({title: document.title, text: document.body?.innerText?.slice(0,1200), scripts: Array.from(document.scripts,s=>s.src).filter(Boolean).slice(0,20), dev: typeof window.WINDBOUND_DEV})")
+                except Exception:
+                    diagnostic = {}
+                results.append({"case": name, "status": "FAIL", "error": str(e), "page_errors": errors_js, "url": page.url, "diagnostic": diagnostic})
             finally:
                 try:
                     page.screenshot(path=str(OUT / (name + ".png")), timeout=10000)
