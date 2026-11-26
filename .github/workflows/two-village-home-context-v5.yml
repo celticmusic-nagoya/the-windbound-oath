@@ -1,7 +1,7 @@
 name: TWO isolated village home context V5
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
     paths:
       - 'tools/map_blender/lind/home/village_home_context_v5.py'
 permissions:
@@ -12,13 +12,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   context:
-    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: |
             tools/map_blender/lind/home/village_home_context_v5.py
