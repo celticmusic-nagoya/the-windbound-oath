@@ -21,6 +21,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py'
       - 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -55,6 +56,10 @@ jobs:
         run: |
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            # V77 isolated far relief and lower background PBR.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             # V76 isolated material A/B only.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
@@ -960,5 +965,49 @@ jobs:
         with:
           name: two-v76-moss-floor
           path: ${{ runner.temp }}/v76-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v77-far-relief:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V77 far relief scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V76 and test continuous textured scenic relief
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v77-in" "$RUNNER_TEMP/v77-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15086058841/zip" > "$RUNNER_TEMP/v77.zip"
+          printf '%s  %s\n' 88c3efae3eca04876d97d1bcc5a439164488a3d3be0758c9658f754e0516c635 "$RUNNER_TEMP/v77.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v77.zip"
+          unzip -q "$RUNNER_TEMP/v77.zip" -d "$RUNNER_TEMP/v77-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py' -- "$RUNNER_TEMP/v77-in/v76_moss_floor_feasibility.blend" "$RUNNER_TEMP/v77-out"
+      - name: Preserve isolated textured relief candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v77-far-relief
+          path: ${{ runner.temp }}/v77-out
           retention-days: 14
           if-no-files-found: error
