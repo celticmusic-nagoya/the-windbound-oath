@@ -1,0 +1,40 @@
+name: Rilde building reference exact readback
+on:
+  push:
+    branches: [feature/lind-buildings-01]
+    paths: ['docs/production/lind/buildings/RILDE_CG_IRISH_VERNACULAR_ART_DIRECTION_20261126.md']
+permissions:
+  contents: read
+concurrency:
+  group: rilde-building-reference-readback
+  cancel-in-progress: false
+jobs:
+  readback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cb0c880d1e638bad1f8855a8bedbe17d11a8c16f
+          persist-credentials: false
+          sparse-checkout: |
+            assets/approved/world/rilde_village.png
+            assets/approved/game/rilde_story/raid/attack_background_only.png
+            assets/approved/game/rilde_story/aftermath/ruins_background_only.png
+          sparse-checkout-cone-mode: false
+      - name: Verify and collect existing approved repository references
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ref"
+          printf '%s\n' 'c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a  assets/approved/world/rilde_village.png' 'a19e782ec0927f9ef983cf896cf31a18ace0aca8bf2b165714342b1cfe528c3e  assets/approved/game/rilde_story/raid/attack_background_only.png' '78b0801f10b6a763c66aa44265ab381edc398f3b5adfb1b3d3dee0e6c6d917b2  assets/approved/game/rilde_story/aftermath/ruins_background_only.png' | sha256sum -c -
+          cp assets/approved/world/rilde_village.png "$RUNNER_TEMP/ref/day.png"
+          cp assets/approved/game/rilde_story/raid/attack_background_only.png "$RUNNER_TEMP/ref/raid.png"
+          cp assets/approved/game/rilde_story/aftermath/ruins_background_only.png "$RUNNER_TEMP/ref/aftermath.png"
+          cd "$RUNNER_TEMP/ref"
+          sha256sum *.png > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rilde-existing-approved-cg-readback
+          path: ${{ runner.temp }}/ref
+          retention-days: 1
+          if-no-files-found: error

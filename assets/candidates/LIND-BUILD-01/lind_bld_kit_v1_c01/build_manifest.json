@@ -1,0 +1,2336 @@
+{
+ "task_id": "LIND-BUILD-01",
+ "status": "CANDIDATE_NOT_ART_APPROVED",
+ "blender": "5.3.0",
+ "seed_base": 1311,
+ "contract": {
+  "status": "HOME_CONTRACT_V1_APPLIED",
+  "fallback_used": false,
+  "pin_sha256": "a415170dfac2d03a71dc973905f5a0ddf707392f10af1c7a755e3f0f37e3c651",
+  "candidates_tried": [
+   {
+    "path": "/home/claude/wt-buildings/docs/production/lind/buildings/vendor/arch-kit-contract.v1.json",
+    "sha256": "a415170dfac2d03a71dc973905f5a0ddf707392f10af1c7a755e3f0f37e3c651",
+    "pin_match": true
+   }
+  ],
+  "home_contract_path": "/home/claude/wt-buildings/docs/production/lind/buildings/vendor/arch-kit-contract.v1.json",
+  "home_contract_sha256": "a415170dfac2d03a71dc973905f5a0ddf707392f10af1c7a755e3f0f37e3c651",
+  "home_contract_status": "CONTRACT_V1_CANDIDATE_NOT_DIRECTOR_LOCKED",
+  "build_extra": {
+   "pitch_deg_build": 44.0,
+   "slate_gauge": 0.18,
+   "batten_section": [
+    0.05,
+    0.03
+   ],
+   "ridge_piece_len": [
+    0.3,
+    0.4
+   ],
+   "wall_texture_tile_m": 3.2,
+   "dressed_texture_tile_m": 1.0,
+   "plinth_height": 0.32,
+   "quoin_course_h": [
+    0.22,
+    0.32
+   ],
+   "quoin_proud": 0.03,
+   "eave_wall_inner_knee": 0.3,
+   "porch": {
+    "post": 0.16,
+    "eave_z": 2.55,
+    "pitch_deg": 44.0,
+    "depth": 1.45
+   },
+   "dormer": {
+    "w": 1.3,
+    "front_h": 1.2,
+    "pitch_deg": 46.0
+   },
+   "render": {
+    "engine": "CYCLES",
+    "samples": 48,
+    "denoise": true,
+    "max_px": 1280
+   }
+  },
+  "contract_material_ids": [
+   "MAT_DOOR_PLANK_A",
+   "MAT_FABRIC_WOOL_GREEN_A",
+   "MAT_GLASS_CROWN_A",
+   "MAT_IRON_WROUGHT_A",
+   "MAT_LEAD_FLASHING_A",
+   "MAT_LINEN_A",
+   "MAT_MORTAR_LIME_A",
+   "MAT_PLANK_FLOOR_A",
+   "MAT_PLASTER_LIME_INT_A",
+   "MAT_SLATE_BLUEGRAY_A",
+   "MAT_SLATE_RIDGE_A",
+   "MAT_STONE_QUOIN_DRESSED_A",
+   "MAT_STONE_RUBBLE_LIMESTONE_A",
+   "MAT_TERRACOTTA_A",
+   "MAT_TIMBER_OAK_WEATHERED_A"
+  ]
+ },
+ "samples": 40,
+ "entries": [
+  {
+   "building": "inn",
+   "bldg_id": "INN",
+   "state": "peaceful",
+   "build_s": 0.9,
+   "dims": {
+    "footprint_w": 12.0,
+    "footprint_d": 8.0,
+    "eave_z": 6.05,
+    "ridge_z": 9.913,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 130,
+    "rafters": 61,
+    "battens": 128,
+    "slates": 3473,
+    "ridge_pieces": 56,
+    "chimney_top_z": 10.813,
+    "sign_emblem": "weathercock",
+    "ridge_z": 9.913,
+    "eave_z": 6.05
+   },
+   "slate_unique_dims": 3469,
+   "mesh": {
+    "tris": 101914,
+    "objects": 12,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_PAINT_GILT_A",
+     "MAT_PAINT_SIGN_GREEN_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 13
+   },
+   "anchors": [
+    "ANC_INN_DOOR_MAIN_EXT",
+    "ANC_INN_DOOR_MAIN_INT",
+    "ANC_INN_EVENT_FXSMOKE01",
+    "ANC_INN_EVENT_FXSMOKE02"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 10.9,
+     "corner_offset": 0.55,
+     "outer_len": 12.0
+    },
+    "N": {
+     "L": 10.9,
+     "corner_offset": 0.55,
+     "outer_len": 12.0
+    },
+    "W": {
+     "L": 8.0,
+     "corner_offset": 0.0,
+     "outer_len": 8.0
+    },
+    "E": {
+     "L": 8.0,
+     "corner_offset": 0.0,
+     "outer_len": 8.0
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -3.7,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 3.7,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -3.7,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05,
+      "shutters": true
+     },
+     {
+      "kind": "W1",
+      "uc": 3.7,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05,
+      "shutters": true
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": -3.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "door2",
+      "uc": 1.0,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W1",
+      "uc": 3.4,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -3.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 3.4,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "E": [
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 23.2671,
+    "type": "ORTHO"
+   },
+   "render_s": 107.2,
+   "render_png": "inn_peaceful_game27.png",
+   "render_sha256": "f755412e78ad0908c03f8c7e31e6e3eb67a05e3884b90719a1cb7ed55facd576"
+  },
+  {
+   "building": "inn",
+   "bldg_id": "INN",
+   "state": "burning",
+   "build_s": 0.4,
+   "dims": {
+    "footprint_w": 12.0,
+    "footprint_d": 8.0,
+    "eave_z": 6.05,
+    "ridge_z": 9.913,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 128,
+    "rafters": 58,
+    "battens": 46,
+    "slates": 838,
+    "chimney_top_z": 10.813,
+    "ridge_z": 9.913,
+    "eave_z": 6.05
+   },
+   "slate_unique_dims": 838,
+   "mesh": {
+    "tris": 44034,
+    "objects": 11,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 10
+   },
+   "anchors": [
+    "ANC_INN_DOOR_MAIN_EXT",
+    "ANC_INN_DOOR_MAIN_INT",
+    "ANC_INN_EVENT_FXFIRE01",
+    "ANC_INN_EVENT_FXFIRE02",
+    "ANC_INN_EVENT_FXFIRE03",
+    "ANC_INN_EVENT_FXFIRE04",
+    "ANC_INN_EVENT_FXFIRE05",
+    "ANC_INN_EVENT_FXFIRE06",
+    "ANC_INN_EVENT_FXFIRE07",
+    "ANC_INN_EVENT_FXFIRE08",
+    "ANC_INN_EVENT_FXFIRE09",
+    "ANC_INN_EVENT_FXFIRE10",
+    "ANC_INN_EVENT_FXFIRE11",
+    "ANC_INN_EVENT_FXFIRE12",
+    "ANC_INN_EVENT_FXFIRE13",
+    "ANC_INN_EVENT_FXFIRE14",
+    "ANC_INN_EVENT_FXFIRE15",
+    "ANC_INN_EVENT_FXFIRE16",
+    "ANC_INN_EVENT_FXFIRE17",
+    "ANC_INN_EVENT_FXFIRE18",
+    "ANC_INN_EVENT_FXFIRE19",
+    "ANC_INN_EVENT_FXFIRE20",
+    "ANC_INN_EVENT_FXFIRE21",
+    "ANC_INN_EVENT_FXFIRE22",
+    "ANC_INN_EVENT_FXSMOKE23",
+    "ANC_INN_EVENT_FXSMOKE24",
+    "ANC_INN_EVENT_FXSMOKE25"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 10.9,
+     "corner_offset": 0.55,
+     "outer_len": 12.0
+    },
+    "N": {
+     "L": 10.9,
+     "corner_offset": 0.55,
+     "outer_len": 12.0
+    },
+    "W": {
+     "L": 8.0,
+     "corner_offset": 0.0,
+     "outer_len": 8.0
+    },
+    "E": {
+     "L": 8.0,
+     "corner_offset": 0.0,
+     "outer_len": 8.0
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -3.7,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 3.7,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -3.7,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05,
+      "shutters": true
+     },
+     {
+      "kind": "W1",
+      "uc": 3.7,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05,
+      "shutters": true
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": -3.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "door2",
+      "uc": 1.0,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W1",
+      "uc": 3.4,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -3.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 3.4,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "E": [
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 2.2,
+      "z0": 3.95,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 23.2683,
+    "type": "ORTHO"
+   },
+   "render_s": 119.3,
+   "render_png": "inn_burning_game27.png",
+   "render_sha256": "7e191f4c1f8f8bf06d27068f76e3d42830f6d92d440e2241e44f4e6a4f427c96"
+  },
+  {
+   "building": "shop",
+   "bldg_id": "SHOP",
+   "state": "peaceful",
+   "build_s": 0.7,
+   "dims": {
+    "footprint_w": 6.6,
+    "footprint_d": 8.4,
+    "eave_z": 3.3,
+    "ridge_z": 6.487,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 43,
+    "chimney_top_z": 7.387,
+    "sign_emblem": "pouch_leaf",
+    "rafters": 30,
+    "battens": 54,
+    "slates": 1963,
+    "ridge_pieces": 26,
+    "ridge_z": 6.487,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 1963,
+   "mesh": {
+    "tris": 53487,
+    "objects": 12,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FABRIC_WOOL_GREEN_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LINEN_A",
+     "MAT_PAINT_GILT_A",
+     "MAT_PAINT_SIGN_GREEN_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 14
+   },
+   "anchors": [
+    "ANC_SHOP_DOOR_MAIN_EXT",
+    "ANC_SHOP_DOOR_MAIN_INT",
+    "ANC_SHOP_EVENT_FXSMOKE01"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 7.3,
+     "corner_offset": 0.55,
+     "outer_len": 8.4
+    },
+    "N": {
+     "L": 7.3,
+     "corner_offset": 0.55,
+     "outer_len": 8.4
+    },
+    "W": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    },
+    "E": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -2.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": -1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "bay",
+      "uc": -1.15,
+      "z0": 0.95,
+      "w": 2.2,
+      "h": 1.35
+     },
+     {
+      "kind": "door",
+      "uc": 1.6,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.75,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "door2",
+      "uc": 1.2,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.75,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 16.6002,
+    "type": "ORTHO"
+   },
+   "render_s": 109.5,
+   "render_png": "shop_peaceful_game27.png",
+   "render_sha256": "fe7d8dc63d55ae474380bbdf4c05718c14710a729ef0e3901f29d201fa4bd47e"
+  },
+  {
+   "building": "shop",
+   "bldg_id": "SHOP",
+   "state": "burning",
+   "build_s": 0.3,
+   "dims": {
+    "footprint_w": 6.6,
+    "footprint_d": 8.4,
+    "eave_z": 3.3,
+    "ridge_z": 6.487,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 49,
+    "chimney_top_z": 7.387,
+    "rafters": 30,
+    "battens": 21,
+    "slates": 480,
+    "ridge_z": 6.487,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 480,
+   "mesh": {
+    "tris": 21426,
+    "objects": 11,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LINEN_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 11
+   },
+   "anchors": [
+    "ANC_SHOP_DOOR_MAIN_EXT",
+    "ANC_SHOP_DOOR_MAIN_INT",
+    "ANC_SHOP_EVENT_FXFIRE01",
+    "ANC_SHOP_EVENT_FXFIRE02",
+    "ANC_SHOP_EVENT_FXFIRE03",
+    "ANC_SHOP_EVENT_FXFIRE04",
+    "ANC_SHOP_EVENT_FXFIRE05",
+    "ANC_SHOP_EVENT_FXFIRE06",
+    "ANC_SHOP_EVENT_FXFIRE07",
+    "ANC_SHOP_EVENT_FXFIRE08",
+    "ANC_SHOP_EVENT_FXSMOKE09",
+    "ANC_SHOP_EVENT_FXSMOKE10"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 7.3,
+     "corner_offset": 0.55,
+     "outer_len": 8.4
+    },
+    "N": {
+     "L": 7.3,
+     "corner_offset": 0.55,
+     "outer_len": 8.4
+    },
+    "W": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    },
+    "E": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -2.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": -1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "bay",
+      "uc": -1.15,
+      "z0": 0.95,
+      "w": 2.2,
+      "h": 1.35
+     },
+     {
+      "kind": "door",
+      "uc": 1.6,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.75,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "door2",
+      "uc": 1.2,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.75,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 16.3201,
+    "type": "ORTHO"
+   },
+   "render_s": 118.4,
+   "render_png": "shop_burning_game27.png",
+   "render_sha256": "630041c74dad099a6e671281839ca8b4a393f393abe84d30e4776e5d82685bc0"
+  },
+  {
+   "building": "house_a",
+   "bldg_id": "DWELL01",
+   "state": "peaceful",
+   "build_s": 0.4,
+   "dims": {
+    "footprint_w": 7.4,
+    "footprint_d": 5.6,
+    "eave_z": 3.3,
+    "ridge_z": 6.004,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 46,
+    "rafters": 37,
+    "battens": 64,
+    "slates": 1564,
+    "ridge_pieces": 27,
+    "chimney_top_z": 6.904,
+    "ridge_z": 6.004,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 1564,
+   "mesh": {
+    "tris": 44572,
+    "objects": 12,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 11
+   },
+   "anchors": [
+    "ANC_DWELL01_DOOR_MAIN_EXT",
+    "ANC_DWELL01_DOOR_MAIN_INT",
+    "ANC_DWELL01_EVENT_FXSMOKE01"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.3,
+     "corner_offset": 0.55,
+     "outer_len": 7.4
+    },
+    "N": {
+     "L": 6.3,
+     "corner_offset": 0.55,
+     "outer_len": 7.4
+    },
+    "W": {
+     "L": 5.6,
+     "corner_offset": 0.0,
+     "outer_len": 5.6
+    },
+    "E": {
+     "L": 5.6,
+     "corner_offset": 0.0,
+     "outer_len": 5.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "door",
+      "uc": -0.4,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.1,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": 1.6,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W3",
+      "uc": -1.5,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ],
+    "W": [
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "W3",
+      "uc": 1.6,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 14.6535,
+    "type": "ORTHO"
+   },
+   "render_s": 102.4,
+   "render_png": "house_a_peaceful_game27.png",
+   "render_sha256": "3a83e2f24c5a1c816ff9b1d964a4226dbae05daa26ece104719f76c17914addc"
+  },
+  {
+   "building": "house_a",
+   "bldg_id": "DWELL01",
+   "state": "burning",
+   "build_s": 0.3,
+   "dims": {
+    "footprint_w": 7.4,
+    "footprint_d": 5.6,
+    "eave_z": 3.3,
+    "ridge_z": 6.004,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 48,
+    "rafters": 31,
+    "battens": 22,
+    "slates": 344,
+    "chimney_top_z": 6.904,
+    "ridge_z": 6.004,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 344,
+   "mesh": {
+    "tris": 17386,
+    "objects": 11,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 9
+   },
+   "anchors": [
+    "ANC_DWELL01_DOOR_MAIN_EXT",
+    "ANC_DWELL01_DOOR_MAIN_INT",
+    "ANC_DWELL01_EVENT_FXFIRE01",
+    "ANC_DWELL01_EVENT_FXFIRE02",
+    "ANC_DWELL01_EVENT_FXFIRE03",
+    "ANC_DWELL01_EVENT_FXFIRE04",
+    "ANC_DWELL01_EVENT_FXFIRE05",
+    "ANC_DWELL01_EVENT_FXFIRE06",
+    "ANC_DWELL01_EVENT_FXFIRE07",
+    "ANC_DWELL01_EVENT_FXSMOKE08",
+    "ANC_DWELL01_EVENT_FXSMOKE09"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.3,
+     "corner_offset": 0.55,
+     "outer_len": 7.4
+    },
+    "N": {
+     "L": 6.3,
+     "corner_offset": 0.55,
+     "outer_len": 7.4
+    },
+    "W": {
+     "L": 5.6,
+     "corner_offset": 0.0,
+     "outer_len": 5.6
+    },
+    "E": {
+     "L": 5.6,
+     "corner_offset": 0.0,
+     "outer_len": 5.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "door",
+      "uc": -0.4,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -2.1,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": 1.6,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W3",
+      "uc": -1.5,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ],
+    "W": [
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "W3",
+      "uc": 1.6,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 14.6166,
+    "type": "ORTHO"
+   },
+   "render_s": 111.2,
+   "render_png": "house_a_burning_game27.png",
+   "render_sha256": "79dc75c295fa8aafb6143cff49462cabf184cc51684a38c5c02037cf56a21e39"
+  },
+  {
+   "building": "house_b",
+   "bldg_id": "DWELL02",
+   "state": "peaceful",
+   "build_s": 0.4,
+   "dims": {
+    "footprint_w": 5.8,
+    "footprint_d": 7.2,
+    "eave_z": 3.3,
+    "ridge_z": 6.1,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 48,
+    "chimney_top_z": 7.001,
+    "rafters": 30,
+    "battens": 66,
+    "slates": 1643,
+    "ridge_pieces": 27,
+    "ridge_z": 6.1,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 1642,
+   "mesh": {
+    "tris": 47188,
+    "objects": 12,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 10
+   },
+   "anchors": [
+    "ANC_DWELL02_DOOR_MAIN_EXT",
+    "ANC_DWELL02_DOOR_MAIN_INT",
+    "ANC_DWELL02_EVENT_FXSMOKE01"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.1,
+     "corner_offset": 0.55,
+     "outer_len": 7.2
+    },
+    "N": {
+     "L": 6.1,
+     "corner_offset": 0.55,
+     "outer_len": 7.2
+    },
+    "W": {
+     "L": 5.8,
+     "corner_offset": 0.0,
+     "outer_len": 5.8
+    },
+    "E": {
+     "L": 5.8,
+     "corner_offset": 0.0,
+     "outer_len": 5.8
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "door",
+      "uc": 0.0,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -1.75,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": 1.75,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "door2",
+      "uc": -1.0,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 14.5286,
+    "type": "ORTHO"
+   },
+   "render_s": 108.2,
+   "render_png": "house_b_peaceful_game27.png",
+   "render_sha256": "f2981c3d92183dc7c2b47137da0827eb34e6cb63cabe3d45ebba94e6713f4be9"
+  },
+  {
+   "building": "house_b",
+   "bldg_id": "DWELL02",
+   "state": "burning",
+   "build_s": 0.2,
+   "dims": {
+    "footprint_w": 5.8,
+    "footprint_d": 7.2,
+    "eave_z": 3.3,
+    "ridge_z": 6.1,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 48,
+    "chimney_top_z": 7.001,
+    "rafters": 26,
+    "battens": 19,
+    "slates": 360,
+    "ridge_z": 6.1,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 360,
+   "mesh": {
+    "tris": 17824,
+    "objects": 11,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 8
+   },
+   "anchors": [
+    "ANC_DWELL02_DOOR_MAIN_EXT",
+    "ANC_DWELL02_DOOR_MAIN_INT",
+    "ANC_DWELL02_EVENT_FXFIRE01",
+    "ANC_DWELL02_EVENT_FXFIRE02",
+    "ANC_DWELL02_EVENT_FXFIRE03",
+    "ANC_DWELL02_EVENT_FXFIRE04",
+    "ANC_DWELL02_EVENT_FXFIRE05",
+    "ANC_DWELL02_EVENT_FXFIRE06",
+    "ANC_DWELL02_EVENT_FXFIRE07",
+    "ANC_DWELL02_EVENT_FXFIRE08",
+    "ANC_DWELL02_EVENT_FXFIRE09",
+    "ANC_DWELL02_EVENT_FXSMOKE10",
+    "ANC_DWELL02_EVENT_FXSMOKE11"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.1,
+     "corner_offset": 0.55,
+     "outer_len": 7.2
+    },
+    "N": {
+     "L": 6.1,
+     "corner_offset": 0.55,
+     "outer_len": 7.2
+    },
+    "W": {
+     "L": 5.8,
+     "corner_offset": 0.0,
+     "outer_len": 5.8
+    },
+    "E": {
+     "L": 5.8,
+     "corner_offset": 0.0,
+     "outer_len": 5.8
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "W1",
+      "uc": -1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     },
+     {
+      "kind": "W1",
+      "uc": 1.5,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 1.8,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "door",
+      "uc": 0.0,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -1.75,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": 1.75,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ],
+    "E": [
+     {
+      "kind": "door2",
+      "uc": -1.0,
+      "z0": 0.25,
+      "w": 0.9,
+      "h": 2.0
+     },
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 3.8,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 14.5243,
+    "type": "ORTHO"
+   },
+   "render_s": 114.5,
+   "render_png": "house_b_burning_game27.png",
+   "render_sha256": "2af462460989e5b8edbaa6846bb3b4e0a946d929d1ed3a4ff76be905dc2eb947"
+  },
+  {
+   "building": "house_c",
+   "bldg_id": "DWELL03",
+   "state": "peaceful",
+   "build_s": 0.4,
+   "dims": {
+    "footprint_w": 7.6,
+    "footprint_d": 5.4,
+    "eave_z": 3.3,
+    "ridge_z": 5.907,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 57,
+    "chimney_top_z": 6.808,
+    "rafters": 36,
+    "battens": 63,
+    "slates": 1803,
+    "ridge_pieces": 22,
+    "ridge_z": 5.907,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 1803,
+   "mesh": {
+    "tris": 49124,
+    "objects": 11,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_LINEN_A",
+     "MAT_PROP_PAINTED_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 12
+   },
+   "anchors": [
+    "ANC_DWELL03_DOOR_MAIN_EXT",
+    "ANC_DWELL03_DOOR_MAIN_INT",
+    "ANC_DWELL03_EVENT_FXSMOKE01"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "N": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "W": {
+     "L": 5.4,
+     "corner_offset": 0.0,
+     "outer_len": 5.4
+    },
+    "E": {
+     "L": 5.4,
+     "corner_offset": 0.0,
+     "outer_len": 5.4
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "door",
+      "uc": 0.8,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -1.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": -2.6,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "W3",
+      "uc": 1.6,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ],
+    "E": [
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 4.1,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 15.4401,
+    "type": "ORTHO"
+   },
+   "render_s": 100.9,
+   "render_png": "house_c_peaceful_game27.png",
+   "render_sha256": "97f414a318f6ad9d6ec511072ce9d9a83019e122f85bfdd6a08a03a007514720"
+  },
+  {
+   "building": "house_c",
+   "bldg_id": "DWELL03",
+   "state": "burning",
+   "build_s": 0.3,
+   "dims": {
+    "footprint_w": 7.6,
+    "footprint_d": 5.4,
+    "eave_z": 3.3,
+    "ridge_z": 5.907,
+    "pitch_deg": 44.0,
+    "front": "eaves"
+   },
+   "stats": {
+    "quoin_courses": 61,
+    "chimney_top_z": 6.808,
+    "rafters": 36,
+    "battens": 23,
+    "slates": 421,
+    "ridge_z": 5.907,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 421,
+   "mesh": {
+    "tris": 19856,
+    "objects": 10,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LEAD_FLASHING_A",
+     "MAT_LINEN_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TERRACOTTA_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 10
+   },
+   "anchors": [
+    "ANC_DWELL03_DOOR_MAIN_EXT",
+    "ANC_DWELL03_DOOR_MAIN_INT",
+    "ANC_DWELL03_EVENT_FXFIRE01",
+    "ANC_DWELL03_EVENT_FXFIRE02",
+    "ANC_DWELL03_EVENT_FXFIRE03",
+    "ANC_DWELL03_EVENT_FXFIRE04",
+    "ANC_DWELL03_EVENT_FXFIRE05",
+    "ANC_DWELL03_EVENT_FXFIRE07",
+    "ANC_DWELL03_EVENT_FXSMOKE06",
+    "ANC_DWELL03_EVENT_FXSMOKE08"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "N": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "W": {
+     "L": 5.4,
+     "corner_offset": 0.0,
+     "outer_len": 5.4
+    },
+    "E": {
+     "L": 5.4,
+     "corner_offset": 0.0,
+     "outer_len": 5.4
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "door",
+      "uc": 0.8,
+      "z0": 0.25,
+      "w": 1.0,
+      "h": 2.05
+     },
+     {
+      "kind": "W1",
+      "uc": -1.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05,
+      "flowers": true
+     },
+     {
+      "kind": "W1",
+      "uc": -2.6,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "N": [
+     {
+      "kind": "W1",
+      "uc": 0.0,
+      "z0": 1.2,
+      "w": 0.8,
+      "h": 1.05
+     }
+    ],
+    "W": [
+     {
+      "kind": "W3",
+      "uc": 1.6,
+      "z0": 1.55,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ],
+    "E": [
+     {
+      "kind": "W2",
+      "uc": 0.0,
+      "z0": 4.1,
+      "w": 0.6,
+      "h": 0.75
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 15.4346,
+    "type": "ORTHO"
+   },
+   "render_s": 117.6,
+   "render_png": "house_c_burning_game27.png",
+   "render_sha256": "473eb29ed73e23f176043ac54bb7248966748a5414c29c482f58bafbeb29ce98"
+  },
+  {
+   "building": "storage",
+   "bldg_id": "STORE01",
+   "state": "peaceful",
+   "build_s": 0.5,
+   "dims": {
+    "footprint_w": 6.6,
+    "footprint_d": 7.6,
+    "eave_z": 3.3,
+    "ridge_z": 6.487,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 49,
+    "rafters": 28,
+    "battens": 54,
+    "slates": 1805,
+    "ridge_pieces": 24,
+    "ridge_z": 6.487,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 1804,
+   "mesh": {
+    "tris": 46726,
+    "objects": 10,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_GLASS_CROWN_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LINEN_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_SLATE_RIDGE_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 9
+   },
+   "anchors": [
+    "ANC_STORE01_DOOR_MAIN_EXT",
+    "ANC_STORE01_DOOR_MAIN_INT"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "N": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "W": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    },
+    "E": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "slit",
+      "uc": -2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 0.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     }
+    ],
+    "N": [
+     {
+      "kind": "slit",
+      "uc": -2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 0.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     }
+    ],
+    "W": [
+     {
+      "kind": "ddoor",
+      "uc": 0.0,
+      "z0": 0.05,
+      "w": 2.2,
+      "h": 2.45
+     }
+    ],
+    "E": [
+     {
+      "kind": "W3",
+      "uc": 0.0,
+      "z0": 1.4,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 15.7187,
+    "type": "ORTHO"
+   },
+   "render_s": 118.9,
+   "render_png": "storage_peaceful_game27.png",
+   "render_sha256": "3c8a98757b2f4af7a21d60a17d0311f119333c4d3099a00ef0a335e6fe5daeef"
+  },
+  {
+   "building": "storage",
+   "bldg_id": "STORE01",
+   "state": "burning",
+   "build_s": 0.2,
+   "dims": {
+    "footprint_w": 6.6,
+    "footprint_d": 7.6,
+    "eave_z": 3.3,
+    "ridge_z": 6.487,
+    "pitch_deg": 44.0,
+    "front": "gable"
+   },
+   "stats": {
+    "quoin_courses": 47,
+    "rafters": 28,
+    "battens": 21,
+    "slates": 421,
+    "ridge_z": 6.487,
+    "eave_z": 3.3
+   },
+   "slate_unique_dims": 421,
+   "mesh": {
+    "tris": 17396,
+    "objects": 9,
+    "meshes_without_UVMap": [],
+    "walls_nonmanifold_edges": 0,
+    "materials": [
+     "MAT_DOOR_PLANK_A",
+     "MAT_FIRE_GLOW_FX_A",
+     "MAT_IRON_WROUGHT_A",
+     "MAT_LINEN_A",
+     "MAT_SLATE_BLUEGRAY_A",
+     "MAT_STONE_QUOIN_DRESSED_A",
+     "MAT_STONE_RUBBLE_LIMESTONE_A",
+     "MAT_TIMBER_OAK_WEATHERED_A"
+    ],
+    "material_count": 8
+   },
+   "anchors": [
+    "ANC_STORE01_DOOR_MAIN_EXT",
+    "ANC_STORE01_DOOR_MAIN_INT",
+    "ANC_STORE01_EVENT_FXSMOKE01"
+   ],
+   "anchor_offsets": {
+    "ext_from_facade_m": 0.6,
+    "int_from_inner_face_m": 0.6,
+    "ext_z": 0.0,
+    "int_z": 0.25,
+    "ffl": 0.25
+   },
+   "walls": {
+    "S": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "N": {
+     "L": 6.5,
+     "corner_offset": 0.55,
+     "outer_len": 7.6
+    },
+    "W": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    },
+    "E": {
+     "L": 6.6,
+     "corner_offset": 0.0,
+     "outer_len": 6.6
+    }
+   },
+   "textures": {
+    "loaded": [
+     "yellow_stone_wall_diff_1k.png",
+     "yellow_stone_wall_rough_1k.png",
+     "yellow_stone_wall_nor_gl_1k.png",
+     "rock_boulder_dry_diff_1k.jpg",
+     "rock_boulder_dry_rough_1k.jpg",
+     "rock_boulder_dry_nor_gl_1k.jpg",
+     "rough_wood_diff_1k.jpg",
+     "rough_wood_rough_1k.jpg",
+     "rough_wood_nor_gl_1k.jpg",
+     "weathered_brown_planks_diff_1k.jpg",
+     "weathered_brown_planks_rough_1k.jpg",
+     "weathered_brown_planks_nor_gl_1k.jpg"
+    ],
+    "missing": []
+   },
+   "layout": {
+    "S": [
+     {
+      "kind": "slit",
+      "uc": -2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 0.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     }
+    ],
+    "N": [
+     {
+      "kind": "slit",
+      "uc": -2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 0.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     },
+     {
+      "kind": "slit",
+      "uc": 2.0,
+      "z0": 1.3,
+      "w": 0.14,
+      "h": 0.7
+     }
+    ],
+    "W": [
+     {
+      "kind": "ddoor",
+      "uc": 0.0,
+      "z0": 0.05,
+      "w": 2.2,
+      "h": 2.45
+     }
+    ],
+    "E": [
+     {
+      "kind": "W3",
+      "uc": 0.0,
+      "z0": 1.4,
+      "w": 0.45,
+      "h": 0.55
+     }
+    ]
+   },
+   "camera": {
+    "elevation_deg": 27,
+    "azimuth_deg": -45,
+    "ortho_scale": 15.6462,
+    "type": "ORTHO"
+   },
+   "render_s": 111.6,
+   "render_png": "storage_burning_game27.png",
+   "render_sha256": "e6efd0298cb65ce6ad6bfcae41821932beebcea4032ef60367ac059499081c9e"
+  }
+ ],
+ "lineup": {
+  "buildings": [
+   "inn",
+   "shop",
+   "house_a",
+   "house_b",
+   "house_c",
+   "storage"
+  ],
+  "camera": {
+   "elevation_deg": 27,
+   "azimuth_deg": -45,
+   "ortho_scale": 62.4983,
+   "type": "ORTHO"
+  },
+  "render_s": 78.6,
+  "render_png": "lineup_peaceful_game27.png",
+  "render_sha256": "7ec96d61b0c6a691c51a79e0f5e3a482465da76531a232faea1b6ba1e2494969",
+  "tris_total": 343011
+ }
+}
