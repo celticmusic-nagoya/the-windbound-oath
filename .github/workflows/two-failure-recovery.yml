@@ -8,6 +8,9 @@ on:
       - 'tools/production_qa/test_recover_failed_run.py'
       - 'tools/production_qa/shared_asset_lease.py'
       - 'tools/production_qa/shared_asset_reservation.py'
+      - 'tools/production_qa/morwen_transfer_claim.py'
+      - 'tools/production_qa/restore_morwen_preserved.py'
+      - 'tools/production_qa/test_morwen_transfer_shallow_checkout.py'
   workflow_run:
     workflows: [Morwen VRoid macOS compatibility probe]
     types: [completed]
@@ -35,6 +38,13 @@ jobs:
           persist-credentials: false
       - name: Run failure recovery regression tests without repository writes
         run: python3 tools/production_qa/test_recover_failed_run.py
+      - name: Verify scoped transfer and cached binding on local Git only
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/production_qa/morwen_transfer_claim.py tools/production_qa/restore_morwen_preserved.py
+          python3 tools/production_qa/test_morwen_transfer_claim.py
+          python3 tools/production_qa/test_morwen_transfer_bound.py
+          python3 tools/production_qa/test_morwen_transfer_shallow_checkout.py
   historical-dry-run:
     if: github.event_name == 'workflow_dispatch' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest

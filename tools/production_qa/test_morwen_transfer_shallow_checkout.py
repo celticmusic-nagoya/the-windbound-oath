@@ -95,6 +95,9 @@ def main():
             cases.append("default checkout compatibility")
             assert git(author, "ls-remote", "--refs", remote, ref) == f"{token}\t{ref}"
             cases.append("remote fence preserved")
+            # The immutable local object must not authorize a released remote lease.
+            git(author, "push", f"--force-with-lease={ref}:{token}", remote, f":{ref}")
+            reject("cached token after remote release", lambda: read(work), cases)
             os.chdir(previous_cwd)
             print(f"{len(cases)}/{len(cases)} PASS", *cases, sep="\n")
     finally:
