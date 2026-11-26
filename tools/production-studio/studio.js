@@ -51,10 +51,43 @@ refreshOverview();
 
 // Discover active area-design work without guessing a PR number.
 // The listing is read-only and labels candidates rather than claiming adoption.
+// Evidence-based coarse maturity, not a measured fraction of work/time or formal G1-G4.
+const AREA_SNAPSHOT={date:"2026-11-26",heads:{482:"4621f79db703a2fd70cfd597b4b73703a9bb5fe4",364:"8e800246b16125506c46a051588b7ad18905ace6",421:"58cf4ea27ca800dc4cd236149b5035c4f324ba54",357:"1c8d0ebf69022f83806a837669ce57156b0dbb68"},stages:[["構想・範囲",10],["詳細設計",20],["3D形状",25],["材質・美術",20],["ゲーム統合",15],["独立QA・採用",10]],areas:[["RILDE_VILLAGE","リルド村",[1,0.5,0.5,0.5,0,0],"港V13・エイダン家の局所native再読込／進入検証。村全体の地形・接続未確定。",[["港・境界設計 V13","RILDE_HARBOR_BOUNDARY_RECEIPT_V13.json"],["エイダン家・実原本検査",364,"7161592250"]],[482,364]],["WINDWAITING_CLIFF","風待ちの崖",[1,0.5,0.5,0.5,0,0],"局所岩盤と材質候補・C11比較画像あり。全域地形・美術・ゲームQA未完了。",[["全域空間設計候補","WINDWAITING_CLIFF_AREA_SPATIAL_CANDIDATE_V01.json"],["C11制作・来歴QA",421,"7163650681"]],[482,421]],["COASTAL_MEADOW","海岸草原",[1,0.5,0.5,0.5,0,0],"暫定領域設計と草地・植生の局所3D候補。草地G2 FAIL、全域配置未実施。",[["8エリア暫定平面図","RILDE_AREA_FIRST_PLAN_V03.svg"],["植生統合候補・独立レビュー",357,"7038851582"],["海岸草地・G2 FAIL",357,"7030143387"]],[482,357]],["RIVER_CORRIDOR","河川回廊",[1,0.5,0.5,0,0,0],"河川網V26、局所GLB V27/V28の記録。支流・海への連続・材質・ゲーム未検証。",[["河川網設計 V26","RILDE_C03_RIVER_NETWORK_DESIGN_V26.json"],["河川中心部メッシュ V27","RILDE_C03_RIVER_CORE_MESH_RECEIPT_V27.json"],["下流メッシュ V28","RILDE_C03_LOWER_RIVER_MESH_RECEIPT_V28.json"]],[482]],["MOSS_FOREST_A1","モスの森 A1",[1,0.5,0,0,0,0],"林縁・進入路と河岸設計V12。過大切土・岸接続HOLD。全域native未確認。",[["林縁経路設計","MOSS_FOREST_TRAIL_DESIGN_V02.json"],["河岸・地形設計 V12","MOSS_FOREST_BANK_LANDFORM_RECEIPT_V12.json"]],[482]],["MOSS_FOREST_A2","モスの森 A2",[1,0.5,0.5,0.5,0,0],"谷・接合部V12と局所PBR/配置V51の記録。全域地形・水系・美術HOLD。",[["谷・接合部 V12","MOSS_FOREST_A2_JUNCTION_TOPOLOGY_RECEIPT_V12.json"],["写真PBR・配置 V51","MOSS_FOREST_A2_PHOTO_PBR_RECEIPT_V51.json"]],[482]],["MOSS_FOREST_A3","モスの森 A3",[1,0.5,0.5,0.5,0,0],"聖域V57/V58 native候補、遺跡V64設計。独立D4・全域配置・G2/G4未完了。",[["聖域・景観 V58","MOSS_FOREST_SANCTUARY_SCENIC_RECEIPT_V58.json"],["小遺跡設計 V64","MOSS_FOREST_SMALL_RUINS_BLUEPRINT_RECEIPT_V64.json"]],[482]],["DUNVAR_FORTRESS","ドゥンヴァル砦",[1,0,0,0,0,0],"暫定配置・設計要求のみ確認。砦固有の精密設計・native・ゲーム証跡未確認。",[["8エリア平面・断面設計枠","RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.svg"],["8エリア接続監査","RILDE_EIGHT_AREA_INTERFACE_RECONCILIATION_V01.json"]],[482]]]};
+const areaMaturity=levels=>Math.round(AREA_SNAPSHOT.stages.reduce((sum,s,i)=>sum+s[1]*levels[i],0)/5)*5;
+function renderAreaProgress(parent){
+ const section=node("section","");section.id="area-progress";section.className="area-progress";
+ section.append(node("h3","8エリア｜制作到達度"),node("p","証跡確認日 "+AREA_SNAPSHOT.date+"。5%刻みの概算指標で、工数・完成面積・正式QAの割合ではありません。未確認は加点なし。局所成果は半分まで、全域で確認した工程のみ満点。"));
+ const rubric=node("details","");rubric.append(node("summary","算出方法・工程配点"),node("p",AREA_SNAPSHOT.stages.map(([n,w])=>n+" "+w+"%").join(" ／ ")),node("p","各工程は未確認0、局所候補0.5、全域確認1。構想・範囲の満点は暫定8エリアの識別のみ。100%には全域のゲーム統合・独立QA・正式採用が必要。旧2D実装を新3D完成とはみなしません。"));section.append(rubric);
+ const grid=node("div","");grid.className="area-progress-grid";
+ for(const [id,name,levels,note,links,owners] of AREA_SNAPSHOT.areas){
+  const card=node("article","");card.className="tile area-progress-card";card.dataset.areaId=id;
+  const percent=areaMaturity(levels);card.append(node("h4",name),node("strong","約 "+percent+"%"));
+  const bar=node("progress","");bar.max=100;bar.value=percent;bar.setAttribute("aria-label",name+"の概算制作到達度");card.append(bar,node("p",note));
+  const fresh=node("p","証跡スナップショット／現在HEAD未照合");fresh.className="area-progress-freshness";fresh.dataset.owners=owners.join(",");card.append(fresh);
+  const details=node("details","");details.append(node("summary","工程内訳・設計資料"));
+  for(const [[label,weight],i] of AREA_SNAPSHOT.stages.map((x,i)=>[x,i]))details.append(node("p",label+"： "+(levels[i]===1?"全域確認":levels[i]===0.5?"局所候補・途中":"未確認")+"（"+(weight*levels[i])+"/"+weight+"）"));
+  for(const [label,path,comment] of links){const link=node("a",label);link.href="https://github.com/"+repo+(typeof path==="number"?"/pull/"+path+"#issuecomment-"+comment:"/blob/"+AREA_SNAPSHOT.heads[482]+"/docs/production/region_master/"+path);link.rel="noopener noreferrer";details.append(link);}
+  card.append(details);grid.append(card);
+ }
+ section.append(grid);
+ const common=node("details","");common.append(node("summary","共通設計資料・カテゴリ別データ"));
+ const references=[["国土・エリア設計継続資料","IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md"],["8エリア暫定平面図","RILDE_AREA_FIRST_PLAN_V03.svg"],["8エリア暫定平面データ","RILDE_AREA_FIRST_PLAN_V03.json"],["平面・縦横断面設計枠","RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.svg"],["河川・水辺｜断面模式図","RILDE_C02_C03_SECTION_HYDROLOGY_V01.svg"],["河川・水辺｜断面データ","RILDE_C02_C03_SECTION_HYDROLOGY_V01.json"],["河川・水辺｜河川網V26","RILDE_C03_RIVER_NETWORK_DESIGN_V26.json"],["樹木｜V55素材来歴","MOSS_FOREST_HERO_TREE_SOURCE_RECEIPT_V55.json"],["植物・森林｜植生配置V09","MOSS_FOREST_A2_ECOLOGY_RELAYOUT_DESIGN_V09.json"],["遺跡｜V64設計記録","MOSS_FOREST_SMALL_RUINS_BLUEPRINT_RECEIPT_V64.json"],["全域｜接続・未確定項目","RILDE_EIGHT_AREA_INTERFACE_RECONCILIATION_V01.json"]];
+ for(const [label,path] of references){const a=node("a",label);a.href="https://github.com/"+repo+"/blob/"+AREA_SNAPSHOT.heads[482]+"/docs/production/region_master/"+path;a.rel="noopener noreferrer";common.append(a);}
+ section.append(common);parent.append(section);
+}
+function reconcileAreaProgress(pulls){
+ if(!Array.isArray(pulls))return;
+ for(const label of document.querySelectorAll(".area-progress-freshness")){
+  const ids=label.dataset.owners.split(",").map(Number);const changed=[],missing=[];
+  for(const id of ids){const p=pulls.find(x=>x.number===id);if(!p||!p.head?.sha)missing.push(id);else if(p.head.sha!==AREA_SNAPSHOT.heads[id])changed.push(id);}
+  label.textContent=changed.length?"新しいHEADあり： "+changed.map(x=>"#"+x).join("、")+"／概算は前回証跡（再評価要）":missing.length?"HEAD未照合： "+missing.map(x=>"#"+x).join("、")+"／概算は前回証跡":"担当HEAD一致／証跡スナップショット";
+ }
+}
+window.addEventListener("studio-live-pulls",e=>reconcileAreaProgress(e.detail));
 async function loadAreaBlueprints(){
  const area=byId("area-blueprints"),status=byId("area-blueprints-status");
  if(!area||!status)return;
- area.replaceChildren();status.textContent="担当PRを検索中";
+ area.replaceChildren();renderAreaProgress(area);status.textContent="担当PRを検索中";
  const designBranch="docs/ireland-world-source-grounded-plan-20261123";
  const designFiles=[
  ["物語接続図 v0.4（SVG・地理実測ではない）","docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg"],
@@ -69,6 +102,8 @@ async function loadAreaBlueprints(){
  const image=node("img","");
  image.alt="物語接続図 v0.4（実測地形ではありません）";
  image.loading="lazy";
+ image.width=1420;image.height=360;
+ image.style.width="100%";image.style.height="auto";
  image.referrerPolicy="no-referrer";
  image.src="https://raw.githubusercontent.com/"+repo+"/83c612079128c308baf021ad22f53498ae611ecf/docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg";
  image.addEventListener("error",()=>{image.remove();preview.append(node("p","SVGプレビュー取得不可。上記の原本リンクから確認してください。"));});
@@ -99,15 +134,17 @@ async function loadAreaBlueprints(){
  contract.rel="noopener noreferrer";inventory.append(contract);
 
  try{
-  const found=new Map();
+  const found=new Map(),allPulls=[];
   for(let page=1;page<=3;page++){
    const pulls=await read("/pulls?state=open&per_page=100&page="+page);
+   allPulls.push(...pulls);
    for(const p of pulls){
     const title=String(p.title||"");
     if(/(アイルランド|Ireland|Irish|地形|エリア設計|area.blueprint|terrain.blueprint|world.blueprint|地勢|地形設計)/i.test(title))found.set(p.number,p);
    }
    if(pulls.length<100)break;
   }
+  reconcileAreaProgress(allPulls);
   const candidates=[...found.values()].sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at)));
   for(const p of candidates){
    const card=tile(area,p.title,["PR #"+p.number+" / "+(p.draft?"Draft":"Open"),"HEAD: "+String(p.head?.sha||"未取得").slice(0,12),"更新: "+p.updated_at,"設計図の実ファイル・G1〜G4: 未検証"],[["担当PR・設計図資料","/pull/"+p.number]]);

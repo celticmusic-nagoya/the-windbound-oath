@@ -82,13 +82,14 @@ async function loadPublishedGallery(automatic=false){
  };
  const assigned=valid.map(e=>({entry:e,...classify(e)}));
  const groups=new Map(categories.map(([id])=>[id,assigned.filter(x=>x.root===id).map(x=>x.entry)]));
- function categoryButton(title,entries,click){
+ const worldDesign={plant:[["植生配置V09・設計データ","MOSS_FOREST_A2_ECOLOGY_RELAYOUT_DESIGN_V09.json"],["植生統合・試作レビュー","https://github.com/celticmusic-nagoya/the-windbound-oath/pull/357#issuecomment-7038851582"]],tree:[["樹木V55・素材来歴","MOSS_FOREST_HERO_TREE_SOURCE_RECEIPT_V55.json"]],forest:[["林縁・経路設計V02","MOSS_FOREST_TRAIL_DESIGN_V02.json"],["谷・接合部V12","MOSS_FOREST_A2_JUNCTION_TOPOLOGY_RECEIPT_V12.json"],["写真PBR・配置V51","MOSS_FOREST_A2_PHOTO_PBR_RECEIPT_V51.json"]],river:[["断面模式図","RILDE_C02_C03_SECTION_HYDROLOGY_V01.svg"],["断面設計データ","RILDE_C02_C03_SECTION_HYDROLOGY_V01.json"],["河川網V26","RILDE_C03_RIVER_NETWORK_DESIGN_V26.json"],["中心部メッシュV27","RILDE_C03_RIVER_CORE_MESH_RECEIPT_V27.json"],["下流メッシュV28","RILDE_C03_LOWER_RIVER_MESH_RECEIPT_V28.json"]],terrain:[["8エリア暫定平面図","RILDE_AREA_FIRST_PLAN_V03.svg"],["暫定平面データ","RILDE_AREA_FIRST_PLAN_V03.json"],["平面・縦横断面設計枠","RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.svg"],["8エリア接続監査","RILDE_EIGHT_AREA_INTERFACE_RECONCILIATION_V01.json"]],sanctuary:[["聖域V58・景観候補記録","MOSS_FOREST_SANCTUARY_SCENIC_RECEIPT_V58.json"]],ruin:[["小遺跡V64・設計記録","MOSS_FOREST_SMALL_RUINS_BLUEPRINT_RECEIPT_V64.json"]]};
+ function categoryButton(title,entries,click,designCount=0){
   const button=document.createElement("button");button.className="category-card";button.type="button";
   const cover=entries.find(e=>e.cover===true&&/\.(png|jpe?g)$/.test(e.path))||entries.find(e=>/\.(png|jpe?g)$/.test(e.path));
   if(cover){const img=document.createElement("img");img.src=base+cover.path;img.alt="";img.loading="lazy";button.append(img);}
-  else {const placeholder=document.createElement("span");placeholder.className="category-placeholder";placeholder.textContent="未同期";button.append(placeholder);}
+  else {const placeholder=document.createElement("span");placeholder.className="category-placeholder";placeholder.textContent=designCount?"設計資料あり":"未同期";button.append(placeholder);}
   const label=document.createElement("strong");label.textContent=title;button.append(label);
-  const count=document.createElement("small");count.textContent=entries.length+" 件";button.append(count);
+  const count=document.createElement("small");count.textContent=entries.length+" 件"+(designCount?" ／ 設計 "+designCount+" 件":"");button.append(count);
   button.onclick=click;area.append(button);
  }
  function navigation(items){const nav=document.createElement("nav");nav.className="gallery-breadcrumb";nav.setAttribute("aria-label","成果物の階層");items.forEach((item,i)=>{if(i){const sep=document.createElement("span");sep.textContent=" / ";sep.setAttribute("aria-hidden","true");nav.append(sep);}if(item.action){const b=document.createElement("button");b.type="button";b.textContent=item.label;b.onclick=item.action;nav.append(b);}else{const current=document.createElement("strong");current.textContent=item.label;current.setAttribute("aria-current","page");nav.append(current);}});area.append(nav);}
@@ -133,15 +134,22 @@ async function loadPublishedGallery(automatic=false){
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
   for(const [sub,label] of subcategories[id]){
    const entries=assigned.filter(x=>x.root===id&&x.sub===sub).map(x=>x.entry);
-   categoryButton(label,entries,()=>detail(id,title+" / "+label,()=>subhome(id,title),entries));
+   categoryButton(label,entries,()=>detail(id,title+" / "+label,()=>subhome(id,title),entries,id==="world"?sub:null),id==="world"?(worldDesign[sub]?.length||0):0);
   }
  }
- function detail(id,title,goBack=home,subset=null){
+ function detail(id,title,goBack=home,subset=null,designKey=null){
  publishedGalleryView="detail";
  area.replaceChildren();area.classList.remove("category-grid");
  navigation([{label:"制作領域",action:home},{label:title}]);
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
  const entries=[...(subset||groups.get(id))].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
+ if(designKey&&worldDesign[designKey]){
+  const docs=document.createElement("section");docs.className="gallery-design-links";docs.dataset.designCategory=designKey;
+  const heading=document.createElement("h3");heading.textContent="設計図・設計データ";docs.append(heading);
+  const note=document.createElement("p");note.textContent="設計候補・制作記録。画像件数とは別計上。実測・採用・完成を意味しません。";docs.append(note);
+  for(const [label,path] of worldDesign[designKey]){const link=document.createElement("a");link.textContent=label;link.href=path.startsWith("https://")?path:"https://github.com/celticmusic-nagoya/the-windbound-oath/blob/4621f79db703a2fd70cfd597b4b73703a9bb5fe4/docs/production/region_master/"+path;link.rel="noopener noreferrer";docs.append(link);}
+  area.append(docs);
+ }
  const photos=entries.filter(e=>/\.(png|jpe?g)$/.test(e.path));
  if(photos.length>=2){
  const compare=document.createElement("button");compare.type="button";compare.className="category-back";compare.textContent="画像比較";area.append(compare);
