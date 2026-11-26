@@ -56,12 +56,15 @@ class SelectionPinsTests(unittest.TestCase):
         by_sha = {r["sha256"]: r for r in receipts}
         self.assertEqual(len(by_sha), len(receipts))
         by_id = {item["artifact_id"]: item for item in items}
-        for aid, count in ((15075315647, 5), (15075731907, 7), (15076007596, 18)):
+        for aid, count in ((15075315647, 5), (15075731907, 7), (15076007596, 18), (14626605689, 8), (14600421099, 1), (15032255249, 2)):
             item = by_id[aid]
             self.assertEqual(item["category"], "world")
             self.assertEqual(len(item["entries"]), count)
             self.assertEqual(set(item["entries"]), set(item["entry_sha256"]))
             self.assertRegex(item["artifact_digest"], re.compile(r"sha256:[0-9a-f]{64}\Z"))
+            if aid in {14626605689, 14600421099, 15032255249}:
+                self.assertEqual(set(item["entries"]), set(item["entry_subcategories"]))
+                self.assertTrue(set(item["entry_subcategories"].values()) <= {"plant", "tree", "forest"})
             for name, sha in item["entry_sha256"].items():
                 self.assertTrue(name.endswith(".png"))
                 r = by_sha[sha]

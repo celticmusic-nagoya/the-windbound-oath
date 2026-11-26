@@ -63,7 +63,12 @@ def stage(spec, source, dest):
                 filename=digest+ext
                 (dest/filename).write_bytes(data)
                 total+=len(data)
+                subcategory = item.get("entry_subcategories", {}).get(name)
+                if subcategory is not None and (category != "world" or subcategory not in {"plant","tree","forest","river","terrain","sanctuary","ruin","general"}):
+                    raise ValueError("invalid world subcategory")
                 records.append(dict(name=info.filename,path="published/"+filename,sha256=digest,bytes=len(data),run_id=run,artifact_id=artifact,head=head,category=category,stage=stage_name,created_at=item.get("created_at",""),cover=name==item.get("cover"),qa="NOT_RUN",adoption="UNDETERMINED",expires_at=item.get("expires_at",""),review_ref=item.get("review_ref",""),entry_pin_verified=expected is not None))
+                if subcategory is not None:
+                    records[-1]["subcategory"] = subcategory
     policy=json.loads(pathlib.Path(__file__).with_name("retention-policy.json").read_text())
     selected=select(records,datetime.now(timezone.utc),policy["soft_gallery_budget_bytes"],policy["recent_days"])
     (dest.parent/"gallery-manifest.json").write_text(json.dumps({"version":1,"entries":selected["entries"]},ensure_ascii=False,indent=2),encoding="utf-8")
