@@ -29,9 +29,13 @@ def height(x,y):
     hit,p,_,_=ground.ray_cast(Vector((x,y,10)),Vector((0,0,-1)),distance=20)
     return p.z if hit else None
 templates=sorted([o for o in scene.objects if o.type=='MESH' and o.name.startswith('V3_turf_')],key=lambda o:o.name)
-assert len(templates)==28 and all(o.hide_render for o in templates)
+inventory=[dict(name=o.name,hidden=o.hide_render,vertices=len(o.data.vertices)) for o in templates]
+print('TURF_INVENTORY',json.dumps(inventory),flush=True)
+assert len(templates)==28, inventory
+hidden_templates=[o for o in templates if o.hide_render]
+assert hidden_templates, inventory
 # Use the exact saved mesh, including vertex colour, UV and wind attributes. All old instances remain untouched.
-template=templates[0];mesh=template.data;mesh.calc_loop_triangles();nt=len(mesh.loop_triangles)
+template=hidden_templates[0];template_name=template.name;mesh=template.data;mesh.calc_loop_triangles();nt=len(mesh.loop_triangles)
 base=template.matrix_world.to_3x3().to_4x4()
 coll=bpy.data.collections.new('V6 terrain-conforming ground cover');scene.collection.children.link(coll)
 rng=random.Random(202611266)
@@ -71,7 +75,7 @@ dest=out/'village_turf_context_v6_UNAPPROVED.blend';assert not dest.exists()
 bpy.ops.file.pack_all();bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True)
 bpy.ops.wm.open_mainfile(filepath=str(dest.resolve()),load_ui=False);scene=bpy.context.scene
 assert snap()==old and sha(src)==lock and all(bpy.data.objects.get(row['name']) for row in rows)
-q=dict(status='ISOLATED_CONFORMING_TURF_FEASIBILITY',source_sha256=lock,protected_meshes=len(old),source_template='V3_turf_000',count=len(rows),added_triangles=tris,root_samples=len(roots),actual=actual,engine_metrics=metrics,placement=rows,house_reservation=house,native_reopen='PASS',limits=['Local provisional units only, no surveyed world or collision. Root residual measured on authored mesh and ground raycast before save, not independent G3. Source turf geometry deliberately deformed in new copies, not adopted.','No GLB export or runtime tests. Stone walls and additional village buildings not yet implemented.'])
+q=dict(status='ISOLATED_CONFORMING_TURF_FEASIBILITY',source_sha256=lock,protected_meshes=len(old),source_template=template_name,turf_inventory=inventory,count=len(rows),added_triangles=tris,root_samples=len(roots),actual=actual,engine_metrics=metrics,placement=rows,house_reservation=house,native_reopen='PASS',limits=['Local provisional units only, no surveyed world or collision. Root residual measured on authored mesh and ground raycast before save, not independent G3. Source turf geometry deliberately deformed in new copies, not adopted.','No GLB export or runtime tests. Stone walls and additional village buildings not yet implemented.'])
 def finish():
     q['outputs']={p.name:sha(p) for p in out.iterdir() if p.suffix in ('.blend','.png')}
     (out/'qa.json').write_text(json.dumps(q,indent=2)+'\n')

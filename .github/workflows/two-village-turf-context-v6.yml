@@ -52,30 +52,3 @@ jobs:
           path: ${{ runner.temp }}/out
           if-no-files-found: warn
           retention-days: 14
-  cliff-readback:
-    if: github.event.pull_request.number == 364 && github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-24.04
-    timeout-minutes: 3
-    steps:
-      - name: Read existing ridge push evidence without dispatch
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/cliff"
-          gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=6e477b8c07d82c54a0f551486d7eb6b8c9207dbc&per_page=100" --jq '[.workflow_runs[]|{id,name,event,status,conclusion,head_sha,html_url}]' > "$RUNNER_TEMP/cliff/runs.json"
-          python3 - "$RUNNER_TEMP/cliff" <<'PY'
-          import json,sys,subprocess,os
-          from pathlib import Path
-          p=Path(sys.argv[1]); runs=json.loads((p/'runs.json').read_text())
-          for r in runs:
-              if 'two-cliff-ridge-v3' not in r['name']:continue
-              result=subprocess.check_output(['gh','api',f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{r['id']}/artifacts"])
-              (p/f"artifacts-{r['id']}.json").write_bytes(result)
-          PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: two-cliff-ridge-push-readback
-          path: ${{ runner.temp }}/cliff
-          if-no-files-found: error
-          retention-days: 7
