@@ -54,6 +54,7 @@ try {
  await blueprint.waitFor({state:'attached'});
  await blueprint.scrollIntoViewIfNeeded();
  await blueprint.waitFor({state:'visible'});
+ await page.waitForFunction(()=>{const image=document.querySelector("#area-blueprints .blueprint-preview img");return image?.complete&&image.naturalWidth===1420;});
  await blueprint.evaluate(e=>e.decode());
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
  assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
@@ -83,6 +84,13 @@ try {
 
  assert.match(await river.locator('.area-progress-freshness').innerText(),/再評価要/);
  assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/未照合/);
+ assert.equal(await river.locator('.area-module[data-source][data-verified="yes"]').count(),0);
+ assert.match(await page.locator('#area-new-evidence summary').innerText(),/未照合/);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:AREA_SNAPSHOT.heads[482]}}]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 45%/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'area progress overflow');
  await progress.screenshot({path:'qa-output/area-progress-mobile.png'});
  // Local audit fixture tests the presentation contract, not asset QA.

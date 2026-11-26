@@ -81,7 +81,7 @@ function renderAreaProgress(parent){
  }
  section.append(grid);
  const newEvidence=node("details","");newEvidence.id="area-new-evidence";newEvidence.append(node("summary","新しい設計・制作記録"),node("p","担当PRとの照合待ち"));section.append(newEvidence);
- const refreshEvidence=node("button","設計証跡を再照合");refreshEvidence.type="button";refreshEvidence.onclick=async()=>{refreshEvidence.disabled=true;try{const p=await read("/pulls/482");await reconcileAreaEvidence(p.head?.sha,true);}catch(e){const box=byId("area-new-evidence");if(box)box.append(node("p","再照合失敗： "+e.message+"／前回証跡を保持"));}finally{refreshEvidence.disabled=false;}};section.append(refreshEvidence);
+ const refreshEvidence=node("button","設計証跡を再照合");refreshEvidence.type="button";refreshEvidence.onclick=async()=>{refreshEvidence.disabled=true;try{const p=await read("/pulls/482");await reconcileAreaEvidence(p.head?.sha,true);}catch(e){invalidateAreaEvidence("再照合失敗： "+e.message);}finally{refreshEvidence.disabled=false;}};section.append(refreshEvidence);
  const common=node("details","");common.append(node("summary","共通設計資料・カテゴリ別データ"));
  const references=[["国土・エリア設計継続資料","IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md"],["8エリア暫定平面図","RILDE_AREA_FIRST_PLAN_V03.svg"],["8エリア暫定平面データ","RILDE_AREA_FIRST_PLAN_V03.json"],["平面・縦横断面設計枠","RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.svg"],["河川・水辺｜断面模式図","RILDE_C02_C03_SECTION_HYDROLOGY_V01.svg"],["河川・水辺｜断面データ","RILDE_C02_C03_SECTION_HYDROLOGY_V01.json"],["河川・水辺｜河川網V26","RILDE_C03_RIVER_NETWORK_DESIGN_V26.json"],["樹木｜V55素材来歴","MOSS_FOREST_HERO_TREE_SOURCE_RECEIPT_V55.json"],["植物・森林｜植生配置V09","MOSS_FOREST_A2_ECOLOGY_RELAYOUT_DESIGN_V09.json"],["遺跡｜V64設計記録","MOSS_FOREST_SMALL_RUINS_BLUEPRINT_RECEIPT_V64.json"],["全域｜接続・未確定項目","RILDE_EIGHT_AREA_INTERFACE_RECONCILIATION_V01.json"]];
  for(const [label,path] of references){const a=node("a",label);a.href="https://github.com/"+repo+"/blob/"+AREA_SNAPSHOT.heads[482]+"/docs/production/region_master/"+path;a.rel="noopener noreferrer";common.append(a);}
@@ -102,6 +102,12 @@ function reconcileAreaProgress(pulls){
 }
 function refreshCurrentAreaScores(){for(const card of document.querySelectorAll(".area-progress-card")){const rows=[...card.querySelectorAll(".area-module")],valid=rows.filter(row=>row.dataset.verified==="yes"),out=card.querySelector(".area-current-score");if(!valid.length){out.textContent="現HEADの証跡加点：未照合";continue;}const modules=AREA_MODULES[card.dataset.areaId],levels=AREA_SNAPSHOT.stages.map((_,i)=>Math.max(0,...valid.map(row=>modules[Number(row.dataset.moduleIndex)].levels[i])));out.textContent="現HEADの照合済み証跡加点：約 "+areaMaturity(levels)+"%（"+valid.length+"/"+rows.length+"項目、未照合は加点なし）";}}
 let areaEvidenceCache=null,areaEvidenceRequest=null,areaEvidenceGeneration=0;
+function invalidateAreaEvidence(reason){
+ ++areaEvidenceGeneration;areaEvidenceRequest=null;
+ for(const row of document.querySelectorAll('.area-module[data-source]')){row.dataset.verified='unknown';row.querySelector('.module-evidence-status').textContent=reason+'／前回評価を保持';}
+ refreshCurrentAreaScores();
+ const panel=byId('area-new-evidence');if(panel)panel.replaceChildren(node('summary','新しい設計・制作記録（未照合）'),node('p',reason+'／前回の概算・原本リンクは保持'));
+}
 function applyAreaEvidence(head,files){
  const indexed=new Map(files.map(f=>[f.name,f.sha]));
  for(const row of document.querySelectorAll(".area-module[data-source]")){
@@ -116,8 +122,8 @@ function applyAreaEvidence(head,files){
  if(extra.length>30)panel.append(node("p","表示上限30件。全件は担当PRを確認。"));
 }
 async function reconcileAreaEvidence(head,force=false){
- if(!/^[a-f0-9]{40}$/.test(head||""))return;
- if(document.hidden&&!force)return;
+ if(!/^[a-f0-9]{40}$/.test(head||"")){invalidateAreaEvidence("担当HEAD未照合");return;}
+ if(document.hidden&&!force){invalidateAreaEvidence("非表示中・現HEAD未照合");return;}
  if(areaEvidenceRequest?.head===head)return areaEvidenceRequest.promise;
  const generation=++areaEvidenceGeneration;
  if(head===AREA_SNAPSHOT.heads[482]&&!force){areaEvidenceRequest=null;applyAreaEvidence(head,Object.entries(AREA_BASELINE_FILES).map(([name,sha])=>({name,sha})));return;}
@@ -133,7 +139,7 @@ async function reconcileAreaEvidence(head,force=false){
  }catch(e){if(generation!==areaEvidenceGeneration)return;const panel=byId("area-new-evidence");if(panel)panel.replaceChildren(node("summary","新しい設計・制作記録（照合失敗）"),node("p",e.message+"／前回評価・資料リンクを保持"));}finally{if(areaEvidenceRequest?.generation===generation)areaEvidenceRequest=null;}})();
  areaEvidenceRequest={head,generation,promise};return promise;
 }
-window.addEventListener("studio-live-pulls",e=>{reconcileAreaProgress(e.detail);const p=Array.isArray(e.detail)?e.detail.find(x=>x.number===482):null;if(p)void reconcileAreaEvidence(p.head?.sha);});
+window.addEventListener("studio-live-pulls",e=>{reconcileAreaProgress(e.detail);const p=Array.isArray(e.detail)?e.detail.find(x=>x.number===482):null;void reconcileAreaEvidence(p?.head?.sha);});
 async function loadAreaBlueprints(){
  const area=byId("area-blueprints"),status=byId("area-blueprints-status");
  if(!area||!status)return;
@@ -195,7 +201,7 @@ async function loadAreaBlueprints(){
    if(pulls.length<100)break;
   }
   reconcileAreaProgress(allPulls);
-  const world=allPulls.find(p=>p.number===482);if(world)void reconcileAreaEvidence(world.head?.sha);
+  const world=allPulls.find(p=>p.number===482);void reconcileAreaEvidence(world?.head?.sha);
   const candidates=[...found.values()].sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at)));
   for(const p of candidates){
    const card=tile(area,p.title,["PR #"+p.number+" / "+(p.draft?"Draft":"Open"),"HEAD: "+String(p.head?.sha||"未取得").slice(0,12),"更新: "+p.updated_at,"設計図の実ファイル・G1〜G4: 未検証"],[["担当PR・設計図資料","/pull/"+p.number]]);
