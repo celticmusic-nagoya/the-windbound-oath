@@ -41,7 +41,7 @@ function inferCategory(branch,name){
  if(/cliff|windwaiting/.test(key))return "風待ちの崖";
  if(/ecology|vegetation|lind-eco/.test(key))return "リルド村・植生";
  if(/home|aidan/.test(key))return "リルド村・エイダン家";
- if(/building|architecture|lind-village/.test(key))return "リルド村・建築";
+ if(/building|architecture|lind-village|village|turf/.test(key))return "リルド村・建築";
  if(/forest/.test(key))return "世界・森林";
  if(/tree/.test(key))return "世界・樹木";
  if(/river|waterway|riverbank/.test(key))return "世界・河川／水辺";
@@ -165,7 +165,7 @@ if(typeof area.before==="function")area.before(swipeHint,swipeBar,liveHeading,li
 if(typeof area.after==="function")area.after(more);
 let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastError="",runSnapshot=[],runError="",runStamp="",visibleLimit=30;
 let visibleCategories=[""];
-function chooseCategory(name){categorySelect.value=name;visibleLimit=30;renderRecent();}
+function chooseCategory(name){categorySelect.value=name;visibleLimit=30;renderRecent();const current=typeof categoryGrid.querySelector==="function"?categoryGrid.querySelector('button[aria-pressed="true"]'):null;if(current&&categoryGrid.scrollWidth>categoryGrid.clientWidth)categoryGrid.scrollLeft+=current.getBoundingClientRect().left-categoryGrid.getBoundingClientRect().left;}
 function shiftCategory(delta){
  const i=visibleCategories.indexOf(categorySelect.value);const next=i+delta;
  if(next>=0&&next<visibleCategories.length)chooseCategory(visibleCategories[next]);
@@ -216,7 +216,7 @@ async function updatePreservation(){
  }catch(e){preservationStatus.textContent="更新失敗: "+e.message+"。前回取得分を保持。";return false;}
 }
 function renderRecent(){
- if(!snapshot&&!runSnapshot.length)return;
+ if(!snapshot&&!runSnapshot.length){liveStatus.textContent=runError?"取得失敗: "+runError:"未取得";return;}
  const all=snapshot?selectRecentArtifacts(snapshot,"",100):[];
  const counts=new Map();for(const x of all)counts.set(x.category,(counts.get(x.category)||0)+1);
  const runCounts=new Map();for(const x of runSnapshot)runCounts.set(x.category,(runCounts.get(x.category)||0)+1);
@@ -277,11 +277,11 @@ async function update(){
   if(g!==generation)return;
   selectRecentArtifacts(data); // Validate before replacing the prior snapshot.
   snapshot=data;lastSuccess=new Date().toLocaleString("ja-JP");lastError="";
-  renderRecent();success=true;
+  success=true;
  }catch(e){if(g===generation){lastError=e.message;status.textContent="最新一覧取得失敗: "+lastError+"。前回取得分を保持。担当PRから確認できます。";}}
  finally{
   const [preservationSuccess,runsSuccess]=await Promise.all([preservation,runs]);
-  if(g===generation){if(snapshot||runSnapshot.length)renderRecent();refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess&&runsSuccess);schedule();}
+  if(g===generation){renderRecent();refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess&&runsSuccess);schedule();}
  }
 }
 document.addEventListener("visibilitychange",()=>{if(document.hidden){if(timer!==null)clearTimeout(timer);timer=null;}else schedule();});
