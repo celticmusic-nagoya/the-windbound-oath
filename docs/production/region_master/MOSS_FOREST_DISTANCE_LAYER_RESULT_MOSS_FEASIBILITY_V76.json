@@ -1,0 +1,96 @@
+{
+  "schema": "two.region.a3.distance_layer_result_moss_feasibility.v76",
+  "parent": "a4b702d4758cbcc054a3dbc1f763e82b2b2de6ae",
+  "status": "V75_NATIVE_FIXED_VISTA_VERIFIED_ART_HOLD_V76_MOSS_MATERIAL_AB_REQUESTED",
+  "prework": {
+    "main_head": "3de7da3326f705421a3072ff134e3cb69f972a1e",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_V75_RESULT_V76_MATERIAL_ONLY_AB",
+    "owner_pr": 482,
+    "owner_head": "a4b702d4758cbcc054a3dbc1f763e82b2b2de6ae",
+    "writer_lease_fencing_evidence": "Completed prior run, isolated immutable V73 and V75 artifacts; CAS; no shared writer or duplicate dispatch.",
+    "source_sha256": {
+      "v73": "9ae2baa35f9d9d11a17a720f1e8fa1dc7cda90e40275a581b788d118b66bfbf2",
+      "v75": "c6e5ceeb5233f1ed9e92d1538beaa4e476babc61efb01c3061e347f8b239e7b7",
+      "leaf_diffuse": "9c38b2b151a0415457a6914966422cfca5a546c94674442e5395e0b1e908a196",
+      "official_cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependency_shas": {
+      "v75": "013806a1f2ce5a4f704055ccea298bacf06163a0",
+      "spec": "a1638c8ff3e9fd6acadc07289039d021a5fa01fc",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "V73/V75 native originals, all geometry/UV/colors, original materials, event/route/sight reservations, runtime, V68 frozen ruins",
+    "stage": "Read-only V75 actual result and separate bounded material-only A/B; not precision production approval",
+    "predecessor_gate_statuses": {
+      "D4": "NOT_RUN",
+      "G2": "SELF_HOLD",
+      "G3": "V75_SCOPED_PASS"
+    },
+    "acceptance_criteria": "V75 archive CRC/SHA and 6/6 output SHA. V76 exact packed diffuse, original 692 mesh geometry/UV/colors exact, 690 complete signatures unchanged, two material slot changes only, save/reopen, matched V73 renders; no new triangle. Preserve zero visual blend within provisional 1.5m route core and four event circles by analytic mask.",
+    "preflight_checks": "Main and handoff retrieved, completed Actions, actual V75 views inspected, exact source archive and source diffuse SHA, 390000 local mask samples, comparison verified; native py_compile in runner.",
+    "result": "V75_NATIVE_VERIFIED_G2_HOLD_V76_FEASIBILITY_READY",
+    "blockers": [
+      "Background sky gaps under tree crowns and lateral views",
+      "No surveyed far terrain/reachability",
+      "Independent D4/G2 not performed",
+      "No Android or runtime validation"
+    ],
+    "checkpoint": "V73 and V75 retained separately"
+  },
+  "v75": {
+    "run": 45749262326,
+    "job": 139672842044,
+    "artifact": 15084318041,
+    "archive_sha256": "5e481e151c777094d4166ed06de65c677bdfd09f9cb1cb4d1b8dac38be79539b",
+    "archive_bytes": 124103630,
+    "qa_sha256": "c872bf07588c7980cfbe5259a96572619f89158267a87a4c993028fb36643605",
+    "native_sha256": "c6e5ceeb5233f1ed9e92d1538beaa4e476babc61efb01c3061e347f8b239e7b7",
+    "output_checks": "6/6",
+    "crc": "PASS",
+    "protected_meshes_exact": 692,
+    "captures": 3,
+    "cards": 19,
+    "triangles": 38,
+    "min_native_bbox_gap_m": 2.8600616455078125,
+    "render_sha256": {
+      "matched": "1b9063575e8004f3b0ba12297577b10609256be37acd12dd793b10cd9ddeaee2",
+      "lateral": "b860c36f4c4eb3f0e77f670dce6dc1614b2101964aba2302e084e52cfa509e02"
+    },
+    "comparison_sha256": "4b4de6c2a226f6c7747d22d66d3240bfe9f8ba37c02ec8817a6868a248651e3f",
+    "visual": "HOLD: canopy density improves slightly but visible sky beneath trunks and behind proxy altar remains. Fixed-vista plane heights illustrative, no surveyed terrain; do not increase card count repeatedly. Future far silhouette/terrain and fog need measured parent interface and D4."
+  },
+  "v76": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py",
+    "source_artifact": 15081683559,
+    "method": "Reuse existing CC0 forest_leaves_02 packed image and normal/roughness, copy V73 shared ground material. Linear G/max(R,1e-5) smoothstep(.58,.85), multiplier [.48,.92,.68], spatial route distance smoothstep(1.5,4.0), product of four event circle smoothsteps r to r+2. Blend old noise weight toward max(old,.8) only by same spatial mask. No V75 card layer; isolate material effect. Heuristic grade not botanical segmentation.",
+    "local_samples": 390000,
+    "local_mask_mean": 0.25137361884117126,
+    "local_mask_gt_half_fraction": 0.22739076614379883,
+    "local_spatial_mean": 0.8056321728492981,
+    "route_core_weight_max": 0,
+    "altar_core_weight_max": 0,
+    "preflight_script_sha256": "e53dbc3951a44c2f644c05f794f0bc8efbb9e0ce95e7670815c1aa8ef5fd8d63",
+    "preflight_json_sha256": "fc23a87133b061b24e5b9f2f34b54e5727dda9f1a2bcaf5bb6eee0b5fe0b826f",
+    "preflight_image_sha256": "048d77c6d200e304f8106cf3f39c90a0c5968bbf7ebcd8677a27d42337caab26",
+    "proposed_scope": "Material only; provisional visual route core not approved walk width; preserve existing reservations."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G2": "SELF_HOLD_V75",
+    "G3": "V75_SCOPED_NATIVE_PASS_V76_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Evaluate V76 actual matched material renders. Do not repeat flat-card or color-only variants; next resolve background terrain/understory silhouettes and depth-layer interface based on verified actual geometry/reachability and independent D4. No formal adoption or main merge."
+}
