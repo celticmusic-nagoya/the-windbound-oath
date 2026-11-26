@@ -1,0 +1,30 @@
+{
+  "schema": "two-reviewed-launch-v1",
+  "review_state": "REVIEWED_FOR_OWNER_LAUNCH",
+  "asset_id": "MORWEN",
+  "worker_path": ".github/workflows/morwen-vroid-macos-probe.yml",
+  "worker_blob": "f0f551197edc5ef0c1b9f6d25a240f1333faf11f",
+  "profile_sha256": "01a49445b08956d942ef1aec301614acbaa87d304817e10cec52a52ed784b7d5",
+  "restore_source": "actions_artifact",
+  "dependency_blobs": {
+    ".github/workflows/morwen-request-launch.yml": "943fdc091f8ac42eb66c0873badd023b16e1441f",
+    "tools/private-preservation/release_transport.py": "a9c2d1a28e649b76608129636b294f6e2b45c97a",
+    "tools/production_qa/capture_transfer_views.sh": "dcef3a3ac4dc0c7e5f58a4b480b21a5cff51d3de",
+    "tools/production_qa/import_vrm_transfer.py": "aea7f6b8daa68bc75221ad1cff303dae39d387cb",
+    "tools/production_qa/install_blender_530.sh": "ba5336850900f90faaa2d33fd846aec9b57b4663",
+    "tools/production_qa/morwen_transfer_claim.py": "53e01020a13821fbe3692039f50cb499f2b20124",
+    "tools/production_qa/pack_transfer.py": "303497deb452508bc279735b06f2b08f1d35ba68",
+    "tools/production_qa/preserve_blender_transfer.py": "7dc0acb55903e563de3f853cee4b714243906336",
+    "tools/production_qa/receive_morwen_transfer.py": "984312424191ad95daf0db30f15c7f6e96fe7880",
+    "tools/production_qa/render_transfer_views.py": "c35be4f1c6efe346d098a40dc8bd820788ff2190",
+    "tools/production_qa/restore_morwen_artifact_preflight.py": "44b68ad4e2ac21f726265cfbd694bf2148e95a92",
+    "tools/production_qa/restore_morwen_preserved.py": "2077646f1c348b0d25e2233c4ccb0363f81b9e44",
+    "tools/production_qa/reviewed_launch_contract.cjs": "6032fb84f7032709c8551da75da48e2f7501382f",
+    "tools/production_qa/run_blender_transfer.sh": "f9e6fd859fdee895652abb37f237e181919096db",
+    "tools/production_qa/shared_asset_lease.py": "b32b9565c0826d905e1d9dce46e54d38264c7b69",
+    "tools/production_qa/shared_asset_reservation.py": "b7e6a2f220935d80a7b0ddd94123df564ab504d9",
+    "tools/production_qa/transfer_private_release.py": "75b5d82be8f208400bc999ffbf030c8d67cc472a",
+    "tools/production_qa/verify_transfer_output.py": "cb1f15e791adf51fc7fbd352c866b370a1381170",
+    "tools/production_qa/vrm_export_session.sh": "3902c2f8c2ed7aa182e1b89a27790c732e8450d3"
+  }
+}

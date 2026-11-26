@@ -1,6 +1,34 @@
 name: TWO Actions orchestration offline unit QA
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/two-actions-orchestration-offline-qa.yml'
+      - '.github/workflows/morwen-request-launch.yml'
+      - '.github/workflows/morwen-vroid-macos-probe.yml'
+      - '.github/morwen/reviewed-launch-contract.json'
+      - '.github/morwen/vrm-export-profile.json'
+      - 'tools/production_qa/reviewed_launch_contract.cjs'
+      - 'tools/production_qa/test_reviewed_launch_contract.cjs'
+      - 'tools/private-preservation/release_transport.py'
+      - 'tools/production_qa/capture_transfer_views.sh'
+      - 'tools/production_qa/import_vrm_transfer.py'
+      - 'tools/production_qa/install_blender_530.sh'
+      - 'tools/production_qa/morwen_transfer_claim.py'
+      - 'tools/production_qa/pack_transfer.py'
+      - 'tools/production_qa/preserve_blender_transfer.py'
+      - 'tools/production_qa/receive_morwen_transfer.py'
+      - 'tools/production_qa/render_transfer_views.py'
+      - 'tools/production_qa/restore_morwen_artifact_preflight.py'
+      - 'tools/production_qa/restore_morwen_preserved.py'
+      - 'tools/production_qa/run_blender_transfer.sh'
+      - 'tools/production_qa/shared_asset_lease.py'
+      - 'tools/production_qa/shared_asset_reservation.py'
+      - 'tools/production_qa/transfer_private_release.py'
+      - 'tools/production_qa/verify_transfer_output.py'
+      - 'tools/production_qa/vrm_export_session.sh'
+      - 'tools/production_qa/test_restore_morwen_artifact_preflight.py'
 permissions:
   contents: read
 concurrency:
@@ -8,6 +36,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   offline-unit-tests:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -23,3 +52,94 @@ jobs:
           for name in classify_actions_jobs audit_actions_ledger collect_actions_snapshot reconcile_actions_snapshot verify_actions_artifact inspect_actions_artifact_metadata download_actions_artifact; do
             python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
           done
+  reviewed-launch-contract:
+    permissions:
+      contents: read
+      actions: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test exact launch digest and prior-run selection
+        run: |
+          set -euo pipefail
+          node --test tools/production_qa/test_reviewed_launch_contract.cjs
+          python3 -m unittest discover -s tools/production_qa -p test_restore_morwen_artifact_preflight.py -v
+      - name: Check candidate pins against checked-out files
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, subprocess
+          root = pathlib.Path(".github/morwen")
+          contract = json.loads((root / "reviewed-launch-contract.json").read_text())
+          assert contract["schema"] == "two-reviewed-launch-v1"
+          assert contract["asset_id"] == "MORWEN"
+          assert contract["review_state"] in ("CANDIDATE_REVIEW_REQUIRED", "REVIEWED_FOR_OWNER_LAUNCH")
+          assert contract["worker_path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          assert subprocess.check_output(["git", "hash-object", contract["worker_path"]], text=True).strip() == contract["worker_blob"]
+          assert hashlib.sha256((root / "vrm-export-profile.json").read_bytes()).hexdigest() == contract["profile_sha256"]
+          assert contract["restore_source"] in ("private_release", "actions_artifact")
+          deps = contract["dependency_blobs"]
+          assert set(deps) == set([".github/workflows/morwen-request-launch.yml","tools/private-preservation/release_transport.py","tools/production_qa/capture_transfer_views.sh","tools/production_qa/import_vrm_transfer.py","tools/production_qa/install_blender_530.sh","tools/production_qa/morwen_transfer_claim.py","tools/production_qa/pack_transfer.py","tools/production_qa/preserve_blender_transfer.py","tools/production_qa/receive_morwen_transfer.py","tools/production_qa/render_transfer_views.py","tools/production_qa/restore_morwen_artifact_preflight.py","tools/production_qa/restore_morwen_preserved.py","tools/production_qa/reviewed_launch_contract.cjs","tools/production_qa/run_blender_transfer.sh","tools/production_qa/shared_asset_lease.py","tools/production_qa/shared_asset_reservation.py","tools/production_qa/transfer_private_release.py","tools/production_qa/verify_transfer_output.py","tools/production_qa/vrm_export_session.sh"])
+          for path, digest in deps.items():
+              assert subprocess.check_output(["git", "hash-object", path], text=True).strip() == digest, path
+          print("CANDIDATE_DIGEST_MATCH")
+          PY
+      - name: Validate actual launcher and worker script syntax
+        run: |
+          python3 - <<'PY'
+          import pathlib, subprocess, tempfile
+          def script(path, name):
+              lines = pathlib.Path(path).read_text().splitlines()
+              start = [i for i, l in enumerate(lines) if l.strip() == "- name: " + name]
+              assert len(start) == 1, name
+              end = next((i for i in range(start[0]+1, len(lines)) if lines[i].startswith("      - ")), len(lines))
+              block = lines[start[0]:end]
+              run = [i for i,l in enumerate(block) if l == "        run: |"]
+              assert len(run) == 1, name
+              body = block[run[0]+1:]
+              body = [l[10:] if l.startswith("          ") else "" for l in body]
+              return "\n".join(body)+"\n"
+          launch = script(".github/workflows/morwen-request-launch.yml", "Reserve and bind reviewed VRM dispatch once")
+          worker = script(".github/workflows/morwen-vroid-macos-probe.yml", "Verify reviewed transfer fence and exact checkpoint profile")
+          for label, body in [("launcher",launch),("worker",worker)]:
+              subprocess.run(["bash","-n"],input=body,text=True,check=True)
+              print("BASH_SYNTAX_PASS",label)
+          js = launch.split("node <<'JS'\n",1)[1].split("\nJS\n",1)[0]
+          with tempfile.TemporaryDirectory() as tmp:
+              p=pathlib.Path(tmp)/"launch.cjs"
+              p.write_text(js)
+              subprocess.run(["node","--check",str(p)],check=True)
+          print("NODE_SYNTAX_PASS")
+          # The contract reader and subsequent Python verification heredocs must compile.
+          blocks=worker.split("<<'PY'\n")[1:]
+          assert len(blocks) >= 3
+          for i,b in enumerate(blocks):
+              compile(b.split("\nPY\n",1)[0],f"worker-heredoc-{i}","exec")
+          print("PYTHON_HEREDOC_SYNTAX_PASS",len(blocks))
+          PY
+      - name: Read-only live prior-run API compatibility
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node <<'JS'
+          const {execFileSync}=require("node:child_process");
+          const {selectPrior,ACTIVE,PATH}=require("./tools/production_qa/reviewed_launch_contract.cjs");
+          const repo="repos/"+process.env.GITHUB_REPOSITORY;
+          const wf=repo+"/actions/workflows/"+PATH.split("/").pop();
+          function api(path){return JSON.parse(execFileSync("gh",["api",path],{encoding:"utf8",timeout:10000,maxBuffer:5000000}));}
+          try {
+            const list=api(wf+"/runs?branch=main&per_page=1");
+            const id=list.workflow_runs?.[0]?.id;
+            if(!Number.isSafeInteger(id)||id<=0)throw Error("latest prior missing");
+            const detail=api(repo+"/actions/runs/"+id);
+            const jobs=api(repo+"/actions/runs/"+id+"/attempts/1/jobs?per_page=100");
+            const active=Object.fromEntries(ACTIVE.map(s=>[s,api(wf+"/runs?status="+s+"&per_page=1")]));
+            console.log("LIVE_PRIOR_READ_ONLY_PASS",selectPrior(list,detail,jobs,active));
+          } catch(e) {
+            // Live state may change during PR QA. Do not equate HOLD to launch eligibility.
+            console.log("LIVE_PRIOR_READ_ONLY_HOLD",e.message.split("\n")[0]);
+          }
+          JS

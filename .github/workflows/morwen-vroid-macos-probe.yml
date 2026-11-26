@@ -534,13 +534,37 @@ jobs:
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           REQUEST_ID: ${{ inputs.request_id }}
           REQUEST_ACTOR: ${{ github.actor_id }}
-          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           test "$REQUEST_ACTOR" = 41898282 # github-actions[bot]; owner checked separately
           [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -C transfer-control rev-parse HEAD)" = "$GITHUB_SHA"
+          PROFILE_SHA256=$(python3 - <<'PY'
+          import json, pathlib, subprocess, os, re
+          root = pathlib.Path("transfer-control")
+          contract = json.loads((root / ".github/morwen/reviewed-launch-contract.json").read_text())
+          assert contract["schema"] == "two-reviewed-launch-v1"
+          assert contract["review_state"] == "REVIEWED_FOR_OWNER_LAUNCH"
+          assert contract["asset_id"] == os.environ["TRANSFER_ASSET"] == "MORWEN"
+          assert contract["worker_path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          worker = subprocess.check_output(["git", "-C", str(root), "hash-object", contract["worker_path"]], text=True).strip()
+          assert worker == contract["worker_blob"]
+          assert re.fullmatch(r"[0-9a-f]{64}", contract["profile_sha256"])
+          assert contract["restore_source"] in ("private_release", "actions_artifact")
+          deps = contract["dependency_blobs"]
+          expected = [".github/workflows/morwen-request-launch.yml","tools/private-preservation/release_transport.py","tools/production_qa/capture_transfer_views.sh","tools/production_qa/import_vrm_transfer.py","tools/production_qa/install_blender_530.sh","tools/production_qa/morwen_transfer_claim.py","tools/production_qa/pack_transfer.py","tools/production_qa/preserve_blender_transfer.py","tools/production_qa/receive_morwen_transfer.py","tools/production_qa/render_transfer_views.py","tools/production_qa/restore_morwen_artifact_preflight.py","tools/production_qa/restore_morwen_preserved.py","tools/production_qa/reviewed_launch_contract.cjs","tools/production_qa/run_blender_transfer.sh","tools/production_qa/shared_asset_lease.py","tools/production_qa/shared_asset_reservation.py","tools/production_qa/transfer_private_release.py","tools/production_qa/verify_transfer_output.py","tools/production_qa/vrm_export_session.sh"]
+          assert isinstance(deps, dict) and set(deps) == set(expected)
+          for path in expected:
+              assert re.fullmatch(r"[0-9a-f]{40}", deps[path])
+              actual = subprocess.check_output(["git", "-C", str(root), "hash-object", path], text=True).strip()
+              assert actual == deps[path], "dependency review missing: " + path
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as f:
+              f.write("MORWEN_RESTORE_SOURCE=" + contract["restore_source"] + "\n")
+          print(contract["profile_sha256"])
+          PY
+          )
           [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
           test -n "$TRANSFER_ASSET"
           PRIVATE_DROP="$RUNNER_TEMP/morwen-private-transfer"
@@ -608,7 +632,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/restore_morwen_preserved.py
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/restore_morwen_preserved.py --source "$MORWEN_RESTORE_SOURCE"
       - name: Restore exact saved hair candidate for read-only comparison
         if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
         env:

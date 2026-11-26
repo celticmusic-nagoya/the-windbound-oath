@@ -163,16 +163,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PYTHONPATH: tools/production_qa
           TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
-          PROFILE_SHA256: ${{ vars.MORWEN_VRM_EXPORT_PROFILE_SHA256 }}
-          REVIEWED_WORKER_BLOB: ${{ vars.MORWEN_VRM_WORKER_BLOB }}
-          REVIEWED_PREVIOUS_RUN: ${{ vars.MORWEN_VRM_PREVIOUS_RUN }}
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           gh auth setup-git --hostname github.com
           node <<'JS'
-          const fs=require("node:fs"),{execFileSync}=require("node:child_process"),crypto=require("node:crypto");
+          const fs=require("node:fs"),{execFileSync}=require("node:child_process");
+          const {verifyContract,selectPrior,ACTIVE}=require("./tools/production_qa/reviewed_launch_contract.cjs");
           function validate(e,attempt,now,revision,live,pr) {
             const c=e.comment||{}, age=now-Date.parse(c.created_at);
             if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1"||!Number.isFinite(age)||age<0||age>600000)throw Error("request identity");
@@ -193,14 +191,22 @@ jobs:
           if(head!==env.GITHUB_SHA)throw Error("main moved");
           const request=validate(e,env.GITHUB_RUN_ATTEMPT,Date.now(),head,api(repo+"/issues/comments/"+e.comment.id),api(repo+"/pulls/427"));
           const blob=api(repo+"/contents/.github/workflows/morwen-vroid-macos-probe.yml?ref="+head).sha;
-          if(!/^[0-9a-f]{40}$/.test(env.REVIEWED_WORKER_BLOB)||blob!==env.REVIEWED_WORKER_BLOB)throw Error("worker review missing");
+          const contract=JSON.parse(fs.readFileSync(".github/morwen/reviewed-launch-contract.json","utf8"));
           const profile=fs.readFileSync(".github/morwen/vrm-export-profile.json");
-          if(!/^[0-9a-f]{64}$/.test(env.PROFILE_SHA256)||crypto.createHash("sha256").update(profile).digest("hex")!==env.PROFILE_SHA256)throw Error("profile review missing");
+          verifyContract(contract,blob,profile,env.TRANSFER_ASSET,path=>execFileSync("git",["hash-object",path],{encoding:"utf8",timeout:10000}).trim());
           const reviewed=JSON.parse(profile);
           if(!/^[A-Z0-9][A-Z0-9_-]{2,100}$/.test(env.TRANSFER_ASSET||"")||reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_destination!=="celticmusic-nagoya/the-windbound-oath-handoff"||reviewed.staging!=="RUNNER_TEMP_OWNER_ONLY"||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
-          const prior=api(wf+"/runs?branch=main&per_page=1").workflow_runs[0];
-          if(!prior||String(prior.id)!==env.REVIEWED_PREVIOUS_RUN||prior.status!=="completed")throw Error("prior run changed");
-          for(const status of ["queued","in_progress","waiting","requested","pending"]){if(api(wf+"/runs?status="+status+"&per_page=1").total_count!==0)throw Error("active worker");}
+          function latestPrior(){
+            const list=api(wf+"/runs?branch=main&per_page=1");
+            const id=list.workflow_runs?.[0]?.id;
+            if(!Number.isSafeInteger(id)||id<=0)throw Error("latest prior missing");
+            const detail=api(repo+"/actions/runs/"+id);
+            const jobs=api(repo+"/actions/runs/"+id+"/attempts/1/jobs?per_page=100");
+            const active=Object.fromEntries(ACTIVE.map(status=>[status,api(wf+"/runs?status="+status+"&per_page=1")]));
+            return selectPrior(list,detail,jobs,active);
+          }
+          const prior=latestPrior();
+          console.log("REVIEWED_PRIOR_RUN",prior);
           const title="Morwen VRoid / vrm_export request:"+request;
           if(api(wf+"/runs?per_page=100").workflow_runs.some(x=>x.display_title===title))throw Error("request already dispatched");
           // The protected worker reads the exact private preservation Release and checks its bytes before GUI launch.
@@ -212,8 +218,9 @@ jobs:
             return token;
           }
           if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved before reserve");
+          if(latestPrior()!==prior)throw Error("prior moved before reserve");
           const reservation=cas("reserve",head,request);
-          if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved after reserve; reconcile");
+          if(latestPrior()!==prior||api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main or prior moved after reserve; reconcile");
           execFileSync("gh",["api","--method","POST",wf+"/dispatches","--input","-"],{input:JSON.stringify({ref:"main",inputs:{mode:"vrm_export",expected_main:head,request_id:request,transfer_fence:reservation}}),encoding:"utf8",timeout:20000});
           for(let i=0;i<12;i++){
             const matches=api(wf+"/runs?per_page=20").workflow_runs.filter(x=>x.display_title===title);
