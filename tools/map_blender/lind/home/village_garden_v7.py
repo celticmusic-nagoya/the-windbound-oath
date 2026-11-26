@@ -40,6 +40,7 @@ def overlap(a,b):
 rng=random.Random(202611267)
 coll=bpy.data.collections.new('V7_GARDEN_SCENIC_ONLY');scene.collection.children.link(coll)
 # Explicit LOD3 exact CC0 scan, not the failed bridge abutment or a cuboid generator.
+pre_materials=set(bpy.data.materials);pre_images=set(bpy.data.images);pre_meshes=set(bpy.data.meshes)
 with bpy.data.libraries.load(str(rock.resolve()),link=False) as (a,b):
     names=[n for n in a.objects if n=='rock_07_LOD3'];assert len(names)==1,a.objects
     b.objects=names
@@ -51,6 +52,21 @@ assert all(mx[i]>mn[i] for i in range(3))
 for p in mesh.vertices:
     p.co=Vector(((p.co.x-(mn[0]+mx[0])/2)/(mx[0]-mn[0]),(p.co.y-(mn[1]+mx[1])/2)/(mx[1]-mn[1]),(p.co.z-mn[2])/(mx[2]-mn[2])))
 mesh.update();mesh.calc_loop_triangles()
+# Scan geometry only: detach imported external-texture dependencies, never existing scene data.
+mesh.materials.clear()
+source_mesh=raw.data
+assert source_mesh not in pre_meshes and not raw.users_collection
+bpy.data.objects.remove(raw,do_unlink=True)
+assert source_mesh.users==0 or (source_mesh.use_fake_user and source_mesh.users==1)
+bpy.data.meshes.remove(source_mesh)
+removed_materials=[];removed_images=[]
+for item in list(set(bpy.data.materials)-pre_materials):
+    assert item.users==0 or (item.use_fake_user and item.users==1),(item.name,item.users)
+    removed_materials.append(item.name);bpy.data.materials.remove(item)
+for item in list(set(bpy.data.images)-pre_images):
+    assert item.users==0 or (item.use_fake_user and item.users==1),(item.name,item.users)
+    removed_images.append(item.name);bpy.data.images.remove(item)
+print('SCAN_DEPENDENCY_CLEANUP',json.dumps(dict(materials=removed_materials,images=removed_images)),flush=True)
 asset=photos/'rock_boulder_dry';rec=json.loads((asset/'manifest.json').read_text());assert rec['license']=='CC0'
 mat=bpy.data.materials.new('V7 garden stone PBR');mat.use_nodes=True;n=mat.node_tree.nodes;l=mat.node_tree.links;bs=next(q for q in n if q.type=='BSDF_PRINCIPLED')
 texs={}
@@ -115,9 +131,11 @@ from blueprint_engine.residual import evaluate
 actual={'ground_residual_abs_max':max(map(abs,roots)),'protected_mesh_changes':0,'route_overlap_count':0}
 metrics=evaluate(dict(values={k:0 for k in actual},tolerances={'ground_residual_abs_max':.07,'protected_mesh_changes':0,'route_overlap_count':0},uncertainty={k:0 for k in actual}),dict(actual=actual,uncertainty={'ground_residual_abs_max':.000001,'protected_mesh_changes':0,'route_overlap_count':0}))
 dest=out/'village_garden_v7_UNAPPROVED.blend';assert not dest.exists()
+missing=[im.name for im in bpy.data.images if im.source=='FILE' and not im.packed_file and not Path(bpy.path.abspath(im.filepath)).is_file()]
+assert not missing,missing
 bpy.ops.file.pack_all();bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True);bpy.ops.wm.open_mainfile(filepath=str(dest.resolve()),load_ui=False);scene=bpy.context.scene
 assert snap()==old and sha(src)==lock and all(bpy.data.objects.get(q['name']) for q in stones+flowers)
-q=dict(status='SCENIC_GARDEN_FEASIBILITY',source_sha256=lock,rock_source_sha256=rocklock,rock_source='Poly Haven rock_07 LOD3; CC0; historical source manifest PR363; not Irish provenance',pbr=texs,protected_meshes=len(old),garden=list(garden),house=list(house),stones=stones,flowers=flowers,root_samples=len(roots),actual=actual,engine_metrics=metrics,native_reopen='PASS',limits=['Provisional local scene only; not structural dry-stone wall or approved garden layout.','Existing turf is retained, not collision tested; no GLB bake or runtime.'])
+q=dict(status='SCENIC_GARDEN_FEASIBILITY',source_sha256=lock,rock_source_sha256=rocklock,rock_source='Poly Haven rock_07 LOD3; CC0; historical source manifest PR363; not Irish provenance',pbr=texs,removed_unused_scan_dependencies=dict(materials=removed_materials,images=removed_images),protected_meshes=len(old),garden=list(garden),house=list(house),stones=stones,flowers=flowers,root_samples=len(roots),actual=actual,engine_metrics=metrics,native_reopen='PASS',limits=['Provisional local scene only; not structural dry-stone wall or approved garden layout.','Existing turf is retained, not collision tested; no GLB bake or runtime.'])
 q['added_triangles']=0
 for item in stones+flowers:
     m=bpy.data.objects[item['name']].data;m.calc_loop_triangles();q['added_triangles']+=len(m.loop_triangles)
