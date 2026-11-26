@@ -1,0 +1,31 @@
+{
+  "status": "BOUNDED_SCENIC_FEASIBILITY_READY_NOT_RUN",
+  "parent": "0f3d5cc98a4f91c29e8580a10c59197d075f01e1",
+  "source_artifact": 15086832595,
+  "source_sha256": "1e7e74a3f1d33958eccb7a55e222e586ba6cb018c2ac9585508904985c6cfccf",
+  "scope": "V78 far relief only; source derived moss/shrub/fern, no route or canon edits",
+  "design": {
+    "frame": "A3 provisional local XY meters",
+    "distance_from_seam_m": [
+      5,
+      38
+    ],
+    "max_instances": 60,
+    "min_instances": 24,
+    "max_added_triangles": 60000,
+    "root_sample_residual_m": [
+      -0.015,
+      0.22
+    ],
+    "material": "two far PBR branches only; original seam preserved",
+    "seed": 2026112678
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limitations": "No independent D4; bounded scenic feasibility only, not precision production. No full collision or atmosphere change; preserve camera and lighting. Native execution pending."
+}
