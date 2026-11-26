@@ -1,0 +1,600 @@
+{
+  "schema": "two.region.a3.ruins.detailed_blueprint.v60",
+  "parent": "b0995175ba753fd72ca3e092909e210bd3d97d05",
+  "status": "DETAILED_DESIGN_CANDIDATE_PAD_INTERFACE_HOLD_D4_NOT_RUN",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "v59_design": "3a44610dc4d73fa89367a2fa049ae96dee49948c",
+    "v59_receipt": "fe095dc687faacdecbb302ecf439462b2924f1bb",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "source": {
+    "artifact": 15076007596,
+    "archive_sha256": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+    "source_checks": "21/21 SHA256 and Git blob SHA1/size exact",
+    "v59_local_json_sha256": "dc7e0484973c909f7bbfd0c91445b80f89c6dd7bd304f3fa067f0556bc45d26b",
+    "terrain_sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "source_unchanged": true
+  },
+  "design": {
+    "units": "m",
+    "part_count": 50,
+    "old_gate_parts_exact": 17,
+    "added_rubble": 3,
+    "asymmetric_parts": 8,
+    "section_ring_validity": "all valid positive area",
+    "wear_targets": 9,
+    "moss_targets": 7,
+    "ivy_paths": 5,
+    "min_wear_margin_after_radius_depth_m": 0.0038906974753914643,
+    "monolith_motif_samples": 266,
+    "monolith_motif_min_boundary_gap_m": 0.1340797919139042,
+    "groove_width_m": 0.018,
+    "groove_depth_m": 0.008,
+    "interaction_area_m2": 3.45,
+    "interaction_overlap_m2": 0,
+    "rubble_walk_gap_m": 0.09242062437155951,
+    "method": "Asymmetric offsets of existing section rings, original bearing rings unchanged for gate, new separate ground-supported rubble outside projected walk; actual triangle barycenters and normals for local damage/moss masks; ivy edge midpoint anchors; monolith front motif projected into intended triangular surface by barycentric coordinates. Small 4 elevations and all section rings. No actual cuts or textures. Non-semantic motifs. Reverse faces and dimensions authored, not measured from 2D.",
+    "asymmetry_ring_xy_offsets": {
+      "ALT-MON": [
+        [
+          0,
+          0
+        ],
+        [
+          0.015,
+          -0.01
+        ],
+        [
+          -0.055,
+          0.015
+        ],
+        [
+          -0.095,
+          0.02
+        ],
+        [
+          -0.13,
+          0.01
+        ]
+      ],
+      "ALT-L-ST1": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          -0.03,
+          0.01
+        ],
+        [
+          -0.07,
+          0.015
+        ]
+      ],
+      "ALT-R-ST1": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0.045,
+          -0.02
+        ],
+        [
+          0.065,
+          -0.035
+        ]
+      ],
+      "ALT-L-ST2": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          -0.025,
+          -0.025
+        ],
+        [
+          -0.045,
+          -0.03
+        ]
+      ],
+      "ALT-R-ST2": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0.035,
+          -0.015
+        ],
+        [
+          0.065,
+          -0.025
+        ]
+      ],
+      "RUNE-S01": [
+        [
+          0,
+          0
+        ],
+        [
+          0.01,
+          0
+        ],
+        [
+          -0.025,
+          0.015
+        ],
+        [
+          -0.08,
+          0.025
+        ],
+        [
+          -0.14,
+          0.04
+        ],
+        [
+          -0.17,
+          0.04
+        ]
+      ],
+      "BOUND-S01": [
+        [
+          0,
+          0
+        ],
+        [
+          0.01,
+          0
+        ],
+        [
+          0.07,
+          -0.015
+        ],
+        [
+          0.11,
+          -0.03
+        ]
+      ],
+      "FRAG-S01": [
+        [
+          0,
+          0
+        ],
+        [
+          0.025,
+          0.01
+        ],
+        [
+          -0.07,
+          0.025
+        ],
+        [
+          -0.16,
+          0.04
+        ]
+      ]
+    },
+    "rubble": {
+      "section_format": "[z,w,d,chamfer,dx,dy]",
+      "parts": [
+        {
+          "id": "GATE-R-FRAG01",
+          "center": [
+            2.16,
+            -0.73
+          ],
+          "yaw": -9,
+          "sections": [
+            [
+              0,
+              0.48,
+              0.38,
+              0.06,
+              0,
+              0
+            ],
+            [
+              0.12,
+              0.43,
+              0.34,
+              0.05,
+              0.02,
+              0
+            ],
+            [
+              0.3,
+              0.29,
+              0.25,
+              0.055,
+              -0.025,
+              0.025
+            ]
+          ]
+        },
+        {
+          "id": "GATE-R-FRAG02",
+          "center": [
+            1.84,
+            0.75
+          ],
+          "yaw": 11,
+          "sections": [
+            [
+              0,
+              0.45,
+              0.36,
+              0.04,
+              0,
+              0
+            ],
+            [
+              0.13,
+              0.4,
+              0.3,
+              0.045,
+              -0.015,
+              0
+            ],
+            [
+              0.23,
+              0.26,
+              0.25,
+              0.05,
+              0.03,
+              -0.02
+            ]
+          ]
+        },
+        {
+          "id": "GATE-L-FRAG01",
+          "center": [
+            -2.04,
+            0.75
+          ],
+          "yaw": -13,
+          "sections": [
+            [
+              0,
+              0.33,
+              0.36,
+              0.05,
+              0,
+              0
+            ],
+            [
+              0.13,
+              0.29,
+              0.3,
+              0.04,
+              0,
+              0
+            ],
+            [
+              0.21,
+              0.22,
+              0.2,
+              0.04,
+              -0.02,
+              0.01
+            ]
+          ]
+        }
+      ]
+    },
+    "wear_rows": {
+      "format": "[part,section,edge,radius_m,depth_m]; triangle (k,j),(k,j+1),(k+1,j+1), barycentric thirds",
+      "rows": [
+        [
+          "ALT-MON",
+          2,
+          2,
+          0.045,
+          0.018
+        ],
+        [
+          "ALT-MON",
+          1,
+          6,
+          0.04,
+          0.018
+        ],
+        [
+          "ALT-L-ST1",
+          1,
+          2,
+          0.024,
+          0.012
+        ],
+        [
+          "ALT-R-ST1",
+          1,
+          6,
+          0.024,
+          0.012
+        ],
+        [
+          "GATE-L-P2",
+          0,
+          6,
+          0.03,
+          0.012
+        ],
+        [
+          "GATE-R-P3",
+          0,
+          2,
+          0.032,
+          0.015
+        ],
+        [
+          "RUNE-S01",
+          2,
+          2,
+          0.03,
+          0.012
+        ],
+        [
+          "BOUND-S01",
+          1,
+          6,
+          0.025,
+          0.012
+        ],
+        [
+          "FRAG-S01",
+          1,
+          2,
+          0.025,
+          0.01
+        ]
+      ]
+    },
+    "moss_rows": {
+      "format": "[part,section,edge,radius_m]; same triangle barycenter",
+      "rows": [
+        [
+          "ALT-MON",
+          2,
+          4,
+          0.065
+        ],
+        [
+          "ALT-MON",
+          1,
+          2,
+          0.065
+        ],
+        [
+          "GATE-L-P2",
+          0,
+          6,
+          0.055
+        ],
+        [
+          "GATE-R-P3",
+          0,
+          2,
+          0.055
+        ],
+        [
+          "RUNE-S01",
+          1,
+          6,
+          0.06
+        ],
+        [
+          "BOUND-S01",
+          1,
+          2,
+          0.04
+        ],
+        [
+          "FRAG-S01",
+          1,
+          4,
+          0.04
+        ]
+      ]
+    },
+    "ivy_rows": {
+      "format": "[part,edge]; each ring side edge midpoint; stem radius .009, leaf width .045",
+      "rows": [
+        [
+          "ALT-MON",
+          6
+        ],
+        [
+          "RUNE-S01",
+          6
+        ],
+        [
+          "BOUND-S01",
+          2
+        ],
+        [
+          "GATE-L-P3",
+          6
+        ],
+        [
+          "GATE-R-P2",
+          2
+        ]
+      ]
+    },
+    "monolith_motif": {
+      "front_edge": 0,
+      "paths": [
+        {
+          "id": "MON-SPINE",
+          "x": -0.03,
+          "z": [
+            0.55,
+            3.15
+          ],
+          "samples": 91
+        },
+        {
+          "id": "MON-RING",
+          "center": [
+            -0.03,
+            2.43
+          ],
+          "radius": 0.265,
+          "samples": 129
+        },
+        {
+          "id": "MON-CROSS",
+          "x": [
+            -0.32,
+            0.26
+          ],
+          "z": 2.43,
+          "samples": 41
+        },
+        {
+          "id": "MON-TIP",
+          "xz": [
+            [
+              -0.03,
+              3.15
+            ],
+            [
+              -0.13,
+              3.02
+            ],
+            [
+              -0.03,
+              2.91
+            ],
+            [
+              0.07,
+              3.02
+            ],
+            [
+              -0.03,
+              3.15
+            ]
+          ]
+        }
+      ],
+      "triangle_rule": "front j=0, each section k (k0,k1,k+1_1), (k0,k+1_1,k+1_0), solve barycentric in XZ. Union intersecting recess mask, no semantic rune changes."
+    },
+    "limits": "Gate primary arch still too regular vs original sprite, all original gate bearing parts retained, only rubble/side damage added. Ivy paths are anchors, not contact-certified curves. Material masks not actual textures, cutter volumes not evaluated. No structural/nav acceptance."
+  },
+  "terrain": {
+    "frame": "A3 local east/north/up, world offset [600,-400,0]; corrected altar mapping x=-n,y=d (old determinant -1, new +1)",
+    "matrix": [
+      [
+        -0.6148655745981655,
+        0.788631932636555
+      ],
+      [
+        -0.788631932636555,
+        -0.6148655745981655
+      ]
+    ],
+    "pad_center_local": [
+      93.9431596631828,
+      -93.0743278729908
+    ],
+    "target_z": 27.988129971478276,
+    "pad_area_m2": 64,
+    "pad_outside_tile_m2": 0,
+    "grid_samples": 6561,
+    "sampled_delta_target_minus_ground_range_m": [
+      -0.30107868090659906,
+      0.3168167575390122
+    ],
+    "sampled_cut_m3": 4.034040098975559,
+    "sampled_fill_m3": 4.175406444063819,
+    "skirt_screen": [
+      {
+        "width": 0.5,
+        "outside_area": 0.06911532497023758,
+        "in_tile_max_radial_grade_pct": 71.41760233928949
+      },
+      {
+        "width": 1,
+        "outside_area": 0.9602681654786422,
+        "in_tile_max_radial_grade_pct": 39.77878750423791
+      },
+      {
+        "width": 1.5,
+        "outside_area": 3.498954429323535,
+        "in_tile_max_radial_grade_pct": 29.232515892553817
+      },
+      {
+        "width": 2,
+        "outside_area": 8.068775549469082,
+        "in_tile_max_radial_grade_pct": 23.956761750234712
+      }
+    ],
+    "criterion": "all four fail whole-tile coverage and provisional 15% grade; out-of-tile samples excluded; no extrapolation",
+    "approach": {
+      "width_m": 3,
+      "y_range": [
+        -12,
+        -4
+      ],
+      "max_sample_longitudinal_grade_pct": 1.7934401892958363,
+      "join_ground_minus_pad_delta_m": [
+        -0.15737131461348142,
+        0.032854394989819014
+      ],
+      "deck_z_above_pad": 0.54
+    },
+    "limits": "Exact reconstructed V02 lattice triangle interpolation, sampled .1m cut/fill approximate, V47B actual pad and adjacent actual terrain not recovered. No terrain or event mutation. Corrected frame is proposed, not existing native transform."
+  },
+  "outputs": {
+    "files_sha256": {
+      "blueprint_v60.json": "dc4128c622127707cec3ddcdf57b805124f839d39f03086ae93a770d4e43eaa2",
+      "build_v60.py": "ce82849640c6e1be94f6b4c9bee5c6947a4062231781f083b0bf3c816e84350c",
+      "monolith_motif.png": "06372a5e36641d8d72c42f1c9c27be6f8d7fe9fc629ac97d07455cd1665ab320",
+      "monolith_motif.py": "4c5fae32a49c0df705f7180df9403babcd2734f22f4f8e5c64a7960f342de7ee",
+      "ruins_detail.png": "242643152373df21317e6db21ef03b71bb7532556c42b658cbdceae971060329",
+      "small_sections.png": "20b0608e9fe75ed5f5fb8b7c5a637c8a68d79b74ce5d32bffcaedab0cee73f43",
+      "terrain_interface.png": "726299d36e346795578c18e4db792418a279464a6a6633cf23c07c2e39e7d419"
+    },
+    "package_sha256": "4522c03155f7f77973803000cbcd7cd6f529f8d78ef1982fec3ba02a13dc26b2",
+    "bytes": 2257054,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Local attachments (requires V59 source refs and exact terrain to reproduce), compact design delta and receipt committed. No production geometry."
+  },
+  "gates": {
+    "D0": "SOURCE_BYTES_VERIFIED",
+    "D1": "HOLD_TERRAIN_AND_EVENT",
+    "D2": "PARTIAL_DETAILED_COORDINATES",
+    "D3": "PARTIAL_NATIVE_UNCERTAINTY",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat uniform skirt widths. Resolve pad design via separately evaluated retaining-edge/terrace interface or independently located module, preserve source terrain and event; refine asymmetric arch bearing/stone profile before independent D4. No 3D production until relevant design accepted, no formal adoption/main merge."
+}
