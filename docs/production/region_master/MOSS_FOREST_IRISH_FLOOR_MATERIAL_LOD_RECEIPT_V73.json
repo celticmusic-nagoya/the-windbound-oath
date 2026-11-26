@@ -1,0 +1,90 @@
+{
+  "schema": "two.region.a3.irish_floor_material_lod.v73",
+  "parent": "49d20787be51daa56012ec4de1e265ed32fc4377",
+  "status": "V72_RENDER_RECOVERY_VERIFIED_V73_BOUNDED_MATERIAL_LOD_REQUESTED",
+  "prework": {
+    "main_head": "2f5195c0787a9a323e6dc14f8764476cf01727f4",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_IRISH_FLOOR_BOUNDED_MATERIAL_LOD_V73",
+    "owner_pr": 482,
+    "owner_head": "49d20787be51daa56012ec4de1e265ed32fc4377",
+    "writer_lease_fencing_evidence": "Completed V72 run, isolated exact V71 checkpoint, existing verified runner, no shared writer takeover; expected HEAD CAS.",
+    "dependency_shas": {
+      "v72": "430ee1f0e03e70b88997bc8d444de90ea6143e14",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All original bytes, V71 prior instances except six scoped stump candidate copies and two terrain material assignments; V68 frozen design, canon and game.",
+    "stage": "One bounded technical and art feasibility to address prior budget and bare floor, no new precision production or D4 waiver",
+    "acceptance_criteria": "Exact source/archive SHA and 8 provider file hashes, one 25% stump candidate with <=25mm sampled placed surface error and <=15mm bounds delta, root checks and UV count; otherwise keep original. One deadwood only if saved >=101802 triangles, full footprint and root check. Original geometry, UV and color attributes exact; shared copied terrain material, save/reopen matched renders.",
+    "preflight_checks": "V72 complete job, actual archived digest CRC and 2/2 render SHA, actual views visually inspected, source receipt exact. Native script py_compile in existing Actions.",
+    "result": "READY_BOUNDED_FEASIBILITY_ONLY",
+    "blockers": [
+      "D4 independent absent",
+      "G2 sparse forest",
+      "No runtime performance certification"
+    ],
+    "checkpoint": "V71 immutable native retained"
+  },
+  "v72": {
+    "run": 45741712674,
+    "job": 139648056966,
+    "artifact": 15081647346,
+    "archive_sha256": "72751057f1daffea72b4531bd10574ee96ed68f121c8995e59ad32a0964aad19",
+    "qa_sha256": "fbe66df31dbb337edc2f78b95c6bb67eea4163c66ae3bff4698da5d963468f06",
+    "render_sha256": [
+      "c1fa6b9e5cd77f5dc2f3533bd903ed255e192534880ad02c697ac8e91ed4ab4a",
+      "c30451e011eb144f5de80eb4a742fc27ef1b7ccd9ec2159a790f5a9997cf8793"
+    ],
+    "crc": "PASS",
+    "output_checks": "2/2",
+    "mesh_count": 691,
+    "linked_instances_verified": 168,
+    "visual": "HOLD: clustered mostly at edge, bare foreground, homogeneous trees and open skyline, altar proxy. No repeated placement count-only tuning."
+  },
+  "v73": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py",
+    "source_artifacts": [
+      15081142222,
+      15080758554
+    ],
+    "native_sha256": "745f3739cf5360b113267003a21b61d0c812abeb7dfb3eecd66a2e558f2bf6bc",
+    "source_archive_sha256": "54a89abb4f9851c39d63624921567c402bf0c908a4781402911d3a5153f3d79b",
+    "material": {
+      "asset": "forest_leaves_02",
+      "provider": "https://polyhaven.com/a/forest_leaves_02",
+      "author": "Rob Tuytel",
+      "license": "CC0",
+      "physical_height_m": 3,
+      "repeat_xy_m": 3,
+      "repeat_x_assumption": "Square source maps; horizontal scale inferred from square texture",
+      "blend": "World-space noise scale .18, detail 3, factor .15–.85, shared copied material and separate normal/roughness; existing graph preserved, no displacement."
+    },
+    "lod": {
+      "source_triangles": 41046,
+      "ratio": 0.25,
+      "instances": 6,
+      "limits": "Vertex-to-surface samples not Hausdorff bound; UV count not visual proof. Retain original if thresholds fail."
+    },
+    "deadwood": {
+      "max_instances": 1,
+      "source_triangles": 101802,
+      "placement_only_if_budget_freed": true
+    }
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G2": "SELF_HOLD",
+    "G3": "V72_RENDER_RECOVERY_PASS_V73_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect V73 actual result, avoid repeated density or LOD variants; if material improved, use evidence for scoped design review. No formal adoption or main merge."
+}
