@@ -246,11 +246,11 @@ try{
  assert.ok(await zoomRegion.evaluate(e=>e.scrollWidth<=e.clientWidth+1),'reset must fit image');
 
  await review.getByText('制作情報・QA・来歴',{exact:true}).click();
- assert.ok((await review.locator('details p').innerText()).includes(cliffPhotos[0].sha256));
+ assert.ok((await review.locator('.gallery-review-metadata').innerText()).includes(cliffPhotos[0].sha256));
  if(cliffPhotos.length>1){
   await review.getByRole('button',{name:'次へ →'}).click();
   assert.equal(await review.getByRole('status').innerText(),'2 / '+cliffPhotos.length);
-  assert.ok((await review.locator('details p').innerText()).includes(cliffPhotos[1].sha256));
+  assert.ok((await review.locator('.gallery-review-metadata').innerText()).includes(cliffPhotos[1].sha256));
   await review.getByRole('button',{name:'← 前へ'}).click();
   assert.equal(await review.getByRole('status').innerText(),'1 / '+cliffPhotos.length);
  }
