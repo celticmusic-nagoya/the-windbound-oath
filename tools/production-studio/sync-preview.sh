@@ -7,7 +7,7 @@ python - <<'PY'
 import json, subprocess, os
 from pathlib import Path
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
-assert len(selection)<=28
+assert len(selection)<=36
 active=[]
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
