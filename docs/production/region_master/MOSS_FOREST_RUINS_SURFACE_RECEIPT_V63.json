@@ -1,0 +1,187 @@
+{
+  "schema": "two.region.a3.ruin.surface.v63",
+  "parent": "52a1529010652ab552136d4c06ac76443291f4e8",
+  "status": "SMALL_LOCAL_MOTIF_DESIGN_DELIVERED_NATIVE_CONFLICT_CLASSIFICATION_REQUESTED_D4_HOLD",
+  "prework": {
+    "main_head": "f0ecfaad2554876e96f5aaf941276b2d6430efc0",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6"
+    },
+    "effective_rules": "Local design only; read-only native survey; no formal production before D4",
+    "scope_id": "A3_SMALL_RUINS_V63_AND_TERRACE_READ_ONLY",
+    "owner_pr": 482,
+    "owner_head": "52a1529010652ab552136d4c06ac76443291f4e8",
+    "writer_lease_fencing_evidence": "No shared native writes, no lease takeover. CAS non-force commit.",
+    "source_sha256": {
+      "v60": "dc4128c622127707cec3ddcdf57b805124f839d39f03086ae93a770d4e43eaa2",
+      "v62": "69abe22b3ad8596bb7efb32e639b000d33dba768018ff85ceac261ac3af4d204",
+      "refs": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+      "v58_native": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a"
+    },
+    "protected_scope": "All V60 section rings, V62 masonry, V58 native and canon",
+    "dependency_shas": {
+      "v62": "cfe7c94b15a0c48a06ef65ef7fcad7586849b999",
+      "v60": "aaa80fa8d33c8cadc525aac052ce8b153fd598f1",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "stage": "D2/D3 local design, read-only survey",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED",
+      "D1": "HOLD_TERRACE_EVENT",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "Preserve rings, verify 21 source files, exact projected path coverage, margin >.012m, metric UV side triangle length residual <1e-10m. Native source exact SHA and reproduce prior single triangle.",
+    "preflight_checks": "Local source hash assertions, geometry checks, py_compile local design, CRC, expected HEAD. Native script compilation in workflow.",
+    "result": "READY_DESIGN_AND_READ_ONLY_ONLY",
+    "blockers": [
+      "D4 independent",
+      "actual final terrain and event height",
+      "surface cutters, seam-continuous UV and runtime"
+    ],
+    "checkpoint": "V62/V58 unchanged",
+    "next_stage": "Inspect exact triangle classification; independently review isolated small ruins scope, no precision native edit yet."
+  },
+  "design": {
+    "parts": 3,
+    "motifs": 10,
+    "projected_segments": 29,
+    "min_boundary_margin_m": 0.08772217060351481,
+    "uv_side_triangles": 176,
+    "max_uv_edge_residual_m": 2.220446049250313e-16,
+    "method": "De-yaw each existing ring with original yaw 8,-7,17 degrees. Front face j=0, split projected paths against triangle polygons, barycentric lift to 3D, verify coverage and margin. UV0 metric per-triangle basis, not seam-continuous unwrap. Conservative full ring hull collision reserve. No semantic rune or emission change.",
+    "motif_parameters": {
+      "rune_diamonds_z_width_height": [
+        [
+          0.66,
+          0.24,
+          0.4
+        ],
+        [
+          0.66,
+          0.12,
+          0.21
+        ],
+        [
+          1.31,
+          0.18,
+          0.34
+        ],
+        [
+          1.31,
+          0.09,
+          0.17
+        ],
+        [
+          1.77,
+          0.075,
+          0.14
+        ]
+      ],
+      "boundary_diamonds": [
+        [
+          0.47,
+          0.2,
+          0.37
+        ],
+        [
+          0.47,
+          0.11,
+          0.2
+        ],
+        [
+          0.47,
+          0.042,
+          0.08
+        ]
+      ],
+      "fragment": {
+        "spiral_center": "center(z=.36)-.16",
+        "theta": [
+          0.2,
+          14.137166941154069
+        ],
+        "radius": [
+          0.012,
+          0.12
+        ],
+        "samples": 120,
+        "diamond": [
+          0.36,
+          0.17,
+          0.22,
+          0.19
+        ]
+      },
+      "groove_width_m": 0.018,
+      "groove_depth_m": 0.008
+    },
+    "limits": "Fragment source appears oblique, motif front chosen as new design. No actual sculpt/cutters, UV1/cap/continuous unwrap, actual materials or D4. Source sprite art is reference, not texture."
+  },
+  "event_contract": {
+    "source": "data/maps/moss_forest_03_ancient_grove.json",
+    "source_blob": "99449f538e07dc31ecc3b6e1f6701709e2d8f7da",
+    "gate": {
+      "blocker": "cb_a3_seal",
+      "fx": "fx_seal",
+      "flagOnOpen": "moss_a3_seal_open",
+      "openWhen": "PrologueProgress.count()>=3"
+    },
+    "altar": {
+      "id": "ev_a3_altar_trigger",
+      "type": "trigger",
+      "shape": {
+        "shape": "rect",
+        "x": 4670,
+        "y": 3010,
+        "w": 160,
+        "h": 120
+      },
+      "once": true,
+      "eventId": "prologue_altar_scene",
+      "requires": {
+        "flag": "moss_a3_lou_found",
+        "is": true
+      }
+    },
+    "note": "Legacy 2D feet coordinates, no verified mapping to 3D trigger/height or character controller. Keep runtime unchanged."
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "prior_artifact": 15077471039,
+    "source_artifact": 15075731907,
+    "script": "tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py",
+    "scope": "Exact prior grove triangle extraction, material slot, clipped subvolume polygons and area. No native save or relocation. Correct prior count note: actual V61 JSON has 11 replaceable proxy object hits, one grove hit."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v63.py": "526f875ab9fdf10a777f89090476f89ddad3dd3cb34afec3580e061528055996",
+      "small_ruins_v63.json": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+      "small_ruins_surface_blueprint.png": "45ccd9c2cffa8e3784d0308fed0f0002c1c51faee4074b7ea2e8b2efa7ef5c19"
+    },
+    "package_sha256": "4030123638bfd38182ca33ef1ea0c9233e3da0ba1af1c8a5145bb708f77a67ae",
+    "bytes": 1014640,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Full JSON and code in conversation package, parameter summary in PR."
+  },
+  "gates": {
+    "D0": "VERIFIED",
+    "D1": "HOLD_WORLD_EVENT",
+    "D2": "PARTIAL_SMALL_SURFACE",
+    "D3": "PARTIAL_NATIVE",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}
