@@ -1,7 +1,7 @@
 name: TWO isolated scenic native two-cliff-ridge-v3
 on:
-  pull_request:
-    types: [synchronize]
+  push:
+    branches: [feature/lind-cliff-rock-art-study-20261118]
     paths:
       - 'tools/map_blender/lind/scenic_ridge_v3.py'
       - '.github/workflows/two-cliff-ridge-v3.yml'
@@ -9,17 +9,16 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: two-cliff-ridge-v3-${{ github.event.pull_request.number }}
+  group: two-cliff-ridge-v3-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   scenic:
-    if: github.event.pull_request.number == 421 && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 28
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           lfs: true
           persist-credentials: false
           sparse-checkout: |
