@@ -105,10 +105,12 @@ def await_bound(remote, asset, reservation, revision, request, run, attempt, tim
     raise TimeoutError("launcher did not bind reservation to this run")
 
 
-def complete(remote, asset, reservation, revision, request, run, attempt, receipt):
+def complete(remote, asset, reservation, revision, request, run, attempt, producer_sha, receipt):
     """Only after both worker jobs terminated successfully and private byte readback."""
     if not isinstance(receipt, dict) or receipt.get("scope") != "PRIVATE_CANDIDATE_READBACK_VERIFIED" or receipt.get("adoption") != "NOT_ADOPTED":
         raise ValueError("durable private receipt required")
+    if receipt.get("kind") != "blend" or receipt.get("revision") != revision or not re.fullmatch(r"[0-9a-f]{64}", producer_sha) or receipt.get("source_archive_sha256") != producer_sha:
+        raise ValueError("receipt stage or source mismatch")
     if receipt.get("run_id") != run or receipt.get("request_id") != request:
         raise ValueError("receipt run/request mismatch")
     if not re.fullmatch(r"[0-9a-f]{64}", receipt.get("sha256", "")):
