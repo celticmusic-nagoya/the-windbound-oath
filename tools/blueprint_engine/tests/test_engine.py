@@ -146,6 +146,46 @@ class ResidualTests(unittest.TestCase):
                 self.assertEqual(report["metrics"]["k"]["state"], metric_state(r, t, u))
                 self.assertEqual(report["overall"], expected)
 
+    def test_direct_residual_refuses_invalid_metric_maps(self):
+        target = dict(values={"k": 0.0}, tolerances={"k": 0.5}, uncertainty={"k": 0.1})
+        obs = dict(actual={"k": 0.25}, uncertainty={"k": 0.1})
+        for field, bad in (
+            ("values", {}), ("values", {"": 0}), ("values", {"k": True}),
+            ("tolerances", {"k": -0.5}), ("uncertainty", {"k": -1.0}),
+            ("uncertainty", {"k": float("nan")}), ("tolerances", {"k": float("inf")}),
+            ("lower_bound", {"k": 1.0}), ("lower_bound", []),
+            ("tolerances", {"k": 0.5, "other": 0}),
+        ):
+            with self.subTest(field=field, bad=bad):
+                with self.assertRaises(ValueError):
+                    evaluate(dict(target, **{field: bad}), obs)
+        for field, bad in (
+            ("actual", {}), ("actual", {"k": float("nan")}),
+            ("actual", {"k": True}), ("actual", {"k": 0, "other": 0}),
+            ("uncertainty", {"k": -1}), ("uncertainty", {"k": float("inf")}),
+        ):
+            with self.subTest(field=field, bad=bad):
+                with self.assertRaises(ValueError):
+                    evaluate(target, dict(obs, **{field: bad}))
+
+    def test_direct_residual_refuses_arithmetic_overflow(self):
+        target = dict(values={"k": -1e308}, tolerances={"k": 0.5}, uncertainty={"k": 0.0})
+        obs = dict(actual={"k": 1e308}, uncertainty={"k": 0.0})
+        with self.assertRaises(ValueError):
+            evaluate(target, obs)
+        target["values"]["k"] = 1e308
+        target["uncertainty"]["k"] = obs["uncertainty"]["k"] = 1e308
+        with self.assertRaises(ValueError):
+            evaluate(target, obs)
+
+    def test_direct_residual_valid_lower_bound(self):
+        target = dict(values={"k": 1.0}, tolerances={"k": 0}, uncertainty={"k": 0.125},
+                      lower_bound={"k": 1.0})
+        for actual, expected in ((1.25, "PASS"), (1.0, "HOLD"), (0.625, "OUTSIDE")):
+            with self.subTest(actual=actual):
+                obs = dict(actual={"k": actual}, uncertainty={"k": 0.125})
+                self.assertEqual(evaluate(target, obs)["overall"], expected)
+
 
 class ContractTests(unittest.TestCase):
     def setUp(self):
