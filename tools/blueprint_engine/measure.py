@@ -47,13 +47,23 @@ def _native_raw(native, script, python, spec_data, timeout, deadline, label, *, 
         spec = Path(directory) / "spec.json"
         out = Path(directory) / "raw.json"
         spec.write_text(json.dumps(spec_data))
-        proc = subprocess.run([*python, str(script), str(native), str(spec), str(out)],
-                              capture_output=True, text=True,
-                              timeout=_remaining_timeout(timeout, deadline), env=env)
-        if file_sha256(native) != before:
-            raise RuntimeError(label + " measurement modified the native file")
+        budget = _remaining_timeout(timeout, deadline)
+        try:
+            proc = subprocess.run([*python, str(script), str(native), str(spec), str(out)],
+                                  capture_output=True, text=True, timeout=budget, env=env)
+        finally:
+            # subprocess.run reaps its direct child on timeout. Check the protected
+            # input even on exceptions; an ambiguous input must not be retried.
+            # Integrity verification may extend beyond the measurement deadline.
+            try:
+                after = file_sha256(native)
+            except OSError as exc:
+                raise RuntimeError(label + " measurement native integrity unavailable") from exc
+            if after != before:
+                raise RuntimeError(label + " measurement modified the native file")
         if proc.returncode != 0 or not out.is_file():
-            raise RuntimeError(label + " measurement failed: " + proc.stderr[-2000:])
+            raise RuntimeError(label + " measurement failed: stderr: " + proc.stderr[-2000:]
+                               + " / stdout: " + proc.stdout[-2000:])
         raw = json.loads(out.read_text())
         _remaining_timeout(timeout, deadline)
         return raw
