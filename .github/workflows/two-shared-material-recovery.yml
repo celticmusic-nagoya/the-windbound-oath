@@ -26,6 +26,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -64,6 +65,9 @@ jobs:
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
@@ -1207,5 +1211,51 @@ jobs:
         with:
           name: two-v81-moss-forest
           path: ${{ runner.temp }}/v81-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82a-visibility:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-A visibility scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V81 and render reversible visibility candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82a-in" "$RUNNER_TEMP/v82a-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15174560838/zip" > "$RUNNER_TEMP/v81.zip"
+          printf '%s  %s\n' e9cf0229a2718f05a688b170d30c5afc4faef70493c79fc7a37bbf3012f23ca6 "$RUNNER_TEMP/v81.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v81.zip"
+          unzip -q "$RUNNER_TEMP/v81.zip" -d "$RUNNER_TEMP/v82a-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' -- "$RUNNER_TEMP/v82a-in/v81_moss_forest.blend" "$RUNNER_TEMP/v82a-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' "$RUNNER_TEMP/v82a-out/"
+          (cd "$RUNNER_TEMP/v82a-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated V82-A candidate, renders and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82a-visibility
+          path: ${{ runner.temp }}/v82a-out
           retention-days: 14
           if-no-files-found: error
