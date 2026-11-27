@@ -2,33 +2,31 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site"
-python discover-gallery.py
+git fetch --no-tags --depth=1 origin refs/heads/studio-published
+git show FETCH_HEAD:gallery-manifest.json > "$RUNNER_TEMP/studio-published-history.json"
+python discover-gallery.py --published-history "$RUNNER_TEMP/studio-published-history.json"
 python - <<'PY'
 import json, subprocess, os
 from datetime import datetime, timezone
 from pathlib import Path
-from artifact_availability import recorded_expired_404, retained_receipt_matches, archive_budget, reusable_published_images
+from artifact_availability import recorded_expired_404, retained_receipt_matches, archive_budget, reusable_group_kind
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
-assert len(selection)<=36
 active=[]
 reused=[]
 approvals=json.loads(Path('publication-approvals.json').read_text())
-history=None
-def public_history():
-    global history
-    if history is None:
-        subprocess.run(['git','fetch','--no-tags','--depth=1','origin','refs/heads/studio-published'],check=True)
-        history=json.loads(subprocess.check_output(['git','show','FETCH_HEAD:gallery-manifest.json']))
-    return history
+history=json.loads((Path(os.environ['RUNNER_TEMP'])/'studio-published-history.json').read_text())
+kinds={x['artifact_id']:reusable_group_kind(x,history,approvals) for x in selection}
+assert len(kinds)==len(selection), 'duplicate discovered artifact'
+assert sum(kind is None for kind in kinds.values())<=36, 'active selection exceeds budget'
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
     assert type(a)==int and type(run)==int and min(a,run)>0
     repo=os.environ['GITHUB_REPOSITORY']
     budget=archive_budget(x)
-    if x.get('reuse_retained') is True and 'exact_archive_bytes' in x and retained_receipt_matches(x,public_history()):
+    if kinds[a]=='legacy':
         print(f'REUSED: artifact {a} exact published entries; downstream merge rehashes retained images')
         continue
-    if x.get('entry_sha256') and x.get('artifact_digest') and reusable_published_images(x,public_history(),approvals):
+    if kinds[a]=='ordinary':
         print(f'REUSED: artifact {a} exact approved published images; downstream merge rehashes retained files')
         reused.append(a)
         continue
@@ -38,7 +36,7 @@ for x in selection:
         stderr=exc.stderr.decode('utf-8',errors='replace')
         if not recorded_expired_404(x,stderr,datetime.now(timezone.utc)):
             raise
-        if not retained_receipt_matches(x,public_history()):
+        if not retained_receipt_matches(x,history):
             raise ValueError(f'expired artifact {a}: exact published history not found') from exc
         print(f'NOT_RUN: artifact {a} recorded expiry elapsed and HTTP 404; exact historical entries retained by downstream SHA verification')
         continue
