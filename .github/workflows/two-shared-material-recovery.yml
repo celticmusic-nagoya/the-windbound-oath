@@ -1539,7 +1539,7 @@ jobs:
         run: |
           git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
           if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
-      - name: Recover V82-E and repair central substrate topology (layer lifecycle fix)
+      - name: Recover V82-E and reconstruct measured central substrate (F3)
         if: steps.scope.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ github.token }}

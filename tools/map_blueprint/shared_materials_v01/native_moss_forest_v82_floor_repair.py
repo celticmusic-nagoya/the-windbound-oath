@@ -1,6 +1,6 @@
-"""V82-F: local native central substrate topology repair.
-Exact V82-E input (tileable stone; identical source geometry). Identify component with degenerate triangles, weld only
-coincident vertices in that component, require unchanged other face/UV signatures
+"""V82-F: local native central substrate reconstruction (F3).
+Exact V82-E input (tileable stone; identical source geometry). Identify component with degenerate triangles, reconstruct only
+the measured central substrate component, require unchanged other face/UV signatures
 and sampled top surface. No blanket merge, no material edit, no new dimensions.
 """
 import bpy, sys, math, hashlib, json, struct
@@ -169,15 +169,65 @@ def checkpoint():
     (out/'v82f_floor_qa.json').write_text(json.dumps(qa,indent=2))
     print('V82F_CHECKPOINT',json.dumps(qa),flush=True)
 checkpoint()
-# Weld only coincident vertices of this one component, never between masonry blocks.
-# Use a small tolerance, substantially below existing geometric detail.
+# F3 method switch: F2 coincident-vertex weld left 1 boundary and 3 nonmanifold edges.
+# Reconstruct the exact observed un-bevelled two-ring substrate, preserving its
+# measured outer contour, top/bottom planes and all non-target masonry.
+assert len(target)==194 and len(verts)==196 and len(center_vertices)==98,qa['before']
+coords=[v.co.copy() for v in verts]
+zlo=min(v.z for v in coords);zhi=max(v.z for v in coords)
+assert zhi-zlo>.01 and all(min(abs(v.z-zlo),abs(v.z-zhi))<1e-6 for v in coords)
+# Local center from actual center vertices, not assumed world origin.
+centers=[v.co.copy() for v in center_vertices]
+cx=sum(v.x for v in centers)/len(centers);cy=sum(v.y for v in centers)/len(centers)
+assert max(math.hypot(v.x-cx,v.y-cy) for v in centers)<1e-5
+def ring_at(z):
+    points=sorted([v for v in coords if abs(v.z-z)<1e-6 and math.hypot(v.x-cx,v.y-cy)>.001],key=lambda v:(math.atan2(v.y-cy,v.x-cx),v.x,v.y))
+    assert len(points)==49,len(points)
+    unique=[]
+    for v in points:
+        if not any((v-u).length<1e-5 for u in unique):unique.append(v)
+    assert len(unique)==48,len(unique)
+    return unique
+lower=ring_at(zlo);upper=ring_at(zhi)
+# Match by measured XY, avoiding angle wrap seam ambiguity.
+upper=[min(upper,key=lambda u:math.hypot(u.x-l.x,u.y-l.y)) for l in lower]
+assert len({tuple(v) for v in upper})==48
+assert max(math.hypot(l.x-u.x,l.y-u.y) for l,u in zip(lower,upper))<1e-5
+uv=bm.loops.layers.uv.active;assert uv is not None
+blk=bm.faces.layers.float.get('blk')
+matvals={f.material_index for f in target};assert len(matvals)==1
+mat=next(iter(matvals))
+blkvals=[f[blk] for f in target] if blk else []
+if blkvals:assert max(blkvals)-min(blkvals)<1e-6
+block_value=blkvals[0] if blkvals else 0.0
+# Preserve original UV offset using one nondegenerate horizontal face and its loop.
 bm.normal_update()
-bmesh.ops.remove_doubles(bm,verts=list(verts),dist=1e-6)
+horizontal=[f for f in target if f.calc_area()>EPS and abs(f.normal.z)>.99]
+assert horizontal
+lp=next(iter(horizontal[0].loops));co=lp.vert.co
+uv_offset=(lp[uv].uv.x-co.x/1.6,lp[uv].uv.y-co.y/1.6)
+qa['reconstruction']={'method':'measured 48-point closed two-ring fan','bottom_z_local':zlo,'top_z_local':zhi,'ring_vertices':48,'uv_offset':uv_offset,'block_value':block_value}
+checkpoint()
+# Component proven isolated by traversal; remove only its vertices on work copy.
+bmesh.ops.delete(bm,geom=list(verts),context='VERTS')
+lo=[bm.verts.new(v) for v in lower];hi=[bm.verts.new(v) for v in upper]
+cb=bm.verts.new((cx,cy,zlo));ct=bm.verts.new((cx,cy,zhi))
+for i in range(48):
+    j=(i+1)%48
+    for vs in ((cb,lo[j],lo[i]),(ct,hi[i],hi[j]),(lo[i],lo[j],hi[j],hi[i])):
+        f=bm.faces.new(vs);f[layer]=1;f.material_index=mat
+        if blk:f[blk]=block_value
 bm.normal_update()
 new_target=[f for f in bm.faces if f[layer]==1]
-assert new_target
-# Degenerate residuals (if any) are diagnosed and rejected, not silently deleted.
+assert len(new_target)==144
+# Generate UVs for replaced component only, matching existing planar scale.
+for f in new_target:
+    ax=max(range(3),key=lambda i:abs(f.normal[i]))
+    for lp in f.loops:
+        c=lp.vert.co;u,v=((c.y,c.z),(c.x,c.z),(c.x,c.y))[ax]
+        lp[uv].uv=(u/1.6+uv_offset[0],v/1.6+uv_offset[1])
 qa['after_component']=topo(new_target)
+qa['after_component']['faces']=len(new_target)
 checkpoint()
 assert qa['after_component']['zero_area_faces']==0 and qa['after_component']['nonmanifold_edges']==0 and qa['after_component']['boundary_edges']==0,qa['after_component']
 mesh=oldmesh.copy();mesh.name='V82F_platform_center_repaired';bm.to_mesh(mesh);bm.free();mesh.update()
