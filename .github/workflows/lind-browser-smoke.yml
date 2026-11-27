@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - feature/lind-agent-blender-handoff-01
+      - feature/lind-webgl-runtime-benchmark-01
     paths:
       - 'tools/map_blender/runtime_benchmark/**'
       - '.github/workflows/lind-browser-smoke.yml'
@@ -16,6 +17,7 @@ on:
       - '.github/workflows/lind-browser-smoke.yml'
 permissions:
   contents: read
+  actions: read
 jobs:
   smoke:
     runs-on: ubuntu-24.04
@@ -26,25 +28,36 @@ jobs:
           persist-credentials: false
       - name: Install browser runner
         run: |
-          npm install --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
+          npm install --ignore-scripts --no-audit --no-fund --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
           npx playwright install --with-deps chromium
       - name: Create isolated GLB fixture
         run: |
           mkdir -p /tmp/lind-glb-benchmark
           python3 - <<'PY'
-          import json,struct,hashlib
+          import json,struct,hashlib,zlib
           from pathlib import Path
           # Minimal standards-compliant GLB: one triangle mesh, no production art.
           import base64
+          def chunk(tag, data):
+              return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
+          png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b'\0\x99\x99\x99\xff'))+chunk(b'IEND',b'')
+          prefix=png+b'\0'*(-len(png)%4)
+          uv=struct.pack('<6f',0,0,1,0,0,1)
           verts=struct.pack('<9f',-1,0,0,1,0,0,0,1,0)
-          doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(verts)}],"bufferViews":[{"buffer":0,"byteOffset":0,"byteLength":len(verts),"target":34962}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]}],"meshes":[{"primitives":[{"attributes":{"POSITION":0}}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
+          data=prefix+uv+verts
+          doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(data)}],"bufferViews":[{"buffer":0,"byteOffset":len(prefix)+len(uv),"byteLength":len(verts),"target":34962},{"buffer":0,"byteOffset":len(prefix),"byteLength":len(uv),"target":34962},{"buffer":0,"byteOffset":0,"byteLength":len(png)}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]},{"bufferView":1,"componentType":5126,"count":3,"type":"VEC2"}],"images":[{"bufferView":2,"mimeType":"image/png"}],"textures":[{"source":0}],"materials":[{"pbrMetallicRoughness":{"baseColorTexture":{"index":0}}}],"meshes":[{"primitives":[{"attributes":{"POSITION":0,"TEXCOORD_0":1},"material":0}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
           j=json.dumps(doc,separators=(',',':')).encode();j+=b' ' * (-len(j)%4)
-          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(verts))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(verts),bytes([66,73,78,0]))+verts
+          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(data))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(data),bytes([66,73,78,0]))+data
           p=Path('/tmp/lind-glb-benchmark/technical-scene.glb');p.write_bytes(blob)
           print('fixture SHA256',hashlib.sha256(blob).hexdigest())
           PY
       - name: Browser import smoke (two engines)
+        env:
+          LIND_RACE_TEST: ${{ github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01' && '1' || '0' }}
+          LIND_EXPECTED_TRIANGLES: '1'
+          LIND_EXPECTED_MESHES: '1'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
+      # V13 causal probe is complete; preserve its prior run, do not fetch or redraw it here.
       - name: Upload evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4
