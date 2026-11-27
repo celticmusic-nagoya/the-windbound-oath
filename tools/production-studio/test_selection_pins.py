@@ -156,7 +156,7 @@ class SelectionPinsTests(unittest.TestCase):
             d = runpy.run_path(str(ROOT / "discover-gallery.py"))
             g = d["discover"].__globals__
             # At the limit, all optional discovery must stop before API/download.
-            curated = [{"artifact_id": i} for i in range(1, 37)]
+            curated = [{"artifact_id": i, "category": "world", "entries": ["review.png"]} for i in range(1, 37)]
             with patch.dict(g, {"api": lambda _: self.fail("unexpected API at capacity")}):
                 d["preview_vroid"](curated, set(range(1, 37)), pathlib.Path(temp))
                 d["preview_receipts"](curated, set(range(1, 37)), pathlib.Path(temp))
@@ -172,13 +172,13 @@ class SelectionPinsTests(unittest.TestCase):
             # and branch must not start another network call.
             def last_preview(selection, known, saved):
                 self.assertTrue(d["has_capacity"](selection))
-                selection.append({"artifact_id": 99})
+                selection.append({"artifact_id": 99, "category": "morwen", "entries": ["view.png"]})
             with patch.dict(g, {"preview_vroid": last_preview,
                                 "api": lambda _: self.fail("unexpected API after last slot")}):
                 with patch.object(pathlib.Path, "read_text", return_value=json.dumps(curated[:-1])):
                     d["discover"]()
                 result = json.loads((pathlib.Path(temp) / "studio-discovered.json").read_text())
-                self.assertEqual(result, curated[:-1] + [{"artifact_id": 99}])
+                self.assertEqual(result, curated[:-1] + [{"artifact_id": 99, "category": "morwen", "entries": ["view.png"]}])
 
 if __name__ == "__main__":
     unittest.main()
