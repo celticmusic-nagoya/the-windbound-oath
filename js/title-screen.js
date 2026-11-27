@@ -2,7 +2,7 @@
 (() => {
  'use strict';
  let root,menu,newButton,continueButton,message,launch,active=false,confirmBox=null,starting=false;
- const query=new URLSearchParams(location.search),skip=query.get('title')==='0'||query.get('legacyVillage')==='1';
+ const query=new URLSearchParams(location.search),skip=window.WINDBOUND_DEV!==false&&(query.get('title')==='0'||query.get('legacyVillage')==='1');
  function hide(){active=false;if(root)root.hidden=true;document.documentElement?.classList.remove('title-on');LoadingInput.release('title');}
  function refresh(){
   if(!root)return;

@@ -128,6 +128,7 @@
   // 2.5D test mode (developer switch, no player-facing setting): ?height25d=1 turns it on and remembers it on this browser, ?height25d=0 turns it off again.
   // ?feature=heightSpecs and WINDBOUND_FEATURES.heightSpecs still work as before. Off by default: normal play never fetches or applies a spec.
   const heightSpecsOn=()=>{
+    if(window.WINDBOUND_DEV===false)return false;
     try{
       if(window.WINDBOUND_FEATURES&&WINDBOUND_FEATURES.heightSpecs)return true;
       if(/[?&]feature=heightSpecs\b/.test(location.search))return true;
@@ -731,6 +732,7 @@
     teleportFeet(x,y){S.x=x-FOOT.ax;S.y=y-FOOT.ay;S.target=null;S.pending=null;S.battleLatch=true;S.transitionLatch=true;},
     // DEV Monster Arena: place monsters around the player (ring, ~260-420px away, on free ground). type = MONSTER_TYPES key.
     devSpawn(type,count=1,group=1){
+      if(window.WINDBOUND_DEV===false)return 0;
       if(!window.FieldMonsters||!FieldMonsters.MONSTER_TYPES[type]||!S.forest||!S.map)return 0;
       const f={x:S.x+FOOT.ax,y:S.y+FOOT.ay};let placed=0,n=Math.max(1,Math.min(30,count|0||1));
       for(let i=0;i<n;i++){
@@ -742,8 +744,8 @@
       }
       return placed;
     },
-    devClearMonsters(){if(window.FieldMonsters)FieldMonsters.removeAll();},
-    devFreezeMonsters(on){if(window.FieldMonsters)FieldMonsters.setFrozen(on);return window.FieldMonsters?FieldMonsters.frozen:false;},
+    devClearMonsters(){if(window.WINDBOUND_DEV===false)return; if(window.FieldMonsters)FieldMonsters.removeAll();},
+    devFreezeMonsters(on){if(window.WINDBOUND_DEV===false)return false; if(window.FieldMonsters)FieldMonsters.setFrozen(on);return window.FieldMonsters?FieldMonsters.frozen:false;},
     monsterResult(won){if(window.FieldMonsters)FieldMonsters.resolve(Boolean(won));},get monsters(){return window.FieldMonsters?FieldMonsters.list:[];},
     encounters(on){if(on===undefined)return !enc.off;enc.off=!on;return !enc.off;},
     forceEncounter(){const z=S.map&&(S.map.encounterZones||[]).find(z=>z.style==='step'&&(z.enemies||[]).some(e=>!hooks.canEncounter||hooks.canEncounter(e.id)));if(!z||!hooks.onEncounter)return false;const e=z.enemies.find(e=>!hooks.canEncounter||hooks.canEncounter(e.id));hooks.onEncounter({zone:z.id,enemy:e.id,count:1,map:S.mapId});return true;},

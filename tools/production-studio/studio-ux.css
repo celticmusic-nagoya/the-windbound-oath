@@ -32,3 +32,36 @@ button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{o
 #published-gallery .gallery-chip{display:inline-flex;align-items:center;min-height:30px;padding:4px 8px;background:#283a3b;border:1px solid #60716e;border-radius:7px;font-size:.77rem;overflow-wrap:anywhere;max-width:100%}
 
 #published-gallery [hidden]{display:none!important}
+
+/* Long production-stage labels must not size a native select beyond its grid area.
+   Keep the options intact; constrain the control, not the document overflow. */
+#published-gallery select.category-back{min-width:0;max-width:100%;width:100%;justify-self:stretch;box-sizing:border-box;min-height:44px}
+#published-gallery .gallery-breadcrumb>*{min-width:0;max-width:100%}
+#published-gallery .gallery-image-button{min-width:0;max-width:100%}
+
+/* Live evidence: category counts are based on the cached metadata, not the 30-card display limit. */
+.recent-category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:8px;margin:12px 0}
+.recent-category-grid button{min-height:44px;text-align:left;white-space:normal;overflow-wrap:anywhere;min-width:0}
+.recent-category-grid button[aria-pressed="true"]{border-color:#dcc99e;background:#435348;color:#fff3d5;box-shadow:inset 0 0 0 1px #dcc99e}
+#recent-review-search{box-sizing:border-box;width:100%;max-width:100%;min-height:44px;margin:6px 0 12px}
+@media(max-width:480px){.recent-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Area maturity is a separate evidence index, never a QA or adoption badge. */
+.area-progress{grid-column:1/-1;min-width:0}
+.area-progress-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin:12px 0}
+.area-progress-card{min-width:0;display:flex;flex-direction:column;gap:8px}
+.area-progress-card h4{margin:0;font-size:1rem}
+.area-progress-card strong{font-size:1.5rem;color:#f1e0b8;font-variant-numeric:tabular-nums}
+.area-progress-card progress{width:100%;height:12px;accent-color:#8db49a}
+.area-progress-card p{margin:0;overflow-wrap:anywhere}
+.area-progress-freshness{font-size:.8rem;color:var(--studio-muted)}
+.area-progress details a,.gallery-design-links a{display:block;min-height:32px;overflow-wrap:anywhere;padding:4px 0}
+.gallery-design-links{grid-column:1/-1;border:1px solid #64726b;border-radius:10px;padding:12px;min-width:0}
+.gallery-design-links h3{margin:0 0 8px}
+@media(max-width:480px){.area-progress-grid{grid-template-columns:1fr}}
+
+.area-module{border-top:1px solid #50645b;padding:9px 0;display:grid;gap:4px;min-width:0}
+.area-module strong{font-size:.92rem}
+.area-module small,.area-current-score{color:var(--studio-muted);font-size:.8rem}
+.area-module a{min-height:32px}
+.area-progress #area-new-evidence{margin:12px 0}

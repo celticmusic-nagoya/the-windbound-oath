@@ -9,6 +9,12 @@ Phase 4 and Phase 5A are COMPLETE. Approved portraits for Aidan/Fiona/Lou/Emma a
 
 Game → DEV ▶ → 立ち絵・モーションテスト:28approved expressions,24blinking/4intentionally static. [Current DEV guide and authoritative adoption records](docs/portraits/DEV_PORTRAIT_GUIDE.md). Older QA/handoff documents preserve their historical status; Lou smile/relieved remain unadopted.
 
+## Play / development environments
+
+- Public player build: https://celticmusic-nagoya.github.io/the-windbound-oath/ — DEV UI and developer commands disabled, including URL opt-ins.
+- Development preview: https://raw.githack.com/celticmusic-nagoya/the-windbound-oath/main/index.html — DEV tools enabled for QA. Local loopback remains enabled for automated/local QA.
+- Both read the same game source; browser save storage is isolated by origin. This client-side gate is not authentication.
+
 ## Development stack
 - HTML
 - CSS

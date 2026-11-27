@@ -1,0 +1,99 @@
+name: Morwen GitHub token CAS qualification
+on:
+  workflow_dispatch:
+permissions: {}
+jobs:
+  isolated-cas:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.actor_id == '315379131' &&
+      github.triggering_actor == github.actor &&
+      github.run_attempt == '1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Exercise Git CAS through the job token on a disposable tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: tools/production_qa
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          remote=$(git remote get-url origin)
+          test "${remote%.git}" = "https://github.com/${GITHUB_REPOSITORY}"
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import os
+          import re
+          import subprocess
+          from concurrent.futures import ThreadPoolExecutor
+
+          import shared_asset_lease as lease
+
+          run_id = os.environ["GITHUB_RUN_ID"]
+          if not re.fullmatch(r"[1-9][0-9]{0,19}", run_id):
+              raise ValueError("invalid GitHub run ID")
+          revision = os.environ["GITHUB_SHA"]
+          asset = "MORWEN_CAS_QUALIFICATION"
+          ref = f"refs/tags/two-cas-qualification/v1/{run_id}"
+
+          # Reuse the production CAS primitives with a probe-only ref resolver.
+          def probe_ref(key):
+              if key != asset:
+                  raise ValueError("probe cannot address another asset")
+              return ref
+
+          lease.ref_for = probe_ref
+
+          def present():
+              return lease.git("ls-remote", "--refs", "origin", ref)
+
+          def rejected(operation):
+              try:
+                  operation()
+              except (RuntimeError, subprocess.CalledProcessError):
+                  return
+              raise AssertionError("unexpectedly accepted a competing operation")
+
+          if present():
+              raise RuntimeError("probe tag already exists; review the previous run")
+          first = lease.acquire("origin", asset, revision)
+          owned = first
+          try:
+              rejected(lambda: lease.acquire("origin", asset, revision))
+              lease.assert_reservation("origin", asset, first, revision)
+              print("CAS_ACQUIRE_AND_COMPETING_ACQUIRE_REJECTION_PASS")
+
+              def contender(_):
+                  try:
+                      return lease.claim_reservation("origin", asset, first, revision)
+                  except (RuntimeError, subprocess.CalledProcessError):
+                      return None
+
+              with ThreadPoolExecutor(max_workers=2) as workers:
+                  winners = [token for token in workers.map(contender, range(2)) if token]
+              if len(winners) != 1:
+                  raise RuntimeError("handoff did not yield exactly one verified owner")
+              owned = winners[0]
+              lease.assert_reservation("origin", asset, owned, revision)
+              rejected(lambda: lease.release("origin", asset, first))
+              lease.assert_owned("origin", asset, owned)
+              print("CAS_HANDOFF_AND_STALE_RELEASE_REJECTION_PASS")
+          finally:
+              # No unconditional delete. A changed or unconfirmed ref stays for review.
+              if present() == f"{owned}\t{ref}":
+                  lease.release("origin", asset, owned)
+          if present():
+              raise RuntimeError("probe ref still exists; reconcile without force deletion")
+          print("CAS_EXACT_OWNER_RELEASE_AND_ABSENT_REF_PASS")
+          PY

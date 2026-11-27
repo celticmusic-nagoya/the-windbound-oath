@@ -8,6 +8,8 @@
     "historical evidence only"
   ],
   "active": [
+    "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
+    "docs/policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md",
     "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
     "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
     "docs/policy/TWO_PRODUCTION_OS_V1.md",
@@ -69,5 +71,26 @@
     "automatic_writer_takeover": "NOT_RUN",
     "production_native_write": "ASSET_SCOPE_GATED",
     "cache_493": "INDEPENDENT_QA_PENDING"
+  },
+  "photo_derived_material_authoring": {
+    "approved": "2026-11-25",
+    "policy": "docs/policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md",
+    "scope": "all agents and automations; relevant character and world materials",
+    "status": "DIRECTOR_APPROVED_POLICY_RUNTIME_NOT_VERIFIED"
+  },
+  "morwen_early_blender_transfer": {
+    "approved": "2026-11-26",
+    "scope": "Morwen #427 only",
+    "policy": "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
+    "supersedes": "native completion and visual readiness required before export for Morwen only",
+    "runtime": "VERIFIED_SCOPED_TECHNICAL_TRANSFER_PASS",
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "run_id": 45779704407
+  },
+  "verified_execution_reuse": {
+    "approved": "2026-11-26",
+    "scope": "all agents and automations; asset-specific execution qualification required",
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "status": "MORWEN_SCOPED_TRANSFER_VERIFIED_OTHER_ASSETS_NOT_IMPLIED"
   }
 }

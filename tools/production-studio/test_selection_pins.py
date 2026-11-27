@@ -50,6 +50,46 @@ class SelectionPinsTests(unittest.TestCase):
                 self.assertRegex(item["artifact_digest"], re.compile(r"sha256:[0-9a-f]{64}\Z"))
                 self.assertTrue(item["expires_at"].endswith("Z"))
 
+    def test_world_wip_images_have_exact_receipts_and_no_native_files(self):
+        items = json.loads((ROOT / "sync-selection.json").read_text(encoding="utf-8"))
+        receipts = json.loads((ROOT / "publication-approvals.json").read_text(encoding="utf-8"))["entries"]
+        by_sha = {r["sha256"]: r for r in receipts}
+        self.assertEqual(len(by_sha), len(receipts))
+        by_id = {item["artifact_id"]: item for item in items}
+        for aid, count in ((15075315647, 5), (15075731907, 7), (15076007596, 18), (14626605689, 8), (14600421099, 1), (15032255249, 2)):
+            item = by_id[aid]
+            self.assertEqual(item["category"], "world")
+            self.assertEqual(len(item["entries"]), count)
+            self.assertEqual(set(item["entries"]), set(item["entry_sha256"]))
+            self.assertRegex(item["artifact_digest"], re.compile(r"sha256:[0-9a-f]{64}\Z"))
+            if aid in {14626605689, 14600421099, 15032255249}:
+                self.assertEqual(set(item["entries"]), set(item["entry_subcategories"]))
+                self.assertTrue(set(item["entry_subcategories"].values()) <= {"plant", "tree", "forest"})
+            for name, sha in item["entry_sha256"].items():
+                self.assertTrue(name.endswith(".png"))
+                r = by_sha[sha]
+                self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"]),
+                                 (item["head"], item["run_id"], aid, name, "published/" + sha + ".png"))
+                self.assertEqual(r["approval_ref"], item["review_ref"])
+                self.assertIn("director-approved-studio-work-in-progress-publication", r["approval_ref"])
+
+
+    def test_cliff_v5_wip_exact_receipts(self):
+        items = json.loads((ROOT / "sync-selection.json").read_text(encoding="utf-8"))
+        receipts = json.loads((ROOT / "publication-approvals.json").read_text(encoding="utf-8"))["entries"]
+        item = next(x for x in items if x["artifact_id"] == 15109973314)
+        self.assertEqual(item["run_id"], 45807905449)
+        self.assertEqual(item["category"], "cliff")
+        self.assertIn("G2 HOLD", item["stage"])
+        self.assertEqual(set(item["entries"]), {"candidate.png", "oblique.png"})
+        self.assertEqual(set(item["entry_sha256"]), set(item["entries"]))
+        self.assertEqual(item["artifact_digest"], "sha256:f4fbd642fdb0a74f0579d2bca5f8bb0643d1aeb50cbbfdfa266c434387638aa3")
+        by_sha = {r["sha256"]: r for r in receipts}
+        for name, sha in item["entry_sha256"].items():
+            receipt = by_sha[sha]
+            self.assertEqual((receipt["head"], receipt["run_id"], receipt["artifact_id"], receipt["name"], receipt["path"], receipt["approval_ref"]),
+                             (item["head"], item["run_id"], item["artifact_id"], name, "published/" + sha + ".png", item["review_ref"]))
+
 
 if __name__ == "__main__":
     unittest.main()

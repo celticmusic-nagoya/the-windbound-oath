@@ -9,7 +9,7 @@
 (function () {
   'use strict';
   const q = (() => { try { return new URLSearchParams(location.search); } catch (e) { return new URLSearchParams(); } })();
-  const LEGACY = q.get('legacyVillage') === '1';
+  const LEGACY = window.WINDBOUND_DEV !== false && q.get('legacyVillage') === '1';
   let forced = null;
   const stage = () => (typeof storyStage === 'number' ? storyStage : 0);
   const enabled = () => !LEGACY && Boolean(window.MossForestStory && window.MossForest);

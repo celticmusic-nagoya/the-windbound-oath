@@ -1,6 +1,8 @@
 import {chromium} from 'playwright';
 import {spawn} from 'node:child_process';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,mkdtemp,open,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -15,10 +17,21 @@ try {
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const fixtureBranch='feature/fixture',fixtureHead='a'.repeat(40),previousHead='b'.repeat(40);
  const mockRun=(id,sha,status,conclusion,branch=fixtureBranch)=>({id,name:'fixture run '+id,head_sha:sha,head_branch:branch,status,conclusion,updated_at:'2026-11-25T00:00:00Z'});
+ let bulkFail=false;let artifactMode='valid';let evidenceFixture=[];const liveHead='c'.repeat(40);
  await page.route('https://api.github.com/**',route=>{
   const url=new URL(route.request().url());
+  if(url.pathname.endsWith('/contents/docs/production/region_master'))return route.fulfill({json:evidenceFixture});
+  if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
-  if(url.pathname.endsWith('/artifacts'))return route.fulfill({json:{total_count:1,artifacts:[{id:123,name:'fixture artifact',expired:false,expires_at:'2026-12-01T00:00:00Z'}]}});
+  if(url.pathname.endsWith('/actions/artifacts'))return route.fulfill({json:{artifacts:['two-hero-tree-v55-island-source','two-forest-v52-native-virtual-qa','two-sanctuary-v58-native-scenery','two-v59-ruin-2d-references'].map((name,i)=>({id:15000000+i,name,expired:false,size_in_bytes:100,created_at:'2026-11-26T00:00:00Z',workflow_run:{id:200+i,head_branch:'docs/ireland-world-source-grounded-plan-20261123',head_sha:fixtureHead,repository_id:1408120919,head_repository_id:1408120919}}))}});
+  if(url.pathname.endsWith('/artifacts')){
+   const a={id:123,name:'fixture artifact',expired:false,expires_at:new Date(Date.now()+86400000).toISOString(),size_in_bytes:1048576};
+   if(artifactMode==='invalid')return route.fulfill({json:{total_count:2,artifacts:[a,a]}});
+   if(artifactMode==='mismatch')return route.fulfill({json:{total_count:1,artifacts:[{...a,workflow_run:{id:999,head_sha:previousHead}}]}});
+   if(artifactMode==='unknown')return route.fulfill({json:{total_count:1,artifacts:[{...a,expires_at:null}]}});
+   if(artifactMode==='expired')return route.fulfill({json:{total_count:1,artifacts:[{...a,expires_at:'2000-01-01T00:00:00Z'}]}});
+   return route.fulfill({json:{total_count:1,artifacts:[a]}});
+  }
   return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
  });
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
@@ -37,6 +50,15 @@ try {
  await prior.locator('.artifact-results').getByText('fixture artifact',{exact:true}).waitFor();
  assert.ok((await prior.locator('.artifact-results').innerText()).includes(previousHead));
  assert.equal(await prior.locator('.artifact-results a').getAttribute('href'),'https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/3/artifacts/123');
+ const reloadArtifact=prior.getByRole('button',{name:'成果物一覧を再取得',exact:true});
+ for(const [mode,expected] of [['invalid','成果物ID・名称不正'],['mismatch','成果物のrun・HEAD不一致'],['unknown','期限情報未確認'],['expired','期限切れ']]){
+  artifactMode=mode;await reloadArtifact.click();
+  await prior.locator('.artifact-results').getByText(expected,{exact:false}).waitFor();
+  assert.equal(await prior.locator('.artifact-results a').count(),0);
+ }
+ artifactMode='valid';await reloadArtifact.click();
+ await prior.locator('.artifact-results a').waitFor();
+ assert.ok((await prior.locator('.artifact-results').innerText()).includes('1.00 MiB'));
  await prior.locator(':scope > summary').press('Enter');
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'project runs mobile overflow');
  // Pointer check before the long inspection. Test the summary label rather than its blank right-hand area.
@@ -47,11 +69,48 @@ try {
  await page.waitForFunction(()=>document.querySelector('#local-title').open===false);
  // Source-pinned Ireland blueprint preview must stay within the mobile viewport.
  const blueprint=page.locator('#area-blueprints .blueprint-preview img');
+ await blueprint.waitFor({state:'attached'});
+ await blueprint.scrollIntoViewIfNeeded();
  await blueprint.waitFor({state:'visible'});
+ await page.waitForFunction(()=>{const image=document.querySelector("#area-blueprints .blueprint-preview img");return image?.complete&&image.naturalWidth===1420;});
  await blueprint.evaluate(e=>e.decode());
  assert.ok(await blueprint.evaluate(e=>e.naturalWidth===1420));
  assert.ok(await blueprint.evaluate(e=>e.getBoundingClientRect().right<=innerWidth+1));
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ // Eight areas: coarse evidence estimate, no fake full-area completion, source links and stale HEAD.
+ const progress=page.locator('#area-progress');
+ assert.equal(await progress.locator('.area-progress-card').count(),8);
+ assert.deepEqual(await progress.locator('progress').evaluateAll(es=>es.map(e=>e.value)),[45,45,45,45,35,45,45,10]);
+ const river=progress.locator('[data-area-id="RIVER_CORRIDOR"]');
+ await river.locator('summary').first().click();
+ assert.match(await river.innerText(),/ゲーム統合： 未確認/);
+ assert.match(await river.getByRole('link',{name:'下流メッシュ V28'}).getAttribute('href'),/3440af1b22a9c87c55237bab25921aa20aa80d34.*V28.json$/);
+ assert.equal(await progress.locator('.area-module').count(),29);
+ await river.locator('.area-modules > summary').click();
+ evidenceFixture=await page.evaluate(()=>Object.entries(AREA_BASELINE_FILES).map(([name,sha])=>({name,sha,type:"file"})));
+ evidenceFixture.push({name:"RILDE_C03_NEW_RECEIPT_V99.json",sha:"e".repeat(40),type:"file"});
+ evidenceFixture.find(x=>x.name==="RILDE_C03_DEPTH_WATER_RECEIPT_V34.json").sha="f".repeat(40);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:'d'.repeat(40)}}]})));
+ await page.waitForFunction(()=>document.querySelector('#area-new-evidence summary').textContent.includes('2件'));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 35%/);
+ assert.match(await river.locator('[data-source="RILDE_C03_DEPTH_WATER_RECEIPT_V34.json"] .module-evidence-status').innerText(),/前回評価を保持/);
+ assert.equal(await page.locator('#area-new-evidence a').count(),2);
+ assert.match(await page.locator('#area-new-evidence a').last().getAttribute('href'),/d{40}/);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:AREA_SNAPSHOT.heads[482]}}]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 45%/);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:'d'.repeat(40)}}]})));
+
+ assert.match(await river.locator('.area-progress-freshness').innerText(),/再評価要/);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/未照合/);
+ assert.equal(await river.locator('.area-module[data-source][data-verified="yes"]').count(),0);
+ assert.match(await page.locator('#area-new-evidence summary').innerText(),/未照合/);
+ assert.equal(await river.locator('progress').evaluate(e=>e.value),45);
+ await page.evaluate(()=>window.dispatchEvent(new CustomEvent('studio-live-pulls',{detail:[{number:482,head:{sha:AREA_SNAPSHOT.heads[482]}}]})));
+ assert.match(await river.locator('.area-current-score').innerText(),/約 45%/);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'area progress overflow');
+ await progress.screenshot({path:'qa-output/area-progress-mobile.png'});
  // Local audit fixture tests the presentation contract, not asset QA.
  const audit={schema:'two.cliff.image_space_geometry_audit.v01',checks:{point_count:8,feature_count:1},comparison_ready:false,reason:'fixture',qa:{G1:'BLOCKED',G2:'NOT_RUN',G3:'NOT_RUN',G4:'NOT_RUN'},required_render_contract:{tolerance_px:null,uncertainty_px:null},derived:[{id:'fixture_rim',point_count:8,polyline_length_px:608.628,world_metric:null}]};
  const auditInput=page.locator('#blueprint-audit-file'),auditResult=page.locator('#blueprint-audit-result');
@@ -312,7 +371,91 @@ try {
  await page.locator('#model-file').setInputFiles({name:'diagnostic.glb',mimeType:'model/gltf-binary',buffer:b});
  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
  assert.equal(await page.locator('#model-view canvas').count(),1);
+ // Virtual large GLB: inspect headers and JSON only, never read BIN.
+ const total=125487140;
+ const bigDoc={...doc,buffers:[{byteLength:total}]};
+ let rawBig=Buffer.from(JSON.stringify(bigDoc)),nb=Math.ceil(rawBig.length/4)*4;
+ bigDoc.buffers[0].byteLength=total-28-nb;
+ rawBig=Buffer.from(JSON.stringify(bigDoc));
+ assert.equal(Math.ceil(rawBig.length/4)*4,nb);
+ const bigHeader=Buffer.alloc(28+nb);
+ bigHeader.writeUInt32LE(0x46546c67,0);bigHeader.writeUInt32LE(2,4);bigHeader.writeUInt32LE(total,8);
+ bigHeader.writeUInt32LE(nb,12);bigHeader.writeUInt32LE(0x4e4f534a,16);bigHeader.fill(32,20,20+nb);rawBig.copy(bigHeader,20);
+ bigHeader.writeUInt32LE(total-bigHeader.length,20+nb);bigHeader.writeUInt32LE(0x004e4942,24+nb);
+ const metadataChecks=await page.evaluate(async({bytes,header,total})=>{
+  const src=Uint8Array.from(bytes),head=Uint8Array.from(header),binHeader=head.length-8;
+  const calls=[];
+  const virtual={size:total,arrayBuffer(){throw Error('full read forbidden');},slice(a,b){calls.push([a,b]);if(b>head.length)throw Error('BIN read forbidden');return new Blob([head.slice(a,b)]);}};
+  const m=await inspectGlbFile(virtual),legacy=inspectGlb(src.buffer);
+  const initialCalls=calls.slice(),bytesRead=initialCalls.reduce((sum,[a,b])=>sum+b-a,0);
+  const fail=async f=>{try{await inspectGlbFile(f);return false;}catch{return true;}};
+  const truncated={size:total-4,slice:virtual.slice};
+  const badHead=head.slice();new DataView(badHead.buffer).setUint32(binHeader,total,true);
+  const overflow={size:total,slice(a,b){return new Blob([badHead.slice(a,b)]);}};
+  return {same:JSON.stringify(m)===JSON.stringify(legacy),calls:initialCalls,bytesRead,headerBytes:head.length,invalidHeader:await fail(truncated),invalidChunk:await fail(overflow),limit:await fail({size:1024**3+1})};
+ },{bytes:Array.from(b),header:Array.from(bigHeader),total});
+ assert.equal(metadataChecks.same,true);
+ assert.equal(metadataChecks.bytesRead,metadataChecks.headerBytes);
+ assert.equal(metadataChecks.calls.length,4);
+ assert.equal(metadataChecks.invalidHeader,true);
+ assert.equal(metadataChecks.invalidChunk,true);
+ assert.equal(metadataChecks.limit,true);
+ console.log('PASS: bounded GLB metadata reads '+metadataChecks.bytesRead+' bytes of virtual '+total+'-byte file');
+ // Actual local file selection with a generated sparse synthetic fixture, not an asset.
+ const sparseDir=await mkdtemp(join(tmpdir(),'two-large-glb-')),sparsePath=join(sparseDir,'large.glb');
+ try{
+  const fd=await open(sparsePath,'wx');
+  try{await fd.writeFile(bigHeader);await fd.truncate(total);}finally{await fd.close();}
+  await page.locator('#model-file').setInputFiles(sparsePath);
+  await page.waitForFunction(()=>document.querySelector('#model-status').textContent.includes('100 MiB超のため描画なし'));
+  assert.match(await page.locator('#model-status').innerText(),/メッシュ 1/);
+  assert.match(await page.locator('#render-status').innerText(),/描画せず構造概要のみ検査/);
+  await page.locator('#model-file').setInputFiles({name:'diagnostic.glb',mimeType:'model/gltf-binary',buffer:b});
+  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
+ }finally{await rm(sparseDir,{recursive:true,force:true});}
+ const nativeInput=page.locator('#native-sha-file'),nativeExpected=page.locator('#native-sha-expected'),nativeResult=page.locator('#native-sha-result');
+ for(const name of ['diagnostic.glb','diagnostic.vrm','diagnostic.vroid','diagnostic.blend']){
+  await nativeInput.setInputFiles({name,mimeType:'application/octet-stream',buffer:b});
+  await nativeExpected.fill(createHash('sha256').update(b).digest('hex'));
+  await page.locator('#native-sha-verify').click();
+  await page.waitForFunction(()=>document.querySelector('#native-sha-result').textContent.startsWith('PASS:'));
+  assert.ok((await nativeResult.innerText()).includes('バイト照合のみ・再読込未検証'));
+ }
+ await nativeExpected.fill('0'.repeat(64));assert.equal(await nativeResult.innerText(),'未照合');
+ await page.locator('#native-sha-verify').click();
+ await page.waitForFunction(()=>document.querySelector('#native-sha-result').textContent.startsWith('FAIL:'));
+ await nativeInput.setInputFiles({name:'invalid.txt',mimeType:'text/plain',buffer:b});
+ await page.locator('#native-sha-verify').click();
+ assert.ok((await nativeResult.innerText()).includes('対象形式'));
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'native SHA mobile overflow');
+
  await page.screenshot({path:'qa-output/mobile-diagnostic.png',fullPage:true});
+ await page.waitForFunction(()=>!document.querySelector('#refresh').disabled&&!document.querySelector('#handoff-refresh').disabled);
+ await page.evaluate(()=>refreshOverview(true));
+ assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
+ assert.match(await page.locator('#handoff-status').innerText(),/自動PR取得 6\/6/);
+ assert.match(await page.locator('#handoff-cards').innerText(),new RegExp(liveHead));
+ bulkFail=true;
+ await page.evaluate(()=>refreshOverview(true));
+ assert.match(await page.locator('#status').innerText(),/前回表示を保持/);
+ assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
+ await page.waitForFunction(()=>document.querySelectorAll('#recent-review-artifacts [data-artifact-id]').length===4);
+ const recentGrid=page.locator('#recent-category-grid');
+ for(const label of ['世界・樹木','世界・森林','世界・聖域','世界・遺跡']){
+  const button=recentGrid.locator('button').filter({hasText:label});
+  assert.match(await button.innerText(),/1件/);
+  await button.click();
+  assert.equal(await page.locator('#recent-review-artifacts article').count(),1);
+  assert.equal(await page.locator('#recent-review-artifacts article h3').innerText(),label);
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+ }
+ await recentGrid.locator('button[data-category=""]').click();
+ await page.locator('#recent-review-search').fill('v59');
+ assert.equal(await page.locator('#recent-review-artifacts article').count(),1);
+ assert.match(await page.locator('#recent-review-artifacts article').innerText(),/two-v59-ruin-2d-references/);
+ await page.locator('#recent-review-search').fill('');
+ assert.equal(await page.locator('#recent-review-artifacts article').count(),4);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'recent category controls overflow');
  assert.deepEqual(errors,[]);
  console.log('PASS: mocked API, mobile width, SHA-256 match/mismatch, diagnostic GLB loader. Not actual asset QA.');
 }finally{await browser?.close();server.kill();}

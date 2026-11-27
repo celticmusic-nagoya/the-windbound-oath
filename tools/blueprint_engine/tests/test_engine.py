@@ -146,6 +146,46 @@ class ResidualTests(unittest.TestCase):
                 self.assertEqual(report["metrics"]["k"]["state"], metric_state(r, t, u))
                 self.assertEqual(report["overall"], expected)
 
+    def test_direct_residual_refuses_invalid_metric_maps(self):
+        target = dict(values={"k": 0.0}, tolerances={"k": 0.5}, uncertainty={"k": 0.1})
+        obs = dict(actual={"k": 0.25}, uncertainty={"k": 0.1})
+        for field, bad in (
+            ("values", {}), ("values", {"": 0}), ("values", {"k": True}),
+            ("tolerances", {"k": -0.5}), ("uncertainty", {"k": -1.0}),
+            ("uncertainty", {"k": float("nan")}), ("tolerances", {"k": float("inf")}),
+            ("lower_bound", {"k": 1.0}), ("lower_bound", []),
+            ("tolerances", {"k": 0.5, "other": 0}),
+        ):
+            with self.subTest(field=field, bad=bad):
+                with self.assertRaises(ValueError):
+                    evaluate(dict(target, **{field: bad}), obs)
+        for field, bad in (
+            ("actual", {}), ("actual", {"k": float("nan")}),
+            ("actual", {"k": True}), ("actual", {"k": 0, "other": 0}),
+            ("uncertainty", {"k": -1}), ("uncertainty", {"k": float("inf")}),
+        ):
+            with self.subTest(field=field, bad=bad):
+                with self.assertRaises(ValueError):
+                    evaluate(target, dict(obs, **{field: bad}))
+
+    def test_direct_residual_refuses_arithmetic_overflow(self):
+        target = dict(values={"k": -1e308}, tolerances={"k": 0.5}, uncertainty={"k": 0.0})
+        obs = dict(actual={"k": 1e308}, uncertainty={"k": 0.0})
+        with self.assertRaises(ValueError):
+            evaluate(target, obs)
+        target["values"]["k"] = 1e308
+        target["uncertainty"]["k"] = obs["uncertainty"]["k"] = 1e308
+        with self.assertRaises(ValueError):
+            evaluate(target, obs)
+
+    def test_direct_residual_valid_lower_bound(self):
+        target = dict(values={"k": 1.0}, tolerances={"k": 0}, uncertainty={"k": 0.125},
+                      lower_bound={"k": 1.0})
+        for actual, expected in ((1.25, "PASS"), (1.0, "HOLD"), (0.625, "OUTSIDE")):
+            with self.subTest(actual=actual):
+                obs = dict(actual={"k": actual}, uncertainty={"k": 0.125})
+                self.assertEqual(evaluate(target, obs)["overall"], expected)
+
 
 class ContractTests(unittest.TestCase):
     def setUp(self):
@@ -239,6 +279,114 @@ class ImageAdapterFactoryTests(unittest.TestCase):
             entries = ledger(d)
             self.assertEqual(entries["x.json"]["sha256"], file_sha256(p))
             self.assertIn("x.json", (Path(d) / "SHA256SUMS").read_text())
+
+
+class MeasurementDeadlineTests(unittest.TestCase):
+    def adapters(self):
+        from blueprint_engine.measure import VrmFaceAdapter
+        return (BlenderAdapter({}, "s"), VrmFaceAdapter({}, "s"))
+
+    def test_expired_deadline_never_launches(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run") as run:
+                    with self.assertRaises(TimeoutError):
+                        adapter.raw(src, deadline=time.monotonic() - 1)
+                    run.assert_not_called()
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_timeout_cleans_disposable_process_files(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            def fail(args, **kwargs):
+                self.assertGreater(kwargs["timeout"], 0)
+                Path(args[-1]).write_text("partial")
+                raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run", side_effect=fail):
+                    with self.assertRaises(subprocess.TimeoutExpired):
+                        adapter.raw(src, deadline=time.monotonic() + 30)
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+                    self.assertEqual(src.read_bytes(), b"fixture")
+
+    def test_timeout_with_modified_native_is_integrity_failure(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            def fail(args, **kwargs):
+                src.write_bytes(b"unexpected mutation")
+                Path(args[-1]).write_text("partial")
+                raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+            for adapter in self.adapters():
+                src.write_bytes(b"fixture")
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run", side_effect=fail):
+                    with self.assertRaisesRegex(RuntimeError, "modified the native file") as caught:
+                        adapter.raw(src, deadline=time.monotonic() + 30)
+                    self.assertIsInstance(caught.exception.__context__, subprocess.TimeoutExpired)
+                    self.assertEqual(src.read_bytes(), b"unexpected mutation")
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_timeout_with_missing_native_is_integrity_failure(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            def fail(args, **kwargs):
+                src.unlink()
+                raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+            for adapter in self.adapters():
+                src.write_bytes(b"fixture")
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run", side_effect=fail):
+                    with self.assertRaisesRegex(RuntimeError, "native integrity unavailable"):
+                        adapter.raw(src, deadline=time.monotonic() + 30)
+                    self.assertEqual(list(Path(d).iterdir()), [])
+
+    def test_nonzero_exit_retains_bounded_stdout_and_stderr(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            def fail(args, **kwargs):
+                return subprocess.CompletedProcess(args, 1, "X" * 3000 + " stdout cause", "Y" * 3000 + " stderr cause")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.subprocess.run", side_effect=fail):
+                    with self.assertRaisesRegex(RuntimeError, "measurement failed") as caught:
+                        adapter.raw(src)
+                    message = str(caught.exception)
+                    self.assertIn("stdout cause", message)
+                    self.assertIn("stderr cause", message)
+                    self.assertLess(len(message), 4200)
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_subsecond_budget_and_success_cleanup(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            def succeed(args, **kwargs):
+                self.assertEqual(kwargs["timeout"], .25)
+                Path(args[-1]).write_text('{"is_dirty": false}')
+                return subprocess.CompletedProcess(args, 0, "", "")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.time.monotonic", return_value=10), patch("blueprint_engine.measure.subprocess.run", side_effect=succeed):
+                    self.assertEqual(adapter.raw(src, deadline=10.25), {"is_dirty": False})
+                    self.assertEqual(list(Path(d).iterdir()), [src])
+
+    def test_expiry_during_hash_prevents_launch(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as d:
+            src = Path(d) / "native.blend"
+            src.write_bytes(b"fixture")
+            for adapter in self.adapters():
+                with self.subTest(adapter=adapter.method), patch("blueprint_engine.measure.time.monotonic", side_effect=[10, 11]), patch("blueprint_engine.measure.subprocess.run") as run:
+                    with self.assertRaises(TimeoutError):
+                        adapter.raw(src, deadline=10.5)
+                    run.assert_not_called()
+                    self.assertEqual(list(Path(d).iterdir()), [src])
 
 
 MAKE_BLEND = """

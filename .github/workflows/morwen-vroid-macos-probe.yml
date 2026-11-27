@@ -1,19 +1,40 @@
 name: Morwen VRoid macOS compatibility probe
-run-name: Morwen VRoid / ${{ inputs.mode }}
+run-name: Morwen VRoid / ${{ inputs.mode }}${{ inputs.request_id != '' && format(' request:{0}', inputs.request_id) || '' }}
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Choose one mode (hair_candidate is the current production step)"
+        description: "Choose one mode (parallel_batch runs isolated module work)"
         type: choice
         required: true
-        default: hair_candidate
+        default: wardrobe_guide
         options:
+          - wardrobe_guide
+          - vrm_export
+          - wardrobe_import
+          - parallel_ac
+          - wardrobe_export
+          - parallel_next
+          - face_candidate
+          - parallel_batch
+          - hair_review
           - hair_candidate
           - front_frame
           - reopen_only
           - native_calibration
           - communication_test
+      expected_main:
+        description: Internal launch guard; empty for manual runs
+        type: string
+        default: ''
+      request_id:
+        description: Internal comment ID; empty for manual runs
+        type: string
+        default: ''
+      transfer_fence:
+        description: Rotated fence produced by the reviewed control job
+        type: string
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -23,10 +44,39 @@ concurrency:
   cancel-in-progress: false
 jobs:
   reopen:
-    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main'
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && inputs.mode != 'vrm_export'
+    name: ${{ matrix.lane }}
+    strategy: &morwen_worker_strategy
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        lane: ${{ fromJSON(inputs.mode == 'parallel_batch' && '["A-face-body","B-hair","C-wardrobe"]' || (inputs.mode == 'parallel_next' && '["B-hair","C-wardrobe"]' || ((inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && '["C-wardrobe"]' || (inputs.mode == 'parallel_ac' && '["A-face-body","C-wardrobe"]' || '["reopen"]')))) }}
     runs-on: macos-15
     timeout-minutes: 35
-    steps:
+    env: &morwen_worker_env
+      LANE: ${{ matrix.lane }}
+      HAIR_STRAND: ${{ inputs.mode == 'parallel_next' && 'Hair 7' || 'Hair 3' }}
+    steps: &morwen_worker_steps
+      - name: Verify automatic launch identity before checkout
+        env:
+          EXPECTED_MAIN: ${{ inputs.expected_main }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          MODE: ${{ inputs.mode }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$MODE" = vrm_export ]; then
+            test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+            [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            exit 0
+          fi
+          if [ -n "$EXPECTED_MAIN" ] || [ -n "$REQUEST_ID" ]; then
+            test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+            [[ "$REQUEST_ID" =~ ^[1-9][0-9]{0,14}$ ]]
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            case "$MODE" in hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) ;; *) exit 1 ;; esac
+          fi
       - uses: actions/checkout@v4
         with:
           ref: 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
@@ -35,12 +85,18 @@ jobs:
         env:
           MODE: ${{ inputs.mode }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
-          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' || inputs.mode == 'vrm_export' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
+          WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
+          WARDROBE_GUIDE: ${{ inputs.mode == 'wardrobe_guide' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
-          case "$MODE" in hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
+          case "$MODE" in vrm_export|wardrobe_guide|wardrobe_import|parallel_ac|wardrobe_export|face_candidate|parallel_next|parallel_batch|hair_review|hair_candidate|front_frame|reopen_only|native_calibration|communication_test) ;; *) echo BLOCKED_UNKNOWN_MODE; exit 1 ;; esac
           mkdir -p evidence
           printf "%s\n" "$MODE" > evidence/selected-mode.txt
           git rev-parse HEAD > evidence/checkout-sha.txt
@@ -52,7 +108,7 @@ jobs:
           fi
           bash -n tools/production_qa/morwen_vroid_session.sh
           swiftc tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ] || [ "$HAIR_PROBE" = true ]; then
+          if [ "$NATIVE_PROBE" = true ] || [ "$FRAME_PROBE" = true ] || [ "$HAIR_PROBE" = true ] || [ "$FACE_PROBE" = true ]; then
           cat > "$RUNNER_TEMP/face-row.swift" <<'SWIFT'
           import Foundation
           import Vision
@@ -148,10 +204,12 @@ jobs:
               return c.blueComponent>0.78 && c.redComponent<0.22 && c.greenComponent>0.30 && c.greenComponent<0.82
           }
           // Selection must be the unique visible Hair 3 row, highlighted blue.
-          let strands=rows.filter { label($0)=="Hair 3" && $0.boundingBox.midX<0.28 }
+          let target=ProcessInfo.processInfo.environment["HAIR_STRAND"] ?? "Hair 3"
+          guard ["Hair 3","Hair 7"].contains(target) else { exit(2) }
+          let strands=rows.filter { label($0)==target && $0.boundingBox.midX<0.28 }
           guard strands.count==1, let strand=strands.first else { exit(2) }
           let sy=Int((1-strand.boundingBox.midY)*768)
-          guard sy>=340 && sy<=370 else { exit(2) }
+          guard (target=="Hair 3" ? (340...370).contains(sy) : (460...490).contains(sy)) else { exit(2) }
           var selected=0
           for yy in (sy-4)...(sy+4) { for xx in 65...90 { if blue(xx,yy) { selected+=1 } } }
           guard selected>=200 else { exit(2) }
@@ -218,7 +276,7 @@ jobs:
             swiftc "$RUNNER_TEMP/hair-save-guard.swift" -o "$RUNNER_TEMP/hair-save-guard"
           fi
       - name: Verify hair save guard on actual archived dialog before VRoid startup
-        if: inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -237,7 +295,212 @@ jobs:
           PY
           "$RUNNER_TEMP/hair-save-guard" "$RUNNER_TEMP/save-fixture.png" | tee evidence/hair-save-preflight.txt
           grep -qx 'Front checked Back unchecked' evidence/hair-save-preflight.txt
+      - name: Preflight Hair 7 locator against exact positive and negative images
+        if: inputs.mode == 'parallel_next' && matrix.lane == 'B-hair'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15006373919/zip" > "$RUNNER_TEMP/hair7-fixture.zip"
+          echo "ee214f69d25ae600c23f0a4063d137fd5de628f956072d5a418bc24379037e94  $RUNNER_TEMP/hair7-fixture.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"hair7-fixture.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"hair-7-geometry.png":"0a48567b4f834c6b5cddef833fbcbb85098c3516fb9de9612e3e93b9915533ab","hair-6-geometry.png":"36151a158820aab2cf740243e4f7e177b90d64e90207be29f4452e8d3d54bba8"}.items():
+                  data=z.read(n)
+                  assert hashlib.sha256(data).hexdigest()==h
+                  (p/n).write_bytes(data)
+          PY
+          test "$("$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-7-geometry.png" '^Width$' | cut -d ' ' -f1)" = 0.03
+          test "$("$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-7-geometry.png" '^Thickness$' | cut -d ' ' -f1)" = 0.04
+          if "$RUNNER_TEMP/hair-row" "$RUNNER_TEMP/hair-6-geometry.png" '^Width$'; then exit 1; fi
+          echo HAIR7_FIXTURE_PASS > evidence/hair7-preflight.txt
+      - name: Compile skirt alpha inspection before VRoid startup
+        if: (inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && matrix.lane == 'C-wardrobe'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/skirt-alpha.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          let dir=URL(fileURLWithPath:CommandLine.arguments[1])
+          let files=try FileManager.default.contentsOfDirectory(at:dir,includingPropertiesForKeys:nil).filter{$0.pathExtension.lowercased()=="png"}
+          guard files.count==1,let im=NSBitmapImageRep(data:try Data(contentsOf:files[0])) else { exit(2) }
+          var rows:[[Int]]=[]
+          for y in 0..<im.pixelsHigh {
+              var lo=im.pixelsWide
+              var hi = -1
+              for x in 0..<im.pixelsWide {
+                  guard let c=im.colorAt(x:x,y:y) else { exit(2) }
+                  if c.alphaComponent>=0.5 { lo=min(lo,x);hi=max(hi,x) }
+              }
+              rows.append(hi>=0 ? [lo,hi] : [])
+          }
+          let result:[String:Any]=["scope":"Alpha coverage only, not UV topology","width":im.pixelsWide,"height":im.pixelsHigh,"rows":rows]
+          let data=try JSONSerialization.data(withJSONObject:result)
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-alpha-row-bounds.json"))
+          SWIFT
+          swiftc "$RUNNER_TEMP/skirt-alpha.swift" -o "$RUNNER_TEMP/skirt-alpha"
+      - name: Preflight mouth controls on exact archived images
+        if: inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/mouth-readout.py" <<'PY'
+          import re, sys
+          from pathlib import Path
+          LABELS=('Mouth Width','Mouth Position (Y)','Mouth Corners','Mouth (Z)')
+          def parse(text):
+              rows=[x.strip() for x in text.split('|')]
+              if rows.count('Parameters')!=1 or 'Mouth' not in rows[:rows.index('Parameters')] or 'Customize' not in rows or 'Edit Texture' not in rows:
+                  raise ValueError('mouth panel not verified')
+              rows=rows[rows.index('Parameters')+1:]
+              result=[]
+              for label in LABELS:
+                  if rows.count(label)!=1: raise ValueError(f'nonunique {label}')
+                  i=rows.index(label)
+                  if i+1>=len(rows): raise ValueError(f'missing {label} value')
+                  j=i+1
+                  if rows[j]=='' and j+1<len(rows): j+=1
+                  v=rows[j].replace('−','-')
+                  if not re.fullmatch(r'-?\d+\.\d{3}',v): raise ValueError(f'invalid {label} value')
+                  result.append(v)
+              return ' '.join(result)
+          if __name__=='__main__':
+              print(parse(Path(sys.argv[1]).read_text()))
+          PY
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15007077087/zip" > "$RUNNER_TEMP/face-fixture.zip"
+          echo "55d76ca1388acf10a53953d498ff57a13b0a0a51346381416c91745c786757a8  $RUNNER_TEMP/face-fixture.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib,json
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"face-fixture.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"face-control-mouth.png":"0d8f11ec03761fca8ad64869433339f4b12088967d80027d4fda729bcab068ce","face-control-nose.png":"256953b755f9315779ca5d7e52c1f5d74c3eb5c7c3ad56ae93a6258d6828d36d"}.items():
+                  b=z.read(n)
+                  assert hashlib.sha256(b).hexdigest()==h
+                  (p/n).write_bytes(b)
+              receipt=json.loads(z.read("module-receipt.json"))
+              for n in ("face-control-mouth.txt","face-control-nose.txt"):
+                  b=z.read(n)
+                  assert hashlib.sha256(b).hexdigest()==receipt["files"][n]
+                  (p/n).write_bytes(b)
+          PY
+          row="$RUNNER_TEMP/face-row"
+          img="$RUNNER_TEMP/face-control-mouth.png"
+          python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/face-control-mouth.txt" | tee evidence/mouth-fixture-values.txt
+          grep -qx -- '-0.026 0.000 0.000 0.000' evidence/mouth-fixture-values.txt
+          if python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/face-control-nose.txt"; then exit 1; fi
+          "$row" "$img" '^Mouth Width$' | tee evidence/mouth-fixture-slider.txt
+          test "$(cut -d ' ' -f1 evidence/mouth-fixture-slider.txt)" = -0.026
+          if "$row" "$RUNNER_TEMP/face-control-nose.png" '^Mouth Width$'; then exit 1; fi
+          # Actual failed live response: exactly one empty OCR separator after Mouth Position (Y).
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15015543408/zip" > "$RUNNER_TEMP/mouth-response.zip"
+          echo "fc6d73a2937c7b769b7a4e6ac3da68a4598d502249cc835d3ddc4d69b2c46117  $RUNNER_TEMP/mouth-response.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,hashlib,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"mouth-response.zip") as z:
+              assert z.testzip() is None
+              for n,h in {"mouth-before.txt":"0b94abc8c186f0ba24f9e10551a6f623efa2341eeb4cbbab30125c9fa25295d9","mouth-after.txt":"9a7cd96ea81e20c356d304555f7bb69ad6bd4b0d2f50d8479fc5934de75beedd"}.items():
+                  data=z.read(n)
+                  assert hashlib.sha256(data).hexdigest()==h
+                  (p/n).write_bytes(data)
+          PY
+          test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-before.txt")" = '-0.026 0.000 0.000 0.000'
+          test "$(python3 "$RUNNER_TEMP/mouth-readout.py" "$RUNNER_TEMP/mouth-after.txt")" = '0.044 0.000 0.000 0.000'
+          echo MOUTH_FIXTURE_PASS > evidence/mouth-preflight.txt
+      - uses: actions/setup-python@v5
+        if: inputs.mode == 'wardrobe_import'
+        with:
+          python-version: '3.13'
+      - name: Rebuild exact material fit trial and verify decoder before startup
+        if: inputs.mode == 'wardrobe_import'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/material-venv"
+          "$RUNNER_TEMP/material-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0 numpy==2.3.5
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14683737147/zip" > "$RUNNER_TEMP/material-sheet.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15018392749/zip" > "$RUNNER_TEMP/material-textile.zip"
+          gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/contents/tools/production_qa/morwen_rebuild_trial.py?ref=41ce803f607dca8744e15c45f1c671ee69c6bea3" > "$RUNNER_TEMP/skirt-recipe.py"
+          echo "8c703690bdc4d18c8c40ee93755f4baf3f0c9c0b7df17217e5b27eec8c0eaead  $RUNNER_TEMP/skirt-recipe.py" | shasum -a 256 -c
+          "$RUNNER_TEMP/material-venv/bin/python" "$RUNNER_TEMP/skirt-recipe.py" "$RUNNER_TEMP/material-sheet.zip" "$RUNNER_TEMP/material-textile.zip" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-sha.txt
+          cat > "$RUNNER_TEMP/skirt-verify.py" <<'PY'
+          import hashlib,struct,zlib,sys
+          from pathlib import Path
+          b=Path(sys.argv[1]).read_bytes()
+          assert b[:8]==b'\x89PNG\r\n\x1a\n' and len(b)<64_000_000
+          pos=8; ids=[]; hdr=None; end=False
+          while pos<len(b):
+              n=struct.unpack('>I',b[pos:pos+4])[0]; tag=b[pos+4:pos+8]; d=b[pos+8:pos+8+n]
+              assert len(d)==n and zlib.crc32(tag+d)==struct.unpack('>I',b[pos+8+n:pos+12+n])[0]
+              pos+=12+n
+              if tag==b'IHDR':
+                  assert hdr is None;hdr=struct.unpack('>IIBBBBB',d)
+                  assert hdr==(1024,512,8,6,0,0,0),hdr
+              elif tag==b'IDAT':ids.append(d)
+              elif tag==b'IEND':end=True;break
+          assert hdr and ids and end and pos==len(b)
+          stride=4096; expect=(stride+1)*512
+          dec=zlib.decompressobj();raw=dec.decompress(b''.join(ids),expect+1)
+          assert len(raw)==expect and dec.eof and not dec.unused_data and not dec.unconsumed_tail
+          prev=bytearray(stride);out=[]
+          for y in range(512):
+              start=y*(stride+1);f=raw[start];row=bytearray(raw[start+1:start+1+stride]);assert f<=4
+              for i in range(stride):
+                  a=row[i-4] if i>=4 else 0;b=prev[i];c=prev[i-4] if i>=4 else 0
+                  if f==1:q=a
+                  elif f==2:q=b
+                  elif f==3:q=(a+b)//2
+                  elif f==4:
+                      p=a+b-c;pa,pb,pc=abs(p-a),abs(p-b),abs(p-c);q=a if pa<=pb and pa<=pc else b if pb<=pc else c
+                  else:q=0
+                  row[i]=(row[i]+q)&255
+              out.append(bytes(row));prev=row
+          h=hashlib.sha256(b''.join(out)).hexdigest();print(h)
+          assert h=='cc42bb0faf2881a1e258389b99b48a959495fdb2bd062611326ed24bed4a13fd'
+          PY
+          python3 "$RUNNER_TEMP/skirt-verify.py" "$RUNNER_TEMP/uv-grid.png" | tee evidence/skirt-generated-pixel-sha.txt
+      - name: Compile UV guide inspector before VRoid startup
+        if: inputs.mode == 'wardrobe_guide'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/skirt-guide-profile.swift" <<'SWIFT'
+          import Cocoa
+          import Foundation
+          guard let im=NSBitmapImageRep(data:try Data(contentsOf:URL(fileURLWithPath:CommandLine.arguments[1]))) else { exit(2) }
+          let w=im.pixelsWide,h=im.pixelsHigh
+          guard w>0,h>0,w<=4096,h<=4096 else { exit(2) }
+          var rows=[[Int]](repeating:[0,0,0],count:h)
+          var cols=[[Int]](repeating:[0,0,0],count:w)
+          for y in 0..<h {
+              for x in 0..<w {
+                  guard let c=im.colorAt(x:x,y:y)?.usingColorSpace(.deviceRGB) else { exit(2) }
+                  let a=c.alphaComponent
+                  if a>=0.5 {
+                      rows[y][0]+=1; cols[x][0]+=1
+                      let v=(c.redComponent+c.greenComponent+c.blueComponent)/3
+                      if v<0.25 { rows[y][1]+=1;cols[x][1]+=1 }
+                      if v>0.75 { rows[y][2]+=1;cols[x][2]+=1 }
+                  }
+              }
+          }
+          let result:[String:Any]=["scope":"UV guide aggregate profiles only; not an inferred island map","width":w,"height":h,"rows":rows,"columns":cols]
+          let data=try JSONSerialization.data(withJSONObject:result)
+          try data.write(to:URL(fileURLWithPath:"evidence/skirt-guide-profile.json"))
+          SWIFT
+          swiftc "$RUNNER_TEMP/skirt-guide-profile.swift" -o "$RUNNER_TEMP/skirt-guide-profile"
       - name: Restore native checkpoint
+        if: inputs.mode != 'vrm_export' && inputs.mode != 'hair_review' && inputs.mode != 'parallel_batch' && inputs.mode != 'parallel_next' && inputs.mode != 'face_candidate' && inputs.mode != 'wardrobe_export' && inputs.mode != 'parallel_ac' && inputs.mode != 'wardrobe_import' && inputs.mode != 'wardrobe_guide'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -256,6 +519,144 @@ jobs:
               data=z.read(item)
               assert hashlib.sha256(data).hexdigest()=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
               (p/"Morwen-resume.vroid").write_bytes(data)
+          PY
+      - uses: actions/checkout@v4
+        if: inputs.mode == 'vrm_export'
+        with:
+          ref: ${{ github.sha }}
+          path: transfer-control
+          persist-credentials: false
+      - name: Verify reviewed transfer fence and exact checkpoint profile
+        if: inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          REQUEST_ACTOR: ${{ github.actor_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$REQUEST_ACTOR" = 41898282 # github-actions[bot]; owner checked separately
+          [[ "$TRANSFER_FENCE" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -C transfer-control rev-parse HEAD)" = "$GITHUB_SHA"
+          PROFILE_SHA256=$(python3 - <<'PY'
+          import json, pathlib, subprocess, os, re
+          root = pathlib.Path("transfer-control")
+          contract = json.loads((root / ".github/morwen/reviewed-launch-contract.json").read_text())
+          assert contract["schema"] == "two-reviewed-launch-v1"
+          assert contract["review_state"] == "REVIEWED_FOR_OWNER_LAUNCH"
+          assert contract["asset_id"] == os.environ["TRANSFER_ASSET"] == "MORWEN"
+          assert contract["worker_path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          worker = subprocess.check_output(["git", "-C", str(root), "hash-object", contract["worker_path"]], text=True).strip()
+          assert worker == contract["worker_blob"]
+          assert re.fullmatch(r"[0-9a-f]{64}", contract["profile_sha256"])
+          assert contract["restore_source"] in ("private_release", "actions_artifact")
+          deps = contract["dependency_blobs"]
+          expected = [".github/workflows/morwen-request-launch.yml","tools/private-preservation/release_transport.py","tools/production_qa/capture_transfer_views.sh","tools/production_qa/import_vrm_transfer.py","tools/production_qa/install_blender_530.sh","tools/production_qa/morwen_transfer_claim.py","tools/production_qa/pack_transfer.py","tools/production_qa/preserve_blender_transfer.py","tools/production_qa/receive_morwen_transfer.py","tools/production_qa/render_transfer_views.py","tools/production_qa/restore_morwen_artifact_preflight.py","tools/production_qa/restore_morwen_preserved.py","tools/production_qa/reviewed_launch_contract.cjs","tools/production_qa/run_blender_transfer.sh","tools/production_qa/shared_asset_lease.py","tools/production_qa/shared_asset_reservation.py","tools/production_qa/transfer_private_release.py","tools/production_qa/verify_transfer_output.py","tools/production_qa/vrm_export_session.sh"]
+          assert isinstance(deps, dict) and set(deps) == set(expected)
+          for path in expected:
+              assert re.fullmatch(r"[0-9a-f]{40}", deps[path])
+              actual = subprocess.check_output(["git", "-C", str(root), "hash-object", path], text=True).strip()
+              assert actual == deps[path], "dependency review missing: " + path
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as f:
+              f.write("MORWEN_RESTORE_SOURCE=" + contract["restore_source"] + "\n")
+          print(contract["profile_sha256"])
+          PY
+          )
+          [[ "$PROFILE_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          test -n "$TRANSFER_ASSET"
+          PRIVATE_DROP="$RUNNER_TEMP/morwen-private-transfer"
+          mkdir -m 700 "$PRIVATE_DROP"
+          printf 'PRIVATE_DROP=%s\n' "$PRIVATE_DROP" >> "$GITHUB_ENV"
+          python3 -m venv "$RUNNER_TEMP/transfer-venv"
+          "$RUNNER_TEMP/transfer-venv/bin/python" -m pip install --only-binary=:all: --disable-pip-version-check Pillow==12.3.0
+          profile=transfer-control/.github/morwen/vrm-export-profile.json
+          printf '%s  %s\n' "$PROFILE_SHA256" "$profile" | shasum -a 256 -c
+          python3 - "$profile" "$PRIVATE_DROP" <<'PY'
+          import json, os, pathlib, sys
+          approved = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          drop = pathlib.Path(sys.argv[2]).resolve(strict=True)
+          assert approved["source_sha256"] == "acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"
+          assert approved["source_archive_sha256"] == "b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588"
+          assert approved["asset_id"] == os.environ["TRANSFER_ASSET"]
+          assert drop.is_absolute() and drop == (pathlib.Path(os.environ["RUNNER_TEMP"]) / "morwen-private-transfer").resolve()
+          assert approved["private_destination"] == "celticmusic-nagoya/the-windbound-oath-handoff"
+          assert approved["staging"] == "RUNNER_TEMP_OWNER_ONLY"
+          assert drop.stat().st_mode & 0o077 == 0
+          PY
+          gh auth setup-git --hostname github.com
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$REQUEST_ID" > "$RUNNER_TEMP/transfer-request.json"
+          python3 - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"])
+          comment = json.loads((p/"transfer-request.json").read_bytes())
+          repo = os.environ["GITHUB_REPOSITORY"]
+          assert comment["issue_url"] == f"https://api.github.com/repos/{repo}/issues/427"
+          assert comment["user"]["id"] == 315379131 and comment["author_association"] == "OWNER"
+          assert comment["created_at"] == comment["updated_at"]
+          assert comment["body"] == f'/two-morwen-launch vrm_export main={os.environ["GITHUB_SHA"]}'
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > "$RUNNER_TEMP/transfer-run.json"
+          export MORWEN_TRANSFER_GIT_DIR="$GITHUB_WORKSPACE/transfer-control"
+          test "$(git -C "$MORWEN_TRANSFER_GIT_DIR" rev-parse HEAD)" = "$GITHUB_SHA"
+          printf 'MORWEN_TRANSFER_GIT_DIR=%s\n' "$MORWEN_TRANSFER_GIT_DIR" >> "$GITHUB_ENV"
+          PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import json, os, pathlib
+          from morwen_transfer_claim import await_bound
+          env = os.environ
+          run = json.loads((pathlib.Path(env["RUNNER_TEMP"])/"transfer-run.json").read_bytes())
+          assert run["id"] == int(env["GITHUB_RUN_ID"]) and run["run_attempt"] == 1
+          assert run["event"] == "workflow_dispatch" and run["head_branch"] == "main"
+          assert run["head_sha"] == env["GITHUB_SHA"]
+          assert run["path"] == ".github/workflows/morwen-vroid-macos-probe.yml"
+          assert run["display_title"] == "Morwen VRoid / vrm_export request:" + env["REQUEST_ID"]
+          assert run["repository"]["id"] == 1408120919 and run["head_repository"]["id"] == 1408120919
+          assert run["actor"]["id"] == 41898282 and run["actor"]["login"] == "github-actions[bot]"
+          token = await_bound("origin", env["TRANSFER_ASSET"], env["TRANSFER_FENCE"],
+                              env["GITHUB_SHA"], env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          with open(env["GITHUB_ENV"], "a", encoding="utf-8") as f:
+              f.write("MORWEN_BOUND_FENCE=" + token + "\n")
+          PY
+      - name: Restore preserved native checkpoint from existing private Release
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/restore_morwen_preserved.py --source "$MORWEN_RESTORE_SOURCE"
+      - name: Restore exact saved hair candidate for read-only comparison
+        if: inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/15003297779/zip" > "$RUNNER_TEMP/hair-review.zip"
+          echo "b1c9b7b61433b17c4caa160f0558461386edb0b6440b9740f6652e89565a6482  $RUNNER_TEMP/hair-review.zip" | shasum -a 256 -c
+          python3 - <<'PY'
+          import os,zipfile,io,pathlib,hashlib,json
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])
+          with zipfile.ZipFile(p/"hair-review.zip") as z:
+              assert z.testzip() is None
+              r=json.loads(z.read("hair-author-receipt.json"))
+              data=z.read("hair-width-candidate-not-adopted.vroid")
+              assert hashlib.sha256(data).hexdigest()==r["candidate_sha256"]=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+              assert r["source_sha256"]=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+              assert (r["before"],r["after"],r["reopened"])==(.03,.02,.02)
+              assert r["protected_thickness"]==[.05]*3
+              assert json.loads(z.read("hair-shared-engine-qa.json"))["overall"]=="PASS"
+              assert zipfile.ZipFile(io.BytesIO(data)).testzip() is None
+              (p/"Morwen-resume.vroid").write_bytes(data)
+              pathlib.Path("evidence/hair-review-source.json").write_text(json.dumps(dict(run=45572622840,artifact=15003297779,native_sha256=r["candidate_sha256"],scope="READ_ONLY_NOT_ADOPTED"),indent=2))
           PY
       - name: Restore three existing frame candidates
         if: inputs.mode == 'front_frame'
@@ -305,12 +706,33 @@ jobs:
       - name: Launch signed application and collect evidence
         timeout-minutes: 22
         env:
+          TRANSFER_MODE: ${{ inputs.mode == 'vrm_export' }}
+          GH_TOKEN: ${{ inputs.mode == 'vrm_export' && github.token || '' }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
           NATIVE_PROBE: ${{ inputs.mode == 'native_calibration' }}
-          FRAME_PROBE: ${{ inputs.mode == 'front_frame' }}
-          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' }}
+          FRAME_PROBE: ${{ inputs.mode == 'front_frame' || inputs.mode == 'hair_review' }}
+          HAIR_REVIEW: ${{ inputs.mode == 'hair_review' || inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'face_candidate' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
+          FACE_PROBE: ${{ inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body') }}
+          PARALLEL: ${{ inputs.mode == 'parallel_batch' || inputs.mode == 'wardrobe_export' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' || ((inputs.mode == 'parallel_next' || inputs.mode == 'parallel_ac') && matrix.lane == 'C-wardrobe') }}
+          NEXT_BATCH: ${{ inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide' }}
+          WARDROBE_IMPORT: ${{ inputs.mode == 'wardrobe_import' }}
+          WARDROBE_GUIDE: ${{ inputs.mode == 'wardrobe_guide' }}
+          HAIR_PROBE: ${{ inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair') }}
         shell: bash
         run: |
           set -euo pipefail
+          verify_transfer_run() {
+            PYTHONPATH=transfer-control/tools/production_qa python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import verify
+          env = os.environ
+          verify("origin", env["TRANSFER_ASSET"], env["MORWEN_BOUND_FENCE"], env["GITHUB_SHA"],
+                 env["REQUEST_ID"], env["GITHUB_RUN_ID"], env["GITHUB_RUN_ATTEMPT"])
+          PY
+          }
+          if [ "$TRANSFER_MODE" = true ]; then verify_transfer_run; fi
           app="$RUNNER_TEMP/VRoidStudio.app"
           /usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$app/Contents/Info.plist" > evidence/version.txt
           exe="$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Contents/Info.plist")"
@@ -440,7 +862,22 @@ jobs:
           screencapture -x evidence/final-recovery-screen.png || true
           grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
           MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
+          if [ "$TRANSFER_MODE" = true ]; then
+            verify_transfer_run
+            export MORWEN_TRANSFER_PYTHON="$RUNNER_TEMP/transfer-venv/bin/python"
+            out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+            mkdir -m 700 "$out"
+            bash transfer-control/tools/production_qa/vrm_export_session.sh "$gui" \
+              "$MORWEN_READONLY_NATIVE" "$out/views" "$out" \
+              transfer-control/.github/morwen/vrm-export-profile.json
+            cmp "$MORWEN_READONLY_NATIVE" evidence/input-model.vroid
+            verify_transfer_run
+            "$MORWEN_TRANSFER_PYTHON" transfer-control/tools/production_qa/pack_transfer.py "$out" "$out/Morwen-transfer.zip" > "$out/package-receipt.json"
+            verify_transfer_run
+            exit 0
+          fi
           MORWEN_EXPECTED_SHA256=9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574
+          if [ "$HAIR_REVIEW" = true ]; then MORWEN_EXPECTED_SHA256=55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541; fi
           if [ "$FRAME_PROBE" = true ]; then
             test "$NATIVE_PROBE" != true
             test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
@@ -450,7 +887,9 @@ jobs:
             sleep 2
             echo "direction attempt action bbox_xmin bbox_ymin bbox_xmax bbox_ymax foreground margin" > evidence/frame-recovery-ledger.txt
             all=1
-            for direction in front; do
+            directions="front"
+            if [ "$HAIR_REVIEW" = true ]; then directions="front left4 left8 right4"; fi
+            for direction in $directions; do
               "$gui" vroid-shortcut front
               case "$direction" in
                 left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
@@ -500,13 +939,17 @@ jobs:
             if [ "$all" = 1 ]; then
               for view in front left4 left8 right4; do test -s "evidence/frame-selected-$view.png"; done
               shasum -a 256 evidence/frame-selected-*.png > evidence/frame-selected-sha256.txt
-              echo FRONT_MARGIN_AND_THREE_REUSED_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              if [ "$HAIR_REVIEW" = true ]; then
+                echo SAVED_HAIR_FOUR_FRESH_CAPTURES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              else
+                echo FRONT_MARGIN_AND_THREE_REUSED_CANDIDATES_REVIEW_REQUIRED > evidence/frame-recovery-status.txt
+              fi
             else
               echo BLOCKED_MARGIN_NOT_ESTABLISHED > evidence/frame-recovery-status.txt
               exit 1
             fi
-          elif [ "$HAIR_PROBE" = true ]; then
-            : # Skip previous framing and iris tests.
+          elif [ "$HAIR_PROBE" = true ] || [ "$PARALLEL" = true ] || [ "$FACE_PROBE" = true ]; then
+            : # Targeted module work below; no repeated generic framing or iris tests.
           else
             MORWEN_CAPTURE_MODE=rear-only
             source tools/production_qa/morwen_readonly_capture.sh
@@ -624,12 +1067,12 @@ jobs:
               sleep 2
               capture_state "$tag-group" >&2 || return 1
               grep -Fq 'Freehand Guides' "evidence/$tag-group.txt" || return 1
-              grep -Fq 'Hair 3' "evidence/$tag-group.txt" || return 1
+              grep -Fq "$HAIR_STRAND" "evidence/$tag-group.txt" || return 1
               grep -Fq 'Front' "evidence/$tag-group.txt" || return 1
-              "$gui" click-label "evidence/$tag-group.png" 'Hair 3' 'Freehand Guides' >&2 || return 1
+              "$gui" click-label "evidence/$tag-group.png" "$HAIR_STRAND" 'Freehand Guides' >&2 || return 1
               sleep 2
               capture_state "$tag-selected" >&2 || return 1
-              grep -Fq 'Hair 3' "evidence/$tag-selected.txt" || return 1
+              grep -Fq "$HAIR_STRAND" "evidence/$tag-selected.txt" || return 1
               grep -Fq 'Hair Groups' "evidence/$tag-selected.txt" || return 1
               # Actual prior screenshot: Texture Parameters at (754,221), width 2.98 is NOT geometry.
               # Toggle only the exact section header; then collapse Materials if needed.
@@ -663,7 +1106,9 @@ jobs:
             fi
             read -r thickness _ _ <<< "$protected"
             # Exact observed baseline, not a general percentage-based correction.
-            if [ "$before" != 0.03 ] || [ "$thickness" != 0.05 ]; then
+            expected_thickness=0.05
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then expected_thickness=0.04; fi
+            if [ "$before" != 0.03 ] || [ "$thickness" != "$expected_thickness" ]; then
               echo BLOCKED_HAIR_OBSERVED_BASELINE_MISMATCH > evidence/hair-author-status.txt
               exit 1
             fi
@@ -674,15 +1119,20 @@ jobs:
           PY
             chmod u+w "$MORWEN_READONLY_NATIVE"
             echo HAIR_WIDTH_MUTATION_ATTEMPTED > evidence/hair-author-status.txt
-            slider_by hair-width '^Width$' -0.008 || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
+            # Run45583270461 Hair7: measured slider moved 8px, display remained .03.
+            # One revised bounded drag, 16px on 1024px screen; retain exact .02/.04 postcondition.
+            delta=-0.008
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then delta=-0.015625; fi
+            slider_by hair-width '^Width$' "$delta" || { echo BLOCKED_WIDTH_RESPONSE_UNVERIFIED > evidence/hair-author-status.txt; exit 1; }
             capture_state hair-after-selected
             read -r after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Width$')"
             read -r thickness_after _ _ <<< "$("$row" evidence/hair-after-selected.png '^Thickness$')"
             python3 - "$before" "$after" "$thickness" "$thickness_after" <<'PY'
-          import sys
+          import sys,os
           from decimal import Decimal
           a,b,t,u=map(Decimal,sys.argv[1:])
-          assert (a,b,t,u)==tuple(map(Decimal,("0.03","0.02","0.05","0.05"))), "not the observed one-display-step candidate"
+          expected="0.04" if os.environ["HAIR_STRAND"]=="Hair 7" else "0.05"
+          assert (a,b,t,u)==tuple(map(Decimal,("0.03","0.02",expected,expected))), "unexpected one-display-step response"
           PY
             "$gui" click 0.0234 0.0990
             sleep 2
@@ -711,12 +1161,22 @@ jobs:
               echo BLOCKED_HAIR_REOPEN_VALUE_MISMATCH > evidence/hair-author-status.txt
               exit 1
             fi
+            if [ "$HAIR_STRAND" = "Hair 7" ]; then
+              "$gui" click-label evidence/hair-reopened-geometry.png 'Hair 3' 'Freehand Guides'
+              sleep 2
+              capture_state hair3-protected-reopened
+              read -r w3 _ _ <<< "$(HAIR_STRAND='Hair 3' "$row" evidence/hair3-protected-reopened.png '^Width$')"
+              read -r t3 _ _ <<< "$(HAIR_STRAND='Hair 3' "$row" evidence/hair3-protected-reopened.png '^Thickness$')"
+              test "$w3" = 0.02 && test "$t3" = 0.05
+              echo "Hair 3 width=$w3 thickness=$t3" > evidence/hair3-protection.txt
+            fi
             python3 - "$before" "$after" "$reopened" "$thickness" "$thickness_after" "$thickness_reopened" <<'PY'
-          import hashlib,json,pathlib,sys,zipfile
+          import hashlib,json,pathlib,sys,zipfile,os
           p=pathlib.Path("evidence")
           def sha(q): return hashlib.sha256(q.read_bytes()).hexdigest()
           src=p/"input-model.vroid"; dst=p/"model.vroid"
-          assert sha(src)=="9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574"
+          expected_source={"Hair 3":"9aba397dc080af510cc299cde1459accc83f468fa6bfa139229fe7e720887574","Hair 7":"55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"}[os.environ["HAIR_STRAND"]]
+          assert sha(src)==expected_source
           with zipfile.ZipFile(src) as a,zipfile.ZipFile(dst) as b:
               assert a.testzip() is None and b.testzip() is None
               assert a.read("v1model/data.bin")!=b.read("v1model/data.bin")
@@ -724,7 +1184,7 @@ jobs:
           a,b,c,t,u,v=map(float,sys.argv[1:])
           (p/"hair-author-receipt.json").write_text(json.dumps(dict(
               status="SINGLE_STRAND_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED",
-              target="Front / first Freehand Group 1 / Hair 3 / Width",
+              target="Front / first Freehand Group 1 / "+os.environ["HAIR_STRAND"]+" / Width",
               before=a,after=b,reopened=c,protected_thickness=[t,u,v],
               source_sha256=sha(src),candidate_sha256=sha(dst),
               screenshots={k:sha(p/(k+".png")) for k in ("hair-before-selected","hair-before-geometry","hair-after-selected","hair-reopened-geometry")},
@@ -733,8 +1193,394 @@ jobs:
           PY
             echo HAIR_WIDTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/hair-author-status.txt
           fi
+          if [ "$PARALLEL" = true ]; then
+            sha_before=$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)
+            test "$sha_before" = "$MORWEN_EXPECTED_SHA256"
+            test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
+            echo MODULE_EVIDENCE_PENDING > evidence/module-status.txt
+            panel() {
+              local tag="$1" tab="$2" anchor="$3" sig="$4"
+              capture_state "$tag-nav"
+              "$gui" click-label "evidence/$tag-nav.png" "$tab" "$anchor"
+              sleep 2
+              capture_state "$tag"
+              grep -Eiq "$sig" "evidence/$tag.txt"
+              ! dialog_visible "$tag"
+            }
+            case "$LANE" in
+              A-face-body)
+                "$gui" vroid-shortcut face
+                "$gui" vroid-shortcut front
+                sleep 2
+                capture_state face-base
+                grep -Fq 'Face Sets' evidence/face-base.txt
+                "$gui" zoom 0.50 0.42 6 0
+                sleep 2
+                capture_state face-close-front
+                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done
+                sleep 2
+                capture_state face-close-left4
+                "$gui" vroid-shortcut front
+                for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done
+                sleep 2
+                capture_state face-close-right4
+                "$gui" vroid-shortcut front
+                for entry in eyes:0.230 iris:0.293 nose:0.729 mouth:0.792; do
+                  tag=$(echo "$entry" | cut -d: -f1); yy=$(echo "$entry" | cut -d: -f2)
+                  "$gui" click 0.023 "$yy"
+                  sleep 2
+                  capture_state "face-control-$tag"
+                  grep -Fq 'Morwen-resume.vroid' "evidence/face-control-$tag.txt"
+                  ! dialog_visible "face-control-$tag"
+                done
+                panel body-top Body Outfit 'Whole Body'
+                for page in 1 2 3; do
+                  "$gui" scroll 0.89 0.81 -12 0
+                  sleep 2
+                  capture_state "body-control-$page"
+                  grep -Fq 'Whole Body' "evidence/body-control-$page.txt"
+                done
+                ;;
+              B-hair)
+                "$gui" vroid-shortcut hair
+                sleep 3
+                capture_state hair-tab
+                grep -Fq 'Hairstyle Sets' evidence/hair-tab.txt
+                "$gui" click 0.023 0.231
+                sleep 2
+                capture_state hair-category
+                grep -Fq Front evidence/hair-category.txt
+                "$gui" click-label evidence/hair-category.png 'Edit Hairstyle' 'Edit Hair Bounce'
+                sleep 3
+                capture_state hair-editor
+                grep -Fq 'Freehand Group 1' evidence/hair-editor.txt
+                grep -Fq 'Hair Groups' evidence/hair-editor.txt
+                "$gui" vroid-shortcut hair-select
+                "$gui" click 0.0713 0.3997
+                sleep 2
+                capture_state hair-group
+                grep -Fq 'Freehand Guides' evidence/hair-group.txt
+                # Duplicate labels Hair 4 and Hair 10 are excluded.
+                for strand in 6 7 11; do
+                  capture_state "hair-$strand-nav"
+                  grep -Eq "(^|[|] )Hair $strand( [|]|$)" "evidence/hair-$strand-nav.txt"
+                  "$gui" click-label "evidence/hair-$strand-nav.png" "Hair $strand" 'Freehand Guides'
+                  sleep 2
+                  capture_state "hair-$strand-selected"
+                  grep -Fq 'Hair Groups' "evidence/hair-$strand-selected.txt"
+                  if grep -Fq 'Highlights Position' "evidence/hair-$strand-selected.txt"; then
+                    "$gui" click 0.7363 0.2878
+                    sleep 2
+                  fi
+                  capture_state "hair-$strand-geometry"
+                done
+                ;;
+              C-wardrobe)
+                panel outfit-top Outfit Body 'Whole Sets|Tops|Bottoms|Shoes'
+                if [ "$NEXT_BATCH" != true ]; then
+                for entry in tops:0.232 bottoms:0.294 neckwear:0.419 socks:0.669 shoes:0.732; do
+                  tag=$(echo "$entry" | cut -d: -f1); yy=$(echo "$entry" | cut -d: -f2)
+                  "$gui" click 0.023 "$yy"
+                  sleep 2
+                  capture_state "outfit-$tag"
+                  grep -Fq 'Morwen-resume.vroid' "evidence/outfit-$tag.txt"
+                  ! dialog_visible "outfit-$tag"
+                done
+                fi
+                "$gui" click 0.023 0.294
+                sleep 2
+                capture_state skirt-template
+                grep -Fq Bottoms evidence/skirt-template.txt
+                grep -Fq 'Edit Texture' evidence/skirt-template.txt
+                "$gui" click-label evidence/skirt-template.png 'Edit Texture' Bottoms
+                ready=0
+                for delay in 4 10 20 30; do
+                  sleep "$delay"
+                  capture_state "skirt-texture-wait-$delay"
+                  if grep -Eiq 'Layers|UV Guide|Texture Editor|Default Image' "evidence/skirt-texture-wait-$delay.txt"; then
+                    cp "evidence/skirt-texture-wait-$delay.png" evidence/skirt-texture-editor.png
+                    cp "evidence/skirt-texture-wait-$delay.txt" evidence/skirt-texture-editor.txt
+                    ready=1; break
+                  fi
+                done
+                test "$ready" = 1 || { echo BLOCKED_TEXTURE_EDITOR_TRANSITION > evidence/module-status.txt; exit 1; }
+                if [ "$NEXT_BATCH" = true ]; then
+                  # Source: actual C artifact15007343469, Uniform Skirt / Default Design.
+                  # Actual context menu from artifact15009347382; select Export directly.
+                  grep -Fq 'Uniform Skirt' evidence/skirt-texture-editor.txt
+                  grep -Fq 'Default Design' evidence/skirt-texture-editor.txt
+                  grep -Fq 'Texture Editor' evidence/skirt-texture-editor.txt
+                  "$gui" click-label evidence/skirt-texture-editor.png 'Default Design' 'Uniform Skirt'
+                  sleep 2
+                  capture_state skirt-export-layer
+                  # The verified click opens a context menu that obscures the layer name.
+                  # Never use the adjacent Export Guide or any destructive menu item.
+                  python3 - evidence/skirt-export-layer.txt <<'PY'
+          import sys,pathlib
+          labels=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(labels.count(s)==1 for s in ("Texture Editor","Toggle Visibility","Export","Export Guide"))
+          assert sum(s in ("Uniform Skirt","v Uniform Skirt","∨ Uniform Skirt") for s in labels)==1
+          assert labels.index("Export Guide")==labels.index("Export")+1
+          PY
+                  if [ "$WARDROBE_IMPORT" = true ]; then
+                    # Import into isolated volatile editor only. Never accept an unidentified dialog.
+                    target="$HOME/Documents/uv-grid.png"
+                    test ! -e "$target"
+                    test ! -L "$target"
+                    cp "$RUNNER_TEMP/uv-grid.png" "$target"
+                    cmp "$RUNNER_TEMP/uv-grid.png" "$target"
+                    "$gui" click-label evidence/skirt-export-layer.png Import 'Import from Closet'
+                    sleep 4
+                    capture_state skirt-import-dialog
+                    grep -Fq Cancel evidence/skirt-import-dialog.txt
+                    grep -Fq Open evidence/skirt-import-dialog.txt
+                    grep -Fq Documents evidence/skirt-import-dialog.txt
+                    # Actual run45615371028: Vision returns "- uv-grid.png" and "Open|".
+                    # Match the exact observed label, never click a filename substring.
+                    cat > "$RUNNER_TEMP/skirt-import-label.py" <<'PY'
+          import sys,pathlib
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().strip().split(" | ")]
+          assert rows.count("Texture Editor")==1 and rows.count("Cancel")==1,rows
+          assert any(s in ("Documents","# Documents") for s in rows),rows
+          files=[s for s in rows if s in ("uv-grid.png","- uv-grid.png")]
+          opens=[s for s in rows if s in ("Open","Open|")]
+          assert len(files)==1 and len(opens)==1,rows
+          assert sys.argv[2] in ("file","open")
+          print(files[0] if sys.argv[2]=="file" else opens[0])
+          PY
+                    file_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-dialog.txt file)
+                    "$gui" click-label evidence/skirt-import-dialog.png "$file_label" Cancel
+                    sleep 2
+                    capture_state skirt-import-selected
+                    open_label=$(python3 "$RUNNER_TEMP/skirt-import-label.py" evidence/skirt-import-selected.txt open)
+                    "$gui" click-label evidence/skirt-import-selected.png "$open_label" Cancel
+                    sleep 5
+                    capture_state skirt-import-preview
+                    grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
+                    grep -Fq 'Uniform Skirt' evidence/skirt-import-preview.txt
+                    grep -Fq 'Default Design' evidence/skirt-import-preview.txt
+                    # Observe projection in the live editor; names denote requested shortcuts, not verified angles.
+                    for view in front left4 left8 right4; do
+                      "$gui" vroid-shortcut front
+                      case "$view" in
+                        left4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-left; done ;;
+                        left8) for n in 1 2 3 4 5 6 7 8; do "$gui" vroid-shortcut turn-left; done ;;
+                        right4) for n in 1 2 3 4; do "$gui" vroid-shortcut turn-right; done ;;
+                      esac
+                      sleep 2
+                      capture_state "skirt-uv-$view"
+                      grep -Fq 'Texture Editor' "evidence/skirt-uv-$view.txt"
+                      grep -Fq 'Uniform Skirt' "evidence/skirt-uv-$view.txt"
+                    done
+                    "$gui" vroid-shortcut front
+                    sleep 2
+                    capture_state skirt-import-preview
+                    grep -Fq 'Texture Editor' evidence/skirt-import-preview.txt
+                    grep -Fq 'Default Design' evidence/skirt-import-preview.txt
+                    "$gui" click-label evidence/skirt-import-preview.png 'Default Design' 'Uniform Skirt'
+                    sleep 2
+                    capture_state skirt-export-layer
+                    python3 - evidence/skirt-export-layer.txt <<'PY'
+          import sys,pathlib
+          labels=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(labels.count(s)==1 for s in ("Texture Editor","Toggle Visibility","Export","Export Guide"))
+          assert sum(s in ("Uniform Skirt","v Uniform Skirt","∨ Uniform Skirt") for s in labels)==1
+          assert labels.index("Export Guide")==labels.index("Export")+1
+          PY
+                  fi
+                  if [ "$WARDROBE_GUIDE" = true ]; then
+                    "$gui" click-label evidence/skirt-export-layer.png 'Export Guide' 'Toggle Visibility'
+                    sleep 4
+                    capture_state skirt-export-dialog
+                    # Use only the visible, simple default filename and verified Documents destination.
+                    export_name=$(python3 - evidence/skirt-export-dialog.txt <<'PY'
+          import pathlib,sys
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          # Actual run 45609778090: OCR emits Save As: | Tags: | Where: | guide | Documents.
+          # Only accept the observed guide basename, never an arbitrary OCR-derived path.
+          assert all(rows.count(s)==1 for s in ("Save As:","Tags:","Where:","Documents","Cancel","Save","Texture Editor")),rows
+          assert rows.count("guide")+rows.count("guide.png")==1,rows
+          assert rows.index("Cancel")<rows.index("Save"),rows
+          print("guide.png")
+          PY
+                    )
+                    test -d "$HOME/Documents"
+                    for existing in "$HOME/Documents/$export_name" "$HOME/Documents/$(basename "$export_name" .png)"; do
+                      if [ -e "$existing" ] || [ -L "$existing" ]; then exit 1; fi
+                    done
+                    export_dir="$RUNNER_TEMP/morwen-skirt-export"
+                    mkdir "$export_dir"
+                    cp evidence/skirt-export-dialog.png evidence/skirt-export-destination.png
+                    cp evidence/skirt-export-dialog.txt evidence/skirt-export-destination.txt
+                    "$gui" click-label evidence/skirt-export-destination.png Save Cancel
+                    for delay in 2 4 8 12; do
+                      sleep "$delay"
+                      if [ -s "$HOME/Documents/$export_name" ]; then break; fi
+                    done
+                    test -f "$HOME/Documents/$export_name"
+                    test ! -L "$HOME/Documents/$export_name"
+                    cp "$HOME/Documents/$export_name" "$export_dir/layer.png"
+                  else
+                  "$gui" click-label evidence/skirt-export-layer.png Export 'Export Guide'
+                  sleep 4
+                  capture_state skirt-export-dialog
+                  grep -Fq 'Save As' evidence/skirt-export-dialog.txt
+                  grep -Fq 'Cancel' evidence/skirt-export-dialog.txt
+                  export_dir="$RUNNER_TEMP/morwen-skirt-export"
+                  mkdir "$export_dir"
+                  # Actual dialog from run45594627894: filename layer, Where Documents.
+                  # Bypass the failed Go to Folder path; never overwrite an existing file.
+                  python3 - evidence/skirt-export-dialog.txt <<'PY'
+          import pathlib,sys
+          rows=[s.strip() for s in pathlib.Path(sys.argv[1]).read_text().split("|")]
+          assert all(rows.count(s)==1 for s in ("Save As:","Where:","layer","Documents","Cancel","Save","Texture Editor"))
+          assert rows.index("Cancel")<rows.index("Save")
+          PY
+                  test -d "$HOME/Documents"
+                  for existing in "$HOME/Documents/layer.png" "$HOME/Documents/layer"; do
+                    if [ -e "$existing" ] || [ -L "$existing" ]; then
+                      echo BLOCKED_EXPORT_DESTINATION_EXISTS > evidence/module-status.txt
+                      exit 1
+                    fi
+                  done
+                  cp evidence/skirt-export-dialog.png evidence/skirt-export-destination.png
+                  cp evidence/skirt-export-dialog.txt evidence/skirt-export-destination.txt
+                  "$gui" click-label evidence/skirt-export-destination.png Save Cancel
+                  for delay in 2 4 8 12; do
+                    sleep "$delay"
+                    if [ -s "$HOME/Documents/layer.png" ]; then break; fi
+                  done
+                  test -f "$HOME/Documents/layer.png"
+                  test ! -L "$HOME/Documents/layer.png"
+                  cp "$HOME/Documents/layer.png" "$export_dir/layer.png"
+                  fi
+                  # Never upload the stock PNG itself. Read it only within this runner.
+                  python3 - "$export_dir" <<'PY'
+          import pathlib,sys,hashlib,json,struct,zlib,os
+          folder=pathlib.Path(sys.argv[1])
+          images=list(folder.glob("*.png"))
+          assert len(images)==1 and images[0].is_file()
+          b=images[0].read_bytes()
+          assert b[:8]==b"\x89PNG\r\n\x1a\n" and 0<len(b)<64_000_000
+          pos=8; chunks=[]; image=None
+          while pos<len(b):
+              n=struct.unpack(">I",b[pos:pos+4])[0]
+              tag=b[pos+4:pos+8]; data=b[pos+8:pos+8+n]
+              assert len(data)==n and zlib.crc32(tag+data)==struct.unpack(">I",b[pos+8+n:pos+12+n])[0]
+              chunks.append(tag.decode("ascii"))
+              if tag==b"IHDR":
+                  width,height,depth,ctype,comp,flt,interlace=struct.unpack(">IIBBBBB",data)
+                  assert 0<width<=8192 and 0<height<=8192
+                  image=dict(width=width,height=height,bit_depth=depth,color_type=ctype,interlace=interlace)
+              pos+=12+n
+              if tag==b"IEND": break
+          assert pos==len(b) and image and chunks[-1]=="IEND" and "IDAT" in chunks
+          result=dict(scope=("RUNNER_LOCAL_AUTHORED_TEXTURE_REEXPORT_NOT_DISTRIBUTED" if os.environ["WARDROBE_IMPORT"]=="true" else "RUNNER_LOCAL_UV_GUIDE_METADATA_ONLY_NOT_DISTRIBUTED" if os.environ["WARDROBE_GUIDE"]=="true" else "RUNNER_LOCAL_STOCK_LAYER_METADATA_ONLY_NOT_DISTRIBUTED"),sha256=hashlib.sha256(b).hexdigest(),size_bytes=len(b),image=image,source=("Uniform Skirt / Export Guide" if os.environ["WARDROBE_GUIDE"]=="true" else "Uniform Skirt / Default Design"),formal_adoption=False)
+          pathlib.Path("evidence/skirt-export-metadata.json").write_text(json.dumps(result,indent=2))
+          PY
+                  "$RUNNER_TEMP/skirt-alpha" "$export_dir"
+                  if [ "$WARDROBE_GUIDE" = true ]; then
+                    "$RUNNER_TEMP/skirt-guide-profile" "$export_dir/layer.png"
+                  fi
+                  if [ "$WARDROBE_IMPORT" = true ]; then
+                    python3 "$RUNNER_TEMP/skirt-verify.py" "$export_dir/layer.png" | tee evidence/skirt-import-pixel-sha.txt
+                  fi
+                  capture_state skirt-export-complete
+                  test -s evidence/skirt-export-metadata.json
+                  test -s evidence/skirt-alpha-row-bounds.json
+                fi
+                ;;
+              *) exit 1 ;;
+            esac
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$sha_before"
+            test "$(shasum -a 256 evidence/input-model.vroid | cut -d ' ' -f1)" = "$sha_before"
+            python3 - <<'PY'
+          import os,pathlib,hashlib,json
+          p=pathlib.Path("evidence")
+          lane=os.environ["LANE"]
+          required={
+              "A-face-body":["face-base","face-close-front","face-close-left4","face-close-right4","face-control-eyes","face-control-iris","face-control-nose","face-control-mouth","body-top","body-control-1","body-control-2","body-control-3"],
+              "B-hair":["hair-group"]+[f"hair-{s}-{k}" for s in (6,7,11) for k in ("selected","geometry")],
+              "C-wardrobe":["outfit-tops","outfit-bottoms","outfit-neckwear","outfit-socks","outfit-shoes","skirt-template","skirt-texture-editor"]
+          }[lane]
+          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe": required=["skirt-template","skirt-texture-editor","skirt-export-layer","skirt-export-dialog","skirt-export-destination","skirt-export-complete"]
+          if os.environ["WARDROBE_IMPORT"]=="true": required += ["skirt-import-dialog","skirt-import-selected","skirt-import-preview","skirt-uv-front","skirt-uv-left4","skirt-uv-left8","skirt-uv-right4"]
+          hashes={}
+          for tag in required:
+              for ext in (".png",".txt"):
+                  f=p/(tag+ext)
+                  assert f.is_file() and f.stat().st_size>0, f
+                  hashes[f.name]=hashlib.sha256(f.read_bytes()).hexdigest()
+          if os.environ["NEXT_BATCH"]=="true" and lane=="C-wardrobe":
+              for name in ("skirt-export-metadata.json","skirt-alpha-row-bounds.json"):
+                  hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          if os.environ["WARDROBE_GUIDE"]=="true":
+              name="skirt-guide-profile.json"
+              hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          if os.environ["WARDROBE_IMPORT"]=="true":
+              for name in ("skirt-generated-sha.txt","skirt-generated-pixel-sha.txt","skirt-import-pixel-sha.txt"):
+                  hashes[name]=hashlib.sha256((p/name).read_bytes()).hexdigest()
+          parent=hashlib.sha256((p/"input-model.vroid").read_bytes()).hexdigest()
+          assert parent=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          (p/"module-receipt.json").write_text(json.dumps(dict(lane=lane,parent_sha256=parent,run=os.environ["GITHUB_RUN_ID"],scope=("VOLATILE_UV_MATERIAL_FIT_TRIAL_PIXEL_VERIFIED_NOT_SAVED" if os.environ["WARDROBE_IMPORT"]=="true" else "READ_ONLY_TARGETED_MODULE_EVIDENCE"),files=hashes,formal_adoption=False,limits=["UI and projection must be visually reviewed","No native save or module merge"]),indent=2))
+          PY
+            echo MODULE_EVIDENCE_CAPTURED_REVIEW_REQUIRED > evidence/module-status.txt
+          fi
+          if [ "$FACE_PROBE" = true ]; then
+            row="$RUNNER_TEMP/face-row"
+            sed '/^case "\$MODE" in/,$d' tools/production_qa/morwen_vroid_session.sh > "$RUNNER_TEMP/session-helpers.sh"
+            bash -n "$RUNNER_TEMP/session-helpers.sh"
+            source "$RUNNER_TEMP/session-helpers.sh"
+            mouth_values() {
+              local tag="$1"
+              python3 "$RUNNER_TEMP/mouth-readout.py" "evidence/$tag.txt"
+            }
+            test "$(shasum -a 256 "$MORWEN_READONLY_NATIVE" | cut -d ' ' -f1)" = "$MORWEN_EXPECTED_SHA256"
+            face_cat 0.792
+            "$gui" vroid-shortcut front
+            "$gui" zoom 0.50 0.42 6 0
+            sleep 2
+            capture_state mouth-before
+            baseline=$(mouth_values mouth-before)
+            test "$baseline" = '-0.026 0.000 0.000 0.000'
+            chmod u+w "$MORWEN_READONLY_NATIVE"
+            echo MOUTH_WIDTH_EXPLORATORY_EDIT_ATTEMPTED > evidence/mouth-status.txt
+            slider_by mouth-width '^Mouth Width$' 0.008
+            capture_state mouth-after
+            actual=$(mouth_values mouth-after)
+            python3 - "$baseline" "$actual" <<'PY'
+          import sys
+          from decimal import Decimal
+          a,b=[list(map(Decimal,s.split())) for s in sys.argv[1:]]
+          assert a==list(map(Decimal,("-0.026","0","0","0")))
+          assert len(b)==4 and Decimal("0.002")<=b[0]-a[0]<=Decimal("0.10") and a[1:]==b[1:]
+          PY
+            native_save
+            reopen_copy
+            face_cat 0.792
+            "$gui" vroid-shortcut front
+            "$gui" zoom 0.50 0.42 6 0
+            sleep 2
+            capture_state mouth-reopened
+            reopened=$(mouth_values mouth-reopened)
+            test "$actual" = "$reopened"
+            python3 - "$baseline" "$actual" "$reopened" <<'PY'
+          import hashlib,json,pathlib,sys,zipfile
+          p=pathlib.Path("evidence")
+          def sha(q):return hashlib.sha256(q.read_bytes()).hexdigest()
+          src=p/"input-model.vroid"; dst=p/"model.vroid"
+          assert sha(src)=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          with zipfile.ZipFile(src) as a,zipfile.ZipFile(dst) as b:
+              assert a.testzip() is None and b.testzip() is None
+              assert a.read("v1model/data.bin")!=b.read("v1model/data.bin")
+          assert sha(src)!=sha(dst)
+          v=[list(map(float,s.split())) for s in sys.argv[1:]]
+          (p/"mouth-candidate-receipt.json").write_text(json.dumps(dict(scope="EXPLORATORY_NOT_ADOPTED",target="Mouth Width",before=v[0],after=v[1],reopened=v[2],protected=["Mouth Position (Y)","Mouth Corners","Mouth (Z)"],source_sha256=sha(src),candidate_sha256=sha(dst),screenshots={n:sha(p/(n+".png")) for n in ("mouth-before","mouth-after","mouth-reopened")},limits=["Unregistered projection","Slider value not a physical dimension","Other module geometry and art QA pending"]),indent=2))
+          PY
+            echo MOUTH_CANDIDATE_REOPENED_REVIEW_REQUIRED > evidence/mouth-status.txt
+          fi
       - name: Checkout trusted shared engines for control receipt
-        if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'native_calibration' || inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -775,7 +1621,7 @@ jobs:
           (p/"shared-engine-control-qa.json").write_text(json.dumps(report,indent=2))
           PY
       - name: Validate hair candidate receipt with shared engines
-        if: inputs.mode == 'hair_candidate'
+        if: inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair')
         env:
           PYTHONPATH: ${{ github.workspace }}/shared-main/tools
         shell: bash
@@ -793,7 +1639,12 @@ jobs:
           assert all(sha(p/(k+".png"))==v for k,v in r["screenshots"].items())
           assert r["scope"]=="OBSERVED_ONE_DISPLAY_STEP_EXPLORATORY_CANDIDATE"
           assert (r["before"],r["after"],r["reopened"])==(0.03,0.02,0.02)
-          assert r["protected_thickness"]==[0.05,0.05,0.05]
+          if r["target"].endswith("Hair 7 / Width"):
+              assert r["protected_thickness"]==[0.04]*3
+              assert (p/"hair3-protection.txt").read_text().strip()=="Hair 3 width=0.02 thickness=0.05"
+              assert r["source_sha256"]=="55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541"
+          else:
+              assert r["protected_thickness"]==[0.05]*3
           target=dict(values={"hair_width":r["after"]},tolerances={"hair_width":0.02},uncertainty={"hair_width":0.01})
           report=evaluate(target,dict(actual={"hair_width":r["reopened"]},uncertainty={"hair_width":0.01}))
           assert report["overall"]=="PASS"
@@ -877,7 +1728,7 @@ jobs:
             fi
           fi
       - name: Label hair candidate or quarantine
-        if: always() && inputs.mode == 'hair_candidate'
+        if: always() && (inputs.mode == 'hair_candidate' || (inputs.mode == 'parallel_next' && matrix.lane == 'B-hair'))
         shell: bash
         run: |
           set -euo pipefail
@@ -888,16 +1739,219 @@ jobs:
               mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
             fi
           fi
+      - name: Label face candidate or quarantine
+        if: always() && (inputs.mode == 'face_candidate' || (inputs.mode == 'parallel_ac' && matrix.lane == 'A-face-body'))
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f evidence/model.vroid ]; then
+            if [ -s evidence/mouth-candidate-receipt.json ] && grep -qx MOUTH_CANDIDATE_REOPENED_REVIEW_REQUIRED evidence/mouth-status.txt; then
+              mv evidence/model.vroid evidence/face-mouth-candidate-not-adopted.vroid
+            else
+              mv evidence/model.vroid evidence/quarantine-unverified-not-adopted.vroid
+            fi
+          fi
+      - name: Close editor before using protected transfer credential
+        id: close-transfer-editor
+        if: inputs.mode == 'vrm_export' && (success() || (failure() && env.MORWEN_METADATA_DIAGNOSTICS == 'true'))
+        shell: bash
+        run: |
+          set -euo pipefail
+          osascript -e 'tell application id "net.pixiv.vroid.macosx" to quit' >/dev/null 2>&1 || true
+          for i in $(seq 1 15); do
+            if ! pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then break; fi
+            sleep 2
+          done
+          if pgrep -f "$RUNNER_TEMP/VRoidStudio.app/Contents/MacOS/" >/dev/null; then
+            echo PRIVATE_TRANSFER_BLOCKED_EDITOR_STILL_RUNNING
+            exit 1
+          fi
+      - name: Preserve cropped metadata failure evidence privately
+        if: failure() && inputs.mode == 'vrm_export' && env.MORWEN_METADATA_DIAGNOSTICS == 'true' && steps.close-transfer-editor.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py --metadata-diagnostic "$out/Morwen-metadata-diagnostic.zip" "$out/private-metadata-diagnostic-receipt.json"
+      - name: Transfer candidate directly to reviewed private handoff
+        id: private-transfer
+        if: success() && inputs.mode == 'vrm_export'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          PYTHONPATH: transfer-control/tools/production_qa:transfer-control/tools/private-preservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          test "$MORWEN_PRIVATE_TRANSFER_APPROVED" = true
+          test -n "$DEST_TOKEN"
+          out="$PRIVATE_DROP/run-$GITHUB_RUN_ID"
+          "$RUNNER_TEMP/transfer-venv/bin/python" transfer-control/tools/production_qa/transfer_private_release.py "$out/Morwen-transfer.zip" "$out/private-release-receipt.json"
+          python3 - "$out/private-release-receipt.json" <<'PY'
+          import json, os, re, sys
+          with open(sys.argv[1]) as f:
+              result=json.load(f)
+          assert result["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED" and result["run_id"]==os.environ["GITHUB_RUN_ID"]
+          assert re.fullmatch(r"[0-9a-f]{64}",result["sha256"])
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("zip_sha="+result["sha256"]+"\n")
+          PY
       - name: Upload review evidence
-        if: always()
+        if: always() && inputs.mode != 'vrm_export'
         uses: actions/upload-artifact@v4
         with:
-          name: morwen-isolated-vroid-reopen-review
+          name: ${{ (inputs.mode == 'parallel_batch' || inputs.mode == 'parallel_next' || inputs.mode == 'wardrobe_export' || inputs.mode == 'parallel_ac' || inputs.mode == 'wardrobe_import' || inputs.mode == 'wardrobe_guide') && format('morwen-parallel-{0}', matrix.lane) || 'morwen-isolated-vroid-reopen-review' }}
           path: |
             evidence/*.png
             evidence/*.txt
             evidence/*.json
             evidence/calibration-only-reopened-not-adopted.vroid
             evidence/hair-width-candidate-not-adopted.vroid
+            evidence/face-mouth-candidate-not-adopted.vroid
             evidence/quarantine-unverified-not-adopted.vroid
           retention-days: 7
+  vrm-export-protected:
+    # A separate job reuses the exact worker steps, not a second engine.
+    # The pre-existing environment is only requested by this reviewed mode.
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.ref == 'refs/heads/main' && inputs.mode == 'vrm_export' &&
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    name: VRM export and private transfer
+    strategy: *morwen_worker_strategy
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: two-private-preservation
+    outputs:
+      zip_sha: ${{ steps.private-transfer.outputs.zip_sha }}
+    env: *morwen_worker_env
+    steps: *morwen_worker_steps
+  blender-transfer-protected:
+    needs: vrm-export-protected
+    if: success() && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: two-private-preservation
+    outputs:
+      completion_receipt: ${{ steps.preserve-blender.outputs.completion_receipt }}
+    env:
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+      PYTHONPATH: tools/production_qa:tools/private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify same run-bound fence on Blender runner
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$PRODUCER_ZIP_SHA" =~ ^[0-9a-f]{64}$ ]]
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import os
+          from morwen_transfer_claim import await_bound
+          e=os.environ
+          token=await_bound("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"])
+          with open(e["GITHUB_ENV"],"a") as f:
+              f.write("MORWEN_BOUND_FENCE="+token+"\n")
+          PY
+      - name: Receive exact private VRM
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/receive_morwen_transfer.py "$PRODUCER_ZIP_SHA" "$RUNNER_TEMP/morwen-blender-input"
+      - name: Import save reopen and render using existing Blender runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          source="$RUNNER_TEMP/morwen-blender-input"
+          expected="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["vrm_sha256"])' "$source/input-receipt.json")"
+          if ! bash tools/production_qa/run_blender_transfer.sh "$source/Morwen-transfer.vrm" "$expected" "$RUNNER_TEMP/morwen-blender-output" > "$RUNNER_TEMP/morwen-blender.log" 2>&1; then
+            echo BLENDER_IMPORT_OR_RENDER_BLOCKED_PRIVATE_LOG
+            exit 1
+          fi
+      - name: Preserve editable blend and renders via existing private transfer
+        id: preserve-blender
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 tools/production_qa/preserve_blender_transfer.py "$RUNNER_TEMP/morwen-blender-input" "$RUNNER_TEMP/morwen-blender-output" "$PRODUCER_ZIP_SHA"
+          python3 - "$RUNNER_TEMP/morwen-blender-output/private-blender-receipt.json" <<'PY'
+          import json, os, sys
+          with open(sys.argv[1]) as f:
+              receipt=json.load(f)
+          assert receipt["kind"]=="blend" and receipt["scope"]=="PRIVATE_CANDIDATE_READBACK_VERIFIED"
+          assert receipt["source_archive_sha256"]==os.environ["PRODUCER_ZIP_SHA"]
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("completion_receipt="+json.dumps(receipt,separators=(",",":"))+"\n")
+          PY
+  complete-morwen-transfer:
+    needs: [vrm-export-protected, blender-transfer-protected]
+    if: success() && needs.vrm-export-protected.result == 'success' && needs.blender-transfer-protected.result == 'success' && inputs.mode == 'vrm_export' && github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.ref == 'refs/heads/main' && vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: tools/production_qa
+      TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+      REQUEST_ID: ${{ inputs.request_id }}
+      TRANSFER_FENCE: ${{ inputs.transfer_fence }}
+      EXPECTED_MAIN: ${{ inputs.expected_main }}
+      PRODUCER_ZIP_SHA: ${{ needs.vrm-export-protected.outputs.zip_sha }}
+      COMPLETION_RECEIPT: ${{ needs.blender-transfer-protected.outputs.completion_receipt }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Release only the exact completed run reservation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_ACTOR_ID" = 41898282
+          test "$EXPECTED_MAIN" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$TRANSFER_ASSET" = MORWEN
+          gh auth setup-git --hostname github.com
+          python3 - <<'PY'
+          import json, os
+          from morwen_transfer_claim import complete
+          e=os.environ
+          complete("origin",e["TRANSFER_ASSET"],e["TRANSFER_FENCE"],e["GITHUB_SHA"],e["REQUEST_ID"],e["GITHUB_RUN_ID"],e["GITHUB_RUN_ATTEMPT"],e["PRODUCER_ZIP_SHA"],json.loads(e["COMPLETION_RECEIPT"]))
+          print("MORWEN_EXACT_COMPLETION_RELEASE_PASS")
+          PY
