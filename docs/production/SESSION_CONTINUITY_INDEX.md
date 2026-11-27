@@ -1,3 +1,6 @@
+## Director decision — hybrid custom character production v7.0 (2026-11-27)
+Read [hybrid custom production v7.0](../policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md). New-custom-first, per-part tool selection (VRoid / Blender 5.3.0 / HairHarpy / XWear); supersedes VRoid-only and Blender-only fixation. Morwen #427 resumes from W93 (run 45960609972, private route): empty custom hair/body/outfit lanes; W90 and earlier are restore/comparison only.
+
 ## Verified production milestone — VRoid → Blender (2026-11-26)
 
 Read [verified execution and causal recovery](VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md) before related tasks. Morwen #427: actual run 45779704407 at d2b0468c completed signed native restore/reopen, VRM export, Blender 5.3.0 editable save/reopen, six views, private preservation and exact lease release. Reuse preserved private Blender baseline; technical transfer PASS, full independent QA and asset adoption remain pending. #588/#589/#590/#591 merged; do not restart the resolved failure loops or copy asset-specific authorization. Historical NOT_RUN statements for this transfer below are superseded; other assets need qualification.
