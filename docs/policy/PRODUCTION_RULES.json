@@ -274,17 +274,19 @@
     }
   ],
   "character_authoring": {
-    "morwen_primary": "VRoid_native_first",
+    "morwen_primary": "Blender_after_verified_VRoid_base_export",
     "blueprint_parallel": true,
-    "pre_export_native_readiness_required": true,
+    "pre_export_native_readiness_required": false,
     "premature_method_switch_requires_director_approval": true,
-    "policy": "docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md",
+    "policy": "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
     "hair_method_priority": [
-      "VRoid_native",
+      "VRoid_base_preserved",
       "HairHarpy_2.0.0_qualified",
-      "Blender_final_refinement"
+      "Blender_principal_authoring"
     ],
-    "hairharpy_qualification_required": true
+    "hairharpy_qualification_required": true,
+    "historical_vroid_policy": "docs/policy/MORWEN_VROID_FIRST_AUTHORING_20261121.md",
+    "native_export_integrity_required": true
   },
   "blueprint_first": {
     "scope": "all_workstreams",
@@ -371,5 +373,75 @@
     "reassess_after_unchanged_next_steps": 2,
     "continue_independent_work": true,
     "latest_approved_priority": true
+  },
+  "photo_derived_material_authoring": {
+    "approved": "2026-11-25",
+    "policy": "docs/policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md",
+    "required_for_relevant_material_work": true,
+    "rights_verified_before_pixel_reuse": true,
+    "unknown_license": "REFERENCE_ONLY",
+    "source_and_derivative_provenance_required": true,
+    "canonical_design_and_stylized_identity_preserved": true,
+    "material_maps_separated": true,
+    "directional_highlight_bake_in_basecolor": false,
+    "scene_light_response": true,
+    "native_first_unchanged": false,
+    "modules": [
+      "fabric",
+      "embroidery",
+      "skin",
+      "hair",
+      "eyes",
+      "equipment",
+      "world_materials"
+    ],
+    "actual_model_and_runtime_qa_as_applicable": true,
+    "status": "POLICY_APPROVED_RUNTIME_NOT_VERIFIED",
+    "formal_adoption_separate": true,
+    "morwen_sequence_override": "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
+    "other_characters_sequence_unchanged": true
+  },
+  "morwen_early_blender_transfer": {
+    "approved": "2026-11-26",
+    "scope": "Morwen #427 only",
+    "policy": "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
+    "overrides_conflicting_vroid_first_fields": true,
+    "primary": "Blender_after_verified_VRoid_base_export",
+    "native_completion_before_export_required": false,
+    "source_preservation_required": true,
+    "actual_transfer_qa_required": true,
+    "other_character_policy_unchanged": true,
+    "runtime": "VERIFIED_SCOPED_TECHNICAL_TRANSFER_PASS",
+    "visual_targets": {
+      "nominal_head_count": 7.75,
+      "design_range": [
+        7.5,
+        8
+      ],
+      "head_count_measurement": "neutral base mesh crown-to-sole / crown-to-chin; exclude hair, hat, shoe heels; report separate apparent hair-inclusive ratio",
+      "hair_shape_source": "official_Layer0_four_views",
+      "hair_color_source": "official_clothed_design",
+      "observed_reference_srgb": [
+        47,
+        33,
+        53
+      ],
+      "observed_reference_srgb_is_intrinsic_basecolor": false,
+      "style": "stylized_anime_high_fidelity_materials",
+      "synthetic_images": "material_reference_only",
+      "measurement_and_qa": "NOT_RUN"
+    },
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "run_id": 45779704407
+  },
+  "verified_execution_reuse": {
+    "scope": "all agents and automations",
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "reuse_qualified_components": true,
+    "asset_specific_qualification_required": true,
+    "retain_private_originals_and_receipts": true,
+    "avoid_unnecessary_reexport": true,
+    "temporary_artifact_expiry_check": true,
+    "formal_adoption_or_blanket_permission": false
   }
 }

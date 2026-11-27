@@ -1,0 +1,238 @@
+name: Morwen scoped comment launch
+on:
+  issue_comment:
+    types: [created]
+permissions: {}
+jobs:
+  probe:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 427 && github.event.issue.pull_request &&
+      github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
+      github.event.comment.author_association == 'OWNER' &&
+      github.event.comment.body == '/two-morwen-launch probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Read-only connector receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs=require("node:fs"), {execFileSync}=require("node:child_process");
+          function command(e,attempt,now) {
+            const c=e.comment||{};
+            if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1")throw Error("identity");
+            const age=now-Date.parse(c.created_at);if(!Number.isFinite(age)||age<0||age>600000)throw Error("stale");
+            if(c.body==="/two-morwen-launch probe")return {kind:"probe",id:c.id};
+            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
+            if(!m||m[0]!==c.body)throw Error("command");
+            return {kind:"start",id:c.id,mode:m[1],main:m[2],blob:m[3],previous:Number(m[4])};
+          }
+          const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH,"utf8"));
+          const q=command(e,process.env.GITHUB_RUN_ATTEMPT,Date.now());
+          const repo="repos/celticmusic-nagoya/the-windbound-oath";
+          const path=".github/workflows/morwen-vroid-macos-probe.yml";
+          function api(p){return JSON.parse(execFileSync("gh",["api",p],{encoding:"utf8",timeout:20000,maxBuffer:5000000}));}
+          const live=api(repo+"/issues/comments/"+q.id);
+          if(live.body!==e.comment.body||live.created_at!==live.updated_at||live.created_at!==e.comment.created_at||live.user.id!==315379131||live.author_association!=="OWNER"||live.issue_url!=="https://api.github.com/"+repo+"/issues/427")throw Error("comment changed");
+          if(q.kind==="probe"){console.log("READ_ONLY_CONNECTOR_RECEIVED",q.id);process.exit(0);}
+          throw Error("probe only");
+          JS
+  accept:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 427 && github.event.issue.pull_request &&
+      github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
+      github.event.comment.author_association == 'OWNER' &&
+      (startsWith(github.event.comment.body, '/two-morwen-launch hair_candidate main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch hair_review main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch parallel_batch main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch parallel_next main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch face_candidate main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_export main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch parallel_ac main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_import main=') ||
+       startsWith(github.event.comment.body, '/two-morwen-launch wardrobe_guide main='))
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: write
+    concurrency:
+      group: morwen-scoped-comment-launch
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LAUNCH_ALLOWED: 'true'
+    steps:
+      - name: Validate immutable request and dispatch only the revised isolated workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs=require("node:fs"), {execFileSync}=require("node:child_process");
+          function command(e,attempt,now) {
+            const c=e.comment||{};
+            if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1")throw Error("identity");
+            const age=now-Date.parse(c.created_at);if(!Number.isFinite(age)||age<0||age>600000)throw Error("stale");
+            if(c.body==="/two-morwen-launch probe")return {kind:"probe",id:c.id};
+            const m=/^\/two-morwen-launch (hair_candidate|hair_review|parallel_batch|parallel_next|face_candidate|wardrobe_export|parallel_ac|wardrobe_import|wardrobe_guide) main=([0-9a-f]{40}) workflow=([0-9a-f]{40}) previous=([1-9][0-9]{0,14})$/.exec(c.body);
+            if(!m||m[0]!==c.body)throw Error("command");
+            return {kind:"start",id:c.id,mode:m[1],main:m[2],blob:m[3],previous:Number(m[4])};
+          }
+          function eligible(q,head,blob,prior,runs,active,priorBlob) {
+           if(q.kind!=="start"||head!==q.main||blob!==q.blob||prior.id!==q.previous||prior.status!=="completed"||prior.head_branch!=="main"||prior.event!=="workflow_dispatch"||prior.path!==".github/workflows/morwen-vroid-macos-probe.yml"||!["hair_candidate","hair_review","parallel_batch","parallel_next","face_candidate","wardrobe_export","parallel_ac","wardrobe_guide","wardrobe_import"].includes(prior.display_title?.split(" / ")[1]?.split(" ")[0])||runs[0]?.id!==prior.id||active!==0||priorBlob===blob)throw Error("ineligible");
+           if(q.mode==="hair_candidate"&&prior.conclusion==="failure"&&prior.display_title?.startsWith("Morwen VRoid / hair_candidate"))return true;
+           if(q.mode==="hair_review"&&prior.conclusion==="success"&&prior.id===45572622840)return true;
+           if(q.mode==="parallel_batch"&&prior.conclusion==="success"&&prior.id===45574711897)return true;
+           if(q.mode==="parallel_next"&&prior.conclusion==="failure"&&[45581111206,45583270461].includes(prior.id))return true;
+           if(q.mode==="face_candidate"&&["success","failure"].includes(prior.conclusion)&&prior.id===45585724554)return true;
+           if(q.mode==="face_candidate"&&prior.conclusion==="failure"&&prior.id===45601016604)return true;
+           if(q.mode==="wardrobe_export"&&["success","failure"].includes(prior.conclusion)&&prior.id===45592878835)return true;
+           if(q.mode==="parallel_ac"&&prior.conclusion==="failure"&&prior.id===45594627894)return true;
+           if(q.mode==="wardrobe_import"&&["success","failure"].includes(prior.conclusion)&&prior.id===45605491226)return true;
+           if(q.mode==="wardrobe_import"&&prior.conclusion==="success"&&prior.id===45611596057&&prior.display_title==="Morwen VRoid / wardrobe_guide request:7162063209"&&priorBlob==="101e730e217f7aab4a5209ba29fc6516fb470677"&&blob==="c684b6ecbc5be701a6906613aff67dd3dc1a4483")return true;
+           if(q.mode==="wardrobe_import"&&prior.conclusion==="failure"&&prior.id===45615371028&&prior.display_title==="Morwen VRoid / wardrobe_import request:7162601723"&&priorBlob==="c684b6ecbc5be701a6906613aff67dd3dc1a4483"&&blob==="739f73d5cb54fad021205bac69d5bfc070e0447b")return true;
+           if(q.mode==="wardrobe_import"&&prior.conclusion==="success"&&prior.id===45618046492&&prior.display_title==="Morwen VRoid / wardrobe_import request:7162984254"&&priorBlob==="739f73d5cb54fad021205bac69d5bfc070e0447b"&&blob==="db7b9f4e3c03c0bef3b9085ba937ac22d04ead6e")return true;
+           if(q.mode==="wardrobe_guide"&&prior.conclusion==="success"&&prior.id===45605491226)return true;
+           if(q.mode==="wardrobe_guide"&&prior.conclusion==="failure"&&prior.id===45609778090&&prior.display_title==="Morwen VRoid / wardrobe_guide request:7161805577"&&priorBlob==="b8a1931ad47783b6bc81720016cf73a1b04cf9b7"&&blob==="101e730e217f7aab4a5209ba29fc6516fb470677")return true;
+           throw Error("unqualified transition");
+          }
+          const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH,"utf8"));
+          const q=command(e,process.env.GITHUB_RUN_ATTEMPT,Date.now());
+          const repo="repos/celticmusic-nagoya/the-windbound-oath";
+          const path=".github/workflows/morwen-vroid-macos-probe.yml";
+          function api(p){return JSON.parse(execFileSync("gh",["api",p],{encoding:"utf8",timeout:20000,maxBuffer:5000000}));}
+          const live=api(repo+"/issues/comments/"+q.id);
+          if(live.body!==e.comment.body||live.created_at!==live.updated_at||live.created_at!==e.comment.created_at||live.user.id!==315379131||live.author_association!=="OWNER"||live.issue_url!=="https://api.github.com/"+repo+"/issues/427")throw Error("comment changed");
+          if(q.kind==="probe"){console.log("READ_ONLY_CONNECTOR_RECEIVED",q.id);process.exit(0);}
+          if(process.env.LAUNCH_ALLOWED!=="true")throw Error("dispatch disabled");
+          const pr=api(repo+"/pulls/427");
+          if(pr.state!=="open"||pr.head.sha!=="df986c7e0549871940deb26f65f7a54f58658211")throw Error("owner HEAD changed; review required");
+          const wf=repo+"/actions/workflows/morwen-vroid-macos-probe.yml";
+          const head=api(repo+"/git/ref/heads/main").object.sha;
+          const blob=api(repo+"/contents/"+path+"?ref="+head).sha;
+          const prior=api(repo+"/actions/runs/"+q.previous);
+          const runs=api(wf+"/runs?per_page=10").workflow_runs;
+          let active=0;for(const s of ["queued","in_progress","waiting","requested","pending"])active+=api(wf+"/runs?status="+s+"&per_page=1").total_count;
+          const priorBlob=api(repo+"/contents/"+path+"?ref="+prior.head_sha).sha;
+          eligible(q,head,blob,prior,runs,active,priorBlob);
+          if(q.mode==="hair_review"||q.mode==="parallel_batch"||q.mode==="parallel_next"||q.mode==="face_candidate"||q.mode==="wardrobe_export"||q.mode==="parallel_ac"||q.mode==="wardrobe_import"||q.mode==="wardrobe_guide"){const a=api(repo+"/actions/artifacts/15003297779");if(a.expired||a.workflow_run?.id!==45572622840||a.digest!=="sha256:b1c9b7b61433b17c4caa160f0558461386edb0b6440b9740f6652e89565a6482")throw Error("saved candidate artifact unavailable");}
+          if(blob==="3947ec75c38d439b013e60e8696a58ef070a1275")throw Error("launch metadata alone is not a production correction");
+          if(runs.some(x=>x.display_title==="Morwen VRoid / "+q.mode+" request:"+q.id))throw Error("request already dispatched");
+          if(api(repo+"/git/ref/heads/main").object.sha!==q.main)throw Error("main moved");
+          const args=["api","--method","POST",wf+"/dispatches","--input","-"];
+          execFileSync("gh",args,{input:JSON.stringify({ref:"main",inputs:{mode:q.mode,expected_main:q.main,request_id:String(q.id)}}),encoding:"utf8",timeout:20000});
+          console.log("DISPATCH_ACCEPTED_NOT_RUN_PROOF",q.id);
+          // Keep serialized launcher until the durable target run is visible; never retry ambiguous POST.
+          for(let i=0;i<12;i++){const a=api(wf+"/runs?per_page=10").workflow_runs.filter(x=>x.display_title==="Morwen VRoid / "+q.mode+" request:"+q.id);if(a.length===1){console.log("TARGET_RUN",a[0].id);process.exit(0);}if(a.length>1)throw Error("duplicate target runs");Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,2500);}
+          throw Error("dispatch receipt not visible; reconcile, do not retry");
+          JS
+
+  accept-vrm-transfer:
+    if: >-
+      github.repository == 'celticmusic-nagoya/the-windbound-oath' &&
+      github.event.issue.number == 427 && github.event.issue.pull_request &&
+      github.event.sender.id == 315379131 && github.event.comment.user.id == 315379131 &&
+      github.event.comment.author_association == 'OWNER' &&
+      startsWith(github.event.comment.body, '/two-morwen-launch vrm_export main=') &&
+      vars.MORWEN_VRM_LAUNCH_REVIEWED == 'true' &&
+      vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: read
+      actions: write
+    concurrency:
+      group: morwen-scoped-comment-launch
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Reserve and bind reviewed VRM dispatch once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: tools/production_qa
+          TRANSFER_ASSET: ${{ vars.MORWEN_TRANSFER_ASSET_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          gh auth setup-git --hostname github.com
+          node <<'JS'
+          const fs=require("node:fs"),{execFileSync}=require("node:child_process");
+          const {verifyContract,selectPrior,ACTIVE}=require("./tools/production_qa/reviewed_launch_contract.cjs");
+          function validate(e,attempt,now,revision,live,pr) {
+            const c=e.comment||{}, age=now-Date.parse(c.created_at);
+            if(e.action!=="created"||e.repository?.full_name!=="celticmusic-nagoya/the-windbound-oath"||e.repository?.id!==1408120919||e.issue?.number!==427||!e.issue?.pull_request||e.issue?.state!=="open"||e.sender?.id!==315379131||c.user?.id!==315379131||c.author_association!=="OWNER"||!Number.isSafeInteger(c.id)||c.id<=0||c.created_at!==c.updated_at||attempt!=="1"||!Number.isFinite(age)||age<0||age>600000)throw Error("request identity");
+            if(!/^[0-9a-f]{40}$/.test(revision)||c.body!=="/two-morwen-launch vrm_export main="+revision)throw Error("request revision");
+            if(live.id!==c.id||live.body!==c.body||live.created_at!==c.created_at||live.updated_at!==c.updated_at||live.user?.id!==315379131||live.author_association!=="OWNER"||live.issue_url!=="https://api.github.com/repos/celticmusic-nagoya/the-windbound-oath/issues/427")throw Error("live comment differs");
+            if(pr.state!=="open"||pr.head?.sha!=="df986c7e0549871940deb26f65f7a54f58658211")throw Error("owner HEAD differs");
+            return String(c.id);
+          }
+          function target(run,revision,request) {
+            if(!Number.isSafeInteger(run.id)||run.id<=0||run.run_attempt!==1||run.event!=="workflow_dispatch"||run.head_branch!=="main"||run.head_sha!==revision||run.path!==".github/workflows/morwen-vroid-macos-probe.yml"||run.display_title!=="Morwen VRoid / vrm_export request:"+request||run.repository?.id!==1408120919||run.head_repository?.id!==1408120919||run.actor?.id!==41898282||run.actor?.login!=="github-actions[bot]"||!["queued","in_progress","waiting","requested","pending"].includes(run.status))throw Error("wrong target run");
+            return String(run.id);
+          }
+          const env=process.env, repo="repos/celticmusic-nagoya/the-windbound-oath";
+          const wf=repo+"/actions/workflows/morwen-vroid-macos-probe.yml";
+          function api(p){return JSON.parse(execFileSync("gh",["api",p],{encoding:"utf8",timeout:20000,maxBuffer:5000000}));}
+          const e=JSON.parse(fs.readFileSync(env.GITHUB_EVENT_PATH,"utf8"));
+          const head=api(repo+"/git/ref/heads/main").object.sha;
+          if(head!==env.GITHUB_SHA)throw Error("main moved");
+          const request=validate(e,env.GITHUB_RUN_ATTEMPT,Date.now(),head,api(repo+"/issues/comments/"+e.comment.id),api(repo+"/pulls/427"));
+          const blob=api(repo+"/contents/.github/workflows/morwen-vroid-macos-probe.yml?ref="+head).sha;
+          const contract=JSON.parse(fs.readFileSync(".github/morwen/reviewed-launch-contract.json","utf8"));
+          const profile=fs.readFileSync(".github/morwen/vrm-export-profile.json");
+          verifyContract(contract,blob,profile,env.TRANSFER_ASSET,path=>execFileSync("git",["hash-object",path],{encoding:"utf8",timeout:10000}).trim());
+          const reviewed=JSON.parse(profile);
+          if(!/^[A-Z0-9][A-Z0-9_-]{2,100}$/.test(env.TRANSFER_ASSET||"")||reviewed.asset_id!==env.TRANSFER_ASSET||reviewed.private_destination!=="celticmusic-nagoya/the-windbound-oath-handoff"||reviewed.staging!=="RUNNER_TEMP_OWNER_ONLY"||reviewed.app_version!=="2.16.0"||reviewed.source_sha256!=="acc7805b6a5b63913bccb7c28e30e1c9e4da6473ed083b5c0673f73cdca9e23a"||!reviewed.license_review_ref)throw Error("profile source or private destination mismatch");
+          function latestPrior(){
+            const list=api(wf+"/runs?branch=main&per_page=1");
+            const id=list.workflow_runs?.[0]?.id;
+            if(!Number.isSafeInteger(id)||id<=0)throw Error("latest prior missing");
+            const detail=api(repo+"/actions/runs/"+id);
+            const jobs=api(repo+"/actions/runs/"+id+"/attempts/1/jobs?per_page=100");
+            const active=Object.fromEntries(ACTIVE.map(status=>[status,api(wf+"/runs?status="+status+"&per_page=1")]));
+            return selectPrior(list,detail,jobs,active);
+          }
+          const prior=latestPrior();
+          console.log("REVIEWED_PRIOR_RUN",prior);
+          const title="Morwen VRoid / vrm_export request:"+request;
+          if(api(wf+"/runs?per_page=100").workflow_runs.some(x=>x.display_title===title))throw Error("request already dispatched");
+          // The protected worker reads the exact private preservation Release and checks its bytes before GUI launch.
+          if(reviewed.source_archive_sha256!=="b210fb4907d11d24c79a35f58edb689b0958bf34d222b614256dd94e13b19588")throw Error("preserved archive profile mismatch");
+          function cas(op,...args){
+            const code="import sys; from morwen_transfer_claim import reserve,claim; print({'reserve':reserve,'claim':claim}[sys.argv[1]](*sys.argv[2:]))";
+            const token=execFileSync("python3",["-c",code,op,"origin",env.TRANSFER_ASSET,...args],{encoding:"utf8",timeout:50000}).trim();
+            if(!/^[0-9a-f]{40}$/.test(token))throw Error("CAS receipt invalid");
+            return token;
+          }
+          if(api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main moved before reserve");
+          if(latestPrior()!==prior)throw Error("prior moved before reserve");
+          const reservation=cas("reserve",head,request);
+          if(latestPrior()!==prior||api(repo+"/git/ref/heads/main").object.sha!==head)throw Error("main or prior moved after reserve; reconcile");
+          execFileSync("gh",["api","--method","POST",wf+"/dispatches","--input","-"],{input:JSON.stringify({ref:"main",inputs:{mode:"vrm_export",expected_main:head,request_id:request,transfer_fence:reservation}}),encoding:"utf8",timeout:20000});
+          for(let i=0;i<12;i++){
+            const matches=api(wf+"/runs?per_page=20").workflow_runs.filter(x=>x.display_title===title);
+            if(matches.length>1)throw Error("ambiguous target; no retry");
+            if(matches.length===1){
+              const id=target(matches[0],head,request);
+              const confirmed=target(api(repo+"/actions/runs/"+id),head,request);
+              if(id!==confirmed)throw Error("target changed");
+              cas("claim",reservation,head,request,id,"1");
+              console.log("BOUND_TARGET_RUN",id);process.exit(0);
+            }
+            Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,2500);
+          }
+          throw Error("dispatch receipt not visible; preserve reservation and reconcile; no retry");
+          JS

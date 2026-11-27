@@ -9,13 +9,15 @@
   {id:427,name:"キャラクター担当｜モルウェン",scope:"実設計図 / VRoid / 3D制作"},
   {id:421,name:"マップ担当｜風待ちの崖",scope:"崖の実設計図 / Blender制作"},
   {id:364,name:"マップ担当｜地域統合",scope:"村・建築・地域統合"},
-  {id:484,name:"ChatGPT｜Production Studio",scope:"読み取り専用UI / 成果物可視化 / 独立QA"}
+  {id:484,name:"ChatGPT｜Production Studio",scope:"読み取り専用UI / 成果物可視化 / 独立QA"},
+  {id:493,name:"環境再利用",scope:"Environment Reuse Manager / 検証済みキャッシュ"}
  ];
  const area=document.getElementById("handoff-cards");
  const status=document.getElementById("handoff-status");
  const button=document.getElementById("handoff-refresh");
- let generation=0;
- if(!area||!status||!button)return;
+ let generation=0,runSnapshot=null;
+ const search=document.getElementById("handoff-search"),filterStatus=document.getElementById("handoff-filter-status");
+ if(!area||!status||!button||!search||!filterStatus)return;
  const el=(tag,content)=>{const n=document.createElement(tag);n.textContent=content;return n;};
  async function get(path){
   const response=await fetch(api+path,{headers:{Accept:"application/vnd.github+json"},credentials:"omit",cache:"no-store",signal:AbortSignal.timeout(10000)});
@@ -29,11 +31,37 @@
   }
   return data;
  }
+ function filterCards(){
+  const q=search.value.trim().toLowerCase(),cards=[...area.querySelectorAll("article.handoff-card")];
+  let shown=0;
+  for(const card of cards){const match=card.dataset.search.includes(q);card.hidden=!match;card.style.display=match?"":"none";if(match)shown++;}
+  filterStatus.textContent="表示 "+shown+" / "+cards.length+" 件";
+ }
+ function renderRunEvidence(card){
+  const slot=card.querySelector(".handoff-run-evidence");if(!slot)return;
+  slot.replaceChildren();
+  const head=card.dataset.head,branch=card.dataset.branch;
+  if(!head||!branch){slot.append(el("p","現HEAD Actions: PR情報未確認"));return;}
+  if(!runSnapshot){slot.append(el("p","現HEAD Actions: 一覧未取得"));return;}
+  const hits=runSnapshot.runs.filter(r=>r.head_sha===head&&r.head_branch===branch);
+  slot.append(el("p","現HEAD Actions: 全体最新20件の取得範囲内 "+hits.length+"件 / "+runSnapshot.stamp+" 時点（全履歴・品質は未検証）"));
+  for(const r of hits.slice(0,3)){const a=el("a",r.name+" / "+r.status+" / "+(r.conclusion||"未確定"));a.href="https://github.com/"+repo+"/actions/runs/"+r.id;a.rel="noopener noreferrer";slot.append(a);}
+  if(hits.length>3)slot.append(el("p","表示上限3件。全件は担当PRを参照。"));
+ }
+ window.addEventListener("studio-live-runs",event=>{
+  const data=event.detail;
+  if(!data||!Array.isArray(data.runs)||typeof data.stamp!=="string"){runSnapshot=null;}
+  else{runSnapshot={stamp:data.stamp,runs:data.runs.slice(0,20).filter(r=>r&&Number.isSafeInteger(r.id)&&r.id>0&&/^[a-f0-9]{40}$/.test(r.head_sha||"")&&typeof r.head_branch==="string"&&typeof r.name==="string"&&typeof r.status==="string")};}
+  for(const card of area.querySelectorAll("article.handoff-card"))renderRunEvidence(card);
+ });
+ search.addEventListener("input",filterCards);
  function addCard(owner,result){
   const card=el("article","");card.className="tile handoff-card";
+  card.dataset.search=[owner.name,owner.scope,owner.id,result.status==="fulfilled"?result.value.head?.sha:""].join(" ").toLowerCase();
   card.append(el("h3",owner.name),el("p","担当範囲: "+owner.scope));
   if(result.status==="fulfilled"){
    const p=result.value;
+   card.dataset.head=p.head.sha;card.dataset.branch=typeof p.head.ref==="string"?p.head.ref:"";
    card.append(el("p","PR #"+owner.id+" / "+(p.merged?"merged":p.state)+(p.draft?" / Draft":"")),
     el("p","HEAD: "+(p.head?.sha||"UNKNOWN")),
     el("p","PR更新: "+(p.updated_at||"UNKNOWN")),
@@ -44,7 +72,7 @@
    card.append(el("p","PR取得失敗: "+(timedOut?"10秒でタイムアウト":String(reason?.message||reason))));
   }
   if(owner.id===468||owner.id===485){
-   const evidence=el("p","2026-11-23 担当PR報告: #468基底で片側制約116件 ISOLATED_PASS。Blender 5.3 native保存・別プロセス再オープン、CAS/fencing競合も隔離検証。共有適用・P0-Aは BLOCKED / SYNC_UNVERIFIED、P0-B〜E・G1〜G4は NOT_RUN。Release asset保全はHTTP 401で未完了。");
+   const evidence=el("p","過去の参考記録（現HEADの判定ではない）2026-11-23 担当PR報告: #468基底で片側制約116件 ISOLATED_PASS。Blender 5.3 native保存・別プロセス再オープン、CAS/fencing競合も隔離検証。共有適用・P0-Aは BLOCKED / SYNC_UNVERIFIED、P0-B〜E・G1〜G4は NOT_RUN。Release asset保全はHTTP 401で未完了。");
    card.append(evidence);
    const report=el("a","隔離検証の報告証跡（#468）");
    report.href="https://github.com/"+repo+"/pull/468#issuecomment-7101409252";
@@ -60,6 +88,7 @@
   ];
   for(const [key,value] of fields){checklist.append(el("dt",key),el("dd",value));}
   card.append(checklist,el("p","代行書き込み: SYNC_UNVERIFIED（自動切替不可）"));
+  const slot=el("div","");slot.className="handoff-run-evidence";card.append(slot);renderRunEvidence(card);
   area.append(card);
  }
  async function refresh(){
@@ -68,13 +97,22 @@
   try{
    const results=await Promise.allSettled(owners.map(o=>get("/pulls/"+o.id)));
    if(current!==generation)return;
-   owners.forEach((o,i)=>addCard(o,results[i]));
+   owners.forEach((o,i)=>addCard(o,results[i]));filterCards();
    const failures=results.filter(r=>r.status==="rejected").length;
    status.textContent="PR取得 "+(owners.length-failures)+"/"+owners.length+(failures?" / 取得失敗 "+failures+"件（未検証）":"")+" / "+new Date().toLocaleString("ja-JP")+
     " / 書き込み可否は全件SYNC_UNVERIFIED";
   }catch(e){if(current===generation)status.textContent="取得失敗: "+e.message;}
   finally{if(current===generation)button.disabled=false;}
  }
+ // Share the overview's bounded bulk PR poll rather than issuing six more requests.
+ window.addEventListener("studio-live-pulls",event=>{
+  if(button.disabled||!Array.isArray(event.detail))return;
+  const records=owners.map(o=>event.detail.find(p=>p.number===o.id&&/^[a-f0-9]{40}$/.test(p.head?.sha||"")&&["open","closed"].includes(p.state)));
+  if(records.some(p=>!p)){status.textContent="自動取得範囲外の担当PRあり。前回表示を保持。個別手動取得可。";return;}
+  area.replaceChildren();
+  owners.forEach((o,i)=>addCard(o,{status:"fulfilled",value:{...records[i],merged:!!records[i].merged_at||records[i].merged===true}}));filterCards();
+  status.textContent="自動PR取得 "+owners.length+"/"+owners.length+" / "+new Date().toLocaleString("ja-JP")+" / 書き込み可否は全件SYNC_UNVERIFIED";
+ });
  button.addEventListener("click",refresh);
  refresh();
 })();

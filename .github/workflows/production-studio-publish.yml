@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify publication boundary tests
+        run: python -m unittest discover -s tools/production-studio -p test_publication_gate.py -v
       - name: Stage verified production gallery
         env:
           GH_TOKEN: ${{ github.token }}
@@ -35,9 +37,14 @@ jobs:
             git worktree add --detach "$RUNNER_TEMP/history" FETCH_HEAD
             cp -r "$RUNNER_TEMP/history/gallery-manifest.json" "$RUNNER_TEMP/history/published" "$RUNNER_TEMP/old-gallery/"
           else
-            cp -r tools/production-studio/gallery-manifest.json tools/production-studio/published "$RUNNER_TEMP/old-gallery/"
+            echo "Published history unavailable; bootstrap requires explicit approval" >&2
+            exit 1
           fi
+          cp "$RUNNER_TEMP/studio-site/gallery-manifest.json" "$RUNNER_TEMP/staged-candidates.json"
+          python tools/production-studio/publication-gate.py filter "$RUNNER_TEMP/old-gallery/gallery-manifest.json" "$RUNNER_TEMP/staged-candidates.json" tools/production-studio/publication-approvals.json "$RUNNER_TEMP/approved-delta.json"
+          cp "$RUNNER_TEMP/approved-delta.json" "$RUNNER_TEMP/studio-site/gallery-manifest.json"
           python tools/production-studio/merge-gallery.py "$RUNNER_TEMP/old-gallery" "$RUNNER_TEMP/studio-site" "$RUNNER_TEMP/retained"
+          python tools/production-studio/publication-gate.py verify "$RUNNER_TEMP/old-gallery/gallery-manifest.json" "$RUNNER_TEMP/approved-delta.json" "$RUNNER_TEMP/retained/gallery-manifest.json"
           cp "$RUNNER_TEMP/retained/gallery-manifest.json" "$RUNNER_TEMP/studio-site/"
           cp -r "$RUNNER_TEMP/retained/published/." "$RUNNER_TEMP/studio-site/published/"
       - name: Validate retained images in browser
@@ -51,22 +58,13 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if test -d "$RUNNER_TEMP/history"; then
-            cd "$RUNNER_TEMP/history"
-          else
-            git worktree add --detach "$RUNNER_TEMP/history" HEAD
-            cd "$RUNNER_TEMP/history"
-            git switch --orphan studio-gallery-initial
-          fi
+          cd "$RUNNER_TEMP/history"
+          # No new approved bytes: keep the existing public branch byte-for-byte.
+          if python -c 'import json,sys;sys.exit(bool(json.load(open(sys.argv[1]))["entries"]))' "$RUNNER_TEMP/approved-delta.json"; then exit 0; fi
           mkdir -p published
           cp "$RUNNER_TEMP/retained/gallery-manifest.json" .
           cp -r "$RUNNER_TEMP/retained/published/." published/
-          python - <<'PY'
-          import pathlib,json
-          keep={e['path'] for e in json.loads(pathlib.Path('gallery-manifest.json').read_text())['entries']}
-          for p in pathlib.Path('published').iterdir():
-              if p.is_file() and str(p) not in keep:p.unlink()
-          PY
+          # Preserve all previously present files; never prune on publication.
           git add -- gallery-manifest.json published
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Publish verified production gallery snapshot'

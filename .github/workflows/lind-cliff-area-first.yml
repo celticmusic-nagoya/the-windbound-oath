@@ -1,0 +1,87 @@
+name: LIND area-first isolated candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/lind-cliff-area-first.yml']
+  pull_request:
+    paths:
+      - '.github/workflows/lind-cliff-area-first.yml'
+      - 'tools/map_blender/area_first/build_area_candidate.py'
+permissions:
+  contents: read
+concurrency:
+  group: lind-area-first-${{ github.event_name == 'pull_request' && github.ref || 'native' }}
+  cancel-in-progress: false
+jobs:
+  candidate:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Gate first introduction or manual main dispatch
+        id: launch
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          native=false
+          case "$EVENT" in
+            workflow_dispatch) native=true ;;
+            push)
+              # On main only, and only on first introduction of this file.
+              # Unavailable parent is a fail-closed condition, not a rerun.
+              [[ "$BEFORE" =~ ^[0-9a-f]{40}$ ]]
+              git cat-file -e "$BEFORE^{commit}"
+              prior="$(git ls-tree --name-only "$BEFORE" -- .github/workflows/lind-cliff-area-first.yml)"
+              if [[ -z "$prior" ]]; then native=true; fi
+              ;;
+            pull_request) ;;
+            *) exit 1 ;;
+          esac
+          echo "native=$native" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: 40bc0943ade095e6494c06fcf6f3dfea44c536b9
+          path: pinned-design
+          persist-credentials: false
+          sparse-checkout: |
+            docs/production/region_master
+      - name: Verify exact design and code; compile and check topology
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=pinned-design/docs/production/region_master/WINDWAITING_CLIFF_AREA_SPATIAL_CANDIDATE_V01.json
+          test "$(git hash-object "$src")" = 81e14da2ebb23adc4bb6ac63691d8d5d6b85f617
+          echo "fb72f59e839e704220fad7829c16c631abf1231d47af656bda58edc437319272  tools/map_blender/area_first/build_area_candidate.py" | sha256sum -c -
+          python3 -m py_compile tools/map_blender/area_first/build_area_candidate.py
+          python3 tools/map_blender/area_first/build_area_candidate.py "$src" out --check-only
+      - name: Install existing verified Blender runtime (first main introduction or manual)
+        if: steps.launch.outputs.native == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object tools/production_qa/install_blender_530.sh)" = ba5336850900f90faaa2d33fd846aec9b57b4663
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender"
+      - name: Build isolated area candidate and verify native reopen
+        if: steps.launch.outputs.native == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=pinned-design/docs/production/region_master/WINDWAITING_CLIFF_AREA_SPATIAL_CANDIDATE_V01.json
+          mkdir -p out
+          timeout 300 "$RUNNER_TEMP/blender/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python tools/map_blender/area_first/build_area_candidate.py -- "$src" out
+          (cd out && sha256sum area_first_v02_UNAPPROVED.blend qa.json > SHA256SUMS && sha256sum -c SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        if: steps.launch.outputs.native == 'true' && success()
+        with:
+          name: lind-area-first-isolated-${{ github.run_id }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 14
