@@ -45,6 +45,107 @@ jobs:
       - name: Verify shared contract and Factory regression
         working-directory: tools/production_qa
         run: python -m unittest test_shared_blueprint_contract test_shared_item_correction test_shared_lower_bound
+  wheelhouse-pilot:
+    # Qualification only: do not enable for normal production jobs.
+    if: github.event_name == 'pull_request' && github.head_ref == 'fix/blueprint-wheelhouse-reuse-pilot-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      key: ${{ steps.lock.outputs.key }}
+      ready: ${{ steps.ready.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Resolve exact wheel digests from official metadata
+        id: lock
+        working-directory: tools
+        run: |
+          set -euo pipefail
+          key=$(timeout 75s python -E -s -m blueprint_engine.wheelhouse resolve --lock "$RUNNER_TEMP/wheel-lock.json")
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/wheel-lock.json"
+      - uses: actions/cache/restore@v4
+        id: restore
+        with:
+          path: ${{ runner.temp }}/two-bpy-wheels
+          key: ${{ steps.lock.outputs.key }}
+      - name: Download verified archives only on exact miss
+        if: steps.restore.outputs.cache-hit != 'true'
+        working-directory: tools
+        run: |
+          set -euo pipefail
+          python -E -s -m blueprint_engine.wheelhouse download --lock "$RUNNER_TEMP/wheel-lock.json" --root "$RUNNER_TEMP/two-bpy-wheels"
+      - name: Verify and install without package index
+        working-directory: tools
+        run: |
+          set -euo pipefail
+          python -E -s -m blueprint_engine.wheelhouse install --lock "$RUNNER_TEMP/wheel-lock.json" --root "$RUNNER_TEMP/two-bpy-wheels"
+      - name: Check cache storage headroom
+        id: headroom
+        if: steps.restore.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if usage=$(gh api "repos/$GITHUB_REPOSITORY/actions/cache/usage" --jq .active_caches_size_in_bytes) &&
+             [[ "$usage" =~ ^[0-9]{1,11}$ ]] &&
+             (( usage + 768 * 1024**2 <= 10 * 1024**3 )); then
+            echo "allowed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Cache save skipped: storage headroom unavailable"
+          fi
+      - uses: actions/cache/save@v4
+        id: save
+        if: steps.headroom.outputs.allowed == 'true'
+        with:
+          path: ${{ runner.temp }}/two-bpy-wheels
+          key: ${{ steps.lock.outputs.key }}
+      - name: Allow separate-job restore test
+        id: ready
+        if: steps.restore.outputs.cache-hit == 'true' || steps.save.outcome == 'success'
+        run: echo "ready=true" >> "$GITHUB_OUTPUT"
+  wheelhouse-pilot-warm:
+    needs: wheelhouse-pilot
+    if: needs.wheelhouse-pilot.outputs.ready == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Re-resolve official digests independently
+        id: lock
+        working-directory: tools
+        env:
+          EXPECTED: ${{ needs.wheelhouse-pilot.outputs.key }}
+        run: |
+          set -euo pipefail
+          key=$(timeout 75s python -E -s -m blueprint_engine.wheelhouse resolve --lock "$RUNNER_TEMP/wheel-lock.json")
+          test "$key" = "$EXPECTED"
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache/restore@v4
+        id: restore
+        with:
+          path: ${{ runner.temp }}/two-bpy-wheels
+          key: ${{ steps.lock.outputs.key }}
+          fail-on-cache-miss: true
+      - name: Prove verified offline install on separate job
+        working-directory: tools
+        env:
+          EXACT_HIT: ${{ steps.restore.outputs.cache-hit }}
+        run: |
+          set -euo pipefail
+          test "$EXACT_HIT" = true
+          python -E -s -m blueprint_engine.wheelhouse install --lock "$RUNNER_TEMP/wheel-lock.json" --root "$RUNNER_TEMP/two-bpy-wheels"
+          python -I blueprint_engine/ensure_runtime.py
+          echo "WHEELHOUSE_SEPARATE_JOB_EXACT_HIT_PASS"
   engine:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
