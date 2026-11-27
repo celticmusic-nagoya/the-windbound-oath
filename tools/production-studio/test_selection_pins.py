@@ -3,6 +3,7 @@ import json
 import pathlib
 import re
 import unittest
+from artifact_availability import archive_budget
 
 ROOT = pathlib.Path(__file__).resolve().parent
 HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -90,6 +91,26 @@ class SelectionPinsTests(unittest.TestCase):
             self.assertEqual((receipt["head"], receipt["run_id"], receipt["artifact_id"], receipt["name"], receipt["path"], receipt["approval_ref"]),
                              (item["head"], item["run_id"], item["artifact_id"], name, "published/" + sha + ".png", item["review_ref"]))
 
+
+    def test_v82e_large_archive_exact_image_only_exception(self):
+        items = json.loads((ROOT / "sync-selection.json").read_text())
+        receipts = json.loads((ROOT / "publication-approvals.json").read_text())["entries"]
+        item = next(x for x in items if x["artifact_id"] == 15177030518)
+        self.assertEqual(archive_budget(item), 139463532)
+        self.assertEqual(archive_budget({}), 128*1024*1024)
+        self.assertEqual(len(item["entries"]), 6)
+        self.assertTrue(all(n.endswith(".png") for n in item["entries"]))
+        self.assertEqual(set(item["entries"]), set(item["entry_subcategories"]))
+        by_sha = {r["sha256"]: r for r in receipts}
+        for name, sha in item["entry_sha256"].items():
+            r = by_sha[sha]
+            self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"], r["approval_ref"]),
+                             (item["head"], item["run_id"], item["artifact_id"], name, "published/"+sha+".png", item["review_ref"]))
+        for changes in ({"artifact_id":1},{"run_id":2},{"head":"a"*40},{"artifact_digest":"sha256:"+"a"*64},
+                        {"exact_archive_bytes":160*1024*1024},{"reuse_retained":False},{"entries":item["entries"]+["native.blend"]},
+                        {"entry_sha256":dict(item["entry_sha256"], **{item["entries"][0]:"a"*64})}):
+            with self.assertRaises(ValueError):
+                archive_budget(dict(item,**changes))
 
 if __name__ == "__main__":
     unittest.main()

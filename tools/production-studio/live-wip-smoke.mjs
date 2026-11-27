@@ -16,6 +16,7 @@ try{
  let fail=false;
  await page.route("https://api.github.com/**",route=>{
   const u=new URL(route.request().url());
+  if(u.pathname.endsWith("/issues/comments"))return fail?route.fulfill({status:403}):route.fulfill({json:[{id:7211450119,issue_url:"https://api.github.com/repos/"+repo+"/issues/540",html_url:"https://github.com/"+repo+"/pull/540#issuecomment-7211450119",user:{login:"celticmusic-nagoya"},updated_at:now,body:"W82 wardrobe staging: local-only output, not adopted."},{id:7211532848,issue_url:"https://api.github.com/repos/"+repo+"/issues/482",html_url:"https://github.com/"+repo+"/pull/482#issuecomment-7211532848",user:{login:"celticmusic-nagoya"},updated_at:now,body:"V82-F2 structural gate failed; no native output."}]});
   if(u.pathname.endsWith("/actions/artifacts"))return fail?route.fulfill({status:403}):route.fulfill({json:{artifacts:[artifact(1,"morwen-isolated-vroid-reopen-review","main"),artifact(2,"forest-wip-v99","feature/world-forest"),artifact(3,"fresh-candidate","feature/new-asset")]}});
   if(u.pathname.endsWith("/actions/runs")&&u.searchParams.get("per_page")==="100")return fail?route.fulfill({status:403}):route.fulfill({json:{workflow_runs:[run(401,"Morwen VRoid / vrm_export","in_progress",".github/workflows/morwen-vroid-macos-probe.yml"),run(402,"Forest render","completed",".github/workflows/forest.yml","feature/world-forest")]}});
   if(u.pathname.includes("/pulls/"))return route.fulfill({json:{state:"open",head:{sha,ref:"main"}}});
@@ -25,6 +26,10 @@ try{
  await page.route("https://raw.githubusercontent.com/**",r=>r.fulfill({status:404}));
  await page.goto("http://127.0.0.1:8767/index.html");
  await page.waitForFunction(()=>document.querySelectorAll("#recent-live-runs article").length===2&&document.querySelectorAll("#recent-review-artifacts article").length===3);
+ await page.waitForFunction(()=>document.querySelectorAll("#recent-production-reports article").length===2);
+ assert.match(await page.locator("#recent-production-reports").innerText(),/W82 wardrobe staging/);
+ assert.match(await page.locator("#recent-production-reports").innerText(),/画像／成果物実体／QA未確認/);
+ assert.equal(await page.locator('[data-report-id="7211532848"] a').getAttribute("href"),"https://github.com/"+repo+"/pull/482#issuecomment-7211532848");
  assert.match(await page.locator("#recent-live-runs").innerText(),/制作中/);
  assert.match(await page.locator("#recent-review-artifacts").innerText(),/その他・未分類/);
  const category=page.locator("#recent-review-category");
@@ -51,6 +56,8 @@ try{
  assert.equal(await page.locator("#recent-live-runs article").count(),1);
  fail=true;await page.locator("#refresh-recent-review").click();
  await page.waitForFunction(()=>document.querySelector("#recent-review-status").textContent.includes("前回取得分を保持"));
+ assert.equal(await page.locator("#recent-production-reports article").count(),2);
+ assert.match(await page.locator("#recent-production-reports").innerText(),/W82 wardrobe staging/);
  assert.equal(await page.locator("#recent-review-search").inputValue(),"forest");
  assert.equal(await page.locator("#recent-live-runs article").count(),1);
  assert.equal(await page.locator("#recent-review-artifacts article").count(),1);

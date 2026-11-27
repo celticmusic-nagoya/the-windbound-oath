@@ -29,23 +29,24 @@ test("visible automatic refresh, hidden pause, no overlap, error retains prior c
  const ids=Object.fromEntries(["recent-review-artifacts","recent-review-status","refresh-recent-review","recent-review-title"].map(k=>[k,new El()]));
  const doc={hidden:false,events:{},getElementById:k=>ids[k],createElement:()=>new El(),addEventListener(k,f){this.events[k]=f}};
  let calls=0,fail=false,timer=null,serial=0;
- const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:url.includes("/actions/runs?")?{workflow_runs:[]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"feature/lind-ecology-01","lind-eco-53-candidate-evidence")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
+ const sandbox={document:doc,AbortSignal,fetch:async url=>{calls++;return {ok:!fail,status:403,json:async()=>url.includes("/issues/comments?")?[report(71,427),report(72,421)]:url.includes("/workflows/")?{workflow_runs:[run(45710690152)]}:url.includes("/actions/runs?")?{workflow_runs:[]}:{artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"feature/lind-ecology-01","lind-eco-53-candidate-evidence")]}}},setTimeout:(fn,ms)=>{timer={id:++serial,fn,ms};return serial},clearTimeout:()=>{timer=null}};
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,"recent-review-artifacts.js"),"utf8"),sandbox);
  const flush=()=>new Promise(resolve=>setImmediate(resolve));await flush();
- assert.equal(calls,3);assert.equal(ids["recent-review-artifacts"].children.length,2);
- const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,3);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
+ assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,2);
+ const category=ids["refresh-recent-review"].afterItems[2];category.value="リルド村・植生";category.events.change();assert.equal(calls,4);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
  const buttons=ids["refresh-recent-review"].afterItems[4];const search=ids["refresh-recent-review"].afterItems[6];
  const allButton=buttons.children.find(e=>e.dataset.category==="");allButton.events.click();assert.equal(ids["recent-review-artifacts"].children.length,2);
  search.value="eco";search.events.input();assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(ids["recent-review-artifacts"].children[0].dataset.artifactId,"2");
- search.value="";search.events.input();category.value="リルド村・植生";category.events.change();assert.equal(calls,3);
+ search.value="";search.events.input();category.value="リルド村・植生";category.events.change();assert.equal(calls,4);
  const preservation=ids["recent-review-title"].beforeItems[3];assert.equal(preservation.children.length,1);
+ const reports=ids["recent-review-artifacts"].beforeItems[3];assert.equal(reports.children.length,2);assert.equal(reports.children[0].dataset.reportId,"72");
  assert.ok(timer.ms>=299000&&timer.ms<=300000);
  doc.hidden=true;doc.events.visibilitychange();assert.equal(timer,null);
  doc.hidden=false;doc.events.visibilitychange();assert.ok(timer);
  fail=true;timer.fn();ids["refresh-recent-review"].events.click();await flush();
- assert.equal(calls,6);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(preservation.children.length,1);
+ assert.equal(calls,7);assert.equal(ids["recent-review-artifacts"].children.length,1);assert.equal(preservation.children.length,1);assert.equal(reports.children.length,2);
  assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);assert.ok(timer.ms>=899000&&timer.ms<=900000);
- category.value="";category.events.change();assert.equal(calls,6);assert.equal(ids["recent-review-artifacts"].children.length,2);assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);
+ category.value="";category.events.change();assert.equal(calls,7);assert.equal(ids["recent-review-artifacts"].children.length,2);assert.match(ids["recent-review-status"].textContent,/前回取得分を保持/);
 });
 
 test("ECO and measured material sources are recognized; filter before 30-row limit",()=>{
@@ -108,4 +109,21 @@ test("active and completed public runs classified, no fork/no-op or invalid path
 });
 test("swipe threshold preserves vertical scroll, tiny gestures and both directions",()=>{
  assert.equal(swipeDirection(-80,10),1);assert.equal(swipeDirection(80,10),-1);assert.equal(swipeDirection(30,0),0);assert.equal(swipeDirection(60,80),0);assert.equal(swipeDirection(-60,55),0);
+});
+
+const {selectProductionReports,mergeProductionReports}=context.module.exports;
+function report(id,pr,extra={}){
+ return {id,issue_url:"https://api.github.com/repos/"+REPO+"/issues/"+pr,html_url:"https://github.com/"+REPO+"/pull/"+pr+"#issuecomment-"+id,user:{login:"celticmusic-nagoya"},updated_at:"2026-11-27T06:00:00Z",body:"公開制作報告・画像未登録",...extra};
+}
+test("reports include actual owning PR sources; exclude untrusted links, other authors, invalid dates and duplicates",()=>{
+ const a=report(7211450119,540),b=report(7211532848,482);
+ const rows=selectProductionReports([a,b,a,report(1,999),report(2,427,{user:{login:"other"}}),report(3,427,{html_url:"https://example.com"}),report(4,427,{updated_at:"bad"}),report(5,427,{issue_url:"https://api.github.com/repos/other/repo/issues/427"}),null]);
+ assert.deepEqual(Array.from(rows,x=>x.id),[7211532848,7211450119]);
+ assert.equal(rows[0].category,"世界・エリア制作");assert.throws(()=>selectProductionReports({comments:[]}));
+});
+test("report snapshot keeps bounded prior records when recent 100 are dominated by another domain",()=>{
+ const prior=selectProductionReports([report(10,421),report(11,427),report(12,427),report(13,427)]);
+ const current=selectProductionReports([report(14,427),report(12,427,{body:"edited"}),report(15,482)]);
+ const rows=mergeProductionReports(prior,current);
+ assert.deepEqual(Array.from(rows,x=>x.id),[15,14,13,12,10]);assert.equal(rows.find(x=>x.id===12).excerpt,"edited");
 });

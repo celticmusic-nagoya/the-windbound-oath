@@ -7,25 +7,32 @@ python - <<'PY'
 import json, subprocess, os
 from datetime import datetime, timezone
 from pathlib import Path
-from artifact_availability import recorded_expired_404, retained_receipt_matches
+from artifact_availability import recorded_expired_404, retained_receipt_matches, archive_budget
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
 assert len(selection)<=36
 active=[]
 history=None
+def public_history():
+    global history
+    if history is None:
+        subprocess.run(['git','fetch','--no-tags','--depth=1','origin','refs/heads/studio-published'],check=True)
+        history=json.loads(subprocess.check_output(['git','show','FETCH_HEAD:gallery-manifest.json']))
+    return history
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
     assert type(a)==int and type(run)==int and min(a,run)>0
     repo=os.environ['GITHUB_REPOSITORY']
+    budget=archive_budget(x)
+    if x.get('reuse_retained') is True and 'exact_archive_bytes' in x and retained_receipt_matches(x,public_history()):
+        print(f'REUSED: artifact {a} exact published entries; downstream merge rehashes retained images')
+        continue
     try:
         meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}'],stderr=subprocess.PIPE))
     except subprocess.CalledProcessError as exc:
         stderr=exc.stderr.decode('utf-8',errors='replace')
         if not recorded_expired_404(x,stderr,datetime.now(timezone.utc)):
             raise
-        if history is None:
-            subprocess.run(['git','fetch','--no-tags','--depth=1','origin','refs/heads/studio-published'],check=True)
-            history=json.loads(subprocess.check_output(['git','show','FETCH_HEAD:gallery-manifest.json']))
-        if not retained_receipt_matches(x,history):
+        if not retained_receipt_matches(x,public_history()):
             raise ValueError(f'expired artifact {a}: exact published history not found') from exc
         print(f'NOT_RUN: artifact {a} recorded expiry elapsed and HTTP 404; exact historical entries retained by downstream SHA verification')
         continue
@@ -33,7 +40,9 @@ for x in selection:
         print(f'Artifact {a} expired; retaining previously published copy if available')
         continue
     assert meta['workflow_run']['id']==run and meta['workflow_run']['head_sha']==x['head']
-    assert 0 < meta['size_in_bytes'] <= 128*1024*1024
+    assert 0 < meta['size_in_bytes'] <= budget
+    if 'exact_archive_bytes' in x:
+        assert meta['size_in_bytes']==budget
     x['created_at']=meta['created_at']
     target=Path(os.environ['RUNNER_TEMP'])/'studio-zips'/f'{a}.zip'
     if not target.exists():
@@ -46,7 +55,9 @@ for x in selection:
         assert isinstance(expected,str) and len(expected)==71 and expected.startswith('sha256:'), 'invalid pinned archive digest'
         assert digest==expected, f'archive digest changed: {a}'
     assert digest.startswith('sha256:') and hashlib.file_digest(target.open('rb'),'sha256').hexdigest()==digest[7:]
-    assert target.stat().st_size <= 128*1024*1024
+    assert target.stat().st_size <= budget
+    if 'exact_archive_bytes' in x:
+        assert target.stat().st_size==budget
     active.append(x)
 (Path(os.environ['RUNNER_TEMP'])/'studio-selection.json').write_text(json.dumps(active))
 PY

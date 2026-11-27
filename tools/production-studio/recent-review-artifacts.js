@@ -89,7 +89,35 @@ const SOURCE_LINKS=[
  ["地図・エリア設計","/pull/482"]
 ];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
-const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000;
+const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000, PRESERVATION_MS=30*60*1000;
+const REPORT_SOURCES=new Map([[427,"モルウェン・造形"],[540,"モルウェン・衣装"],[474,"モルウェン・ヘア技術"],[421,"風待ちの崖"],[364,"リルド村・建築"],[357,"リルド村・植生"],[482,"世界・エリア制作"],[608,"3D描画技術"]]);
+// Public producer reports are evidence links, never inferred artifact/QA approval.
+function selectProductionReports(data){
+ if(!Array.isArray(data))throw Error("制作報告一覧形式不正");
+ const seen=new Set(),rows=[];
+ for(const c of data.slice(0,100)){
+  const prefix=API+"/issues/";
+  if(!c||!isId(c.id)||seen.has(c.id)||typeof c.issue_url!=="string"||!c.issue_url.startsWith(prefix))continue;
+  const suffix=c.issue_url.slice(prefix.length);
+  if(!/^[1-9]\d*$/.test(suffix))continue;
+  const pr=Number(suffix);
+  if(!REPORT_SOURCES.has(pr)||c.user?.login!=="celticmusic-nagoya"||c.html_url!==GH+"/pull/"+pr+"#issuecomment-"+c.id||!Number.isFinite(Date.parse(c.updated_at)))continue;
+  // Only already-public report text; never interpret HTML/markdown or expose attachments.
+  if(typeof c.body!=="string"||!c.body.trim())continue;
+  const excerpt=c.body.replace(/[\x00-\x1f\x7f]/g," ").replace(/\s+/g," ").trim().slice(0,220);
+  seen.add(c.id);rows.push({id:c.id,pr,category:REPORT_SOURCES.get(pr),updated:c.updated_at,excerpt});
+ }
+ return rows.sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||b.id-a.id);
+}
+function mergeProductionReports(previous,current){
+ const byId=new Map(previous.map(x=>[x.id,x]));
+ for(const x of current)byId.set(x.id,x);
+ const counts=new Map(),out=[];
+ for(const x of [...byId.values()].sort((a,b)=>Date.parse(b.updated)-Date.parse(a.updated)||b.id-a.id)){
+  if((counts.get(x.pr)||0)>=3)continue;counts.set(x.pr,(counts.get(x.pr)||0)+1);out.push(x);
+ }
+ return out;
+}
 const PRESERVATION_WORKFLOW=".github/workflows/public-preservation-pilot.yml";
 const preservationLabel=id=>[45706894871,45712121342,45717409074,45721456382].includes(id)?"自動保全":[45710690152,45713758086,45717635993,45722898390].includes(id)?"独立復元":"保全／復元（実行種別はログ参照）";
 function selectPreservationRuns(data){
@@ -129,7 +157,7 @@ function selectRecentArtifacts(data,category="",limit=30){
  }
  return rows.sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id).slice(0,limit);
 }
-if(typeof module!=="undefined")module.exports={selectRecentArtifacts,selectPreservationRuns,refreshDelay,selectLiveRuns,swipeDirection,inferCategory};
+if(typeof module!=="undefined")module.exports={selectRecentArtifacts,selectPreservationRuns,refreshDelay,selectLiveRuns,swipeDirection,inferCategory,selectProductionReports,mergeProductionReports};
 if(typeof document==="undefined")return;
 const area=document.getElementById("recent-review-artifacts"),status=document.getElementById("recent-review-status"),refresh=document.getElementById("refresh-recent-review");
 if(!area||!status||!refresh)return;
@@ -141,7 +169,7 @@ const preservationStatus=make("p","未取得");preservationStatus.setAttribute("
 const preservationArea=make("section","");preservationArea.className="grid";
 preservationArea.setAttribute("aria-labelledby",preservationHeading.id);
 heading.before(preservationHeading,make("p","実行結果のみ表示。非公開原本・保全台帳・認証情報は取得しません。保存成功は正式採用やGUI再読込の証明ではありません。"),preservationStatus,preservationArea);
-const cadence=make("p","公開Actions・Artifactは表示中5分ごとに照会（手動更新可）。承認済み公開画像は別一覧で1分ごとに照会。通信失敗時は15分間隔に抑制し、前回結果を保持。未保存・非公開の作業ファイルは取得できません。");
+const cadence=make("p","公開Actions・Artifact・担当PR制作報告は表示中5分ごとに照会（手動更新可）。保全実行情報は30分ごと、承認済み公開画像は別一覧で1分ごと。通信失敗時は15分間隔に抑制。未保存・非公開の作業ファイルは取得できません。");
 cadence.className="note";
 const categoryLabel=make("label","制作領域で絞り込み");
 const categorySelect=make("select","");categorySelect.id="recent-review-category";categoryLabel.htmlFor=categorySelect.id;
@@ -152,6 +180,12 @@ for(const [name,path] of SOURCE_LINKS){const link=make("a",name+" / 担当PR");l
 const categoryGrid=make("div","");categoryGrid.id="recent-category-grid";categoryGrid.className="recent-category-grid";categoryGrid.setAttribute("aria-label","制作領域別の成果物件数");
 const searchLabel=make("label","制作成果物を検索");const search=make("input","");search.type="search";search.id="recent-review-search";search.placeholder="名称・バージョン・HEAD・Artifact ID";searchLabel.htmlFor=search.id;
 refresh.after(cadence,categoryLabel,categorySelect,sources,categoryGrid,searchLabel,search);
+const reportsHeading=make("h3","新着制作報告（画像未登録・チャット内制作を含む）");
+reportsHeading.id="recent-production-reports-title";
+const reportsStatus=make("p","未取得");reportsStatus.setAttribute("role","status");
+const reportsArea=make("section","");reportsArea.id="recent-production-reports";reportsArea.className="grid";reportsArea.setAttribute("aria-labelledby",reportsHeading.id);
+const reportHint=make("p","担当PRの公開報告を参照。報告と実ファイルの保存・画像公開・独立QAは別です。直近100コメントの取得範囲に限定。");
+reportHint.className="note";
 const liveHeading=make("h3","制作中・最近の実行");
 const liveStatus=make("p","未取得");liveStatus.setAttribute("role","status");
 const liveArea=make("section","");liveArea.id="recent-live-runs";liveArea.className="grid";
@@ -161,10 +195,27 @@ const swipeBar=make("div","");swipeBar.className="recent-swipe-bar";
 const back=make("button","← 前のカテゴリ"),forward=make("button","次のカテゴリ →");
 back.type=forward.type="button";swipeBar.append(back,forward);
 const more=make("button","さらに表示");more.type="button";more.hidden=true;
-if(typeof area.before==="function")area.before(swipeHint,swipeBar,liveHeading,liveStatus,liveArea,artifactHeading);
+if(typeof area.before==="function")area.before(reportsHeading,reportHint,reportsStatus,reportsArea,swipeHint,swipeBar,liveHeading,liveStatus,liveArea,artifactHeading);
 if(typeof area.after==="function")area.after(more);
 let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastError="",runSnapshot=[],runError="",runStamp="",visibleLimit=30;
+let reportRows=[],reportStamp="",reportError="",preservationDue=0;
 let visibleCategories=[""];
+function renderReports(){
+ reportsArea.replaceChildren();
+ for(const x of reportRows){
+  const card=make("article","");card.className="tile";card.dataset.reportId=String(x.id);
+  card.append(make("h4",x.category),make("p","報告更新 "+new Date(x.updated).toLocaleString("ja-JP")+" / PR #"+x.pr),make("p",x.excerpt),make("p","公開PR報告・画像／成果物実体／QA未確認"));
+  const a=make("a","制作報告の全文・証跡");a.href=GH+"/pull/"+x.pr+"#issuecomment-"+x.id;a.rel="noopener noreferrer";card.append(a);reportsArea.append(card);
+ }
+ reportsStatus.textContent=reportRows.length+" 件（各PR最大3件・取得済み報告） / "+(reportStamp||"未取得")+(reportError?" / 更新失敗: "+reportError+"。前回分を保持。":" / 全履歴・実ファイルは未確認");
+}
+async function updateReports(){
+ try{
+  const rows=selectProductionReports(await publicJson("/issues/comments?sort=updated&direction=desc&per_page=100"));
+  reportRows=mergeProductionReports(reportRows,rows);reportStamp=new Date().toLocaleString("ja-JP");reportError="";return true;
+ }catch(e){reportError=e.message;return false;}
+ finally{renderReports();}
+}
 function chooseCategory(name){categorySelect.value=name;visibleLimit=30;renderRecent();const current=typeof categoryGrid.querySelector==="function"?categoryGrid.querySelector('button[aria-pressed="true"]'):null;if(current&&categoryGrid.scrollWidth>categoryGrid.clientWidth)categoryGrid.scrollLeft+=current.getBoundingClientRect().left-categoryGrid.getBoundingClientRect().left;}
 function shiftCategory(delta){
  const i=visibleCategories.indexOf(categorySelect.value);const next=i+delta;
@@ -271,7 +322,8 @@ async function update(){
  if(busy||document.hidden)return;
  busy=true;if(timer!==null)clearTimeout(timer);timer=null;
  const g=++generation;refresh.disabled=true;status.textContent="最新Artifactの公開メタデータを取得中";
- const preservation=updatePreservation(),runs=updateRuns();let success=false;
+ const preservation=Date.now()>=preservationDue?updatePreservation().then(ok=>{preservationDue=Date.now()+(ok?PRESERVATION_MS:RETRY_MS);return ok}):Promise.resolve(true);
+ const runs=updateRuns(),reports=updateReports();let success=false;
  try{
   const data=await publicJson("/actions/artifacts?per_page=100");
   if(g!==generation)return;
@@ -280,8 +332,8 @@ async function update(){
   success=true;
  }catch(e){if(g===generation){lastError=e.message;status.textContent="最新一覧取得失敗: "+lastError+"。前回取得分を保持。担当PRから確認できます。";}}
  finally{
-  const [preservationSuccess,runsSuccess]=await Promise.all([preservation,runs]);
-  if(g===generation){renderRecent();refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess&&runsSuccess);schedule();}
+  const [preservationSuccess,runsSuccess,reportsSuccess]=await Promise.all([preservation,runs,reports]);
+  if(g===generation){renderRecent();refresh.disabled=false;busy=false;nextDue=Date.now()+refreshDelay(success&&preservationSuccess&&runsSuccess&&reportsSuccess);schedule();}
  }
 }
 document.addEventListener("visibilitychange",()=>{if(document.hidden){if(timer!==null)clearTimeout(timer);timer=null;}else schedule();});
