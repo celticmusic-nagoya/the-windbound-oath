@@ -217,5 +217,51 @@ class SelectionPinsTests(unittest.TestCase):
         model.update(entries=["native.glb"],cover="native.glb",entry_sha256={"native.glb":sha})
         self.assertFalse(reusable_published_images(model,history,approvals))
 
+    def test_reused_groups_free_capacity_without_losing_known_ids(self):
+        import os, runpy
+        from unittest.mock import patch
+        from tempfile import TemporaryDirectory
+        # Exercise discovery with real reuse predicates; only optional API discovery
+        # is mocked. All approved historical groups remain in the output registry.
+        curated, rows, receipts = [], [], []
+        for i in range(1, 42):
+            n, sha = f"view{i}.png", f"{i:064x}"
+            item = dict(run_id=i, artifact_id=i, head="b"*40, category="world",
+                        stage="WIP / HOLD", review_ref="review", cover=n,
+                        artifact_digest="sha256:"+"c"*64, entries=[n],
+                        entry_sha256={n:sha})
+            curated.append(item)
+            if i<=40:
+                row = dict(run_id=i, artifact_id=i, head="b"*40, name=n, sha256=sha,
+                           path="published/"+sha+".png", entry_pin_verified=True,
+                           category="world", stage="WIP / HOLD", review_ref="review", cover=True)
+                rows.append(row)
+                receipts.append(dict(row, approval_ref="review"))
+        history={"version":1,"entries":rows}
+        approvals={"version":1,"entries":receipts}
+        with TemporaryDirectory() as temp, patch.dict(os.environ, {
+            "RUNNER_TEMP": temp, "GITHUB_REPOSITORY": "celticmusic-nagoya/the-windbound-oath",
+            "STUDIO_PREVIEW_MODELS": "1"
+        }):
+            d=runpy.run_path(str(ROOT/"discover-gallery.py"))
+            g=d["discover"].__globals__
+            def preview(selection, known, saved):
+                self.assertEqual(selection, curated[-1:])
+                self.assertEqual(known,set(range(1,42)))
+                selection.append({"artifact_id":99,"category":"world","entries":["new.png"]})
+                known.add(99)
+            with patch.dict(g, {"preview_vroid":preview, "preview_receipts":lambda *args:None, "BRANCHES":{}}):
+                with patch.object(pathlib.Path,"read_text",return_value=json.dumps(curated)):
+                    d["discover"](history,approvals)
+                result=json.loads((pathlib.Path(temp)/"studio-discovered.json").read_text())
+                self.assertEqual(result,curated+[{"artifact_id":99,"category":"world","entries":["new.png"]}])
+                # Missing evidence consumes active slots; more than 36 fails before discovery.
+                with patch.object(pathlib.Path,"read_text",return_value=json.dumps(curated)):
+                    with self.assertRaisesRegex(ValueError,"curated selection exceeds"):
+                        d["discover"]({"version":1,"entries":[]},approvals)
+                with patch.object(pathlib.Path,"read_text",return_value=json.dumps(curated+[curated[0]])):
+                    with self.assertRaisesRegex(ValueError,"duplicate curated artifact"):
+                        d["discover"](history,approvals)
+
 if __name__ == "__main__":
     unittest.main()

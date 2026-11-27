@@ -1,5 +1,6 @@
 """Discover bounded production image candidates from known owning branches."""
-import json, os, pathlib, re, subprocess, zipfile, hashlib
+import argparse, json, os, pathlib, re, subprocess, zipfile, hashlib
+from artifact_availability import reusable_group_kind
 ROOT=pathlib.Path(os.environ["RUNNER_TEMP"])
 REPO=os.environ["GITHUB_REPOSITORY"]
 MAX_SELECTION=36
@@ -92,10 +93,15 @@ def preview_receipts(selection, known, saved):
         selection.append(dict(run_id=rid,artifact_id=aid,head=head,category=cat,stage=stage,cover=entries[0],entries=entries,entry_sha256=entry_sha256,artifact_digest=a["digest"]))
         known.add(aid)
 
-def discover():
-    selection=json.loads(pathlib.Path(__file__).with_name("sync-selection.json").read_text())
-    has_capacity(selection)  # curated entries always take priority; never truncate them
-    known={x["artifact_id"] for x in selection}
+def discover(history=None, approvals=None):
+    curated=json.loads(pathlib.Path(__file__).with_name("sync-selection.json").read_text())
+    known={x["artifact_id"] for x in curated}
+    if len(known)!=len(curated):
+        raise ValueError("duplicate curated artifact")
+    selection=[x for x in curated if history is None or not reusable_group_kind(x,history,approvals)]
+    has_capacity(selection)  # only groups requiring active processing consume slots
+    initial_active=len(selection)
+    print(f'CAPACITY: curated {len(curated)}; reusable {len(curated)-initial_active}; active {initial_active}; free {MAX_SELECTION-initial_active}')
     saved=ROOT/"studio-zips";saved.mkdir(exist_ok=True)
     if os.environ.get("STUDIO_PREVIEW_MODELS")=="1":
         preview_vroid(selection,known,saved)
@@ -125,6 +131,16 @@ def discover():
                     known.add(a["id"]);found=True;break
                 target.unlink()
             if found:break
-    (ROOT/"studio-discovered.json").write_text(json.dumps(selection,ensure_ascii=False))
-    print(json.dumps([{"artifact":x["artifact_id"],"category":x["category"],"count":len(x["entries"])} for x in selection]))
-if __name__=="__main__":discover()
+    # Preserve the full curated registry and known IDs for audit and duplicate prevention.
+    result=curated+selection[initial_active:]
+    (ROOT/"studio-discovered.json").write_text(json.dumps(result,ensure_ascii=False))
+    print(json.dumps([{"artifact":x["artifact_id"],"category":x["category"],"count":len(x["entries"])} for x in result]))
+if __name__=="__main__":
+    p=argparse.ArgumentParser()
+    p.add_argument("--published-history",type=pathlib.Path)
+    args=p.parse_args()
+    if args.published_history:
+        discover(json.loads(args.published_history.read_text()),
+                 json.loads(pathlib.Path(__file__).with_name("publication-approvals.json").read_text()))
+    else:
+        discover()
