@@ -12,7 +12,8 @@
 <button id="run">3秒準備＋30秒測定</button><button id="stop">停止</button><button id="copy">結果コピー</button></header>
 <canvas id="view"></canvas><pre id="report">NOT_RUN</pre>
 <script type="module">
-const canvas=document.querySelector('#view'),file=document.querySelector('#file'),selector=document.querySelector('#engine'),report=document.querySelector('#report'),run=document.querySelector('#run');
+let canvas=document.querySelector('#view');
+const file=document.querySelector('#file'),selector=document.querySelector('#engine'),report=document.querySelector('#report'),run=document.querySelector('#run');
 let token=0,active=null,result={status:'NOT_RUN'};
 const show=()=>report.textContent=JSON.stringify(result,null,2);
 const percentile=a=>{const s=[...a].sort((a,b)=>a-b);return s.length?s[Math.ceil(s.length*.95)-1]:null};
@@ -22,7 +23,7 @@ function cancel(status){token++;run.disabled=false;cleanup();if(result.status===
 document.querySelector('#stop').onclick=()=>cancel('STOPPED_EARLY');
 document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>{result.copyError=String(e);show()});
 async function sha(buffer){const b=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function threeSession(THREE,GLTFLoader,bytes,dims){
+function threeSession(THREE,GLTFLoader,bytes,dims,canvas){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:false});renderer.setPixelRatio(1);renderer.setSize(dims.width,dims.height,false);
  const scene=new THREE.Scene();scene.background=new THREE.Color(0x132033);
  const camera=new THREE.PerspectiveCamera(55,dims.width/dims.height,.1,1000);
@@ -39,9 +40,9 @@ function threeSession(THREE,GLTFLoader,bytes,dims){
    draw(dt){mixerState.mixer?.update(dt);renderer.render(scene,camera)},
    stats(){return {drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}},
    dispose(){root.traverse(o=>{if(o.geometry)o.geometry.dispose();const m=o.material;if(m)(Array.isArray(m)?m:[m]).forEach(x=>x.dispose())});renderer.dispose()}});
- },reject));
+ },error=>{renderer.dispose();reject(error)}));
 }
-async function babylonSession(bytes,dims){
+async function babylonSession(bytes,dims,canvas){
  const B=window.BABYLON;if(!B?.SceneLoader)throw Error('Babylon loader unavailable');
  const engine=new B.Engine(canvas,false,{preserveDrawingBuffer:false,stencil:false},false);engine.setSize(dims.width,dims.height);
  const scene=new B.Scene(engine);scene.clearColor=new B.Color4(.075,.125,.2,1);
@@ -66,14 +67,17 @@ async function babylonSession(bytes,dims){
 run.onclick=async()=>{
  cancel('STOPPED_EARLY');const id=token;const f=file.files?.[0];if(!f){result={status:'NO_FILE'};show();return}
  run.disabled=true;const engine=selector.value;
+ const runCanvas=canvas.cloneNode(false);canvas.replaceWith(runCanvas);canvas=runCanvas;
  result={status:'LOADING',engine,filename:f.name,bytes:f.size,userAgent:navigator.userAgent,dimensions:dimensions(),warmupMs:3000,measurementMs:30000,warning:'Technical-only. No engine adoption, G2 or Android G4 PASS'};show();
  try{
   const buffer=await f.arrayBuffer();if(id!==token)return;
-  result.sha256=await sha(buffer);if(id!==token)return;
+  const digest=await sha(buffer);if(id!==token)return;result.sha256=digest;
   const t0=performance.now(),bytes=new Uint8Array(buffer);
-  if(engine==='three'){const [THREE,addon]=await Promise.all([import('three'),import('three/addons/loaders/GLTFLoader.js')]);if(id!==token)return;active=await threeSession(THREE,addon.GLTFLoader,bytes,result.dimensions)}
-  else active=await babylonSession(bytes,result.dimensions);
-  if(id!==token){cleanup();return}
+  let session;
+  if(engine==='three'){const [THREE,addon]=await Promise.all([import('three'),import('three/addons/loaders/GLTFLoader.js')]);if(id!==token)return;session=await threeSession(THREE,addon.GLTFLoader,bytes,result.dimensions,runCanvas)}
+  else session=await babylonSession(bytes,result.dimensions,runCanvas);
+  if(id!==token){session.dispose();return}
+  active=session;
   result.loadMs=performance.now()-t0;result.asset=active.meta;result.engineVersion=engine==='babylon'?window.BABYLON?.Engine?.Version:'0.170.0';result.status='WARMUP';show();
   let phaseStart=0,last=0,samples=[],elapsed=0;
   const tick=t=>{
@@ -89,6 +93,6 @@ run.onclick=async()=>{
    }
    requestAnimationFrame(tick);
   };requestAnimationFrame(tick);
- }catch(e){if(id===token){result.status='FAIL_LOAD';result.error=String(e);cleanup();show()}}finally{if(result.status!=='WARMUP'&&result.status!=='RUNNING')run.disabled=false}
+ }catch(e){if(id===token){result.status='FAIL_LOAD';result.error=String(e);cleanup();show()}}finally{if(id===token&&result.status!=='WARMUP'&&result.status!=='RUNNING')run.disabled=false}
 };
 </script></body></html>
