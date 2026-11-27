@@ -48,6 +48,8 @@ jobs:
       - name: Browser import smoke (two engines)
         env:
           LIND_RACE_TEST: ${{ github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01' && '1' || '0' }}
+          LIND_EXPECTED_TRIANGLES: '1'
+          LIND_EXPECTED_MESHES: '1'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Reuse verified V13 export (read only; no Blender)
         if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
@@ -69,12 +71,16 @@ jobs:
           (p/'verified.glb').write_bytes(data)
           print('PASS: reused exact V13 export, no native edit or upload')
           PY
-      - name: Existing map GLB browser import smoke
+      - name: Existing map GLB paired 30s diagnostic (two alternating rounds)
         if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
         env:
           LIND_GLB: ${{ runner.temp }}/lind-source/verified.glb
           LIND_EXPECTED_SHA: b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d
-          LIND_QA_OUT: /tmp/lind-glb-benchmark/v13-browser-smoke.json
+          LIND_QA_OUT: /tmp/lind-glb-benchmark/v13-browser-measure.json
+          LIND_FULL_MEASURE: '1'
+          LIND_REPETITIONS: '2'
+          LIND_EXPECTED_TRIANGLES: '803031'
+          LIND_EXPECTED_MESHES: '389'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload evidence even on failure
         if: always()
