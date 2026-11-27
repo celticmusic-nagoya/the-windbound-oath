@@ -21,7 +21,7 @@ try {
  await page.route('https://api.github.com/**',route=>{
   const url=new URL(route.request().url());
   if(url.pathname.endsWith('/contents/docs/production/region_master'))return route.fulfill({json:evidenceFixture});
-  if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
+  if(url.pathname.endsWith('/pulls')&&url.searchParams.get('sort')==='updated')return bulkFail?route.fulfill({status:403}):route.fulfill({json:[427,421,364,468,485,484,493].map(number=>({number,state:'open',draft:true,head:{sha:liveHead,ref:fixtureBranch},updated_at:'2026-11-26'}))});
   if(url.pathname.includes('/pulls/'))return route.fulfill({json:{state:'open',draft:true,head:{sha:fixtureHead,ref:fixtureBranch},updated_at:'2026-11-22'}});
   if(url.pathname.endsWith('/actions/artifacts'))return route.fulfill({json:{artifacts:['two-hero-tree-v55-island-source','two-forest-v52-native-virtual-qa','two-sanctuary-v58-native-scenery','two-v59-ruin-2d-references'].map((name,i)=>({id:15000000+i,name,expired:false,size_in_bytes:100,created_at:'2026-11-26T00:00:00Z',workflow_run:{id:200+i,head_branch:'docs/ireland-world-source-grounded-plan-20261123',head_sha:fixtureHead,repository_id:1408120919,head_repository_id:1408120919}}))}});
   if(url.pathname.endsWith('/artifacts')){
@@ -32,11 +32,26 @@ try {
    if(artifactMode==='expired')return route.fulfill({json:{total_count:1,artifacts:[{...a,expires_at:'2000-01-01T00:00:00Z'}]}});
    return route.fulfill({json:{total_count:1,artifacts:[a]}});
   }
-  return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[]}});
+  return route.fulfill({json:{workflow_runs:url.searchParams.has('branch')?[mockRun(5,fixtureHead,'in_progress',null),mockRun(4,fixtureHead,'completed','failure'),mockRun(3,previousHead,'completed','success'),mockRun(2,previousHead,'completed','failure'),mockRun(9,fixtureHead,'completed','success','other-branch')]:[mockRun(21,fixtureHead,'completed','failure'),mockRun(22,previousHead,'completed','success'),mockRun(23,fixtureHead,'completed','success','other-branch'),mockRun(24,liveHead,'in_progress',null)]}});
  });
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="360" viewBox="0 0 1420 360"><rect width="1420" height="360" fill="white"/></svg>'}));
  await page.goto('http://127.0.0.1:8765/index.html');
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('取得完了'));
+ // Integrated dashboard: reuse global Actions snapshot, no separate polling.
+ await page.waitForFunction(()=>document.querySelectorAll('#handoff-cards .handoff-card').length===7&&document.querySelectorAll('#handoff-cards .handoff-run-evidence a[href$="/actions/runs/21"]').length===7);
+ const handoffCards=page.locator('#handoff-cards .handoff-card');
+ assert.equal(await page.locator('#handoff-cards a[href$="/actions/runs/22"],#handoff-cards a[href$="/actions/runs/23"]').count(),0);
+ assert.equal(await page.locator('#handoff-cards a[href$="/actions/runs/21"]').count(),7);
+ assert.match(await page.locator('#handoff-cards .handoff-run-evidence').first().innerText(),/failure/);
+ const handoffSearch=page.locator('#handoff-search');
+ await handoffSearch.fill('493');
+ assert.equal(await handoffCards.filter({visible:true}).count(),1);
+ assert.match(await page.locator('#handoff-filter-status').innerText(),/1 \/ 7/);
+ assert.match(await handoffCards.filter({visible:true}).innerText(),/環境再利用/);
+ await handoffSearch.fill(fixtureHead);assert.equal(await handoffCards.filter({visible:true}).count(),7);
+ await handoffSearch.fill('');assert.equal(await handoffCards.filter({visible:true}).count(),7);
+ for(const width of [390,1280]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'integrated dashboard overflow');}
+ await page.setViewportSize({width:390,height:844});
  // Exact revision separation, active/failed runs, and the prior successful artifact path.
  const project=page.locator('#projects > article').first();
  await project.locator('[data-revision="current"]').first().waitFor();
@@ -433,11 +448,15 @@ try {
  await page.waitForFunction(()=>!document.querySelector('#refresh').disabled&&!document.querySelector('#handoff-refresh').disabled);
  await page.evaluate(()=>refreshOverview(true));
  assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
- assert.match(await page.locator('#handoff-status').innerText(),/自動PR取得 6\/6/);
+ assert.match(await page.locator('#handoff-status').innerText(),/自動PR取得 7\/7/);
  assert.match(await page.locator('#handoff-cards').innerText(),new RegExp(liveHead));
+ assert.equal(await page.locator('#handoff-cards a[href$="/actions/runs/24"]').count(),7);
+ assert.equal(await page.locator('#handoff-cards a[href$="/actions/runs/21"]').count(),0);
  bulkFail=true;
  await page.evaluate(()=>refreshOverview(true));
  assert.match(await page.locator('#status').innerText(),/前回表示を保持/);
+ assert.equal(await page.locator('#handoff-cards .handoff-run-evidence a').count(),0);
+ assert.match(await page.locator('#handoff-cards .handoff-run-evidence').first().innerText(),/一覧未取得/);
  assert.match(await page.locator('#projects').innerText(),new RegExp(liveHead.slice(0,12)));
  await page.waitForFunction(()=>document.querySelectorAll('#recent-review-artifacts [data-artifact-id]').length===4);
  const recentGrid=page.locator('#recent-category-grid');
