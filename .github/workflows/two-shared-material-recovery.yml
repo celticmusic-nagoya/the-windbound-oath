@@ -37,6 +37,8 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'
+      - 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -75,6 +77,9 @@ jobs:
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
@@ -1769,5 +1774,59 @@ jobs:
         with:
           name: two-v86-trail-fill
           path: ${{ runner.temp }}/v86-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v87-dormant-inlay:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V87 native inlay scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V86, reconstruct inlay and render dormant/active
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v87-in" "$RUNNER_TEMP/v87-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15180621277/zip" > "$RUNNER_TEMP/v86.zip"
+          printf '%s  %s\n' 3a69c165086aaa2dbdfaca752e61873d31817cf275f685398abaea702d4f5a4d "$RUNNER_TEMP/v86.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v86.zip"
+          unzip -q "$RUNNER_TEMP/v86.zip" -d "$RUNNER_TEMP/v87-in"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15178552814/zip" > "$RUNNER_TEMP/v84.zip"
+          printf '%s  %s\n' f7cf35f137e67627b43dcc7acd96f0f964783b7452da41a11ebb1e5a4cbcc27b "$RUNNER_TEMP/v84.zip" | sha256sum -c -
+          unzip -p "$RUNNER_TEMP/v84.zip" v84_sanctuary_dormant.glb > "$RUNNER_TEMP/v84.glb"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176206406/zip" > "$RUNNER_TEMP/v82.zip"
+          printf '%s  %s\n' df73a27e21383029cdac60b7beb11dbd25f21ae49755cf6d37b4cd2b22bdbb30 "$RUNNER_TEMP/v82.zip" | sha256sum -c -
+          python -m pip install --disable-pip-version-check numpy==2.3.5 scipy==1.16.3 Pillow==12.3.0
+          python 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py' "$RUNNER_TEMP/v84.glb" "$RUNNER_TEMP/v82.zip" "$RUNNER_TEMP/v87-out/projection"
+          node 'tools/map_blueprint/shared_materials_v01/v85_altar_motes/test_pool.mjs'
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' -- "$RUNNER_TEMP/v87-in/v86_trail_fill_candidate.blend" "$RUNNER_TEMP/v87-out" 2>&1 | tee "$RUNNER_TEMP/v87-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' "$RUNNER_TEMP/v87-out/"
+          (cd "$RUNNER_TEMP/v87-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V87 native and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v87-dormant-inlay
+          path: ${{ runner.temp }}/v87-out
           retention-days: 14
           if-no-files-found: error
