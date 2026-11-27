@@ -1,5 +1,7 @@
 """Runtime preparation decisions; no network or real installation in unit tests."""
 import os
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import subprocess
 import unittest
 from unittest.mock import patch
@@ -26,7 +28,9 @@ class RuntimePreparationTests(unittest.TestCase):
             self.assertIn("--retries", command)
             self.assertEqual(command[command.index("--retries") + 1], "0")
             self.assertEqual(run.call_args_list[0].kwargs["timeout"], 180)
-            self.assertTrue(all(f"{k}=={v}" in command for k, v in runtime.LOCK.items()))
+            self.assertIn("--require-hashes", command)
+            self.assertIn("--no-deps", command)
+            self.assertEqual(command[command.index("-r") + 1], str(runtime.REQUIREMENTS))
 
     def test_timeout_never_retries(self):
         with patch.object(runtime, "check_platform"), patch.object(runtime, "mismatches", return_value={"bpy": None}), patch.object(runtime.subprocess, "run", side_effect=subprocess.TimeoutExpired("pip", 180)) as run:
@@ -50,3 +54,15 @@ class RuntimePreparationTests(unittest.TestCase):
         with patch.dict(os.environ, {"GH_TOKEN": "test", "HANDOFF_TOKEN": "test",
                                       "PIP_INDEX_URL": "test", "PYTHONPATH": "test", "PATH": "/bin"}, clear=True):
             self.assertEqual(runtime.child_env(), {"PATH": "/bin"})
+
+    def test_requirements_lock_rejects_malformed_or_missing_entries(self):
+        with TemporaryDirectory() as d:
+            path = Path(d) / "requirements.txt"
+            with patch.object(runtime, "REQUIREMENTS", path):
+                for bad in ("bpy==5.3.0\n", "bpy==5.3.0 --hash=sha256:" + "a"*64 + "\n"):
+                    path.write_text(bad)
+                    with self.assertRaises(RuntimeError):
+                        runtime.verified_requirements()
+
+    def test_exact_lock_validates(self):
+        self.assertEqual(runtime.verified_requirements(), runtime.REQUIREMENTS)
