@@ -1,0 +1,42 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source": "19ee63e1008fbf2e4d67c7492456d22b08db279d3dfb5de87be1a4e328b85051",
+  "official_day": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "frame": "provisional local BU, Z up",
+  "grass": {
+    "clumps": 802,
+    "blades": 6470,
+    "triangles": 19410,
+    "root_samples_saved_glb": 12940,
+    "max_abs_root_residual": 0.008000463088296828
+  },
+  "flowers": {
+    "instances": 62,
+    "reused_meshes": [
+      136,
+      139
+    ],
+    "triangles": 100944,
+    "root_samples": 23458,
+    "max_abs_root_residual": 0.026105520077413166,
+    "tolerance": 0.075,
+    "uncertainty": 0.000002
+  },
+  "qa": {
+    "original_scene_roots": 351,
+    "original_resources_and_binary_prefix_exact": true,
+    "selected_road_and_obstacle_exclusions": true,
+    "verified_hashes": 9
+  },
+  "outputs": {
+    "integration": "8c4e15e0208d655adbf3279907f72e615af4c82d5dc6adede23685c429e4f5bf",
+    "build": "95943183d30798ac9f73e9502ea1653abea6e509bc3a26d0c4abf0c92d90f05b",
+    "reader": "027478e1b1e014ffdf428d144e91e8a9beb95b39173ba26dd7c923399b04a8eb",
+    "qa": "86a9ab84ea3c5ab6f21379d52470307c27587b0ec1b3835385b6db91f660686e",
+    "comparison": "3564b2051ce0b654c79ca514dabbee40d365c50d01260be38b8da3044cfe1b5e"
+  },
+  "limits": [
+    "Actual three VTK EGL views inspected; dark thin blades and broad bare spaces, simplified lighting; G2 HOLD.",
+    "Road reserve and selected obstacle AABB only, low plant overlap not fully assessed. Grass open double-sided ribbon by design. Flower root checks at placement, grass roots independently read from saved GLB. No native edit, true PBR, atmospheric haze, mobile/runtime QA, adoption or merge."
+  ]
+}
