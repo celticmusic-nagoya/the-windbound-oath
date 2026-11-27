@@ -90,6 +90,8 @@ try{
  const modelButton=f=>modelTile(f).getByRole('button',{name:'3D表示',exact:true});
  const selectedModel=()=>page.locator('#model-file').evaluate(el=>el.files[0]?.name||'');
  async function delayedModelSelection(choose,expected){
+  const beforeStatus=await page.locator('#published-status').innerText();
+  assert.ok(beforeStatus.includes(' / '+(manifest.entries.length+2)+' 件 / '),'unexpected gallery fixture count');
   let release,complete;
   const gate=new Promise(r=>{release=r;}),finished=new Promise(r=>{complete=r;});
   await page.route(modelPath(slowModel),async route=>{try{await gate;await route.fulfill({body:slowModel.bytes,contentType:'model/gltf-binary'});}catch{}finally{complete();}});
@@ -101,7 +103,7 @@ try{
    release();await finished;
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('#published-gallery article.tile')).some(t=>t.querySelector('h3')?.textContent==='QA model slow'&&t.querySelector('[role=status]')?.textContent==='取得を中止しました'));
    assert.equal(await selectedModel(),expected,'stale model overwrote latest selection');
-   assert.match(await page.locator('#published-status').innerText(),/^\d+ 件/,'download error replaced gallery count');
+   assert.equal(await page.locator('#published-status').innerText(),beforeStatus,'download changed gallery count or view');
   }finally{release();await page.unroute(modelPath(slowModel));}
  }
  await delayedModelSelection(()=>modelButton(fastModel).click(),fastModel.entry.path.split('/').pop());
