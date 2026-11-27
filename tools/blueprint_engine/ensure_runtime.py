@@ -7,6 +7,8 @@ import importlib.metadata
 import json
 import os
 import platform
+from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -27,6 +29,21 @@ LOCK = {
     "urllib3": "2.8.0",
     "zstandard": "0.25.0",
 }
+REQUIREMENTS = Path(__file__).with_name('requirements-bpy-linux-x64-py313.txt')
+
+
+def verified_requirements():
+    rows = {}
+    for line in REQUIREMENTS.read_text().splitlines():
+        match = re.fullmatch(r'([a-z0-9-]+)==([0-9.]+) --hash=sha256:([a-f0-9]{64})', line)
+        if not match or match[1] in rows:
+            raise RuntimeError('invalid bpy requirements lock')
+        rows[match[1]] = match[2]
+    if rows != LOCK:
+        raise RuntimeError('bpy requirements lock version mismatch')
+    return REQUIREMENTS
+
+
 VERIFY = """import bpy, PIL
 if bpy.app.version_string != '5.3.0' or bpy.app.build_hash.decode() != '02f0899d78e3' or PIL.__version__ != '12.3.0':
     raise RuntimeError('unexpected bpy build or Pillow version')
@@ -60,6 +77,7 @@ def child_env():
 def prepare():
     check_platform()
     started = time.monotonic()
+    requirements = verified_requirements()
     missing = mismatches()
     env = child_env()
     calls = 0
@@ -69,7 +87,7 @@ def prepare():
         subprocess.run([sys.executable, "-I", "-m", "pip", "--isolated", "install",
                         "--index-url", "https://pypi.org/simple", "--only-binary=:all:",
                         "--timeout", "30", "--retries", "0",
-                        *[f"{k}=={v}" for k, v in LOCK.items()]],
+                        "--require-hashes", "--no-deps", "-r", str(requirements)],
                        check=True, timeout=180, env=env, stdout=sys.stderr)
         # importlib metadata is read again in the current process.
         if mismatches():
