@@ -33,6 +33,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -71,6 +72,9 @@ jobs:
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
@@ -1564,5 +1568,56 @@ jobs:
         with:
           name: two-v82f-floor-repair
           path: ${{ runner.temp }}/v82f-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v83-sanctuary-integration:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V83 sanctuary integration scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Integrate corrected floor, stone, ivy and dormant/active VFX
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v83-in" "$RUNNER_TEMP/v83-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15177481071/zip" > "$RUNNER_TEMP/v82f.zip"
+          printf '%s  %s\n' 51fefab535faa7d2da6fefc322941858a6436595a6956665c9ab602679493337 "$RUNNER_TEMP/v82f.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82f.zip"
+          unzip -q "$RUNNER_TEMP/v82f.zip" -d "$RUNNER_TEMP/v83-in"
+          mkdir -p "$RUNNER_TEMP/v83-ivy"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15175858305/zip" > "$RUNNER_TEMP/v82c.zip"
+          printf '%s  %s\n' 392ddf38f16ddb656728038962f39f8344d605519fd05bd8a8fa14e06dd72e71 "$RUNNER_TEMP/v82c.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82c.zip"
+          unzip -q "$RUNNER_TEMP/v82c.zip" -d "$RUNNER_TEMP/v83-ivy"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' -- "$RUNNER_TEMP/v83-in/v82f_floor_native_repair.blend" "$RUNNER_TEMP/v83-out" 2>&1 | tee "$RUNNER_TEMP/v83-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' "$RUNNER_TEMP/v83-out/"
+          (cd "$RUNNER_TEMP/v83-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V83 candidate and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v83-sanctuary-integration
+          path: ${{ runner.temp }}/v83-out
           retention-days: 14
           if-no-files-found: error
