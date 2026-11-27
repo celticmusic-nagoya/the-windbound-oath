@@ -20,6 +20,11 @@ class ReviewPackTests(unittest.TestCase):
         for changes in ({'content_reviewed':False},{'rights_reviewed':False},{'rights_note':''},{'head':'bad'},{'entry_sha256':{'view.png':'a'*64}},{'entry_sha256':{'../view.png':digest(self.raw)}},{'entry_sha256':{'native.blend':digest(b'private')}},{'entry_sha256':{'view.png':digest(self.raw),'other.png':digest(self.raw)}}):
             with self.subTest(changes=changes),self.assertRaises(ValueError):pack(self.source,dict(self.spec,**changes),self.out)
         self.assertFalse(self.out.exists())
+    def test_directory_rejects_all_archive_provenance(self):
+        for field, value in (('archive_bytes', 1), ('archive_sha256', 'a'*64), ('run_id', 1), ('artifact_id', 1)):
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                pack(self.source, dict(self.spec, **{field: value}), self.out)
+        self.assertFalse(self.out.exists())
     def test_no_overwrite(self):
         self.out.write_bytes(b'old')
         with self.assertRaises(ValueError):pack(self.source,self.spec,self.out)
