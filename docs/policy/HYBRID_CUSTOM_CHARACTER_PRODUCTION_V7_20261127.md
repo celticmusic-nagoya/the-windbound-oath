@@ -4,12 +4,12 @@ Scope: all TWO 3D characters and all AI agents/automations (Claude, ChatGPT, Cod
 
 ## Director correction — 2026-11-27
 
-Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve W99 hair and independent modules. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613). The originally registered v7 text is retained in merge commit 69411da7998260280561dff70b0c6c103490ba1f; only the conflicting head-count wording is corrected here.
+Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve W99 hair and independent modules. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613). The originally registered v7 text is retained in merge commit 69411da7998260280561dff70b0c6c103490ba1f. Current text includes the director's 2026-11-28 VRoid-primary clarification.
 
 ## Precedence and relation to existing policy
 
 - Latest explicit director instruction > this v7.0 > AGENTS.md v6.0 sections and registry > older scoped policies > historical evidence.
-- **New-custom-first hybrid production supersedes** VRoid-only completion, preset-modification fixation and Blender-only fixation wherever they conflict (including `MORWEN_VROID_FIRST_AUTHORING_20261121.md` and the "Blender as principal environment" wording of `MORWEN_EARLY_BLENDER_TRANSFER_20261126.md`). Tool choice is per part (VRoid / Blender 5.3.0 / HairHarpy 2.0.0 / XWear / texture tools), by measured quality, editability, compatibility, rights and total effort.
+- **VRoid-primary new-custom hybrid production (director clarification 2026-11-28).** VRoid Studio is the primary authoring environment for face, skin/eyes, body, new custom hair and supported wardrobe. Use Blender, qualified HairHarpy and XWear only for specifically evidenced native limitations, independent unsupported parts, interchange, refinement or game integration. Record the module, actual native attempts/limits, alternative and editable-output compatibility; a missing runtime is an operation blocker, not proof of a VRoid limitation. Any change of primary environment requires explicit director approval. Preserve the editable .vroid master and independently authored external sources.
 - Unchanged and still mandatory: D0–D4 design maturity, G1–G4 PASS/FAIL/HOLD/BLOCKED/NOT_RUN, canon/protected originals, licensing, single writer, STOP_ACK/CAS/lease/fencing where the route requires them, no forced reclaim, no new spending, private/public boundary, formal-adoption approval, Morwen visual targets (6.25 heads nominal within 6.2–6.3, corrected 2026-11-27; Layer 0 hair shape, official clothed dark-violet hair colour).
 - Claude is the current principal production agent; roles are not permanent. Any qualified AI may produce, implement, recover and QA.
 
@@ -64,7 +64,7 @@ Director correction (2026-11-27): Morwen's production target is 6.25 heads nomin
 
 ユーザーの最新明示指示を最優先する。旧規約、過去の会話、旧担当、未完成の管理基盤を理由に承認済み制作を停滞させない。
 
-本指示の新規カスタム優先・ハイブリッド制作方針は、旧来のVRoid完結主義、プリセット修正への固執、Blender固定主義より優先する。
+本指示の主制作環境はVRoid Studioとする。正式設計図から空カスタムを実制作し、VRoidの実証済み機能限界がある部位だけ補助ツールへ移す。主制作環境の変更にはディレクターの明示承認を要する。
 
 #### 3. AI非依存・担当交代可能な制作体制
 
@@ -122,7 +122,7 @@ VRoidの基礎人体メッシュ、骨格、表情機能、衣装型紙、UV等�
 
 #### 6. ハイブリッド制作方式
 
-VRoidだけで全パーツを完成させることに固執しない。部位ごとに最適なツールを選択する。
+VRoid Studioを主制作環境とし、顔・瞳・肌・身体・髪・対応する衣装は新規カスタムでネイティブ制作する。補助ツールは具体的な対象部位・実際のVRoid操作結果と限界・代替方式・編集可能性・互換性を記録して選択する。実行環境やコネクタ不足をVRoidの機能限界と混同しない。外部ツールでしか制作できない装備等は独立制作できるが、全体の主体変更は別途明示承認が必要。
 
 ##### VRoid Studio
 
@@ -214,7 +214,7 @@ VRoidのパラメーター限界を超える形状はBlenderで補正する。
 
 板状の前髪、均一すぎる毛束、過剰な顔の遮蔽、不自然な頭皮露出、貫通を避ける。
 
-VRoid自由描画、個別毛束編集、HairHarpy、Blender曲線・メッシュ等を適宜組み合わせる。
+VRoid自由描画・個別毛束編集を第一選択とする。実証済み限界がある部位のみ資格確認済みHairHarpy、次いで必要なBlender曲線・メッシュを補助利用する。外部メッシュから編集可能な.vroid髪型への逆移植を仮定しない。
 
 毛束数を先に固定せず、四方向のシルエットと美術品質から必要な構造を判断する。
 
@@ -404,7 +404,7 @@ Actions Artifactsの期限切れを前提に、重要なcheckpointは既存の�
 
 W90までは復元・比較・技術実証用として保護する。旧プリセット由来の髪型を完成品としない。
 
-W93の実行結果、保存原本、最新担当PRを確認し、未完了部分から再開する。起動済みの同一作業を重複実行しない。
+W99保存・再読込済み空Frontを起点に、W92の設計を実頭部へ登録し、VRoid内で実毛束を制作する。W96型紙は保存再読込・実UVを確認する。H04は独立未採用比較候補として保全し、測定・設計知見のみ利用する。W104/W105Bの旧衣装改修は比較資料。最新担当PRと原本を確認し、同一作業を重複起動しない。
 
 正式目標：
 
@@ -414,7 +414,7 @@ W93の実行結果、保存原本、最新担当PRを確認し、未完了部分
 - 髪色：正式衣装付きデザインの暗い紫系
 - 衣装・装備：最新正式設定
 
-顔・髪型・身体・衣装・装備を独立管理し、必要に応じてVRoid、Blender、HairHarpy、XWearを組み合わせる。
+顔・髪型・身体・衣装・装備を独立管理し、VRoid主体の編集可能原本を維持する。Blender、HairHarpy、XWearは実証済みの部位別補助に限定し、主体変更は明示承認を要する。
 
 #### 19. 継続的な技術研究
 
