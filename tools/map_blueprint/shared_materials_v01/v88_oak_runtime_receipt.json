@@ -1,0 +1,26 @@
+{
+  "candidate_only": true,
+  "source_run": 45961659745,
+  "source_artifact": 15180064726,
+  "zip_sha256": "744103bf9985f5650919a691f53405dc89f8ea89e83ffb0a4270681341e3527c",
+  "manifest_verified": 31,
+  "atlas_sha256": "e7914033e48920b8b3813579b8d32857598d6ae378237d98404643ea52803661",
+  "original_preview_sha256": "75be728df95ecdc127cb5932519a4181a12fd4bb255b59605f39e426ab7e364a",
+  "corrected_local_preview_sha256": "eb256783dc1502ab7b62c58e1eeeda84c79906b0233085a28edbca275a489b88",
+  "preview_correction": "swap U coordinates only, +X camera right=-Z",
+  "pivot": [
+    0.033129096031188965,
+    2.4933953285217285,
+    -0.17469823360443115
+  ],
+  "ortho_span": 8.853480603434726,
+  "entry_px": 10,
+  "exit_px": 12,
+  "numeric_tests": "68/68 actual local Node 22.16.0",
+  "limits": [
+    "Actual renderer and Android NOT_RUN",
+    "Blend may ghost; no intermediate-angle reference QA",
+    "Original packer preview UV correction not yet backported; corrected preview local only",
+    "No world placement, no near/mid LOD or adoption"
+  ]
+}
