@@ -1,6 +1,13 @@
 "use strict";
 let publishedGalleryGeneration=0,publishedGalleryActive=0,publishedGalleryTimer=null,publishedGalleryDue=0;
 let publishedGalleryKey=null,publishedGalleryView="home",publishedGalleryRemote=false;
+let openGalleryCategory=null,pendingGalleryCategory=null;
+const galleryProjectIds=new Set(["morwen","cliff","village"]);
+document.addEventListener("studio:open-gallery-category",event=>{
+ const id=event.detail;if(!galleryProjectIds.has(id))return;
+ if(openGalleryCategory){openGalleryCategory(id);pendingGalleryCategory=publishedGalleryActive>0?id:null;}
+ else{pendingGalleryCategory=id;document.getElementById("published-status").textContent="成果物一覧の取得待ち。必要に応じて成果物を更新してください。";}
+});
 const publishedGalleryLive=document.createElement("p");
 publishedGalleryLive.id="published-live-status";publishedGalleryLive.className="note";publishedGalleryLive.setAttribute("role","status");
 document.getElementById("published-status").after(publishedGalleryLive);
@@ -53,8 +60,8 @@ async function loadPublishedGallery(automatic=false){
  const note=source+" / 最終照会 "+stamp+" / 表示中は1分ごとに自動照会";
  if(base!=="./")publishedGalleryRemote=true;
  success=true;
- if(automatic&&key===publishedGalleryKey){publishedGalleryLive.textContent=note+" / 変更なし";return;}
- if(automatic&&publishedGalleryKey!==null&&publishedGalleryView!=="home"){publishedGalleryLive.textContent=note+" / 新しい一覧あり。閲覧中の内容を保持しています。「成果物を更新」で反映。";return;}
+ if(automatic&&key===publishedGalleryKey){pendingGalleryCategory=null;publishedGalleryLive.textContent=note+" / 変更なし";return;}
+ if(automatic&&publishedGalleryKey!==null&&publishedGalleryView!=="home"){pendingGalleryCategory=null;publishedGalleryLive.textContent=note+" / 新しい一覧あり。閲覧中の内容を保持しています。「成果物を更新」で反映。";return;}
  publishedGalleryKey=key;publishedGalleryLive.textContent=note+" / "+valid.length+" 件";
  const repoUrl="https://github.com/celticmusic-nagoya/the-windbound-oath";
  function provenance(e,parent){
@@ -184,12 +191,20 @@ async function loadPublishedGallery(automatic=false){
   const history=document.createElement("button");history.type="button";history.className="category-back";history.textContent="制作改訂履歴（HEAD別）";history.onclick=revisionHistory;area.append(history);
   for(const [id,title] of categories){categoryButton(title,groups.get(id),()=>id in subcategories?subhome(id,title):detail(id,title));}
  }
+ function projectShortcut(id){
+  if(!galleryProjectIds.has(id))return;
+  const button=document.createElement("button");button.type="button";button.className="category-back";button.textContent="この領域の制作状況へ";
+  button.onclick=()=>{
+   const target=document.getElementById("project-"+id)?.querySelector("h3")||document.getElementById("projects-title");
+   if(target){target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:"start"});}
+  };area.append(button);
+ }
  function subhome(id,title){
   publishedGalleryView="sub";
   area.replaceChildren();area.classList.add("category-grid");
   navigation([{label:"制作領域",action:home},{label:title}]);
   const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=home;area.append(back);
-  status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
+  projectShortcut(id);status.textContent=title+" / "+groups.get(id).length+" 件 / サブカテゴリ";
   if(id==="world"){const note=document.createElement("p");note.textContent="制作途中・未採用も掲載（権利・内容確認済みの画像）。画像未掲載の証跡は直近制作成果物から確認できます。";note.style.gridColumn="1/-1";area.append(note);const links=document.createElement("p");links.style.gridColumn="1/-1";for(const [label,path] of [["植生統合・樹木の制作記録","/actions/runs/44730162099"],["森林V21の制作記録","/actions/runs/45631347949"],["河川V26：EPA参照データ（CC BY 4.0・完成レンダーなし）","/actions/runs/45641788138"]]){const link=document.createElement("a");link.href="https://github.com/celticmusic-nagoya/the-windbound-oath"+path;link.textContent=label;link.rel="noopener noreferrer";links.append(link,document.createTextNode("　"));}area.append(links);}
   categoryButton(title+" / 全件",groups.get(id),()=>detail(id,title+" / 全件",()=>subhome(id,title)));
   for(const [sub,label] of subcategories[id]){
@@ -202,6 +217,7 @@ async function loadPublishedGallery(automatic=false){
  area.replaceChildren();area.classList.remove("category-grid");
  navigation([{label:"制作領域",action:home},{label:title}]);
  const back=document.createElement("button");back.type="button";back.className="category-back";back.textContent="← カテゴリ一覧";back.onclick=goBack;area.append(back);
+ projectShortcut(id);
  const entries=[...(subset||groups.get(id))].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")));status.textContent=title+" / "+entries.length+" 件 / 制作成果物";
  if(designKey&&worldDesign[designKey]){
   const docs=document.createElement("section");docs.className="gallery-design-links";docs.dataset.designCategory=designKey;
@@ -268,8 +284,9 @@ async function loadPublishedGallery(automatic=false){
  const apply=()=>{let count=0;for(const {tile,e} of tiles){tile.hidden=!matches(e);if(!tile.hidden)count++;}empty.hidden=count!==0||entries.length===0;status.textContent=title+" / 表示 "+count+" 件・全 "+entries.length+" 件";};filter.onchange=apply;search.oninput=apply;qaFilter.select.onchange=apply;adoptionFilter.select.onchange=apply;
  if(!entries.length){filter.hidden=true;search.hidden=true;qaFilter.select.hidden=true;adoptionFilter.select.hidden=true;clear.hidden=true;const p=document.createElement("p");p.textContent="成果物はまだ同期されていません。";area.append(p);}
  }
- home();
- }catch(e){if(generation===publishedGalleryGeneration){publishedGalleryLive.textContent="更新失敗: "+e.message+" / 前回取得分を保持。";if(publishedGalleryKey===null)status.textContent="同期一覧未取得: "+e.message;}}
+ openGalleryCategory=id=>{const category=categories.find(([key])=>key===id);if(category){const title=category[1];if(id in subcategories)subhome(id,title);else detail(id,title);}};
+ if(pendingGalleryCategory){const id=pendingGalleryCategory;pendingGalleryCategory=null;openGalleryCategory(id);}else home();
+ }catch(e){if(generation===publishedGalleryGeneration){if(openGalleryCategory)pendingGalleryCategory=null;publishedGalleryLive.textContent="更新失敗: "+e.message+" / 前回取得分を保持。";if(publishedGalleryKey===null)status.textContent="同期一覧未取得: "+e.message;}}
  finally{publishedGalleryActive--;if(generation===publishedGalleryGeneration)publishedGalleryDue=Date.now()+(success?60000:300000);schedulePublishedGallery();}
 }
 document.getElementById("refresh-published").addEventListener("click",()=>loadPublishedGallery(false));

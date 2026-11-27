@@ -5,15 +5,30 @@ mkdir -p "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site"
 python discover-gallery.py
 python - <<'PY'
 import json, subprocess, os
+from datetime import datetime, timezone
 from pathlib import Path
+from artifact_availability import recorded_expired_404, retained_receipt_matches
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
 assert len(selection)<=36
 active=[]
+history=None
 for x in selection:
     a=x['artifact_id']; run=x['run_id']
     assert type(a)==int and type(run)==int and min(a,run)>0
     repo=os.environ['GITHUB_REPOSITORY']
-    meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}']))
+    try:
+        meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}'],stderr=subprocess.PIPE))
+    except subprocess.CalledProcessError as exc:
+        stderr=exc.stderr.decode('utf-8',errors='replace')
+        if not recorded_expired_404(x,stderr,datetime.now(timezone.utc)):
+            raise
+        if history is None:
+            subprocess.run(['git','fetch','--no-tags','--depth=1','origin','refs/heads/studio-published'],check=True)
+            history=json.loads(subprocess.check_output(['git','show','FETCH_HEAD:gallery-manifest.json']))
+        if not retained_receipt_matches(x,history):
+            raise ValueError(f'expired artifact {a}: exact published history not found') from exc
+        print(f'NOT_RUN: artifact {a} recorded expiry elapsed and HTTP 404; exact historical entries retained by downstream SHA verification')
+        continue
     if meta['expired']:
         print(f'Artifact {a} expired; retaining previously published copy if available')
         continue

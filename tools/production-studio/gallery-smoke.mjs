@@ -162,6 +162,41 @@ try{
  await page.unroute('**/gallery-manifest.json');
  await page.locator('#refresh-published').click();
  await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+ // Project/gallery navigation rebased on current live-refresh implementation.
+ await page.waitForFunction(()=>document.querySelector('#project-cliff'));
+ const projectLink=id=>page.locator('#project-'+id).getByRole('button',{name:'この領域の成果物を見る',exact:true});
+ const backToProject=()=>page.getByRole('button',{name:'この領域の制作状況へ',exact:true});
+ const checkFocus=selector=>page.locator(selector).evaluate(e=>document.activeElement===e);
+ await projectLink('cliff').click();
+ assert.match(await page.locator('#published-status').innerText(),/風待ちの崖/);
+ assert.equal(await page.locator('#published-gallery article').count(),manifest.entries.filter(e=>categoryOf(e)==='cliff').length);
+ assert.ok(await checkFocus('#published-title'));
+ await backToProject().click();assert.ok(await checkFocus('#project-cliff h3'));
+ for(const [id,title] of [['morwen','モルウェン'],['village','リルド村']]){
+  await projectLink(id).click();
+  assert.ok((await page.locator('#published-status').innerText()).includes(title));
+  assert.ok(await checkFocus('#published-title'));
+  await backToProject().click();assert.ok(await checkFocus('#project-'+id+' h3'));
+ }
+ // A requested category must survive an in-flight manual refresh; invalid requests do not navigate.
+ let releaseNavigation,navArrived;
+ const navGate=new Promise(r=>{releaseNavigation=r;}),navStart=new Promise(r=>{navArrived=r;});
+ await page.route('**/gallery-manifest.json',async route=>{navArrived();await navGate;await route.fulfill({json:manifest});});
+ try{
+  const started=page.waitForRequest(req=>req.url().includes('/gallery-manifest.json'));
+  await page.locator('#refresh-published').click();await started;await navStart;
+  await projectLink('morwen').click();
+  assert.match(await page.locator('#published-status').innerText(),/モルウェン/);
+  releaseNavigation();
+  await page.waitForFunction(()=>publishedGalleryActive===0);
+  assert.match(await page.locator('#published-status').innerText(),/モルウェン/);
+  const before=await page.locator('#published-status').innerText();
+  await page.evaluate(()=>document.dispatchEvent(new CustomEvent('studio:open-gallery-category',{detail:'unknown'})));
+  assert.equal(await page.locator('#published-status').innerText(),before);
+ }finally{releaseNavigation();await page.unroute('**/gallery-manifest.json');}
+ await backToProject().click();assert.ok(await checkFocus('#project-morwen h3'));
+ await page.getByRole('button',{name:'← カテゴリ一覧',exact:true}).click();
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'project navigation mobile overflow');
  // UX regression: bundled stylesheet, breadcrumbs, 390px layout and QA metadata.
  const uxCss=await page.request.get('http://127.0.0.1:8766/studio-ux.css');
  assert.equal(uxCss.status(),200,'UX stylesheet missing from published bundle');
