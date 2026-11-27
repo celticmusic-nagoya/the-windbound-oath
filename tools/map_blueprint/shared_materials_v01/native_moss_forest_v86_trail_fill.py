@@ -162,36 +162,60 @@ def visible_segment(start,end):
     d=end-start
     hit,loc,n,index,obj,matrix=scene.ray_cast(deps,start,d.normalized(),distance=d.length-.05)
     return (not hit, None if not hit else obj.name)
-def choose_fill(offset):
-    target2=EYE.to_2d()+FWD*offset
-    gz=ground(target2.x,target2.y);assert gz is not None
-    target=Vector((target2.x,target2.y,gz+.25))
+# F2: actual previous raycast hit four ferns at EYE. Do not bypass
+# vegetation occlusion or lower the 3/5 threshold. Project to authored
+# animal-trail centerline, search nearby longitudinal stations, permit one
+# qualified fixture if a second cannot be found.
+qa['placement_trials']=[]
+def centerline(a):
+    return A_+U*a+N_*meander(a)
+def choose_fill(offset,occupied):
+    nominal=EYE.to_2d()+FWD*offset
+    station=(nominal-A_).dot(U)
     trials=[]
-    for lateral in (-2.0,2.0,-3.5,3.5,0.0):
-        for height in (4.0,5.5,3.0):
-            p2=target2+PERP*lateral;z=ground(p2.x,p2.y)
-            if z is None:continue
-            pos=Vector((p2.x,p2.y,z+height))
-            checks=[]
-            for advance,side in ((0,0),(-1.5,0),(1.5,0),(0,-.5),(0,.5)):
-                p=target2+FWD*advance+PERP*side;g=ground(p.x,p.y)
-                if g is None:continue
-                checks.append(visible_segment(Vector((p.x,p.y,g+.35)),pos))
-            score=sum(v[0] for v in checks)
-            trials.append((score,-abs(lateral),-abs(height-4),pos,checks))
-    assert trials,'no grounded placement'
-    score,_,_,pos,checks=max(trials,key=lambda x:x[:3])
-    assert score>=3,('insufficient unoccluded ground samples',offset,score,checks)
+    for shift in (0,-2,2,-4,4):
+        a=station+shift
+        if not 0<a<LEN:continue
+        target2=centerline(a)
+        if any((target2-p).length<5 for p in occupied):continue
+        gz=ground(target2.x,target2.y)
+        if gz is None:continue
+        target=Vector((target2.x,target2.y,gz+.25))
+        for lateral in (-2.0,2.0,-3.5,3.5,0.0):
+            for height in (4.0,5.5,3.0):
+                p2=target2+N_*lateral;z=ground(p2.x,p2.y)
+                if z is None:continue
+                pos=Vector((p2.x,p2.y,z+height))
+                checks=[]
+                for advance,side in ((0,0),(-1.5,0),(1.5,0),(0,-.25),(0,.25)):
+                    p=centerline(a+advance)+N_*side;g=ground(p.x,p.y)
+                    if g is None:continue
+                    checks.append(visible_segment(Vector((p.x,p.y,g+.35)),pos))
+                if len(checks)!=5:continue
+                score=sum(v[0] for v in checks)
+                trials.append((score,-abs(shift),-abs(lateral),-abs(height-4),target,pos,checks,a))
+    if not trials:
+        qa['placement_trials'].append({'offset':offset,'status':'NO_TRIALS'});checkpoint();return None
+    score,_,_,_,target,pos,checks,a=max(trials,key=lambda x:x[:4])
+    qa['placement_trials'].append({'offset':offset,'station':a,'candidate_count':len(trials),'clear':score,'blocked_by':[name for clear,name in checks if not clear]})
+    checkpoint()
+    if score<3:return None
     return target,pos,score,checks
-new=[]
+new=[];occupied=[]
 for idx,offset in enumerate((-8.0,0.0)):
-    target,pos,score,checks=choose_fill(offset)
+    result=choose_fill(offset,occupied)
+    if result is None:continue
+    target,pos,score,checks=result
+    occupied.append(target.to_2d())
     light=bpy.data.lights.new('V86_trail_soft_%02d'%idx,'AREA')
     light.shape='DISK';light.size=4.5;light.color=(.86,.93,1.0);light.energy=0
     ob=bpy.data.objects.new(light.name,light);collection.objects.link(ob)
     ob.location=pos;ob.rotation_euler=(target-pos).to_track_quat('-Z','Y').to_euler()
     new.append(ob)
     qa['placements'].append({'object':ob.name,'target':list(target),'location':list(pos),'unblocked_ground_samples':score,'sample_count':len(checks),'blocked_by':[name for clear,name in checks if not clear],'size':4.5})
+    checkpoint()
+assert new,'no qualified trail fill; stop without lighting mutation'
+qa['fixture_count']=len(new)
 def setlight(power):
     for ob in new:ob.data.energy=power
     assert scene.view_settings.exposure==exposure and bg.inputs['Strength'].default_value==strength and vol.inputs['Density'].default_value==density
