@@ -112,5 +112,22 @@ class SelectionPinsTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 archive_budget(dict(item,**changes))
 
+    def test_v83_review_only_transport_pins(self):
+        items = json.loads((ROOT / "sync-selection.json").read_text())
+        item = next(x for x in items if x["artifact_id"] == 15177623362)
+        self.assertEqual((item["run_id"], item["head"]), (45953942216, "e91779c99004b69303d0af411fdd4ab8258e206c"))
+        self.assertEqual(item["artifact_digest"], "sha256:d205f0aa85b527255c591132681eb9893db3b0644f84f61a4497cbd6e11288bb")
+        self.assertEqual(len(item["entries"]), 8)
+        self.assertEqual(set(item["entries"]), set(item["entry_sha256"]))
+        self.assertTrue(all(n.startswith("v83_") and n.endswith(".png") for n in item["entries"]))
+        self.assertEqual(set(item["entry_subcategories"].values()), {"sanctuary"})
+        self.assertNotIn("exact_archive_bytes", item)
+        self.assertIn("G2 HOLD", item["stage"])
+        receipts = {r["sha256"]:r for r in json.loads((ROOT / "publication-approvals.json").read_text())["entries"]}
+        for name, sha in item["entry_sha256"].items():
+            r = receipts[sha]
+            self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"], r["approval_ref"]),
+                             (item["head"], item["run_id"], item["artifact_id"], name, "published/"+sha+".png", item["review_ref"]))
+
 if __name__ == "__main__":
     unittest.main()
