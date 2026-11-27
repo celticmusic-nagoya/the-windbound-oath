@@ -29,6 +29,8 @@ on:
       - 'tools/production_qa/verify_transfer_output.py'
       - 'tools/production_qa/vrm_export_session.sh'
       - 'tools/production_qa/test_restore_morwen_artifact_preflight.py'
+      - 'tools/production_qa/shared_artifact_reuse.py'
+      - 'tools/production_qa/test_shared_artifact_reuse.py'
 permissions:
   contents: read
 concurrency:
@@ -52,6 +54,17 @@ jobs:
           for name in classify_actions_jobs audit_actions_ledger collect_actions_snapshot reconcile_actions_snapshot verify_actions_artifact inspect_actions_artifact_metadata download_actions_artifact; do
             python3 -m unittest discover -s tools/production_qa -p "test_${name}.py" -v
           done
+  artifact-reuse-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify streaming reuse, archive contracts and reservation compatibility
+        working-directory: tools/production_qa
+        run: |
+          python3 -m unittest -v test_shared_artifact_reuse test_verify_actions_artifact test_inspect_actions_artifact_metadata test_download_actions_artifact test_shared_dispatch_reservation
   reviewed-launch-contract:
     permissions:
       contents: read
