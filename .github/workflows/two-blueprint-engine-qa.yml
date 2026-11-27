@@ -37,6 +37,19 @@ jobs:
           python -I tools/blueprint_engine/ensure_runtime.py | tee "$RUNNER_TEMP/bpy-preparation.json"
           python -I tools/blueprint_engine/ensure_runtime.py | tee "$RUNNER_TEMP/bpy-reuse.json"
           python -c "import json,sys; d=json.load(open(sys.argv[1])); assert d['status']=='VERIFIED' and d['route']=='REUSED' and d['pip_install_calls']==0" "$RUNNER_TEMP/bpy-reuse.json"
+      - name: Isolated Cycles multiview timing and pixel comparison
+        if: github.head_ref == 'test/blueprint-cycles-persistent-views-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+        run: python -I tools/blueprint_engine/render_reuse_pilot.py "$RUNNER_TEMP/render-pilot"
+      - uses: actions/upload-artifact@v4
+        if: always() && github.head_ref == 'test/blueprint-cycles-persistent-views-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+        with:
+          name: cycles-multiview-pilot
+          path: |
+            ${{ runner.temp }}/render-pilot/summary.json
+            ${{ runner.temp }}/render-pilot/*/receipt.json
+            ${{ runner.temp }}/render-pilot/*/*.png
+          if-no-files-found: warn
+          retention-days: 7
       - name: Compile and verify engine with isolated fixtures only
         working-directory: tools
         run: |
