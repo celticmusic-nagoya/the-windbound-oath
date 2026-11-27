@@ -145,5 +145,40 @@ class SelectionPinsTests(unittest.TestCase):
             self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"], r["approval_ref"]),
                              (item["head"], item["run_id"], item["artifact_id"], name, "published/"+sha+".png", item["review_ref"]))
 
+    def test_optional_discovery_respects_curated_capacity(self):
+        import os, runpy
+        from unittest.mock import patch
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as temp, patch.dict(os.environ, {
+            "RUNNER_TEMP": temp, "GITHUB_REPOSITORY": "celticmusic-nagoya/the-windbound-oath",
+            "STUDIO_PREVIEW_MODELS": "1"
+        }):
+            d = runpy.run_path(str(ROOT / "discover-gallery.py"))
+            g = d["discover"].__globals__
+            # At the limit, all optional discovery must stop before API/download.
+            curated = [{"artifact_id": i, "category": "world", "entries": ["review.png"]} for i in range(1, 37)]
+            with patch.dict(g, {"api": lambda _: self.fail("unexpected API at capacity")}):
+                d["preview_vroid"](curated, set(range(1, 37)), pathlib.Path(temp))
+                d["preview_receipts"](curated, set(range(1, 37)), pathlib.Path(temp))
+                with patch.object(pathlib.Path, "read_text", return_value=json.dumps(curated)):
+                    d["discover"]()
+                self.assertEqual(json.loads((pathlib.Path(temp) / "studio-discovered.json").read_text()), curated)
+                with patch.object(pathlib.Path, "read_text", return_value=json.dumps(curated + [{"artifact_id": 37}])):
+                    with self.assertRaisesRegex(ValueError, "curated selection exceeds"):
+                        d["discover"]()
+            self.assertTrue(d["has_capacity"](curated[:-1]))
+            self.assertFalse(d["has_capacity"](curated))
+            # An optional preview can consume the last slot, but the next receipt
+            # and branch must not start another network call.
+            def last_preview(selection, known, saved):
+                self.assertTrue(d["has_capacity"](selection))
+                selection.append({"artifact_id": 99, "category": "morwen", "entries": ["view.png"]})
+            with patch.dict(g, {"preview_vroid": last_preview,
+                                "api": lambda _: self.fail("unexpected API after last slot")}):
+                with patch.object(pathlib.Path, "read_text", return_value=json.dumps(curated[:-1])):
+                    d["discover"]()
+                result = json.loads((pathlib.Path(temp) / "studio-discovered.json").read_text())
+                self.assertEqual(result, curated[:-1] + [{"artifact_id": 99, "category": "morwen", "entries": ["view.png"]}])
+
 if __name__ == "__main__":
     unittest.main()
