@@ -2,11 +2,15 @@
 
 Scope: all TWO 3D characters and all AI agents/automations (Claude, ChatGPT, Codex and others). Registered from the director's explicit v7.0 instruction delivered in a Claude session on 2026-11-27 (16:50 JST). This registration changes production method priority; it does not certify any runtime capability, grant credentials, adopt assets or change canon.
 
+## Director correction — 2026-11-27
+
+Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve W99 hair and independent modules. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613). The originally registered v7 text is retained in merge commit 69411da7998260280561dff70b0c6c103490ba1f; only the conflicting head-count wording is corrected here.
+
 ## Precedence and relation to existing policy
 
 - Latest explicit director instruction > this v7.0 > AGENTS.md v6.0 sections and registry > older scoped policies > historical evidence.
 - **New-custom-first hybrid production supersedes** VRoid-only completion, preset-modification fixation and Blender-only fixation wherever they conflict (including `MORWEN_VROID_FIRST_AUTHORING_20261121.md` and the "Blender as principal environment" wording of `MORWEN_EARLY_BLENDER_TRANSFER_20261126.md`). Tool choice is per part (VRoid / Blender 5.3.0 / HairHarpy 2.0.0 / XWear / texture tools), by measured quality, editability, compatibility, rights and total effort.
-- Unchanged and still mandatory: D0–D4 design maturity, G1–G4 PASS/FAIL/HOLD/BLOCKED/NOT_RUN, canon/protected originals, licensing, single writer, STOP_ACK/CAS/lease/fencing where the route requires them, no forced reclaim, no new spending, private/public boundary, formal-adoption approval, Morwen visual targets (7.75 heads nominal within 7.5–8, Layer 0 hair shape, official clothed dark-violet hair colour).
+- Unchanged and still mandatory: D0–D4 design maturity, G1–G4 PASS/FAIL/HOLD/BLOCKED/NOT_RUN, canon/protected originals, licensing, single writer, STOP_ACK/CAS/lease/fencing where the route requires them, no forced reclaim, no new spending, private/public boundary, formal-adoption approval, Morwen visual targets (6.25 heads nominal within 6.2–6.3, corrected 2026-11-27; Layer 0 hair shape, official clothed dark-violet hair colour).
 - Claude is the current principal production agent; roles are not permanent. Any qualified AI may produce, implement, recover and QA.
 
 ## Operative summary
@@ -220,7 +224,7 @@ VRoid自由描画、個別毛束編集、HairHarpy、Blender曲線・メッシ�
 
 頭部、首、肩、胸郭、胴体、骨盤、腕、手、脚、足の比率と自然な人体構造を設計する。
 
-モルウェンの現行正式目標は7.75頭身を基準とした7.5〜8頭身とする。
+モルウェンの現行正式目標は6.25頭身を基準とした6.2〜6.3頭身とする（2026-11-27 ディレクター訂正。旧7.75／7.5〜8指定に優先）。
 
 頭身計測時は髪のボリューム、帽子、靴のヒールを除外した人体ランドマークを使用する。
 
@@ -404,7 +408,7 @@ W93の実行結果、保存原本、最新担当PRを確認し、未完了部分
 
 正式目標：
 
-- 頭身：7.75基準
+- 頭身：6.25基準（6.2〜6.3）
 - 顔：正式デザインへの精密な一致
 - 髪型：正式Layer 0四面図
 - 髪色：正式衣装付きデザインの暗い紫系

@@ -1,5 +1,9 @@
 # AGENTS.md — THE WINDBOUND OATH / Mionn na Gaoithe
 
+## Director correction — Morwen proportions (2026-11-27)
+
+Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve W99 hair and independent modules. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision and recovery evidence](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613).
+
 ## Director-approved hybrid custom character production v7.0 (2026-11-27)
 
 All 3D characters, all agents and automations: apply [hybrid custom production v7.0](docs/policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md). Build face/hair/body/clothing/equipment/textures from new empty custom items, layers or meshes where practical; a preset colour change or minor edit is never a finished part. Choose VRoid, Blender 5.3.0, HairHarpy 2.0.0, XWear or texture tools per part by measured quality, editability, compatibility, rights and total effort; this supersedes VRoid-only, preset-fixation and Blender-only wording where conflicting. Reuse qualified existing parts after evaluation; VRoid base mesh/rig/expressions/templates/UV remain usable. Morwen legacy preset hair (W42/W89/W90) is proof/comparison/restore only. Qualify unverified tool features before use; preserve editable originals privately; hand off with retrievable files and SHA. Claude is current principal producer; roles are not fixed. D0–D4, G1–G4, canon, licences, writer safety, spending and adoption rules remain.
@@ -24,7 +28,7 @@ For Production Studio only, the director explicitly authorizes routine gallery p
 
 ## Director-approved Morwen early Blender transfer (2026-11-26)
 
-For Morwen #427, [early Blender transfer](docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md) supersedes conflicting VRoid-native completion-before-export wording below and in the older VRoid-first policy. Preserve the verified VRoid base/checkpoints, export and validate actual VRM on an isolated copy, then use Blender as the main authoring environment. Director-approved Morwen visual targets: 7.75 heads nominal, Layer 0 hair shape, official clothed design dark violet hair color; synthetic photo-style material reference only. D0–D4, G1–G4, licensing, protected originals, writer safety, spending and adoption requirements remain. No automatic extension to other characters.
+For Morwen #427, [early Blender transfer](docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md) supersedes conflicting VRoid-native completion-before-export wording below and in the older VRoid-first policy. Preserve the verified VRoid base/checkpoints, export and validate actual VRM on an isolated copy, then use Blender as the main authoring environment. Director-approved Morwen visual targets: 6.25 heads nominal (6.2–6.3; corrected 2026-11-27), Layer 0 hair shape, official clothed design dark violet hair color; synthetic photo-style material reference only. D0–D4, G1–G4, licensing, protected originals, writer safety, spending and adoption requirements remain. No automatic extension to other characters.
 
 ## Production-First v6.0 — director-approved 2026-11-25 (read this first)
 
