@@ -30,8 +30,16 @@ def checkpoint():
     (out/'v89_oak_qa.json').write_text(json.dumps(qa,indent=2));print('V89_CHECKPOINT',json.dumps({k:v for k,v in qa.items() if k!='views'}),flush=True)
 copy=source.copy();copy.name='V89_oak_leaf_detail_candidate'
 bm=bmesh.new();bm.from_mesh(copy);bm.faces.ensure_lookup_table();bm.verts.ensure_lookup_table()
-layers=list(bm.loops.layers.uv.values());active=bm.loops.layers.uv.active;assert layers and active is not None
-ai=layers.index(active)
+# BMLayerItem wrappers are not identity-equal across collection lookups.
+# Resolve by the original Mesh UV name, not Python object identity.
+uv_names=list(bm.loops.layers.uv.keys())
+active_name=source.uv_layers.active.name
+assert uv_names and len(uv_names)==len(set(uv_names))
+assert set(uv_names)=={u.name for u in source.uv_layers} and active_name in uv_names
+layers=[bm.loops.layers.uv[name] for name in uv_names]
+ai=uv_names.index(active_name)
+qa['uv_preflight']={'names':uv_names,'active':active_name,'active_index':ai,'method':'name lookup'}
+checkpoint()
 leaf=[f for f in bm.faces if f.material_index==1];wood={v for f in bm.faces if f.material_index!=1 for v in f.verts}
 assert len(leaf)==1060032
 seen=set();groups=[]
@@ -80,6 +88,11 @@ qa.update({'changed_components':changed,'skipped_components':skipped,'leaf_trian
 assert changed>0 and removed_tri>0
 ob=bpy.data.objects.new('V89_oak_candidate',copy);study.collection.objects.link(ob)
 old.hide_render=True;reference.hide_render=True;ob.hide_render=False
+# Preserve a native checkpoint before rendering; re-open validation below.
+bpy.context.window.scene=study
+bpy.ops.object.select_all(action='DESELECT');ob.select_set(True);bpy.context.view_layer.objects.active=ob
+dest=out/'v89_oak_candidate.blend';assert not dest.exists()
+bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True);qa['native_sha256']=sha(dest);checkpoint()
 lo=Vector(tuple(min(v.co[i] for v in source.vertices) for i in range(3)));hi=Vector(tuple(max(v.co[i] for v in source.vertices) for i in range(3)));center=(lo+hi)*.5;extent=(hi-lo).length
 assert abs(camera.data.ortho_scale-extent*1.05)<1e-5 and study.cycles.samples==24
 def alpha(f):
@@ -98,6 +111,6 @@ qa['screening']='PASS' if qa['min_alpha_iou']>=.92 and qa['max_coverage_deviatio
 bpy.context.window.scene=study;bpy.ops.object.select_all(action='DESELECT');ob.select_set(True);bpy.context.view_layer.objects.active=ob
 glb=out/'v89_oak_candidate.glb';bpy.ops.export_scene.gltf(filepath=str(glb.resolve()),export_format='GLB',use_selection=True,export_animations=False)
 qa['glb_sha256']=sha(glb)
-dest=out/'v89_oak_candidate.blend';bpy.ops.wm.save_as_mainfile(filepath=str(dest.resolve()),compress=True);qa['native_sha256']=sha(dest)
+assert sha(dest)==qa['native_sha256']
 bpy.ops.wm.open_mainfile(filepath=str(dest.resolve()));assert protected(bpy.data.objects['V89_oak_candidate'].data)==original
 qa['reopen_wood_exact']=True;qa['source_unchanged']=sha(src)==LOCK;assert qa['source_unchanged'];checkpoint();print('V89_OAK_DONE',json.dumps(qa))
