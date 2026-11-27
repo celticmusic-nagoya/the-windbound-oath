@@ -1,0 +1,53 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source_v20": "b94a3e25ec68577e895319cbc506079b7f67ba094a47cd71787ed25dda6c841c",
+  "official_day": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "frame": "provisional local BU Z up; no world transform approved",
+  "ridge": {
+    "y_range": [
+      115,
+      235
+    ],
+    "near_width": 155,
+    "far_width": 310,
+    "vertices": 3087,
+    "triangles": 5952,
+    "height_range": [
+      2,
+      83.76450325669678
+    ],
+    "seam_vertices": 63,
+    "independent_saved_seam_max": 4.440892098500626e-15,
+    "atlas_dimensions": [
+      2048,
+      1536
+    ],
+    "material_sources": "existing embedded meadow texture24 and rock texture0 luminance, authored slope/elevation blend; no directional light baked"
+  },
+  "trees": {
+    "instances": 46,
+    "mesh": 258,
+    "triangles_per_tree": 2446,
+    "root_samples": 414,
+    "root_max": 0.09497322709734224,
+    "tolerance": 0.095,
+    "uncertainty": 0.000002,
+    "selected_obstacle_exclusion": true
+  },
+  "qa": {
+    "old_scene_roots_preserved": 304,
+    "original_resource_arrays_and_bin_prefix_exact": true,
+    "verified_hashes": 10,
+    "visual_correction": "first eye render exposed mountain side; tapered outer ridge heights; same-camera comparison created. Independent stored seam strict byte equality failed at 4.44e-15 BU due floating point; tolerance <1e-5 passed."
+  },
+  "outputs": {
+    "integration": "19ee63e1008fbf2e4d67c7492456d22b08db279d3dfb5de87be1a4e328b85051",
+    "atlas": "82d8725350bf86c01a1afba18915486e8638aa48367b59e69f0a444e1a70fcc8",
+    "build": "e1384f569c9f003e63abef3137bdbe4c53968e017fd86dff8903bc9f62ce97a0",
+    "qa": "cebb940f806c2f1682bd463341e7ac991913b9f3599549381c6aa9687c44b918"
+  },
+  "limits": [
+    "Mountain shape not metric reconstruction from CG; upper forest sparse, mountain material simple, exposed exterior edges remain in overview.",
+    "No native edit, full PBR/dynamic water, atmospheric haze, collision/navigation, mobile runtime or adoption. Shared mesh reuse not GPU instancing. No main merge."
+  ]
+}
