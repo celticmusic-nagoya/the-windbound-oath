@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';import {createMotePool} from './mote_pool.mjs';
+let tests=0,disposals=0;const ok=(v)=>{assert.ok(v);tests++};const reject=(f)=>{assert.throws(f);tests++};
+const pos=()=>({x:0,y:0,z:0,set(x,y,z){Object.assign(this,{x,y,z})}});
+const mat=()=>({transparent:true,depthWrite:true,emissive:{},emissiveIntensity:1,opacity:1,clone(){return {...this}},dispose(){disposals++}});
+const material=mat(),geo={};const proto={isMesh:true,material,geometry:geo,clone(){return {isMesh:true,material,geometry:geo,visible:true,position:pos(),scale:{factor:1,multiplyScalar(s){this.factor*=s}}}}};
+const runes=['01_stele','02_posts','03_floor'].map(id=>({name:`V82_FX_${id}`,isMesh:true,material:mat(),visible:true}));
+const root={visible:true,children:[...runes],traverse(f){this.children.forEach(f)},add(o){assert.equal(o.visible,false);this.children.push(o)},remove(o){this.children=this.children.filter(x=>x!==o)}};
+const pool=createMotePool(root,proto);let extra=root.children.slice(3);ok(root.children.length===28);ok(extra.every(x=>!x.visible));ok(!root.visible);ok(extra.every(x=>x.geometry===geo));ok(extra.every(x=>x.material!==material&&!x.material.depthWrite));ok(material.depthWrite&&material.opacity===1);ok(extra[0].scale.factor===2.5);
+const frame=(a,active)=>({layers:['01_stele','02_posts','03_floor'].map(id=>({id,visible:a>0,emission:a})),floating:{visible:active,y:.65,opacity:active?.9:0},particles:active?[{id:0,x:.3,y:.4,z:.5,opacity:.8}]:[]});
+pool.apply(frame(1,true));ok(root.visible&&runes.every(o=>o.visible));ok(extra[0].visible&&Math.abs(extra[0].position.y-29.374717254638672)<1e-8);ok(extra[1].visible&&extra[1].material.opacity===.8);ok(extra.slice(2).every(o=>!o.visible));ok(Math.abs(extra[1].position.x-94.24316101074219)<1e-8);
+pool.reset();ok(!root.visible&&extra.every(o=>!o.visible&&o.material.opacity===0));pool.dispose();ok(root.children.length===3&&disposals===28);pool.dispose();ok(disposals===28);reject(()=>pool.apply(frame(1,true)));reject(()=>createMotePool(root,proto,{count:25}));reject(()=>createMotePool(root,proto,{coreScale:5}));reject(()=>createMotePool(root,{...proto,material:{transparent:false}}));ok(root.children.length===3);console.log(`${tests}/${tests} PASS (mock object interface; no renderer)`);
