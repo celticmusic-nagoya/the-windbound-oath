@@ -1,5 +1,5 @@
 """V82-F: local native central substrate topology repair.
-Exact V82-B input. Identify component with degenerate triangles, weld only
+Exact V82-E input (tileable stone; identical source geometry). Identify component with degenerate triangles, weld only
 coincident vertices in that component, require unchanged other face/UV signatures
 and sampled top surface. No blanket merge, no material edit, no new dimensions.
 """
@@ -13,7 +13,7 @@ src,out=map(Path,sys.argv[sys.argv.index('--')+1:][:2])
 out.mkdir(parents=True,exist_ok=True)
 def sha(p):
     with open(p,'rb') as f: return hashlib.file_digest(f,'sha256').hexdigest()
-LOCK='6061d7233cf32b2b1b1e37bfae28a6d15f43eda88c6fd6cf00807eda0c7962a5'
+LOCK='f4e5f90511f544de17bc79001a98227327d048c83bc6f3a3e5465b5a4037604d'
 assert sha(src)==LOCK and bpy.app.version[:3]==(5,3,0)
 bpy.ops.wm.open_mainfile(filepath=str(src.resolve()))
 scene=bpy.context.scene
@@ -134,7 +134,11 @@ def triangle_area(m,t):
 bad=[t.polygon_index for t in oldmesh.loop_triangles if triangle_area(oldmesh,t)<=EPS]
 assert bad,'No degenerate native loop triangles, inspect exporter rather than mutate'
 # Identify only vertex-connected component(s) of the observed zero-area triangles.
-bm=bmesh.new();bm.from_mesh(oldmesh);bm.faces.ensure_lookup_table();bm.verts.ensure_lookup_table()
+bm=bmesh.new();bm.from_mesh(oldmesh)
+# Adding a custom-data layer invalidates existing BMFace/BMVert references.
+# Allocate it before obtaining any element handles (observed run 45950947341).
+layer=bm.faces.layers.int.new('V82F_repair_component')
+bm.faces.ensure_lookup_table();bm.verts.ensure_lookup_table();bm.faces.index_update();bm.verts.index_update()
 seed=set(bm.faces[i] for i in set(bad));seen=set();groups=[]
 for f in sorted(seed,key=lambda x:x.index):
     if f in seen:continue
@@ -155,13 +159,16 @@ def sig_mesh(m,exclude=set()):
 untouched=sig_mesh(oldmesh,indices)
 # Preserve an exact signature for the existing non-defect component faces, independently
 # of polygon index changes in BMesh.
-layer=bm.faces.layers.int.new('V82F_repair_component')
 for f in target:f[layer]=1
 qa={'candidate_only':True,'source_sha256':LOCK,'threshold_area':EPS,'before':{'loop_triangles':len(oldmesh.loop_triangles),'zero_area_triangles':len(bad),'defect_component_faces':len(target),'defect_component_vertices':len(verts),'centre_vertices':len(center_vertices)},'limits':['Central substrate only; no stone appearance or rune change','Finite grid surface diagnostic, not traversal certification','No adopted geometry, no G2/G4']}
 def topo(faces):
     ee={e for f in faces for e in f.edges}
     return {'boundary_edges':sum(len(e.link_faces)==1 for e in ee),'nonmanifold_edges':sum(len(e.link_faces)>2 for e in ee),'zero_area_faces':sum(f.calc_area()<=EPS for f in faces)}
 qa['before'].update(topo(target))
+def checkpoint():
+    (out/'v82f_floor_qa.json').write_text(json.dumps(qa,indent=2))
+    print('V82F_CHECKPOINT',json.dumps(qa),flush=True)
+checkpoint()
 # Weld only coincident vertices of this one component, never between masonry blocks.
 # Use a small tolerance, substantially below existing geometric detail.
 bm.normal_update()
@@ -171,6 +178,7 @@ new_target=[f for f in bm.faces if f[layer]==1]
 assert new_target
 # Degenerate residuals (if any) are diagnosed and rejected, not silently deleted.
 qa['after_component']=topo(new_target)
+checkpoint()
 assert qa['after_component']['zero_area_faces']==0 and qa['after_component']['nonmanifold_edges']==0 and qa['after_component']['boundary_edges']==0,qa['after_component']
 mesh=oldmesh.copy();mesh.name='V82F_platform_center_repaired';bm.to_mesh(mesh);bm.free();mesh.update()
 attr=mesh.attributes['V82F_repair_component'];new_indices={i for i,v in enumerate(attr.data) if v.value==1}
@@ -192,6 +200,7 @@ for ix in range(-40,41):
         if a is None or b is None:missing+=1;continue
         delta.append(abs(a.z-b.z))
 qa['surface_grid']={'paired_hits':len(delta),'missing':missing,'max_delta_local':max(delta) if delta else None,'tolerance_local':.0001}
+checkpoint()
 assert len(delta)>0 and missing==0 and max(delta)<=.0001
 platform.data=mesh
 newfp=fingerprint()
