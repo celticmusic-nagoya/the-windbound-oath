@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - feature/lind-agent-blender-handoff-01
+      - feature/lind-webgl-runtime-benchmark-01
     paths:
       - 'tools/map_blender/runtime_benchmark/**'
       - '.github/workflows/lind-browser-smoke.yml'
@@ -16,6 +17,7 @@ on:
       - '.github/workflows/lind-browser-smoke.yml'
 permissions:
   contents: read
+  actions: read
 jobs:
   smoke:
     runs-on: ubuntu-24.04
@@ -26,7 +28,7 @@ jobs:
           persist-credentials: false
       - name: Install browser runner
         run: |
-          npm install --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
+          npm install --ignore-scripts --no-audit --no-fund --no-save --no-package-lock playwright@1.56.1 three@0.170.0 babylonjs@7.40.3 babylonjs-loaders@7.40.3
           npx playwright install --with-deps chromium
       - name: Create isolated GLB fixture
         run: |
@@ -44,6 +46,35 @@ jobs:
           print('fixture SHA256',hashlib.sha256(blob).hexdigest())
           PY
       - name: Browser import smoke (two engines)
+        env:
+          LIND_RACE_TEST: ${{ github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01' && '1' || '0' }}
+        run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
+      - name: Reuse verified V13 export (read only; no Blender)
+        if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/lind-source"
+          gh api repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/15131882078/zip > "$RUNNER_TEMP/lind-source/input.zip"
+          echo "93ebf13d046d605051d6931b3af056b52e7e498591e27f8304061c6898cc4a69  $RUNNER_TEMP/lind-source/input.zip" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib,os,zipfile
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'lind-source'
+          with zipfile.ZipFile(p/'input.zip') as z:
+              assert z.testzip() is None
+              data=z.read('village_v13_SCENIC_EXPORT.glb')
+          assert len(data)==50732020 and hashlib.sha256(data).hexdigest()=='b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d'
+          (p/'verified.glb').write_bytes(data)
+          print('PASS: reused exact V13 export, no native edit or upload')
+          PY
+      - name: Existing map GLB browser import smoke
+        if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
+        env:
+          LIND_GLB: ${{ runner.temp }}/lind-source/verified.glb
+          LIND_EXPECTED_SHA: b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d
+          LIND_QA_OUT: /tmp/lind-glb-benchmark/v13-browser-smoke.json
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
       - name: Upload evidence even on failure
         if: always()
