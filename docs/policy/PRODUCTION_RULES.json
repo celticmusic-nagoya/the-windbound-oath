@@ -414,10 +414,10 @@
     "other_character_policy_unchanged": true,
     "runtime": "VERIFIED_SCOPED_TECHNICAL_TRANSFER_PASS",
     "visual_targets": {
-      "nominal_head_count": 7.75,
+      "nominal_head_count": 6.25,
       "design_range": [
-        7.5,
-        8
+        6.2,
+        6.3
       ],
       "head_count_measurement": "neutral base mesh crown-to-sole / crown-to-chin; exclude hair, hat, shoe heels; report separate apparent hair-inclusive ratio",
       "hair_shape_source": "official_Layer0_four_views",
@@ -466,6 +466,17 @@
     "editable_originals_preservation_required": true,
     "handoff_requires_retrievable_files": true,
     "principal_agent_current": "Claude",
-    "fixed_ai_roles": false
+    "fixed_ai_roles": false,
+    "morwen_proportion_correction": {
+      "approved": "2026-11-27",
+      "nominal_head_count": 6.25,
+      "design_range": [
+        6.2,
+        6.3
+      ],
+      "scope": "Morwen_only",
+      "supersedes_conflicting_older_targets": true,
+      "source": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613"
+    }
   }
 }
