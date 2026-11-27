@@ -1,0 +1,56 @@
+name: TWO isolated village home context V5
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths:
+      - 'tools/map_blender/lind/home/village_home_context_v5.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-home-context-v5
+  cancel-in-progress: false
+jobs:
+  context:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_home_context_v5.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Restore exact independent input checkpoints
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/home" "$RUNNER_TEMP/verge" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14742392508/zip" > "$RUNNER_TEMP/home.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15094583638/zip" > "$RUNNER_TEMP/verge.zip"
+          printf '%s  %s\n' 42e2f9c6ee3d7da2047301015d65c05c5a670947e28490a09befc1a76c81bac9 "$RUNNER_TEMP/home.zip" 61e5c7788c80dfa2a96a5b4da21bd3f9cea2ca18ad0d8579044cb92dd89fe9b2 "$RUNNER_TEMP/verge.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/home.zip"
+          unzip -tq "$RUNNER_TEMP/verge.zip"
+          unzip -q "$RUNNER_TEMP/home.zip" -d "$RUNNER_TEMP/home"
+          unzip -q "$RUNNER_TEMP/verge.zip" -d "$RUNNER_TEMP/verge"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_home_context_v5.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_home_context_v5.py' -- "$RUNNER_TEMP/home/home_furniture_candidate.blend" "$RUNNER_TEMP/verge/village_verge_v4_UNAPPROVED.blend" "$RUNNER_TEMP/out" "$PWD/engine"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-home-context-v5
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14

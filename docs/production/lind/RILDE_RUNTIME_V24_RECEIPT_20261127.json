@@ -1,0 +1,75 @@
+{
+  "status": "LOSSLESS_LOCAL_CANDIDATE_G2_HOLD_G4_BLOCKED",
+  "source": "8c4e15e0208d655adbf3279907f72e615af4c82d5dc6adede23685c429e4f5bf",
+  "compaction": {
+    "bytes_before": 199765064,
+    "bytes_after": 125487140,
+    "percent_reduction": 37.18263970320657,
+    "active_roots": 414,
+    "semantic_root_fingerprints_equal": true,
+    "active_triangles": 1945401,
+    "active_mesh_instances": 501,
+    "resources_before": {
+      "nodes": 612,
+      "meshes": 331,
+      "accessors": 1399,
+      "bufferViews": 1491,
+      "materials": 199,
+      "textures": 184,
+      "images": 116,
+      "samplers": 11
+    },
+    "resources_after": {
+      "nodes": 518,
+      "meshes": 241,
+      "accessors": 1052,
+      "bufferViews": 1098,
+      "materials": 113,
+      "textures": 53,
+      "images": 53,
+      "samplers": 3
+    }
+  },
+  "render": {
+    "engine": "VTK EGL conventional basecolor preview",
+    "pixels_per_view": 1024000,
+    "changed_rgb_gt2": {
+      "plaza": 2,
+      "street": 1,
+      "farm": 3
+    },
+    "max_rgb_difference": {
+      "plaza": 4,
+      "street": 4,
+      "farm": 14
+    },
+    "note": "Actor grouping changes after exact material deduplication; no exact pixel equality claim."
+  },
+  "instancing": {
+    "tile_BU": 20,
+    "original_instances": 234,
+    "groups": 58,
+    "theoretical_draw_primitives_before": 719,
+    "after": 454,
+    "transformed_vertex_displacement_bound_BU": 0.000003885556154700067,
+    "original_buffer_prefix_and_mesh_material_records_preserved": true,
+    "required_extension": "EXT_mesh_gpu_instancing",
+    "blend_transmission_excluded": true,
+    "ordinary_fallback_retained": true
+  },
+  "outputs": {
+    "compact": "b599ab8d88c523613ab798fca517f9d6ce3e3b2843c1530c72a06916bbb657d9",
+    "instanced": "4c93e93d53df9786f6a5875befff72c7e5ada61d07c4a8fc6fd5c220215cd6c7",
+    "qa": "77d641c069d4612f9ad69576d36278bbb9bafb0c748bed4b4e99de06d3f9d3c4",
+    "compact_script": "9885403f6b3be2d9c4ed4562e79861a9769bc1f283ba9231303a880de46cb3b5",
+    "instance_script": "01baa48070e779e1370bde86bdd7036c3e264a05558305214c63bcff204176a1",
+    "probe_html": "1b7686ae0e0c519f6334186f56116608ecdea325a328f8cddb44de07ba45ea10"
+  },
+  "verified_hashes": 12,
+  "browser": {
+    "status": "BLOCKED",
+    "error": "Chromium Page.goto net::ERR_BLOCKED_BY_ADMINISTRATOR at loopback. No WebGL2 draw. Probe JS syntax check passed.",
+    "game_path_sync": "main dev/windwaiting-cliff/play.mjs, surface.mjs and package.json 404; no runtime edits."
+  },
+  "limits": "Exact V22 source retained. No triangle reduction or full scene runtime shader, FPS, Android, native edit, formal adoption or main merge. Next identify actual active runtime entry, test on authorized environment and perform component-aware LOD."
+}

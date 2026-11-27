@@ -1,0 +1,71 @@
+{
+  "status": "LOCAL_DISTANCE_LOD_CANDIDATE_G2_HOLD_G4_NOT_RUN",
+  "source": "b599ab8d88c523613ab798fca517f9d6ce3e3b2843c1530c72a06916bbb657d9",
+  "official_day": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "method": "VTK attribute-aware quadric decimation, scalar weight .8, volume preservation. Three variants, 20000 bidirectional surface samples each and 8 orthographic silhouette views.",
+  "source_triangles": 231040,
+  "tests": [
+    {
+      "reduction": 0.75,
+      "triangles": 57760,
+      "closed": true,
+      "sample_max": 0.017660372589618643,
+      "p95": 0.0012160218892533058,
+      "min_silhouette_iou": 0.9986259315193979,
+      "gold_proxy_iou": 0.890918541620257,
+      "bounds_delta": 0.0012333393096923828,
+      "pass": true
+    },
+    {
+      "reduction": 0.875,
+      "triangles": 28880,
+      "closed": false,
+      "sample_max": 0.045067735741762725,
+      "p95": 0.0022166692981558174,
+      "min_silhouette_iou": 0.9977722772277228,
+      "gold_proxy_iou": 0.8490278583865352,
+      "pass": false
+    },
+    {
+      "reduction": 0.9375,
+      "triangles": 14440,
+      "closed": true,
+      "sample_max": 0.04180623893339308,
+      "p95": 0.003884734535732107,
+      "min_silhouette_iou": 0.9963195029093808,
+      "gold_proxy_iou": 0.817076679614444,
+      "pass": false
+    }
+  ],
+  "thresholds": {
+    "sample_max_BU": 0.018,
+    "p95_BU": 0.006,
+    "silhouette_iou": 0.985,
+    "gold_proxy_iou": 0.85,
+    "bounds_delta_BU": 0.008
+  },
+  "readback": {
+    "vertices": 28882,
+    "triangles": 57760,
+    "closed": true,
+    "winding": true,
+    "positive_volume": true,
+    "source_roots": 414,
+    "changed_nodes": 1,
+    "all_original_resource_records_and_binary_prefix_exact": true,
+    "scene_triangles_before": 1945401,
+    "scene_triangles_after": 1772121,
+    "bytes": 126643084
+  },
+  "outputs": {
+    "integration": "fd08e43b9395be5b12d18de83c8c002509f3ab9e57a29de2f5bcd6db5bcf561e",
+    "build": "4543dc9e396df75b108d29ae71aac418ee0e365ddb5ed3ac3256e65a7476999a",
+    "qa": "78eac7653445a6c30f0b848658d57881431ff84e1702ad1ec260e748e2e1ebce",
+    "front": "49af4f3c853897a3c8974499a990a6d7e2a57556ac4eba971daf2fddd969a268",
+    "oblique": "224b2d5626081454ede1fc7ed8a75a8bd30c11f7fe419533e5e20a042761fff4"
+  },
+  "limits": [
+    "Gold mask threshold proxy, not exact motif segmentation; sampled distances not global error bound. Gold line discontinuity and smoothed stone visible in closeup, near original retained. Fixed candidate node, no dynamic LOD distance trigger.",
+    "Original resources retained inside candidate, file size grows, no new compaction. No native write, full collision, Android/WebGL or formal adoption/main merge. Next target repeated flower/tree meshes with component-aware reduction and actual runtime route."
+  ]
+}

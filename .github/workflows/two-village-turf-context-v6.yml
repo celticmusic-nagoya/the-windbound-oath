@@ -1,0 +1,53 @@
+name: TWO isolated village conforming turf V6
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths:
+      - 'tools/map_blender/lind/home/village_turf_context_v6.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-turf-context-v6
+  cancel-in-progress: false
+jobs:
+  context:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_turf_context_v6.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Restore exact V5 candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v5" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15099170569/zip" > "$RUNNER_TEMP/v5.zip"
+          printf '%s  %s\n' 3d0784759920c2b6a8249351d128ba3ce1dc635d41544349829c1591577f234b "$RUNNER_TEMP/v5.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v5.zip"
+          unzip -q "$RUNNER_TEMP/v5.zip" -d "$RUNNER_TEMP/v5"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_turf_context_v6.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_turf_context_v6.py' -- "$RUNNER_TEMP/v5/village_home_context_v5_UNAPPROVED.blend" "$RUNNER_TEMP/out" "$PWD/engine"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-turf-context-v6
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14

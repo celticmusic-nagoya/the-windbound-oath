@@ -1,0 +1,66 @@
+{
+  "status": "provisional_target_not_canon",
+  "source": {
+    "commit": "d477176179af046db7ef86f3bdf8bbe92e47b1d2",
+    "path": "tools/map_blender/lind/home/build_aidan_house.py",
+    "artifact": 14742392508
+  },
+  "units": "m",
+  "frame": "bed local: x head to foot, y across, z above FFL",
+  "existing_design": {
+    "frame": [
+      2,
+      1.02
+    ],
+    "mattress": [
+      1.84,
+      0.88,
+      0.2
+    ],
+    "blanket_method": "closed superquadric with 0.012 sinusoidal displacement",
+    "pillow_half_axes": [
+      0.17,
+      0.32,
+      0.07
+    ]
+  },
+  "target": {
+    "blanket": {
+      "method": "continuous draped quad surface with thickness modifier and asymmetric folds",
+      "grid": [
+        65,
+        41
+      ],
+      "thickness": 0.008,
+      "fold_amplitude": [
+        0.012,
+        0.035
+      ],
+      "top_x": [
+        0.7,
+        1.85
+      ],
+      "side_overhang_max": 0.055,
+      "hem_z_min": 0.4
+    },
+    "pillow": {
+      "method": "rounded seam-bound cushion with local compression",
+      "dimensions": [
+        0.34,
+        0.64,
+        0.14
+      ]
+    }
+  },
+  "qa": {
+    "protected": "all non-bedding vertices, anchors, collision geometry, existing named materials",
+    "checks": [
+      "zero self-intersection",
+      "no bedding/frame penetration beyond declared contact",
+      "consistent UV metric scale",
+      "native reopen",
+      "same camera lighting baseline",
+      "independent G2"
+    ]
+  }
+}

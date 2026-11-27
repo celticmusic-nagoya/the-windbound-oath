@@ -1,0 +1,56 @@
+name: TWO isolated village garden V7
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['tools/map_blender/lind/home/village_garden_v7.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-garden-v7
+  cancel-in-progress: false
+jobs:
+  garden:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_garden_v7.py
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/blueprint_engine
+            tools/production_qa
+      - name: Restore exact checkpoints and verified CC0 source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v6" "$RUNNER_TEMP/photos" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15100310764/zip" > "$RUNNER_TEMP/v6.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/14670447492/zip" > "$RUNNER_TEMP/photos.zip"
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Models/blend/1k/rock_07/rock_07_1k.blend' -o "$RUNNER_TEMP/rock.blend"
+          printf '%s  %s\n' a91695b693734133a02ceb97c480b5836eaf885bff3662403ffc0f45cb5c0101 "$RUNNER_TEMP/v6.zip" 4edaab28ebde25b29537edd86aa4a6f284d062fa7e71a6b7fa2c900818014b6e "$RUNNER_TEMP/photos.zip" da8010774291c5d0acfbcc3b82b367be06c5ed0926640147de5f17371ef227d1 "$RUNNER_TEMP/rock.blend" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v6.zip"
+          unzip -tq "$RUNNER_TEMP/photos.zip"
+          unzip -q "$RUNNER_TEMP/v6.zip" -d "$RUNNER_TEMP/v6"
+          unzip -q "$RUNNER_TEMP/photos.zip" -d "$RUNNER_TEMP/photos"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_garden_v7.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_garden_v7.py' -- "$RUNNER_TEMP/v6/village_turf_context_v6_UNAPPROVED.blend" "$RUNNER_TEMP/rock.blend" "$RUNNER_TEMP/photos" "$RUNNER_TEMP/out" "$PWD/engine"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-garden-v7
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14

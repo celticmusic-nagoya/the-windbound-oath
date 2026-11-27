@@ -1,0 +1,71 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source_v16": "ee17b5edf96a5cf57140bcedd175e02d1d593af5f21aab27fb840150da74bd85",
+  "design_v14": "561f931cca93e57e7e932d1431b31bb6503fa362",
+  "units": "provisional local BU, X east Y north Z up",
+  "farm": {
+    "bounds_xyxy": [
+      36,
+      -13.5,
+      44,
+      -8.5
+    ],
+    "beds": 4,
+    "crops": 68,
+    "flowers": 48,
+    "gate_width": 2
+  },
+  "training": {
+    "bounds_xyxy": [
+      120,
+      14,
+      128,
+      21
+    ],
+    "top_z": 0.3,
+    "targets": 2,
+    "ordinary_practice_posts": 2,
+    "canon_magic_dummy_not_replaced": true,
+    "ramp_bounds_xyxy": [
+      122.8,
+      10.57,
+      125.2,
+      14
+    ],
+    "sampled_longitudinal_grade": 0.08571428571428648,
+    "sampled_road_edge_step": 0.006,
+    "sampled_ramp_min_clearance": 0.006,
+    "sampled_floor_min_clearance": 0.052607603590964336,
+    "construction": "additive closed fill volume with fieldstone edge; original terrain retained below"
+  },
+  "qa": {
+    "closed_components_pre_uv": 1238,
+    "triangles_added": 90056,
+    "standalone_reload": true,
+    "source_resource_records_and_binary_prefix_exact": true,
+    "anchor_samples": 168,
+    "anchor_max_error": 0.03,
+    "anchor_scope": "authored anchor point vs terrain or nominal bed/platform surface, not every root vertex",
+    "selected_existing_obstacle_overlaps": 0,
+    "road_overlap_area": {
+      "farm": 0,
+      "training": 0,
+      "ramp": 1.2588500908350426e-7
+    },
+    "verified_output_hashes": 12
+  },
+  "outputs": {
+    "kit": "846b0b1462d866b50eb8fcfcfb878036557a65553309abcdb59815cd83200903",
+    "integration": "1588674edc61e1981b94a96389bee62d3307e882310a805cb23b8aaa473742ff",
+    "build": "07ef6d4ed3d7f2d6f3695bddc2c5b8d81921422fac4931ce64b962a8bbbe5376",
+    "reader": "8e182dc4d7a48a5402b53e3ae8a90c437aee02bf7fada93acc11e9b8d708d24b",
+    "svg": "98002a181e65de831b98ce48a45ff512761e0572acb6fa9e83e156b1d1c9b3a4",
+    "farm_jpeg": "1261e413264afea98bd115630752bc2dbdb64ad699e9792dc713d2e4f9519946",
+    "training_jpeg": "f45aa1ff4f94e124be71a879aeb8fd8dbb750da60f89f3f6944e51448ab94930"
+  },
+  "limitations": [
+    "Exact site not canon confirmed; smaller provisional garden and practice terrace, not full farm or formal training field.",
+    "Initial target face occluded by wood, corrected disc stack; actual VTK images inspected. Crop forms uniform, post dummy simple, terrain color discrepancy and lack of surroundings; G2 HOLD.",
+    "No actual all-root vertex test, low vegetation overlap, continuous surface collision, seam tessellation, navigation, native Blender write, runtime PBR or Android QA. No adoption or main merge."
+  ]
+}

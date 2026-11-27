@@ -1,0 +1,80 @@
+name: LIND isolated bedding V2 qualification
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['.github/workflows/lind-bed-drape-isolated.yml']
+permissions:
+  contents: read
+  statuses: write
+concurrency:
+  group: lind-isolated-bed-drape
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: 081f10204796d4e19aa2e573b880bb65106aec90
+          path: shared-runtime
+          persist-credentials: false
+          sparse-checkout: tools/production_qa/install_blender_530.sh
+          sparse-checkout-cone-mode: false
+      - name: Verified Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libegl1 libegl-mesa0 libgl1-mesa-dri libgl1 libgbm1
+          echo LIBGL_ALWAYS_SOFTWARE=1 >> "$GITHUB_ENV"
+          echo EGL_PLATFORM=surfaceless >> "$GITHUB_ENV"
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          bash shared-runtime/tools/production_qa/install_blender_530.sh /tmp/blender
+      - name: Generate and examine isolated mesh
+        run: |
+          mkdir -p /tmp/bed
+          /tmp/blender/blender -b --python-exit-code 1 --python tools/map_blender/lind/home/build_bed_drape_candidate.py -- /tmp/bed/drape.blend
+          cat >/tmp/qa.py <<'PY'
+          import bpy,bmesh,json
+          from mathutils import Vector
+          from pathlib import Path
+          o=bpy.data.objects['BED_DRAPE_CANDIDATE']
+          e=o.evaluated_get(bpy.context.evaluated_depsgraph_get())
+          bm=bmesh.new();bm.from_mesh(e.to_mesh())
+          assert all(x.is_manifold for x in bm.edges)
+          assert min(f.calc_area() for f in bm.faces)>1e-10
+          from mathutils.bvhtree import BVHTree
+          bm.faces.ensure_lookup_table()
+          tree=BVHTree.FromBMesh(bm)
+          # Exclude adjacent faces sharing a vertex from self-overlap candidates.
+          sets=[set(v.index for v in f.verts) for f in bm.faces]
+          overlaps=[(a,b) for a,b in tree.overlap(tree) if a<b and not sets[a]&sets[b]]
+          assert not overlaps, overlaps[:10]
+          print('SOLIDIFIED_MANIFOLD_PASS',len(bm.verts),len(bm.faces))
+          Path('/tmp/bed/qa.json').write_text(json.dumps(dict(vertices=len(bm.verts),faces=len(bm.faces),manifold=True,nonadjacent_overlap=0,contact='NOT_RUN',G2='NOT_RUN')))
+          bm.free();e.to_mesh_clear()
+          mat=bpy.data.materials.new('Preview wool green');mat.diffuse_color=(.15,.24,.11,1);o.data.materials.append(mat)
+          s=bpy.context.scene
+          bpy.ops.object.camera_add(location=(2.8,-2.5,2.2))
+          cam=bpy.context.object;cam.rotation_euler=(Vector((1.25,0,.5))-cam.location).to_track_quat('-Z','Y').to_euler();s.camera=cam;cam.data.type='ORTHO';cam.data.ortho_scale=1.9
+          s.render.engine='BLENDER_WORKBENCH';s.display.shading.light='STUDIO';s.display.shading.color_type='MATERIAL';s.display.shading.show_shadows=True;s.display.shading.show_cavity=True
+          s.render.resolution_x=1000;s.render.resolution_y=800;s.render.resolution_percentage=100
+          s.render.filepath='/tmp/bed/drape.png';bpy.ops.render.render(write_still=True)
+          PY
+          /tmp/blender/blender -b /tmp/bed/drape.blend --python-exit-code 1 --python /tmp/qa.py
+          cd /tmp/bed
+          sha256sum drape.blend drape.png qa.json > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: isolated-bed-drape-${{ github.run_id }}
+          path: /tmp/bed
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ job.status }}
+        run: |
+          state=failure
+          if [[ "$RESULT" == success ]]; then state=success; fi
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" -f state="$state" -f context=two/isolated-bed-drape -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

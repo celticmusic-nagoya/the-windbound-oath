@@ -1,0 +1,104 @@
+{
+  "status": "LOCAL_LOD_LIBRARY_AND_SELECTOR_CANDIDATE_G2_HOLD_G4_NOT_RUN",
+  "source": "af7374842830efc7e8ed9882769549b99733147988976429d1b462ed5ea76e28",
+  "high_baseline": "b599ab8d88c523613ab798fca517f9d6ce3e3b2843c1530c72a06916bbb657d9",
+  "method": "Whole welded foliage components removed only when 10 orthographic occupancy projections retain >=.97 coverage. Flower/stem component classes and extrema protected. Source vertices, colors, normals and retained index order unchanged.",
+  "variants": [
+    {
+      "mesh": 54,
+      "before": 2844,
+      "after": 2674,
+      "components": 278,
+      "retained": 252,
+      "protected": 139,
+      "coverage_min": 0.9701291192908075,
+      "render_iou_min": 0.9700481303221029
+    },
+    {
+      "mesh": 57,
+      "before": 750,
+      "after": 635,
+      "components": 154,
+      "retained": 139,
+      "protected": 77,
+      "coverage_min": 0.9701579871269749,
+      "render_iou_min": 0.9666811846689896
+    },
+    {
+      "mesh": 55,
+      "before": 1240,
+      "after": 814,
+      "components": 64,
+      "retained": 41,
+      "protected": 6,
+      "coverage_min": 0.9706658844235846,
+      "render_iou_min": 0.9686086795546505
+    }
+  ],
+  "bounds_exact": true,
+  "original_resources_and_scene_roots_preserved": true,
+  "restored_high_nodes": 90,
+  "selector": {
+    "entries": 216,
+    "initial": "HIGH",
+    "tests": 10368,
+    "engine": "Node.js",
+    "thresholds_px": {
+      "stone": [
+        40,
+        52
+      ],
+      "tree": [
+        45,
+        58
+      ],
+      "flower": [
+        16,
+        22
+      ],
+      "grass": [
+        16,
+        22
+      ]
+    },
+    "all_high_triangles": 1945401,
+    "all_low_triangles": 1635067,
+    "simulation": [
+      {
+        "name": "plaza",
+        "low": 25,
+        "triangles": 1931965
+      },
+      {
+        "name": "street",
+        "low": 86,
+        "triangles": 1750218
+      },
+      {
+        "name": "farm",
+        "low": 3,
+        "triangles": 1943126
+      },
+      {
+        "name": "bridge",
+        "low": 0,
+        "triangles": 1945401
+      }
+    ],
+    "note": "Projected diameter approximation, hysteresis, high fallback on unavailable low mesh/invalid camera. No frustum culling or live renderer binding."
+  },
+  "outputs": {
+    "library": "24c75d3c327b260c7ab38e6fb455e83e25b9a344a1040236c7696a91588520b7",
+    "build": "78e80892acb6d9ba4656437f3fefdaa4f4d69150b7748fd9944699bc02ca1a3e",
+    "qa": "f6ce59e4bd2a9037afcdf7b1f7211684650814e7c2c16759057524d958eba108",
+    "manifest": "c68ab7684a2779ee3ff297a6fb93d7da17a54f9d96051c954ca087000e0f3f4e",
+    "selector": "45b65d1df6cfa15dca8312659e39598cdf56bf7b3e3ab7005b12e1781c29f776",
+    "test": "c8963302f872fb4bf30de191095753a81b6cd6f58065ed6e66e483903e4da160",
+    "selector_qa": "b356a7beb284831d6516fd07c1c72ea136798a8e5869fa4bc85e65c9b498ed25",
+    "comparison": "ea7eb7c5d911da89be59fa4fc3bdc3da879fdde4f715cc430e0a2abc3f5bf853"
+  },
+  "limits": [
+    "Existing four-triangle daisy LOD2 height .609062 vs .396135 BU LOD1, not adopted without scaling/appearance validation. New mesh variants preserve flower geometry but visible foliage density decreases.",
+    "VTK basecolor render, not actual game; screen thresholds heuristic, low meshes unreferenced by default and require explicit loader binding. Near all-high triangles exceed mobile target, simulated savings modest, no FPS/Android/native edit/main merge."
+  ]
+}

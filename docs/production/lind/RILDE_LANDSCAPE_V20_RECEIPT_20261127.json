@@ -1,0 +1,74 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source_v19": "b7b6a60b01241603c3fb20ba04302fb0f662fe2ea8acbd06a2ac0df2b11ffa2b",
+  "official_day": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "frame": "provisional local BU; no approved world transform",
+  "atlas": {
+    "dimensions": [
+      3072,
+      1896
+    ],
+    "bounds_xyxy": [
+      -72.5,
+      -42.5,
+      183,
+      115
+    ],
+    "source": "embedded photo-derived meadow texture24; old V12 atlas66 road mask by color, authored spatial palette variation; no source pixel from official CG",
+    "material_only_meshes": [
+      [
+        "river_meadow",
+        1880
+      ],
+      [
+        "V7_west_meadow",
+        1786
+      ],
+      [
+        "V7_east_meadow",
+        1786
+      ],
+      [
+        "V11_PROXY_V10_curving_road_plaza_PBR",
+        2622
+      ]
+    ]
+  },
+  "hills": {
+    "bounds_xyxy": [
+      -72.5,
+      55,
+      82.5,
+      115
+    ],
+    "triangles": 2976,
+    "seam_vertices": 63,
+    "independent_saved_glb_seam_max": 0
+  },
+  "trees": {
+    "instances": 43,
+    "shared_native_mesh": 258,
+    "triangles_each": 2446,
+    "root_vertex_samples": 387,
+    "max_abs_root_residual": 0.09492531673629667,
+    "tolerance": 0.095,
+    "selected_tall_obstacle_AABB_and_road_checks": true
+  },
+  "qa": {
+    "old_active_mesh_nodes_unchanged": 343,
+    "material_only_nodes": 4,
+    "all_original_resource_records_and_BIN_prefix_exact": true,
+    "new_mesh_index_and_finite_validation": true,
+    "output_hashes": 10
+  },
+  "outputs": {
+    "integration": "b94a3e25ec68577e895319cbc506079b7f67ba094a47cd71787ed25dda6c841c",
+    "atlas": "845f33cddbf8192573f379515954351f4ba67eb69ea3ed1d64af00074b6b89b1",
+    "build": "5db47c99438c459abfaf89d46e5d44e2d5614cec0ff35f9b35eb3201ee1020c3",
+    "qa": "afb42a4b14bb340f008c729b3f88bc0d40da2b33cfcb68a282344c372e727f8d"
+  },
+  "limits": [
+    "VTK EGL conventional basecolor render, no new ground normal/detail roughness, no dynamic water. Shared mesh references, no GPU instancing qualification.",
+    "Northern hill contour simple and sparse trees, exposed outer tile edges, grass uniform at eye level, buildings/props need further dressing; G2 HOLD. Road mask color heuristic. Root check limited to lower vertices; no precise collision, native edit, Android, adoption or merge."
+  ]
+}

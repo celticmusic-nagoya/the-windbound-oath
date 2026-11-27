@@ -1,0 +1,99 @@
+name: TWO isolated village market V9
+on:
+  push:
+    branches: [feature/lind-village-world-integration-plan-01]
+    paths: ['tools/map_blender/lind/home/village_market_context_v9.py']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-village-market-v9
+  cancel-in-progress: false
+jobs:
+  market:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/home/village_market_context_v9.py
+      - uses: actions/checkout@v4
+        with:
+          ref: f54a6856494d2cd5ad5124cf85b02981e05c8b63
+          path: buildkit
+          persist-credentials: false
+          sparse-checkout: |
+            tools/map_blender/lind/buildings
+            docs/production/lind/buildings
+      - uses: actions/checkout@v4
+        with:
+          ref: dd47929f3e100b3cfcabbe48a614e699da1c5ea9
+          path: engine
+          persist-credentials: false
+          sparse-checkout: |
+            tools/production_qa/install_blender_530.sh
+      - name: Restore all required CC0 wall and timber maps
+        run: |
+          set -eu
+          mkdir -p /tmp/rilde-out /tmp/rilde-textures
+          cd /tmp/rilde-textures
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_diff_1k.jpg' -o 'rock_boulder_dry_diff_1k.jpg'
+          echo '20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c  rock_boulder_dry_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_nor_gl_1k.jpg' -o 'rock_boulder_dry_nor_gl_1k.jpg'
+          echo '5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595  rock_boulder_dry_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_rough_1k.jpg' -o 'rock_boulder_dry_rough_1k.jpg'
+          echo 'cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130  rock_boulder_dry_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_diff_1k.jpg' -o 'rough_wood_diff_1k.jpg'
+          echo 'abc46d8e3163d911220f4ec3a4043b68d2b0c6d750513f80871211acfefb2a98  rough_wood_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_nor_gl_1k.jpg' -o 'rough_wood_nor_gl_1k.jpg'
+          echo '3d1c6f098b66d93e52071b41834dd14a424d8cd2f7c4130c62dc062acfa65011  rough_wood_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_wood/rough_wood_rough_1k.jpg' -o 'rough_wood_rough_1k.jpg'
+          echo '4e9ea9962a7e8b69057937e6723c4b0134b949c1ee5cdb5f3687a54113027b09  rough_wood_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_diff_1k.jpg' -o 'weathered_brown_planks_diff_1k.jpg'
+          echo '94833feda44e025a9139f7b5723ea84e4f0258d3b54939a79e1013c133085e29  weathered_brown_planks_diff_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_nor_gl_1k.jpg' -o 'weathered_brown_planks_nor_gl_1k.jpg'
+          echo '8d38f02f121c0e58eaedc19cd668faea21381ae3ff4d5332cd90de75e6683393  weathered_brown_planks_nor_gl_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_brown_planks/weathered_brown_planks_rough_1k.jpg' -o 'weathered_brown_planks_rough_1k.jpg'
+          echo 'b80c45969d8299ca5f21de969f0269138a5e3e78e51fc911af809683d99c5bc9  weathered_brown_planks_rough_1k.jpg' | sha256sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_diff_2k.jpg' -o 'yellow_stone_wall_diff_2k.jpg'
+          echo 'c180712e9ddbdb5bf09542b6fae7f012  yellow_stone_wall_diff_2k.jpg' | md5sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_nor_gl_2k.jpg' -o 'yellow_stone_wall_nor_gl_2k.jpg'
+          echo '67b08d1e7ea232a22ba9b875ab849278  yellow_stone_wall_nor_gl_2k.jpg' | md5sum -c -
+          curl -fsSL --max-time 90 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/yellow_stone_wall/yellow_stone_wall_rough_2k.jpg' -o 'yellow_stone_wall_rough_2k.jpg'
+          echo '73489c781dfa64a196810c2e321db256  yellow_stone_wall_rough_2k.jpg' | md5sum -c -
+          sha256sum *.jpg > /tmp/rilde-out/source.sha256
+          sudo apt-get install -y python3-pil
+          /usr/bin/python3 - <<'PY'
+          from PIL import Image
+          for k in ('diff','nor_gl','rough'):
+              im=Image.open('yellow_stone_wall_'+k+'_2k.jpg')
+              im.resize((1024,1024),Image.Resampling.LANCZOS).save('yellow_stone_wall_'+k+'_1k.png')
+          PY
+          sha256sum *.png > /tmp/rilde-out/derived.sha256
+      - name: Restore exact V8 and assemble BUILD variants
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LIND_BUILD_TEX: /tmp/rilde-textures
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v8" "$RUNNER_TEMP/out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15109903508/zip" > "$RUNNER_TEMP/v8.zip"
+          printf '%s  %s\n' aaea4186e31530fa6ca54be2986a1f88cc87ed191cbddb48848380e4131497f1 "$RUNNER_TEMP/v8.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v8.zip"
+          unzip -q "$RUNNER_TEMP/v8.zip" -d "$RUNNER_TEMP/v8"
+          python3 -m py_compile 'tools/map_blender/lind/home/village_market_context_v9.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash engine/tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          cp /tmp/rilde-out/*.sha256 "$RUNNER_TEMP/out/"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --disable-autoexec --python-exit-code 1 --python 'tools/map_blender/lind/home/village_market_context_v9.py' -- "$RUNNER_TEMP/v8/village_neighborhood_v8_UNAPPROVED.blend" "$PWD/buildkit" "$RUNNER_TEMP/out"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: two-village-market-v9
+          path: ${{ runner.temp }}/out
+          if-no-files-found: warn
+          retention-days: 14
