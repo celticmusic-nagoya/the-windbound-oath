@@ -9,7 +9,6 @@
   ],
   "active": [
     "docs/policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md",
-    "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
     "docs/policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md",
     "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
     "docs/policy/AUTONOMOUS_AUTHORITY_AND_SAFE_HANDOFF_V5_20261124.md",
@@ -79,15 +78,6 @@
     "scope": "all agents and automations; relevant character and world materials",
     "status": "DIRECTOR_APPROVED_POLICY_RUNTIME_NOT_VERIFIED"
   },
-  "morwen_early_blender_transfer": {
-    "approved": "2026-11-26",
-    "scope": "Morwen #427 only",
-    "policy": "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
-    "supersedes": "native completion and visual readiness required before export for Morwen only",
-    "runtime": "VERIFIED_SCOPED_TECHNICAL_TRANSFER_PASS",
-    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
-    "run_id": 45779704407
-  },
   "verified_execution_reuse": {
     "approved": "2026-11-26",
     "scope": "all agents and automations; asset-specific execution qualification required",
@@ -98,7 +88,7 @@
     "approved": "2026-11-27",
     "scope": "all 3D characters; all agents and automations",
     "policy": "docs/policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md",
-    "supersedes": "VRoid-only completion, preset-modification fixation and Blender-only fixation where conflicting (incl. MORWEN_VROID_FIRST_AUTHORING_20261121 and principal-environment wording of MORWEN_EARLY_BLENDER_TRANSFER_20261126)",
+    "supersedes": "Retired production-order directives; VRoid-primary new-custom authoring, evidenced supplementary tools only.",
     "retained": [
       "D0-D4",
       "G1-G4",
@@ -121,6 +111,17 @@
       "scope": "Morwen_only",
       "supersedes_conflicting_older_targets": true,
       "source": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613"
+    },
+    "primary_environment": "VRoid_Studio",
+    "primary_change_requires_director_approval": true,
+    "clarified": "2026-11-28"
+  },
+  "retired_policy_history": [
+    {
+      "scope": "Morwen #427 early transfer method",
+      "status": "RETIRED_NOT_INSTRUCTION",
+      "revision": "b8780771b5f3212745d002ffd8c876ba01429fad",
+      "history_url": "https://github.com/celticmusic-nagoya/the-windbound-oath/blob/b8780771b5f3212745d002ffd8c876ba01429fad/docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md"
     }
-  }
+  ]
 }
