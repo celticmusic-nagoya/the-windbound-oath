@@ -1,0 +1,128 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source": "6e535d9daecef7d07d913706bc7e33a1f9b3e4da5400f6d070bece2272b946ca",
+  "design_dependency": "561f931cca93e57e7e932d1431b31bb6503fa362",
+  "units": "provisional local BU, Z up",
+  "assets": [
+    {
+      "id": "barrel",
+      "dimensions": [
+        0.62,
+        0.62,
+        0.84
+      ],
+      "components": 29,
+      "triangles": 3400,
+      "xy": [
+        25.9,
+        -5.1
+      ],
+      "z": -0.006,
+      "root_samples": 213,
+      "root_max": 0.006
+    },
+    {
+      "id": "sack",
+      "dimensions": [
+        0.58,
+        0.42,
+        0.66
+      ],
+      "components": 4,
+      "triangles": 7520,
+      "xy": [
+        26.6,
+        -6.15
+      ],
+      "z": 0,
+      "root_samples": 73,
+      "root_max": 0
+    },
+    {
+      "id": "crate",
+      "dimensions": [
+        0.7,
+        0.7,
+        0.56
+      ],
+      "components": 27,
+      "triangles": 1148,
+      "xy": [
+        26.95,
+        -5.1
+      ],
+      "z": -0.004946996,
+      "root_samples": 68,
+      "root_max": 0.004946996
+    },
+    {
+      "id": "cart",
+      "dimensions": [
+        2.6,
+        1.32,
+        1.1
+      ],
+      "components": 59,
+      "triangles": 3760,
+      "xy": [
+        31.15,
+        -6.85
+      ],
+      "z": -0.002096009,
+      "root_samples": 12,
+      "root_max": 0.002096009
+    },
+    {
+      "id": "sheaf",
+      "dimensions": [
+        0.46,
+        0.46,
+        0.8
+      ],
+      "components": 166,
+      "triangles": 7296,
+      "xy": [
+        29.4,
+        -7.55
+      ],
+      "z": -0.001096314,
+      "root_samples": 385,
+      "root_max": 0.001096314
+    },
+    {
+      "id": "food_basket",
+      "dimensions": [
+        0.56,
+        0.4,
+        0.38
+      ],
+      "components": 700,
+      "triangles": 19080,
+      "xy": [
+        28,
+        -5.45
+      ],
+      "z": -0.00588325,
+      "root_samples": 461,
+      "root_max": 0.00588325
+    }
+  ],
+  "total_triangles": 42204,
+  "component_checks": "985 original closed consistent positive-volume components before UV seam splits; isolated GLB readback triangle count matches",
+  "site_constraints": "actual projected road + .35 BU buffer, water/deck, selected existing building/monument/tree/prop AABBs, .08 BU added footprint; pairwise disjoint. Min measured road distance 2.3272466 BU. Low vegetation and hidden shader road mask not checked.",
+  "root_samples": 1212,
+  "root_max": 0.006000000052154064,
+  "source_preservation": "original V14 binary prefix and original resource records exact",
+  "material": "reused rough wood PBR diffuse normal ORM from V14 material 22; other colors authored; VTK basecolor preview only",
+  "outputs": {
+    "kit": "601f0c2fafd60337f2b56a11eaf6e0c1f7e9445422beb66b6886f27c6d08f611",
+    "integration": "0b549245040c816559d77ed7897aa0c4e2f1e7c974598f7723df007a029fc360",
+    "blueprint": "47639c03e0c28e44861dcbe403bbe9d195fdcdc95fb2884b87b83a7b54f0e813",
+    "build": "4aa17886ec89ffdd4d18f1cd98069f27dd7ec149014012c3ae8795ca552c214f",
+    "place": "663d10ab7174fa74d8dcf63549c8538bdd5b72070571bc9305cb8f1f2486ce65",
+    "svg": "ebf0d186a412625f56aaecfef1fae8df4f617930aaa8a8c20745288105397d9c",
+    "site_jpeg": "67e2d6bc3437d398be9b2f7e2658300a19e93627b426230c714c3b93940479f5"
+  },
+  "verified_output_hashes": 13,
+  "limits": "local candidate only; bare grass display staging, no market counter or actual farm/training yard; basket and sack relatively high poly, wood UV projection seams, flat cloth and food materials; no native Blender edit, true PBR rendering, exact collisions, Android or formal placement/adoption/main merge. Next grouped market stall with actual tabletop contacts and cloth material; farm and training siting correction."
+}
