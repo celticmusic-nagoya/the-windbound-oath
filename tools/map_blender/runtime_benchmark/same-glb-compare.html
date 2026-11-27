@@ -98,7 +98,7 @@ run.onclick=async()=>{
    const dt=t-last;last=t;
    try{active.draw(Math.min(dt/1000,.1))}catch(e){result.status='FAIL_RENDER';result.error=String(e);cleanup();show();run.disabled=false;return}
    elapsed=t-phaseStart;
-   if(result.status==='WARMUP'&&elapsed>=3000){result.status='RUNNING';phaseStart=t;last=t;samples=[];show()}
+   if(result.status==='WARMUP'&&elapsed>=3000){result.status='RUNNING';phaseStart=t;last=t;samples=[];result.renderInfo=active.stats();show()}
    else if(result.status==='RUNNING'){
     if(dt>0&&Number.isFinite(dt))samples.push(dt);
     if(elapsed>=30000){result.status='COMPLETED';result.frames=samples.length;result.meanFrameMs=samples.length?samples.reduce((a,b)=>a+b,0)/samples.length:null;result.p50FrameMs=percentile(samples,.5);result.p95FrameMs=percentile(samples);result.p99FrameMs=percentile(samples,.99);result.maxFrameMs=samples.length?Math.max(...samples):null;result.longFrames=samples.filter(x=>x>33.3).length;result.stalls=samples.filter(x=>x>=1000).length;result.frameIntervalsMs=samples;result.elapsedMs=elapsed;result.renderInfo=active.stats();cleanup();show();run.disabled=false;return}

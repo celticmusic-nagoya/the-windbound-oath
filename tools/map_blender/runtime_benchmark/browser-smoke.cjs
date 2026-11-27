@@ -11,6 +11,7 @@ const glb = process.env.LIND_GLB || '/tmp/lind-glb-benchmark/technical-scene.glb
 const out = process.env.LIND_QA_OUT || '/tmp/lind-glb-benchmark/browser-smoke.json';
 const fullMeasure = process.env.LIND_FULL_MEASURE === '1';
 const raceTest = process.env.LIND_RACE_TEST === '1';
+const transmissionProbe = process.env.LIND_TRANSMISSION_PROBE === '1';
 const expectedSha = process.env.LIND_EXPECTED_SHA || createHash('sha256').update(fs.readFileSync(glb)).digest('hex');
 assert.match(expectedSha,/^[a-f0-9]{64}$/);
 assert.equal(createHash('sha256').update(fs.readFileSync(glb)).digest('hex'),expectedSha,'input SHA mismatch');
@@ -99,6 +100,67 @@ async function raceProbe(browser,url,first,second){
  }
  return record;
 }
+// Exact, one-byte material diagnostic. Never modify the original file or export the variant.
+async function probeTransmission(browser,url,results){
+ const source=fs.readFileSync(glb);
+ assert.equal(expectedSha,'b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d');
+ assert.equal(source.length,50732020);
+ assert.equal(source.readUInt32LE(0),0x46546c67);assert.equal(source.readUInt32LE(4),2);
+ assert.equal(source.readUInt32LE(8),source.length);assert.equal(source.readUInt32LE(16),0x4e4f534a);
+ const jsonEnd=20+source.readUInt32LE(12),doc=JSON.parse(source.subarray(20,jsonEnd).toString('utf8'));
+ const key='KHR_materials_transmission',material=doc.materials[5];
+ assert.equal(material.name,'MAT_GLASS_CROWN_A');
+ assert.equal(material.extensions[key].transmissionFactor,1);
+ assert.deepEqual(doc.materials.flatMap((m,i)=>m.extensions?.[key]?[i]:[]),[5]);
+ const needle=Buffer.from('"transmissionFactor":1'),offset=source.indexOf(needle,20);
+ assert.ok(offset>=20&&offset+needle.length<=jsonEnd);
+ assert.ok(source.indexOf(needle,offset+needle.length)===-1||source.indexOf(needle,offset+needle.length)>=jsonEnd);
+ const changed=Buffer.from(source),byteOffset=offset+needle.length-1;
+ changed[byteOffset]=48;
+ const changedDoc=JSON.parse(changed.subarray(20,jsonEnd).toString('utf8'));
+ const expectedDoc=structuredClone(doc);expectedDoc.materials[5].extensions[key].transmissionFactor=0;
+ assert.deepEqual(changedDoc,expectedDoc);
+ assert.ok(source.subarray(0,byteOffset).equals(changed.subarray(0,byteOffset)));
+ assert.ok(source.subarray(byteOffset+1).equals(changed.subarray(byteOffset+1)));
+ const changedSha=createHash('sha256').update(changed).digest('hex');
+ results.role='TRANSMISSION_SINGLE_BYTE_DRAW_CALL_DIAGNOSTIC';
+ results.sourceSha=expectedSha;results.variantSha=changedSha;results.changedByteOffset=byteOffset;
+ results.material={index:5,name:material.name,from:1,to:0};results.probes=[];
+ for(const variant of ['original','disabled','disabled','original']){
+  const page=await browser.newPage({viewport:{width:960,height:720},acceptDownloads:false});
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  const row={variant,pass:false};results.probes.push(row);
+  try{
+   await page.goto(url,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>typeof document.querySelector('#run').onclick==='function');
+   await page.locator('#file').setInputFiles({name:variant+'.glb',mimeType:'model/gltf-binary',buffer:variant==='original'?source:changed});
+   await page.locator('#engine').selectOption('three');
+   await page.locator('#run').click();
+   await page.waitForFunction(()=>['RUNNING','FAIL_LOAD','FAIL_RENDER'].includes(JSON.parse(document.querySelector('#report').textContent).status),{},{timeout:90000});
+   row.report=JSON.parse(await page.locator('#report').textContent());
+   assert.equal(row.report.status,'RUNNING');
+   assert.equal(row.report.sha256,variant==='original'?expectedSha:changedSha);
+   assert.equal(row.report.asset.meshes,389);
+   assert.equal(row.report.asset.triangles,803031);
+   assert.equal(row.report.asset.materials,83);
+   assert.ok(Number.isInteger(row.report.renderInfo?.drawCalls)&&row.report.renderInfo.drawCalls>0);
+   assert.ok(Number.isInteger(row.report.renderInfo?.triangles)&&row.report.renderInfo.triangles>0);
+   assert.deepEqual(errors,[]);
+   await page.locator('#stop').click();
+   row.pass=true;
+  }catch(e){row.error=String(e)}finally{row.pageErrors=errors;await page.close()}
+ }
+ const rows=results.probes,first=rows[0].report;
+ results.sameConditions=rows.every(x=>x.pass&&JSON.stringify(x.report.camera)===JSON.stringify(first.camera)&&JSON.stringify(x.report.environment)===JSON.stringify(first.environment)&&JSON.stringify(x.report.asset)===JSON.stringify(first.asset)&&x.report.engineVersion===first.engineVersion);
+ results.repeatable=rows.every(x=>x.pass)&&JSON.stringify(rows[0].report.renderInfo)===JSON.stringify(rows[3].report.renderInfo)&&JSON.stringify(rows[1].report.renderInfo)===JSON.stringify(rows[2].report.renderInfo);
+ results.pass=results.sameConditions&&results.repeatable;
+ if(results.pass){
+  results.drawCalls={original:rows[0].report.renderInfo.drawCalls,disabled:rows[1].report.renderInfo.drawCalls};
+  results.submittedTriangles={original:rows[0].report.renderInfo.triangles,disabled:rows[1].report.renderInfo.triangles};
+  results.interpretation='Causal diagnostic only: glass appearance intentionally changed; no asset adoption, FPS or Android claim.';
+ }
+ assert.equal(createHash('sha256').update(fs.readFileSync(glb)).digest('hex'),expectedSha,'source file must remain unchanged');
+}
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-webgl']});
@@ -106,6 +168,8 @@ async function raceProbe(browser,url,first,second){
  try{
   const url='http://127.0.0.1:'+server.address().port+'/tools/map_blender/runtime_benchmark/same-glb-compare.html';
   results.expectedSha=expectedSha;
+  if(transmissionProbe){await probeTransmission(browser,url,results);}
+  else{
   if(raceTest){
    results.raceCases=[];
    for(const first of ['three','babylon'])for(const second of ['three','babylon'])results.raceCases.push(await raceProbe(browser,url,first,second));
@@ -138,6 +202,7 @@ async function raceProbe(browser,url,first,second){
   const validTiming=e=>Array.isArray(e.frameIntervalsMs)&&e.frames===e.frameIntervalsMs.length&&e.frames>0&&e.frameIntervalsMs.every(x=>Number.isFinite(x)&&x>0)&&near(e.elapsedMs,e.frameIntervalsMs.reduce((a,b)=>a+b,0))&&e.elapsedMs>=30000&&near(e.meanFrameMs,e.elapsedMs/e.frames)&&Number.isFinite(e.p95FrameMs);
   results.conditions=results.rounds.map(r=>{const a=r.engines.three,b=r.engines.babylon;return {round:r.round,cameraMatch:matchingCamera(a.camera,b.camera),drawingBufferMatch:!!a.environment&&!!b.environment&&a.environment.width===b.environment.width&&a.environment.height===b.environment.height&&a.environment.width===a.dimensions.width&&a.environment.height===a.dimensions.height&&b.environment.width===b.dimensions.width&&b.environment.height===b.dimensions.height,rendererMatch:!!a.environment&&!!b.environment&&a.environment.renderer===b.environment.renderer,trianglesMatch:a.asset?.triangles===b.asset?.triangles,meshCountMatch:a.asset?.meshes===b.asset?.meshes};});
   results.pass=entries.every(e=>fullMeasure?(e.status==='COMPLETED'&&validTiming(e)):(e.status==='RUNNING'||e.status==='COMPLETED'))&&entries.every(e=>e.sha256===expectedSha)&&entries.every(e=>e.asset?.meshes>0&&e.asset.triangles>0&&e.pageErrors.length===0&&(expectedTriangles===null||e.asset.triangles===expectedTriangles)&&(expectedMeshes===null||e.asset.meshes===expectedMeshes))&&results.conditions.every(c=>c.cameraMatch&&c.drawingBufferMatch&&c.rendererMatch&&c.trianglesMatch&&c.meshCountMatch)&&(!raceTest||results.raceCases.length===4&&results.raceCases.every(x=>x.pass));
+  }
  }finally{
   await browser.close();server.close();
   fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(results,null,2)+'\n');
