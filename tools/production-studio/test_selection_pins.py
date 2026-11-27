@@ -3,7 +3,7 @@ import json
 import pathlib
 import re
 import unittest
-from artifact_availability import archive_budget
+from artifact_availability import archive_budget, reusable_published_images
 
 ROOT = pathlib.Path(__file__).resolve().parent
 HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -179,6 +179,43 @@ class SelectionPinsTests(unittest.TestCase):
                     d["discover"]()
                 result = json.loads((pathlib.Path(temp) / "studio-discovered.json").read_text())
                 self.assertEqual(result, curated[:-1] + [{"artifact_id": 99, "category": "morwen", "entries": ["view.png"]}])
+
+    def test_reuse_requires_complete_approved_image_history(self):
+        import copy
+        name, sha = "review/front.png", "a"*64
+        item = dict(run_id=1, artifact_id=2, head="b"*40, category="world",
+                    stage="WIP / HOLD", review_ref="review", cover=name,
+                    artifact_digest="sha256:"+"c"*64, entries=[name],
+                    entry_sha256={name:sha}, entry_subcategories={name:"forest"})
+        row = dict(run_id=1, artifact_id=2, head="b"*40, name=name, sha256=sha,
+                   path="published/"+sha+".png", entry_pin_verified=True,
+                   category="world", stage="WIP / HOLD", review_ref="review",
+                   cover=True, subcategory="forest")
+        receipt = {k:row[k] for k in ("run_id","artifact_id","head","name","sha256","path")}
+        receipt["approval_ref"]="review"
+        history={"version":1,"entries":[row]}
+        approvals={"version":1,"entries":[receipt]}
+        self.assertTrue(reusable_published_images(item,history,approvals))
+        for target, key, value in (
+            (0,"entries",[]),(0,"entries",[name,"missing.png"]),(0,"entry_sha256",{}),
+            (0,"artifact_digest","bad"),(0,"run_id",3),(0,"head","d"*40),
+            (0,"stage","WIP / preview only"),(0,"category","cliff"),(0,"cover","other.png"),
+            (0,"entry_subcategories",{name:"river"}),(0,"review_ref","other"),
+            (1,"path","published/other.png"),(1,"entry_pin_verified",False),
+            (1,"cover",False),(1,"stage","different"),(1,"subcategory","river"),
+            (2,"approval_ref","other"),(2,"artifact_id",3)):
+            with self.subTest(target=target,key=key):
+                i,h,a=copy.deepcopy((item,history,approvals))
+                (i,h["entries"][0],a["entries"][0])[target][key]=value
+                self.assertFalse(reusable_published_images(i,h,a))
+        for h,a in (({"version":1,"entries":[]},approvals),
+                    (history,{"version":1,"entries":[]}),
+                    ({"version":1,"entries":[row,row]},approvals),
+                    (history,{"version":1,"entries":[receipt,receipt]})):
+            self.assertFalse(reusable_published_images(item,h,a))
+        model=copy.deepcopy(item)
+        model.update(entries=["native.glb"],cover="native.glb",entry_sha256={"native.glb":sha})
+        self.assertFalse(reusable_published_images(model,history,approvals))
 
 if __name__ == "__main__":
     unittest.main()

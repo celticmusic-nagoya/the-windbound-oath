@@ -37,3 +37,6 @@ Source #482 HEAD 172bd7f54e35b25c99cbf62dd636f1e4dc3a3825, run 45956718656/artif
 
 ### Bounded discovery capacity
 The sync job retains the existing 36-group selection budget. Curated selections are never silently truncated. Optional preview and branch discovery stop before any further API/archive request once the available slots are filled, logging `DEFERRED` for optional discovery. More than 36 curated groups is a separate explicit error requiring retained-history reconciliation; this does not increase download budgets or bypass publication approval. No existing gallery history is deleted.
+
+### Reuse exact published images
+Before fetching ordinary curated archives, require complete image SHA pins, a pinned archive digest, exact published provenance and display metadata, and matching existing approval receipts. A missing/changed/duplicate receipt or preview/model entry follows the original download/validation route. The legacy V82-E exception remains unchanged and all retained files are rehashed by the existing downstream merge; the publication gate remains unchanged. No new rights, capacity increase, source deletion or automatic adoption. This avoids fetching an archive only to restage the same public bytes. Group savings and actual execution time are measured separately; this is not an original-native preservation mechanism.

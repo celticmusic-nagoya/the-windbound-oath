@@ -7,10 +7,12 @@ python - <<'PY'
 import json, subprocess, os
 from datetime import datetime, timezone
 from pathlib import Path
-from artifact_availability import recorded_expired_404, retained_receipt_matches, archive_budget
+from artifact_availability import recorded_expired_404, retained_receipt_matches, archive_budget, reusable_published_images
 selection=json.load(open(Path(os.environ['RUNNER_TEMP'])/'studio-discovered.json'))
 assert len(selection)<=36
 active=[]
+reused=[]
+approvals=json.loads(Path('publication-approvals.json').read_text())
 history=None
 def public_history():
     global history
@@ -25,6 +27,10 @@ for x in selection:
     budget=archive_budget(x)
     if x.get('reuse_retained') is True and 'exact_archive_bytes' in x and retained_receipt_matches(x,public_history()):
         print(f'REUSED: artifact {a} exact published entries; downstream merge rehashes retained images')
+        continue
+    if x.get('entry_sha256') and x.get('artifact_digest') and reusable_published_images(x,public_history(),approvals):
+        print(f'REUSED: artifact {a} exact approved published images; downstream merge rehashes retained files')
+        reused.append(a)
         continue
     try:
         meta=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/artifacts/{a}'],stderr=subprocess.PIPE))
@@ -59,6 +65,7 @@ for x in selection:
     if 'exact_archive_bytes' in x:
         assert target.stat().st_size==budget
     active.append(x)
+print(f'SYNC: reused {len(reused)} ordinary groups; staged {len(active)} groups (legacy exception separate)')
 (Path(os.environ['RUNNER_TEMP'])/'studio-selection.json').write_text(json.dumps(active))
 PY
 python artifact-sync.py "$RUNNER_TEMP/studio-selection.json" "$RUNNER_TEMP/studio-zips" "$RUNNER_TEMP/studio-site/published"
