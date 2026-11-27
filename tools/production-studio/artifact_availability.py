@@ -98,3 +98,13 @@ def archive_budget(item):
         or item.get("reuse_retained") is not True):
         raise ValueError("unqualified large archive exception")
     return _V82E[-1]
+
+def reusable_group_kind(item, history, approvals):
+    """Single decision shared by discovery capacity and archive fetching."""
+    archive_budget(item)  # validate the immutable large-archive exception first
+    if (item.get("reuse_retained") is True and "exact_archive_bytes" in item
+        and retained_receipt_matches(item, history)):
+        return "legacy"
+    if reusable_published_images(item, history, approvals):
+        return "ordinary"
+    return None
