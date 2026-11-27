@@ -4,6 +4,14 @@ let publishedGalleryKey=null,publishedGalleryView="home",publishedGalleryRemote=
 const publishedGalleryLive=document.createElement("p");
 publishedGalleryLive.id="published-live-status";publishedGalleryLive.className="note";publishedGalleryLive.setAttribute("role","status");
 document.getElementById("published-status").after(publishedGalleryLive);
+let publishedModelEpoch=0,publishedModelController=null;
+function invalidatePublishedModel(){
+ publishedModelEpoch++;
+ publishedModelController?.abort();
+ publishedModelController=null;
+}
+document.getElementById("model-file").addEventListener("change",invalidatePublishedModel);
+window.addEventListener("pagehide",invalidatePublishedModel);
 function schedulePublishedGallery(){
  if(publishedGalleryTimer!==null)clearTimeout(publishedGalleryTimer);
  publishedGalleryTimer=null;
@@ -73,7 +81,41 @@ async function loadPublishedGallery(automatic=false){
  const preservation=document.createElement("p");preservation.className="gallery-preservation";preservation.textContent="原Artifact保全: "+(e.preservation_status==="PRESERVED_AND_READBACK_VERIFIED"?"manifest申告：再取得SHA検証済み（独立未検証）":e.preservation_status==="PRESERVATION_BLOCKED"?"権利確認待ち・未保全":"未検証（公開画像と原ZIPの保全は別）");tile.append(preservation);
  provenance(e,tile);
  if(/\.(png|jpe?g)$/.test(e.path)){const img=document.createElement("img");img.src=base+e.path;img.loading="lazy";img.alt=e.name;tile.prepend(img);}
- else {const button=document.createElement("button");button.textContent="3D表示";button.onclick=async()=>{button.disabled=true;try{const res=await fetch(base+e.path,{credentials:"omit"});if(!res.ok)throw Error("HTTP "+res.status);const reader=res.body.getReader();let size=0;const parts=[];try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>e.bytes)throw Error("容量不一致");parts.push(value);}}finally{await reader.cancel();}const blob=new Blob(parts);const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer())),x=>x.toString(16).padStart(2,"0")).join("");if(size!==e.bytes||hash!==e.sha256)throw Error("SHA不一致");const input=document.getElementById("model-file"),dt=new DataTransfer();const panel=input.closest("details");if(panel)panel.open=true;dt.items.add(new File([blob],e.path.split("/").pop()));input.files=dt.files;input.dispatchEvent(new Event("change"));document.getElementById("model-view").scrollIntoView({block:"center"});}catch(err){status.textContent="モデル取得失敗: "+err.message;}finally{button.disabled=false;}};tile.append(button);}
+ else {
+ const button=document.createElement("button"), modelNote=document.createElement("p");
+ button.textContent="3D表示";modelNote.setAttribute("role","status");
+ button.onclick=async()=>{
+  invalidatePublishedModel();
+  const id=publishedModelEpoch,controller=new AbortController();
+  publishedModelController=controller;
+  button.disabled=true;modelNote.textContent="取得・SHA照合中";
+  try{
+   const res=await fetch(base+e.path,{credentials:"omit",signal:controller.signal});
+   if(id!==publishedModelEpoch)return;
+   if(!res.ok)throw Error("HTTP "+res.status);
+   const reader=res.body.getReader();let size=0;const parts=[];
+   try{while(true){const {done,value}=await reader.read();if(id!==publishedModelEpoch)return;if(done)break;size+=value.length;if(size>e.bytes)throw Error("容量不一致");parts.push(value);}}
+   finally{try{await reader.cancel();}catch(err){if(id===publishedModelEpoch)throw err;}}
+   const blob=new Blob(parts);
+   const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer())),x=>x.toString(16).padStart(2,"0")).join("");
+   if(id!==publishedModelEpoch)return;
+   if(size!==e.bytes||hash!==e.sha256)throw Error("SHA不一致");
+   const input=document.getElementById("model-file"),dt=new DataTransfer();
+   const panel=input.closest("details");if(panel)panel.open=true;
+   dt.items.add(new File([blob],e.path.split("/").pop()));input.files=dt.files;
+   publishedModelController=null;
+   modelNote.textContent="SHA照合済み・表示処理へ引継ぎ";
+   input.dispatchEvent(new Event("change"));
+   document.getElementById("model-view").scrollIntoView({block:"center"});
+  }catch(err){if(id===publishedModelEpoch)modelNote.textContent="モデル取得失敗: "+err.message;}
+  finally{
+   if(publishedModelController===controller)publishedModelController=null;
+   if(id!==publishedModelEpoch&&modelNote.textContent==="取得・SHA照合中")modelNote.textContent="取得を中止しました";
+   button.disabled=false;
+  }
+ };
+ tile.append(button,modelNote);
+ }
  return tile;
  }
  const categories=[["cliff","風待ちの崖"],["morwen","モルウェン"],["village","リルド村"],["world","世界・自然／遺構"],["blueprint","設計図"],["map","地図・配置図"],["other","その他"]];
