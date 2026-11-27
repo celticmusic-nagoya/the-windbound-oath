@@ -66,6 +66,52 @@ try{
  assert.ok((await page.locator('#published-status').innerText()).startsWith(manifest.entries.length+' 件'),'stale gallery response overwrote refresh');
  assert.equal(refreshCount,2,'expected two refresh requests');
  await page.unroute('**/gallery-manifest.json');
+ // Model download ordering: fixture GLBs are generated locally, not published assets.
+ const triangleGlb=tag=>{
+  const bin=Buffer.alloc(36);[0,0,0,1,0,0,0,1,0].forEach((x,i)=>bin.writeFloatLE(x,i*4));
+  const j=Buffer.from(JSON.stringify({asset:{version:'2.0',generator:tag},scene:0,scenes:[{nodes:[0]}],nodes:[{mesh:0}],meshes:[{primitives:[{attributes:{POSITION:0}}]}],buffers:[{byteLength:36}],bufferViews:[{buffer:0,byteLength:36,target:34962}],accessors:[{bufferView:0,componentType:5126,count:3,type:'VEC3',min:[0,0,0],max:[1,1,0]}]}));
+  const pad=Buffer.alloc((4-j.length%4)%4,32),body=Buffer.concat([j,pad]),h=Buffer.alloc(12),jh=Buffer.alloc(8),bh=Buffer.alloc(8);
+  h.writeUInt32LE(0x46546c67,0);h.writeUInt32LE(2,4);h.writeUInt32LE(12+8+body.length+8+bin.length,8);
+  jh.writeUInt32LE(body.length,0);jh.writeUInt32LE(0x4e4f534a,4);bh.writeUInt32LE(bin.length,0);bh.writeUInt32LE(0x004e4942,4);
+  return Buffer.concat([h,jh,body,bh,bin]);
+ };
+ const modelFixtures=['slow','fast'].map(tag=>{
+  const bytes=triangleGlb(tag),sha256=createHash('sha256').update(bytes).digest('hex');
+  return {bytes,entry:{name:'QA model '+tag,path:'published/'+sha256+'.glb',sha256,bytes:bytes.length,qa:'NOT_RUN',adoption:'UNADOPTED',category:'other'}};
+ });
+ const [slowModel,fastModel]=modelFixtures;
+ const modelPath=f=>'**/'+f.entry.path;
+ await page.route('**/gallery-manifest.json',r=>r.fulfill({json:{...manifest,entries:[...manifest.entries,...modelFixtures.map(f=>f.entry)]}}));
+ await page.route(modelPath(fastModel),r=>r.fulfill({body:fastModel.bytes,contentType:'model/gltf-binary'}));
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length+2);
+ await page.getByRole('button',{name:'全成果物・新着順',exact:true}).click();
+ const modelTile=f=>page.locator('#published-gallery article.tile').filter({has:page.getByRole('heading',{name:f.entry.name,exact:true})});
+ const modelButton=f=>modelTile(f).getByRole('button',{name:'3D表示',exact:true});
+ const selectedModel=()=>page.locator('#model-file').evaluate(el=>el.files[0]?.name||'');
+ async function delayedModelSelection(choose,expected){
+  let release,complete;
+  const gate=new Promise(r=>{release=r;}),finished=new Promise(r=>{complete=r;});
+  await page.route(modelPath(slowModel),async route=>{try{await gate;await route.fulfill({body:slowModel.bytes,contentType:'model/gltf-binary'});}catch{}finally{complete();}});
+  try{
+   const started=page.waitForRequest(req=>req.url().endsWith(slowModel.entry.path));
+   await modelButton(slowModel).click();await started;
+   await choose();
+   await page.waitForFunction(n=>document.getElementById('model-file').files[0]?.name===n,expected);
+   release();await finished;
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('#published-gallery article.tile')).some(t=>t.querySelector('h3')?.textContent==='QA model slow'&&t.querySelector('[role=status]')?.textContent==='取得を中止しました'));
+   assert.equal(await selectedModel(),expected,'stale model overwrote latest selection');
+   assert.match(await page.locator('#published-status').innerText(),/^\d+ 件/,'download error replaced gallery count');
+  }finally{release();await page.unroute(modelPath(slowModel));}
+ }
+ await delayedModelSelection(()=>modelButton(fastModel).click(),fastModel.entry.path.split('/').pop());
+ await delayedModelSelection(()=>page.locator('#model-file').setInputFiles({name:'manual.glb',mimeType:'model/gltf-binary',buffer:fastModel.bytes}),'manual.glb');
+ await page.locator('#model-file').setInputFiles([]);
+ await page.unroute(modelPath(fastModel));
+ await page.unroute('**/gallery-manifest.json');
+ await page.locator('#refresh-published').click();
+ await page.waitForFunction(n=>document.querySelector('#published-status').textContent.startsWith(n+' 件'),manifest.entries.length);
+
  // Malformed manifest entries are ignored without losing valid gallery entries.
  await page.route('**/gallery-manifest.json',route=>route.fulfill({json:{...manifest,entries:[null,{...manifest.entries[0],name:{unexpected:"object"}},{...manifest.entries[0],stage:[]},...manifest.entries]}}));
  await page.locator('#refresh-published').click();
