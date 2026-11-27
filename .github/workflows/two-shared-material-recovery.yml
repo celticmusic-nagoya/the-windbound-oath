@@ -35,6 +35,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -73,6 +74,9 @@ jobs:
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
@@ -1669,5 +1673,51 @@ jobs:
         with:
           name: two-v84-pbr-export
           path: ${{ runner.temp }}/v84-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v85-light-study:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V85 light study scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V84 and compare balanced ambient light
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v85-in" "$RUNNER_TEMP/v85-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15178552814/zip" > "$RUNNER_TEMP/v84.zip"
+          printf '%s  %s\n' f7cf35f137e67627b43dcc7acd96f0f964783b7452da41a11ebb1e5a4cbcc27b "$RUNNER_TEMP/v84.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v84.zip"
+          unzip -q "$RUNNER_TEMP/v84.zip" -d "$RUNNER_TEMP/v85-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' -- "$RUNNER_TEMP/v85-in/v84_pbr_export_candidate.blend" "$RUNNER_TEMP/v85-out" 2>&1 | tee "$RUNNER_TEMP/v85-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' "$RUNNER_TEMP/v85-out/"
+          (cd "$RUNNER_TEMP/v85-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V85 light candidate and renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v85-light-study
+          path: ${{ runner.temp }}/v85-out
           retention-days: 14
           if-no-files-found: error
