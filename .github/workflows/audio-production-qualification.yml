@@ -1,0 +1,36 @@
+name: TWO audio offline qualification
+on:
+  pull_request:
+    paths:
+      - 'tools/audio-production/**'
+      - '.github/workflows/audio-production-qualification.yml'
+permissions:
+  contents: read
+concurrency:
+  group: audio-qualification-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify or install distribution FFmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install --no-install-recommends -y ffmpeg
+          fi
+          ffmpeg -version
+          ffmpeg -hide_banner -filters | grep -E 'asoftclip|acompressor|highpass|equalizer'
+      - name: Actual offline audio processing and QA
+        run: |
+          python -m py_compile tools/audio-production/process_audio.py
+          python tools/audio-production/process_audio.py selftest "$RUNNER_TEMP/two-audio-qualification"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: two-audio-qualification-synthetic
+          path: ${{ runner.temp }}/two-audio-qualification/
+          retention-days: 7
+          if-no-files-found: error
