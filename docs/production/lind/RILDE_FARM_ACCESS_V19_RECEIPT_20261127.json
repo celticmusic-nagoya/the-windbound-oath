@@ -1,0 +1,86 @@
+{
+  "status": "LOCAL_CANDIDATE_D4_G2_HOLD",
+  "source_v18": "d58c803afff940e0d9dc6f77d7c3db31722e7d6bf90aa6f4562903c2fd6b3f5d",
+  "frame": "provisional local BU, Z up",
+  "main_points": [
+    [
+      37,
+      -1.35
+    ],
+    [
+      37,
+      -4.3
+    ],
+    [
+      37.3,
+      -4.75
+    ],
+    [
+      37.8,
+      -5
+    ],
+    [
+      48.15,
+      -5
+    ],
+    [
+      48.7,
+      -5.25
+    ],
+    [
+      49,
+      -5.8
+    ],
+    [
+      49,
+      -6.55
+    ]
+  ],
+  "branch_points": [
+    [
+      40,
+      -5
+    ],
+    [
+      40,
+      -8.45
+    ]
+  ],
+  "width": 1.2,
+  "length_main": 16.38050018868136,
+  "length_branch": 3.4499999999999993,
+  "surface_triangles": 1240,
+  "area": 23.061542983659244,
+  "grade_max": 0.05241853125318468,
+  "surface_samples": 4960,
+  "terrain_clearance_range": [
+    0.008,
+    0.028117410045117183
+  ],
+  "selected_obstacle_clearance": 0.22403564453124858,
+  "road_overlap_area": 0.29748737815033977,
+  "actual_interface_road": {
+    "samples": 13,
+    "matched": 13,
+    "max_delta": 0.014000000197727621
+  },
+  "actual_interface_ramp": {
+    "samples": 13,
+    "matched": 13,
+    "max_delta": 0.000020664821156257673
+  },
+  "flowers": 46,
+  "flower_components": 368,
+  "triangles_added": 28104,
+  "source_resources_preserved": true,
+  "verified_output_hashes": 12,
+  "outputs": {
+    "standalone": "8699780053ca0af889815456a7a276a0a457d2f8af89387e60ce6311b69bcb4f",
+    "integration": "b7b6a60b01241603c3fb20ba04302fb0f662fe2ea8acbd06a2ac0df2b11ffa2b",
+    "build": "b63a66244d43c8d8de6720ef521b1e2a28a8e9ba4014ac9ce31b9854fdf67daf"
+  },
+  "limits": [
+    "Selected V12 obstacle components and other tall object AABBs, not full collision. Garden entrance ends .05 BU before nominal fence line on existing terrain. Deliberate open ribbon overlay; tiny degenerate clipped triangles removed before accepted run.",
+    "VTK basecolor preview: road edges too sharp, sparse flowers, terrain color uniform. G2 HOLD. Native write, gameplay traversal, Android, final world position and adoption not done."
+  ]
+}
