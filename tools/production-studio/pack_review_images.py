@@ -39,7 +39,7 @@ def pack(source, spec, output):
     archive = None
     try:
         if source.is_dir():
-            if 'archive_sha256' in spec or 'artifact_id' in spec or 'run_id' in spec:
+            if any(k in spec for k in ('archive_sha256', 'archive_bytes', 'artifact_id', 'run_id')):
                 raise ValueError('directory cannot claim archive provenance')
         else:
             if not source.is_file() or not 0 < source.stat().st_size <= MAX_ARCHIVE:
