@@ -50,3 +50,6 @@
 
 /* At fit-to-window scale, horizontal gestures turn images; zoomed images keep pan. */
 .gallery-lightbox [aria-label="画像拡大表示"]:has(img[style*="max-width: 100%"]){touch-action:pan-y pinch-zoom}
+
+/* Local audio A/B review, never uploads audio. */
+#audio-review{margin:24px 0;min-width:0}#audio-review input{display:block;max-width:100%;margin:4px 0 12px}#audio-review label{display:block}#audio-review audio{width:100%;max-width:100%;display:block}#audio-review [hidden]{display:none!important}.audio-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px}.audio-pair>div{min-width:0;border:1px solid var(--line);padding:12px;border-radius:8px}.audio-actions{display:flex;gap:8px;flex-wrap:wrap}#audio-meta,#audio-status{overflow-wrap:anywhere}
