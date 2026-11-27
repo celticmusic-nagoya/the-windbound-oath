@@ -25,6 +25,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'
       - 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -60,6 +61,10 @@ jobs:
           if [[ "$ACTION" == synchronize ]]; then
             git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V80 isolated moss-forest root/LOD candidate only.
@@ -1157,5 +1162,50 @@ jobs:
         with:
           name: two-v80-moss-forest
           path: ${{ runner.temp }}/v80-out
+          retention-days: 14
+          if-no-files-found: error
+  v81-moss-forest:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V81 moss forest scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V80 and build sanctuary/trail/density candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v81-in" "$RUNNER_TEMP/v81-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15101780672/zip" > "$RUNNER_TEMP/v80.zip"
+          printf '%s  %s\n' 9eb241c84735d0587a9254b52598edce70fb513a2f72483c61c05835f5651ba3 "$RUNNER_TEMP/v80.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v80.zip"
+          unzip -q "$RUNNER_TEMP/v80.zip" -d "$RUNNER_TEMP/v81-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' -- "$RUNNER_TEMP/v81-in/v80_moss_forest.blend" "$RUNNER_TEMP/v81-out" --v80-renders "$RUNNER_TEMP/v81-in/renders" --ref assets/images/environments/moss_ancient_altar_idle_v1.png
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' "$RUNNER_TEMP/v81-out/"
+          (cd "$RUNNER_TEMP/v81-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated V81 candidate, renders, GLB and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v81-moss-forest
+          path: ${{ runner.temp }}/v81-out
           retention-days: 14
           if-no-files-found: error
