@@ -34,14 +34,20 @@ jobs:
         run: |
           mkdir -p /tmp/lind-glb-benchmark
           python3 - <<'PY'
-          import json,struct,hashlib
+          import json,struct,hashlib,zlib
           from pathlib import Path
           # Minimal standards-compliant GLB: one triangle mesh, no production art.
           import base64
+          def chunk(tag, data):
+              return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
+          png=b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',1,1,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b'\0\x99\x99\x99\xff'))+chunk(b'IEND',b'')
+          prefix=png+b'\0'*(-len(png)%4)
+          uv=struct.pack('<6f',0,0,1,0,0,1)
           verts=struct.pack('<9f',-1,0,0,1,0,0,0,1,0)
-          doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(verts)}],"bufferViews":[{"buffer":0,"byteOffset":0,"byteLength":len(verts),"target":34962}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]}],"meshes":[{"primitives":[{"attributes":{"POSITION":0}}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
+          data=prefix+uv+verts
+          doc={"asset":{"version":"2.0"},"buffers":[{"byteLength":len(data)}],"bufferViews":[{"buffer":0,"byteOffset":len(prefix)+len(uv),"byteLength":len(verts),"target":34962},{"buffer":0,"byteOffset":len(prefix),"byteLength":len(uv),"target":34962},{"buffer":0,"byteOffset":0,"byteLength":len(png)}],"accessors":[{"bufferView":0,"componentType":5126,"count":3,"type":"VEC3","min":[-1,0,0],"max":[1,1,0]},{"bufferView":1,"componentType":5126,"count":3,"type":"VEC2"}],"images":[{"bufferView":2,"mimeType":"image/png"}],"textures":[{"source":0}],"materials":[{"pbrMetallicRoughness":{"baseColorTexture":{"index":0}}}],"meshes":[{"primitives":[{"attributes":{"POSITION":0,"TEXCOORD_0":1},"material":0}]}],"nodes":[{"mesh":0}],"scenes":[{"nodes":[0]}],"scene":0}
           j=json.dumps(doc,separators=(',',':')).encode();j+=b' ' * (-len(j)%4)
-          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(verts))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(verts),bytes([66,73,78,0]))+verts
+          blob=b'glTF'+struct.pack('<II',2,12+8+len(j)+8+len(data))+struct.pack('<I4s',len(j),b'JSON')+j+struct.pack('<I4s',len(data),bytes([66,73,78,0]))+data
           p=Path('/tmp/lind-glb-benchmark/technical-scene.glb');p.write_bytes(blob)
           print('fixture SHA256',hashlib.sha256(blob).hexdigest())
           PY
@@ -51,34 +57,7 @@ jobs:
           LIND_EXPECTED_TRIANGLES: '1'
           LIND_EXPECTED_MESHES: '1'
         run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
-      - name: Reuse verified V13 export (read only; no Blender)
-        if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/lind-source"
-          gh api repos/celticmusic-nagoya/the-windbound-oath/actions/artifacts/15131882078/zip > "$RUNNER_TEMP/lind-source/input.zip"
-          echo "93ebf13d046d605051d6931b3af056b52e7e498591e27f8304061c6898cc4a69  $RUNNER_TEMP/lind-source/input.zip" | sha256sum -c -
-          python3 - <<'PY'
-          import hashlib,os,zipfile
-          from pathlib import Path
-          p=Path(os.environ['RUNNER_TEMP'])/'lind-source'
-          with zipfile.ZipFile(p/'input.zip') as z:
-              assert z.testzip() is None
-              data=z.read('village_v13_SCENIC_EXPORT.glb')
-          assert len(data)==50732020 and hashlib.sha256(data).hexdigest()=='b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d'
-          (p/'verified.glb').write_bytes(data)
-          print('PASS: reused exact V13 export, no native edit or upload')
-          PY
-      - name: Existing map GLB transmission single-byte draw-call diagnostic (ABBA)
-        if: github.event_name == 'pull_request' && github.base_ref == 'feature/lind-webgl-runtime-benchmark-01'
-        env:
-          LIND_GLB: ${{ runner.temp }}/lind-source/verified.glb
-          LIND_EXPECTED_SHA: b32fbe55777dcdc43cde9e8ad337aac15cc447de568aac8fdd7f9f5fc473f57d
-          LIND_QA_OUT: /tmp/lind-glb-benchmark/v13-transmission-probe.json
-          LIND_TRANSMISSION_PROBE: '1'
-        run: node tools/map_blender/runtime_benchmark/browser-smoke.cjs
+      # V13 causal probe is complete; preserve its prior run, do not fetch or redraw it here.
       - name: Upload evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4

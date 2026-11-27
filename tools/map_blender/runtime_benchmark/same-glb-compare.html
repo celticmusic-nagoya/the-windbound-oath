@@ -25,6 +25,26 @@ function cancel(status){token++;run.disabled=false;cleanup();if(result.status===
 document.querySelector('#stop').onclick=()=>cancel('STOPPED_EARLY');
 document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(JSON.stringify(result,null,2)).catch(e=>{result.copyError=String(e);show()});
 async function sha(buffer){const b=await crypto.subtle.digest('SHA-256',buffer);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+// Each session owns a fresh canvas and a locally parsed asset. No shared texture cache.
+function disposeThreeAsset(root){
+ const geometries=new Set(),materials=new Set(),textures=new Set(),skeletons=new Set(),bitmaps=new Set();
+ root?.traverse(o=>{
+  if(o.geometry)geometries.add(o.geometry);
+  if(o.skeleton)skeletons.add(o.skeleton);
+  for(const m of (Array.isArray(o.material)?o.material:[o.material]))if(m)materials.add(m);
+ });
+ for(const m of materials)for(const value of Object.values(m))if(value?.isTexture)textures.add(value);
+ for(const t of textures){
+  const image=t.source?.data;
+  for(const item of (Array.isArray(image)?image:[image]))if(typeof ImageBitmap!=='undefined'&&item instanceof ImageBitmap)bitmaps.add(item);
+ }
+ for(const s of skeletons)s.dispose();
+ for(const g of geometries)g.dispose();
+ for(const m of materials)m.dispose();
+ for(const t of textures)t.dispose();
+ for(const b of bitmaps)b.close();
+}
+function releaseContext(gl){if(gl&&!gl.isContextLost())gl.getExtension('WEBGL_lose_context')?.loseContext();}
 function threeSession(THREE,GLTFLoader,bytes,dims,canvas){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:false});renderer.setPixelRatio(1);renderer.setSize(dims.width,dims.height,false);
  const scene=new THREE.Scene();scene.background=new THREE.Color(0x132033);
@@ -32,8 +52,17 @@ function threeSession(THREE,GLTFLoader,bytes,dims,canvas){
  renderer.toneMapping=THREE.NoToneMapping;
  scene.add(new THREE.HemisphereLight(0xffffff,0x555555,0.7));
  const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(...VEC_LIGHT);scene.add(light);
- const loader=new GLTFLoader(),mixerState={mixer:null};
- return new Promise((resolve,reject)=>loader.parse(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'',gltf=>{
+ const loader=new GLTFLoader(),mixerState={mixer:null},gl=renderer.getContext();
+ let roots=[],disposed=false;
+ const dispose=()=>{if(disposed)return;disposed=true;try{
+  // All loaded scenes can share resources; collect once through a temporary group.
+  const group=new THREE.Group();for(const root of roots)group.add(root);disposeThreeAsset(group);roots=[];
+ }finally{try{renderer.dispose()}finally{releaseContext(gl)}}};
+ return new Promise((resolve,reject)=>{
+ const fail=error=>{try{dispose()}catch(cleanupError){console.warn('session cleanup',cleanupError)}reject(error)};
+ try{loader.parse(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'',gltf=>{
+  roots=gltf.scenes?.length?gltf.scenes:[gltf.scene];
+  try{
   const root=gltf.scene;scene.add(root);
   const bounds=new THREE.Box3().setFromObject(root),center=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3()),radius=Math.max(size.length(),1);
   camera.position.copy(center).add(new THREE.Vector3(0,radius*.25,radius*1.5));camera.lookAt(center);camera.far=Math.max(1000,radius*10);camera.updateProjectionMatrix();
@@ -43,8 +72,10 @@ function threeSession(THREE,GLTFLoader,bytes,dims,canvas){
    camera:{min:bounds.min.toArray(),max:bounds.max.toArray(),eye:camera.position.toArray(),target:center.toArray(),near:camera.near,far:camera.far,verticalFovDegrees:FOV,rightHanded:true},environment:renderEnvironment(canvas),
    draw(dt){mixerState.mixer?.update(dt);renderer.render(scene,camera)},
    stats(){return {drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}},
-   dispose(){root.traverse(o=>{if(o.geometry)o.geometry.dispose();const m=o.material;if(m)(Array.isArray(m)?m:[m]).forEach(x=>x.dispose())});renderer.dispose()}});
- },error=>{renderer.dispose();reject(error)}));
+   dispose});
+  }catch(error){fail(error)}
+ },fail)}catch(error){fail(error)}
+ });
 }
 async function babylonSession(bytes,dims,canvas){
  const B=window.BABYLON;if(!B?.SceneLoader)throw Error('Babylon loader unavailable');
@@ -53,7 +84,9 @@ async function babylonSession(bytes,dims,canvas){
  const camera=new B.FreeCamera('camera',new B.Vector3(0,1,5),scene);camera.fov=FOV*Math.PI/180;camera.fovMode=B.Camera.FOVMODE_VERTICAL_FIXED;camera.minZ=.1;camera.maxZ=1000;scene.activeCamera=camera;
  const ambient=new B.HemisphericLight('ambient',new B.Vector3(0,1,0),scene);ambient.intensity=.7;ambient.groundColor=B.Color3.FromHexString('#555555').toLinearSpace();
  const light=new B.DirectionalLight('key',new B.Vector3(...VEC_LIGHT.map(x=>-x)),scene);light.intensity=2;
- const glbFile=new File([bytes],'benchmark.glb',{type:'model/gltf-binary'});
+ const glbFile=new File([bytes],'benchmark.glb',{type:'model/gltf-binary'}),gl=canvas.getContext('webgl2')||canvas.getContext('webgl');
+ let disposed=false;
+ const dispose=()=>{if(disposed)return;disposed=true;try{scene.dispose()}finally{try{engine.dispose()}finally{releaseContext(gl)}}};
  try{
   const loaded=await B.SceneLoader.ImportMeshAsync('','',glbFile,scene,undefined,'.glb');
   const meshes=loaded.meshes.filter(m=>m.getTotalVertices&&m.getTotalVertices()>0);
@@ -66,8 +99,8 @@ async function babylonSession(bytes,dims,canvas){
   loaded.animationGroups.forEach(g=>g.stop());
   return {meta:{meshes:meshes.length,skinned:meshes.filter(m=>m.skeleton).length,animations:loaded.animationGroups.length,triangles:meshes.reduce((n,m)=>n+Math.floor((m.getTotalIndices?.()||m.getTotalVertices())/3),0),materials:scene.materials.length},
    camera:{min:lo.asArray(),max:hi.asArray(),eye:camera.position.asArray(),target:center.asArray(),near:camera.minZ,far:camera.maxZ,verticalFovDegrees:FOV,rightHanded:scene.useRightHandedSystem},environment:renderEnvironment(canvas),
-   draw(){scene.render()},stats(){return {drawCalls:null,triangles:null}},dispose(){scene.dispose();engine.dispose()}};
- }catch(e){scene.dispose();engine.dispose();throw e}
+   draw(){scene.render()},stats(){return {drawCalls:null,triangles:null}},dispose};
+ }catch(e){dispose();throw e}
 }
 run.onclick=async()=>{
  cancel('STOPPED_EARLY');const id=token;const f=file.files?.[0];if(!f){result={status:'NO_FILE'};show();return}

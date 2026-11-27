@@ -42,7 +42,7 @@ async function raceProbe(browser,url,first,second){
   await page.evaluate(async first=>{
    let unlock;
    const gate=new Promise(r=>{unlock=r});
-   const state=window.__raceGate={entered:false,released:false,release:unlock,oldCanvas:null};
+   const state=window.__raceGate={entered:false,released:false,release:unlock,oldCanvas:null,oldGL:null,textureDisposes:0,oldTextures:0};
    if(first==='three'){
     const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
     const original=GLTFLoader.prototype.parse;
@@ -51,7 +51,10 @@ async function raceProbe(browser,url,first,second){
      if(!hold)return original.call(this,data,path,onLoad,onError);
      hold=false;
      return original.call(this,data,path,gltf=>{
-      state.oldCanvas=document.querySelector('#view');state.entered=true;
+      state.oldCanvas=document.querySelector('#view');state.oldGL=state.oldCanvas.getContext('webgl2')||state.oldCanvas.getContext('webgl');
+      const textures=new Set();gltf.scene.traverse(o=>{for(const m of (Array.isArray(o.material)?o.material:[o.material]))if(m)for(const t of Object.values(m))if(t?.isTexture)textures.add(t)});
+      state.oldTextures=textures.size;for(const t of textures)t.addEventListener('dispose',()=>state.textureDisposes++);
+      state.entered=true;
       gate.then(()=>{onLoad(gltf);state.released=true});
      },onError);
     };
@@ -61,7 +64,7 @@ async function raceProbe(browser,url,first,second){
     B.SceneLoader.ImportMeshAsync=async function(...args){
      const first=hold;hold=false;
      const loaded=await original.apply(this,args);
-     if(first){state.oldCanvas=document.querySelector('#view');state.entered=true;await gate;state.released=true}
+     if(first){state.oldCanvas=document.querySelector('#view');state.oldGL=state.oldCanvas.getContext('webgl2')||state.oldCanvas.getContext('webgl');state.entered=true;await gate;state.released=true}
      return loaded;
     };
    }
@@ -78,7 +81,8 @@ async function raceProbe(browser,url,first,second){
   await page.evaluate(()=>window.__raceGate.release());
   await page.waitForFunction(()=>window.__raceGate.released,{},{timeout:30000});
   await page.evaluate(()=>new Promise(resolve=>{let n=0;const frame=()=>{if(++n>=8)resolve();else requestAnimationFrame(frame)};requestAnimationFrame(frame)}));
-  const observed=await page.evaluate(()=>({report:JSON.parse(document.querySelector('#report').textContent),distinctCanvas:window.__raceGate.oldCanvas!==document.querySelector('#view'),oldCanvasDetached:!window.__raceGate.oldCanvas.isConnected,runDisabled:document.querySelector('#run').disabled}));
+  const observed=await page.evaluate(()=>{const s=window.__raceGate,c=document.querySelector('#view'),gl=c.getContext('webgl2')||c.getContext('webgl');window.__currentGL=gl;return {report:JSON.parse(document.querySelector('#report').textContent),distinctCanvas:s.oldCanvas!==c,oldCanvasDetached:!s.oldCanvas.isConnected,oldContextLost:s.oldGL.isContextLost(),currentContextAlive:!gl.isContextLost(),oldTextures:s.oldTextures,textureDisposes:s.textureDisposes,runDisabled:document.querySelector('#run').disabled}});
+
   record.observed=observed;
   assert.equal(observed.report.status,'RUNNING','stale load destroyed current rendering');
   assert.equal(observed.report.sha256,nextSha);
@@ -88,10 +92,15 @@ async function raceProbe(browser,url,first,second){
   assert.equal(observed.report.asset.meshes,1);
   assert.equal(observed.distinctCanvas,true);
   assert.equal(observed.oldCanvasDetached,true);
+  assert.equal(observed.oldContextLost,true,'stale GL context not released');
+  assert.equal(observed.currentContextAlive,true,'current GL context lost');
+  if(first==='three'){assert.ok(observed.oldTextures>0,'textured fixture required');assert.equal(observed.textureDisposes,observed.oldTextures,'texture disposal count');}
   assert.equal(observed.runDisabled,true);
   assert.deepEqual(errors,[]);
   await page.locator('#stop').click();
   assert.equal(JSON.parse(await page.locator('#report').textContent()).status,'STOPPED_EARLY');
+  await page.waitForFunction(()=>window.__currentGL.isContextLost());
+  record.currentContextReleased=true;
   record.pass=true;
  }catch(e){record.error=String(e)}finally{
   record.pageErrors=errors;
