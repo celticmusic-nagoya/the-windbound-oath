@@ -1,0 +1,100 @@
+{
+  "status": "OFFLINE_LIGHTING_CANDIDATE_G2_HOLD",
+  "source": "8c4e15e0208d655adbf3279907f72e615af4c82d5dc6adede23685c429e4f5bf",
+  "official_day": "c55af0770e0aa7c876575e57e4016df3280816459efd41f7200fa5ed3b51726a",
+  "units": "provisional BU Z up",
+  "preview": {
+    "engine": "VTK 9.6.2 EGL",
+    "resolution": [
+      1280,
+      800
+    ],
+    "views": 3,
+    "actor_groups": 115,
+    "alpha_groups_excluded": 4,
+    "key": {
+      "position": [
+        -80,
+        -120,
+        155
+      ],
+      "target": [
+        20,
+        0,
+        0
+      ],
+      "intensity": 1.08,
+      "color": [
+        1,
+        0.95,
+        0.85
+      ]
+    },
+    "fill": {
+      "position": [
+        60,
+        25,
+        85
+      ],
+      "target": [
+        20,
+        0,
+        0
+      ],
+      "intensity": 0.32,
+      "color": [
+        0.79,
+        0.88,
+        1
+      ]
+    },
+    "shadow": {
+      "resolution": [
+        2048,
+        2048
+      ],
+      "valid_pixels": 2344372,
+      "bias_BU": 0.32,
+      "strength": 0.43,
+      "pcf_samples": 9
+    },
+    "contact_approx_strength": 0.18,
+    "haze_start_BU": 16,
+    "haze_extinction_per_BU": 0.0033,
+    "haze_cap": 0.56
+  },
+  "metrics": {
+    "plaza": {
+      "shadowed_pixels": 180131,
+      "haze_pixels": 49982,
+      "max_haze": 0.5271947591735918
+    },
+    "street": {
+      "shadowed_pixels": 644579,
+      "haze_pixels": 14842,
+      "max_haze": 0.4670442515658829
+    },
+    "farm": {
+      "shadowed_pixels": 145536,
+      "haze_pixels": 47944,
+      "max_haze": 0.3603954459482568
+    }
+  },
+  "qa": {
+    "source_hash_recheck": true,
+    "verified_output_hashes": 14,
+    "shadow_haze_outside_opaque_pixels_all_views": 0,
+    "near_haze_all_views": 0
+  },
+  "outputs": {
+    "script": "0a3e3b3aa66a749cc84c066c53d09797f090e6f4bfdc80df15a24ac2ef7763a8",
+    "qa": "8eba39153e871291d8889328353fd165774712da8db21adb364e199d9873fcfc",
+    "plaza_comparison": "1a26c00b3e8677eaf04110d4d2cd0cb7d3c9e4daaf0640add999cebc8e53e371",
+    "street_comparison": "182d992a4b7345c0de4b6f70a8720b76285db6e9811bd368cc567c5539c305f8",
+    "farm_comparison": "36047419ed4eb3f8635076ea5c5f8d818f1d31a3b2fd45033539839da9a03c26"
+  },
+  "limits": [
+    "Actual 3D hardware-depth based offline image compositing, not game engine lighting; no GLB changes. Alpha groups excluded as shadow casters and affected screen pixels excluded from composite; no true SSAO or full PBR normal maps.",
+    "Matched cameras visually inspected: mountain separation improved; near stone facade dark, crop shapes rigid, grass uniform, no leaf shadows. G2 HOLD. No native edit, dynamic water integration, runtime/Android or adoption/main merge."
+  ]
+}
