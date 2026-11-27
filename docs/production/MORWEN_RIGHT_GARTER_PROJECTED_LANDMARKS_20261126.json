@@ -1,0 +1,133 @@
+{
+  "scope": "D0_D3_DRAFT_MANUAL_PROJECTED_LANDMARKS_NOT_D4",
+  "owner_pr": 427,
+  "material_pr": 540,
+  "source_archive_sha256": "a290131b16f8c61ee32d30125e438782ab59e36ffa2ce9c132685cefa71016bc",
+  "source_path": "assets/companions/morwen/master/morwen-full-body-v3.png",
+  "source_sha256": "96a88e1deb86734fc18b5d762bad6d5c33b9a481cdbf76d45d954e92a875f990",
+  "image_size": [
+    1024,
+    1536
+  ],
+  "frame": "original image top-left origin, x right, y down; oblique illustration; right leg = screen-left foreground",
+  "measurements": [
+    {
+      "id": "G01",
+      "label": "Visible strap width",
+      "points": [
+        [
+          573,
+          883
+        ],
+        [
+          588,
+          883
+        ]
+      ],
+      "value_px": 15,
+      "edge_uncertainty_px": 3,
+      "conservative_interval_px": [
+        9,
+        21
+      ]
+    },
+    {
+      "id": "G02",
+      "label": "Visible clasp width",
+      "points": [
+        [
+          575,
+          906
+        ],
+        [
+          588,
+          906
+        ]
+      ],
+      "value_px": 13,
+      "edge_uncertainty_px": 3,
+      "conservative_interval_px": [
+        7,
+        19
+      ]
+    },
+    {
+      "id": "G03",
+      "label": "Visible clasp height",
+      "points": [
+        [
+          582,
+          899
+        ],
+        [
+          582,
+          927
+        ]
+      ],
+      "value_px": 28,
+      "edge_uncertainty_px": 3,
+      "conservative_interval_px": [
+        22,
+        34
+      ]
+    },
+    {
+      "id": "G04",
+      "label": "Cuff projected thickness",
+      "points": [
+        [
+          555,
+          906
+        ],
+        [
+          555,
+          925
+        ]
+      ],
+      "value_px": 19,
+      "edge_uncertainty_px": 4,
+      "conservative_interval_px": [
+        11,
+        27
+      ]
+    },
+    {
+      "id": "G05",
+      "label": "Right leg projected width",
+      "points": [
+        [
+          514,
+          928
+        ],
+        [
+          620,
+          928
+        ]
+      ],
+      "value_px": 106,
+      "edge_uncertainty_px": 4,
+      "conservative_interval_px": [
+        98,
+        114
+      ]
+    }
+  ],
+  "nominal_ratios_to_G05": {
+    "G01": 0.1415,
+    "G02": 0.1226,
+    "G03": 0.2642,
+    "G04": 0.1792
+  },
+  "constraints": [
+    "right side only, no mirrored left clasp",
+    "upper attachment occluded by skirt; preserve clearance and inspect real garment",
+    "cuff follows leg, clasp overlaps top of cuff; skin/stocking/skirt must remain independently editable",
+    "native UV and world units unknown; do not convert px to mm",
+    "depth, back attachment, fastening thickness, exact mesh clearance unresolved"
+  ],
+  "native_operation": "qualified VRoid texture/layer and accessory capability evaluation first; use actual native body fit and independent D4 before geometric authoring",
+  "D4": "NOT_RUN",
+  "G2": "NOT_RUN",
+  "G3": "NOT_RUN",
+  "G4": "NOT_RUN"
+}

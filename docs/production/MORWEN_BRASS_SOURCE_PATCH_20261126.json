@@ -1,0 +1,65 @@
+{
+  "scope": "SOURCE_PATCH_CANDIDATE_NOT_NATIVE_UV_NOT_ADOPTED",
+  "main": "f7ba98e4dd458fbf7f3fd34eb3aef424382fbfbe",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "f74a6e618e8f88084f2543e224fbb93d6e2042c1",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "source": {
+    "url": "https://polyhaven.com/a/brass_pan_01",
+    "author": "Rico Cilliers",
+    "license": "CC0",
+    "license_url": "https://polyhaven.com/license",
+    "capture_method": "UNVERIFIED: textured real-world brass object, not verified photograph/scan",
+    "run": 45654915980,
+    "artifact": 15042068159,
+    "archive_sha256": "b7532af15c4fe647c408eafcbdbde4db54df7e7752596e49d560aa35aa4274c1",
+    "metadata_sha256": "d291aa801e2b112e9c1d9152952a5c2cf85d7c033d376a647b577443ded0ce50",
+    "map_sha256": {
+      "diff": "e8beb65e8a9e52207934d63a684d5104322238e2693e0f0447bd298c14bc3418",
+      "normal_gl": "2551f2bef09c9e550972dff459913a9f0e67912117f6bf5450352cbe5f76427d",
+      "rough": "875cc2d9595094a42460d1aa86ac86b938f6cac342c8c86ea6a6ce58f5b1d4c7",
+      "metal": "54c3b518db197d1d94ef189ef687bed747c87bf97022bf666653d3c2499ec79e"
+    },
+    "dimensions": [
+      1024,
+      1024
+    ]
+  },
+  "qa": {
+    "crc": "PASS",
+    "source_map_byte_md5_pixel": "4/4 PASS",
+    "metadata_comparison": "2/2 SHA PASS",
+    "first_patch_attempt": "FAIL decoded scalar hash; corrected 16-bit scalar conversion to match source receipt",
+    "repeat_after_fix": "6/6 byte-identical",
+    "map_reopen_and_wrap": "4/4 PASS",
+    "visual": "Source UV islands and patina visible; selected inside brass region. Candidate very restrained, not a visual quality verdict."
+  },
+  "patch": {
+    "crop_xyxy": [
+      370,
+      490,
+      434,
+      554
+    ],
+    "metal_min": 255,
+    "source_roughness_percentiles": [
+      0.2784313725490196,
+      0.2980392156862745,
+      0.3215686274509804
+    ],
+    "candidate_roughness_range": [
+      0.31960784313725493,
+      0.42
+    ],
+    "normal_xy_std": 0.0020602163267832586,
+    "method": "64px crop, repeated 2x to128px. Highpass radius3 source normal and roughness strength .65, edge taper6px, roughness center .34, fixed trial palette #CD9E6C. No source diffuse copied. Not calibrated microstructure.",
+    "script_sha256": "a4ac103ccbbf6083d8d68ba16ab05c92fc98b4890cece01dc921c2f163b72e5e",
+    "receipt_sha256": "7414b280e818cf05279c3a4b22b991f97d16c47f908fa230f877703e2241d9be",
+    "comparison_sha256": "9f0596576190c70b86f9f2cc479076afb1654fe604345e760d08a011d1df2844",
+    "zip_sha256": "730e365304c7ded4a3af8e8dc89ba030b038cae9a59f88341429ae6e31e38677",
+    "storage": "Local patch ZIP, source archive Actions; GitHub summary only."
+  },
+  "next": "Confirm scan provenance or obtain a verified scan alternative; compare on actual native-qualified hardware, not more swatches. Capture diagnosis remains unexecuted on macOS; no native dispatch or save. G2 FAIL for skirt unchanged; patch G2-G4 NOT_RUN."
+}

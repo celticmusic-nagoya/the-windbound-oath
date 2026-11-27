@@ -1,0 +1,41 @@
+{
+  "scope": "SOURCE_SPACE_ORNAMENT_EDGE_CANDIDATES_NOT_UV_NOT_ADOPTED",
+  "main": "5f0e5c341303e42b6843e1ac9b36d911e44219c9",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "232b546e6eec9b6ddfa0ceea758b029462d0273e",
+  "reference_archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+  "parent_receipt_sha256": "07290535bcd54fda82285c2060aca43d328016d7b295b8f3f4f1f261e52eef22",
+  "parent_design_blob": "45ca955582493949b2322bc12a7bc6bd0c4ffd5e",
+  "method": "Exact parent binary core; weak gold classifier R>=95 G>=60 R>G G-B>=12 R-B>=30 source alpha>=245, one pixel 8-neighbor only, within reviewed original ROI, exclude all other ROI for added edge, alpha128; no extrapolation. Flat trial gold RGB205,158,108 not measured Layer0 physical albedo; no directional baked lighting.",
+  "results": {
+    "embroidery_regions": 13,
+    "hardware_regions_excluded": 13,
+    "core_pixels": 3939,
+    "edge_candidate_pixels": 1171,
+    "rgba_decals": 13,
+    "repeat_files_identical": 15,
+    "source_sha": "4/4 PASS",
+    "parent_masks_sha": "26/26 PASS",
+    "core_protection": "13/13 PASS",
+    "roi_guard": "13/13 PASS",
+    "reopen": "13/13 PASS",
+    "visual": "Actual motif contact sheet reviewed; visible leaf/scroll motifs preserved, but pixel-level gaps and coarse boundaries remain. Not clean vector artwork."
+  },
+  "outputs": {
+    "comparison_sha256": "d061a3b50e39115892c171d1e9dc8dabd41dfaffd898d139a7154dec48b6541e",
+    "local_script_sha256": "fa02f2fe503bd9c5b71f1f1fe97907bdffdd22fe9af06c2aeb9c958706612bdb",
+    "local_receipt_sha256": "0227f85f109cc6ea9ce6c933ea8405bffd257af14da7684ec8a7ac95f835f551",
+    "storage": "Local source-space decal PNGs, script, receipt only. No reference images or binary textures committed."
+  },
+  "gates": {
+    "D2": "PARTIAL visible ornament evidence",
+    "D3": "HOLD exact native UV, contour confidence and dimensions",
+    "D4": "NOT_RUN",
+    "G2": "NOT_RUN actual Layer0 garment; outer skirt G2 FAIL unchanged",
+    "G3": "NOT_RUN native",
+    "G4": "NOT_RUN runtime"
+  },
+  "next": "Manually resolve individual motif discontinuities from visible source, preserve uncertainty; obtain actual template/UV mapping and compare before application. No Codex skirt interference, no native edit/launch or main merge."
+}

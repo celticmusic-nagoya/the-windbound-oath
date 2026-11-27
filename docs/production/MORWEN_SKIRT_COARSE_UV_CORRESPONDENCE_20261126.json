@@ -1,0 +1,133 @@
+{
+  "scope": "READ_ONLY_ACTUAL_SCREEN_COARSE_UV_CORRESPONDENCE_NOT_EXACT_UV",
+  "main": "3f0c821a20da4cd407758a5d66500e2c9dd22d37",
+  "agents_blob": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "f0cc327b3a075f0e10e97eae576db4deedb16548",
+  "native": {
+    "artifact": 15003297779,
+    "archive_sha256": "b1c9b7b61433b17c4caa160f0558461386edb0b6440f6652e89565a6482",
+    "native_sha256": "55cf70f24f55577d81ad7a4c54b20abe4d682e7c4c2688c0a87be1dd1125c541",
+    "archive_crc": "outer and native ZIP PASS",
+    "version": "2.16.0",
+    "structure": "meta.json, v1model/meta.json, v1model/data.bin, thumbnail.jpg; no standalone UV mesh exposed; binary not modified or decoded"
+  },
+  "grid": {
+    "run": 45618046492,
+    "artifact": 15023063410,
+    "archive_sha256": "b8ee069f9ed359d2fc82d32cdfff348b7f28fe506a62706d7e85bfb4ec743ad0",
+    "receipt": "31/31 SHA, CRC PASS",
+    "workflow_head": "8886fba60bd959dd4f120bb09a2981ae08fafb9e",
+    "rgba_sha256": "b7e62a61c9f58611e0abe455d43ab442f4fcf5a342ec026879887556038c3f26",
+    "column_width": 128,
+    "points": {
+      "front": [
+        [
+          358,
+          552,
+          2
+        ],
+        [
+          386,
+          570,
+          3
+        ],
+        [
+          415,
+          573,
+          4
+        ],
+        [
+          449,
+          580,
+          5
+        ]
+      ],
+      "left4": [
+        [
+          367,
+          573,
+          1
+        ],
+        [
+          395,
+          570,
+          2
+        ],
+        [
+          421,
+          570,
+          3
+        ],
+        [
+          440,
+          573,
+          4
+        ]
+      ],
+      "left8": [
+        [
+          348,
+          576,
+          5
+        ],
+        [
+          367,
+          574,
+          6
+        ],
+        [
+          403,
+          575,
+          7
+        ],
+        [
+          438,
+          576,
+          0
+        ]
+      ],
+      "right4": [
+        [
+          370,
+          586,
+          5
+        ],
+        [
+          399,
+          574,
+          6
+        ],
+        [
+          432,
+          575,
+          7
+        ]
+      ]
+    },
+    "method": "Manual interior points; 3x3 RGB median; nearest source circular hue distance <20deg and runner-up margin >5deg. Initial yellow sample ambiguous (margin 2.30deg) rejected and replaced with clearer interior point. 15/15 accepted; not camera calibrated."
+  },
+  "result": {
+    "A_panel": [
+      416,
+      608
+    ],
+    "B_panel": [
+      384,
+      640
+    ],
+    "both": "C3-C4 only",
+    "finding": "left4 samples C1-C4; right4 samples C5-C7. Asymmetric coverage consistent with source U placement, not fixed by widening within C3/C4. Exact local UV, side camera angles, surface fraction, and target motif placement HOLD. Do not infer C5-C7 all require plaid."
+  },
+  "outputs": {
+    "script_sha256": "4826cefcd4aa790749fdc0774dfd8a0f7e4341ed81c216e36c4e28af090633",
+    "comparison_sha256": "f0ccfebc6e0a53a6ca8f66b864d36f7f7455bee34ee0021c63bef04e6bee8916",
+    "receipt_sha256": "99818a9f484b688a7090ae7f653332d7dcea1f3f23e44ee005147bfced102ae6",
+    "repeat": "2/2 exact",
+    "storage": "Local annotated screenshot and receipt; repo summary only"
+  },
+  "blocker": "Existing main morwen-request-launch.yml blob 2e19ae757f48a4cdc735704f4854a12c5a73f1d2 allows only listed past transitions, not new preview diagnostic. No direct dispatch connector. Latest scoped launch skipped; no bypass. Native capture probe and actual shape edit NOT_RUN.",
+  "next": "Use qualified native owner route, finer uniquely coded U/V markers or verified exact UV export and matched normal preview; map both reference-side target panels separately. No C atlas by guessing, no repeated palette trial. G2 FAIL unchanged; no merge/adoption."
+}

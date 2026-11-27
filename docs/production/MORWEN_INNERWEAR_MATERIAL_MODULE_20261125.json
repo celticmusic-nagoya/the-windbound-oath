@@ -1,0 +1,296 @@
+{
+  "version": 3,
+  "scope": "INNERWEAR_MODULE_CANDIDATE_NOT_ADOPTED",
+  "authority": "Director clarification 2026-11-25: reproduce existing official Layer 0 four-view innerwear design, with equal wardrobe material quality. Supersedes provisional design proposal, not asset adoption.",
+  "owner_pr": 427,
+  "material_pr": 540,
+  "prework": {
+    "main": "ea9be4762ca4c41619b26649beeec870b1c26735",
+    "agents_blob": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index_blob": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry_blob": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules_blob": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "canon_status": "Uniform v3 remains protected. Official Layer 0 four-view is the controlling innerwear visual design per director clarification.",
+    "canon_blobs": [
+      "c20fc9b7ea7aaa0de7449e110463225dab07573e",
+      "e1000869aaf232d989761d15c982ed798378b49d",
+      "ec5940c2ca6466150810f93c7fc6a463ef7ebec3"
+    ],
+    "native_active_run": null,
+    "source_owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+    "material_head_before": "a291cb1ee2ff85f5b7500aed8918540ad49319e9",
+    "latest_native_run": {
+      "id": 45618046492,
+      "status": "completed",
+      "conclusion": "success",
+      "scope": "outer skirt UV diagnostic; artifact not independently inspected in this turn"
+    }
+  },
+  "modules": [
+    {
+      "id": "MOR-INNER-UPPER",
+      "role": "Reproduce Layer 0 upper garment shape, gold ornament, purple central ornament, straps and rear clasp"
+    },
+    {
+      "id": "MOR-INNER-LOWER",
+      "role": "Reproduce Layer 0 lower garment silhouette, purple color, front/rear gold motifs and scalloped border"
+    },
+    {
+      "id": "MOR-INNER-GARTER-R",
+      "role": "Reproduce single right-side strap, adjusters and buckle; do not mirror"
+    },
+    {
+      "id": "MOR-INNER-STOCKINGS",
+      "role": "Reproduce dark purple stockings and top bands"
+    },
+    {
+      "id": "MOR-INNER-EDGE",
+      "role": "Separate ornamental embroidery-like details, border, stitching and elastic masks; no unobserved decoration"
+    },
+    {
+      "id": "MOR-INNER-HARDWARE",
+      "role": "Separate observed closures, metal fittings and central jewel-like detail; material type provisional"
+    }
+  ],
+  "sources": [
+    {
+      "id": "cotton_jersey",
+      "url": "https://polyhaven.com/a/cotton_jersey",
+      "license": "CC0",
+      "status": "acquired_verified_artifact_15026208724",
+      "role": "Soft matte knit; candidate only"
+    },
+    {
+      "id": "stretch_poplin",
+      "url": "https://polyhaven.com/a/stretch_poplin",
+      "license": "CC0",
+      "status": "acquired_verified_artifact_15026208724",
+      "role": "Fine stretch woven comparison; candidate only"
+    }
+  ],
+  "license_url": "https://polyhaven.com/license",
+  "maps": {
+    "base_color": "sRGB",
+    "normal": "tangent OpenGL, non-color",
+    "roughness": "linear non-color",
+    "metalness": "0 for cloth; hardware separate",
+    "opacity": "Match observed coverage and stocking appearance; no invented transparency; material/opacity model pending tests.",
+    "height": "optional only where supported"
+  },
+  "design": {
+    "shape": "Follow verified Layer 0 visible silhouettes and garment features; native fit and exact dimensions still require measurement.",
+    "color": "Derive visible colors from Layer 0 itself; do not substitute outer uniform palette or new colorway.",
+    "visibility": "Layer 0 reference fidelity and ordinary outer garment coverage; no changes to official outer design.",
+    "native_first": true,
+    "blender": "only qualified post-native stage",
+    "uv": "no inferred mapping; exact atlas and verified mask required",
+    "rig": "match existing body rig and deformation, protect body and outer clothing"
+  },
+  "qa": {
+    "D0": "Reference 4/4 and acquired CC0 source maps 6/6 exact byte/MD5/decoded SHA PASS",
+    "D1": "module interface specified, actual fit pending",
+    "D2": "PARTIAL: 5 standalone cloth BaseColor candidates and preserved normal/roughness; garment contour and native mapping pending",
+    "D3": "BLOCKED pending exact UV, dimensions, fit and tolerance",
+    "D4": "NOT_RUN",
+    "G1": "Official design input verified; candidate design/asset conformity not yet evaluated",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "checks": [
+      "Four-view Layer 0 shape, color, ornamental motif, hardware and asymmetric strap fidelity",
+      "source SHA and license",
+      "matched material swatches, near/mid/far visual QA",
+      "no outer silhouette changes or unwanted exposure",
+      "walk/run/sit/combat clipping, normal and skin weights",
+      "native save and reopen, independent QA",
+      "WebGL/Android runtime texture and transparency cost"
+    ]
+  },
+  "limits": [
+    "No actual model application or final adoption",
+    "No hidden geometry or fabric composition inferred as canon",
+    "Do not mutate active native checkpoint",
+    "No paid source acquisition",
+    "Appearance samples from painted reference are not physical albedo; stocking opacity and physical textile scale unresolved. No fixed lighting or reflective highlights in BaseColor."
+  ],
+  "layer0": {
+    "artifact_id": 14602858760,
+    "run_id": 44679568515,
+    "archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+    "crc": "PASS",
+    "image_size_px": [
+      384,
+      1024
+    ],
+    "sha_match": "4/4",
+    "visual_review": "actual contact sheet reviewed; do not redistribute reference images",
+    "landmarks_blob": "93eefba2426f33b5033d07ba7d7c751a99a12292",
+    "blueprint_blob": "ea55e2bcaf5cddc4af3b012e738d075a83ae66b1",
+    "views": {
+      "front": {
+        "file": "7809.png",
+        "sha256": "b0a5d9f6c77c4a73a9f8bcca3dd2d8acad62403f374e04ebb2b0cb9b1b1199ed"
+      },
+      "right": {
+        "file": "7807.png",
+        "sha256": "9f4873cf331f55b72510159412bd0bfc4c606499f792626e03cffcdace7bf737"
+      },
+      "back": {
+        "file": "7810.png",
+        "sha256": "b9d6d6667be8d9bbed1538a42cbaea0e51bab68371366962e43463fbe394976f"
+      },
+      "left": {
+        "file": "7808.png",
+        "sha256": "69f23ce23cf9c56228e1e4d9a23fbab6b6607456a35239c853718a84da2298fa"
+      }
+    },
+    "observed_design": [
+      "Deep purple upper and lower garments with gold ornamental embroidery-like motifs",
+      "Upper front central purple jewel-like ornament with gold border",
+      "Upper rear strap and gold-toned clasp",
+      "Scalloped ornamental edges",
+      "One asymmetric garter on character right, purple strap with gold-toned adjusters and buckle; front image left / rear image right",
+      "Dark purple thigh-high stockings with darker top bands, fully covered feet"
+    ],
+    "unresolved": [
+      "Fabric fiber composition and reflectance are not determined by illustration",
+      "Actual seam construction, hidden lining and UV topology not specified; do not invent canon"
+    ]
+  },
+  "material_trial": {
+    "main": "5f0e5c341303e42b6843e1ac9b36d911e44219c9",
+    "reference_archive_sha256": "d7e006a37dbc739a68d3a409c6ceafd038306d856bb445c8c8c60d4e18c3d29d",
+    "material_source_run": 45624991144,
+    "material_source_artifact": 15026208724,
+    "material_source_archive_sha256": "9a904f93c5514043fbd5d7136715d0a80d7af28ffcb588a351f1c8f5265c0426",
+    "source_view": "7809.png",
+    "sample_method": "Manual interior 5x5 medians, source pixels; lighting not removed by physical inverse rendering",
+    "samples": {
+      "upper": {
+        "xy": [
+          253,
+          299
+        ],
+        "rgba": [
+          91,
+          49,
+          94,
+          253
+        ]
+      },
+      "lower": {
+        "xy": [
+          202,
+          470
+        ],
+        "rgba": [
+          93,
+          48,
+          93,
+          253
+        ]
+      },
+      "strap": {
+        "xy": [
+          159,
+          466
+        ],
+        "rgba": [
+          111,
+          67,
+          107,
+          253
+        ]
+      },
+      "band": {
+        "xy": [
+          140,
+          565
+        ],
+        "rgba": [
+          80,
+          50,
+          79,
+          252
+        ]
+      },
+      "stocking": {
+        "xy": [
+          155,
+          635
+        ],
+        "rgba": [
+          120,
+          80,
+          93,
+          252
+        ]
+      }
+    },
+    "outputs": [
+      {
+        "role": "body-cloth-knit",
+        "source": "cotton_jersey",
+        "rgb": [
+          92,
+          48,
+          94
+        ],
+        "sha256": "a32deff40b812de2181c0d459db42bfea56b8eb46e60134015200f7f78ac0ba6"
+      },
+      {
+        "role": "body-cloth-woven",
+        "source": "stretch_poplin",
+        "rgb": [
+          92,
+          48,
+          94
+        ],
+        "sha256": "5c5aaa646ed8ec0e124d60a2f176b4f6d136cbee2df7d17bb1cf30c4320d0a6c"
+      },
+      {
+        "role": "strap-woven",
+        "source": "stretch_poplin",
+        "rgb": [
+          111,
+          67,
+          107
+        ],
+        "sha256": "d2472efa675874e08c9da46111e40363414a62e333d055e44b8ae3eb75bfee5c"
+      },
+      {
+        "role": "band-knit",
+        "source": "cotton_jersey",
+        "rgb": [
+          80,
+          50,
+          79
+        ],
+        "sha256": "9ad29ba2c525e7b42a46f36638640831d37ce62e87f448a33341d82df877d88e"
+      },
+      {
+        "role": "stocking-knit-opaque-trial",
+        "source": "cotton_jersey",
+        "rgb": [
+          120,
+          80,
+          93
+        ],
+        "sha256": "d6ba302b329f43e04908a23d4cfa46bf287213b40b00aa09067fea278fdd03fb"
+      }
+    ],
+    "qa": {
+      "archive_crc": "2/2 PASS",
+      "source_maps": "6/6 PASS",
+      "flat_basecolor": "5/5 PASS",
+      "original_normal_roughness": "4/4 PASS",
+      "repeat": "11/11 byte-identical",
+      "visual": "Actual plane lighting comparison inspected; knit texture visible under grazing light, woven subtler; opaque stocking approximation only. No garment art QA."
+    },
+    "script_sha256": "913eb30e4cfdd73990478ebf51c27c62edccbffb9c81edc502307a01adb7fa8c",
+    "receipt_sha256": "7a95f2dcf892ab010786a9eb9e16cf4768a1916b39f7726a5bb157d6ccfafeac",
+    "comparison_sha256": "b17b9574be739bf2fc9ff24c8b484805223a86ddf4e1df9912f27c094154c6ba",
+    "storage": "Local maps and recipe only; receipt summary committed; no official images republished.",
+    "next": "Observed decorative motif placement, separate source-view garment contour landmarks and native template fit after owner coordination. No further isolated hair highlight tuning."
+  }
+}

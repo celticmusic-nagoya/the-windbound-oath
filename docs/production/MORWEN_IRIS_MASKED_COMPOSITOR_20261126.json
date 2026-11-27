@@ -1,0 +1,38 @@
+{
+  "scope": "IRIS_ATLAS_COMPOSITOR_SYNTHETIC_FIXTURE_QA_ONLY",
+  "main": "3f0c821a20da4cd407758a5d66500e2c9dd22d37",
+  "agents_blob": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "dd91d9f30bb157e7273fa45aec337b62daa4a36d",
+  "active_native_run": 45666549093,
+  "source": {
+    "detail_sha256": "1ddcf617e567fd17feac7c3903e3459567912cadb1126e426436b2a9412591e0",
+    "type": "Previously authored original neutral radial detail map; not real scan, no donor photograph pixels"
+  },
+  "implementation": "Exact input PNG SHA, explicit reviewed binary mask and box, bounded linear-light scalar modulation <=0.08, preserve alpha and outside-mask bytes, write unique output and reopen. Native mask must exclude pupil, limbus and intentional highlights; no inferred UV. Actual texture export unavailable.",
+  "qa": {
+    "fixture_size": [
+      384,
+      256
+    ],
+    "changed_pixels": 15518,
+    "protected_pixels": 75637,
+    "alpha_exact": true,
+    "negative_tests": "5/5 (SHA, box, strength, mask, existing output)",
+    "repeat": "2/2 exact",
+    "portable_test": "PASS",
+    "zip_crc": "9 entries PASS",
+    "visual": "subtle radial detail, no changes to protected fixture regions; not actual eye"
+  },
+  "outputs": {
+    "script_sha256": "9f17097b4f8d9ddc764bf8634fbd63e856129889c74351d01ef2ac59d05cc1d9",
+    "test_sha256": "8804db8f97c90175adc7019eed08e222a68ec95d1e8f05c1e7bf41ae82450313",
+    "comparison_sha256": "de7ad9d6378d538a9d1da3a4efc7449c29ba5a532b1430ec07788775ce3f839d",
+    "zip_sha256": "c4d794caaaf94cfc24ea6f1af8d8b28293ca2a29271ad6b947056ef8f1543fbd",
+    "storage": "local reproducible ZIP; GitHub record only"
+  },
+  "next": "On eligible native face session, acquire exact existing iris layer texture and approved mask with actual UV. Preserve face controls and original texture. Apply only on isolated copy, save/reopen and independent G2. No native mutation, no dispatch, no adoption. Skirt G2 FAIL remains."
+}

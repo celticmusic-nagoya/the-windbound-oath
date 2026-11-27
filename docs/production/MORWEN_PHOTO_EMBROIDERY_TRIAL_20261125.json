@@ -1,0 +1,63 @@
+{
+  "scope": "SOURCE_SPACE_CLOTH_SCAN_PROXY_NOT_GOLD_THREAD_NOT_UV",
+  "main": "848dcc14c505f6b34b77343b22b8ea38d21855c8",
+  "policy_blob": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+  "owner_pr": 427,
+  "owner_head": "df986c7e0549871940deb26f65f7a54f58658211",
+  "material_pr": 540,
+  "parent_head": "5f23b268a5b0e628904d8ec3cb3744da2bbd8f6b",
+  "source": {
+    "artifact": 15026208724,
+    "archive_sha256": "9a904f93c5514043fbd5d7136715d0a80d7af28ffcb588a351f1c8f5265c0426",
+    "provider": "Poly Haven",
+    "url": "https://polyhaven.com/a/poly_wool_herringbone",
+    "license": "CC0",
+    "license_url": "https://polyhaven.com/license",
+    "normal_sha256": "f2e3d60088b7416425b6e81c3285507d5c3d9d630e7a28016012a1befd1c04b1",
+    "roughness_sha256": "028b4fb92c322a31b5374171f62f43af2cfd6a012748be175fd44dbf1109903c",
+    "crop_xyxy": [
+      128,
+      128,
+      384,
+      384
+    ]
+  },
+  "parent_receipt_sha256": "0227f85f109cc6ea9ce6c933ea8405bffd257af14da7684ec8a7ac95f835f551",
+  "method": "13 original masks scaled 4x nearest; exact original alpha/support; gold color flat RGB205,158,108, scan normal XY scaled .65 and normalized, cloth roughness variation centered .52, source crop repeated, neutral outside mask. No directional baked lighting. Woven wool is a proxy, not measured metallic embroidery.",
+  "qa": {
+    "source_archive_crc": "PASS",
+    "source_normal_roughness": "2/2 byte/MD5/pixel SHA PASS",
+    "parent_masks": "13/13 byte and pixel SHA PASS",
+    "output_maps_reopen": "39/39 PASS",
+    "repeat": "41/41 identical files",
+    "visual": "reviewed actual comparison; motif pixel edges remain blocky and some source gaps remain. High-resolution material maps do not reconstruct higher-resolution motif geometry."
+  },
+  "outputs": {
+    "comparison_sha256": "e1b18dbe2ef545866633f1dd9ee2e3a388619e86a8f380599967ee9ab355b59b",
+    "receipt_sha256": "91950b02f239a573660418cb4aaf6bf79949fc94cfa01fc4c6d2d2bd7a309d99",
+    "script_sha256": "7e444ea31ca8b8c8dedc655ff6275c12e3d7b06fca5670c3dc5c6b644c1a1feb",
+    "storage": "local maps/script/receipt; no original reference image published"
+  },
+  "new_source_candidates": [
+    {
+      "object": 445867,
+      "url": "https://www.metmuseum.org/art/collection/search/445867",
+      "medium": "linen, silk, gold thread; embroidered",
+      "rights": "Public Domain per object page search result; API image-level verification and acquisition pending"
+    },
+    {
+      "object": 451169,
+      "url": "https://www.metmuseum.org/art/collection/search/451169",
+      "medium": "linen, silk and gold wrapped thread embroidery",
+      "rights": "Public Domain; acquisition pending"
+    },
+    {
+      "object": 214169,
+      "url": "https://www.metmuseum.org/art/collection/search/214169",
+      "medium": "gold thread metal cloth",
+      "rights": "Public Domain; acquisition pending"
+    }
+  ],
+  "rights_terms": "https://www.metmuseum.org/policies/image-resources",
+  "blocker": "Local curl error 6 DNS could not resolve collectionapi.metmuseum.org; no new Met photo bytes acquired. Actual gold stitch microstructure, photo lighting separation, exact native UV and G2-G4 unverified. Use hosted acquisition once, verify source object public-domain flag and image bytes, choose pattern-free local thread crop only after viewing. No native writes or adoption."
+}
