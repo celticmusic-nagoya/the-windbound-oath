@@ -1,0 +1,37 @@
+{
+  "status": "LOCAL_BACKGROUND_LOD_CANDIDATE_G2_HOLD_G4_NOT_RUN",
+  "source": "fd08e43b9395be5b12d18de83c8c002509f3ab9e57a29de2f5bcd6db5bcf561e",
+  "method": "Weld position at 1e-6 BU, identify 568 connected 4-triangle leaf cards; greedily delete complete cards using 10 orthographic alpha-mask projections 256x256, nearest sampling, minimum coverage >=.97. Opposite horizontal projections are redundant as occupancy ignores depth. Exact surviving original indices and attributes; bark unchanged.",
+  "mesh": 160,
+  "source_cards": 568,
+  "retained_cards": 298,
+  "tree_triangles_before": 2446,
+  "tree_triangles_after": 1366,
+  "minimum_projection_coverage": 0.9700191737842078,
+  "actual_vtk_4view_mask_iou": [
+    0.9803520083645552,
+    0.9722405909250792,
+    0.9820113751598254,
+    0.9734097515947261
+  ],
+  "alpha_texture_sha256": "9761a7526a7ccc861e06f6e22b9a89f963bbaa71e97b0d8ec10f8df44e08f32d",
+  "background_nodes_changed": 89,
+  "near_tree_nodes_protected": 19,
+  "scene_triangles_before": 1772121,
+  "scene_triangles_after": 1676001,
+  "source_resource_records_and_bin_prefix_exact": true,
+  "scene_roots_preserved": true,
+  "output_hashes": {
+    "integration": "af7374842830efc7e8ed9882769549b99733147988976429d1b462ed5ea76e28",
+    "script": "c6be00c0ae28e0bc1a279da4a53e8bf99748640e57ef1ac5385bfa29374fc2f2",
+    "qa": "25abc187268453c7a04197bdd6f15bd5d9710c9c93e082234258728eae9e2a43",
+    "view1": "f57201c60863d7df011bb00ff5af110c2bea9e0fc606ab792e84bcfba4c341d6",
+    "view2": "265bf884a1dad4ac1fa9802cd36497615fd48dd9a05eb30c02b20c0d5fed0104",
+    "view3": "8af4549f668d4ca8d1803c828c2a3286efc4870b0004f5fbb21edd5b37806c4e",
+    "view4": "8e402ce2cb8a7b8fe57d2bf79d9942120763ef225cd916bfa7055b16f5ff2f91"
+  },
+  "limits": [
+    "Four actual VTK EGL thresholded-alpha renders; original alpha bytes retained but no hardware alpha-test or PBR equivalence, projection occupancy does not test depth/color. View 1 visually inspected and small canopy holes visible. Fixed V20/V21 background assignments, not dynamic distance switching.",
+    "Flowers unchanged. Full-scene render, native edit, runtime, Android, adoption and main merge not run. V25 stone distance candidate retained as supplied, not approved for close-up. Next flower component-aware LOD and dynamic distance/runtime QA."
+  ]
+}
