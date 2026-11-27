@@ -129,5 +129,21 @@ class SelectionPinsTests(unittest.TestCase):
             self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"], r["approval_ref"]),
                              (item["head"], item["run_id"], item["artifact_id"], name, "published/"+sha+".png", item["review_ref"]))
 
+    def test_v85_review_only_transport_pins(self):
+        items = json.loads((ROOT / "sync-selection.json").read_text())
+        item = next(x for x in items if x["artifact_id"] == 15179971100)
+        self.assertEqual((item["run_id"], item["head"]), (45958764679, "11f64a5cc71e59d1872499b61d3624d36ce85cd1"))
+        self.assertEqual(item["artifact_digest"], "sha256:d514e004d533174d515762121ac9e78294127417ac94741327c18a84aebc7662")
+        self.assertEqual(item["entry_sha256"], {"v85_A_altar_approach.png":"c42416e53687a38c5691a9a05c010faec5506a7842e4656d00d6ecf02881ae2b","v85_A_altar_front.png":"9faf8719e5052aa669692bd192251e499624e6764da88a75511a73d3ad555f01","v85_A_player_eye.png":"8001813cf2eba3611d66f8bacfdeb2e9922ac126ec656702223745cf9baff557","v85_B_altar_approach.png":"71304ff3c5f7ecfa1512957f76724c563b73ecc1da9a20d38ac1ec652226237e","v85_B_altar_front.png":"d4aaf7fed38334ab4f6150a5495665bb7ea5b8d61bf899cb951e72f9baec8614","v85_B_player_eye.png":"c5e13b64abb399dcd461f55efc84420b1c7267f655731a11564930aa37316a2d","v85_C_altar_approach.png":"06a01383dc07519e41f569e8fdbfa844bb392e68682b869746906d608492d3d2","v85_C_altar_front.png":"b9e7fcc0e3c3aa89c8762f90624e46e7ce9393a22c8e3b728f81031ab015ce1f","v85_C_player_eye.png":"2ee68c25823429604d853bc1b173aae67da709d5f02bfc0a5dd17b122349cde7"})
+        self.assertEqual(set(item["entries"]), set(item["entry_sha256"]))
+        self.assertEqual(set(item["entry_subcategories"].values()), {"sanctuary"})
+        self.assertIn("G2 HOLD", item["stage"])
+        self.assertNotIn("exact_archive_bytes", item)
+        receipts = {r["sha256"]: r for r in json.loads((ROOT / "publication-approvals.json").read_text())["entries"]}
+        for name, sha in item["entry_sha256"].items():
+            r = receipts[sha]
+            self.assertEqual((r["head"], r["run_id"], r["artifact_id"], r["name"], r["path"], r["approval_ref"]),
+                             (item["head"], item["run_id"], item["artifact_id"], name, "published/"+sha+".png", item["review_ref"]))
+
 if __name__ == "__main__":
     unittest.main()
