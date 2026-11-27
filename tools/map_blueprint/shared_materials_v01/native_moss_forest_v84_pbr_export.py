@@ -127,7 +127,18 @@ protected=snapshot()
 names=('V81_ruin_platform','V81_ruin_back','V81_ruin_posts','V81_ruin_rubble')
 targets=[bpy.data.objects[n] for n in names]
 original=bpy.data.materials['V83_weathered_stone_candidate']
-assert all(o.data.users==1 and list(o.data.materials)==[original] for o in targets)
+# V84-F1 failed here before any bake: raw slot count is not an actual face-material contract.
+# Inventory actual used indices, reject non-stone polygons, preserve unused slots.
+inventory={o.name:{'mesh_users':o.data.users,'slot_names':[m.name if m else None for m in o.data.materials],'used_indices':sorted({p.material_index for p in o.data.polygons}),'uv_names':[u.name for u in o.data.uv_layers]} for o in targets}
+(out/'v84_slot_preflight.json').write_text(json.dumps(inventory,indent=2))
+print('V84_SLOT_PREFLIGHT',json.dumps(inventory),flush=True)
+used={}
+for o in targets:
+    indices=inventory[o.name]['used_indices']
+    assert len(indices)==1 and all(i<len(o.data.materials) and o.data.materials[i]==original for i in indices),(o.name,inventory[o.name])
+    assert 'UVMap' in inventory[o.name]['uv_names'],inventory[o.name]
+    used[o.name]=indices[0]
+# Every target is assigned its own mesh copy before mutation, even if input has shared users.
 normal_node=[n for n in original.node_tree.nodes if n.type=='NORMAL_MAP'];assert len(normal_node)==1
 normal_img=normal_node[0].inputs['Color'].links[0].from_node.image
 assert normal_img.name.startswith('castle_wall_slates_nor_gl')
@@ -166,7 +177,8 @@ for o in targets:
     uv=array('f',[0])*(len(mesh.loops)*2);mesh.uv_layers['V84BakeUV'].data.foreach_get('uv',uv)
     assert min(uv)>=-.001 and max(uv)<=1.001
     work=original.copy();work.name='V84_bake_temp_'+o.name
-    o.data.materials[0]=work
+    o.data.materials[used[o.name]]=work
+    assert all(m==original or m==work or i!=used[o.name] for i,m in enumerate(o.data.materials))
     nt=work.node_tree;bs=next(n for n in nt.nodes if n.type=='BSDF_PRINCIPLED')
     for n in nt.nodes:
         if n.type=='NORMAL_MAP':n.uv_map='UVMap'
@@ -175,6 +187,8 @@ for o in targets:
     nt.links.new(emit.outputs[0],output.inputs['Surface'])
     scene.render.engine='CYCLES';scene.cycles.samples=16
     scene.render.bake.use_selected_to_active=False
+    # Bake with explicitly named original shader UV and destination active UV.
+    assert mesh.uv_layers.active.name=='V84BakeUV'
     scene.render.bake.target='IMAGE_TEXTURES'
     imgs={}
     for socket,label in (('Base Color','color'),('Roughness','roughness')):
@@ -187,7 +201,7 @@ for o in targets:
         for n in nt.nodes:n.select=False
         node.select=True;nt.nodes.active=node
         select(o)
-        bpy.ops.object.bake(type='EMIT',margin=8,use_clear=True)
+        bpy.ops.object.bake(type='EMIT',margin=8,use_clear=True,uv_layer='V84BakeUV')
         pixels=np.empty(len(im.pixels),dtype=np.float32);im.pixels.foreach_get(pixels);rgb=pixels.reshape(-1,4)[:,:3]
         nonzero=float((rgb.max(1)>.005).mean())
         assert nonzero>.10,(o.name,label,nonzero)
@@ -203,8 +217,9 @@ for o in targets:
     nmap=mt.nodes.new('ShaderNodeNormalMap');nmap.uv_map='UVMap';nmap.inputs['Strength'].default_value=normal_strength
     mt.links.new(nn.outputs['Color'],nmap.inputs['Color']);mt.links.new(nmap.outputs['Normal'],bs.inputs['Normal'])
     bs.inputs['Metallic'].default_value=0;bs.inputs['Specular IOR Level'].default_value=.35
-    o.data.materials[0]=mat
+    o.data.materials[used[o.name]]=mat
     assert digest(mesh)==protected[o.name][0] and uv_sig(mesh,'UVMap')==uv_before[o.name]
+    assert all((m.name if m else None)==old_slots[o.name][i] for i,m in enumerate(o.data.materials) if i!=used[o.name])
 assert snapshot()==protected
 for o in scene.objects:
     if o.type=='MESH' and o.name not in names:assert tuple(m.name if m else None for m in o.data.materials)==old_slots[o.name]
