@@ -8,6 +8,7 @@
     "historical evidence only"
   ],
   "active": [
+    "docs/policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md",
     "docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md",
     "docs/policy/PHOTO_DERIVED_MATERIAL_AUTHORING_V1_20261125.md",
     "docs/policy/QUALIFIED_SHARED_ENGINES_V45_20261124.md",
@@ -92,5 +93,23 @@
     "scope": "all agents and automations; asset-specific execution qualification required",
     "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
     "status": "MORWEN_SCOPED_TRANSFER_VERIFIED_OTHER_ASSETS_NOT_IMPLIED"
+  },
+  "hybrid_custom_character_production_v7": {
+    "approved": "2026-11-27",
+    "scope": "all 3D characters; all agents and automations",
+    "policy": "docs/policy/HYBRID_CUSTOM_CHARACTER_PRODUCTION_V7_20261127.md",
+    "supersedes": "VRoid-only completion, preset-modification fixation and Blender-only fixation where conflicting (incl. MORWEN_VROID_FIRST_AUTHORING_20261121 and principal-environment wording of MORWEN_EARLY_BLENDER_TRANSFER_20261126)",
+    "retained": [
+      "D0-D4",
+      "G1-G4",
+      "canon_and_protected_originals",
+      "licensing",
+      "single_writer_STOP_ACK_CAS_fencing",
+      "no_forced_reclaim",
+      "no_new_spending",
+      "formal_adoption_approval",
+      "morwen_visual_targets"
+    ],
+    "status": "DIRECTOR_APPROVED_POLICY_RUNTIME_NOT_VERIFIED"
   }
 }
