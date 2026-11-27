@@ -2,9 +2,37 @@
 function inspectGlb(buffer){
  const v=new DataView(buffer);if(v.byteLength<20||v.getUint32(0,true)!==0x46546c67||v.getUint32(4,true)!==2||v.getUint32(8,true)!==v.byteLength)throw Error("GLB 2.0 header invalid");
  let offset=12,doc=null;while(offset<v.byteLength){if(offset+8>v.byteLength)throw Error("Incomplete chunk header");const n=v.getUint32(offset,true),kind=v.getUint32(offset+4,true);offset+=8;if(n%4||n>v.byteLength-offset)throw Error("Invalid chunk length");if(doc===null){if(kind!==0x4e4f534a||n>8*1024*1024)throw Error("Invalid JSON chunk");doc=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(new Uint8Array(buffer,offset,n)));}offset+=n;}
+ return summarizeGlbDocument(doc);
+}
+function summarizeGlbDocument(doc){
  if(!doc||doc.asset?.version!=="2.0")throw Error("Unsupported glTF asset");const extensions=doc.extensions||{},vrm=extensions.VRMC_vrm,old=extensions.VRM;return {format:vrm?"VRM 1.0":old?"VRM 0.x":"GLB",meshes:doc.meshes?.length||0,materials:doc.materials?.length||0,animations:doc.animations?.length||0,skins:doc.skins?.length||0,images:doc.images?.length||0,humanoidBones:vrm?Object.keys(vrm.humanoid?.humanBones||{}).length:old?(old.humanoid?.humanBones?.length||0):null,expressions:vrm?Object.keys(vrm.expressions?.preset||{}).length+Object.keys(vrm.expressions?.custom||{}).length:old?(old.blendShapeMaster?.blendShapeGroups?.length||0):null,externalResources:[...(doc.buffers||[]),...(doc.images||[])].some(x=>typeof x.uri==="string"&&!x.uri.startsWith("data:"))};
 }
-if(typeof document!=="undefined"){const input=document.getElementById("model-file"),out=document.getElementById("model-status");let generation=0;input.addEventListener("change",async()=>{const id=++generation,f=input.files[0];if(!f){out.textContent="未選択";return;}if(f.size>100*1024*1024){out.textContent="100 MiB上限超過";return;}out.textContent="検査中";try{const m=inspectGlb(await f.arrayBuffer());if(id!==generation)return;out.textContent=f.name+" / "+m.format+" / メッシュ "+m.meshes+" / 材質 "+m.materials+" / アニメーション "+m.animations+" / スキン "+m.skins+" / 画像 "+m.images+(m.humanoidBones===null?"":" / humanoid宣言 "+m.humanoidBones+" / 表情宣言 "+m.expressions)+" / "+(m.externalResources?"外部参照あり（取得しない）":"外部参照なし")+" / 構造概要のみ・描画未検証";}catch(e){if(id===generation)out.textContent="検査失敗: "+e.message;}});}
+// Read only GLB headers and bounded JSON. BIN bytes and external resources are never fetched.
+// Metadata counts are declarations, not geometry, SHA or rendering certification.
+async function inspectGlbFile(file){
+ if(!Number.isSafeInteger(file.size)||file.size<20||file.size>1024**3)throw Error("GLB metadata inspection size limit");
+ const read=async(offset,n)=>{
+  const buffer=await file.slice(offset,offset+n).arrayBuffer();
+  if(buffer.byteLength!==n)throw Error("Incomplete chunk data");
+  return buffer;
+ };
+ const h=new DataView(await read(0,12));
+ if(h.getUint32(0,true)!==0x46546c67||h.getUint32(4,true)!==2||h.getUint32(8,true)!==file.size)throw Error("GLB 2.0 header invalid");
+ let offset=12,doc=null,chunks=0;
+ while(offset<file.size){
+  if(++chunks>64||offset+8>file.size)throw Error("Invalid chunk headers");
+  const header=new DataView(await read(offset,8));
+  const n=header.getUint32(0,true),kind=header.getUint32(4,true);offset+=8;
+  if(n%4||n>file.size-offset)throw Error("Invalid chunk length");
+  if(chunks===1){
+   if(kind!==0x4e4f534a||n>8*1024*1024)throw Error("Invalid JSON chunk");
+   doc=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(await read(offset,n)));
+  }else if(kind===0x4e4f534a)throw Error("Duplicate JSON chunk");
+  offset+=n;
+ }
+ return summarizeGlbDocument(doc);
+}
+if(typeof document!=="undefined"){const input=document.getElementById("model-file"),out=document.getElementById("model-status");let generation=0;input.addEventListener("change",async()=>{const id=++generation,f=input.files[0];if(!f){out.textContent="未選択";return;}if(f.size>1024**3){out.textContent="構造概要検査の1 GiB上限超過";return;}out.textContent="検査中";try{const m=await inspectGlbFile(f);if(id!==generation)return;out.textContent=f.name+" / "+m.format+" / メッシュ "+m.meshes+" / 材質 "+m.materials+" / アニメーション "+m.animations+" / スキン "+m.skins+" / 画像 "+m.images+(m.humanoidBones===null?"":" / humanoid宣言 "+m.humanoidBones+" / 表情宣言 "+m.expressions)+" / "+(m.externalResources?"外部参照あり（取得しない）":"外部参照なし")+" / 構造概要のみ・BIN内容・SHA・描画未検証"+(f.size>100*1024*1024?" / 100 MiB超のため描画なし":"");}catch(e){if(id===generation)out.textContent="検査失敗: "+e.message;}});}
 
 // Local byte identity check for native transfer. No parsing, rendering, uploading or network fetch.
 (() => {

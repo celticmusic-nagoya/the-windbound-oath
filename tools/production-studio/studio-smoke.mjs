@@ -1,6 +1,8 @@
 import {chromium} from 'playwright';
 import {spawn} from 'node:child_process';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,mkdtemp,open,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -369,6 +371,48 @@ try {
  await page.locator('#model-file').setInputFiles({name:'diagnostic.glb',mimeType:'model/gltf-binary',buffer:b});
  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
  assert.equal(await page.locator('#model-view canvas').count(),1);
+ // Virtual large GLB: inspect headers and JSON only, never read BIN.
+ const total=125487140;
+ const bigDoc={...doc,buffers:[{byteLength:total}]};
+ let rawBig=Buffer.from(JSON.stringify(bigDoc)),nb=Math.ceil(rawBig.length/4)*4;
+ bigDoc.buffers[0].byteLength=total-28-nb;
+ rawBig=Buffer.from(JSON.stringify(bigDoc));
+ assert.equal(Math.ceil(rawBig.length/4)*4,nb);
+ const bigHeader=Buffer.alloc(28+nb);
+ bigHeader.writeUInt32LE(0x46546c67,0);bigHeader.writeUInt32LE(2,4);bigHeader.writeUInt32LE(total,8);
+ bigHeader.writeUInt32LE(nb,12);bigHeader.writeUInt32LE(0x4e4f534a,16);bigHeader.fill(32,20,20+nb);rawBig.copy(bigHeader,20);
+ bigHeader.writeUInt32LE(total-bigHeader.length,20+nb);bigHeader.writeUInt32LE(0x004e4942,24+nb);
+ const metadataChecks=await page.evaluate(async({bytes,header,total})=>{
+  const src=Uint8Array.from(bytes),head=Uint8Array.from(header),binHeader=head.length-8;
+  const calls=[];
+  const virtual={size:total,arrayBuffer(){throw Error('full read forbidden');},slice(a,b){calls.push([a,b]);if(b>head.length)throw Error('BIN read forbidden');return new Blob([head.slice(a,b)]);}};
+  const m=await inspectGlbFile(virtual),legacy=inspectGlb(src.buffer);
+  const initialCalls=calls.slice(),bytesRead=initialCalls.reduce((sum,[a,b])=>sum+b-a,0);
+  const fail=async f=>{try{await inspectGlbFile(f);return false;}catch{return true;}};
+  const truncated={size:total-4,slice:virtual.slice};
+  const badHead=head.slice();new DataView(badHead.buffer).setUint32(binHeader,total,true);
+  const overflow={size:total,slice(a,b){return new Blob([badHead.slice(a,b)]);}};
+  return {same:JSON.stringify(m)===JSON.stringify(legacy),calls:initialCalls,bytesRead,headerBytes:head.length,invalidHeader:await fail(truncated),invalidChunk:await fail(overflow),limit:await fail({size:1024**3+1})};
+ },{bytes:Array.from(b),header:Array.from(bigHeader),total});
+ assert.equal(metadataChecks.same,true);
+ assert.equal(metadataChecks.bytesRead,metadataChecks.headerBytes);
+ assert.equal(metadataChecks.calls.length,4);
+ assert.equal(metadataChecks.invalidHeader,true);
+ assert.equal(metadataChecks.invalidChunk,true);
+ assert.equal(metadataChecks.limit,true);
+ console.log('PASS: bounded GLB metadata reads '+metadataChecks.bytesRead+' bytes of virtual '+total+'-byte file');
+ // Actual local file selection with a generated sparse synthetic fixture, not an asset.
+ const sparseDir=await mkdtemp(join(tmpdir(),'two-large-glb-')),sparsePath=join(sparseDir,'large.glb');
+ try{
+  const fd=await open(sparsePath,'wx');
+  try{await fd.writeFile(bigHeader);await fd.truncate(total);}finally{await fd.close();}
+  await page.locator('#model-file').setInputFiles(sparsePath);
+  await page.waitForFunction(()=>document.querySelector('#model-status').textContent.includes('100 MiB超のため描画なし'));
+  assert.match(await page.locator('#model-status').innerText(),/メッシュ 1/);
+  assert.match(await page.locator('#render-status').innerText(),/描画せず構造概要のみ検査/);
+  await page.locator('#model-file').setInputFiles({name:'diagnostic.glb',mimeType:'model/gltf-binary',buffer:b});
+  await page.waitForFunction(()=>document.querySelector('#render-status').textContent.includes('基本glTF描画'));
+ }finally{await rm(sparseDir,{recursive:true,force:true});}
  const nativeInput=page.locator('#native-sha-file'),nativeExpected=page.locator('#native-sha-expected'),nativeResult=page.locator('#native-sha-result');
  for(const name of ['diagnostic.glb','diagnostic.vrm','diagnostic.vroid','diagnostic.blend']){
   await nativeInput.setInputFiles({name,mimeType:'application/octet-stream',buffer:b});
