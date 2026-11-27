@@ -38,6 +38,8 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py'
       - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py'
+      - 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
       - 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
@@ -77,6 +79,9 @@ jobs:
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
@@ -1828,5 +1833,53 @@ jobs:
         with:
           name: two-v87-dormant-inlay
           path: ${{ runner.temp }}/v87-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v88-oak-impostor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V88 oak production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact native oak and render missing angles
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v88-in" "$RUNNER_TEMP/v88-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176576457/zip" > "$RUNNER_TEMP/v82d.zip"
+          printf '%s  %s\n' 3619eecff599eeb84cac584628b65b6032a698d873fb7921de0a3469e5ae506a "$RUNNER_TEMP/v82d.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82d.zip"
+          unzip -q "$RUNNER_TEMP/v82d.zip" -d "$RUNNER_TEMP/v88-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
+          python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==12.3.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' -- "$RUNNER_TEMP/v88-in/v82d_oak_candidate.blend" "$RUNNER_TEMP/v88-out" 2>&1 | tee "$RUNNER_TEMP/v88-out/blender.log"
+          python 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py' "$RUNNER_TEMP/v88-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py' "$RUNNER_TEMP/v88-out/"
+          (cd "$RUNNER_TEMP/v88-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V88 source views, atlas and geometry evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v88-oak-impostor
+          path: ${{ runner.temp }}/v88-out
           retention-days: 14
           if-no-files-found: error
