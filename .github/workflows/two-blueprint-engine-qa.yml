@@ -31,10 +31,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Install existing pinned test runtime
+      - name: Prepare bounded pinned runtime and prove same-job reuse
         run: |
-          python -m pip install --quiet bpy==5.3.0 pillow==12.3.0
-          python -c "import bpy; assert bpy.app.version_string == '5.3.0' and bpy.app.build_hash.decode() == '02f0899d78e3'"
+          set -euo pipefail
+          python -I tools/blueprint_engine/ensure_runtime.py | tee "$RUNNER_TEMP/bpy-preparation.json"
+          python -I tools/blueprint_engine/ensure_runtime.py | tee "$RUNNER_TEMP/bpy-reuse.json"
+          python -c "import json,sys; d=json.load(open(sys.argv[1])); assert d['status']=='VERIFIED' and d['route']=='REUSED' and d['pip_install_calls']==0" "$RUNNER_TEMP/bpy-reuse.json"
       - name: Compile and verify engine with isolated fixtures only
         working-directory: tools
         run: |
@@ -58,10 +60,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Runtime (bpy 5.3.0 = Blender 5.3.0 build 02f0899d78e3)
+      - name: Runtime (bounded bpy 5.3.0 build 02f0899d78e3)
         run: |
-          python -m pip install --quiet bpy==5.3.0 pillow==12.3.0
-          python -c "import bpy,PIL; print(bpy.app.version_string, bpy.app.build_hash, PIL.__version__)"
+          set -euo pipefail
+          env -u GH_TOKEN -u HANDOFF_TOKEN python -I tools/blueprint_engine/ensure_runtime.py | tee "$RUNNER_TEMP/bpy-preparation.json"
       - name: Preflight
         run: python -m py_compile tools/blueprint_engine/*.py tools/blueprint_engine/cases/*.py tools/blueprint_engine/tests/*.py
       - name: 'Engine unit tests and full #468 suite (lower_bound applied in #468 2747ac90)'
