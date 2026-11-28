@@ -4,6 +4,8 @@
 
 ## 0. Native VRoid authoring and indirect launch evidence
 
+Current routing: [director-approved public-first production / private preservation](../../AGENTS.md#director-approved-public-first-production-private-preservation-2026-11-28). Historical private branch push and runner evidence below remains valid for the exact demonstrated operation, not the preferred future compute route. Migrate reviewed public-safe worker code through the current owner PR to qualified free public standard runners; retain private inputs/outputs in existing protected transport. No public original/receipt exposure, permission expansion, extra spending or weakened fence. W108 recovery #626 established public runner startup but not private restore (HTTP 403); do not relaunch unchanged. Any replacement must qualify exact source, live exclusion and readback before native mutation. The private vault is not made public.
+
 Audited 2026-11-28 against actual jobs, immutable private workflow revisions and owning PR receipts. These are scoped operation proofs, not art acceptance or authority to rerun. All agents must consult the appropriate previous success before claiming an execution blocker.
 
 | Evidence | Verified scope / limitation |
