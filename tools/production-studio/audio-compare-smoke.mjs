@@ -26,6 +26,7 @@ try{
  const a=fixture(16000),b=fixture(8000);
  const receipt={schema:'two.audio.candidate.v1',candidate_only:true,preset:'warm',backend:'synthetic fixture',source_sha256:a.sha,output_sha256:b.sha,before:a.m,after:b.m};
  const put=(id,name,buffer,mimeType)=>page.locator('#'+id).setInputFiles({name,mimeType,buffer});
+ const loud=(r)=>put('audio-loudness','loudness.json',Buffer.from(JSON.stringify(r)),'application/json');
  const rec=r=>put('audio-receipt','receipt.json',Buffer.from(JSON.stringify(r)),'application/json');
  await put('audio-source','source.wav',a.data,'audio/wav');await put('audio-candidate','candidate.wav',b.data,'audio/wav');await rec(receipt);
  await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));
@@ -36,6 +37,16 @@ try{
  assert.ok(await page.locator('#audio-b').evaluate(p=>p.currentTime>=.15));
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await mkdir('qa-output',{recursive:true});await page.locator('#audio-review').screenshot({path:'qa-output/audio-comparison-mobile.png'});
+ const rh=createHash('sha256').update(JSON.stringify(receipt)).digest('hex');
+ const lm={schema:'two.audio.loudness-inspection.v1',candidate_only:true,source_receipt_sha256:rh,before:{sha256:a.sha,pcm:a.m,integrated_lufs:-10,true_peak_dbtp:-6,loudness_range_lu:0},after:{sha256:b.sha,pcm:b.m,integrated_lufs:-16,true_peak_dbtp:-12,loudness_range_lu:0},delta_lufs:-6,qa:{sha_pcm:'PASS',lufs:'MEASURED',true_peak:'MEASURED'}};
+ await loud({schema:'two.audio.packet-inspection.v1',candidate_only:true,pairs:{warm:lm,repeat:lm}});
+ await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('紐付け一致'));
+ assert.match(await page.locator('#audio-loudness-a').innerText(),/-10.00 LUFS/);
+ await page.locator('#audio-match-level').check();await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('A -6.00 dB / B 0.00 dB'));
+ await page.locator('#audio-match-level').uncheck();assert.match(await page.locator('#audio-gain-status').innerText(),/補正なし/);
+ await loud({...lm,source_receipt_sha256:'0'.repeat(64)});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('拒否'));assert.equal(await page.locator('#audio-loudness-results').isVisible(),false);
+ await loud({schema:'two.audio.packet-inspection.v1',candidate_only:true,pairs:{warm:lm,conflict:{...lm,after:{...lm.after,integrated_lufs:-17},delta_lufs:-7}}});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('競合'));
+ await page.locator('#audio-loudness').setInputFiles([]);
  await rec({...receipt,output_sha256:'0'.repeat(64)});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('SHA-256不一致'));assert.equal(await page.locator('#audio-results').isVisible(),false);
  await rec({...receipt,after:{...b.m,rms_dbfs:0}});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('測定記録不一致'));assert.equal(await page.locator('#audio-results').isVisible(),false);
  await rec(receipt);await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));await page.locator('#audio-clear').click();
