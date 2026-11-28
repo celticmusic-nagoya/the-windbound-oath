@@ -24,7 +24,8 @@ function controls(){
  expected.disabled=busy||mode!=="manual";
  verify.disabled=busy||mode==="loading"||mode==="invalid"||(mode==="locator"&&(!locator?.digest||locator.bytes>LIMIT));
 }
-function hideSource(){source.hidden=true;source.removeAttribute("href");}
+// Global Studio anchor CSS sets display:block; enforce hidden state explicitly.
+function hideSource(){source.hidden=true;source.style.display="none";source.removeAttribute("href");}
 function manual(digest=""){
  ++generation;locator=null;mode="manual";input.value="";expected.value=digest;hideSource();status.textContent="復元情報未選択・手動SHA照合";result.textContent="未照合";controls();
 }
@@ -46,7 +47,7 @@ input.addEventListener("change",async()=>{
   const x=readLocator(JSON.parse(await f.text()));
   if(token!==generation)return;
   locator=x;mode="locator";expected.value=x.digest?x.digest.slice(7):"";
-  source.href=x.url;source.hidden=false;
+  source.href=x.url;source.hidden=false;source.style.removeProperty("display");
   const expiry=x.expiry?(Date.parse(x.expiry)<=Date.now()?"期限経過（取得可否未確認）":"記録期限 "+new Date(x.expiry).toLocaleString("ja-JP")):"期限不明";
   status.textContent="復元情報読込: "+x.name+" / Run "+x.run+" / Artifact "+x.id+" / HEAD "+x.head+" / "+x.bytes.toLocaleString("ja-JP")+" bytes / "+expiry+" / 記録時刻 "+x.observed+" / 発行者未認証・保全未確認"+(!x.digest?" / SHAなし：照合不可":x.bytes>LIMIT?" / 128 MiB上限超過：端末内照合不可":"");
  }catch(e){
@@ -71,5 +72,5 @@ verify.addEventListener("click",async()=>{
 });
 zipInput.addEventListener("change",()=>{if(!busy)result.textContent="未照合";});
 expected.addEventListener("input",()=>{if(!busy)result.textContent="未照合";});
-controls();
+hideSource();controls();
 })();
