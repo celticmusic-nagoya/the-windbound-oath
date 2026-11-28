@@ -1,9 +1,11 @@
 """Publication gate offline regression; no network or actual publication."""
+import copy
+import json
 import importlib.util
 import pathlib
 import unittest
 from datetime import datetime, timezone
-from artifact_availability import recorded_expired_404, retained_receipt_matches
+from artifact_availability import recorded_expired_404, retained_receipt_matches, retained_legacy_snapshot, reusable_group_kind
 spec = importlib.util.spec_from_file_location("publication_gate", pathlib.Path(__file__).with_name("publication-gate.py"))
 gate = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gate)
@@ -58,6 +60,26 @@ class ArtifactAvailabilityTests(unittest.TestCase):
         for changes in ({"head":"e"*40},{"artifact_id":13},{"run_id":14},{"name":"wrong.png"},{"sha256":"c"*64}):
             self.assertFalse(retained_receipt_matches(self.item,manifest(dict(self.history["entries"][0],**changes))))
         self.assertFalse(retained_receipt_matches(self.item,manifest(*self.history["entries"],*self.history["entries"])))
+
+class LegacySnapshotTests(unittest.TestCase):
+    def test_exact_legacy_retention_only(self):
+        p=pathlib.Path(__file__).with_name("retained-legacy-history.json")
+        snap=json.loads(p.read_text())
+        self.assertEqual({g["selection"]["artifact_id"] for g in snap["groups"]},{14616152278,14703052245,14778567780})
+        self.assertEqual(sum(len(g["entries"]) for g in snap["groups"]),19)
+        for g in snap["groups"]:
+            i,h=g["selection"],manifest(*g["entries"])
+            self.assertTrue(retained_legacy_snapshot(i,h))
+            self.assertEqual(reusable_group_kind(i,h,manifest()),"historical")
+            self.assertEqual(gate.approved_candidates(h,h,manifest()),manifest())
+            for key,value in (("head","e"*40),("category","other-changed"),("stage","changed"),("entries",i["entries"][:-1])):
+                self.assertFalse(retained_legacy_snapshot(dict(i,**{key:value}),h))
+            for key,value in (("sha256","0"*64),("bytes",1),("qa","PASS"),("cover",not h["entries"][0]["cover"]),("path","published/wrong.png")):
+                changed=copy.deepcopy(h);changed["entries"][0][key]=value
+                self.assertFalse(retained_legacy_snapshot(i,changed))
+            self.assertFalse(retained_legacy_snapshot(i,manifest(*h["entries"][:-1])))
+            self.assertFalse(retained_legacy_snapshot(i,manifest(*h["entries"],h["entries"][0])))
+            self.assertFalse(retained_legacy_snapshot(dict(i,artifact_id=999),h))
 
 if __name__ == "__main__":
     unittest.main()

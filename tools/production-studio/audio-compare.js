@@ -5,6 +5,11 @@ const inputs=["audio-source","audio-candidate","audio-receipt"].map(get);
 const players=["audio-a","audio-b"].map(get);
 const check=get("audio-check"), clear=get("audio-clear"), status=get("audio-status"), results=get("audio-results");
 const loudInput=get("audio-loudness"),level=get("audio-match-level"),loudResults=get("audio-loudness-results"),loudStatus=get("audio-loudness-status"),gainStatus=get("audio-gain-status");
+const mode=get("audio-mode"), musicInputs=[get("audio-music-a"),get("audio-music-b")], allInputs=[...inputs,loudInput,...musicInputs];
+const MUSIC=[
+ {name:"A01",archiveBytes:412600,archiveSha:"6c2125a6cdc89c73f249786f6e83aea3d6da26fdab716185fc59bd1129476e62",bytes:408435,sha:"00ffc1e7c44bb5b44549a1464f170965985a082229820cca3eefc483ef8f3136",integrated_lufs:-17.02,true_peak_dbtp:-8.57,loudness_range_lu:1.4},
+ {name:"A02",archiveBytes:360993,archiveSha:"98037f0f425e478fbaba510da1e044ef685e4a593dabb60b7432323bb1043288",bytes:356433,sha:"41769209ea7e6fd679c6c117de0834fc09d397c3cc991ec6bceb4cbc1e62bf52",integrated_lufs:-17.20,true_peak_dbtp:-9.06,loudness_range_lu:1.3}
+];
 let generation=0, urls=[], last=0, gains=null, audioContext=null, gainNodes=null;
 const hex=/^[a-f0-9]{64}$/;
 function invalid(message){throw new Error(message);}
@@ -12,7 +17,7 @@ function reset(){
   generation++;
   gains=null;level.checked=false;level.disabled=true;loudResults.hidden=true;loudStatus.textContent="追加測定記録なし";gainStatus.textContent="補正なし";
   if(gainNodes)for(const n of gainNodes)n.gain.value=1;
-  for(const a of players){a.pause();a.removeAttribute("src");a.load();}
+  for(const a of players){a.pause();a.loop=false;a.removeAttribute("src");a.load();}
   for(const url of urls)URL.revokeObjectURL(url);
   urls=[];last=0;results.hidden=true;check.disabled=false;
   status.textContent="未照合";
@@ -55,11 +60,60 @@ function metrics(m){
   const db=x=>x===null?"無音":x.toFixed(2)+" dBFS";
   return (m.frames/m.sample_rate).toFixed(3)+" 秒 / "+m.channels+"ch / 48kHz｜Peak "+db(m.sample_peak_dbfs)+"｜RMS "+db(m.rms_dbfs)+"｜フルスケール "+m.full_scale_samples;
 }
-for(const input of [...inputs,loudInput])input.addEventListener("change",reset);
-clear.addEventListener("click",()=>{reset();for(const input of [...inputs,loudInput])input.value="";});
+for(const input of allInputs)input.addEventListener("change",reset);
+function setMode(){reset();const music=mode.value==="music";get("audio-wav-inputs").hidden=music;get("audio-music-inputs").hidden=!music;get("audio-a-title").textContent=music?"A｜A01":"A｜原本";get("audio-b-title").textContent=music?"B｜A02":"B｜加工候補";}
+mode.addEventListener("change",()=>{for(const input of allInputs)input.value="";setMode();});
+clear.addEventListener("click",()=>{reset();for(const input of allInputs)input.value="";});
+setMode();
+// Only the exact reviewed archive is eligible for extraction. No general ZIP upload or filesystem writes.
+async function pinnedOpus(file,pin){
+  if(!file||![pin.bytes,pin.archiveBytes].includes(file.size))invalid(pin.name+" ファイルサイズ不一致");
+  const b=await file.arrayBuffer(), digest=await hash(b);
+  let data=b;
+  if(digest===pin.archiveSha&&file.size===pin.archiveBytes){
+    const v=new DataView(b),size=v.byteLength;
+    let e=size-22;
+    while(e>=Math.max(0,size-65557)){if(v.getUint32(e,true)===0x06054b50&&e+22+v.getUint16(e+20,true)===size)break;e--;}
+    if(e<Math.max(0,size-65557))invalid("ZIP終端不正");
+    const count=v.getUint16(e+10,true),start=v.getUint32(e+16,true),end=start+v.getUint32(e+12,true);
+    if(v.getUint16(e+4,true)||v.getUint16(e+6,true)||count!==v.getUint16(e+8,true)||count<1||count>16||end>e)invalid("ZIP中央ディレクトリ不正");
+    let p=start,found=null;
+    for(let i=0;i<count;i++){
+      if(p+46>end||v.getUint32(p,true)!==0x02014b50)invalid("ZIP項目不正");
+      const flags=v.getUint16(p+8,true),method=v.getUint16(p+10,true),crc=v.getUint32(p+16,true),packed=v.getUint32(p+20,true),n=v.getUint32(p+24,true),nl=v.getUint16(p+28,true),next=p+46+nl+v.getUint16(p+30,true)+v.getUint16(p+32,true),off=v.getUint32(p+42,true);
+      if(next>end)invalid("ZIP項目範囲不正");
+      const name=new TextDecoder().decode(new Uint8Array(b,p+46,nl));p=next;
+      if(name!=="delivery.ogg")continue;
+      if(found||flags&1||![0,8].includes(method)||n!==pin.bytes||packed>pin.archiveBytes||off+30>start||v.getUint32(off,true)!==0x04034b50||v.getUint16(off+8,true)!==method)invalid("ZIP音声項目不正");
+      const pos=off+30+v.getUint16(off+26,true)+v.getUint16(off+28,true);
+      if(pos+packed>start||method===0&&packed!==n)invalid("ZIP音声範囲不正");
+      const bytes=new Uint8Array(b,pos,packed);
+      const blob=method===0?new Blob([bytes]):await inflateBounded(bytes,n);
+      const unpacked=await blob.arrayBuffer();
+      if(unpacked.byteLength!==n||crc32(new Uint8Array(unpacked))!==crc)invalid("ZIP音声CRC不一致");
+      found=unpacked;
+    }
+    if(p!==end||!found)invalid("ZIP音声項目なし");
+    data=found;
+  }else if(digest!==pin.sha||file.size!==pin.bytes)invalid(pin.name+" SHA-256不一致");
+  if(data.byteLength!==pin.bytes||await hash(data)!==pin.sha||new TextDecoder().decode(new Uint8Array(data,0,4))!=="OggS")invalid(pin.name+" Ogg SHA-256不一致");
+  return data;
+}
+async function compareMusic(token){
+  const buffers=await Promise.all(musicInputs.map((input,i)=>pinnedOpus(input.files[0],MUSIC[i])));
+  if(token!==generation)return;
+  urls=buffers.map(x=>URL.createObjectURL(new Blob([x],{type:"audio/ogg; codecs=opus"})));
+  players.forEach((p,i)=>{p.loop=true;p.src=urls[i];});
+  get("audio-meta").textContent="リルド村・昼｜A01 / A02｜未採用候補";
+  for(let i=0;i<2;i++)get(i?"audio-b-metrics":"audio-a-metrics").textContent="24.000 秒 / 2ch / 48kHz｜Ogg Opus "+MUSIC[i].bytes.toLocaleString("ja-JP")+" B";
+  showLoudness({before:MUSIC[0],after:MUSIC[1],delta_lufs:MUSIC[1].integrated_lufs-MUSIC[0].integrated_lufs});
+  loudStatus.textContent="既知成果物のSHA一致。表示は検証済みActions測定値（再測定なし）。";
+  results.hidden=false;status.textContent="照合 PASS：A01・A02 Opus SHA 2/2（端末内）";
+}
 check.addEventListener("click",async()=>{
   reset();const token=generation;check.disabled=true;status.textContent="端末内で照合中";
   try{
+    if(mode.value==="music"){if(!globalThis.crypto?.subtle)invalid("HTTPSまたはlocalhostで開いてください");await compareMusic(token);return;}
     const [a,b,r]=inputs.map(i=>i.files[0]);
     if(!a||!b||!r)invalid("3ファイルを選択してください");
     if([a,b].some(f=>f.size<44||f.size>24*1024**2)||r.size<2||r.size>64*1024)invalid("ファイルサイズ上限を超えています");

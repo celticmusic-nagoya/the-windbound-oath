@@ -26,6 +26,9 @@ for x in selection:
     if kinds[a]=='legacy':
         print(f'REUSED: artifact {a} exact published entries; downstream merge rehashes retained images')
         continue
+    if kinds[a]=='historical':
+        print(f'REUSED: artifact {a} exact retention-only legacy snapshot; no source fetch or new publication')
+        continue
     if kinds[a]=='ordinary':
         print(f'REUSED: artifact {a} exact approved published images; downstream merge rehashes retained files')
         reused.append(a)
@@ -35,6 +38,9 @@ for x in selection:
     except subprocess.CalledProcessError as exc:
         stderr=exc.stderr.decode('utf-8',errors='replace')
         if not recorded_expired_404(x,stderr,datetime.now(timezone.utc)):
+            import re
+            code=re.search(r'HTTP (\d{3})',stderr)
+            print(f'BLOCKED: artifact {a} metadata request failed; HTTP {code.group(1) if code else "unknown"}',flush=True)
             raise
         if not retained_receipt_matches(x,history):
             raise ValueError(f'expired artifact {a}: exact published history not found') from exc
