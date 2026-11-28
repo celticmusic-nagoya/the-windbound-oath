@@ -1,0 +1,47 @@
+name: Morwen W118 read-only quarantine diagnostic
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/morwen-quarantine-diagnostic.yml'
+      - 'tools/production_qa/morwen_quarantine_diagnostic.py'
+      - 'tools/production_qa/test_morwen_quarantine_diagnostic.py'
+  push:
+    branches: [main]
+    paths: ['.github/workflows/morwen-quarantine-diagnostic.yml']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: morwen-vroid-macos-probe
+  cancel-in-progress: false
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: |
+          python3 -m py_compile tools/production_qa/morwen_quarantine_diagnostic.py
+          python3 tools/production_qa/test_morwen_quarantine_diagnostic.py
+  diagnose:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor_id == '315379131' && github.run_attempt == 1 && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: two-private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Check exact existing transport and diagnostic tests
+        run: |
+          set -euo pipefail
+          test "$(git hash-object tools/private-preservation/release_transport.py)" = a9c2d1a28e649b76608129636b294f6e2b45c97a
+          python3 tools/production_qa/test_morwen_quarantine_diagnostic.py
+      - name: Read verified quarantine and emit fixed diagnostic labels only
+        env:
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_quarantine_diagnostic.py
