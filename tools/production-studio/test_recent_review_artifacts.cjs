@@ -66,7 +66,7 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
 test("observed current hero-tree and native forest evidence is discoverable, with branch and name constraints",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]});
- assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・森林","世界・森林"]);assert.equal(rows.find(x=>x.id===9).metadataOnly,true);
+ assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・樹木","世界・森林"]);assert.equal(rows.find(x=>x.id===9).metadataOnly,true);assert.equal(rows.find(x=>x.id===15073087704).metadataOnly,false);
 });
 
 test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
@@ -74,15 +74,15 @@ test("sanctuary and future versioned world evidence are visible without weakenin
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
  assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,12,11]);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);assert.equal(selectRecentArtifacts(data).find(x=>x.id===12).metadataOnly,true);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[11]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[12,11]);assert.equal(selectRecentArtifacts(data,"世界・河川／水辺").find(x=>x.id===11).metadataOnly,false);
 });
 
 test("world namespace catches actual new naming orders and unversioned candidates without crossing branches",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const data={artifacts:[art(15076007596,branch,"two-v59-ruin-2d-references"),art(15075731907,branch,"two-sanctuary-v58-native-scenery"),art(31,branch,"two-unversioned-prototype"),art(32,"other","two-v59-ruin-2d-references"),art(33,branch,"two-../unsafe"),art(34,branch,"two-"+'a'.repeat(161)),art(35,branch,"two-fork",{workflow_run:{...art(35,branch,"two-fork").workflow_run,head_repository_id:2}})]};
- assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,31]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,32,31]);assert.equal(selectRecentArtifacts(data).find(x=>x.id===32).metadataOnly,true);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075731907);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596,32]);assert.equal(selectRecentArtifacts(data).find(x=>x.id===15076007596).metadataOnly,false);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[31]);
 });
 
