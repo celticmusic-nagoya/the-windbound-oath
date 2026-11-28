@@ -3,15 +3,15 @@ const fs=require("node:fs"),vm=require("node:vm"),path=require("node:path");
 const context={module:{exports:{}}};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,"recent-review-artifacts.js"),"utf8"),context);
 const {selectRecentArtifacts}=context.module.exports;
-const art=(id,branch,name,extra={})=>({id,name,expired:false,size_in_bytes:100,created_at:"2026-11-25T12:00:00Z",digest:"sha256:"+"a".repeat(64),workflow_run:{id:100+id,head_branch:branch,head_sha:"b".repeat(40),repository_id:1,head_repository_id:1},...extra});
+const art=(id,branch,name,extra={})=>({id,name,expired:false,size_in_bytes:100,created_at:"2026-11-25T12:00:00Z",digest:"sha256:"+"a".repeat(64),workflow_run:{id:100+id,head_branch:branch,head_sha:"b".repeat(40),repository_id:1408120919,head_repository_id:1408120919},...extra});
 test("recognizes live face, wardrobe, textile, blueprint and HOME receipts",()=>{
  const rows=selectRecentArtifacts({artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"main","morwen-parallel-C-wardrobe"),art(3,"asset/morwen-measured-textile-20261125","morwen-measured-textile-not-adopted"),art(4,"feature/lind-village-world-integration-plan-01","aidan-measured-blueprint"),art(5,"feature/lind-village-world-integration-plan-01","home-cross-run-qa-45607836766")]});
  assert.deepEqual(Array.from(rows,x=>x.id),[5,4,3,2,1]);assert.match(rows[4].filter,/mouth-reopened/);
 });
-test("rejects expired, unrelated, fork, malformed, duplicate and unknown-source records",()=>{
+test("rejects expired, wrong repository, fork, malformed and duplicate; same-repo unknown sources are metadata only",()=>{
  const a=art(1,"main","morwen-isolated-vroid-reopen-review");
- const rows=selectRecentArtifacts({artifacts:[a,a,art(2,"main","unrelated"),art(3,"evil","morwen-isolated-vroid-reopen-review"),art(4,"main",a.name,{expired:true}),art(5,"main",a.name,{workflow_run:{...a.workflow_run,head_repository_id:2}}),art(6,"main",a.name,{workflow_run:{...a.workflow_run,head_sha:"bad"}}),null]});
- assert.equal(rows.length,1);assert.equal(rows[0].id,1);
+ const rows=selectRecentArtifacts({artifacts:[a,a,art(2,"main","unrelated"),art(3,"evil","morwen-isolated-vroid-reopen-review"),art(4,"main",a.name,{expired:true}),art(5,"main",a.name,{workflow_run:{...a.workflow_run,head_repository_id:2}}),art(6,"main",a.name,{workflow_run:{...a.workflow_run,head_sha:"bad"}}),art(7,"main",a.name,{workflow_run:{...a.workflow_run,repository_id:2,head_repository_id:2}}),null]});
+ assert.deepEqual(Array.from(rows,x=>x.id),[3,2,1]);assert.ok(rows[0].metadataOnly&&rows[1].metadataOnly&&!rows[2].metadataOnly);
 });
 test("invalid API shape and bounded result",()=>{assert.throws(()=>selectRecentArtifacts({workflow_runs:[]}));assert.equal(selectRecentArtifacts({artifacts:Array.from({length:60},(_,i)=>art(i+1,"main","morwen-isolated-vroid-reopen-review"))}).length,30);});
 
@@ -58,7 +58,7 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
  const unrelated=art(6,"feature/lind-ecology-01","unknown-source");
  const data={artifacts:[eco,pkg,brass,gold,photo,unrelated,...Array.from({length:40},(_,i)=>art(100+i,"main","morwen-isolated-vroid-reopen-review"))]};
  assert.equal(selectRecentArtifacts(data).length,30);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"リルド村・植生"),x=>x.id),[2,1]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"リルド村・植生"),x=>x.id),[6,2,1]);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"モルウェン・材質研究"),x=>x.id),[5,4,3]);
  assert.equal(selectRecentArtifacts(data,"unknown").length,0);
 });
@@ -66,23 +66,23 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
 test("observed current hero-tree and native forest evidence is discoverable, with branch and name constraints",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]});
- assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・森林"]);
+ assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・樹木","世界・森林"]);assert.equal(rows.find(x=>x.id===9).metadataOnly,true);assert.equal(rows.find(x=>x.id===15073087704).metadataOnly,false);
 });
 
 test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
- assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,11]);
- assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[11]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,12,11]);
+ assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);assert.equal(selectRecentArtifacts(data).find(x=>x.id===12).metadataOnly,true);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[12,11]);assert.equal(selectRecentArtifacts(data,"世界・河川／水辺").find(x=>x.id===11).metadataOnly,false);
 });
 
 test("world namespace catches actual new naming orders and unversioned candidates without crossing branches",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const data={artifacts:[art(15076007596,branch,"two-v59-ruin-2d-references"),art(15075731907,branch,"two-sanctuary-v58-native-scenery"),art(31,branch,"two-unversioned-prototype"),art(32,"other","two-v59-ruin-2d-references"),art(33,branch,"two-../unsafe"),art(34,branch,"two-"+'a'.repeat(161)),art(35,branch,"two-fork",{workflow_run:{...art(35,branch,"two-fork").workflow_run,head_repository_id:2}})]};
- assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,31]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15076007596,15075731907,32,31]);assert.equal(selectRecentArtifacts(data).find(x=>x.id===32).metadataOnly,true);
  assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075731907);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・遺跡"),x=>x.id),[15076007596,32]);assert.equal(selectRecentArtifacts(data).find(x=>x.id===15076007596).metadataOnly,false);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・新規制作証跡（未分類）"),x=>x.id),[31]);
 });
 
@@ -126,4 +126,27 @@ test("report snapshot keeps bounded prior records when recent 100 are dominated 
  const current=selectProductionReports([report(14,427),report(12,427,{body:"edited"}),report(15,482)]);
  const rows=mergeProductionReports(prior,current);
  assert.deepEqual(Array.from(rows,x=>x.id),[15,14,13,12,10]);assert.equal(rows.find(x=>x.id===12).excerpt,"edited");
+});
+
+const {expiryState,expirySummary,orderExpiry,recoveryLocator}=context.module.exports;
+test("expiry boundary, stale snapshot and priority never imply durable preservation",()=>{
+ const now=Date.parse("2026-11-28T12:00:00Z");
+ const make=(id,offset)=>({id,expires:offset===null?"":new Date(now+offset*3600000).toISOString()});
+ const rows=[make(1,169),make(2,168),make(3,48),make(4,0),make(5,-1),make(6,null),make(7,1),make(8,48.1)];
+ assert.deepEqual(Array.from(rows,x=>expiryState(x,now)),["later","soon","urgent","elapsed","elapsed","unknown","urgent","soon"]);
+ assert.deepEqual(JSON.parse(JSON.stringify(expirySummary(rows,now))),{elapsed:2,urgent:2,soon:2,later:1,unknown:1});
+ assert.deepEqual(Array.from(orderExpiry(rows,now),x=>x.id),[7,3,8,2,6,5,4]);
+ assert.equal(expiryState({expires:"bad"},now),"unknown");
+});
+test("locator binds same repository identity, exact digest and source metadata without claiming backup",()=>{
+ const a=art(15261507321,"studio/rilde-day-expression-a02-20261128","two-audio-rilde-day-a02-review",{expires_at:"2026-12-01T11:29:44Z",digest:"sha256:"+"9".repeat(64)});
+ const row=selectRecentArtifacts({artifacts:[a]})[0];
+ const receipt=recoveryLocator(row,"2026-11-28T12:00:00Z");
+ assert.equal(row.category,"音楽・音響");
+ assert.equal(receipt.repository,REPO);assert.equal(receipt.artifact_id,a.id);assert.equal(receipt.run_id,a.workflow_run.id);assert.equal(receipt.head_sha,a.workflow_run.head_sha);assert.equal(receipt.head_branch,a.workflow_run.head_branch);
+ assert.equal(receipt.archive_digest,a.digest);assert.equal(receipt.archive_bytes,a.size_in_bytes);assert.equal(receipt.expires_at,a.expires_at);
+ assert.equal(receipt.preservation_status,"UNVERIFIED");assert.equal(receipt.byte_verification,"NOT_RUN");assert.equal(receipt.adoption,"UNDETERMINED");
+ assert.equal(recoveryLocator({...row,digest:"",expires:"bad"},"2026-11-28T12:00:00Z").archive_digest,null);
+ assert.throws(()=>recoveryLocator({...row,head:"bad"},"2026-11-28T12:00:00Z"));
+ assert.throws(()=>recoveryLocator(row,"bad"));
 });
