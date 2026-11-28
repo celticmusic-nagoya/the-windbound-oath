@@ -6,13 +6,14 @@ on:
       - '.github/workflows/audio-production-qualification.yml'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: audio-qualification-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 jobs:
   qualify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Verify or install distribution FFmpeg
@@ -27,6 +28,44 @@ jobs:
         run: |
           python -m py_compile tools/audio-production/process_audio.py
           python tools/audio-production/process_audio.py selftest "$RUNNER_TEMP/two-audio-qualification"
+      - name: Inspect exact existing synthetic packet (one-off migration evidence)
+        if: github.head_ref == 'studio/audio-packet-loudness-20261128'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/15188224187 > "$RUNNER_TEMP/audio-source-meta.json"
+          python - <<'PY'
+          import os,json,pathlib
+          a=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'audio-source-meta.json').read_text())
+          assert a['id']==15188224187 and a['size_in_bytes']==679647 and not a['expired']
+          assert a['digest']=='sha256:ec8257eb7f5e66599c606a55e0e00eaab8f668216b0f161f06c2d3ceec97a5f6'
+          assert a['workflow_run']['id']==45979835210 and a['workflow_run']['head_sha']=='490548e7a0c131bf1e74ace39ff67d0282b5552d'
+          PY
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/15188224187/zip > "$RUNNER_TEMP/old-audio.zip"
+          python tools/audio-production/inspect_audio.py packet "$RUNNER_TEMP/verified-audio-packet" "$RUNNER_TEMP/audio-inspection/loudness.json" --pinned-archive "$RUNNER_TEMP/old-audio.zip"
+          echo "TWO_AUDIO_PACKET=$RUNNER_TEMP/verified-audio-packet" >> "$GITHUB_ENV"
+      - name: Inspect current producer outputs on subsequent changes
+        if: github.head_ref != 'studio/audio-packet-loudness-20261128'
+        run: |
+          python tools/audio-production/inspect_audio.py packet "$RUNNER_TEMP/two-audio-qualification" "$RUNNER_TEMP/audio-inspection/loudness.json"
+          echo "TWO_AUDIO_PACKET=$RUNNER_TEMP/two-audio-qualification" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Studio test dependencies
+        working-directory: tools/production-studio
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.51.1
+          npx playwright install --with-deps chromium
+      - name: Actual producer packet to Studio native playback
+        run: node tools/audio-production/audio-packet-smoke.mjs "$TWO_AUDIO_PACKET" "$RUNNER_TEMP/audio-inspection"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-audio-inspection
+          path: ${{ runner.temp }}/audio-inspection/
+          retention-days: 7
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: success()
         with:
