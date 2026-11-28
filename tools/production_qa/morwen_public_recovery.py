@@ -2,7 +2,7 @@
 Never print private bytes, exception text, URLs or credentials.
 No model mutation, no public artifacts; exact W108 checkpoint only.
 """
-import hashlib,io,json,os,re,stat,subprocess,sys,zipfile
+import hashlib,io,json,os,re,stat,subprocess,sys,time,zipfile
 from pathlib import Path
 DEST='celticmusic-nagoya/the-windbound-oath-handoff'
 BASE='https://api.github.com/repos/'+DEST
@@ -49,16 +49,38 @@ def extract(raw):
     with zipfile.ZipFile(io.BytesIO(model)) as z:
         require(len(z.infolist())==4 and set(z.namelist())=={'meta.json','v1model/meta.json','v1model/data.bin','thumbnails/thumbnail.jpg'} and sum(i.file_size for i in z.infolist())<=CAP and z.testzip() is None)
     return model
-def check_active(api,token,public_token,run_id):
+class ActiveSnapshotBlocked(ValueError):
+    pass
+def check_active_once(api,token,public_token,run_id):
     # Same-asset public jobs and all private jobs must be inactive.
     for repo,cred in ((DEST,token),(ORIGIN,public_token)):
         for status in ('queued','in_progress','waiting','requested','pending'):
             stage(('PRIVATE' if repo==DEST else 'PUBLIC')+'_ACTIVE_'+status.upper())
             q=api(cred,'GET','https://api.github.com/repos/'+repo+'/actions/runs?per_page=100&status='+status)
-            runs=q.get('workflow_runs',[])
-            require(isinstance(runs,list) and q.get('total_count')==len(runs) and len(runs)<=100)
+            runs=q.get('workflow_runs')
+            if not (isinstance(runs,list) and type(q.get('total_count')) is int and q['total_count']==len(runs) and len(runs)<=100):
+                stage(('PRIVATE' if repo==DEST else 'PUBLIC')+'_ACTIVE_INVENTORY_INCONSISTENT')
+                raise ActiveSnapshotBlocked('inconsistent inventory')
             for a in runs:
-                require(repo==ORIGIN and (str(a.get('id'))==run_id or 'morwen' not in (str(a.get('name',''))+' '+str(a.get('head_branch',''))).lower()))
+                if not (isinstance(a,dict) and type(a.get('id')) is int and a['id']>0 and isinstance(a.get('name'),str) and isinstance(a.get('head_branch'),str)):
+                    stage(('PRIVATE' if repo==DEST else 'PUBLIC')+'_ACTIVE_ROW_INCOMPLETE')
+                    raise ActiveSnapshotBlocked('incomplete active row')
+                if not (repo==ORIGIN and (str(a['id'])==run_id or 'morwen' not in (a['name']+' '+a['head_branch']).lower())):
+                    stage(('PRIVATE' if repo==DEST else 'PUBLIC')+'_ACTIVE_CONFLICT')
+                    # Public run IDs are public metadata; never print private run identifiers or names.
+                    if repo==ORIGIN:print('RECOVERY_PUBLIC_CONFLICT_RUN_'+str(a['id']),flush=True)
+                    raise ActiveSnapshotBlocked('active conflict')
+def check_active(api,token,public_token,run_id):
+    # Only transient inventory/active conflicts may be re-observed, never HTTP/identity errors.
+    # A complete successful fresh scan is still mandatory; no ignored rows or forced takeover.
+    for attempt in range(3):
+        try:
+            check_active_once(api,token,public_token,run_id)
+            return
+        except ActiveSnapshotBlocked:
+            if attempt==2:raise
+            print('RECOVERY_ACTIVE_REOBSERVE_'+str(attempt+1),flush=True)
+            time.sleep(30)
 def restore(api,env,root):
     identity(env);token=env['DEST_TOKEN'];stage('PRIVATE_DESTINATION');private(api,token)
     stage('ACTIVE_JOB_CHECK');check_active(api,token,env['GH_TOKEN'],env['GITHUB_RUN_ID'])
