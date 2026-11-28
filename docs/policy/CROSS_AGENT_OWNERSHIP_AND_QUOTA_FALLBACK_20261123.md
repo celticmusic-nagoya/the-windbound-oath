@@ -6,7 +6,7 @@ Status: director-approved operational assignment and safe handoff rules. This do
 
 These are historical starting pointers to existing workstreams, not fixed AI restrictions or grants of writer authority. The current AGENTS and live owner/STOP_ACK/CAS/fence determine assignment. Any qualified AI may execute independent approved tasks, and a missing connector method must not erase an existing authorized route.
 
-| Scope | Primary | Boundary |
+| Scope | Historical starting pointer / live owner to verify | Boundary |
 | --- | --- | --- |
 | Shared Blueprint Engine | Claude (common infrastructure) | Reuse #468 target/measurement/operation contracts; do not fork a competing schema. Engine implementation, adapters and verification only, not asset canon or owner artwork. |
 | Long-run Production Engine | Codex, existing PR #468 | Factory, Session Controller, real edit guard, checkpoint, cross-run restore, queue, CAS/lease/fencing and Actions dispatch. |
@@ -15,7 +15,7 @@ These are historical starting pointers to existing workstreams, not fixed AI res
 | Production Studio | ChatGPT development coordinator | Read-only mobile-first artifact/blueprint/GLB/VRM views, provenance, PR/run/QA/lease visibility; public eligibility and secret boundaries enforced. |
 | Cross-agent coordination and independent review | ChatGPT development coordinator | Synchronize evidence, review contracts, handle safe fallback, never assume writer ownership. |
 
-A named AI is a default assignment, not an automatic exclusive lock or authority to edit an asset. Live owner acknowledgement, stage lease and fencing determine write authority. Existing specialist work is not displaced by this document. Avoid new duplicate PRs, duplicate CI, redundant rendering or replacing verified work.
+A named AI in the table is a dated historical assignment, not a current default, exclusive lock or authority to edit an asset. Live owner acknowledgement, stage lease and fencing determine write authority. Existing specialist work is not displaced by this document. Avoid new duplicate PRs, duplicate CI, redundant rendering or replacing verified work.
 
 ## Required shared handoff record
 
@@ -32,8 +32,8 @@ Record each material stage change in the owning PR and existing Production OS qu
 
 ## Integration contracts and acceptance
 
-- Claude Blueprint Engine emits source-grounded targets with coordinates, units, projection, target/measurement IDs, tolerances, uncertainty, qualified operations, protected scopes and dependency fingerprints. Inferred geometry and unknown values are labeled; no speculative canon. Codex #468 remains the shared execution/measurement contract owner; coordinate interface changes in its PR before adapter adoption.
-- Codex Factory accepts only qualified contracts, records actual native SHA and measured deltas for required edits, prohibits edits for read-only stages, verifies reopen and independent cross-run restore. No automatic precision PASS from a JSON schema alone.
+- The Blueprint Engine emits source-grounded targets with coordinates, units, projection, target/measurement IDs, tolerances, uncertainty, qualified operations, protected scopes and dependency fingerprints. Inferred geometry and unknown values are labeled; no speculative canon. Resolve the live #468 shared execution/measurement contract owner; coordinate interface changes in its PR before adapter adoption.
+- The Factory accepts only qualified contracts, records actual native SHA and measured deltas for required edits, prohibits edits for read-only stages, verifies reopen and independent cross-run restore. No automatic precision PASS from a JSON schema alone.
 - Asset owners author actual blueprint and native work in their existing PRs; independent visual G2 and measured G1/G3/G4 remain owner-specific. No cross-owner writes without a verified handoff.
 - Studio consumes only authenticated, provenance-checked, publication-eligible records; displays current/candidate/quarantine/adopted distinctly and unknown/expired evidence explicitly. Public site is read-only; publication is separately approved.
 - Readiness vocabulary: POLICY_ONLY, IMPLEMENTED, ISOLATED_PASS, PRODUCTION_VERIFIED, BLOCKED, NOT_RUN. Require revision-specific evidence; a successful CI, isolated Blender test, same-run reopen or merged PR does not prove production-ready cross-run recovery, 60–360 minute runs, or G1–G4.

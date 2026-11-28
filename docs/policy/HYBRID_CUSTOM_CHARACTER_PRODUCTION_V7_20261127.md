@@ -4,7 +4,7 @@ Scope: all TWO 3D characters and all AI agents/automations (Claude, ChatGPT, Cod
 
 ## Director correction — 2026-11-27
 
-Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve W99 hair and independent modules. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613). The originally registered v7 text is retained in merge commit 69411da7998260280561dff70b0c6c103490ba1f. Current text includes the director's 2026-11-28 VRoid-primary clarification.
+Director correction (2026-11-27): Morwen's production target is 6.25 heads nominal, range 6.2–6.3. This supersedes conflicting earlier 7.75 / 7.5–8 targets. W04 is a verified surface-proxy candidate, not an adopted or independently verified anatomical landmark ratio. Retain B01/B02 for comparison; remeasure the 6.25 work copy using neutral anatomical crown/chin/sole, excluding hair, hats and shoe heels. Preserve the latest verified native hair (W108 at W116 recovery) and independent modules; W99 is historical. Do not blindly reverse B02. Morwen only; all other requirements remain. [Decision](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7214642613). The originally registered v7 text is retained in merge commit 69411da7998260280561dff70b0c6c103490ba1f. Current text includes the director's 2026-11-28 VRoid-primary clarification.
 
 ## Precedence and relation to existing policy
 
@@ -404,7 +404,7 @@ Actions Artifactsの期限切れを前提に、重要なcheckpointは既存の�
 
 W90までは復元・比較・技術実証用として保護する。旧プリセット由来の髪型を完成品としない。
 
-W99保存・再読込済み空Frontを起点に、W92の設計を実頭部へ登録し、VRoid内で実毛束を制作する。W96型紙は保存再読込・実UVを確認する。H04は独立未採用比較候補として保全し、測定・設計知見のみ利用する。W104/W105Bの旧衣装改修は比較資料。最新担当PRと原本を確認し、同一作業を重複起動しない。
+W99空Frontは履歴とし、W108保存・再読込済み新規前髪5毛束を起点とする（[W116公開環境読取復旧PASS](https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7238578428)）。最新の検証済み原本を優先し、W92由来の設計を実頭部へ登録して、未制作F06・前髪材質分離・頭頂部等の実制作を進める。W116は読取復旧の実証であり、新規編集・正式採用の証明ではない。W96型紙は保存再読込・実UVを確認する。H04は独立未採用比較候補として保全し、測定・設計知見のみ利用する。W104/W105Bの旧衣装改修は比較資料。最新担当PRと原本を確認し、同一作業を重複起動しない。
 
 正式目標：
 
