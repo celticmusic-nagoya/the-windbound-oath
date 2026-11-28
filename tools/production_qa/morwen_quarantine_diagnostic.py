@@ -27,6 +27,14 @@ STAGES=[
  ('REOPEN_VISIBLE','W110-reopened-visible.png'),
  ('NATIVE_RECEIPT','W110-receipt.json')]
 ERRORS=[
+ ('F06_SCALE_TOLERANCE','F06 unsupported at scale-adjusted tolerance'),
+ ('STALE_FACE_REGISTRATION','stale or invalid face registration'),
+ ('REQUIRED_TOOL_INACTIVE','required tool inactive'),
+ ('COLLAR_ANCHOR_DETAIL','insufficient collar anchor detail'),
+ ('FRONT_GROUP_COUNT','not sole new Front group'),
+ ('BLUEPRINT_IDENTITY','blueprint identity'),
+ ('W108_FACE_IDENTITY','W108 face registration identity'),
+ ('W108_REFERENCE_IDENTITY','W108 reference identity'),
  ('CAMERA_OR_POSE','camera/pose moved'),
  ('FACE_REGISTRATION','face registration residual too high'),
  ('EYE_REGISTRATION','eye registration mismatch'),
@@ -64,9 +72,16 @@ def inspect(raw):
         log=z.read('gui.log').decode('utf-8','replace') if 'gui.log' in names else ''
         guard=z.read('W110-F06-guard.txt').decode('utf-8','replace') if 'W110-F06-guard.txt' in names else ''
         last=next((label for label,name in reversed(STAGES) if name in names),'PRE_REOPEN')
-        code=next((label for label,pattern in ERRORS if pattern in log or pattern in guard),'UNCLASSIFIED')
+        # Prefer the terminal Python exception, not arbitrary words in earlier setup output.
+        terminal=[line.strip() for line in (log+'\n'+guard).splitlines() if re.match(r'^\s*(ValueError|AssertionError|FileNotFoundError|PermissionError|ModuleNotFoundError)(:|$)',line)]
+        message=terminal[-1] if terminal else ''
+        code=next((label for label,pattern in ERRORS if pattern in message),'UNCLASSIFIED') if message else next((label for label,pattern in ERRORS if pattern in log or pattern in guard),'UNCLASSIFIED')
+        callsite='UNKNOWN'
+        if re.search(r'File "[^"\n]*w110_camera_register\.py", line \d+, in support\b',log):callsite='CAMERA_SUPPORT'
+        elif re.search(r'File "[^"\n]*w108_guide_fit\.py", line \d+, in context\b',log):callsite='GUIDE_CONTEXT'
+        elif re.search(r'File "[^"\n]*w110_camera_register\.py", line \d+, in register\b',log):callsite='CAMERA_REGISTER'
         source_reopen='recovery-result.txt' in names and z.read('recovery-result.txt').strip()==b'REOPENED_READONLY_SOURCE_UNCHANGED'
-        return {'stage':last,'error':code,'source_reopen':source_reopen,'candidate_present':rec['candidate_present']}
+        return {'stage':last,'error':code,'source_reopen':source_reopen,'candidate_present':rec['candidate_present'],'callsite':callsite}
 def main():
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'private-preservation'))
     from release_transport import request
@@ -79,6 +94,7 @@ def main():
     print('QUARANTINE_INTEGRITY_PASS',flush=True)
     print('QUARANTINE_LAST_STAGE_'+result['stage'],flush=True)
     print('QUARANTINE_ERROR_'+result['error'],flush=True)
+    print('QUARANTINE_CALLSITE_'+result['callsite'],flush=True)
     print('QUARANTINE_SOURCE_REOPEN_'+('YES' if result['source_reopen'] else 'NO'),flush=True)
     print('QUARANTINE_SAVED_CANDIDATE_'+('YES' if result['candidate_present'] else 'NO'),flush=True)
 if __name__=='__main__':
