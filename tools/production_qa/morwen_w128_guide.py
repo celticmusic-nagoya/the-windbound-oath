@@ -188,6 +188,8 @@ def guide(png, rows, reg_path, bp_path, out, tool="brush"):
         dist = signed_distance_at(sil, path)
         r = float(max(dist))
         lanes[lane] = dict(points=len(path), worst_signed_distance_px=round(r, 3),
+                           root_deficit_px=round(float(max(dist[:3])), 3),
+                           body_deficit_px=round(float(max(dist[3:])), 3),
                            outside_fraction=round(float(sum(v > 0 for v in dist)) / len(dist), 3),
                            draw_eligible=lane in DRAW_LANES and r <= DRAW_LIMIT,
                            verdict="PASS" if r + UNCERTAINTY <= -1 else "OUTSIDE" if r - UNCERTAINTY > -1 else "HOLD",
@@ -385,9 +387,9 @@ def crown(png, rows_path, reg_path, guide_json, out, margin=2.0, max_lift=27.0):
     cx = f["center_px"][0]
     require(len(row) == 3 and abs(row[1][0] - cx) <= 6 * ratio and row[0][0] < row[1][0] < row[2][0], "crown row not unique: %r" % (row,))
     require(all(460 <= p[0] <= 565 and 280 <= p[1] <= 380 for p in row), "unqualified crown location")
-    need = max(gd["lanes"][l]["worst_signed_distance_px"] for l in LANES)
+    need = max(gd["lanes"][l]["root_deficit_px"] for l in LANES)
     lift = need + margin
-    require(lift > 0, "no lift needed")
+    require(lift > 0.5, "no crown lift needed")
     require(lift <= max_lift * ratio, "lift %.1f exceeds bound" % lift)
     drags = [[p[0] / 1024, p[1] / 768, p[0] / 1024, (p[1] - lift) / 768, 0.65] for p in (row[1], row[0], row[2])]
     res = dict(schema="morwen_w130_crown_lift", screenshot_sha256=sha(png), control_points=len(pts),
@@ -395,6 +397,47 @@ def crown(png, rows_path, reg_path, guide_json, out, margin=2.0, max_lift=27.0):
                lift_px=round(lift, 2), ratio=ratio, drags=drags)
     with Path(out).open("x") as fo:
         json.dump(res, fo, indent=2)
+    for dr in drags:
+        print(" ".join(f"{v:.8f}" for v in dr))
+
+
+def shoulder(png, rows_path, reg_path, guide_json, out, margin=2.0, max_move=10.0):
+    """Move the second-row shoulder control points outward-up (unit (-+0.6, -0.8)) by the flank
+    lane body deficit + margin (F01 -> left, F06 -> right), bounded. One drag per needy side."""
+    d = json.loads(Path(rows_path).read_text())
+    require(d["screenshot_sha256"] == sha(png), "stale row capture")
+    g1, g2 = groups(rows_path)
+    a = rgb(png)
+    y2 = int(round(g2["y"]))
+    require(blue_count(a, 51, 85, y2 - 10, y2 + 10) >= 420, "G2 selection not verified")
+    require(blue_count(a, 315, 348, 125, 150) >= 120, "select tool inactive")
+    f = json.loads(Path(reg_path).read_text())
+    require(f["screenshot_sha256"] == sha(png) and f.get("jacket_mae", 99) <= 8, "registration identity")
+    gd = json.loads(Path(guide_json).read_text())
+    require(gd["screenshot_sha256"] == sha(png) and gd.get("tool") == "select", "guide measurement identity")
+    ratio = f["scale"] / BASE_SCALE
+    cx = f["center_px"][0]
+    pts = control_points(a)
+    require(len(pts) >= 12, "control points not established")
+    top = min(p[1] for p in pts)
+    drags, sides = [], {}
+    for side, lane, sgn in (("left", "F01", -1), ("right", "F06", 1)):
+        deficit = gd["lanes"][lane]["body_deficit_px"]
+        amount = deficit + margin
+        if amount <= 0.5:
+            sides[side] = dict(deficit=deficit, move=0)
+            continue
+        require(amount <= max_move * ratio, "%s shoulder move %.1f exceeds bound" % (side, amount))
+        cand = [p for p in pts if sgn * (p[0] - cx) >= 15 * ratio and top + 10 * ratio <= p[1] <= top + 45 * ratio]
+        require(cand, "%s shoulder point not visible" % side)
+        p = min(cand, key=lambda q: (q[1], -sgn * q[0]))
+        tx, ty = p[0] + sgn * 0.6 * amount, p[1] - 0.8 * amount
+        require(460 <= tx <= 565 and 280 <= ty <= 380, "unqualified shoulder target")
+        drags.append([p[0] / 1024, p[1] / 768, tx / 1024, ty / 768, 0.65])
+        sides[side] = dict(deficit=deficit, move=round(amount, 2), point=[round(p[0], 1), round(p[1], 1)], target=[round(tx, 1), round(ty, 1)])
+    require(drags, "no shoulder move needed")
+    with Path(out).open("x") as fo:
+        json.dump(dict(schema="morwen_w131_shoulder", screenshot_sha256=sha(png), sides=sides, drags=drags), fo, indent=2)
     for dr in drags:
         print(" ".join(f"{v:.8f}" for v in dr))
 
@@ -408,6 +451,8 @@ def main(argv):
         guide(*args)
     elif cmd == "crown":
         crown(*args)
+    elif cmd == "shoulder":
+        shoulder(*args)
     elif cmd == "points":
         points(*args)
     elif cmd == "complete":

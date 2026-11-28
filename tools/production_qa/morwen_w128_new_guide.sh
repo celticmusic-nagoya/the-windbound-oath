@@ -104,20 +104,25 @@ measure_g2() {
 draw=$(measure_g2 W128-c0 select)
 last=W128-c0
 echo "c0 $draw" > evidence/W128-guide-attempts.txt
-for it in 1 2; do
+for it in 1 2 3 4; do
   test "$draw" = "F06 F01" && break
-  if ! "$py" "$w128" crown "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-crown-$it.json" > "evidence/W128-crown-$it.txt" 2>"evidence/W128-crown-$it-error.txt"; then
-    echo "crown$it NOT_APPLIED" >> evidence/W128-guide-attempts.txt
+  # Crown lift while lane roots are short; otherwise shoulder move for the flank lanes (W131).
+  if "$py" "$w128" crown "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-adjust-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-crown-error.txt"; then
+    kind=crown
+  elif "$py" "$w128" shoulder "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-shoulder-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-shoulder-error.txt"; then
+    kind=shoulder
+  else
+    echo "adjust$it NOT_APPLIED" >> evidence/W128-guide-attempts.txt
     break
   fi
   while read -r d1 d2 d3 d4 d5; do
     "$gui" drag "$d1" "$d2" "$d3" "$d4" "$d5"
     sleep 1
-  done < "evidence/W128-crown-$it.txt"
+  done < "evidence/W128-adjust-$it.txt"
   sleep 1
   draw=$(measure_g2 "W128-c$it" select)
   last="W128-c$it"
-  echo "c$it $draw" >> evidence/W128-guide-attempts.txt
+  echo "c$it $kind $draw" >> evidence/W128-guide-attempts.txt
 done
 draw=$(measure_g2 W128-g2-final brush)
 last=W128-g2-final
@@ -263,7 +268,7 @@ lanes=(p/'W128-lanes.txt').read_text().splitlines()
 (p/'W128-receipt.json').write_text(json.dumps(dict(
   status='NEW_INDEPENDENT_GUIDE_SAVED_REOPENED_NOT_ADOPTED',source_sha256=sha(p/'input-model.vroid'),
   candidate_sha256=sha(p/'W128-new-guide-not-adopted.vroid'),groups=['Freehand Group 1','Freehand Group 2'],
-  iteration='W130',guide_attempts=(p/'W128-guide-attempts.txt').read_text().splitlines(),
+  iteration='W131',guide_attempts=(p/'W128-guide-attempts.txt').read_text().splitlines(),
   lanes=lanes,draw_plan=(p/'W128-draw-plan.txt').read_text().split(),save_reopen=True,
   screenshots={q.name:sha(q) for q in sorted(p.glob('W128-*.png'))},
   limitations=['G2 guide measured as 2D front proxy; no D4','G1 untouched incl. truncated W108 F01 stub','independent G2/G3/G4 pending']),indent=2))
