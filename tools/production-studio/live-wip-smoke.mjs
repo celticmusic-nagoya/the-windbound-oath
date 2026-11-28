@@ -1,6 +1,6 @@
 import {chromium} from "playwright";
 import {spawn} from "node:child_process";
-import {mkdir} from "node:fs/promises";
+import {mkdir,readFile} from "node:fs/promises";
 import assert from "node:assert/strict";
 const server=spawn("python3",["-m","http.server","8767","--bind","127.0.0.1"],{stdio:"ignore"});
 let browser;
@@ -12,7 +12,7 @@ try{
  const errors=[];page.on("pageerror",e=>errors.push(e.message));
  const sha="a".repeat(40),now="2026-11-26T08:00:00Z";
  const run=(id,name,status,path,branch="main")=>({id,name,status,conclusion:status==="completed"?"success":null,path,head_sha:sha,head_branch:branch,repository:{full_name:repo},head_repository:{full_name:repo},updated_at:now});
- const artifact=(id,name,branch)=>({id,name,expired:false,size_in_bytes:100,created_at:now,workflow_run:{id:200+id,head_branch:branch,head_sha:sha,repository_id:1408120919,head_repository_id:1408120919}});
+ const artifact=(id,name,branch)=>({id,name,expired:false,size_in_bytes:100,created_at:now,digest:"sha256:"+"b".repeat(64),expires_at:new Date(Date.now()+(id===1?3600000:id===2?72*3600000:240*3600000)).toISOString(),workflow_run:{id:200+id,head_branch:branch,head_sha:sha,repository_id:1408120919,head_repository_id:1408120919}});
  let fail=false;
  await page.route("https://api.github.com/**",route=>{
   const u=new URL(route.request().url());
@@ -32,6 +32,19 @@ try{
  assert.equal(await page.locator('[data-report-id="7211532848"] a').getAttribute("href"),"https://github.com/"+repo+"/pull/482#issuecomment-7211532848");
  assert.match(await page.locator("#recent-live-runs").innerText(),/制作中/);
  assert.match(await page.locator("#recent-review-artifacts").innerText(),/その他・未分類/);
+ assert.match(await page.locator("#artifact-expiry-summary").innerText(),/48時間以内 1件 \/ 2〜7日以内 1件/);
+ await page.locator("#artifact-expiry-toggle").click();
+ assert.equal(await page.locator("#recent-review-artifacts article").count(),2);
+ assert.equal(await page.locator("#recent-review-artifacts article").first().getAttribute("data-artifact-id"),"1");
+ const downloadEvent=page.waitForEvent("download");
+ await page.locator('[data-artifact-id="1"]').getByRole("button",{name:"復元情報JSONを保存"}).click();
+ const download=await downloadEvent;
+ assert.equal(download.suggestedFilename(),"two-artifact-1-locator.json");
+ const locator=JSON.parse(await readFile(await download.path(),"utf8"));
+ assert.equal(locator.artifact_id,1);assert.equal(locator.run_id,201);assert.equal(locator.head_sha,sha);
+ assert.equal(locator.archive_digest,"sha256:"+"b".repeat(64));assert.equal(locator.preservation_status,"UNVERIFIED");
+ await page.locator("#artifact-expiry-toggle").click();
+ assert.equal(await page.locator("#recent-review-artifacts article").count(),3);
  const category=page.locator("#recent-review-category");
  await page.locator("#recent-category-grid button").filter({hasText:"モルウェン・Blender移行／造形"}).click();
  assert.equal(await page.locator("#recent-live-runs article").count(),1);
@@ -58,6 +71,7 @@ try{
  await page.waitForFunction(()=>document.querySelector("#recent-review-status").textContent.includes("前回取得分を保持"));
  assert.equal(await page.locator("#recent-production-reports article").count(),2);
  assert.match(await page.locator("#recent-production-reports").innerText(),/W82 wardrobe staging/);
+ assert.match(await page.locator("#artifact-expiry-summary").innerText(),/前回記録/);
  assert.equal(await page.locator("#recent-review-search").inputValue(),"forest");
  assert.equal(await page.locator("#recent-live-runs article").count(),1);
  assert.equal(await page.locator("#recent-review-artifacts article").count(),1);
