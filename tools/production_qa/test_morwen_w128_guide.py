@@ -21,12 +21,12 @@ def bp_point(x, y):
     return [(x - 511.5) / S + 212.5, (y - 385.5) / S + 125]
 
 
-def screen(rx, g2_selected=True, brush=True, g1_selected=False):
+def screen(rx, g2_selected=True, brush=True, g1_selected=False, cy=370):
     a = np.full((768, 1024, 3), BG, np.uint8)
     a[450:560, 450:575] = (30, 35, 60)
     yy, xx = np.mgrid[0:768, 0:1024]
-    inside = ((xx - 511.5) / rx) ** 2 + ((yy - 370) / 58) ** 2 <= 1
-    grid = (np.rint(xx - 511.5).astype(int) % 6 == 0) | (np.rint(yy - 370).astype(int) % 6 == 0)
+    inside = ((xx - 511.5) / rx) ** 2 + ((yy - cy) / 58) ** 2 <= 1
+    grid = (np.rint(xx - 511.5).astype(int) % 6 == 0) | (np.rint(yy - cy).astype(int) % 6 == 0)
     a[inside & grid] = WIRE
     if g2_selected:
         a[335:355, 51:85] = BLUE
@@ -168,7 +168,7 @@ def test_w129_eye_hidden_shown_handle(tmp):
 
 
 def test_w130_crown_lift(tmp):
-    a = screen(30)
+    a = screen(30, cy=384)
     a[125:150, 351:379] = BG
     a[125:150, 315:348] = BLUE
     for (x, y) in [(500, 352), (511, 353), (523, 352), (490, 358), (532, 358), (484, 368), (538, 368),
@@ -184,6 +184,32 @@ def test_w130_crown_lift(tmp):
     assert all(abs(u - v) <= 0.5 for p, q in zip(c["crown_row"], [[500, 352], [511, 353], [523, 352]]) for u, v in zip(p, q)) and 0 < c["lift_px"] <= 27 * 1.0
     assert all(abs(d[3] * 768 - (d[1] * 768 - c["lift_px"])) < 0.01 for d in c["drags"])
     expect_error(lambda: w.guide(png, rw, rg, blueprint(tmp), Path(tmp) / "g2.json", "brush"), "brush inactive")
+
+
+def test_w131_shoulder(tmp):
+    a = screen(40)
+    a[125:150, 351:379] = BG
+    a[125:150, 315:348] = BLUE
+    pts = [(500, 300), (511, 299), (523, 300), (484, 318), (539, 318), (476, 335), (547, 335),
+           (472, 360), (551, 360), (511, 330), (511, 360), (472, 390), (551, 390)]
+    for (x, y) in pts:
+        a[y - 7:y + 8, x - 7:x + 8] = (40, 200, 40)
+        a[y - 2:y + 3, x - 2:x + 3] = (255, 255, 255)
+    png = write(tmp, "s.png", a)
+    rw, rg = rows(tmp, png), reg(tmp, png)
+    gj = Path(tmp) / "g.json"
+    w.guide(png, rw, rg, blueprint(tmp), gj, "select")
+    g = json.loads(gj.read_text())
+    g["lanes"]["F01"]["body_deficit_px"] = 2.3      # simulate the W130 flank deficits
+    g["lanes"]["F06"]["body_deficit_px"] = -5.0      # right side already supported
+    for l in g["lanes"]:
+        g["lanes"][l]["root_deficit_px"] = -6.0
+    gj.write_text(json.dumps(g))
+    expect_error(lambda: w.crown(png, rw, rg, gj, Path(tmp) / "c.json"), "no crown lift needed")
+    w.shoulder(png, rw, rg, gj, Path(tmp) / "s.json")
+    sd = json.loads((Path(tmp) / "s.json").read_text())
+    assert sd["sides"]["right"]["move"] == 0 and len(sd["drags"]) == 1
+    assert sd["sides"]["left"]["point"] == [484.0, 318.0] and sd["sides"]["left"]["target"][0] < 484 and sd["sides"]["left"]["target"][1] < 318
 
 
 def main():
