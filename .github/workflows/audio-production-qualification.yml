@@ -46,6 +46,24 @@ jobs:
         run: python tools/audio-production/export_delivery.py selftest "$TWO_AUDIO_PACKET" "$RUNNER_TEMP/audio-delivery"
       - name: Verify compressed playback and two-cycle loop render in Chromium
         run: node tools/audio-production/delivery-smoke.mjs "$RUNNER_TEMP/audio-delivery"
+      - name: Render original musical candidate and verify delivery
+        run: |
+          python -m py_compile tools/audio-production/render_rilde_day.py
+          python tools/audio-production/render_rilde_day.py "$RUNNER_TEMP/rilde-day-candidate"
+          node tools/audio-production/delivery-smoke.mjs "$RUNNER_TEMP/rilde-day-candidate" loop
+          cp "$RUNNER_TEMP/rilde-day-candidate/browser-delivery-qa.json" "$RUNNER_TEMP/rilde-day-candidate/review/"
+          python - <<'PY'
+          import os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'rilde-day-candidate/review'
+          assert {x.name for x in p.iterdir()}=={'delivery.ogg','delivery.json','loudness.json','processing.json','provenance.json','browser-delivery-qa.json'}
+          assert sum(x.stat().st_size for x in p.iterdir())<=524288
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: two-audio-rilde-day-original-review
+          path: ${{ runner.temp }}/rilde-day-candidate/review/
+          retention-days: 3
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: two-audio-delivery-qualification
