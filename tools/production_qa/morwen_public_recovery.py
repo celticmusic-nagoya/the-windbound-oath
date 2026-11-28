@@ -53,6 +53,7 @@ def check_active(api,token,public_token,run_id):
     # Same-asset public jobs and all private jobs must be inactive.
     for repo,cred in ((DEST,token),(ORIGIN,public_token)):
         for status in ('queued','in_progress','waiting','requested','pending'):
+            stage(('PRIVATE' if repo==DEST else 'PUBLIC')+'_ACTIVE_'+status.upper())
             q=api(cred,'GET','https://api.github.com/repos/'+repo+'/actions/runs?per_page=100&status='+status)
             runs=q.get('workflow_runs',[])
             require(isinstance(runs,list) and q.get('total_count')==len(runs) and len(runs)<=100)
