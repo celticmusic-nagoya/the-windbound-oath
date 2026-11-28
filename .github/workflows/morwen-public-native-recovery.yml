@@ -56,7 +56,7 @@ jobs:
           bash -n tools/production_qa/morwen_public_recovery_startup.sh
           python3 tools/production_qa/test_morwen_public_recovery.py
           swiftc qualified-vroid/tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-      - name: Restore exact private native without public output
+      - name: Verify active-job exclusion and restore exact private native (stage-coded diagnostics)
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}

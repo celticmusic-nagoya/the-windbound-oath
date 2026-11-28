@@ -41,6 +41,13 @@ class Test(unittest.TestCase):
         def busy(token,method,url):
             return {'total_count':1,'workflow_runs':[{'id':2,'name':'Morwen job','head_branch':'main'}]}
         with self.assertRaises(ValueError):m.check_active(busy,'x','y','1')
+    def test_active_check_diagnostic_stages(self):
+        for failing,expected in [('private','PRIVATE_ACTIVE_QUEUED'),('public','PUBLIC_ACTIVE_QUEUED')]:
+            def api(credential,method,url):
+                if credential==failing:raise ValueError('denied')
+                return {'total_count':0,'workflow_runs':[]}
+            with self.assertRaises(ValueError):m.check_active(api,'private','public','1')
+            self.assertEqual(m.STAGE,expected)
     def test_truncated_active_list_rejected(self):
         with self.assertRaises(ValueError):m.check_active(lambda *a:{'total_count':101,'workflow_runs':[]},'x','y','1')
 if __name__=='__main__':unittest.main()
