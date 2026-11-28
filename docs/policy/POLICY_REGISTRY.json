@@ -138,5 +138,26 @@
     "authority": "live_main_plus_latest_scoped_director_instruction",
     "reuse_successful_routes": true,
     "status": "POLICY_ONLY_RUNTIME_ENFORCEMENT_NOT_VERIFIED"
+  },
+  "public_first_production": {
+    "approved": "2026-11-28",
+    "policy": "AGENTS.md#director-approved-public-first-production-private-preservation-2026-11-28",
+    "scope": "all_agents_automations_workstreams",
+    "public_production_repository": "celticmusic-nagoya/the-windbound-oath",
+    "private_preservation_repository": "celticmusic-nagoya/the-windbound-oath-handoff",
+    "default_execution": "qualified_free_public_standard_runner",
+    "private_compute_default": false,
+    "private_compute_exception": "necessary_preservation_recovery_verified_free_and_authorized",
+    "private_visibility_change_authorized": false,
+    "private_history_bulk_copy_authorized": false,
+    "public_code_review_required": true,
+    "protected_native_and_canon_publication_authorized": false,
+    "private_input_transport": "existing_authorized_exact_scope_only",
+    "public_private_output_allowed": false,
+    "existing_credentials_only": true,
+    "added_cost_authorized": false,
+    "ownership_and_quality_gates_unchanged": true,
+    "operation_specific_runtime_qualification_required": true,
+    "status": "POLICY_APPROVED_RUNTIME_MIGRATION_PER_OPERATION_NOT_VERIFIED"
   }
 }
