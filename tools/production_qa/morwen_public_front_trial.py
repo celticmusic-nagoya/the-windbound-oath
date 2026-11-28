@@ -29,8 +29,8 @@ def git_sha(raw):
 def gate(api,env):
     r.identity(env);r.private(api,env['DEST_TOKEN'])
     r.check_active(api,env['DEST_TOKEN'],env['GH_TOKEN'],env['GITHUB_RUN_ID'])
-    owner=api(env['GH_TOKEN'],'GET','https://api.github.com/repos/'+r.ORIGIN+'/pulls/427')
-    r.require(owner.get('state')=='open' and owner.get('head',{}).get('sha')==OWNER_HEAD)
+    owner=api(env['GH_TOKEN'],'GET','https://api.github.com/repos/'+r.ORIGIN+'/git/ref/heads/feature/morwen-artdirected-sculpt-20261119')
+    r.require(owner.get('ref')=='refs/heads/feature/morwen-artdirected-sculpt-20261119' and owner.get('object',{}).get('sha')==OWNER_HEAD)
     ref=api(env['DEST_TOKEN'],'GET',r.BASE+'/git/ref/heads/'+WORKER_BRANCH)
     r.require(ref.get('ref')=='refs/heads/'+WORKER_BRANCH and ref.get('object',{}).get('sha')==WORKER_HEAD)
 def unpack_release(raw):
