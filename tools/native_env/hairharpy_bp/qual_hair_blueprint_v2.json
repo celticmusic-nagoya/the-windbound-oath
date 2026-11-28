@@ -1,0 +1,490 @@
+{
+ "schema": "two-hair-blueprint/v2",
+ "blueprint_id": "QUAL-HH-VOLUME-V2",
+ "status": "QUALIFICATION_ONLY - neutral head; original test hairstyle, not a Morwen design, not a candidate",
+ "coordinate_system": "hairharpy-head-local-yup",
+ "units": "m",
+ "projection": "native-3d",
+ "head": {
+  "type": "ellipsoid",
+  "semi_axes_xyz": [
+   0.082,
+   0.118,
+   0.095
+  ],
+  "center": [
+   0,
+   0,
+   0
+  ]
+ },
+ "angles": "elev: latitude on the ellipsoid (deg, +90 top); az: azimuth from front (+z) toward +x (deg)",
+ "cross_section": {
+  "strands": 4,
+  "inner_width_ratio": 0.6,
+  "note": "lens section: outer pair at +t/2 (away from scalp), inner pair at -t/2, inner narrower"
+ },
+ "locks": [
+  {
+   "id": "B01",
+   "role": "bang",
+   "root": {
+    "elev": 60,
+    "az": -34
+   },
+   "tip": {
+    "elev": 14,
+    "az": -40
+   },
+   "hang_to_y": null,
+   "length": 0.1,
+   "width": [
+    0.026,
+    0.032,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007
+  },
+  {
+   "id": "B02",
+   "role": "bang",
+   "root": {
+    "elev": 60,
+    "az": -17
+   },
+   "tip": {
+    "elev": 10,
+    "az": -22
+   },
+   "hang_to_y": null,
+   "length": 0.112,
+   "width": [
+    0.026,
+    0.032,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007
+  },
+  {
+   "id": "B03",
+   "role": "bang",
+   "root": {
+    "elev": 60,
+    "az": 0
+   },
+   "tip": {
+    "elev": 8,
+    "az": -3
+   },
+   "hang_to_y": null,
+   "length": 0.115,
+   "width": [
+    0.026,
+    0.032,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007
+  },
+  {
+   "id": "B04",
+   "role": "bang",
+   "root": {
+    "elev": 60,
+    "az": 17
+   },
+   "tip": {
+    "elev": 12,
+    "az": 20
+   },
+   "hang_to_y": null,
+   "length": 0.104,
+   "width": [
+    0.026,
+    0.032,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007
+  },
+  {
+   "id": "B05",
+   "role": "bang",
+   "root": {
+    "elev": 60,
+    "az": 34
+   },
+   "tip": {
+    "elev": 18,
+    "az": 38
+   },
+   "hang_to_y": null,
+   "length": 0.092,
+   "width": [
+    0.026,
+    0.032,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007
+  },
+  {
+   "id": "F01",
+   "role": "face_frame",
+   "root": {
+    "elev": 44,
+    "az": -60
+   },
+   "tip": {
+    "elev": 0,
+    "az": -62.400000000000006
+   },
+   "hang_to_y": -0.12,
+   "length": 0.23,
+   "width": [
+    0.024,
+    0.03,
+    0.004
+   ],
+   "thickness": [
+    0.007,
+    0.011,
+    0.002
+   ],
+   "clear": 0.006,
+   "bend": 0.01
+  },
+  {
+   "id": "F02",
+   "role": "face_frame",
+   "root": {
+    "elev": 44,
+    "az": 60
+   },
+   "tip": {
+    "elev": 0,
+    "az": 62.400000000000006
+   },
+   "hang_to_y": -0.08,
+   "length": 0.19,
+   "width": [
+    0.024,
+    0.03,
+    0.004
+   ],
+   "thickness": [
+    0.007,
+    0.011,
+    0.002
+   ],
+   "clear": 0.006,
+   "bend": 0.01
+  },
+  {
+   "id": "S01",
+   "role": "side",
+   "root": {
+    "elev": 36,
+    "az": -84
+   },
+   "tip": {
+    "elev": 0,
+    "az": -87.36
+   },
+   "hang_to_y": -0.17,
+   "length": 0.29,
+   "width": [
+    0.034,
+    0.042,
+    0.005
+   ],
+   "thickness": [
+    0.009,
+    0.014,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "S02",
+   "role": "side",
+   "root": {
+    "elev": 36,
+    "az": 84
+   },
+   "tip": {
+    "elev": 0,
+    "az": 87.36
+   },
+   "hang_to_y": -0.15,
+   "length": 0.27,
+   "width": [
+    0.034,
+    0.042,
+    0.005
+   ],
+   "thickness": [
+    0.009,
+    0.014,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "S03",
+   "role": "side",
+   "root": {
+    "elev": 36,
+    "az": -106
+   },
+   "tip": {
+    "elev": 0,
+    "az": -110.24000000000001
+   },
+   "hang_to_y": -0.18,
+   "length": 0.3,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "S04",
+   "role": "side",
+   "root": {
+    "elev": 36,
+    "az": 106
+   },
+   "tip": {
+    "elev": 0,
+    "az": 110.24000000000001
+   },
+   "hang_to_y": -0.16,
+   "length": 0.28,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K01",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": -128
+   },
+   "tip": {
+    "elev": 0,
+    "az": -133.12
+   },
+   "hang_to_y": -0.2,
+   "length": 0.33,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K02",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": -150
+   },
+   "tip": {
+    "elev": 0,
+    "az": -156.0
+   },
+   "hang_to_y": -0.21,
+   "length": 0.34,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K03",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": -172
+   },
+   "tip": {
+    "elev": 0,
+    "az": -172
+   },
+   "hang_to_y": -0.21,
+   "length": 0.34,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K04",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": 172
+   },
+   "tip": {
+    "elev": 0,
+    "az": 172
+   },
+   "hang_to_y": -0.2,
+   "length": 0.33,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K05",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": 150
+   },
+   "tip": {
+    "elev": 0,
+    "az": 156.0
+   },
+   "hang_to_y": -0.19,
+   "length": 0.32,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  },
+  {
+   "id": "K06",
+   "role": "back",
+   "root": {
+    "elev": 36,
+    "az": 128
+   },
+   "tip": {
+    "elev": 0,
+    "az": 133.12
+   },
+   "hang_to_y": -0.18,
+   "length": 0.31,
+   "width": [
+    0.04,
+    0.048,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014
+  }
+ ],
+ "profile_note": "width/thickness = [root, mid, tip] design values (m); mid = 50 % of the lock's surface length",
+ "targets": {
+  "length": {
+   "tolerance": 0.006
+  },
+  "width_mid": {
+   "tolerance": 0.004
+  },
+  "thickness_mid": {
+   "tolerance": 0.003
+  },
+  "min_head_clearance": {
+   "value": 0.002,
+   "tolerance": 0.0019,
+   "note": "must stay outside the head"
+  }
+ },
+ "not_inferred": "numeric qualification design only; no 2D reference is interpreted",
+ "orientation": "front = +z (face), character's left = +x, az > 0 toward the character's left"
+}

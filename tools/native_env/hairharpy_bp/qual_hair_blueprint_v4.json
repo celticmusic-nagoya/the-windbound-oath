@@ -1,0 +1,1291 @@
+{
+ "schema": "two-hair-blueprint/v4",
+ "blueprint_id": "QUAL-HH-VOLUME-V4",
+ "status": "QUALIFICATION_ONLY - neutral head; original test hairstyle, not a Morwen design, not a candidate",
+ "coordinate_system": "hairharpy-head-local-yup",
+ "units": "m",
+ "projection": "native-3d",
+ "head": {
+  "type": "ellipsoid",
+  "semi_axes_xyz": [
+   0.082,
+   0.118,
+   0.095
+  ],
+  "center": [
+   0,
+   0,
+   0
+  ]
+ },
+ "angles": "elev: latitude on the ellipsoid (deg, +90 top); az: azimuth from front (+z) toward +x (deg)",
+ "cross_section": {
+  "strands": 4,
+  "inner_width_ratio": 0.6,
+  "note": "lens section: outer pair at +t/2 (away from scalp), inner pair at -t/2, inner narrower"
+ },
+ "locks": [
+  {
+   "id": "B01",
+   "role": "bang",
+   "root": {
+    "elev": 58.0,
+    "az": -34
+   },
+   "tip": {
+    "elev": 14,
+    "az": -40
+   },
+   "hang_to_y": null,
+   "length": 0.1,
+   "width": [
+    0.0291,
+    0.0358,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.090895,
+    "kappa_25": 12.151963,
+    "kappa_50": 14.116162,
+    "kappa_75": 12.528477,
+    "width_root": 0.03117,
+    "width_mid": 0.0358,
+    "width_tip": 0.018437,
+    "thickness_root": 0.006618,
+    "thickness_mid": 0.008,
+    "thickness_tip": 0.004724,
+    "taper_085": 0.514997,
+    "section_aspect_mid": 0.223464
+   }
+  },
+  {
+   "id": "B02",
+   "role": "bang",
+   "root": {
+    "elev": 58.0,
+    "az": -17
+   },
+   "tip": {
+    "elev": 10,
+    "az": -22
+   },
+   "hang_to_y": null,
+   "length": 0.112,
+   "width": [
+    0.0291,
+    0.0358,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007,
+   "layer": 0.002,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.101964,
+    "kappa_25": 10.903232,
+    "kappa_50": 12.670544,
+    "kappa_75": 11.234831,
+    "width_root": 0.03117,
+    "width_mid": 0.0358,
+    "width_tip": 0.018437,
+    "thickness_root": 0.006618,
+    "thickness_mid": 0.008,
+    "thickness_tip": 0.004724,
+    "taper_085": 0.514997,
+    "section_aspect_mid": 0.223464
+   }
+  },
+  {
+   "id": "B03",
+   "role": "bang",
+   "root": {
+    "elev": 58.0,
+    "az": 0
+   },
+   "tip": {
+    "elev": 8,
+    "az": -3
+   },
+   "hang_to_y": null,
+   "length": 0.115,
+   "width": [
+    0.0291,
+    0.0358,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.105231,
+    "kappa_25": 10.709901,
+    "kappa_50": 12.44611,
+    "kappa_75": 10.983919,
+    "width_root": 0.03117,
+    "width_mid": 0.0358,
+    "width_tip": 0.018437,
+    "thickness_root": 0.006618,
+    "thickness_mid": 0.008,
+    "thickness_tip": 0.004724,
+    "taper_085": 0.514997,
+    "section_aspect_mid": 0.223464
+   }
+  },
+  {
+   "id": "B04",
+   "role": "bang",
+   "root": {
+    "elev": 58.0,
+    "az": 17
+   },
+   "tip": {
+    "elev": 12,
+    "az": 20
+   },
+   "hang_to_y": null,
+   "length": 0.104,
+   "width": [
+    0.0291,
+    0.0358,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007,
+   "layer": 0.002,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.097589,
+    "kappa_25": 11.231723,
+    "kappa_50": 13.127376,
+    "kappa_75": 11.712943,
+    "width_root": 0.03117,
+    "width_mid": 0.0358,
+    "width_tip": 0.018437,
+    "thickness_root": 0.006618,
+    "thickness_mid": 0.008,
+    "thickness_tip": 0.004724,
+    "taper_085": 0.514997,
+    "section_aspect_mid": 0.223464
+   }
+  },
+  {
+   "id": "B05",
+   "role": "bang",
+   "root": {
+    "elev": 58.0,
+    "az": 34
+   },
+   "tip": {
+    "elev": 18,
+    "az": 38
+   },
+   "hang_to_y": null,
+   "length": 0.092,
+   "width": [
+    0.0291,
+    0.0358,
+    0.004
+   ],
+   "thickness": [
+    0.006,
+    0.008,
+    0.002
+   ],
+   "clear": 0.004,
+   "bend": 0.007,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.082384,
+    "kappa_25": 13.142625,
+    "kappa_50": 15.524219,
+    "kappa_75": 13.928013,
+    "width_root": 0.03117,
+    "width_mid": 0.0358,
+    "width_tip": 0.018437,
+    "thickness_root": 0.006618,
+    "thickness_mid": 0.008,
+    "thickness_tip": 0.004724,
+    "taper_085": 0.514997,
+    "section_aspect_mid": 0.223464
+   }
+  },
+  {
+   "id": "F01",
+   "role": "face_frame",
+   "root": {
+    "elev": 57.0,
+    "az": -60
+   },
+   "tip": {
+    "elev": 0,
+    "az": -62.400000000000006
+   },
+   "hang_to_y": -0.12,
+   "length": 0.23,
+   "width": [
+    0.0269,
+    0.0336,
+    0.004
+   ],
+   "thickness": [
+    0.007,
+    0.011,
+    0.002
+   ],
+   "clear": 0.006,
+   "bend": 0.01,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.249011,
+    "kappa_25": 6.340652,
+    "kappa_50": 8.183663,
+    "kappa_75": 7.308578,
+    "width_root": 0.02897,
+    "width_mid": 0.0336,
+    "width_tip": 0.017438,
+    "thickness_root": 0.008236,
+    "thickness_mid": 0.011,
+    "thickness_tip": 0.006086,
+    "taper_085": 0.518992,
+    "section_aspect_mid": 0.327381
+   }
+  },
+  {
+   "id": "F02",
+   "role": "face_frame",
+   "root": {
+    "elev": 57.0,
+    "az": 60
+   },
+   "tip": {
+    "elev": 0,
+    "az": 62.400000000000006
+   },
+   "hang_to_y": -0.08,
+   "length": 0.19,
+   "width": [
+    0.0269,
+    0.0336,
+    0.004
+   ],
+   "thickness": [
+    0.007,
+    0.011,
+    0.002
+   ],
+   "clear": 0.006,
+   "bend": 0.01,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.201638,
+    "kappa_25": 7.253514,
+    "kappa_50": 6.572441,
+    "kappa_75": 15.401221,
+    "width_root": 0.02897,
+    "width_mid": 0.0336,
+    "width_tip": 0.017438,
+    "thickness_root": 0.008236,
+    "thickness_mid": 0.011,
+    "thickness_tip": 0.006086,
+    "taper_085": 0.518992,
+    "section_aspect_mid": 0.327381
+   }
+  },
+  {
+   "id": "S01",
+   "role": "side",
+   "root": {
+    "elev": 57.0,
+    "az": -84
+   },
+   "tip": {
+    "elev": 0,
+    "az": -87.36
+   },
+   "hang_to_y": -0.17,
+   "length": 0.29,
+   "width": [
+    0.0381,
+    0.047,
+    0.005
+   ],
+   "thickness": [
+    0.009,
+    0.014,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.293579,
+    "kappa_25": 6.081179,
+    "kappa_50": 2.906573,
+    "kappa_75": 4.936509,
+    "width_root": 0.04085,
+    "width_mid": 0.047,
+    "width_tip": 0.024068,
+    "thickness_root": 0.010545,
+    "thickness_mid": 0.014,
+    "thickness_tip": 0.007994,
+    "taper_085": 0.512077,
+    "section_aspect_mid": 0.297872
+   }
+  },
+  {
+   "id": "S02",
+   "role": "side",
+   "root": {
+    "elev": 57.0,
+    "az": 84
+   },
+   "tip": {
+    "elev": 0,
+    "az": 87.36
+   },
+   "hang_to_y": -0.15,
+   "length": 0.27,
+   "width": [
+    0.0381,
+    0.047,
+    0.005
+   ],
+   "thickness": [
+    0.009,
+    0.014,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.282224,
+    "kappa_25": 5.864697,
+    "kappa_50": 2.953572,
+    "kappa_75": 6.379484,
+    "width_root": 0.04085,
+    "width_mid": 0.047,
+    "width_tip": 0.024068,
+    "thickness_root": 0.010545,
+    "thickness_mid": 0.014,
+    "thickness_tip": 0.007994,
+    "taper_085": 0.512077,
+    "section_aspect_mid": 0.297872
+   }
+  },
+  {
+   "id": "S03",
+   "role": "side",
+   "root": {
+    "elev": 57.0,
+    "az": -106
+   },
+   "tip": {
+    "elev": 0,
+    "az": -110.24000000000001
+   },
+   "hang_to_y": -0.18,
+   "length": 0.3,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.313025,
+    "kappa_25": 5.703843,
+    "kappa_50": 2.88677,
+    "kappa_75": 4.463056,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "S04",
+   "role": "side",
+   "root": {
+    "elev": 57.0,
+    "az": 106
+   },
+   "tip": {
+    "elev": 0,
+    "az": 110.24000000000001
+   },
+   "hang_to_y": -0.16,
+   "length": 0.28,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.285172,
+    "kappa_25": 6.215681,
+    "kappa_50": 3.03389,
+    "kappa_75": 5.67101,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K01",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": -128
+   },
+   "tip": {
+    "elev": 0,
+    "az": -133.12
+   },
+   "hang_to_y": -0.2,
+   "length": 0.33,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.325878,
+    "kappa_25": 6.173145,
+    "kappa_50": 2.622388,
+    "kappa_75": 3.605847,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K02",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": -150
+   },
+   "tip": {
+    "elev": 0,
+    "az": -156.0
+   },
+   "hang_to_y": -0.21,
+   "length": 0.34,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.346061,
+    "kappa_25": 6.02128,
+    "kappa_50": 2.475365,
+    "kappa_75": 3.268268,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K03",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": -172
+   },
+   "tip": {
+    "elev": 0,
+    "az": -172
+   },
+   "hang_to_y": -0.21,
+   "length": 0.34,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.337515,
+    "kappa_25": 6.536686,
+    "kappa_50": 2.474846,
+    "kappa_75": 3.268326,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K04",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": 172
+   },
+   "tip": {
+    "elev": 0,
+    "az": 172
+   },
+   "hang_to_y": -0.2,
+   "length": 0.33,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.336561,
+    "kappa_25": 6.173648,
+    "kappa_50": 2.595138,
+    "kappa_75": 3.60888,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K05",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": 150
+   },
+   "tip": {
+    "elev": 0,
+    "az": 156.0
+   },
+   "hang_to_y": -0.19,
+   "length": 0.32,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "inner",
+   "layer": 0.0,
+   "registry": {
+    "arc_length_spine": 0.317616,
+    "kappa_25": 6.500979,
+    "kappa_50": 2.710044,
+    "kappa_75": 4.005408,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "K06",
+   "role": "back",
+   "root": {
+    "elev": 57.0,
+    "az": 128
+   },
+   "tip": {
+    "elev": 0,
+    "az": 133.12
+   },
+   "hang_to_y": -0.18,
+   "length": 0.31,
+   "width": [
+    0.0448,
+    0.0538,
+    0.006
+   ],
+   "thickness": [
+    0.01,
+    0.016,
+    0.003
+   ],
+   "clear": 0.008,
+   "bend": 0.014,
+   "shell": "outer",
+   "layer": 0.01,
+   "registry": {
+    "arc_length_spine": 0.314705,
+    "kappa_25": 5.904342,
+    "kappa_50": 2.84845,
+    "kappa_75": 4.467084,
+    "width_root": 0.047581,
+    "width_mid": 0.0538,
+    "width_tip": 0.027701,
+    "thickness_root": 0.011854,
+    "thickness_mid": 0.016,
+    "thickness_tip": 0.008902,
+    "taper_085": 0.514884,
+    "section_aspect_mid": 0.297398
+   }
+  },
+  {
+   "id": "W01",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 0
+   },
+   "tip": {
+    "elev": 50,
+    "az": 0
+   },
+   "hang_to_y": null,
+   "length": 0.049,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.04904,
+    "kappa_25": 18.379588,
+    "kappa_50": 22.028239,
+    "kappa_75": 20.413541,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W02",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 30
+   },
+   "tip": {
+    "elev": 50,
+    "az": 30
+   },
+   "hang_to_y": null,
+   "length": 0.0496,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.049571,
+    "kappa_25": 18.255961,
+    "kappa_50": 21.795997,
+    "kappa_75": 20.239636,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W03",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 60
+   },
+   "tip": {
+    "elev": 50,
+    "az": 60
+   },
+   "hang_to_y": null,
+   "length": 0.046,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.046008,
+    "kappa_25": 20.776172,
+    "kappa_50": 24.790532,
+    "kappa_75": 22.664618,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W04",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 90
+   },
+   "tip": {
+    "elev": 50,
+    "az": 90
+   },
+   "hang_to_y": null,
+   "length": 0.0465,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.046542,
+    "kappa_25": 20.547127,
+    "kappa_50": 24.536402,
+    "kappa_75": 22.540802,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W05",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 120
+   },
+   "tip": {
+    "elev": 50,
+    "az": 120
+   },
+   "hang_to_y": null,
+   "length": 0.046,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.046008,
+    "kappa_25": 20.776172,
+    "kappa_50": 24.790532,
+    "kappa_75": 22.664618,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W06",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": 150
+   },
+   "tip": {
+    "elev": 50,
+    "az": 150
+   },
+   "hang_to_y": null,
+   "length": 0.0496,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.049571,
+    "kappa_25": 18.255961,
+    "kappa_50": 21.795997,
+    "kappa_75": 20.239636,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W07",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -180
+   },
+   "tip": {
+    "elev": 50,
+    "az": -180
+   },
+   "hang_to_y": null,
+   "length": 0.049,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.04904,
+    "kappa_25": 18.379588,
+    "kappa_50": 22.028239,
+    "kappa_75": 20.413541,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W08",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -150
+   },
+   "tip": {
+    "elev": 50,
+    "az": -150
+   },
+   "hang_to_y": null,
+   "length": 0.0496,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.049571,
+    "kappa_25": 18.255961,
+    "kappa_50": 21.795997,
+    "kappa_75": 20.239636,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W09",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -120
+   },
+   "tip": {
+    "elev": 50,
+    "az": -120
+   },
+   "hang_to_y": null,
+   "length": 0.046,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.046008,
+    "kappa_25": 20.776172,
+    "kappa_50": 24.790532,
+    "kappa_75": 22.664618,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W10",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -90
+   },
+   "tip": {
+    "elev": 50,
+    "az": -90
+   },
+   "hang_to_y": null,
+   "length": 0.0465,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.046542,
+    "kappa_25": 20.547127,
+    "kappa_50": 24.536402,
+    "kappa_75": 22.540802,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W11",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -60
+   },
+   "tip": {
+    "elev": 50,
+    "az": -60
+   },
+   "hang_to_y": null,
+   "length": 0.046,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.0,
+   "shell": "inner",
+   "registry": {
+    "arc_length_spine": 0.046008,
+    "kappa_25": 20.776172,
+    "kappa_50": 24.790532,
+    "kappa_75": 22.664618,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  },
+  {
+   "id": "W12",
+   "role": "top",
+   "root": {
+    "elev": 76,
+    "az": -30
+   },
+   "tip": {
+    "elev": 50,
+    "az": -30
+   },
+   "hang_to_y": null,
+   "length": 0.0496,
+   "width": [
+    0.016,
+    0.032,
+    0.014
+   ],
+   "thickness": [
+    0.004,
+    0.006,
+    0.002
+   ],
+   "clear": 0.0025,
+   "bend": 0.003,
+   "layer": 0.003,
+   "shell": "outer",
+   "registry": {
+    "arc_length_spine": 0.049571,
+    "kappa_25": 18.255961,
+    "kappa_50": 21.795997,
+    "kappa_75": 20.239636,
+    "width_root": 0.020944,
+    "width_mid": 0.032,
+    "width_tip": 0.022172,
+    "thickness_root": 0.004618,
+    "thickness_mid": 0.006,
+    "thickness_tip": 0.003816,
+    "taper_085": 0.69287,
+    "section_aspect_mid": 0.1875
+   }
+  }
+ ],
+ "profile_note": "width/thickness = [root, mid, tip] design values (m); mid = 50 % of the lock's surface length",
+ "targets": {
+  "length": {
+   "tolerance": 0.006
+  },
+  "width_root": {
+   "tolerance": 0.004
+  },
+  "width_mid": {
+   "tolerance": 0.004
+  },
+  "thickness_root": {
+   "tolerance": 0.003
+  },
+  "thickness_mid": {
+   "tolerance": 0.003
+  },
+  "taper_085": {
+   "tolerance": 0.12
+  },
+  "kappa_50": {
+   "tolerance_rel": 0.3,
+   "tolerance_abs": 2.0
+  },
+  "min_head_clearance": {
+   "value": 0.0025,
+   "tolerance": 0.0014,
+   "note": "whorl clear 2.5 mm sits above the 1.5 mm-lifted crown fill"
+  },
+  "max_penetration_depth": {
+   "value": 0.0,
+   "tolerance": 0.001,
+   "note": "vertex of one lock inside another closed lock deeper than 1 mm = penetration"
+  }
+ },
+ "not_inferred": "numeric qualification design; registry values computed from the design spine and profiles",
+ "orientation": "front = +z (face), character's left = +x, az > 0 toward the character's left",
+ "layers": {
+  "top": "12-lock whorl from elev 76 to 50 (covers crown and frontal scalp), inner/outer 0 / 3 mm",
+  "hanging": "inner/outer shells alternating in azimuth ring order, 0 / 10 mm",
+  "bang": "alternating 0 / 2 mm",
+  "crown_edge_elev_deg": 58.8
+ },
+ "derived_from": "qual_hair_blueprint_v3.json"
+}

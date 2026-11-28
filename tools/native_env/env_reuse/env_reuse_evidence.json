@@ -1,0 +1,242 @@
+{
+ "schema": "two.env_reuse_qualification/1",
+ "owner": "Claude #474",
+ "consumer": "#493 (Codex, implementation owner)",
+ "date": "2026-11-24",
+ "main_sha": "4143ef02f6d2a9f4f7bbac87f58a87f9fc497e8c",
+ "label_rules": "CI_* values are read back from existing hosted-runner jobs; LOCAL_* values are this sandbox (2 vCPU, not a hosted runner) and are not runner measurements",
+ "compatibility_with_main": {
+  "session_plan.py/bounded_operation.py": "byte-identical to #474 pin 5c067e51 (SHA-256 113212d8.../851c2854...)",
+  "468_api_signatures": "acquire, publish_checkpoint, digest_record, execute_factory_stage, fingerprint, run, run_operation unchanged",
+  "vroid_bridge_contract_test": "PASS with main session_plan + #427 pin 340c693b (synthetic file)",
+  "g1_eval_tests": "5/5 PASS (originals from #419 in-repo mirror, SHA-verified, not committed; evaluator code moved to private storage 2026-11-24)",
+  "hairharpy_v4_session_vs_main_468": {
+   "level": "LOCAL_ISOLATED",
+   "engine": " main 4143ef02 tools/production_qa",
+   "status": "COMPLETE",
+   "sec": 668,
+   "metrics": 205,
+   "states": "205 PASS",
+   "max_abs_actual_diff_vs_ci_run_45097145790": 0.0,
+   "target_sha256_equal": true,
+   "differing_fields": [
+    "dependency_fingerprint (engine code SHAs)",
+    "source_sha256 (fresh base hairmesh bytes)",
+    "protection.baseline_sha256 (fresh head file)"
+   ],
+   "blueprint_engine_485_evaluate": "205 PASS on both CI and local observations",
+   "ci_artifact": "14783679154 (digest c0d7b0c6...)"
+  },
+  "native_session_adapter": "compatible by pin identity; not rerun (evidence reuse)"
+ },
+ "blender": {
+  "official": {
+   "5.3.0": {
+    "archive": "blender-5.3.0-linux-x64.tar.xz",
+    "sha256": "dacb8264197a3f7fda6001285a5a506fc97ee943881261c2c3bd63c882f22e05",
+    "bytes": 406944100,
+    "build": "02f0899d78e3"
+   },
+   "5.2.4": {
+    "archive": "blender-5.2.4-linux-x64.tar.xz",
+    "sha256": "2fd14c50987426897ba60237ee996edf2b4151f4b1a72a460ca20be58c1d2d86",
+    "bytes": 385047680,
+    "build": "cd5dc428cce1"
+   }
+  },
+  "pristine_tree": {
+   "5.3.0": {
+    "bytes": 1292442515,
+    "sha256": "1dabcbf276c23265666269d2bd5fce7929b1aa738a4c5970bfeb3d990a273e26",
+    "entries": 6671,
+    "files": 5693,
+    "symlinks": 85,
+    "unsafe": []
+   },
+   "5.2.4": {
+    "bytes": 1237845968,
+    "sha256": "afe69c69eef7b8610ba331262ebdde33ca9389e4673e5a015debb5713b302d17",
+    "entries": 6547,
+    "files": 5596,
+    "symlinks": 79,
+    "unsafe": []
+   }
+  },
+  "manifest_deterministic_across_extractions": true,
+  "startup_mutates_tree": {
+   "5.3.0": [
+    {
+     "mode": "default",
+     "startup_ok": true,
+     "version": "5.3.0 b'02f0899d78e3'",
+     "startup_sec": 1.61,
+     "manifest_after": "47db9e9d029380ca300a7fc39eada936aace543af6d1a1636c025d21afbeaa24",
+     "tree_unchanged": false,
+     "entries_added": 311
+    },
+    {
+     "mode": "system_env_no_bytecode",
+     "startup_ok": true,
+     "version": "5.3.0 b'02f0899d78e3'",
+     "startup_sec": 1.64,
+     "manifest_after": "1dabcbf276c23265666269d2bd5fce7929b1aa738a4c5970bfeb3d990a273e26",
+     "tree_unchanged": true,
+     "entries_added": 0
+    },
+    {
+     "mode": "nonroot_readonly",
+     "startup_ok": true,
+     "version": "5.3.0 b'02f0899d78e3'",
+     "startup_sec": 1.65,
+     "manifest_after": "1dabcbf276c23265666269d2bd5fce7929b1aa738a4c5970bfeb3d990a273e26",
+     "tree_unchanged": true,
+     "entries_added": 0
+    }
+   ],
+   "5.2.4": [
+    {
+     "mode": "default",
+     "startup_ok": true,
+     "version": "5.2.4 LTS b'cd5dc428cce1'",
+     "startup_sec": 2.14,
+     "manifest_after": "829f4633fc47639a091f41aad7cef2ecaa52931959adc7e29b2bfa920df8634f",
+     "tree_unchanged": false,
+     "entries_added": 479
+    },
+    {
+     "mode": "system_env_no_bytecode",
+     "startup_ok": true,
+     "version": "5.2.4 LTS b'cd5dc428cce1'",
+     "startup_sec": 2.0,
+     "manifest_after": "afe69c69eef7b8610ba331262ebdde33ca9389e4673e5a015debb5713b302d17",
+     "tree_unchanged": true,
+     "entries_added": 0
+    },
+    {
+     "mode": "nonroot_readonly",
+     "startup_ok": true,
+     "version": "5.2.4 LTS b'cd5dc428cce1'",
+     "startup_sec": 1.95,
+     "manifest_after": "afe69c69eef7b8610ba331262ebdde33ca9389e4673e5a015debb5713b302d17",
+     "tree_unchanged": true,
+     "entries_added": 0
+    }
+   ]
+  },
+  "CI_install_step_seconds": {
+   "blender_530_install_script": {
+    "n": 13,
+    "median_s": 24.0,
+    "min_s": 20.0,
+    "max_s": 65.0,
+    "runs": [
+     44662437584,
+     44662790223,
+     44663100460,
+     44663207442,
+     44663541400,
+     44663680407,
+     44664484827,
+     44669026520,
+     44669813476,
+     44671175180,
+     44675605115,
+     44678376702,
+     44731371329
+    ]
+   },
+   "blender_530_install_script(home-p0)": {
+    "n": 3,
+    "median_s": 26.0,
+    "min_s": 19.0,
+    "max_s": 40.0,
+    "runs": [
+     45041738217,
+     45042057012,
+     45042246246
+    ]
+   },
+   "blender_524_fetch_verify": {
+    "n": 12,
+    "median_s": 27.5,
+    "min_s": 22.0,
+    "max_s": 73.0,
+    "runs": [
+     44290315985,
+     44290793692,
+     44291005915,
+     44291314924,
+     44291526093,
+     44295731451,
+     44295750550,
+     44297005978,
+     44297544198,
+     44297620853,
+     44298179696,
+     44302992255
+    ]
+   },
+   "bpy_530_pip_wheel": {
+    "n": 11,
+    "median_s": 21.0,
+    "min_s": 18.0,
+    "max_s": 34.0,
+    "runs": [
+     45141066807,
+     45142555554,
+     45143347872,
+     45148559135,
+     45153835902,
+     45168903879,
+     45169260553,
+     45307907609,
+     45308239619,
+     45314400300,
+     45322490454
+    ]
+   }
+  },
+  "LOCAL_timings": {
+   "download_530_s": 4.5,
+   "xz_extract_530_s": 21.3,
+   "download_524_s": 129.6,
+   "xz_extract_524_s": 20.6,
+   "zstd3_image_530_bytes": 502435743,
+   "zstd3_pack_s": 3.3,
+   "zstd3_unpack_s": 3.0,
+   "manifest_hash_s": 1.2,
+   "startup_s": 1.6
+  },
+  "license": "GPL-2.0-or-later (Blender); cache of unmodified official build is permissible; keep official source URL + SHA in the manifest"
+ },
+ "hairharpy": {
+  "release": "v2.0.0",
+  "asset": "HairHarpy-2.0.0-linux-x86_64.tar.gz",
+  "asset_sha256": "f8e6f398a2faa2e252e01d6e201c2aa8737fff456bfedabebe13be63e7ca2b3c",
+  "asset_bytes": 47854908,
+  "license_sha256": "eda711fbdc35afb806b4288be71779068097a8fa2c14940a7b4eeba4efe96b80",
+  "license_url": "https://github.com/Rackta/HairHarpy/blob/9d5eb9ddf6a325ffb89b02ee0c49877e2fca253a/LICENSE.md",
+  "cache_eligibility": "INELIGIBLE (section 2.1: no distribution except by linking; public-repo Actions caches are restorable by fork pull requests)",
+  "reuse_route": "per-run download from the author release + SHA-256 (SUMS + API digest) = link-only use; never store binary/extracted app in cache, artifact, release or repo",
+  "CI_prep_seconds": {
+   "value": 32.2,
+   "source": "run 45039748645 job hairharpy log timestamps 15:43:08.67-15:43:40.90 (apt update/install + download + SHA + tag clone)"
+  },
+  "output_determinism": "native output bytes differ across environments while all 205 measurements are identical: accept reuse by measured values/manifest, not output hash"
+ },
+ "vroid": {
+  "status": "BLOCKED (owner #427/#450, Windows/macOS GUI; not testable on Linux runners here)",
+  "terms": "VRoid Studio Guidelines (Terms of Use art.5): distributing VRoid Studio to third parties without pixiv's express permission and reverse engineering/decompiling are prohibited",
+  "cache_eligibility": "INELIGIBLE for installer or installed folder in a public-repo Actions cache without pixiv permission",
+  "observed_risk": "feature/morwen-artdirected-sculpt-20261119 morwen-vroid-macos-probe.yml caches vroid.dmg with actions/cache (key vroid-macos-arm64-2.16.0-d3d8900b6397e9ed7); owner/director review needed; not modified here"
+ },
+ "github_actions_cache_facts": [
+  "restore scope: current branch or default branch; PR runs also base branch, including forks",
+  "entries not accessed for 7 days are evicted",
+  "10 GB per repository by default; usage beyond 10 GB is billed",
+  "entries are immutable; new content needs a new key"
+ ],
+ "not_verifiable_here": [
+  "repository cache usage/list API (proxy 403 from this session); #493 job should read it with actions: read"
+ ]
+}

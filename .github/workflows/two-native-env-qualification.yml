@@ -1,0 +1,310 @@
+name: TWO native environment qualification (calibration fixture, no asset writes)
+on:
+  push:
+    branches:
+      - infra/native-env-qualification-20261123
+    paths:
+      - tools/native_env/**
+      - .github/workflows/two-native-env-qualification.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-native-env-qualification
+  cancel-in-progress: false
+env:
+  ENGINE_468_COMMIT: 5c067e518d4d764dc1499920fe4a2513340c96b9
+jobs:
+  mode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      mode: ${{ steps.m.outputs.mode }}
+      hairharpy: ${{ steps.m.outputs.hairharpy }}
+      session: ${{ steps.m.outputs.session }}
+      hhgui: ${{ steps.m.outputs.hhgui }}
+      realasset: ${{ steps.m.outputs.realasset }}
+      hhbp: ${{ steps.m.outputs.hhbp }}
+      hhv: ${{ steps.m.outputs.hhv }}
+      hhv3: ${{ steps.m.outputs.hhv3 }}
+      hhv4: ${{ steps.m.outputs.hhv4 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: m
+        run: |
+          if [ -f tools/native_env/restore_request.json ]; then echo mode=run2 >> "$GITHUB_OUTPUT"; else echo mode=run1 >> "$GITHUB_OUTPUT"; fi
+          # reuse verified HairHarpy evidence instead of re-running it (record in hairharpy_evidence.json)
+          if [ -f tools/native_env/hairharpy_evidence.json ]; then echo hairharpy=reuse >> "$GITHUB_OUTPUT"; else echo hairharpy=run >> "$GITHUB_OUTPUT"; fi
+          # approved evidence is reused; successful tests are not repeated
+          if [ -f tools/native_env/native_session_evidence.json ]; then echo session=reuse >> "$GITHUB_OUTPUT"; else echo session=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f tools/native_env/hairharpy_gui_evidence.json ]; then echo hhgui=reuse >> "$GITHUB_OUTPUT"; else echo hhgui=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f tools/native_env/real_asset_request.json ] && [ ! -f tools/native_env/real_asset_evidence.json ]; then echo realasset=run >> "$GITHUB_OUTPUT"; else echo realasset=skip >> "$GITHUB_OUTPUT"; fi
+          B=tools/native_env/hairharpy_bp
+          if [ -f $B/hhv_evidence.json ]; then echo hhv=skip >> "$GITHUB_OUTPUT"; else echo hhv=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f $B/hhv3_evidence.json ]; then echo hhv3=skip >> "$GITHUB_OUTPUT"; else echo hhv3=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f $B/hhv4_evidence.json ]; then echo hhv4=skip >> "$GITHUB_OUTPUT"; else echo hhv4=run >> "$GITHUB_OUTPUT"; fi
+          if [ -f $B/hh_bp_evidence.json ]; then echo hhbp=skip >> "$GITHUB_OUTPUT"; elif [ -f $B/hh_bp_restore_request.json ]; then echo hhbp=run2 >> "$GITHUB_OUTPUT"; else echo hhbp=run1 >> "$GITHUB_OUTPUT"; fi
+      - name: Preflight exact bytes
+        run: |
+          python3 -m py_compile tools/native_env/*.py
+          bash -n tools/native_env/hairharpy_runtime.sh
+          bash -n tools/native_env/hairharpy_gui_roundtrip.sh
+          bash -n tools/native_env/hairharpy_bp/hh_bp_ci.sh
+          python3 -m py_compile tools/native_env/hairharpy_bp/*.py
+          python3 -c "import yaml,sys; yaml.safe_load(open('.github/workflows/two-native-env-qualification.yml'))"
+      - name: Pinned #468 planner (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 5c067e518d4d764dc1499920fe4a2513340c96b9
+          path: engine468
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: Pinned #427 VRoid checkpoint publisher (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 340c693b70d8ed7cf26cd2df1ad04fa1ad25a4d0
+          path: owner427
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: VRoid checkpoint -> planner contract test (synthetic file, no VRoid run)
+        run: python3 tools/native_env/test_vroid_checkpoint_bridge.py engine468/tools/production_qa owner427/tools/production_qa
+  blender-session:
+    needs: mode
+    if: needs.mode.outputs.session == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 planner engine (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.ENGINE_468_COMMIT }}
+          path: engine468
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: Install Blender 5.3.0 and 5.2.4 with official SHA-256 (main installers)
+        run: |
+          set -euo pipefail
+          # headless Workbench/EEVEE need EGL + Mesa (run 45039748645: libEGL.so.1 missing at s5)
+          sudo apt-get update -q >/dev/null
+          sudo apt-get install -y -q libegl1 libgl1-mesa-dri libglx-mesa0 libgles2 mesa-vulkan-drivers >/dev/null
+          mkdir -p /tmp/two-work
+          bash tools/production_qa/install_blender_530.sh /tmp/b530 | tee /tmp/two-work/install_530.txt
+          if [ "${{ needs.mode.outputs.mode }}" = run1 ]; then bash tools/production_qa/install_blender_524.sh /tmp/b524 | tee /tmp/two-work/install_524.txt; fi
+      - name: Restore prior run artifact (run2)
+        if: needs.mode.outputs.mode == 'run2'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/native_env/fetch_restore.py tools/native_env/restore_request.json /tmp/restore/src
+      - name: Long-session adapter
+        run: |
+          set -euo pipefail
+          extra=""
+          if [ "${{ needs.mode.outputs.mode }}" = run1 ]; then extra="--blender524 /tmp/b524/blender"; else extra="--restore /tmp/restore/src"; fi
+          python3 tools/native_env/native_session_adapter.py --blender /tmp/b530/blender $extra \
+            --engine engine468/tools/production_qa --work /tmp/two-work \
+            --blueprint tools/morwen_authored_sculpt/precision_blueprint_v2.json --mode ${{ needs.mode.outputs.mode }} --budget 8400 --reserve 600
+          cp /tmp/restore/restore_provenance.json /tmp/two-work/ 2>/dev/null || true
+      - name: Upload native checkpoints, renders and QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-native-session-${{ needs.mode.outputs.mode }}
+          path: /tmp/two-work/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy:
+    needs: mode
+    if: needs.mode.outputs.mode == 'run1' && needs.mode.outputs.hairharpy == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: HairHarpy v2.0.0 official release, runtime and Blender 5.3.0 bridge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash tools/native_env/hairharpy_runtime.sh /tmp/hh-out
+      - name: Upload evidence (reports and screenshots only; no HairHarpy binaries are redistributed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-qualification
+          path: /tmp/hh-out/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-gui-roundtrip:
+    needs: mode
+    if: needs.mode.outputs.hhgui == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: HairHarpy authoring, GUI Send, Blender 5.3.0 save/reopen, shape/UV/material QA
+        run: bash tools/native_env/hairharpy_gui_roundtrip.sh /tmp/hh-rt
+      - name: Upload outputs and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-gui-roundtrip
+          path: /tmp/hh-rt/
+          if-no-files-found: error
+          retention-days: 30
+  real-asset-pbr-gn:
+    needs: mode
+    if: needs.mode.outputs.realasset == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Disposable copy of owner native (digest + native SHA), shared PBR/GN/render, separate-process reopen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q >/dev/null
+          sudo apt-get install -y -q libegl1 libgl1-mesa-dri libglx-mesa0 libgles2 >/dev/null
+          bash tools/production_qa/install_blender_530.sh /tmp/b530 > /dev/null
+          python3 tools/native_env/fetch_real_asset.py tools/native_env/real_asset_request.json /tmp/ra
+          T=$(python3 -c "import json;print(json.load(open('tools/native_env/real_asset_request.json'))['target'])")
+          mkdir -p /tmp/ra/out
+          /tmp/b530/blender -b /tmp/ra/copy/home-p0.COPY.blend --factory-startup --python-exit-code 3 --python tools/native_env/real_asset_pbr_gn_check.py -- run "$T" /tmp/ra/out/real_asset_test_COPY.blend /tmp/ra/out/report.json /tmp/ra/out/renders > /tmp/ra/out/run.log 2>&1
+          /tmp/b530/blender -b /tmp/ra/out/real_asset_test_COPY.blend --factory-startup --python-exit-code 3 --python tools/native_env/real_asset_pbr_gn_check.py -- verify "$T" /tmp/ra/out/report.json /tmp/ra/out/verify.json > /tmp/ra/out/verify.log 2>&1
+          grep -h "TWO_REAL_ASSET" /tmp/ra/out/run.log /tmp/ra/out/verify.log
+          python3 -c "import json;a=json.load(open('/tmp/ra/out/report.json'));b=json.load(open('/tmp/ra/out/verify.json'));assert a['result']=='PASS' and b['result']=='PASS'"
+      - name: Upload evidence (test copy is not a candidate)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-real-asset-pbr-gn-copy
+          path: /tmp/ra/out/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-blueprint-session:
+    needs: mode
+    if: needs.mode.outputs.hhbp == 'run1' || needs.mode.outputs.hhbp == 'run2'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 shared session controller / factory / contract (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 41b5c1529a2aec3f5afab1a3101d9fb9b99d4439
+          path: engine468
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy x blueprint x #468 session (isolated fencing remote)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh ${{ needs.mode.outputs.hhbp }} /tmp/hhbp
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-blueprint-${{ needs.mode.outputs.hhbp }}
+          path: /tmp/hhbp/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-volume-v2:
+    needs: mode
+    if: needs.mode.outputs.hhv == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 latest contract (8c1d5ae, read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 8c1d5ae84b2783cd5475154d45409916ecebc4da
+          path: engine468v
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy volumetric hair v2 session (isolated fencing remote)
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh v2 /tmp/hhv
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-volume-v2
+          path: /tmp/hhv/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-volume-v3:
+    needs: mode
+    if: needs.mode.outputs.hhv3 == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 latest contract (8c1d5ae, read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 8c1d5ae84b2783cd5475154d45409916ecebc4da
+          path: engine468v
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy volume v3 session (top cover, shells, registry, guarded correction) (isolated fencing remote)
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh v3 /tmp/hhv3
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-volume-v3
+          path: /tmp/hhv3/
+          if-no-files-found: error
+          retention-days: 30
+  hairharpy-volume-v4:
+    needs: mode
+    if: needs.mode.outputs.hhv4 == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pinned #468 latest contract (8c1d5ae, read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: 8c1d5ae84b2783cd5475154d45409916ecebc4da
+          path: engine468v
+          persist-credentials: false
+          sparse-checkout: tools/production_qa
+      - name: HairHarpy volume v4 session (whorl, widened locks, coupling guard, 128 spp views) (isolated fencing remote)
+        run: |
+          git config --global user.name "TWO session"
+          git config --global user.email "session@invalid"
+          bash tools/native_env/hairharpy_bp/hh_bp_ci.sh v4 /tmp/hhv4
+      - name: Upload session tarball and evidence (no HairHarpy binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hairharpy-volume-v4
+          path: /tmp/hhv4/
+          if-no-files-found: error
+          retention-days: 30
