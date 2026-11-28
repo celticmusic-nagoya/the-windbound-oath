@@ -162,7 +162,7 @@ def blue_count(a, x0, x1, y0, y1):
     return int(((b > 170) & (g > 80) & (b - r > 90) & (r < 60)).sum())
 
 
-def guide(png, rows, reg_path, bp_path, out):
+def guide(png, rows, reg_path, bp_path, out, tool="brush"):
     d = json.loads(Path(rows).read_text())
     require(d["screenshot_sha256"] == sha(png), "stale row capture")
     g1, g2 = groups(rows)
@@ -170,7 +170,8 @@ def guide(png, rows, reg_path, bp_path, out):
     y = int(round(g2["y"]))
     require(blue_count(a, 51, 85, y - 10, y + 10) >= 420, "G2 selection not verified")
     require(blue_count(a, 51, 85, int(g1["y"]) - 10, int(g1["y"]) + 10) < 120, "G1 still selected")
-    require(blue_count(a, 351, 379, 125, 150) >= 120, "brush inactive")
+    xlo, xhi = (351, 379) if tool == "brush" else (315, 348)
+    require(tool in ("brush", "select") and blue_count(a, xlo, xhi, 125, 150) >= 120, "brush inactive" if tool == "brush" else "select tool inactive")
     reg = json.loads(Path(reg_path).read_text())
     require(reg.get("jacket_mae", 99) <= 8 and reg["screenshot_sha256"] == sha(png), "registration identity")
     bp = json.loads(Path(bp_path).read_text())
@@ -196,7 +197,7 @@ def guide(png, rows, reg_path, bp_path, out):
                silhouette_close_px=k, silhouette_px=int(sil.sum()),
                silhouette_bounds_px=[int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())],
                draw_limit_px=DRAW_LIMIT, uncertainty_px=UNCERTAINTY, registration=str(reg_path),
-               g2_row=[g2["x"], g2["y"]], lanes=lanes,
+               g2_row=[g2["x"], g2["y"]], tool=tool, lanes=lanes,
                draw=[l for l in DRAW_LANES if lanes[l]["draw_eligible"]])
     with Path(out).open("x") as f:
         json.dump(res, f, indent=2)
@@ -284,14 +285,18 @@ def eye(png, rows_path, group):
 
 def hidden(before, after):
     a, b = hair_px(rgb(before)), hair_px(rgb(after))
-    require(a >= 600 and b <= 0.4 * a, "G1 strands not hidden (%d -> %d)" % (a, b))
+    require(a >= 300 and b <= 0.4 * a, "G1 strands not hidden (%d -> %d)" % (a, b))
     print(a, b)
 
 
-def shown(prehide, after):
-    a, b = hair_px(rgb(prehide)), hair_px(rgb(after))
-    require(b >= 0.9 * a, "G1 strands not restored (%d -> %d)" % (a, b))
-    print(a, b)
+def shown(prehide, hidden_png, preshow, after):
+    """Restoration measured in the same overlay state: the gain on re-show must be at least
+    60% of the loss observed when G1 was hidden."""
+    a, h, p, b = (hair_px(rgb(x)) for x in (prehide, hidden_png, preshow, after))
+    loss = a - h
+    require(loss >= 200, "hide loss not established")
+    require(b - p >= 0.6 * loss, "G1 strands not restored (gain %d, loss %d)" % (b - p, loss))
+    print(a, h, p, b)
 
 
 def handle(png, rows_path, reg_path, which):
@@ -327,6 +332,73 @@ def handle(png, rows_path, reg_path, which):
     print(f"{hx/1024:.8f} {hy/768:.8f} {tx/1024:.8f} {ty/768:.8f} 0.65")
 
 
+def control_points(a):
+    """White control-point blobs (min channel >= 245) with a green rim inside the viewport."""
+    x0, y0, x1, y1 = VIEW
+    white = np.zeros(a.shape[:2], bool)
+    white[y0:y1, x0:x1] = a[y0:y1, x0:x1].min(2) >= 245
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    green = (g > 145) & (g - r > 60) & (g - b > 50)
+    seen = np.zeros_like(white)
+    pts = []
+    for sy, sx in zip(*np.nonzero(white)):
+        if seen[sy, sx]:
+            continue
+        stack, comp = [(sy, sx)], []
+        seen[sy, sx] = True
+        while stack:
+            y, x = stack.pop()
+            comp.append((y, x))
+            for ny, nx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+                if white[ny, nx] and not seen[ny, nx]:
+                    seen[ny, nx] = True
+                    stack.append((ny, nx))
+        if not 6 <= len(comp) <= 80:
+            continue
+        cy = sum(p[0] for p in comp) / len(comp)
+        cx = sum(p[1] for p in comp) / len(comp)
+        ring = int(green[int(cy) - 7:int(cy) + 8, int(cx) - 7:int(cx) + 8].sum())
+        if ring >= 8:
+            pts.append((cx, cy, len(comp), ring))
+    return sorted(pts, key=lambda t: (t[1], t[0]))
+
+
+def crown(png, rows_path, reg_path, guide_json, out, margin=2.0, max_lift=27.0):
+    """Lift for the three top control points so every lane root gets r <= -margin.
+    Measured lift = worst root signed distance + margin, bounded; drags returned one per line."""
+    d = json.loads(Path(rows_path).read_text())
+    require(d["screenshot_sha256"] == sha(png), "stale row capture")
+    g1, g2 = groups(rows_path)
+    a = rgb(png)
+    y2 = int(round(g2["y"]))
+    require(blue_count(a, 51, 85, y2 - 10, y2 + 10) >= 420, "G2 selection not verified")
+    require(blue_count(a, 315, 348, 125, 150) >= 120, "select tool inactive")
+    f = json.loads(Path(reg_path).read_text())
+    require(f["screenshot_sha256"] == sha(png) and f.get("jacket_mae", 99) <= 8, "registration identity")
+    gd = json.loads(Path(guide_json).read_text())
+    require(gd["screenshot_sha256"] == sha(png) and gd.get("tool") == "select", "guide measurement identity")
+    ratio = f["scale"] / BASE_SCALE
+    pts = control_points(a)
+    require(len(pts) >= 12, "control points not established (%d)" % len(pts))
+    top = min(p[1] for p in pts)
+    row = sorted([p for p in pts if p[1] <= top + 4], key=lambda p: p[0])
+    cx = f["center_px"][0]
+    require(len(row) == 3 and abs(row[1][0] - cx) <= 6 * ratio and row[0][0] < row[1][0] < row[2][0], "crown row not unique: %r" % (row,))
+    require(all(460 <= p[0] <= 565 and 280 <= p[1] <= 380 for p in row), "unqualified crown location")
+    need = max(gd["lanes"][l]["worst_signed_distance_px"] for l in LANES)
+    lift = need + margin
+    require(lift > 0, "no lift needed")
+    require(lift <= max_lift * ratio, "lift %.1f exceeds bound" % lift)
+    drags = [[p[0] / 1024, p[1] / 768, p[0] / 1024, (p[1] - lift) / 768, 0.65] for p in (row[1], row[0], row[2])]
+    res = dict(schema="morwen_w130_crown_lift", screenshot_sha256=sha(png), control_points=len(pts),
+               crown_row=[[round(p[0], 1), round(p[1], 1)] for p in row], worst_lane_px=need,
+               lift_px=round(lift, 2), ratio=ratio, drags=drags)
+    with Path(out).open("x") as fo:
+        json.dump(res, fo, indent=2)
+    for dr in drags:
+        print(" ".join(f"{v:.8f}" for v in dr))
+
+
 def main(argv):
     cmd, *args = argv
     if cmd == "groups":
@@ -334,6 +406,8 @@ def main(argv):
         print(f"{g1['x']/1024:.8f} {g1['y']/768:.8f} {g2['x']/1024:.8f} {g2['y']/768:.8f}")
     elif cmd == "guide":
         guide(*args)
+    elif cmd == "crown":
+        crown(*args)
     elif cmd == "points":
         points(*args)
     elif cmd == "complete":

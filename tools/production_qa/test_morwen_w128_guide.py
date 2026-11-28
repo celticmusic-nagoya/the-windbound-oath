@@ -151,8 +151,8 @@ def test_w129_eye_hidden_shown_handle(tmp):
     hid = write(tmp, "hid.png", base)
     w.hidden(png, hid)
     expect_error(lambda: w.hidden(png, png), "not hidden")
-    w.shown(png, png)
-    expect_error(lambda: w.shown(png, hid), "not restored")
+    w.shown(png, hid, hid, png)
+    expect_error(lambda: w.shown(png, hid, hid, hid), "not restored")
     # crown handle: white 3x3 core with green ring at the W108 left position, select tool active
     h = base.copy()
     h[125:150, 351:379] = BG
@@ -165,6 +165,25 @@ def test_w129_eye_hidden_shown_handle(tmp):
     rp.write_text(json.dumps(dict(REG, screenshot_sha256=hashlib.sha256(hp.read_bytes()).hexdigest())))
     w.handle(hp, hr, rp, "left")
     expect_error(lambda: w.handle(hp, hr, rp, "right"), "crown control point not visible")
+
+
+def test_w130_crown_lift(tmp):
+    a = screen(30)
+    a[125:150, 351:379] = BG
+    a[125:150, 315:348] = BLUE
+    for (x, y) in [(500, 352), (511, 353), (523, 352), (490, 358), (532, 358), (484, 368), (538, 368),
+                   (481, 380), (541, 380), (481, 395), (541, 395), (511, 375), (511, 395)]:
+        a[y - 7:y + 8, x - 7:x + 8] = (40, 200, 40)
+        a[y - 2:y + 3, x - 2:x + 3] = (255, 255, 255)
+    png = write(tmp, "c.png", a)
+    rw = rows(tmp, png)
+    rg = reg(tmp, png)
+    w.guide(png, rw, rg, blueprint(tmp), Path(tmp) / "g.json", "select")
+    w.crown(png, rw, rg, Path(tmp) / "g.json", Path(tmp) / "c.json")
+    c = json.loads((Path(tmp) / "c.json").read_text())
+    assert all(abs(u - v) <= 0.5 for p, q in zip(c["crown_row"], [[500, 352], [511, 353], [523, 352]]) for u, v in zip(p, q)) and 0 < c["lift_px"] <= 27 * 1.0
+    assert all(abs(d[3] * 768 - (d[1] * 768 - c["lift_px"])) < 0.01 for d in c["drags"])
+    expect_error(lambda: w.guide(png, rw, rg, blueprint(tmp), Path(tmp) / "g2.json", "brush"), "brush inactive")
 
 
 def main():
