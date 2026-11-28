@@ -54,31 +54,68 @@ for f in leaf:
     groups.append(group)
 assert len(groups)==44168
 qa['component_count']=len(groups);checkpoint()
+# F3: the F2 runner timed out after 16000/44168 leaves. Keep the exact
+# reducer and per-leaf guards, but avoid a full BMesh operator per card.
+# Batch face-only deletions; vertex/UV data remain valid until final cleanup.
+import time
+BATCH=512
 hist=Counter();resmax=0.;changed=0;skipped=0;removed_tri=0
+pending=[];solve_seconds=0.;edit_seconds=0.;started=time.perf_counter()
+def flush():
+    global edit_seconds
+    if not pending:return
+    t0=time.perf_counter()
+    old_faces=[f for group,verts,vid,uv,new,smooth in pending for f in group]
+    assert all(f.is_valid for f in old_faces) and len(set(old_faces))==len(old_faces)
+    before=len(bm.faces)
+    bmesh.ops.delete(bm,geom=old_faces,context='FACES_ONLY')
+    assert len(bm.faces)==before-len(old_faces)
+    added=0
+    for group,verts,vid,uv,new,smooth in pending:
+        assert all(v.is_valid for v in verts)
+        for t in new:
+            f=bm.faces.new(tuple(verts[i] for i in t));f.material_index=1;f.smooth=smooth
+            for l in f.loops:
+                for k,layer in enumerate(layers):l[layer].uv=uv[vid[l.vert]][k]
+            added+=1
+    assert len(bm.faces)==before-len(old_faces)+added
+    pending.clear();edit_seconds+=time.perf_counter()-t0
+def record_progress(n):
+    elapsed=time.perf_counter()-started
+    projected=elapsed*len(groups)/n
+    qa.update({'processed_components':n,'changed_components':changed,'removed_triangles':removed_tri,'max_relative_residual':resmax,'batch_size':BATCH,'solve_seconds':solve_seconds,'edit_seconds':edit_seconds,'elapsed_seconds':elapsed,'projected_geometry_seconds':projected})
+    checkpoint()
+    # Early bounded failure instead of another 100-minute timeout; keep
+    # the exact source and diagnostics. This is not a geometry checkpoint.
+    if n==1024 and projected>3900:
+        raise RuntimeError('F3 geometry time budget exceeded at measured 1024-component preflight: '+str(projected))
 for gi,group in enumerate(groups):
+    t0=time.perf_counter()
     verts=sorted({v for f in group for v in f.verts},key=lambda v:v.index)
-    if len(group)!=24 or len(verts)!=21 or any(v in wood for v in verts) or any(len(f.verts)!=3 for f in group):skipped+=1;hist[len(group)]+=1;continue
-    vid={v:i for i,v in enumerate(verts)};faces=[tuple(vid[v] for v in f.verts) for f in group]
-    coords=[tuple(v.co) for v in verts];uv={};good=True
-    for f in group:
-        for l in f.loops:
-            values=tuple(tuple(l[layer].uv) for layer in layers);k=vid[l.vert]
-            if k in uv and uv[k]!=values:good=False
-            uv[k]=values
-    if not good or len(uv)!=21:skipped+=1;hist[24]+=1;continue
-    new,err=reduce_leaf(coords,[uv[i][ai] for i in range(21)],faces)
-    hist[len(new)]+=1
-    if len(new)==24:continue
-    assert boundary(new)==boundary(faces) and err<=.04
-    smooth=all(f.smooth for f in group)
-    bmesh.ops.delete(bm,geom=group,context='FACES_ONLY')
-    for t in new:
-        f=bm.faces.new(tuple(verts[i] for i in t));f.material_index=1;f.smooth=smooth
-        for l in f.loops:
-            for k,layer in enumerate(layers):l[layer].uv=uv[vid[l.vert]][k]
-    changed+=1;removed_tri+=24-len(new);resmax=max(resmax,err)
-    if (gi+1)%4000==0:
-        qa.update({'processed_components':gi+1,'changed_components':changed,'removed_triangles':removed_tri,'max_relative_residual':resmax});checkpoint()
+    if len(group)!=24 or len(verts)!=21 or any(v in wood for v in verts) or any(len(f.verts)!=3 for f in group):
+        skipped+=1;hist[len(group)]+=1
+    else:
+        vid={v:i for i,v in enumerate(verts)};faces=[tuple(vid[v] for v in f.verts) for f in group]
+        coords=[tuple(v.co) for v in verts];uv={};good=True
+        for f in group:
+            for l in f.loops:
+                values=tuple(tuple(l[layer].uv) for layer in layers);k=vid[l.vert]
+                if k in uv and uv[k]!=values:good=False
+                uv[k]=values
+        if not good or len(uv)!=21:skipped+=1;hist[24]+=1
+        else:
+            new,err=reduce_leaf(coords,[uv[i][ai] for i in range(21)],faces)
+            hist[len(new)]+=1
+            if len(new)!=24:
+                assert boundary(new)==boundary(faces) and err<=.04
+                smooth=all(f.smooth for f in group)
+                pending.append((group,verts,vid,uv,new,smooth))
+                changed+=1;removed_tri+=24-len(new);resmax=max(resmax,err)
+    solve_seconds+=time.perf_counter()-t0
+    if (gi+1)%BATCH==0:
+        flush()
+        if (gi+1)==1024 or (gi+1)%(BATCH*8)==0:record_progress(gi+1)
+flush();record_progress(len(groups))
 bmesh.ops.delete(bm,geom=[e for e in bm.edges if not e.link_faces],context='EDGES')
 bmesh.ops.delete(bm,geom=[v for v in bm.verts if not v.link_faces],context='VERTS')
 bm.normal_update();bm.to_mesh(copy);bm.free();copy.update()

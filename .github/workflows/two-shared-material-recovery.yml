@@ -1931,6 +1931,12 @@ jobs:
           bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
           "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' -- "$RUNNER_TEMP/v89-in/v82d_oak_candidate.blend" "$RUNNER_TEMP/v89-out" 2>&1 | tee "$RUNNER_TEMP/v89-out/blender.log"
           cp 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py' "$RUNNER_TEMP/v89-out/"
+      - name: Record V89 checkpoint manifest
+        if: always() && steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/v89-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py' "$RUNNER_TEMP/v89-out/"
           (cd "$RUNNER_TEMP/v89-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
       - name: Preserve V89 native candidate and matched views
         if: always() && steps.scope.outputs.run == 'true'
