@@ -15,6 +15,25 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Select changed musical input or shared audio dependency
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import os,subprocess
+          paths=set(subprocess.check_output(['git','diff','--name-only','-z',os.environ['BASE_SHA']+'...'+os.environ['HEAD_SHA']]).decode().split('\0'))
+          root='tools/audio-production/'
+          shared=bool(paths & {root+x for x in ('process_audio.py','inspect_audio.py','export_delivery.py','delivery-smoke.mjs')})
+          a01=shared or root+'render_rilde_day.py' in paths
+          a02=a01 or root+'render_rilde_day_a02.py' in paths
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write(f'a01={str(a01).lower()}\na02={str(a02).lower()}\n')
+          print('Music delta: A01',a01,'A02',a02)
+          PY
       - name: Verify or install distribution FFmpeg
         run: |
           if ! command -v ffmpeg >/dev/null; then
@@ -47,6 +66,7 @@ jobs:
       - name: Verify compressed playback and two-cycle loop render in Chromium
         run: node tools/audio-production/delivery-smoke.mjs "$RUNNER_TEMP/audio-delivery"
       - name: Render original musical candidate and verify delivery
+        if: steps.scope.outputs.a01 == 'true'
         run: |
           python -m py_compile tools/audio-production/render_rilde_day.py
           python tools/audio-production/render_rilde_day.py "$RUNNER_TEMP/rilde-day-candidate"
@@ -59,9 +79,30 @@ jobs:
           assert sum(x.stat().st_size for x in p.iterdir())<=524288
           PY
       - uses: actions/upload-artifact@v4
+        if: steps.scope.outputs.a01 == 'true'
         with:
           name: two-audio-rilde-day-original-review
           path: ${{ runner.temp }}/rilde-day-candidate/review/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Render A02 expressive musical candidate and verify delivery
+        if: steps.scope.outputs.a02 == 'true'
+        run: |
+          python -m py_compile tools/audio-production/render_rilde_day_a02.py
+          python tools/audio-production/render_rilde_day_a02.py "$RUNNER_TEMP/rilde-day-a02"
+          node tools/audio-production/delivery-smoke.mjs "$RUNNER_TEMP/rilde-day-a02" loop
+          cp "$RUNNER_TEMP/rilde-day-a02/browser-delivery-qa.json" "$RUNNER_TEMP/rilde-day-a02/review/"
+          python - <<'PY'
+          import os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'rilde-day-a02/review'
+          assert {x.name for x in p.iterdir()}=={'delivery.ogg','delivery.json','loudness.json','processing.json','provenance.json','browser-delivery-qa.json'}
+          assert sum(x.stat().st_size for x in p.iterdir())<=786432
+          PY
+      - uses: actions/upload-artifact@v4
+        if: steps.scope.outputs.a02 == 'true'
+        with:
+          name: two-audio-rilde-day-a02-review
+          path: ${{ runner.temp }}/rilde-day-a02/review/
           retention-days: 3
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
