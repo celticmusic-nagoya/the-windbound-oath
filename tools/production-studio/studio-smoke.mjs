@@ -382,33 +382,33 @@ try {
  assert.equal(await page.locator('#zip-gallery img').count(),0);
  // Recovery locator round trip, expired source, strict identity, no fallback after malformed input.
  const rec={schema:'two.studio.artifact-locator.v1',repository:'celticmusic-nagoya/the-windbound-oath',artifact_id:123,run_id:3,head_sha:previousHead,head_branch:'feature/fixture',name:'diagnostic archive',archive_bytes:zip.length,archive_digest:'sha256:'+createHash('sha256').update(zip).digest('hex'),created_at:'2026-11-20T00:00:00Z',expires_at:'2026-11-21T00:00:00Z',metadata_observed_at:'2026-11-20T12:00:00Z',original_artifact_url:'https://github.com/celticmusic-nagoya/the-windbound-oath/actions/runs/3/artifacts/123',preservation_status:'UNVERIFIED',byte_verification:'NOT_RUN',adoption:'UNDETERMINED'};
- const locatorInput=page.locator('#artifact-locator'),locatorStatus=page.locator('#artifact-locator-status'),check=page.locator('#verify-artifact'),zipField=page.locator('#artifact-zip'),digestField=page.locator('#artifact-digest'),checkResult=page.locator('#verify-result');
+ const locatorInput=page.locator('#artifact-locator'),locatorStatus=page.locator('#artifact-locator-status'),locatorCheck=page.locator('#verify-artifact'),zipField=page.locator('#artifact-zip'),digestField=page.locator('#artifact-digest'),checkResult=page.locator('#verify-result');
  const loadLocator=async(x)=>locatorInput.setInputFiles({name:'locator.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(x))});
  await loadLocator(rec);await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('復元情報読込:'));
  assert.match(await locatorStatus.innerText(),/期限経過/);
  assert.equal(await digestField.isDisabled(),true);assert.equal(await digestField.inputValue(),rec.archive_digest.slice(7));
  assert.equal(await page.locator('#artifact-locator-source').getAttribute('href'),rec.original_artifact_url);
- await check.click();assert.match(await checkResult.innerText(),/FAIL: 復元情報の容量と不一致/);
+ await locatorCheck.click();assert.match(await checkResult.innerText(),/FAIL: 復元情報の容量と不一致/);
  const corrupt=Buffer.from(zip);corrupt[0]^=1;
  await zipField.setInputFiles({name:'wrong.zip',mimeType:'application/zip',buffer:corrupt});
- await check.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('FAIL: 復元情報のSHA不一致'));
+ await locatorCheck.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('FAIL: 復元情報のSHA不一致'));
  await zipField.setInputFiles({name:'saved.zip',mimeType:'application/zip',buffer:zip});
- await check.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('PASS: 復元情報の容量・SHA一致'));
+ await locatorCheck.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('PASS: 復元情報の容量・SHA一致'));
  assert.match(await checkResult.innerText(),/保全／原本再読込／品質は未確認/);
  await page.screenshot({path:'qa-output/artifact-locator-verify.png'});
  for(const change of [{repository:'other/repo'},{original_artifact_url:'https://example.org/'},{head_sha:'bad'},{preservation_status:'PASS'},{archive_bytes:0},{archive_digest:'bad'}]){
   await loadLocator({...rec,...change});await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('復元情報読込失敗'));
-  assert.equal(await check.isDisabled(),true);assert.equal(await digestField.inputValue(),'');assert.equal(await page.locator('#artifact-locator-source').isVisible(),false);
+  assert.equal(await locatorCheck.isDisabled(),true);assert.equal(await digestField.inputValue(),'');assert.equal(await page.locator('#artifact-locator-source').isVisible(),false);
  }
  await loadLocator({...rec,archive_digest:null});await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('SHAなし'));
- assert.equal(await check.isDisabled(),true);
+ assert.equal(await locatorCheck.isDisabled(),true);
  await loadLocator({...rec,archive_bytes:128*1024*1024+1});await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('128 MiB上限超過'));
- assert.equal(await check.isDisabled(),true);
+ assert.equal(await locatorCheck.isDisabled(),true);
  await locatorInput.setInputFiles({name:'oversize.json',mimeType:'application/json',buffer:Buffer.alloc(16385,32)});
- await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('16 KiB以内'));assert.equal(await check.isDisabled(),true);
+ await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('16 KiB以内'));assert.equal(await locatorCheck.isDisabled(),true);
  await page.locator('#artifact-locator-clear').click();
- assert.equal(await digestField.isDisabled(),false);assert.equal(await check.isDisabled(),false);assert.equal(await checkResult.innerText(),'未照合');
- await digestField.fill(rec.archive_digest.slice(7));await check.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('PASS: 指定digestと一致'));
+ assert.equal(await digestField.isDisabled(),false);assert.equal(await locatorCheck.isDisabled(),false);assert.equal(await checkResult.innerText(),'未照合');
+ await digestField.fill(rec.archive_digest.slice(7));await locatorCheck.click();await page.waitForFunction(()=>document.querySelector('#verify-result').textContent.startsWith('PASS: 指定digestと一致'));
  // Existing recent-card handoff must explicitly reset locator mode and prior selected file.
  await loadLocator(rec);await page.waitForFunction(()=>document.querySelector('#artifact-locator-status').textContent.includes('復元情報読込:'));
  await page.locator('#recent-review-artifacts article').first().getByRole('button',{name:'取得したZIPを端末内で見る'}).click();
