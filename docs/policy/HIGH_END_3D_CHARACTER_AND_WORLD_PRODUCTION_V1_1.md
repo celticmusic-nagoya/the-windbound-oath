@@ -32,7 +32,7 @@ Status: DIRECTOR-APPROVED POLICY. Applies repository-wide after merge into main.
 - Follow docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md: after two ineffective attempts with the same root cause reassess evidence, continue only with a credible bounded correction or switch structurally; preserve full attempt ledger. Do not stop unrelated work.
 - Work on dedicated branches and Draft PRs; ordinary scoped integration follows current AGENTS after QA; never overwrite canonical originals, delete destructively or newly publish without separate explicit approval.
 - Continue approved non-destructive work autonomously. Do not claim to have invoked an unavailable AI, editor, service, or test.
-- Split independent tasks across ChatGPT (specification/independent QA), Codex (Blender/code/CI), optional Claude (review), GitHub Actions (execution/renders/technical QA), respecting actual capabilities and permissions. Use PRs and artifacts for handoffs.
+- Allocate independent tasks dynamically by current ownership, demonstrated capability, quality, availability and permissions. ChatGPT, Codex, Claude and other agents may author, implement or independently review qualified scopes; no fixed AI role or dependency. Use qualified GitHub Actions for execution/renders/technical QA and existing PRs and permitted artifacts for handoffs.
 
 ## Current character handoff — Morwen
 - Active SCULPT02: PR #407; active SCULPT03: Draft PR #417. Do not start from scratch.
