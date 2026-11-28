@@ -40,7 +40,9 @@ class Test(unittest.TestCase):
         m.check_active(api,'x','y','1')
         def busy(token,method,url):
             return {'total_count':1,'workflow_runs':[{'id':2,'name':'Morwen job','head_branch':'main'}]}
-        with self.assertRaises(ValueError):m.check_active(busy,'x','y','1')
+        with patch.object(m.time,'sleep') as sleep:
+            with self.assertRaises(ValueError):m.check_active(busy,'x','y','1')
+            self.assertEqual(sleep.call_count,2)
     def test_active_check_diagnostic_stages(self):
         for failing,expected in [('private','PRIVATE_ACTIVE_QUEUED'),('public','PUBLIC_ACTIVE_QUEUED')]:
             def api(credential,method,url):
@@ -49,5 +51,27 @@ class Test(unittest.TestCase):
             with self.assertRaises(ValueError):m.check_active(api,'private','public','1')
             self.assertEqual(m.STAGE,expected)
     def test_truncated_active_list_rejected(self):
-        with self.assertRaises(ValueError):m.check_active(lambda *a:{'total_count':101,'workflow_runs':[]},'x','y','1')
+        with patch.object(m.time,'sleep'):
+            with self.assertRaises(ValueError):m.check_active(lambda *a:{'total_count':101,'workflow_runs':[]},'x','y','1')
+    def test_transient_inventory_requires_complete_rescan(self):
+        calls=[]
+        def api(token,method,url):
+            calls.append((token,url))
+            if len(calls)==1:return {'total_count':1,'workflow_runs':[]}
+            return {'total_count':0,'workflow_runs':[]}
+        with patch.object(m.time,'sleep') as sleep:m.check_active(api,'private','public','1')
+        self.assertEqual(len(calls),11);self.assertEqual(calls[0],calls[1]);sleep.assert_called_once_with(30)
+    def test_public_self_and_conflict(self):
+        def api(token,method,url):
+            rows=[{'id':1,'name':'Morwen current','head_branch':'main'}] if token=='public' else []
+            return {'total_count':len(rows),'workflow_runs':rows}
+        m.check_active(api,'private','public','1')
+        with patch.object(m.time,'sleep') as sleep:
+            with self.assertRaises(m.ActiveSnapshotBlocked):m.check_active(api,'private','public','2')
+            self.assertEqual(sleep.call_count,2)
+        self.assertEqual(m.STAGE,'PUBLIC_ACTIVE_CONFLICT')
+    def test_incomplete_row_blocks(self):
+        with patch.object(m.time,'sleep'):
+            with self.assertRaises(m.ActiveSnapshotBlocked):m.check_active(lambda *a:{'total_count':1,'workflow_runs':[{'id':1}]},'x','y','1')
+        self.assertEqual(m.STAGE,'PRIVATE_ACTIVE_ROW_INCOMPLETE')
 if __name__=='__main__':unittest.main()
