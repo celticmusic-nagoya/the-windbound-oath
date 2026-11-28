@@ -1,6 +1,7 @@
 import {chromium} from 'playwright';
 import {spawn} from 'node:child_process';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,readFile} from 'node:fs/promises';
+import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const host='http://127.0.0.1:8767';
@@ -59,6 +60,35 @@ try{
  await rec({...receipt,after:{...b.m,rms_dbfs:0}});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('測定記録不一致'));assert.equal(await page.locator('#audio-results').isVisible(),false);
  await rec(receipt);await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));await page.locator('#audio-clear').click();
  assert.equal(await page.locator('#audio-results').isVisible(),false);assert.equal(await page.locator('#audio-source').evaluate(x=>x.files.length),0);assert.equal(await page.locator('#audio-a').getAttribute('src'),null);
+ await page.locator('#audio-mode').selectOption('music');
+ assert.equal(await page.locator('#audio-wav-inputs').isVisible(),false);
+ await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('ファイルサイズ不一致'));
+ assert.equal(await page.locator('#audio-results').isVisible(),false);
+ const fake=Buffer.alloc(408435);fake.write('OggS');
+ await put('audio-music-a','fake.ogg',fake,'audio/ogg');await put('audio-music-b','fake.ogg',Buffer.alloc(356433),'audio/ogg');
+ await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('SHA-256不一致'));
+ assert.equal(await page.locator('#audio-results').isVisible(),false);
+ if(process.env.TWO_MUSIC_TEST_DIR){
+   const dir=process.env.TWO_MUSIC_TEST_DIR;
+   await page.locator('#audio-music-a').setInputFiles(join(dir,'a01.zip'));await page.locator('#audio-music-b').setInputFiles(join(dir,'a02.zip'));
+   await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));
+   await page.waitForFunction(()=>['audio-a','audio-b'].every(id=>document.getElementById(id).readyState>=1));
+   assert.deepEqual(await page.evaluate(()=>['audio-a','audio-b'].map(id=>({duration:document.getElementById(id).duration,loop:document.getElementById(id).loop}))),[{duration:24,loop:true},{duration:24,loop:true}]);
+   assert.match(await page.locator('#audio-loudness-a').innerText(),/-17.02 LUFS/);assert.match(await page.locator('#audio-loudness-b').innerText(),/-17.20 LUFS/);
+   await page.locator('#audio-match-level').check();await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('A -0.18 dB / B 0.00 dB'));
+   const g=await page.evaluate(()=>window.__audioTestGains.map(n=>n.gain.value));assert.ok(Math.abs(g[0]-Math.pow(10,-.18/20))<1e-6);assert.equal(g[1],1);
+   await page.locator('#audio-a').evaluate(p=>{p.currentTime=9;return p.play()});await page.locator('#audio-switch').click();await page.waitForFunction(()=>document.getElementById('audio-a').paused&&!document.getElementById('audio-b').paused);
+   assert.ok(await page.locator('#audio-b').evaluate(p=>p.currentTime>=8.9));
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+   await page.locator('#audio-review').screenshot({path:'qa-output/rilde-music-ab-mobile.png'});
+   // Raw extracted Ogg inputs must also work; swap is refused by per-slot pins.
+   await page.locator('#audio-music-a').setInputFiles(join(dir,'a01.ogg'));await page.locator('#audio-music-b').setInputFiles(join(dir,'a02.ogg'));
+   await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));
+   await page.locator('#audio-music-a').setInputFiles(join(dir,'a02.ogg'));await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('ファイルサイズ不一致'));
+   assert.equal(await page.locator('#audio-results').isVisible(),false);
+   console.log('PASS: exact existing A01/A02 ZIP and Ogg bytes, 24s playback, level attenuation, switch, mobile, wrong slot rejection');
+ }
+ await page.locator('#audio-mode').selectOption('wav');assert.equal(await page.locator('#audio-wav-inputs').isVisible(),true);assert.equal(await page.locator('#audio-music-a').evaluate(x=>x.files.length),0);
  assert.deepEqual(writes,[]);assert.deepEqual(errors,[]);
  console.log('PASS: PCM and exact hashes, native playback, same-position A/B, mismatch rejection, clear, mobile, no network writes');
 }finally{await browser?.close();server.kill();}
