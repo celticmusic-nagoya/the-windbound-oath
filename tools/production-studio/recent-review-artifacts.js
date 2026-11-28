@@ -355,8 +355,8 @@ function renderRecent(){
    if(!x.metadataOnly&&x.bytes<=128*1024*1024){
     const b=make("button","取得したZIPを端末内で見る");b.type="button";
     b.addEventListener("click",()=>{
-     const panel=document.getElementById("local-title"),file=document.getElementById("artifact-zip"),filter=document.getElementById("zip-image-filter"),digest=document.getElementById("artifact-digest");
-     panel.open=true;filter.value=x.filter;digest.value=x.digest.replace(/^sha256:/,"");
+     const panel=document.getElementById("local-title"),file=document.getElementById("artifact-zip"),filter=document.getElementById("zip-image-filter");
+     panel.open=true;filter.value=x.filter;window.dispatchEvent(new CustomEvent("studio-artifact-target",{detail:{digest:x.digest.replace(/^sha256:/,"")}}));
      document.getElementById("zip-status").textContent="対象 "+x.name+" のZIPを選択し、必要に応じSHA照合後、ZIP内画像を表示してください。";
      file.scrollIntoView({block:"center"});file.focus({preventScroll:true});
     });card.append(b);
