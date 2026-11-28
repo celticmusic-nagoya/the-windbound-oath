@@ -11,7 +11,7 @@ Director correction (2026-11-27): Morwen's production target is 6.25 heads nomin
 - Latest explicit director instruction > this v7.0 > AGENTS.md v6.0 sections and registry > older scoped policies > historical evidence.
 - **VRoid-primary new-custom hybrid production (director clarification 2026-11-28).** VRoid Studio is the primary authoring environment for face, skin/eyes, body, new custom hair and supported wardrobe. Use Blender, qualified HairHarpy and XWear only for specifically evidenced native limitations, independent unsupported parts, interchange, refinement or game integration. Record the module, actual native attempts/limits, alternative and editable-output compatibility; a missing runtime is an operation blocker, not proof of a VRoid limitation. Any change of primary environment requires explicit director approval. Preserve the editable .vroid master and independently authored external sources.
 - Unchanged and still mandatory: D0–D4 design maturity, G1–G4 PASS/FAIL/HOLD/BLOCKED/NOT_RUN, canon/protected originals, licensing, single writer, STOP_ACK/CAS/lease/fencing where the route requires them, no forced reclaim, no new spending, private/public boundary, formal-adoption approval, Morwen visual targets (6.25 heads nominal within 6.2–6.3, corrected 2026-11-27; Layer 0 hair shape, official clothed dark-violet hair colour).
-- Claude is the current principal production agent; roles are not permanent. Any qualified AI may produce, implement, recover and QA.
+- Determine the current principal production agent from the live owning PR and qualified writer state; roles are not fixed. Any qualified AI may produce, implement, recover and QA.
 
 ## Operative summary
 
@@ -68,7 +68,7 @@ Director correction (2026-11-27): Morwen's production target is 6.25 heads nomin
 
 #### 3. AI非依存・担当交代可能な制作体制
 
-当面はClaudeを主制作担当とする。ただし、Claude・ChatGPT・Codexの担当を恒久的に固定しない。
+現行担当PRのライブ状態・実行資格・所有権に基づき主制作担当を判断する。Claude・ChatGPT・Codexの担当を固定せず、いずれのAIも必須依存としない。
 
 すべてのAIが制作、設計、実装、技術調査、障害復旧、QAを実行できるものとし、利用制限、実行環境、得意分野、制作効率に応じて担当を切り替える。
 
