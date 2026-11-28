@@ -1,6 +1,6 @@
 import {chromium} from 'playwright';
 import {spawn} from 'node:child_process';
-import {mkdir,readFile} from 'node:fs/promises';
+import {mkdir} from 'node:fs/promises';
 import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
@@ -73,7 +73,8 @@ try{
    await page.locator('#audio-music-a').setInputFiles(join(dir,'a01.zip'));await page.locator('#audio-music-b').setInputFiles(join(dir,'a02.zip'));
    await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));
    await page.waitForFunction(()=>['audio-a','audio-b'].every(id=>document.getElementById(id).readyState>=1));
-   assert.deepEqual(await page.evaluate(()=>['audio-a','audio-b'].map(id=>({duration:document.getElementById(id).duration,loop:document.getElementById(id).loop}))),[{duration:24,loop:true},{duration:24,loop:true}]);
+   const media=await page.evaluate(()=>['audio-a','audio-b'].map(id=>({duration:document.getElementById(id).duration,loop:document.getElementById(id).loop})));
+   assert.ok(media.every(x=>x.loop&&Math.abs(x.duration-24)<=.02),'native media duration within 20ms; exact decoded frame count verified separately');
    assert.match(await page.locator('#audio-loudness-a').innerText(),/-17.02 LUFS/);assert.match(await page.locator('#audio-loudness-b').innerText(),/-17.20 LUFS/);
    await page.locator('#audio-match-level').check();await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('A -0.18 dB / B 0.00 dB'));
    const g=await page.evaluate(()=>window.__audioTestGains.map(n=>n.gain.value));assert.ok(Math.abs(g[0]-Math.pow(10,-.18/20))<1e-6);assert.equal(g[1],1);
