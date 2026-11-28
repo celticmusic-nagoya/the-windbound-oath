@@ -45,6 +45,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py'
       - 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
       - 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -2028,3 +2029,61 @@ jobs:
           path: ${{ runner.temp }}/v90-out
           retention-days: 14
           if-no-files-found: error
+  v94-forest-floor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V94 forest floor production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V90 native and build forest floor / sanctuary dressing
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v94-in" "$RUNNER_TEMP/v94-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15192905787/zip" > "$RUNNER_TEMP/v90.zip"
+          printf '%s  %s\n' 48f1eded90064cd77e52e99cc569f5c783ed26506fc9b31769b495042df50ad5 "$RUNNER_TEMP/v90.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v90.zip"
+          unzip -p "$RUNNER_TEMP/v90.zip" v90_bump_candidate.blend > "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend"
+          printf '%s  %s\n' bdf76b553f04427eb3408fdee0a0aa1dc32e658b8c53f44eb638a4460823d446 "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend" | sha256sum -c -
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py' -- "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend" "$RUNNER_TEMP/v94-out" 2>&1 | tee "$RUNNER_TEMP/v94-blender.log" | grep -E '^V94_|Error|Traceback' || true
+          test -f "$RUNNER_TEMP/v94-out/v94_qa.json"
+          cp 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py' "$RUNNER_TEMP/v94-out/"
+          (cd "$RUNNER_TEMP/v94-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+          mkdir -p "$RUNNER_TEMP/v94-review"
+          cp "$RUNNER_TEMP/v94-out/review_only/"*.png "$RUNNER_TEMP/v94-out/v94_qa.json" "$RUNNER_TEMP/v94-review/"
+          (cd "$RUNNER_TEMP/v94-review" && sha256sum * > SHA256SUMS)
+      - name: Preserve V94 native candidate, renders and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-forest-floor
+          path: ${{ runner.temp }}/v94-out
+          retention-days: 14
+          if-no-files-found: error
+      - name: Preserve V94 review-only images (no native)
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-review-only
+          path: ${{ runner.temp }}/v94-review
+          retention-days: 14
+          if-no-files-found: warn
