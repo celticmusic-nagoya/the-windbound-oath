@@ -141,8 +141,8 @@ function selectRecentArtifacts(data,category="",limit=30){
  const seen=new Set(), rows=[];
  for(const a of data.artifacts.slice(0,100)){
   const w=a?.workflow_run;
-  if(!isId(a?.id)||seen.has(a.id)||!isId(w?.id)||typeof a.name!=="string"||
-     typeof w.head_branch!=="string"||!/^[a-f0-9]{40}$/.test(w.head_sha||"")||
+  if(!isId(a?.id)||seen.has(a.id)||!isId(w?.id)||!safeLabel(a.name)||
+     !safeLabel(w.head_branch)||!/^[a-f0-9]{40}$/.test(w.head_sha||"")||
      w.repository_id!==REPO_ID||w.repository_id!==w.head_repository_id||
      a.expired!==false||!isId(a.size_in_bytes)||!Number.isFinite(Date.parse(a.created_at)))continue;
   if(w.head_branch==="docs/ireland-world-source-grounded-plan-20261123"&&a.name.startsWith("two-")&&!/^two-[a-z0-9][a-z0-9-]{0,159}$/i.test(a.name))continue;
