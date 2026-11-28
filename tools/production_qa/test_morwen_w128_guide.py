@@ -138,6 +138,35 @@ def test_preservation_name_filter(tmp):
     assert not any(t.NAME.fullmatch(n) for n in bad)
 
 
+def test_w129_eye_hidden_shown_handle(tmp):
+    base = screen(40)
+    base[274:300, 255:300] = (255, 255, 255)        # white G1 row (row y=280, eye y=288)
+    base[286:291, 269:282] = (150, 150, 150)        # G1 eye icon
+    with_g1 = base.copy()
+    with_g1[318:380, 480:545] = (80, 48, 80)        # G1 fringe strands
+    png = write(tmp, "sel.png", with_g1)
+    rw = rows(tmp, png)
+    w.eye(png, rw, "1")
+    expect_error(lambda: w.eye(png, rw, "2"), "eye row is selected")
+    hid = write(tmp, "hid.png", base)
+    w.hidden(png, hid)
+    expect_error(lambda: w.hidden(png, png), "not hidden")
+    w.shown(png, png)
+    expect_error(lambda: w.shown(png, hid), "not restored")
+    # crown handle: white 3x3 core with green ring at the W108 left position, select tool active
+    h = base.copy()
+    h[125:150, 351:379] = BG
+    h[125:150, 315:348] = BLUE
+    h[326:339, 492:505] = (40, 200, 40)
+    h[331:334, 497:500] = (255, 255, 255)
+    hp = write(tmp, "h.png", h)
+    hr = rows(tmp, hp)
+    rp = Path(tmp) / "hreg.json"
+    rp.write_text(json.dumps(dict(REG, screenshot_sha256=hashlib.sha256(hp.read_bytes()).hexdigest())))
+    w.handle(hp, hr, rp, "left")
+    expect_error(lambda: w.handle(hp, hr, rp, "right"), "crown control point not visible")
+
+
 def main():
     tests = [v for k, v in globals().items() if k.startswith("test_")]
     for fn in tests:
