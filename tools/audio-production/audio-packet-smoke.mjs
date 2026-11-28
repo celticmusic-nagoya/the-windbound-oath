@@ -24,8 +24,14 @@ try{
    await page.locator('#audio-source').setInputFiles(join(packet,source));
    await page.locator('#audio-candidate').setInputFiles(join(packet,name,'candidate.wav'));
    await page.locator('#audio-receipt').setInputFiles(join(packet,name,'receipt.json'));
+   await page.locator('#audio-loudness').setInputFiles(join(out,'loudness.json'));
    await page.locator('#audio-check').click();
    await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('照合 PASS'));
+   await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('紐付け一致'));
+   const inspection=JSON.parse(await readFile(join(out,'loudness.json'),'utf8')).pairs[name];
+   assert.ok((await page.locator('#audio-loudness-b').innerText()).includes(inspection.after.integrated_lufs.toFixed(2)));
+   await page.locator('#audio-match-level').check();
+   await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('試聴補正'));
    await page.waitForFunction(()=>['audio-a','audio-b'].every(id=>document.getElementById(id).readyState>=1));
    assert.match(await page.locator('#audio-b-metrics').innerText(),/2\.000 秒/);
    await page.locator('#audio-a').evaluate(a=>{a.currentTime=.25;return a.play()});
@@ -35,7 +41,7 @@ try{
    const receipt=JSON.parse(await readFile(join(packet,name,'receipt.json'),'utf8'));
    assert.ok((await page.locator('#audio-b-metrics').innerText()).includes(receipt.after.rms_dbfs.toFixed(2)));
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-   checks[name]={sha_pcm:'PASS',playback:'PASS',switch:'PASS',source_sha256:receipt.source_sha256,output_sha256:receipt.output_sha256};
+   checks[name]={sha_pcm:'PASS',loudness_binding:'PASS',level_match:'PASS',playback:'PASS',switch:'PASS',source_sha256:receipt.source_sha256,output_sha256:receipt.output_sha256};
    if(name==='warm')await page.locator('#audio-review').screenshot({path:join(out,'actual-warm-mobile.png')});
    await page.locator('#audio-clear').click();
    assert.equal(await page.locator('#audio-results').isVisible(),false);
