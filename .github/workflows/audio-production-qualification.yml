@@ -32,6 +32,8 @@ jobs:
           a02=a01 or root+'render_rilde_day_a02.py' in paths
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               f.write(f'a01={str(a01).lower()}\na02={str(a02).lower()}\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('button_probe='+str(root+'probe_button_accordion.py' in paths).lower()+'\n')
           print('Music delta: A01',a01,'A02',a02)
           PY
       - name: Verify or install distribution FFmpeg
@@ -42,6 +44,12 @@ jobs:
           fi
           ffmpeg -version
           ffmpeg -hide_banner -filters | grep -E 'asoftclip|acompressor|highpass|equalizer'
+      - name: Verify pinned CC0 button accordion samples and render short notes
+        if: steps.scope.outputs.button_probe == 'true'
+        run: |
+          python -m py_compile tools/audio-production/probe_button_accordion.py
+          python tools/audio-production/probe_button_accordion.py "$RUNNER_TEMP/button-accordion-probe"
+          rm -f "$RUNNER_TEMP/button-accordion-probe/button_probe.wav"
       - name: Actual offline audio processing and QA
         run: |
           python -m py_compile tools/audio-production/process_audio.py tools/audio-production/inspect_audio.py tools/audio-production/export_delivery.py
