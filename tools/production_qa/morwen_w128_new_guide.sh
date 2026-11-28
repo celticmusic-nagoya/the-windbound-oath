@@ -106,13 +106,14 @@ last=W128-c0
 echo "c0 $draw" > evidence/W128-guide-attempts.txt
 for it in 1 2 3 4; do
   test "$draw" = "F06 F01" && break
-  # Crown lift while lane roots are short; otherwise shoulder move for the flank lanes (W131).
-  if "$py" "$w128" crown "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-adjust-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-crown-error.txt"; then
-    kind=crown
-  elif "$py" "$w128" shoulder "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-shoulder-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-shoulder-error.txt"; then
-    kind=shoulder
+  # W132: crown only while a root is outside; otherwise shoulder for the flank lanes.
+  kind=$("$py" "$w128" plan "evidence/$last-guide.json")
+  if test "$kind" = crown && "$py" "$w128" crown "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-adjust-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-error.txt"; then
+    :
+  elif test "$kind" = shoulder && "$py" "$w128" shoulder "evidence/$last.png" "evidence/$last-rows.json" "evidence/$last-registration.json" "evidence/$last-guide.json" "evidence/W128-shoulder-$it.json" > "evidence/W128-adjust-$it.txt" 2>"evidence/W128-adjust-$it-error.txt"; then
+    :
   else
-    echo "adjust$it NOT_APPLIED" >> evidence/W128-guide-attempts.txt
+    echo "adjust$it $kind NOT_APPLIED" >> evidence/W128-guide-attempts.txt
     break
   fi
   while read -r d1 d2 d3 d4 d5; do
@@ -257,6 +258,10 @@ capture_state W128-reopened-front
 "$gui" vroid-shortcut front-right
 sleep 2
 capture_state W128-reopened-oblique
+for n in 1 2 3; do "$gui" vroid-shortcut turn-left; done
+sleep 2
+capture_state W128-reopened-left
+for n in 1 2 3; do "$gui" vroid-shortcut turn-right; done
 "$gui" vroid-shortcut front
 cmp evidence/model.vroid evidence/W128-saved-unverified.vroid
 mv evidence/W128-saved-unverified.vroid evidence/W128-new-guide-not-adopted.vroid
@@ -268,7 +273,7 @@ lanes=(p/'W128-lanes.txt').read_text().splitlines()
 (p/'W128-receipt.json').write_text(json.dumps(dict(
   status='NEW_INDEPENDENT_GUIDE_SAVED_REOPENED_NOT_ADOPTED',source_sha256=sha(p/'input-model.vroid'),
   candidate_sha256=sha(p/'W128-new-guide-not-adopted.vroid'),groups=['Freehand Group 1','Freehand Group 2'],
-  iteration='W131',guide_attempts=(p/'W128-guide-attempts.txt').read_text().splitlines(),
+  iteration='W132',guide_attempts=(p/'W128-guide-attempts.txt').read_text().splitlines(),
   lanes=lanes,draw_plan=(p/'W128-draw-plan.txt').read_text().split(),save_reopen=True,
   screenshots={q.name:sha(q) for q in sorted(p.glob('W128-*.png'))},
   limitations=['G2 guide measured as 2D front proxy; no D4','G1 untouched incl. truncated W108 F01 stub','independent G2/G3/G4 pending']),indent=2))
