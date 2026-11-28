@@ -1,0 +1,38 @@
+{
+  "schema": "two.region.moss_a2_view_lod_receipt.v05",
+  "parent": "940f8a98eb2f462612cd52b7948807417a9cfc75",
+  "status": "DESIGN_SCREEN_HOLD_LANDMARK_VISIBILITY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "ecology_v04": "51cc7574dac4a0141dafb9edec36dd3b8de0358a",
+    "eco_manifest": "33f3b98498e9190ef8943dafcab5b394c5c25a60"
+  },
+  "outputs": {
+    "script_blob": "5d4334a9626be62791326a073989f38e15ee6e3d",
+    "qa_blob": "ab06ecb10d17dfc96638aa2a9451a8e62de6c70b",
+    "script_sha256": "b6cb1fd9eede55173d7a5948ab37b5a8c115e77320e071b7dcc89607b81c7415",
+    "qa_sha256": "4d7a96abf4e424f5b3f0b1daeedf848ed4b6b48394e2882ef0aca85e1dbe4b05",
+    "csv_sha256": "8ac64f8ea83afa4d92d5c6837677bb300180048ad401d69cd8607c12f6deb6e2",
+    "png_sha256": "4d65f37c8a85ed6be77bf04d4de687a2ea373ba3d9ba886c82253fc5ea03ac56"
+  },
+  "execution": "Actual local Python with four exact SHA-matched inputs. 651 road points, 35 observer positions, two eye heights, six targets, 420 rays sampled <=0.25m against candidate terrain and analytic full vertical cylinders; figure inspected. Original files unchanged. No native or runtime execution.",
+  "decision": "Retain B_balanced (12/30/60/100m, 100/25/6% triangle targets, 12-triangle impostor assumption) as provisional tree-only allocation; peak 142242 versus 284847 detail and 75034 mobile. Provisional cap 150000 is not device qualification. All landmark midpoint/lower waterfall observations fail current screen; full cylinders conservatively obscure ancient-tree targets. Next test dry-land observation spur and landmark sightline composition without modifying protected terrain or unreviewed watercourse. No assumption that tree removal alone solves terrain occlusion.",
+  "reproduction": "python audit_view_lod.py <A2 GLB> <V02 valley NPZ> <V03 shoulders NPZ> <V04 placements CSV> in disposable directory; exact input SHA pinned in script.",
+  "limitations": [
+    "No actual foliage mesh, actual LOD, camera frustum, precise ray-continuous terrain test, verified camera, Android test or independent D4. Tree budgets exclude terrain, water, rocks, understory, draw calls and overdraw. Hero triangle counts assumed. CSV/PNG local; exact script and QA JSON stored."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_VIEW_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ACTUAL_LOD_AND_VIEW",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

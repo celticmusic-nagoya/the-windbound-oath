@@ -1,0 +1,109 @@
+{
+  "schema": "two.region.hero_tree.scan_adaptation.v56",
+  "parent": "4438ec56e67f2cabcf1fd21423db1243d6c8006f",
+  "status": "ISOLATED_BBOX_FIT_AND_LEAF_LOD_MEASURED_CROWN_MISMATCH_HOLD_TRUNK_EXTRACT_PASS",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "v55": "381a2363c223bcdfa00574f08c5d3cbcb4ad276c",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "source": {
+    "asset": "Island Tree 01",
+    "license": "CC0",
+    "artifact": 15073087704,
+    "source_preview_sha256": "457e4e92dc64b949b28207cb3216ad79654a0b4da4d1da25cdd3b63cd3384ec4",
+    "source_unchanged": true
+  },
+  "scope": "Isolated feasibility, no native or placement mutation, no D4 or canonical dimensions. Root pivot median of source wood vertices below local y=.08m. Yaw in glTF XZ plane, 1-degree grid, uniform scale to avoid anisotropic distortion.",
+  "fit": {
+    "yaw_deg": 41,
+    "uniform_scale": 2.63,
+    "grid_max_scale": 2.6310620195758743,
+    "root_pivot_source_xz": [
+      0.03152092546224594,
+      0.06966163218021393
+    ],
+    "local_gltf_bounds": [
+      [
+        -5.042655317478715,
+        -0.053462375961244105,
+        -6.123470776129994
+      ],
+      [
+        7.0176959291509995,
+        13.168722186088562,
+        5.497779942994939
+      ]
+    ],
+    "height_m": 13.222184562049806,
+    "target_height_m": 16.5,
+    "root_low_vertex_radius_m": 1.5429197665188616,
+    "low_height_screen_m": 1.2,
+    "leaf_vertices_outside_v05_ellipsoid_union_fraction": 0.9184272604169362,
+    "decision": "BBox only PASS; crown and height HOLD. Do not distort or force fit scan."
+  },
+  "lod": {
+    "original_leaf_components": 44168,
+    "retained_leaf_components": 15726,
+    "source_component_triangles": 24,
+    "source_spatial_voxels": 2831,
+    "retained_voxels": 2831,
+    "source_voxel_m": 0.18,
+    "seed": 2026112656,
+    "full_triangles": 1599403,
+    "lod_triangles": 916795,
+    "wood_and_branch_triangles_unchanged": 539371,
+    "retained_positions_normals_uv_indices_and_all_image_bytes_exact": true,
+    "foreground_pixel_ratio": [
+      0.8681331109163392,
+      0.851454527882478,
+      0.8592201936992097
+    ],
+    "silhouette_iou_proxy": [
+      0.8681067021020936,
+      0.851454527882478,
+      0.8592201936992097
+    ],
+    "render": "Actual VTK EGL GLB importer, 3 matched orthographic cameras, all 3 material PBR bindings, foreground threshold proxy not exact alpha silhouette. Visual thinning obvious, reject as near hero LOD, not runtime-tested. No repeat thinning."
+  },
+  "trunk": {
+    "triangles": 34787,
+    "bytes": 3555588,
+    "sha256": "e07fee4c0739b66076fa89a0a68faf05e93a69abc88cc58555a8ab11e32731a6",
+    "source_scale": true,
+    "images": 3,
+    "all_retained_buffer_views_exact": true,
+    "limit": "Source wood includes ground patch, not a freestanding finished root mesh; no placement, contact or oak species equivalence. Reopened binary verification, separate render not run."
+  },
+  "outputs": {
+    "full_fit_glb_sha256": "986c89e0753feac3a3c78a97bb2ef94abccf467aec6def8ba1b7cef5fdf3b8ea",
+    "full_fit_bytes": 66591296,
+    "lod_glb_sha256": "186529d6c15e4416f95a4863dd5c5ca787b754bbe6aaa0f72538c55824250498",
+    "lod_glb_bytes": 39287220,
+    "build_sha256": "0ee2371455552e429af8d86ca2f7ee7a1ac6ab5586e05e6c50eb2c0a7c717292",
+    "render_sha256": "2037e62490454657ef8953dffdbf65b33e7ccc60d810406bab403b053b762bf1",
+    "extract_sha256": "fd879c28beccae7ddbc540783c368efb5af5f8a8f2626c7c45f47d41cc397abe",
+    "qa_sha256": "5e335b6cbadbfef75c3ac4ffbbd20e2b2b8128b3b82d0ecb859b170ad56eb742",
+    "comparison_sha256": "b79b3b4e3aa0e42c150b8cd5b24311ed64140f0ab788b96e1757a7d16878afa2",
+    "manifest_sha256": "8a17f44a10eb2392464640dbe374cbed8c3fb296a17fa1390772b8b4162b88f5",
+    "package_sha256": "abec43219b9a3571c7e01dbbd7f091aa70c040ddbec7c54866b2283f778769e0",
+    "package_bytes": 27633181,
+    "zip_crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Local GLB and package, receipt only in GitHub. Full fit GLB available separately; package has LOD and trunk plus scripts. Full fit hash in manifest."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_CROWN_SPECIES_AND_LAYOUT",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_REOPEN_PBR_PREVIEW_PASS_NOT_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not continue crown-thinning or fit-scale iteration. Reuse verified scan wood as morphology/optional independent native candidate; design source-grounded oak crown and scene-level two-hero-tree framing with existing terrain and altar interfaces, evaluate composition and independent D4 before precision placement. Prior V54 and V55 preserved. No formal adoption/main merge."
+}

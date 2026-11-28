@@ -1,0 +1,77 @@
+{
+  "schema": "two.region.terrain_recovery_receipt.v01",
+  "status": "PARTIAL_EXACT_RECOVERY_NOT_V03_NOT_ADOPTED",
+  "parent": "1f72a10ab97497cfc3fc5632f2b80ed9692d9709",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "core": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "expansion": "dc06678c3ac274b2d2b63de0926b42bde9758504"
+  },
+  "execution": "Local Python 3.13.5, NumPy 2.3.5, trimesh 4.11.1. Read original V02 build_expansion.py via Library; new recovery scripts executed. No Blender or Actions.",
+  "exact_recovered_v02_sha256": {
+    "MOSS_FOREST_A1": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d",
+    "MOSS_FOREST_A2": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "MOSS_FOREST_A3": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "IF07_FORT_CONNECTOR": "9bfa4d2e46eab9cb1a33295a4d354ad1479db3477bc0a6208b191e93a6fdc146",
+    "DUNVAR_FORTRESS": "480226276267a405666553822dc3eab289e2cafa92f21de1e0a12a835226307f",
+    "RIVER_WATER_CLIPPED": "4043fbc171b2b16f138a1b406c2df72846c8fb625fb05ea5ab9e28d8e6f59bcd"
+  },
+  "reconstructed_not_original_sha256": {
+    "RILDE_VILLAGE": "d02501502c2a44102b6f82e8d52453049ef8ad794be4927379864d9ab85f6bb1",
+    "COASTAL_MEADOW": "e59887b736a74627d9268f627bb7422392334543f63e53e5e5640f0176e18729",
+    "RIVER_CORRIDOR": "fddfee34946a9cdcb336ff3422c75b6837af78ea10e9447bed83dc1f11adda57",
+    "IF01_CLIFF_CONNECTOR": "33d6075a5347298676c4bf782ce469a9a8e4d83db359173a0a795e1c332a2f11",
+    "IF03_RIVER_CONNECTOR": "78053dca83733d7028a59ad8d6c4a0443ab61cafa0070113b03ae1b8b7caab32"
+  },
+  "qa": {
+    "terrain_vertices": 56420,
+    "terrain_triangles": 110000,
+    "seams": 9,
+    "shared_edge_sample_pairs": 369,
+    "max_xyz_seam_delta_m": 0,
+    "water_vertices": 2471,
+    "water_triangles": 4059,
+    "water_shore_vertices": 864,
+    "water_shore_xy_gap_m": 0,
+    "water_reopen_max_xyz_delta_m": 0.0000076248380196375365,
+    "assembly_geometry_count": 14,
+    "assembly_vertices": 61783,
+    "assembly_triangles": 119831,
+    "assembly_reopen_geometry_transform_exact": true,
+    "inputs_unchanged": true
+  },
+  "outputs": {
+    "delivery": "GLBs delivered as local attachments; reproduction scripts committed; binary not committed",
+    "terrain_scene_sha256": "545c0adb81c82c61dda8d3996d2937bb6257a15cdb9b928f887c1f4fc02eb615",
+    "inspection_scene_sha256": "884a4a5f3370eeb9aa972e25835b78b51b4e8b4c671e088effc613524ee663d2",
+    "bridge_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "scripts_sha256": {
+      "recover_tiles": "a074e7731905ce7e4f5265a6a061584be18b8a719e197648eb0034a1a8c21ca8",
+      "recover_water": "588cc46c278e6a07379ee72dc933b95bd1874335c9a4709913929607cdb6b468",
+      "assemble_recovery": "9d0a8e0690c7eedb0598043bf2fcede0508b8d17cccdc8c4315831054180ccef"
+    }
+  },
+  "reproduction": "Run recover_tiles.py then recover_water.py in scratch directory. For assembly, place verified original bridge GLB in sibling rilde_recovery/east_river_bridge_reconstructed.glb (previous recovery recipe available). Run assemble_recovery.py. Do not run in protected original directories.",
+  "blockers": [
+    "World original PNG blob 5abfe58fd4ba4b08a3ddce0181a9978190b0186f: fetch_blob UnicodeDecodeError, alternate API fetch requires UTF-8; no pixels obtained.",
+    "V01 five terrain SHA mismatch; color/topology assumptions not proven; V03 full scene absent. Exact water recovery confirms output not full terrain identity.",
+    "North terrain V02 predates V03 regrade; do not replace V03. Inspection scene contains neither quay nor cliff, no collision/native/runtime/independent QA."
+  ],
+  "design": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ORIGINAL_AND_OPERATIONS",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_RECOVERY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Recover V03 north regrade via original build_access.py; compare source fingerprints and preserve exact V02. Then original CG and harbor seam D4 before production. No formal adoption/main merge."
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "two.region.directional_schematic.v1",
+  "id": "RILDE_C01_C03_DIRECTIONAL_V01",
+  "stage": "DESIGN_CANDIDATE",
+  "basis": "derived directional relationships from director-approved world-map canon; no private source copied",
+  "drawing": "docs/production/region_master/RILDE_C01_C03_DIRECTIONAL_V01.svg",
+  "metric": false,
+  "coordinate_system": {
+    "image": "SVG px, not geographic",
+    "world": "X east, Y north, Z up, 1 BU=1m; origin unknown"
+  },
+  "relationships": [
+    [
+      "sea_cliff",
+      "west_northwest_of",
+      "rilde_village"
+    ],
+    [
+      "fishing_cove",
+      "southwest_of",
+      "rilde_village"
+    ],
+    [
+      "farmland",
+      "north_of",
+      "rilde_village"
+    ],
+    [
+      "dunvar_fortress",
+      "north_of",
+      "rilde_village"
+    ],
+    [
+      "river_corridor",
+      "east_of",
+      "rilde_village"
+    ],
+    [
+      "moss_forest",
+      "southeast_of",
+      "rilde_village"
+    ]
+  ],
+  "distinct_features": [
+    "sea_cliff",
+    "riverbank_cliff"
+  ],
+  "unknown": [
+    "coastline_xyz",
+    "river_polyline_xyz",
+    "terrain_elevations",
+    "DEM_CRS",
+    "vertical_datum",
+    "metric_distance",
+    "8_area_boundary_geometry",
+    "world_transform"
+  ],
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "schema": "two.region.moss_a3_staging_receipt.v02",
+  "parent": "a227b86520e29f22b8bcfe20bcf68a0a64c23435",
+  "status": "PROXY_STAGING_PASS_HOLD_BARRIER_AND_ACTUAL_GAMEPLAY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v01_design": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "v01_script": "49dc438eff1bdd2760cbef13b269db6bef34ff8b"
+  },
+  "inputs_sha256": [
+    "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "c3d6c314cc23f50012840a2b81414f46ea638ac6f7917f3ae557394e434d3f32",
+    "3ab29ffddcaabce5a997e1ce65bd6c55e0f3df2d8e73f00049fb9c6474e9f65e",
+    "b4adf3246b4f9c298f4017050966e332af859caf29038468c3e305d726ce78cf"
+  ],
+  "criteria": {
+    "frame": "provisional metres X east Y north Z up",
+    "actor_radius_m": 0.65,
+    "actor_heights_m": [
+      1.8,
+      1.8,
+      2.4
+    ],
+    "swept_distance_m": 1.5,
+    "min_swept_clearance_m": 0.5,
+    "max_grade_pct": 15,
+    "max_relief_m": 0.5,
+    "vertical_fov_deg": 60,
+    "aspect": "16:9",
+    "image_margin_fraction": 0.1,
+    "max_sample_step_m": 0.2,
+    "min_ray_clearance_m": 0.1,
+    "tree_targets_m": [
+      1,
+      6,
+      12
+    ],
+    "altar_target_m": 1.5,
+    "all": "authored proxy thresholds, not canon or actual actor dimensions"
+  },
+  "staging": {
+    "count": 72,
+    "pass": 72,
+    "angle_deg": 105,
+    "spacing_m": 4,
+    "positions": [
+      [
+        668.05449012324,
+        -474.4182108647749
+      ],
+      [
+        664.1907868180838,
+        -475.453487045185
+      ],
+      [
+        667.0192139428299,
+        -470.5545075596186
+      ]
+    ],
+    "end_positions": [
+      [
+        667.6662615555863,
+        -472.9693221253413
+      ],
+      [
+        662.7418980786501,
+        -475.84171561283875
+      ],
+      [
+        666.6309853751761,
+        -469.10561882018504
+      ]
+    ],
+    "minimum_swept_clearance_m": 1.2000000000001005,
+    "outside_m2": 0,
+    "max_grade_pct": 6.5422738134860134,
+    "max_relief_m": 0.1408443967725077
+  },
+  "camera": {
+    "count": 216,
+    "pass": 212,
+    "angle_deg": 255,
+    "range_m": 8,
+    "height_m": 3,
+    "eye": [
+      665.4662996722147,
+      -480.2137658225093,
+      31.04145469656912
+    ],
+    "aim": [
+      666.4214969613846,
+      -473.4754018231929,
+      28.73543522763558
+    ],
+    "frame_x": 0.6008016108623769,
+    "frame_y": 0.6585069845176517,
+    "min_ray_clearance_m": 0.9647893352866745,
+    "root_hits": 0
+  },
+  "visibility": {
+    "travel_view_count": 29,
+    "hero_counts": [
+      29,
+      29,
+      29
+    ],
+    "altar_count": 29,
+    "scope": "terrain-only point sightlines"
+  },
+  "barrier": {
+    "cross_section_half_width_m": 15,
+    "sample_step_m": 0.25,
+    "gate_width_m": 5,
+    "outside_gate_max_sampled_grade_pct": 7.412343585360759,
+    "status": "BYPASS_RISK_NOT_NAV_PROOF"
+  },
+  "outputs": {
+    "script_blob": "c5289ba92df0ad19380f67bd35266b5da9949bc3",
+    "script_sha256": "b8812b12d5293435b076cef2e42aa89103dcd6eb230a7e40823e6c2b16476be9",
+    "qa_sha256": "86a82dcda10d0fa2fd192d5690ae2d80c1696b6044a65580926e1ba89eb5e644",
+    "qa_local_git_fingerprint": "69b7101c45ac09fc2d1c3012da08e30cd5dd289e",
+    "png_sha256": "e3c44ca64ddd9a47057aff68814af1410c5545c587a65e9721b898649d48e434"
+  },
+  "execution": "Actual local Python, 5 pinned input hashes checked before and after; 72 swept footprint arrangements, 216 initial pose camera projections, 29 travel views and 121 barrier cross-section samples. Plot inspected. Exact script blob verified; full 7922-line QA and PNG local. No Blender or Actions.",
+  "reproduction": "python staging.py <A3 GLB> <V03 shoulders NPZ> <V04 endpoint NPZ> <V01 QA JSON> <V01 design.py>",
+  "decision": "Preserve selected spatial staging as candidate. Test dry-land gate bypass on actual terrain, then design natural boundary and gate interface in coordination with gameplay owner. Separate actual functional one-way behavior, animation, battle rules and event triggers. No assumption that altar is visible in final narrative or that camera is approved. No formal adoption or main merge.",
+  "limits": [
+    "Reconstructed terrain, not official CG. Static proxy camera framing only, no entire movement framing or inter-actor occlusion criterion; actual character/asset sizes and gameplay unverified. Sampled visibility not continuous proof. Single cross-section does not prove navigability. No actual tree, altar, gate, battle implementation or independent D4."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_GATE_INTERFACE",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ACTUAL_GAMEPLAY_ASSET_CAMERA",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

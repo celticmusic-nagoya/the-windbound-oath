@@ -1,0 +1,93 @@
+{
+  "status": "FULL_COUNT_SCREEN_PASS",
+  "input_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394",
+    "8136ad145a9eef636fb9780927f0232cf0b7553793c6d2794833cf7f6822f548",
+    "40f8ea9359aeb3cd69c742fb366728c89b1a80670059cd7e40a263a790db9c03"
+  ],
+  "attempts": [
+    {
+      "halo_m": 18,
+      "seed": 0,
+      "group_count": 111,
+      "failed_ids": [
+        "A2-ECO-0080",
+        "A2-ECO-0102"
+      ],
+      "total_displacement_m": 404.9526699717906
+    },
+    {
+      "halo_m": 18,
+      "seed": 1,
+      "group_count": 111,
+      "failed_ids": [
+        "A2-ECO-0097",
+        "A2-ECO-0102"
+      ],
+      "total_displacement_m": 438.39805739196925
+    },
+    {
+      "halo_m": 35,
+      "seed": 0,
+      "group_count": 202,
+      "failed_ids": [],
+      "total_displacement_m": 352.34058022112254
+    },
+    {
+      "halo_m": 35,
+      "seed": 1,
+      "group_count": 202,
+      "failed_ids": [],
+      "total_displacement_m": 362.0983550567727
+    }
+  ],
+  "selected": {
+    "halo_m": 35,
+    "seed": 0,
+    "group_count": 202,
+    "failed_ids": [],
+    "total_displacement_m": 352.34058022112254
+  },
+  "mandatory_ids": [
+    "A2-ECO-0001",
+    "A2-ECO-0045",
+    "A2-ECO-0102",
+    "A2-ECO-0104",
+    "A2-ECO-0160",
+    "A2-ECO-0338",
+    "A2-ECO-0358",
+    "A2-ECO-0400"
+  ],
+  "placed": 451,
+  "original": 451,
+  "counts": {
+    "ancient_tree_reserve": 3,
+    "deciduous": 36,
+    "fern_cluster": 140,
+    "forest_tall": 68,
+    "moss_patch": 180,
+    "rock_reserve": 24
+  },
+  "unplaced_ids": [],
+  "changed": 80,
+  "max_move_m": 27.94370356364914,
+  "min_pair_clearance_m": 0.1071977282333284,
+  "min_exclusion_clearance_m": 0.008846747175688674,
+  "min_boundary_clearance_m": 0.30299001407497705,
+  "max_grade_pct": 19.27868207028378,
+  "sight_blockers": [],
+  "grade_failures": 0,
+  "exclusion_failures": 0,
+  "outside": 0,
+  "limits": [
+    "Finite 1m grid, bounded group, conservative plan and cylinder envelopes, provisional thresholds. No actual asset mesh, camera, junction, hydrology, D4 or native work. Any unplaced ID is explicitly withheld from reduced-density alternative, not deleted from V04."
+  ],
+  "outputs": {
+    "relayout.py": "54ad4cdce56a0f6bc814e8cc86c40680ca82d65ffdd579fdb443f28a609d0749",
+    "placements_candidate.csv": "a488d0aa7c421fde2353acdea82f9fdec5fe1f6d52a3eb3ed3d13ac4cd599265",
+    "relayout_v09.png": "abce89b2bae0af8b9402fe0c2a4bc99389e2c444ab5d3926e53929d76eeda74c"
+  }
+}

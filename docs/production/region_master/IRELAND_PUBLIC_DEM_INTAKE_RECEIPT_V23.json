@@ -1,0 +1,52 @@
+{
+  "schema": "two.region.ireland_dem_intake.v23",
+  "status": "IMPLEMENTED_RUN_PENDING_NO_RASTER_PASS",
+  "parent": "addda2ae2a912acc7e62250794629a4373d6f51f",
+  "precedence_blob": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+  "local_envelope_qa_blob": "1f541f8e0ee6a98c0f283ba62869b22b61b379ef",
+  "source": {
+    "provider": "Copernicus DEM GLO-30 Public, 2021 release, AWS open data",
+    "catalog": "https://registry.opendata.aws/copernicus-dem/",
+    "documentation": "https://copernicus-dem-30m.s3.amazonaws.com/readme.html",
+    "license": "https://dataspace.copernicus.eu/sites/default/files/media/files/2025-06/copernicus_contributing_mission_data_access_v2_cop_dem_licenses.pdf",
+    "license_review": "Free & open GLO-30-F section, articles 4–6; adaptation permitted, attribution, modified notice and disclaimer required. Reference-only intake, no final game redistribution or fictional geography adoption.",
+    "account_required": false,
+    "source_datum": "EGM2008 per product specification; per-file verification pending",
+    "type": "DSM (vegetation/buildings included)",
+    "source_tiles": [
+      "Copernicus_DSM_COG_10_N52_00_W010_00_DEM",
+      "Copernicus_DSM_COG_10_N51_00_W010_00_DEM"
+    ],
+    "tile_byte_hashes": null
+  },
+  "execution": {
+    "script_blob": "5cdb90017e1569c1d14a1d8a2bc6574aad311ff6",
+    "workflow_blob": "87570d38ad6dff4f02026515103ad437a85d98af",
+    "run": 45635918803,
+    "run_head": "addda2ae2a912acc7e62250794629a4373d6f51f",
+    "last_observed": "pending; no job or artifact yet",
+    "derived_outputs": "UTM29N 30m crops, hillshade PNG, 20m contour GeoJSON, raster CRS/shape/transform/coverage/nodata/elevation/slope/sha report; all pending execution"
+  },
+  "backup": {
+    "artifact": 15032255249,
+    "name": "forest-v21-native-floor.zip",
+    "bytes": 49093100,
+    "sha256": "5a1b341e455e7cbfda7d13716e8888f119a92380f727cd53511a4be5983e3d61",
+    "drive": "Private folder; upload/readback metadata shared=false; authenticated raw download SHA and ZIP CRC verified. No public sharing or new billing."
+  },
+  "policy_pr": {
+    "number": 551,
+    "head": "648bf84c52ad55a2652f13f98327579ee3006922",
+    "diff_review": "Only existing geography contract and cross-AI index; directions and historical source hash unchanged. No code/native changes. Independent review not yet recorded; no merge."
+  },
+  "next": "Verify exact run outputs, download/inspect actual source rasters and derived SHA/CRS, then derive reference terrain metrics for C02 without assigning fictional metric scale; do not use old illustration as geography authority.",
+  "gates": {
+    "source_documentation": "PASS_SCOPE_LIMITED",
+    "raster": "NOT_RUN",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NEW_TERRAIN",
+    "G4": "NOT_RUN"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schema": "two.region.a3.far_relief_feasibility.v77",
+  "parent": "bf46fd63c9ab255fb8f16c9c5a77beec08fb373b",
+  "status": "V76_NATIVE_VERIFIED_ART_HOLD_V77_TEXTURED_RELIEF_FEASIBILITY_READY",
+  "prework": {
+    "main_head": "1e0d2d0174b879cff5367980a1184f4689d8b6e4",
+    "policy_blob_shas": {
+      "agents": "82cb9691b8e124f547f360b77a4f547fc770c9b4",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_V77_SCENIC_RELIEF_AND_LOWER_BACKGROUND_PBR",
+    "owner_pr": 482,
+    "owner_head": "bf46fd63c9ab255fb8f16c9c5a77beec08fb373b",
+    "writer_lease_fencing_evidence": "Completed V76 run; isolated new scene, expected HEAD CAS, no shared writer, no duplicate dispatch.",
+    "source_sha256": {
+      "native": "a0de38b06183e99a7513d04463d7f4ea72113faf6e8dc2316fc98ed3dfb729f9",
+      "archive": "88c3efae3eca04876d97d1bcc5a439164488a3d3be0758c9658f754e0516c635",
+      "terrain": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+      "extension": "2e557724020da3c7f7ed63f31423e0f213b29bce4ec66c609d291f70be66481a",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependency_shas": {
+      "v76": "254ca8b73e4d469ed2b3973b59e7a22fdb3823c8",
+      "spec": "a1638c8ff3e9fd6acadc07289039d021a5fa01fc",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All 692 old meshes, original materials, old terrain, route/event/sight/collision/game, V68 frozen ruins, V75 independent candidate.",
+    "stage": "D1-D3 bounded isolated scenic feasibility, not precision production D4 waiver",
+    "predecessor_gate_statuses": {
+      "D4": "NOT_RUN",
+      "G2": "SELF_HOLD",
+      "G3": "V76_SCOPED_PASS"
+    },
+    "acceptance_criteria": "Exact old source SHA and 692 old signatures unchanged; 396v/650tri, 61 shared vertices and 60 edges; exact shared height/UV/colors, zero far material blend at seam, 3 verified PBR maps, save/reopen; matched and lateral diagnostic images. Reject visible seam/stripes or horizon gaps, not performance claim.",
+    "preflight_checks": "Latest main and handoff, completed V76 and archive/outputs, local exact terrain design, 2 actual isolated PBR GLB previews with all 3 map bindings, source map SHA/MD5 and CRC.",
+    "result": "READY_BOUNDED_FEASIBILITY_ONLY",
+    "blockers": [
+      "Far terrain and reachability not surveyed",
+      "Independent D4 absent",
+      "Native scene rendering and visual seam not yet checked",
+      "No runtime/Android"
+    ],
+    "checkpoint": "V76 immutable; V75 separate"
+  },
+  "v76": {
+    "run": 45752638641,
+    "job": 139683792771,
+    "artifact": 15086058841,
+    "archive_sha256": "88c3efae3eca04876d97d1bcc5a439164488a3d3be0758c9658f754e0516c635",
+    "qa_sha256": "78304d5ac695fe5a2297b7849166f49fb8805f5d79757a37d5c7d2331f9c9210",
+    "native_sha256": "a0de38b06183e99a7513d04463d7f4ea72113faf6e8dc2316fc98ed3dfb729f9",
+    "output_sha_checks": "3/3",
+    "geometry_uv_color_exact": 692,
+    "added_triangles": 0,
+    "visual": "Minor greener grade but insufficient wet woodland effect. Stop color-only variants."
+  },
+  "design": {
+    "frame": "A3 provisional XY meters; GLB axes x,z,-y",
+    "grid_x": "60..135 step2.5,140,147.5,160,175,195",
+    "grid_y": "-195,-175,-160,-147.5,-140,-135..-60 step2.5",
+    "method": "L-shaped heightfield outside existing V58 scenic extension. bx=min(x,135),by=max(y,-135), base=exact boundary vertex height, d=hypot(x-bx,y-by),t=min(d/40,1),z=base+t*t*(3-2*t)*(12+2.5*sin((x+y)*.055)+1.5*cos((x-y)*.037)); cells x>=135 or y<-135. Authored noncanonical ridge.",
+    "vertices": 396,
+    "triangles": 650,
+    "seam_points": 61,
+    "seam_edges": 60,
+    "seam_residual_m": 0,
+    "height_range_m": [
+      26.32808494567871,
+      43.71905895994141
+    ],
+    "max_slope_grade": 0.5848496590531362,
+    "projection_diagnostic": {
+      "band_xyxy": [
+        80,
+        240,
+        880,
+        360
+      ],
+      "horizontal_sensor_mm_assumed": 36,
+      "uncovered_original_terrain_pixels": 68649,
+      "added_cover_pixels": 57275,
+      "fraction": 0.8343165960174219,
+      "lateral_fraction": 0.8328692398863328,
+      "limit": "Terrain-only mathematical projection, not actual sky/occlusion or camera calibration."
+    },
+    "files_sha256": {
+      "design": "b347f74c0777d7a411d72371bec0dabfa56ec8dc7dd16cc3db19332981bab0e3",
+      "script": "924c1d21cf12afa192e8190b42d02efa55e2976cff141edfa29913dd6386ca5d",
+      "figure": "ba10837857a3082de58c55b5f074d42838c264c4293edd52713b0604365fb8cb",
+      "geometry_glb": "62fca5b1ba49f36338f9823b5069a9941c9533881b2ed03911c3e595f677f61f",
+      "package": "860416e0a9da414a487f79a0f63cdf3b834c3e31c78ebde26ee613c4ebe1243a"
+    }
+  },
+  "pbr": {
+    "provider": "https://polyhaven.com/a/forest_leaves_02",
+    "license": "CC0 source already byte-verified",
+    "source_shas": [
+      "9c38b2b151a0415457a6914966422cfca5a546c94674442e5395e0b1e908a196",
+      "af0346114834c347a8d6a138f6ea16a97b0bec8d6e4db32c24f1c7e482163235",
+      "ed2dd60a10242640b1738760015cfae85c8526a79dbf5da563fdffdf30828eae"
+    ],
+    "local": {
+      "first_tiled_glb": "1bd8f6c2d38a0369909896df266476c631063cd4b56cbc5665225d2d6ffb0a13",
+      "first_visual": "Reject: periodic bands.",
+      "second_atlas_px": [
+        1536,
+        1536
+      ],
+      "world_extent_m": 135,
+      "projection_scales_m": [
+        3,
+        4.7
+      ],
+      "rotation_deg": [
+        0,
+        31
+      ],
+      "seed": 2026112677,
+      "macro_glb": "d9a95c4fe83f935ebe4b7313aa065d7f3b12f63d00d95d38bdacbd23317c31a6",
+      "qa": "0220e34448af2c430cba16416bae3631606662a20754ad446eaa07e1157228e8",
+      "script": "7667b2a9dbc948525d075baa166b19e5429ec19f1b005649a6d0c516254a95ff",
+      "comparison": "eb4d117034c24a6bfffa3e4d5db348d4f9778b37385bb553d4fcd3cf79f3ebba",
+      "visual": "Actual isolated VTK PBR. Strong bands reduced, some repetition still visible. Candidate only; not full scene or independent G2."
+    },
+    "native": {
+      "status": "NOT_RUN_AT_COMMIT",
+      "script": "tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py",
+      "source_artifact": 15086058841,
+      "method": "Exact old boundary UV/color, new copied material, original shader at zero blend seam, 25m smooth transition into two world-projected PBR shaders with separate UV/tangent normal maps and macro albedo modulation. Not the same as standalone baked atlas. No old mesh/material edits. Two diagnostic cameras."
+    }
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G2": "HOLD_V76_AND_LOCAL_V77",
+    "G3": "V76_SCOPED_PASS_LOCAL_V77_GLTF_REOPEN_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect actual V77 matched and lateral renders. No more color-only or card-count loops. If terrain seam and horizon valid, ground existing far forest textures against relief, test with separate atmospheric and understory layers; verify actual reachable interface and independent D4 before precision production. No formal adoption/main merge."
+}

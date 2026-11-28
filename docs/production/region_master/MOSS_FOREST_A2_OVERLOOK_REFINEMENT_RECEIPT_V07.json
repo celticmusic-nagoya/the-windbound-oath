@@ -1,0 +1,88 @@
+{
+  "schema": "two.region.moss_a2_overlook_refinement_receipt.v07",
+  "parent": "f6e92ca9476ee59a5a9f97af6ca7ca5158207c5b",
+  "status": "HOLD_RELOCATION_AND_JUNCTION",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v06_design": "d5a644afeb7fbb8e5f54abd3b5e7d99bdbf2378f",
+    "v06_script": "7e2f510900599b8efda660e112c4b48eafd34837"
+  },
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394",
+    "473f56f4d2a5f206607966c6a2255f4c9f3c6e323233eeefc0dc17c87fa27962",
+    "8136ad145a9eef636fb9780927f0232cf0b7553793c6d2794833cf7f6822f548"
+  ],
+  "method": "Circular fillets of simplified V06 paths, 2m wide sampled ribbon, exact maximum absolute gradient projection on each sampled tangent interval, conservative intersected source/design triangle sets. Original near route fails cross-grade <=10% (best 10.428665106164845%); alternate routes screened instead of repeating same geometry.",
+  "selected": {
+    "view_xy": [
+      460,
+      -375
+    ],
+    "radius_m": 3,
+    "length_m": 51.41604946938123,
+    "long_pct": 7.396158255547583,
+    "cross_pct": 8.515245390998778,
+    "folds": 0,
+    "water_overlap_m2": 0,
+    "outside_m2": 0,
+    "road_overlap_m2": 5.079164714784947,
+    "road_overlap_outside_entry_m2": 0,
+    "entry_center_residual_m": 0,
+    "sample_count": 3123,
+    "triangle_count": 5536,
+    "target_range_m": 12.682280026864145,
+    "angular_span_deg": 9.936942371821083,
+    "entry_station_m": 157.90958297869304,
+    "view_grade_pct": 8.459857640169147,
+    "sampled_terrain_ray_clearance_m": 0.27184434013271286
+  },
+  "relocation": {
+    "attempted": 8,
+    "successful": 4,
+    "failed_ids": [
+      "A2-ECO-0001",
+      "A2-ECO-0104",
+      "A2-ECO-0102",
+      "A2-ECO-0045"
+    ],
+    "rows": 451,
+    "remaining_spur_pad_encroachments": 4,
+    "min_pair_clearance_m": -0.6411810106274256,
+    "remaining_sight_blocker_ids": [],
+    "status": "FAIL_NOT_A_VALID_PLACEMENT_SET",
+    "global_v08": "20s container timeout; partial log reports no candidate for hero 0001 and tree 0104 on full A2 0.5m grid with fixed remaining reservations; found one location for 0102 at distance 83.675m; no completed output or accepted changes."
+  },
+  "outputs": {
+    "script_local_git_fingerprint": "fb68e028d357cd9a75d928d9d586214a94076e04",
+    "qa_local_git_fingerprint": "5315979f318c7606bc38235168cfcd5e1302109a",
+    "script_sha256": "d96800cc9e6be700c3acea9acc5f0599ab635d6040e1c87272d900bc42213250",
+    "qa_sha256": "b57823fad9dd692c9054fc0498379355e9a8d16de4759c7e12eaaffa1927ed19",
+    "csv_sha256": "e6ef5c8ec578040c1213665a0e6441ca9005afbde92652fe9c1daf810d6f4ca4",
+    "npz_sha256": "40f8ea9359aeb3cd69c742fb366728c89b1a80670059cd7e40a263a790db9c03",
+    "png_sha256": "72e35bf64dcafc6055be7f1643ab27ea0ac2b2192146493a54d1b6c1b5533cc3",
+    "delivery": "Receipt only; full code, failed candidate CSV, QA and figures local. Do not consume failed CSV as placements."
+  },
+  "execution": "Actual local Python. Six original-route radii per screen (one geometric rejection), alternate screen 12 attempts. Reopened NPZ exact; four source SHA unchanged. Global search interrupted by timeout; no native or Actions.",
+  "reproduction": "python refine.py <A2 GLB> <V02 valley NPZ> <V03 shoulders NPZ> <V04 placements CSV> <V06 QA JSON> <V06 screen.py>",
+  "decision": "Stop isolated moves on saturated V04 reservation packing. Treat 451 as prior provisional layout count, not canon. Next use joint re-layout of bounded affected cluster with stable IDs, compare density and landmark visibility; use vectorized point/clearance screening, avoid repeated exhaustive scalar loops. If preserving density is incompatible, submit explicit alternative density rather than silently deleting reserves. D4 required before native precision work.",
+  "limits": [
+    "No continuous arc-footprint/terrain conformity certificate; overlap at junction remains 5.079m² and center residual is sampled against same height function, not seam proof. No valid updated ecology layout. No actual assets, water flow, official CG, independent D4, Blender, adoption, or main merge."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_RELOCATION_JUNCTION",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

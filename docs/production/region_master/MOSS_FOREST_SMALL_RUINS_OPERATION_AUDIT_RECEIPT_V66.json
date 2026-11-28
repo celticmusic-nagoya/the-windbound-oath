@@ -1,0 +1,139 @@
+{
+  "schema": "two.region.a3.small_ruins.operation_audit.v66",
+  "parent": "0774c2e8bf1974511a67f850b822dc5f728509f0",
+  "status": "ALTERNATE_NUMERIC_AUDIT_AND_BOUNDED_RECESS_FEASIBILITY_PASS_D4_HOLD",
+  "prework": {
+    "main_head": "92e547298612ca5d69d207136312635a60c63d45",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SMALL_RUINS_V66_BOUNDED_OPERATION_RISK_TEST",
+    "owner_pr": 482,
+    "owner_head": "0774c2e8bf1974511a67f850b822dc5f728509f0",
+    "writer_lease_fencing_evidence": "Read-only source audit and one isolated technical feasibility copy. No native write, no lease takeover, non-force CAS.",
+    "source_sha256": {
+      "v63": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+      "v64": "00eed401791c425126b2a5d47c3ae73fea90d183fa40b550864384a051ccbc3a",
+      "v65": "276691c1d57d9daf41a3d14d6da8761d24f397ecfb858009135bbb89e80f55e2",
+      "v65_glb": "7879ba5440c37a736a67e0b77a1a618db2be75728dc75b98753d6b3a8eeacadb",
+      "refs": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+      "pbr": "b2ca93d43c849745e454980b3473dcaca8e2b075d15621c50cf0f18832b25ee5",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependency_shas": {
+      "v65": "7b9cda557ea4eba6b21170a82b35b197a5872c86",
+      "v64": "6891eaa983a22c8eb70e7723da5e0286b0d014a8",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All previous design rings, source maps, official CG, native originals, V58 scene and gameplay unchanged",
+    "stage": "D3 alternate verification and bounded operation qualification; no precision production",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED",
+      "D1": "LOCAL_ONLY",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "One BOUND-S01 copy only, preserve original, exact area coverage 1e-8m2, zero nonmanifold/boundary edges, consistent winding single component, volume residual <=1e-7m3; GLB reopen and render. Stop after one coupon; do not treat as D4 or finished asset.",
+    "preflight_checks": "Exact source SHA locks, ZIP CRC, provider MD5, Git blob SHA1 and size, existing PR HEAD, local syntax and geometry verification",
+    "result": "READY_BOUNDED_TECH_TEST_ONLY",
+    "blockers": [
+      "Independent D4 response absent in current PR comments",
+      "Actual seam color difference",
+      "Source silhouette and visual readability",
+      "Native after-cut UV, G2-G4"
+    ],
+    "checkpoint": "V65 unchanged"
+  },
+  "audit": {
+    "source_locks_verified": 8,
+    "reference_files": 21,
+    "pbr_files": 6,
+    "base_ring_equality": true,
+    "all_base_meshes_closed": true,
+    "base_triangles": 212,
+    "method": "Alternate edge adjacency, 9 interior samples on every cross-chart edge, bilinear RGB atlas sampling; normalized absolute channel mean, not Delta E or a calibrated acceptance threshold.",
+    "seam_rows": [
+      {
+        "id": "RUNE-S01",
+        "edges": 56,
+        "samples": 504,
+        "mean": 0.09155562229025983,
+        "p95": 0.2280078106121162,
+        "max": 0.35526295380681777
+      },
+      {
+        "id": "BOUND-S01",
+        "edges": 40,
+        "samples": 360,
+        "mean": 0.09559004058100966,
+        "p95": 0.22859822582197661,
+        "max": 0.33107100972311393
+      },
+      {
+        "id": "FRAG-S01",
+        "edges": 40,
+        "samples": 360,
+        "mean": 0.09688498464159731,
+        "p95": 0.22318860148186126,
+        "max": 0.3730192734054336
+      }
+    ],
+    "classification": "HOLD seam color phase discontinuity confirmed. Do not repeat texture swatches; correct continuous 3D projection or seam bake when production authorized."
+  },
+  "coupon": {
+    "scope": "BOUND-S01 isolated feasibility, de-yawed exact V64 base with V63 glyph and V65 non-through fracture; not Blender nor precision asset.",
+    "algorithm": "Shapely constrained Delaunay triangulation of each projected original front triangle minus glyph/crack masks. Intersections lifted on original plane then recessed along +Y by .008/.016m; add perimeter connecting walls, shared coordinates quantized to 1e-7m. Fix normals, preserve original other faces, compare integrated projected depth-volume.",
+    "base_triangles": 60,
+    "cut_vertices": 402,
+    "cut_triangles": 800,
+    "boundary_nonmanifold_edges": 0,
+    "watertight": true,
+    "winding_consistent": true,
+    "components": 1,
+    "base_volume_m3": 0.20735599999999996,
+    "removed_volume_m3": 0.00026523572895902786,
+    "actual_volume_m3": 0.20709076756001613,
+    "volume_residual_m3": 3.288975203297184e-9,
+    "projected_coverage_m2": {
+      "glyph": 0.02620531564898426,
+      "fracture": 0.0034745752354471103
+    },
+    "glb_reopen_faces": 860,
+    "render": "Actual VTK EGL two angles, original and coupon side by side; frontal cuts almost invisible, oblique cuts visible. G2 HOLD; faceted outline not matched to 2D original. No self-intersection proof or native after-cut UV."
+  },
+  "outputs": {
+    "files_sha256": {
+      "audit_v66.py": "f99a773aa1d96db740ababceeacf4cdb793f9916c7ff5bce8f9e213908e7db93",
+      "render_v66.py": "2126b5e0abd2587a6189f8a4a302a05025f50a55c93e23a4e2a790bc31b966fe",
+      "audit_v66.json": "831d1fb31030bd3c18179322c084647a566f8be82b0bd486b1b8a05b6606db28",
+      "v66_cut_coupon.glb": "fee29cd3c49047f9c91cdc5cbfde38f15c658d42ea1a4ad6e8983ed39c22a430",
+      "cut_coupon_comparison.png": "8e4ac3ccc8add05a3cb394abb276d373e93084e2f7e92e1d4726ab46081f694a"
+    },
+    "package_sha256": "00da7a77575779cd00c606cb49ce8c981f5ec1e83cb8d2c6abe6b0654a125a9b",
+    "package_bytes": 56670,
+    "CRC": "PASS",
+    "py_compile": "PASS",
+    "location": "Conversation package only; full audit and scripts, no binaries published. Compact receipt in PR."
+  },
+  "gates": {
+    "D0": "VERIFIED",
+    "D1": "LOCAL_SCOPE_GLOBAL_HOLD",
+    "D2": "PARTIAL_VISUAL_SILHOUETTE_IVY",
+    "D3": "PARTIAL_OPERATION_FEASIBILITY_PASS_SEAM_HOLD",
+    "D4": "NOT_RUN_INDEPENDENT_ALTERNATE_CHECKER_NOT_REVIEWER",
+    "G1": "HOLD",
+    "G2": "SELF_HOLD_FEASIBILITY",
+    "G3": "COUPON_CLOSED_REOPEN_PASS_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "No more standalone groove coupons or numeric audit loops. Independent local scope design review is still absent. Correct source-grounded silhouette/visual readability and continuous material projection in the design, or move to separate eligible module. No formal adoption, native production or main merge."
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "two.region.riverbank_rock_placement.v35",
+  "status": "DRY_BANK_SCANNED_ROCK_CANDIDATE_ART_HOLD",
+  "parent": "c0c89e1bb84e67ca7799728e74e6845e281af4c3",
+  "dependencies": {
+    "v34_receipt": "59cc241e25365a220cb5788c166e63d5fdb9c217",
+    "v34_glb_sha256": "f08380bf5b8a13ed8822be983faeb7141ac0c529a3b7f7884a03fe5fa8fccd76",
+    "v07_source_receipt": "cc9d9595d95d8b41223e7d8ae1bca16386f20c94",
+    "rock_glb_sha256": "451599a92e375059fda4c11fc9265e35dde547df6dbc65a6f0572b4d72ae9e88",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+  },
+  "placement": {
+    "source": "Poly Haven rock_moss_set_01 CC0, exact recovered V07 GLB; no geometry or material replacement",
+    "method": "Dry bank only, convex projected footprint and actual triangle height contact, 15–25% embedded vertex fraction, authored 0.7–1.8m width, deterministic seed; conservative exclusion boxes for bridge/event/landing/forest and provisional trail proxy",
+    "instances": 16,
+    "north": 6,
+    "lower": 10,
+    "source_meshes": 6,
+    "old_triangles": 86824,
+    "new_instanced_triangles": 178526,
+    "total_instanced_triangles": 265350,
+    "min_water_gap_m": 0.4645262932834134,
+    "min_protected_gap_m": 50.73873962336006,
+    "min_rock_gap_m": 5.381416667331841,
+    "source_buffer_and_metadata_prefix_exact": true,
+    "rock_source_bytes_exact": true,
+    "all_reopen_instance_transforms_exact": true,
+    "limits": "Footprint collision and terrain embedding sampled at vertices; not full collider/intersection QA. CPU comparison shows isolated stones and uniform bank; clustered vegetation and better bank morphology needed. LOD required; not Android qualified."
+  },
+  "gravel": {
+    "source": "https://polyhaven.com/a/river_small_rocks",
+    "license": "CC0 per asset page; Rico Cilliers and Rob Tuytel; 2.9m source scale",
+    "script_blob": "71378baa66d0edbb4220cf7550d4c66c08ea003b",
+    "workflow_blob": "5379c950e9a81bab756a285b75ba2f3070c84dbf",
+    "run": 45661249966,
+    "status": "PENDING at observation; source bytes and application not verified. Existing cobble unchanged."
+  },
+  "outputs": {
+    "glb_sha256": "46c3ca106a9f39dcdefa6651daf5cb8b7d64af468922693d9acba17d460fdbae",
+    "placement_script_sha256": "df1df5e9785bbcb29e06d38f845158b6db2ee04bbf1097502c9aad65d94f9343",
+    "render_script_sha256": "ecd153ff7af1470774485dc7a482b5b3344cf0789560b50198baf47291aa918e",
+    "qa_sha256": "f7acd722e515a003f2f32ed7df260e655c508878578a749fbe5dfbf980d6c3c8",
+    "render_qa_sha256": "788504a94cfdab701028f8ef7d58caadb539df5b177a479f811045fb715c85f4",
+    "sheet_sha256": "f3917d6e2d5cc507e13340c85025a46029fc348d5e244363e5e95a83bf03237c",
+    "package_sha256": "d96cdf98e59d6b3f401a152e29f34dd6ab7546cd65f2af869e9c6cf5141e5142",
+    "package_bytes": 24074673,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; executed scripts and QA included. Binary not committed."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLB_READBACK_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Verify river gravel artifact, replace cobble with source-scale photo PBR, then grouped bank rock and vegetation design with budgeted LOD; actual native and runtime review. Landing separately held. No formal adoption or main merge."
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "two.region.bridge_recovery_receipt.v01",
+  "status": "PROVISIONAL_RECOVERY_NOT_ADOPTION",
+  "parent": "1d67150e1375ba882d3aaf538482b8c1bb0ce3cd",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "bridge_v03": "250c61114b4779b6349bfbc3c4f6ae2eeacb9b9a",
+    "core_v01": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "expansion_v02": "dc06678c3ac274b2d2b63de0926b42bde9758504"
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "trimesh": "4.11.1",
+    "matplotlib": "3.10.8"
+  },
+  "executed": "local Python; bridge SHA exact, GLB reopen and 4097 samples; no Blender or engines",
+  "script_expected_git_blob": "1c9d3c1d31dde0e3fffc0ecc5dd7cb084d999f96",
+  "script_sha256": "63e97bd270350f585f9b0b0471d2a04ac3e502ca23ac61e416460b56f05409b3",
+  "preview_sha256": "27f67541ff59f4204e857c19831ae046a93d147802fd72e4468f824e3666ca7c",
+  "full_v03_glb_status": "UNAVAILABLE; expected 6f24df182e23ddd2bcbe784e13715c10c4b10042409d534ba6c11ca02fe7c77f",
+  "design": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "BLOCKED_ORIGINAL_TERRAIN",
+    "D4": "NOT_RUN"
+  },
+  "next": "Recover exact combined V03 GLB, validate terrain across both ends, resolve ramp and foundation blueprint; independent D4 before precision edits. Keep bridge silhouette and clear span; no overwrite or unrelated writer actions.",
+  "qa": {
+    "source_bridge_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "source_bridge_status": "BYTE_IDENTICAL_RECOVERED",
+    "terrain_status": "FORMULA_RECONSTRUCTION_NOT_VERIFIED_ORIGINAL",
+    "sample_grid": {
+      "x_step_m": 0.25,
+      "y_step_m": 0.25,
+      "count": 4097
+    },
+    "ends": {
+      "WEST": {
+        "deck_minus_ground_min_m": -0.01749572753906392,
+        "deck_minus_ground_max_m": 0.09749755859375142,
+        "below_ground_samples": 3,
+        "underside_embed_min_m": 0.5525039672851548,
+        "underside_embed_max_m": 0.6674972534179702
+      },
+      "EAST": {
+        "deck_minus_ground_min_m": -0.03177337646484446,
+        "deck_minus_ground_max_m": 0.11825866699218679,
+        "below_ground_samples": 4,
+        "underside_embed_min_m": 0.5317428588867195,
+        "underside_embed_max_m": 0.6817749023437507
+      }
+    },
+    "clear_deck_width_m": 3.3,
+    "deck_longitudinal_grade_percent": 0.6000010172526041,
+    "wet_samples": 1356,
+    "wet_clearance_min_m": 7.374250579833984,
+    "wet_clearance_max_m": 11.024000000000001,
+    "wet_intersection_samples": 0,
+    "gates": {
+      "G1": "BLOCKED",
+      "G2": "NOT_RUN",
+      "G3": "PARTIAL_RECOVERED_MESH_AND_RECONSTRUCTED_TERRAIN",
+      "G4": "NOT_RUN"
+    },
+    "limits": "Not original terrain, no physical foundation strength, no independent art QA, no collision/navigation, no new geometry edits."
+  }
+}

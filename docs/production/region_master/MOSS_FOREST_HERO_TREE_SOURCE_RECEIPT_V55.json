@@ -1,0 +1,53 @@
+{
+  "schema": "two.region.hero_tree.source.v55",
+  "parent": "66a036d8c19b7ab4a658af12a9948da372353212",
+  "status": "METHOD_SWITCH_SOURCE_INTAKE_REQUESTED",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "v54": "069393cc0d823c81f302c87a538c06e133d49cd8",
+    "official_cg_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+  },
+  "method_switch": "Stop V54 point-attachment and leaf count tuning. Existing source geometry and topology alternative; do not adopt coastal species/shape as oak or infer canonical dimensions.",
+  "selection": [
+    {
+      "asset": "Island Tree 01",
+      "source": "https://polyhaven.com/a/island_tree_01",
+      "authors": [
+        "Rico Cilliers",
+        "Rob Tuytel"
+      ],
+      "license": "CC0",
+      "license_url": "https://polyhaven.com/license",
+      "provider_width_m": 12.5,
+      "provider_triangles_approx": 4000000,
+      "role": "gnarled trunk and exposed-root morphology candidate; 1K glTF for inspection, not runtime-ready; original shape coastal, not identified as oak."
+    },
+    {
+      "asset": "SCATTER ancient oak LiDAR",
+      "source": "https://zenodo.org/records/11658042",
+      "role": "research/morphology reference, not direct game use; exact redistribution license not verified; point clouds not production-ready."
+    },
+    {
+      "asset": "Modular Tree",
+      "source": "https://github.com/GoodPie/modular_tree",
+      "role": "alternative native procedural workflow, Blender 4.3+ claimed, 5.3 compatibility and license obligations not verified; no installation."
+    }
+  ],
+  "execution": {
+    "local_direct_network": "DNS resolution failed for provider and alternative hosts; no repeated same-network attempts",
+    "script": "tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py",
+    "workflow": ".github/workflows/two-shared-material-recovery.yml",
+    "scope": "One official asset metadata + 1K glTF dependency set, separate leaves alpha if offered, HTTPS host constrained, provider size/MD5 and SHA256, aggregate 256MiB cap, candidate only; no source script execution or source mutation. No duplicate material recovery."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_SOURCE_BYTES_AND_DESIGN",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Read actual artifact metadata and checksum. If exact source acquired, inspect geometry, materials, alpha, scale, native source preview and compare against V54. If size cap fails, use actual metadata to target lower geometry LOD or measured trunk source, no blind retry. No formal adoption/main merge."
+}

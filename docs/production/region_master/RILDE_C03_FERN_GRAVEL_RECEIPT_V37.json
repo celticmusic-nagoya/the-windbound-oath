@@ -1,0 +1,83 @@
+{
+  "schema": "two.region.riparian_fern_gravel.v37",
+  "status": "LOCAL_FERN_GRAVEL_GLB_READBACK_PASS_ART_HOLD",
+  "parent": "cf6f549d0051e71f0ae13d21c85e4e03ac0d9cfc",
+  "dependencies": {
+    "v36_receipt": "aeafc4d5dab65d03e8eeadb683d66d0fa127b1f3",
+    "v36_glb_sha256": "c7ca860037d6ab22b6450d7b22666e3abceb3328372f4cc1c27892a92ac00476",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+  },
+  "gravel": {
+    "run": 45665935913,
+    "job": 139388563494,
+    "artifact": 15047271974,
+    "archive_sha256": "67d1c3528d8138f129b708a5dfaaa14e39224651707a6a157237137bdc182f2a",
+    "status": "SUCCESS_SHA_MD5_CRC_AND_IMAGE_SIZE_VERIFIED",
+    "source": "https://polyhaven.com/a/river_small_rocks",
+    "license": "CC0 https://polyhaven.com/license",
+    "authors": [
+      "Rico Cilliers",
+      "Rob Tuytel"
+    ],
+    "map_sha256": [
+      "656a20860f5960cc0f442dd425bfe4607052ab1749efdde35d60c5df9639beac",
+      "4468fc6354767fd959b74e4cb7095d061e533268189c2336e03cb0be1bddc250",
+      "073109b53a7b909c4eb705546c03b853c7bcaac92c8e6803ed0382f377e4184f"
+    ],
+    "tile_m": 2.9,
+    "map_count": 3,
+    "dimension_px": 2048,
+    "bed_faces": 14688,
+    "geometry_transforms_exact": true,
+    "old_materials_preserved": true
+  },
+  "fern": {
+    "source": "https://polyhaven.com/a/fern_02",
+    "license": "CC0",
+    "source_glb_sha256": "2e6c1003a729a6230116fcab1819b8099cee9ae6473ee63a443466a8091e36eb",
+    "instances": 48,
+    "rock_clusters": 16,
+    "north": 18,
+    "lower": 30,
+    "added_triangles": 54928,
+    "total_triangles": 186373,
+    "min_water_gap_m": 0.2786081954742705,
+    "min_rock_gap_m": 0.08403035998872381,
+    "min_protected_proxy_gap_m": 49.79774773990231,
+    "max_nearest_root_m": 0.0009486988013005515,
+    "max_sampled_root_burial_m": 0.12784508132442896,
+    "source_buffer_records_and_transforms_exact": true,
+    "reopen_instance_transforms_exact": true
+  },
+  "render": {
+    "method": "Two matched orthographic CPU pairs, alpha cutout and depth alpha composite; not native or runtime",
+    "visible_fern_pixels": [
+      345,
+      371
+    ],
+    "visible_water_pixels": [
+      84913,
+      186999
+    ],
+    "self_review": "Cobble pattern removed. Ferns are very small in composition, sparse and uniform surrounding terrain with angular shoreline and unfinished tile edge remains visible. No G2 pass."
+  },
+  "outputs": {
+    "glb_sha256": "4db247b048f626e16850fc1880ba14fd5bcf0df90bb5b07b264862b915af38cb",
+    "plant_script_sha256": "56fb16739a7270154dad4a1290b89d578e066988c53bc7307329d40ab89a31a9",
+    "gravel_script_sha256": "870fdfd4a180f4675633e1081983f95918ba20633d0a9a0734e6c380de5b3907",
+    "render_script_sha256": "4ef8afd8c260668523c4b562f6f151eb18afca1237871c8a73e27f723ddf541a",
+    "plant_qa_sha256": "88096d024046b5db5a24944f32101f991fd376ca7d1c0a4dc4da5353f7a968e1",
+    "gravel_qa_sha256": "aae19e9dd4264c297672b3c89d2970e05b0f76bbb274a861e77843685485506f",
+    "comparison_sha256": "30c2736ba039eff1d57bc40c994763cc8281ee3f609776034b1cadbccbde0ef8",
+    "package_sha256": "04ba431d6015d92f9aa3cb25443c942cc329418570dc4c707c4b12322e3ed719",
+    "package_bytes": 39598401,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; executable scripts and model included; no binary committed"
+  },
+  "limits": "Conservative dry footprint proxy only. Root contact sampled, not collision. Face-centroid bed classification, static alpha, no flow. No Android benchmark, actual scene lighting, native Blender, independent D4/G2, formal adoption, main merge. Landing remains separate HOLD.",
+  "next": "Avoid repeated tiny vegetation increments. Coordinate a whole-bank representative scene with grass, shrubs, shoreline morphology and native lighting; qualify exact native intake before Blender authoring. Keep prior LOD and gravel source."
+}

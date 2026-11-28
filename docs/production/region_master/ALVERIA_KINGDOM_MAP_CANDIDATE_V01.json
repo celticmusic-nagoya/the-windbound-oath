@@ -1,0 +1,147 @@
+{
+  "schema": "two.world.kingdom_candidate.v1",
+  "status": "PROVISIONAL_NOT_CANON",
+  "dependencies": [
+    {
+      "path": "docs/production/region_master/ALVERIA_W01_CONTINENT_TO_REGION_TOPOLOGY_V01.json",
+      "git_blob": "484fee575101559fa084f9b6226fe6cf0d2ce20b"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_W02_C01_COASTLINE_CANDIDATE_V01.json",
+      "git_blob": "72e1e488bbe4c92fc5d473139d8eb1d00d07b084"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_HIERARCHICAL_ATLAS_V01.json",
+      "git_blob": "a40c72b68678f00fdcf1e1a5992c894a509e4f35"
+    }
+  ],
+  "frame": "same normalized north-up frame as W02",
+  "boundary": [
+    [
+      22,
+      61
+    ],
+    [
+      17,
+      71
+    ],
+    [
+      22,
+      82
+    ],
+    [
+      34,
+      90
+    ],
+    [
+      40,
+      77
+    ],
+    [
+      43,
+      63
+    ],
+    [
+      45,
+      48
+    ],
+    [
+      39,
+      39
+    ],
+    [
+      21,
+      41
+    ],
+    [
+      14,
+      51
+    ],
+    [
+      22,
+      61
+    ]
+  ],
+  "places": [
+    {
+      "id": "RILDE",
+      "xy": [
+        23,
+        54
+      ],
+      "label": "リルド村"
+    },
+    {
+      "id": "DUNVAR",
+      "xy": [
+        24,
+        56
+      ],
+      "label": "ドゥンヴァル砦"
+    },
+    {
+      "id": "CAERDIN",
+      "xy": [
+        37,
+        65
+      ],
+      "label": "王都カエルディン"
+    }
+  ],
+  "routes": [
+    {
+      "from": "RILDE",
+      "to": "DUNVAR",
+      "walk_days": [
+        0.5,
+        1
+      ],
+      "geometry": [
+        [
+          23,
+          54
+        ],
+        [
+          24,
+          56
+        ]
+      ]
+    },
+    {
+      "from": "RILDE",
+      "to": "CAERDIN",
+      "walk_days": [
+        10,
+        14
+      ],
+      "geometry": [
+        [
+          23,
+          54
+        ],
+        [
+          26,
+          59
+        ],
+        [
+          30,
+          60
+        ],
+        [
+          37,
+          65
+        ]
+      ]
+    }
+  ],
+  "metric_scale": null,
+  "elevation": null,
+  "hydrology": null,
+  "qa": {
+    "locator_inside_candidate_land_and_kingdom": "PASS_LOCAL",
+    "boundary_containment": "NOT_RUN",
+    "travel_metric": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN"
+  }
+}

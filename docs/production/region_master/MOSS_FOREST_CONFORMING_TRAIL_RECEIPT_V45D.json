@@ -1,0 +1,127 @@
+{
+  "schema": "two.region.moss_forest_conforming_trail.v45d",
+  "status": "LOCAL_CONFORMING_DESIGN_CANDIDATE_PASS_SCOPED_TOPOLOGY_AND_GRADE",
+  "parent": "e6e91418965fe652bf791c13e4d355823c7b28c0",
+  "dependencies": {
+    "v44_receipt": "786d45035c04f397400876bb13f923c1513d7225",
+    "v44_glb_sha256": "5013fc48b47da8434bda7f0801a4d824298def30ef70d216c02ae66b1f34014d",
+    "recovery_script": "d6e0ef8f4bb0b5effef7cbb929ad37e85e83baf0",
+    "trail_v02_receipt": "d3c22be28b559cf728060aab8239b62888fb5103",
+    "trail_v02_script": "827a7addd4925d8e1ead8baaa961ab86fe906b21",
+    "shoulder_v03": "cd29e56b27b445e6a2e1b179483372145eed8733",
+    "a2_hydrology": "11c39295f270d328b1a7c7acd01bea60434698bd",
+    "a3_sanctuary": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "a3_landmarks": "246095359e151284e447a30c203d33f36cedbe77",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "recovery": {
+    "a1_exact_sha256": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d",
+    "trail_v02_npz_exact_sha256": "09d94cee74a58fcc09dd0999a9b091c60f540b899ebd8ea3a7c061c658746d5d",
+    "road_samples": 14688,
+    "station_count": 1632,
+    "current_v44_ground_height_max_delta_m": 0,
+    "alignment_length_m": 407.5166611364689,
+    "width_m": 2,
+    "shoulders_each_m": 1.5,
+    "maximum_cut_fill_m": 0.36006737637946173,
+    "road_wet_overlap_m2": 0,
+    "earthwork_wet_overlap_m2": 0,
+    "endpoint_sample_residual_m": 0,
+    "outer_sample_residual_m": 0
+  },
+  "trials": [
+    {
+      "id": "A",
+      "method": "Exact projected triangle overlay, constrained triangulation",
+      "float32_degenerate_faces": 16,
+      "nonmanifold_edges": 15,
+      "internal_open_boundary_m": 20.00000774598855,
+      "status": "REJECT"
+    },
+    {
+      "id": "B",
+      "method": "Canonical projected vertex IDs and remove collapsed faces",
+      "degenerate_faces": 0,
+      "nonmanifold_edges": 0,
+      "internal_open_boundary_m": 20.356170770890895,
+      "status": "REJECT_ENDPOINT_T_JUNCTION"
+    },
+    {
+      "id": "C",
+      "method": "Explicit endpoint subdivision in footprint",
+      "internal_open_boundary_m": 0.35616302490234375,
+      "status": "REJECT_SINGLE_NEAR_COINCIDENT_PAIR"
+    },
+    {
+      "id": "D",
+      "method": "Weld only measured pair near east582.5 north-406.82045, preserve geometry; no global tolerance weld",
+      "targeted_weld_m": 0.000001430511474609375,
+      "source_faces": 20800,
+      "untouched_faces": 19682,
+      "vertices": 69057,
+      "triangles": 137532,
+      "degenerate_faces": 0,
+      "nonmanifold_edges": 0,
+      "internal_open_boundary_m": 0,
+      "coverage_symdiff_m2": 0,
+      "area_sum_minus_union_m2": 0,
+      "max_source_boundary_correction_m": 0.0010870600931056629,
+      "reopen_exact": true,
+      "road_triangles_measured": 45204,
+      "road_long_bound_pct": 14.896035558513104,
+      "road_cross_bound_pct": 9.51997799372248,
+      "long_over_15_count": 0,
+      "cross_over_10_count": 0,
+      "shoulder_max_pct": 47.16990566028302,
+      "status": "LOCAL_NUMERICAL_SCREEN_PASS"
+    }
+  ],
+  "frame": {
+    "axes": "glTF X east Y up Z south",
+    "translation_to_v44_m": [
+      500,
+      0,
+      400
+    ],
+    "canonical_transform": null
+  },
+  "altar": {
+    "body_area_m2": 2.880000000000231,
+    "interaction_area_m2": 3.449999999999977,
+    "flat_target_z_m": 27.988129971478276,
+    "body_max_flat_residual_m": 0.09496662905496223,
+    "interaction_max_flat_residual_m": 0.09346583186910706,
+    "status": "HOLD_PAD_NOT_BUILT"
+  },
+  "a2_stream": "HOLD southern catchment and drainage; prior design protected, no watercourse inserted",
+  "render": "Two matched actual VTK offscreen views, inspected, diagnostic vertex colors, no full materials or props.",
+  "outputs": {
+    "glb_sha256": "b8ba6c29ebc75816943988956e9ed5b68e66b1d746481844be8fece2b93fe1bc",
+    "glb_bytes": 2756252,
+    "route_script_sha256": "dc89cb14be7f40f9f34bb5344d72cdd12f0bb55cdc3882618d497f494709113c",
+    "route_qa_sha256": "b6a5c9b6258645814866feb7f8e87c19bf43e5b432f86472851021987382d9c7",
+    "conform_script_sha256": "fef76eb000e3095a4f8b8a9846b0978219f92640dc820bbea48efb081e577542",
+    "conform_qa_sha256": "b53d9644f1332d9d8a606086d61ab5a635f2ec903fab5c4fb5559e86ad6c22d9",
+    "verify_script_sha256": "5d84c679861a30b03536b04defe8eebb4b2732af653ebe9b9e4eefe0c06b71f5",
+    "verify_qa_sha256": "6b820ad00c27eb3e5852bb5ce782781a70fd06f8a8816c341310ee197c755333",
+    "comparison_sha256": "c19d0c4a296fc3801b663c9a1eb2771f24b48c2d4c9555c7ff336739b1bf6821",
+    "plan_sha256": "1a2086f8b2ff8e84d98931af0b1974f931972b7b5447c0841c231e1550b85ba6",
+    "package_sha256": "e34d901a134355a745499c18e06529aedb7a1fd89d0fdad567b91b0ab748e416",
+    "package_bytes": 3768898,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; scripts and rejected trials included; no binary committed."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "PARTIAL_LANDING_PARENT_AND_HYDROLOGY_HOLD",
+    "G2": "HOLD_GEOMETRY_ONLY",
+    "G3": "LOCAL_GEOMETRY_AND_REOPEN_PASS_NOT_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limits": "Standalone forest ground candidate, not V44 full scene replacement. High density overlay not runtime optimized; no actual vegetation, UV materials, altar pad, event/landing, native or collision. No independent QA, formal adoption, public distribution or main merge.",
+  "next": "Prioritize A3 sanctuary pad and A2 southern drainage as separate scopes, then forest material/vegetation integration and topology budget. Avoid repeating recovered route design; retain V44 baseline pending independent QA."
+}

@@ -1,0 +1,119 @@
+{
+  "schema": "two.region.river_forest_terrain_integration.v44",
+  "status": "EXACT_V02_A2_A3_RECOVERY_AND_LOCAL_SEAM_PASS_ART_LANDING_HOLD",
+  "parent": "f2e547bd84c83e122d7122dce0eb6547658f24e9",
+  "dependencies": {
+    "v43b_receipt": "d7901304520488747e40cc52afec2d6c784c2286",
+    "v39_receipt": "173de657c4d0d627b57d05028679547b30c2fa47",
+    "v39_glb_sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "v43_glb_sha256": "a5a38d5bef3d8691d17bc39620efd99bda20a1aeddc5f746d2a33dfa3f4099c6",
+    "recovery_receipt": "a9ebd0569ef2626c82be8a17c26477cd77229a30",
+    "recovery_script_blob": "d6e0ef8f4bb0b5effef7cbb929ad37e85e83baf0",
+    "a2_valley_receipt": "845a48ab8b63f83e16135baa3e1534ef1fddf0bc",
+    "a2_junction_receipt": "6fdfb7f1856a5c4a83787f72d3492373821123dc",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "recovery": {
+    "method": "Re-execute exact V02 individual tile recipe extracted from verified recovery script; Python 3.13.5 NumPy 2.3.5 trimesh 4.11.1; all bytes match previously registered SHA-256.",
+    "A2": {
+      "sha256": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+      "vertices": 3321,
+      "triangles": 6400,
+      "translation_gltf_m": [
+        500,
+        0,
+        300
+      ]
+    },
+    "A3": {
+      "sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+      "vertices": 3321,
+      "triangles": 6400,
+      "translation_gltf_m": [
+        600,
+        0,
+        400
+      ]
+    }
+  },
+  "integration": {
+    "method": "Append exact source buffer data, remap references only, preserve V39 complete binary prefix and original meshes/nodes/materials/accessors/views/images/textures/samplers. Isolated standard GLB candidate; no protected input modification.",
+    "seams": [
+      {
+        "id": "V43_A2_west",
+        "vertices": 41,
+        "edges": 40,
+        "max_xyz_delta_m": 0
+      },
+      {
+        "id": "A1_A2_north",
+        "vertices": 41,
+        "edges": 40,
+        "max_xyz_delta_m": 0
+      },
+      {
+        "id": "A2_A3",
+        "vertices": 41,
+        "edges": 40,
+        "max_xyz_delta_m": 0
+      }
+    ],
+    "v43_prior_seams_edges": [
+      37,
+      10,
+      1
+    ],
+    "new_area_m2": [
+      3098.8245832729153,
+      20000,
+      20000
+    ],
+    "existing_overlap_m2": [
+      0,
+      0,
+      0
+    ],
+    "new_pair_overlap_m2": [
+      0,
+      0,
+      0
+    ],
+    "new_triangles": 14262,
+    "total_reopen_triangles": 430845,
+    "all_added_vertices_faces_transforms_exact": true,
+    "original_records_and_binary_prefix_exact": true,
+    "source_sha_unchanged": true,
+    "render": {
+      "method": "Actual two matched VTK EGL geometry-only views. New patch distinguished gold, A2/A3 green. Textures and props omitted in diagnostic render only. Outer tile boundaries and steep bank remain visible.",
+      "independent_art": false
+    }
+  },
+  "outputs": {
+    "glb_sha256": "5013fc48b47da8434bda7f0801a4d824298def30ef70d216c02ae66b1f34014d",
+    "glb_bytes": 29017000,
+    "recovery_script_sha256": "5587f99d7e09a62abd373871411e8ca5682e4f4b5c0c9b8f7ca029204d297d9e",
+    "assembly_script_sha256": "185039ef5c1a6c938262ce898f7c2d17b535005cbd4d0268078c93fe5b38e09d",
+    "render_script_sha256": "e239464efdd032a03bfc04ae32beea6d0420bbca993a24b68e0ecc6369129ace",
+    "qa_sha256": "391d433997ee10a16535ac699652e2f1d1f512d79c2728b55cc5f79d870a99fe",
+    "render_qa_sha256": "1daef2f93534928d3655c31ea68312e8a2da94a473ac09cd2099e745e74d322d",
+    "comparison_sha256": "fcd1a678be0474ed739e86ff6a024eda197805ef0bdb8d60e54600f1268a8920",
+    "package_sha256": "401a2d2aa10153d2a24bc28129c168a41e74b2143e5ef67d31d9028f96a83f02",
+    "package_bytes": 27239623,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments, binary not committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "PARTIAL_EXACT_BASELINE_SEAMS_LANDING_AND_PARENT_HOLD",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLB_REOPEN_AND_EGL_DIAGNOSTIC_PASS",
+    "G4": "NOT_RUN"
+  },
+  "limits": "A2/A3 V02 base terrain only; later valley, trail, sanctuary, landmarks and forest art not integrated. No actual landing route, longitudinal upstream redesign, native Blender, full material/art QA, Android, canon/adoption/main integration. New surfaces open and not welded; exact coincident boundary edges are not proof of traversability.",
+  "next": "Use recovered exact A2/A3 to reconcile later trail/valley and A3 protected landmark inputs, then joint landing and terrain design. Upstream longitudinal control design remains separate. Do not repeat source recovery or claim full area completion."
+}

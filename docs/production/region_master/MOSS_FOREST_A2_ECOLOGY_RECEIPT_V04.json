@@ -1,0 +1,40 @@
+{
+  "schema": "two.region.moss_forest_a2_ecology_receipt.v04",
+  "parent": "5c78514af9ce9fa66902fa44a36a55449b123233",
+  "status": "PROVISIONAL_PLACEMENT_ENVELOPES_ONLY",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "gate_policy": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "hydrology": "11c39295f270d328b1a7c7acd01bea60434698bd",
+    "eco_manifest": "33f3b98498e9190ef8943dafcab5b394c5c25a60",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "133cdf7e76417e1127d88129deb900939901e220"
+  },
+  "outputs": {
+    "script_blob": "f336680264b9a61c3731a7cfd6a3b92f8ba1998a",
+    "qa_blob": "1d531573f7629928d6928a69fe22b9569264e684",
+    "script_sha256": "20956019b7bb900810202b65bb6d95e7b6829ca72b8f0ba2326f75d8732c76a3",
+    "qa_sha256": "3d52d60b1e5030ae0b2b78a5bcaba14eb960cb8468c9d77c08ce7ac7176215a8",
+    "csv_sha256": "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394",
+    "csv_local_git_fingerprint": "5f04303efabc027402a9b79dd6e3efa64fc9d5d9",
+    "png_sha256": "05cccb9901ce623ac8b87863736ba645228c98bbff3b89057e348285310162b9",
+    "delivery": "Exact Python and QA JSON committed; CSV and PNG local."
+  },
+  "execution": "Actual local Python, SHA-pinned A2 GLB and V02 valley/V03 trail NPZ; 451 candidates accepted and analytic circle-pair/exclusion checked, original SHA unchanged, plot visually inspected. No owner edits, asset instancing or Blender.",
+  "reproduction": "python layout.py <moss_forest_a2.glb> <a2_valley_design_v02.npz> <forest_shoulders_v03.npz>",
+  "decision": "Reserve only. Current ECO unadopted and origin assumption unverified; actual forest density and sightline need art direction and D4. 1,235,944 LOD0 triangles for 104 nonhero trees only, not actual runtime count. Next derive view-dependent LOD budget and 3D sightline/landmark compositions, test against actual qualified assets when available; no adoption or main merge.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_ACTUAL_ASSET_AND_LOD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

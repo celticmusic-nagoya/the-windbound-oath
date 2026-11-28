@@ -1,0 +1,111 @@
+{
+  "schema": "two.region.provisional_layout.v1",
+  "status": "SCHEMATIC_NONCANONICAL",
+  "dependency": {
+    "path": "docs/production/region_master/RILDE_EIGHT_AREA_INTERFACE_RECONCILIATION_V01.json",
+    "git_blob": "bc28c422352546f81f8922ed8f5b913efdd81266"
+  },
+  "coordinate_system": {
+    "origin": "RILDE_VILLAGE",
+    "x": "east",
+    "y": "north",
+    "unit": "dimensionless schematic unit",
+    "metric_scale": null,
+    "world_transform": null
+  },
+  "anchors": [
+    {
+      "id": "RILDE_VILLAGE",
+      "xy": [
+        0,
+        0
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "WINDWAITING_CLIFF",
+      "xy": [
+        -3,
+        1.5
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "COASTAL_MEADOW",
+      "xy": [
+        0,
+        2
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "RIVER_CORRIDOR",
+      "xy": [
+        3,
+        0
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "MOSS_FOREST_A1",
+      "xy": [
+        4,
+        -2
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "xy": [
+        5,
+        -3
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "xy": [
+        6,
+        -4
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    },
+    {
+      "id": "DUNVAR_FORTRESS",
+      "xy": [
+        0,
+        6
+      ],
+      "evidence": "PROVISIONAL_DESIGN",
+      "z": null,
+      "extent": null
+    }
+  ],
+  "constraints": {
+    "physical_adjacency": "UNVERIFIED",
+    "story_order_not_navgraph": true,
+    "forest_sequence_positions": "illustrative only",
+    "cliff_geometry_owner": 421,
+    "world_integration_owner": 364
+  },
+  "qa": {
+    "directional_sign_check": "PASS_DESIGN_ONLY",
+    "metric": "NOT_RUN",
+    "G1": "BLOCKED"
+  },
+  "canonical_adoption": false
+}

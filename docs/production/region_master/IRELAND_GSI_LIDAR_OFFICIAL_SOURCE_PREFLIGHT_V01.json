@@ -1,0 +1,90 @@
+{
+  "schema": "two.world.ireland_gsi_lidar_source_preflight.v1",
+  "status": "OFFICIAL_METADATA_VERIFIED_RASTER_NOT_ACQUIRED",
+  "source_type": "public_terrain_reference_not_fictional_canon",
+  "sources": [
+    {
+      "id": "GSI_DATA_GOV",
+      "url": "https://data.gov.ie/en_GB/dataset/open-topographic-lidar-data",
+      "publisher": "Geological Survey Ireland",
+      "dataset_license": "CC BY 4.0",
+      "vertical_datum": "Malin Head Vertical Datum",
+      "verification": "OFFICIAL_DATASET_METADATA"
+    },
+    {
+      "id": "GSI_PHASE2_COVERAGE",
+      "url": "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_Phase2_IE26_ITM/FeatureServer",
+      "crs_epsg": 2157,
+      "spatial_extent_approx_m": [
+        512000,
+        694000,
+        604000,
+        768000
+      ],
+      "counties_listed": [
+        "Clare",
+        "Galway",
+        "Longford",
+        "Mayo",
+        "Roscommon"
+      ],
+      "raster_grid_cell_coverage_m": [
+        2000,
+        2000
+      ],
+      "coverage_is_not_raster": "YES",
+      "verification": "OFFICIAL_SERVICE_METADATA"
+    },
+    {
+      "id": "GSI_DCHG_DP_COVERAGE",
+      "url": "https://gsi.geodata.gov.ie/server/rest/services/Lidar/IE_GSI_LiDAR_Coverage_GSI_DCHG_DP_IE26_ITM/FeatureServer",
+      "crs_epsg": 2157,
+      "raster_grid_cell_coverage_m": [
+        2000,
+        2000
+      ],
+      "verification": "OFFICIAL_SERVICE_METADATA"
+    }
+  ],
+  "scope": "Irish terrain reference acquisition for W02 coast and W03 elevations; not canonical Ireland landmass",
+  "source_gates": {
+    "dataset_license": "PASS_METADATA_CC_BY_4_0",
+    "horizontal_crs": "PASS_COVERAGE_SERVICE_EPSG_2157",
+    "vertical_datum": "PASS_DATASET_METADATA_MALIN_HEAD",
+    "specific_cliffs_of_moher_tile_coverage": "NOT_VERIFIED",
+    "raster_file_download": "NOT_RUN",
+    "raster_sha256": null,
+    "actual_raster_crs": "NOT_VERIFIED",
+    "actual_raster_vertical_datum": "NOT_VERIFIED",
+    "actual_raster_resolution": "NOT_VERIFIED",
+    "actual_raster_license_owner": "NOT_VERIFIED",
+    "world_local_transform": "BLOCKED",
+    "derived_contour_qa": "NOT_RUN"
+  },
+  "warnings": [
+    "Coverage polygon metadata alone is not a measured DEM",
+    "Do not assume GSI Phase2 has the exact Cliffs of Moher tile",
+    "Dataset-wide CC BY 4.0 does not override a specific tile owner or embedded license; inspect tile record",
+    "No height or coastline coordinate is copied into fictional world"
+  ],
+  "next": [
+    "Query Phase2 and other GSI coverage services with actual candidate geographic bounds in EPSG:2157",
+    "Identify individual downloadable raster tile and per-tile license",
+    "Download source raster and record file SHA256, CRS, nodata, resolution, vertical datum",
+    "Only then create source-grounded height and coastline comparison and design geometry"
+  ],
+  "qa": {
+    "W01": "PARTIAL",
+    "W02": "PARTIAL",
+    "W03": "NOT_STARTED",
+    "D0": "PARTIAL",
+    "D1": "BLOCKED",
+    "D2": "NOT_RUN",
+    "D3": "NOT_RUN",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

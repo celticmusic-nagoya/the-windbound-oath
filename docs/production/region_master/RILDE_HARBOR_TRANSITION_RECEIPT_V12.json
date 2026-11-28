@@ -1,0 +1,42 @@
+{
+  "schema": "two.region.harbor_transition_receipt.v12",
+  "parent": "49ecf9b08ca4cc9becf6d12889bd3e48fe5e0871",
+  "status": "DESIGN_PARTITION_SAMPLED_PASS_OUTER_TERRAIN_HOLD",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "continuity": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v11": "14ac512a999de62d3ca7f4b040bf55d577ef93ce",
+    "v09": "015e0686eae7acc77d63240f406df31afacf6b68"
+  },
+  "execution": "Actual local Python; exact five SHA-pinned inputs; partition predicates, boundary interpolation, 2.5cm sampled grades and preview verified. Read exported script and JSON via Files and verified exact git blobs before commit. No Blender or native edit.",
+  "outputs": {
+    "script": {
+      "blob": "9f94cc2da45786152c94f02a280c2df1b7efeeee",
+      "sha256": "82f9a8def27f9dc3ee8bd750eac3a3af47d400caf0a11ab5e252bda13258027d"
+    },
+    "design": {
+      "blob": "1e23801f0e0d2830c52dc5c9efde17952cdec668",
+      "sha256": "d1e76b00a3f5e09b230f39af3cfa812b55255c5e60680b6e81316da1bbcdaf1c"
+    },
+    "preview_sha256": "8b510e7e21f0fd1b0998959576174e5151b7dd1b7672b031f79f2ef91cb4257d"
+  },
+  "checks": {
+    "overlap_before_m2": 2.829807856026537,
+    "overlap_after_m2": 0,
+    "seam_samples": 491,
+    "seam_height_residual_m": 0,
+    "grade_samples": 41901,
+    "max_sampled_grade_pct": 1.7740373211712068,
+    "reserved_overlap_m2": 0,
+    "max_apron_outer_boundary_deviation_from_flat_m": 0.006855848461660763,
+    "source_unchanged": true
+  },
+  "reproduction": "python check_transition.py <V09 road_sections_v09.npy> <V11 harbor_terrain_design_v11.npz> <V02 JSON> <V07 JSON> <V08 JSON>; SHA checks are in script; use scratch directory",
+  "limitations": [
+    "Planar partition only, not welded native mesh. Sampled grade is not continuous proof.",
+    "Outer apron boundary differs from +2 m by up to 6.856 mm; surrounding terrain requires matching explicit boundary constraints. No original CG/terrain or independent D4. Do not proceed to precision native production before affected scope is qualified."
+  ],
+  "next": "Apply V12 boundary contract to V11 surrounding terrain design; seek independent D4, avoid repeating plan-only loops. No formal adoption/main merge."
+}

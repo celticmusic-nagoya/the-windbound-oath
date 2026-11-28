@@ -1,0 +1,110 @@
+{
+  "schema": "two.region.forest_official_cg_native_floor.v21",
+  "parent": "3f4bb7725549af32013e9829d3934ff7f9a14b34",
+  "status": "OFFICIAL_CG_SHA_RECOVERED_V19B_NATIVE_PASS_BACKGROUND_HOLD_V21_FLOOR_RUNNING",
+  "policies": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gate": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "official_cg": {
+    "status": "EXACT_SOURCE_BYTES_RECOVERED_AND_VISUALLY_INSPECTED",
+    "registered_commit": "dc17dd4846f35ea1f5dea25168eec9ddb50a3838",
+    "path": "assets/sources/lind-world-20261116/original.png",
+    "sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "recovered_in_artifact": 15029479327,
+    "observation": "Southeast forest valley, dense varied tree crowns, visually narrow curving route, monumental gnarled trees framing bright ancient altar, green floor and blue atmospheric haze; visual source only, no physical dimensions inferred.",
+    "comparison_crop_px": [
+      850,
+      610,
+      1518,
+      938
+    ],
+    "comparison_local_sha256": "67270d2867351a4ba7aa242d592f5dcebe90840f16da16de9778a7795010d9b6",
+    "comparison_limit": "Different camera and image type; no quantitative silhouette or size equivalence. Canon source recovery resolved, full design/canon QA not passed."
+  },
+  "v19b": {
+    "run": 45629334087,
+    "head": "ad19d64e8f0446fed30a6854e97d17bfa7a59878",
+    "job": 139258335960,
+    "conclusion": "success",
+    "artifact": 15029479327,
+    "archive_sha256": "f3dfb34f87557391372a7732d32602c125648e8eeaa481505dc936e27350578e",
+    "archive_bytes": 49280428,
+    "crc_and_all_output_sha": "PASS",
+    "blender": "5.3.0",
+    "native_sha256": "6b79f7e7f056cdbfa278c4662bd100eb2f778e638225421dfef060564d7c1cc1",
+    "render_sha256": [
+      "9fe338ba7d6f0284372e7e206181b9f1845dcbf65afd31e80f7b4c0c1452666b",
+      "f290187531a1ac46b6cbb6d4c8676959da7702aeaacb206910a562c90829011a"
+    ],
+    "qa_sha256": "761bb69cc6c71d33116bc1bf3ce57c0d68f596b4f86ae3413960f4efd869854b",
+    "reopen": {
+      "mesh_objects": 401,
+      "triangles": 763977,
+      "packed_images": 25,
+      "external_images": 0,
+      "protected_geometry_transforms": 399
+    },
+    "background": {
+      "status": "HOLD",
+      "accepted": 2,
+      "minimum": 4,
+      "rejections": {
+        "tree_canopy": 934,
+        "protected_full_crown": 1379,
+        "ground_footprint": 492,
+        "tile_edge": 193
+      },
+      "decision": "Terminate same-cause density-placement loop after V19 zero and V19B two (<4); no reduction of protection. Switch to floor restoration and source-grounded sanctuary composition."
+    },
+    "art_review": "Self HOLD: large bare field, empty skyline, spherical repetitive tree shapes, no altar/hero tree, insufficient atmosphere. Original CG is clearly not achieved.",
+    "drive": "Verified owner-only existing folder; archive uploaded, metadata size and shared=false verified. No public links, credential or Cloud billing."
+  },
+  "v21": {
+    "source_checkpoint_sha256": "6b79f7e7f056cdbfa278c4662bd100eb2f778e638225421dfef060564d7c1cc1",
+    "floor_kit_source_sha256": "321995830ef5a33553c58cdedc22fcaa00779422cfc9336f45d5adccf2b5be79",
+    "manifest_blob": "f3f488b7042458ad684f01bba112144d2d8b8ed7",
+    "manifest_decoded_sha256": "2268e0b2727bad82c2704b60d4d04bb0a5aa5d009e328a7025af080745c1aba2",
+    "max_translation_quantization_m": 0.007637946746309475,
+    "max_yaw_quantization_rad": 0.00004715233337115876,
+    "max_scale_quantization": 0.000048437044805060836,
+    "local_source_geometry_check": "All six rock types and moss original ECO source vertices/faces exact versus V15C kit. Stump source LOD0, intentionally not V15C LOD2.",
+    "expected": {
+      "floor_objects": 85,
+      "rock": 12,
+      "moss": 70,
+      "stump": 3,
+      "source_floor_triangles": 296992,
+      "mesh_objects": 479,
+      "scene_triangles": 926746,
+      "protected_geometry_transforms": 394
+    },
+    "script_blob": "f4681166ff47c151e652ebca86aeb71e32498e7f",
+    "workflow_blob": "92df7eed1fc04ee81779168db65966265d0dd404",
+    "run": 45631347949,
+    "run_head": "3f4bb7725549af32013e9829d3934ff7f9a14b34",
+    "last_observed": "pending",
+    "qa": "NOT_RUN_NATIVE_RESULT_PENDING",
+    "method": "Recover four SHA-locked archives. Replace only seven prior approximate floor instances in isolated copy. Full source-derived 85 placements, planar convex footprints and sampled terrain root residuals, issue log/HOLD if conflicts; native save/reopen and two matched renders. No exact V15C native equivalence, no final placement or adoption."
+  },
+  "gates": {
+    "D0": "FORMAL_CG_RECOVERED_RELEVANT_MODULE_PARTIAL",
+    "D1": "HOLD_COMPOSITION",
+    "D4": "NOT_RUN",
+    "G1": "SOURCE_RECOVERY_PASS_FULL_DESIGN_QA_NOT_RUN",
+    "G2": "NOT_RUN_INDEPENDENT_SELF_HOLD",
+    "G3": "V19B_NATIVE_PASS_V21_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect exact V21 native results and floor issues. Build source-grounded sanctuary composition with actual hero tree and altar design, route/visibility interfaces and independent D4; do not merely increase tree counts. Preserve no-billing setup and prior native originals."
+}

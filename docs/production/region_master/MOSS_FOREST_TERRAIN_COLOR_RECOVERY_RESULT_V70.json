@@ -1,0 +1,102 @@
+{
+  "schema": "two.region.a3.terrain_color_repair_result.v70",
+  "parent": "412972e19b7e38af88a6831642ffb25a8c4adea8",
+  "status": "NATIVE_ATTRIBUTE_REPAIR_VERIFIED_MATCHED_RENDER_VISUAL_DEFECT_RESOLVED_SCENE_ART_HOLD",
+  "prework": {
+    "main_head": "9fa081fb2b3bc6e0a957995a397ccffb98230ced",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SCENIC_EXISTING_MATERIAL_INPUT_REPAIR_V69_RESULT",
+    "owner_pr": 482,
+    "owner_head": "412972e19b7e38af88a6831642ffb25a8c4adea8",
+    "writer_lease_fencing_evidence": "Read-only completed isolated native artifact; non-force CAS receipt only; no writer takeover or source edit.",
+    "dependency_shas": {
+      "v69": "cae013bf62b3a300407cb28e257243cb06f7cfab",
+      "script": "fe32939e48a3d3348dee37acbfdacd57e57e5479",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All source/native originals, V68 frozen ruin design, existing mesh geometry and game runtime",
+    "stage": "Recover completed qualified repair and verify actual results",
+    "predecessor_gate_statuses": {
+      "V69": "LOCAL_RECIPE_PASS_NATIVE_PENDING",
+      "D4_ruins": "NOT_RUN"
+    },
+    "acceptance_criteria": "Native exact SHA and archive CRC, output SHA checks, 523 protected mesh signatures unchanged, 33 seam points exact RGBA/UV/height, actual matched two-view comparison.",
+    "preflight_checks": "Main policies and handoff fetched, PR HEAD exact, completed Actions job, archived digest and output SHA checks, actual images inspected.",
+    "result": "VERIFIED_REPAIR_ONLY",
+    "blockers": [
+      "Independent ruin D4 still absent",
+      "Scene art quality insufficient: sparse foreground, exposed horizon, placeholder altar",
+      "Canonical world terrain and runtime unverified"
+    ],
+    "checkpoint": "V58 original and V69 isolated native retained"
+  },
+  "execution": {
+    "run": 45739301311,
+    "job": 139640097064,
+    "conclusion": "success",
+    "artifact": 15080696517,
+    "archive_sha256": "754bb7fb9929c03cc3395987c2dfa595ec618f8045ace92c8311914ec672208c",
+    "archive_bytes": 109249306,
+    "artifact_expires_at": "2026-12-10T02:01:14Z",
+    "crc": "PASS",
+    "output_sha_checks": "3/3",
+    "qa_sha256": "421be30351d3d80784c5a87c810c4b476aa28299fc3acda2c4113155fb634735",
+    "source_native_sha256": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a",
+    "native_sha256": "3c4d31a33e7b5fd5a10dbb7cfd3920a965f738a2196871515ac31c1120e0964d",
+    "native_bytes": 107974834,
+    "blender": "5.3.0",
+    "protected_meshes_exact": 523,
+    "restored_attribute": "V19_ground_color",
+    "attribute_vertices": 705,
+    "original_attribute_recipe_max_residual": 2.9800172773875033e-8,
+    "seam_count": 33,
+    "seam_rgba_residual": 0,
+    "seam_uv_residual": 0,
+    "seam_height_residual_m": 0,
+    "output_render_shas": {
+      "v69_after_0": "6117a2d996adf7e87ff53ce67cf05ce0f62698d49e81adc3ec9f3c168ab9aee6",
+      "v69_after_2": "079598bb5f2e7e4cdee34d3634bfe6ca289225a33b4f88b8e10755084823ffc6"
+    }
+  },
+  "visual": {
+    "matched_before_sha256": {
+      "v58_lighting_0": "a7acc1fa25cc83e01d2cf3e1c06fc7421cf4a4de19fb453a91426c976e642f7a",
+      "v58_lighting_2": "2eb094ec97da540e272a2eba54e469b4d8f5e0bde3c693f457f6940d95896a00"
+    },
+    "comparison_sha256": "1cf0ff1f9c89cb12dfb88ddad1ac14c00af7c66cebfdc24928627d3b4e0c98ce",
+    "visual_qa_sha256": "a8e4c23bfcd31c3f40512509c0fd1295d4a8566be73d827aa3a65b1c71430831",
+    "roi": {
+      "view": 2,
+      "xyxy": [
+        770,
+        354,
+        810,
+        394
+      ],
+      "pixels": 1600,
+      "metric": "mean display-encoded RGB weighted luma, manually selected previously black terrain patch; not scene-referred radiance or seam quality threshold",
+      "before": 0.11960574705882353,
+      "after": 0.5022467279411764
+    },
+    "observation": "Sharp black tile boundary no longer visible in both actual matched views. Placeholder altar, open horizon and sparse forest floor remain. Self visual evaluation, not independent G2."
+  },
+  "gates": {
+    "repair": "PASS_NATIVE_REOPEN_AND_VISUAL_DEFECT_SELF_CHECK",
+    "G1": "HOLD_SCENE_CANDIDATE",
+    "G2": "HOLD_SCENE_ART",
+    "G3": "PASS_SCOPED_ATTRIBUTE_REPAIR_ONLY",
+    "G4": "NOT_RUN",
+    "D4_ruins": "NOT_RUN_INDEPENDENT"
+  },
+  "next": "Preserve successful V69 checkpoint, do not repeat color repair. Prioritize source-grounded forest-floor composition and camera framing, reusing existing verified vegetation and floor kits, define local design and scope-specific QA before any new precision geometry; ruins remain frozen pending independent review. No formal adoption, main merge, or public native redistribution."
+}

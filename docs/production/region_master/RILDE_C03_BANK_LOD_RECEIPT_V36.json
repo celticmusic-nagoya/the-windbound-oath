@@ -1,0 +1,87 @@
+{
+  "schema": "two.region.riverbank_lod.v36",
+  "status": "LOCAL_LOD1_CANDIDATE_READBACK_PASS_GRAVEL_BLOCKED",
+  "parent": "26bd8106fd88123db9d9763935ce9ef67a35a601",
+  "dependencies": {
+    "v35_receipt": "099c96196183d4960327deb8c0b880c49e70f684",
+    "v35_glb_sha256": "46c3ca106a9f39dcdefa6651daf5cb8b7d64af468922693d9acba17d460fdbae",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+  },
+  "execution": {
+    "method": "VTK 9.6.2 quadric attribute-aware decimation, target 75%, texture coordinate error and boundary constraints, recompute normals, preserve V35 original buffers/materials/transforms; separate GLB",
+    "source_faces": [
+      11000,
+      10996,
+      5000,
+      10589,
+      16548,
+      8994
+    ],
+    "lod_faces": [
+      2750,
+      2748,
+      1250,
+      2647,
+      4136,
+      2247
+    ],
+    "placed_rock_faces": [
+      178526,
+      44621
+    ],
+    "active_scene_faces": 131445,
+    "max_sampled_bidirectional_distance_at_largest_instance_m": 0.016076376465964843,
+    "max_sampled_p95_m": 0.005811898512878603,
+    "all_16_sampled_contact": true,
+    "embedded_fraction_range": [
+      0.14036363636363636,
+      0.2909930715935335
+    ],
+    "min_water_gap_m": 0.4645262932834134,
+    "water_overlap_m2": 0,
+    "reopen_exact_protected_records": true,
+    "render": {
+      "method": "6 paired matched CPU texture raster views, 1024px texture minification, not Blender",
+      "silhouette_iou_range": [
+        0.9919792137370086,
+        0.9973431272954598
+      ],
+      "mean_rgb_abs_error_range": [
+        1.8036250620282588,
+        4.605482134116495
+      ],
+      "recovery": "First comparison process status 9 while decoding all material textures; changed to selected rock-only cached downsampled textures, success. Cause of process exit not independently confirmed."
+    }
+  },
+  "gravel": {
+    "run": 45661249966,
+    "conclusion": "cancelled",
+    "jobs": 0,
+    "artifacts": 0,
+    "root_cause": "unknown before job execution; no logs",
+    "decision": "Do not claim source acquired. Re-trigger only through revised scoped path including exact gravel intake script; no additional branch commit immediately after scheduling to avoid superseding pending run."
+  },
+  "outputs": {
+    "glb_sha256": "c7ca860037d6ab22b6450d7b22666e3abceb3328372f4cc1c27892a92ac00476",
+    "script_sha256": "8e92f4cd3dc20e5682579aac0c94268ab62d7d1786bfd5282048be3404ac701f",
+    "comparison_sha256": "de684d043a8818b06e78354da5440f07c5bd9f49a9ecd5d8df5e6f41d51f4c3b",
+    "qa_sha256": "76d066f07834203e59b2eae20084c9df5342dbb6cf6dc5339c253c084170677b",
+    "contact_qa_sha256": "592de93146761805d19fa9df8a41d9d91381093fc16fc45f09d8bcfbe59e9fed",
+    "render_qa_sha256": "fabfc232b92a724045f3cb746512b67c2edc5a5540611e53bad57780c2354d6f",
+    "package_sha256": "46e289921c5511bb8dfbcfe185ba91600f06b8b17e49879eedbe3bdeb3d9757e",
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments, source buffers remain in LOD candidate, no binary commit"
+  },
+  "limits": "Sampled distance not certified Hausdorff bound, contact sampled at vertices only, one comparison angle per rock. No dynamic LOD, memory/file-size savings, native, independent D4/G2 or Android tests. Gravel and grouped vegetation pending. Landing separate HOLD.",
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "LOCAL_LOD1_READBACK_PASS",
+    "G4": "NOT_RUN"
+  }
+}

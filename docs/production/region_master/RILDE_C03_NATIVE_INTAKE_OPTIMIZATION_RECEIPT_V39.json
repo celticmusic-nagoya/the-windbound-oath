@@ -1,0 +1,87 @@
+{
+  "schema": "two.region.riparian_native_intake_optimization.v39",
+  "status": "LOCAL_STANDARD_GLB_AND_INSTANCING_PASS_NATIVE_RUNTIME_NOT_RUN",
+  "parent": "c4ab682681075c61ae21a0b7606a2cd57f871181",
+  "dependencies": {
+    "v38b_receipt": "f025c52a792c23aedb45384f8403d60b34654404",
+    "source_glb_sha256": "72b5d4dc8ab555b389cc61856a246beb3e9f7380bb9c710222625c26f173038b",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "backup": {
+    "source_package_sha256": "3255c9078eacec83b864678da37d4c5612c2fa01ee1605335474d02c599a5f4d",
+    "bytes": 40938684,
+    "location": "existing authenticated private Drive folder; no public sharing",
+    "raw_download_sha_exact": true,
+    "crc": "PASS"
+  },
+  "compact": {
+    "source_bytes": 41539648,
+    "bytes": 28724732,
+    "sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "mesh_records": [
+      28,
+      22
+    ],
+    "buffer_views": [
+      163,
+      124
+    ],
+    "images": [
+      20,
+      16
+    ],
+    "materials": [
+      12,
+      11
+    ],
+    "all_live_buffer_bytes_and_accessors_exact": true,
+    "node_transforms_exact": true,
+    "reopen_trimesh": {
+      "geometry_records": 26,
+      "primitive_nodes": 250,
+      "triangles": 416583
+    }
+  },
+  "runtime_candidate": {
+    "sha256": "b20d8e1098bb84b2259ffec65d5314206c19c5908dd15ba217ba20749ac2f719",
+    "bytes": 28662020,
+    "extension_required": "EXT_mesh_gpu_instancing",
+    "spatial_cell_m": 64,
+    "batches": 26,
+    "batched_instances": 210,
+    "total_mesh_instances": 243,
+    "logical_primitive_draws": [
+      250,
+      64
+    ],
+    "triangles": 416583,
+    "max_decoded_world_vertex_displacement_m": 0.0000023402281960441726,
+    "water_not_batched": true,
+    "recovery": "First preflight rejected ECO node extras. Group by mesh, spatial cell and exact extras; preserve shared wind metadata and original names. Reopened all transforms and compared all affected mesh vertices.",
+    "limit": "Logical primitive count, not measured GPU calls. No loader/Android benchmark, dynamic LOD or geometry reduction."
+  },
+  "native": {
+    "script_sha256": "28b0b1edaf985990f300554c2b6b2afee704089a8a75428fe7070f186e217f8e",
+    "status": "PY_COMPILE_ONLY_NOT_EXECUTED",
+    "blocker": "Local Blender/bpy unavailable; authenticated Actions intake from private Drive not established. No public upload or credential workaround. Script prepared with strict SHA, version, triangle count, four camera renders, packed images and save/reopen fingerprint."
+  },
+  "outputs": {
+    "compact_script_sha256": "2434ec097779712ae5dd3fe90d45e70b755f37603a765ae11d79ee1ae97b5bb2",
+    "qa_sha256": "8231436076d8db5125e9db9ce5ec19ba31b330210de3c67082053f9b15d1b3e7",
+    "scripts_package_sha256": "aaaff83a5c5f42c9dfb5fb2fd8d3d17e0d9035527ec86e0ec98a9328fe5dd96d",
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; no binary commit"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "HOLD_NO_NEW_ART",
+    "G3": "LOCAL_GLB_VERIFIED_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Establish authenticated native runner input without public distribution; run isolated standard GLB intake, render and save/reopen, independent scoped design/art QA. Runtime candidate requires actual loader verification. Landing and terrain morphology remain HOLD. No formal adoption or main merge."
+}

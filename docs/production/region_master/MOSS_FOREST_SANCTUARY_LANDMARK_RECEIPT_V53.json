@@ -1,0 +1,119 @@
+{
+  "schema": "two.region.sanctuary.landmark_feasibility.v53",
+  "parent": "b0f904bf31bc180e7396f0bf06ff6597058e59fa",
+  "status": "V52_NATIVE_VIRTUAL_PASS_V53_ISOLATED_LANDMARK_ENVELOPES_ART_AND_DESIGN_HOLD",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12db5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "v52": "2956b679a43a4ee01604314a526a4f63e41d7d30",
+    "v05": "246095359e151284e447a30c203d33f36cedbe77",
+    "v06": "acbbffca333b087ee3dc93fd89da4c6940ff2792",
+    "v46b": "cca4d08957aec2d24b8b0507a2c41a19b7174c9d",
+    "v47b": "6bff1d308103ed77b07c9abe244956957dce8f6f",
+    "official_cg_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+  },
+  "v52_result": {
+    "run": 45722151229,
+    "job": 139582858744,
+    "artifact": 15072796460,
+    "archive_sha256": "dc19933560919c187d295cd57f94e642d8895755eae7730e04be8c645493b426",
+    "crc": "PASS",
+    "status": "NATIVE_VIRTUAL_SCREEN_PASS",
+    "blender": "5.3.0",
+    "protected_meshes": 479,
+    "seam_samples": 21,
+    "max_seam_delta_m": 0,
+    "virtual_rock_protected_gaps_m": [
+      0.05077152590542067,
+      0.05070732752966123,
+      0.05267916216380364
+    ],
+    "obstacle_gaps_m": [
+      0.9810005432777767,
+      0.4698107796592217,
+      1.142393811349525
+    ],
+    "no_mutation": true
+  },
+  "v53_scope": "Isolated feasibility only; no precision/native authoring or placement, no source mutation, no canon change. Official CG visually inspected: tall stone arch-like feature, flank stones and large gnarled trees. Existing low altar body and reserves retained. Arch proposed as scenic backdrop, not a new portal or barrier. Sizes are authored candidates, not derived physical measurements.",
+  "arch": {
+    "frame": "pad center [693.9431596631828,-493.0743278729908], Z 27.988129971478276; x transverse y along route z up",
+    "width_envelope_m": 4,
+    "height_envelope_m": 3.74,
+    "pier_depth_m": 0.8,
+    "side_clearance_m": 1,
+    "body_to_pier_plan_gap_m": 0.1,
+    "components": 11,
+    "vertices": 424,
+    "faces": 804,
+    "all_components_watertight": true,
+    "all_inside_pad": true,
+    "pier_body_and_interaction_plan_overlap_m2": 0,
+    "max_reopen_delta_m": 1.1871231730964382e-7,
+    "overhead_body_z_separation_min_m": 0.7799999809265137,
+    "limitations": "Side circulation reduced from 1.8m; no structural bearing between arch segments, intentional joint gaps; regular silhouette too pristine compared to CG. Existing altar body is a separate visual proxy only, not exported. No verified stone material or design closure."
+  },
+  "tree": {
+    "method": "V05 trunk/6 limb/7 root knot data with transcription rounding, PCHIP interpolation, local tapered segment distance field and smooth union across paths, marching cubes; no V06 surface profile applied.",
+    "recovery": [
+      {
+        "pitch_m": 0.06,
+        "result": "99340-face main component plus 16-face detached component; rejected"
+      },
+      {
+        "pitch_m": 0.05,
+        "result": "one closed component; no nonmanifold edges; one triangle area below 1e-12m2; HOLD"
+      }
+    ],
+    "vertices": 71145,
+    "faces": 142286,
+    "components": 1,
+    "watertight": true,
+    "nonmanifold_edges": 0,
+    "tiny_triangle_count": 1,
+    "root_zone_outside_reserve_m2": 0,
+    "local_bounds": [
+      [
+        -4.944999694824219,
+        -4.489286422729492,
+        -1.649999976158142
+      ],
+      [
+        4.635000228881836,
+        4.079718589782715,
+        14.130001068115234
+      ]
+    ],
+    "limits": "Simplified smooth taper and sparse branch form, basal capsule bulb extends below nominal ground, no secondary branching or crown/leaf geometry, exact profile residual, final root contact or LOD not verified. Not final tree. No repeated grid resolution tuning."
+  },
+  "outputs": {
+    "arch_glb_sha256": "a5f02a04f82f519ac980f363a4a136343baa543446292b831eec22eaa8a99444",
+    "tree_glb_sha256": "66b3b7f3ec7a32e64280ead2096de881a18d8ddce92647ab7a4b284f9816f407",
+    "arch_script_sha256": "e585efdbd4a89cc72ca6d1549378290cdcc5461744ef6f3f84f6d54c7667ce07",
+    "tree_script_sha256": "e39121f0e695213d5a574c547cb9ae1dee00f50271bbb142184d5d4754eefd55",
+    "arch_qa_sha256": "5f723ce72387c6b19ecd311aee1e09894260fee2c58eb9852483e32c90cef40c",
+    "tree_qa_sha256": "8dd1a611f732e9ef5d2eb2c29047f2c0a6a5cbab349c4815d539fcf463c32a11",
+    "design_png_sha256": "71cd30af71b27e2af144d385f594e718a67582d75fee23aaa63a4e8a188db7c5",
+    "arch_views_sha256": "bf9dd29c785350341033ae6c8d1d38b21570dd31d9247be675562330d93e085d",
+    "tree_views_sha256": "8eed9e1c6b878a34806fb0ffac13e37e1e2e99fede927888eed8aa8d070ce55c",
+    "package_sha256": "c24b11e355f3ce52bf88a02f5e6782a54ad38a477accc4d1bf03f3651cbc20d2",
+    "package_bytes": 1520005,
+    "zip_crc": "PASS",
+    "render": "actual reopened GLB, three views each, VTK EGL clay diagnostic",
+    "location": "local package only; receipt committed"
+  },
+  "gates": {
+    "D0": "PARTIAL_SOURCE_VERIFIED",
+    "D1": "HOLD_SCENE_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD_TOLERANCE_AND_STRUCTURAL_INTERFACE",
+    "D4": "NOT_RUN",
+    "G1": "HOLD",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_REOPEN_TREE_TINY_FACE_HOLD_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Resolve existing native scene and V47B terrain interface and independent D4 before placement. Improve ancient-tree silhouette using source-grounded branching and actual foliage, not uniform capsule iteration; arch weathered morphology, bearing and side traversal design before precision/native. No main merge or adoption."
+}

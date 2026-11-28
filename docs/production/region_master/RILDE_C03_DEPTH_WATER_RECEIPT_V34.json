@@ -1,0 +1,58 @@
+{
+  "schema": "two.region.river_depth_material.v34",
+  "status": "LOCAL_DEPTH_ALPHA_GEOMETRY_READBACK_PASS_ART_HOLD",
+  "parent": "9424ec4a441625e4fdd578ef861ebb5bc1d10330",
+  "dependencies": {
+    "v33_receipt": "67f4864449d1437902d0172f1f799b3c15b14351",
+    "v33_glb_sha256": "d352b4faaaae6f8c9371761c165b1fe79d8edce0ee6c30694c7b93fca573b98b",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "photo_policy": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b",
+    "design_gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "method": "Sample vertical depth against actual exported ground triangles using spatial index and barycentric interpolation; candidate artist-authored alpha=.16+.68*(1-exp(-.85*depth)), linear RGB depth tint, glTF BLEND COLOR_0, existing normal and licensed textures unchanged. No geometry edit or new source acquisition.",
+  "qa": {
+    "triangles": 86824,
+    "water_vertices": 9727,
+    "unmatched": 0,
+    "max_depth_m": 1.6000003814697266,
+    "alpha_range": [
+      0.16,
+      0.6654707282625798
+    ],
+    "shared_exact_positions": 16,
+    "max_shared_depth_delta_m": 0,
+    "original_buffer_prefix_accessors_indices_positions_nodes_exact": true,
+    "trimesh_reopen_triangles_exact": true,
+    "render": {
+      "method": "two matched CPU raster pairs, approximate lighting and linear alpha composite, not native or runtime shader",
+      "visible_water_pixels": [
+        133030,
+        53737
+      ],
+      "self_review": "Bed visible. Cobblestone remains substitute; angular banks and flat uniform ground visible. No physical refraction, flow, transparent sorting or device QA."
+    }
+  },
+  "outputs": {
+    "glb_sha256": "f08380bf5b8a13ed8822be983faeb7141ac0c529a3b7f7884a03fe5fa8fccd76",
+    "depth_script_sha256": "d310429ba8894dc91a5557daa92df2900d6c503b32d47ef7ae3fc1658f78b7cd",
+    "render_script_sha256": "3ecf6ae8690e78cc72d2bc03ba56c40815d71278b95143c35e734a3e673b1541",
+    "qa_sha256": "ac96ba7e6195940091e31bc8e15d1d2df55eb4521f8e196b0c2567d256d32337",
+    "render_qa_sha256": "9855908b7692a233bde656694c8722ce97173c4b969f4918b38093fa005ce608",
+    "sheet_sha256": "bc82b7c403c5d83244a96a28c30bc65be2746445be2b92df695c8f2b214d0bcd",
+    "package_sha256": "09ac0191df46cc8e3d259c5ae4cbf47b0693a9ea9516d45e78f26bc1fee09e7e",
+    "package_bytes": 22932775,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; scripts, depth NPZ, source notice and GLB. No binary commit."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "SELF_HOLD",
+    "G3": "LOCAL_GLB_READBACK_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Acquire rights-cleared fluvial gravel reference and placement-ready riverbank rock/vegetation; native Blender import/material/render and game flow/alpha testing pending. Landing joint landform design remains separate. No formal adoption or main merge."
+}

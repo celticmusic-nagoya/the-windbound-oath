@@ -1,0 +1,98 @@
+{
+  "schema": "two.region.river_core_mesh.v27",
+  "status": "ISOLATED_CORE_CANDIDATE_REOPEN_PASS",
+  "parent": "e23d49c611fa535301c9eaff4325a3d88b66a0a5",
+  "source": {
+    "run": 45641788138,
+    "artifact": 15036275709,
+    "archive_sha256": "975838308c11d9def4fbb0389c70a8035924a5b9cefe5ba44595810990a6e67e",
+    "archive_crc": "PASS",
+    "license": "EPA River Network Routes CC BY 4.0; reference only",
+    "inagh": {
+      "sha": "ade163356e4d27c396f23d97e35833ec45c566ad6bdc8dabecd811673ed44800",
+      "n": 133,
+      "p25_p50_p75_p90": [
+        1.0681771729666958,
+        1.1351037673905107,
+        1.2082548310628416,
+        1.298435597299279
+      ]
+    },
+    "caragh": {
+      "sha": "92f9d25b75a68b5b600be3b26469e07fb8086a1d1b99858cefd7cdc02bb1f12c",
+      "n": 80,
+      "p25_p50_p75_p90": [
+        1.0441846966877921,
+        1.0856530846366992,
+        1.1595951816071552,
+        1.2602495742676934
+      ]
+    },
+    "filter": "Continua null and River_Waterbody_Code present, projected EPSG:32629 component chord >=100m; 200-feature cap each, not complete named-river or basin sample"
+  },
+  "dependencies": {
+    "design": "dc2051c9e9b876d262c08f557e8816ece8e12ba2",
+    "core": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "expansion": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925"
+  },
+  "candidate": {
+    "frame": "provisional core metres, not canonical; V01 analytic reconstruction not verified native bytes",
+    "bounds": [
+      225,
+      -250,
+      375,
+      250
+    ],
+    "grid": 2.5,
+    "ground_vertices": 12261,
+    "ground_triangles": 24000,
+    "water_vertices": 1704,
+    "water_triangles": 2485,
+    "water_components": 1,
+    "edge_delta_m": 0,
+    "shoreline_intersection_residual_m": 1.7763568394002505e-15,
+    "reopen_max_coordinate_error_m": {
+      "ground": 9.536550713562519e-7,
+      "water": 0.000015251299601004575
+    },
+    "faces_exact": true,
+    "centerline_length_m": [
+      503.80672551512873,
+      516.8105784625103
+    ],
+    "sinuosity": [
+      1.0064716315217694,
+      1.0324498656921017
+    ],
+    "bridge_x": 300,
+    "bridge_water_z": 7,
+    "bridge_width_m": 9.920889344712862,
+    "end_widths_m": [
+      19.224428335986318,
+      20.424833105501307
+    ],
+    "max_terrain_change_m": 14.556419557648862,
+    "decision": "Conservative authored sinuosity below reference median; preserve old analytic boundary exactly. Do not certify bank width targets or use as final native terrain. End transitions need neighbor reach design. Repeated sine bends and steep smooth banks remain art limitations."
+  },
+  "outputs": {
+    "script_sha256": "9995a545cce725b3b2d78746fd75f8c1c5432b9e5e7954e85d51cb89f38711f7",
+    "qa_sha256": "d198213d1f1d43fddb3f557c11007c31fab2a34ad08b8ed1c808af8137a1e6b1",
+    "glb_sha256": "2a8cd97cde2463b002a72169d63028653daee9a06446fb1ea1257a2207591f1e",
+    "sheet_sha256": "ef52726434b7942607bc214a170d57bfe0e717c3ba9c3617904a2f6bbba1a337",
+    "package_sha256": "fcadde4f427a6a0c49612d3177f0bc61da09467e747a953aa31f1c795fb84965",
+    "package_bytes": 534287,
+    "location": "Local ChatGPT attachment; binary and executed script not committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_FORMAL_METRIC",
+    "G2": "NOT_RUN",
+    "G3": "LOCAL_RECONSTRUCTED_GLB_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Create adjoining lower reach, tributary and mouth candidate with exact interface to core, then replace smooth banks with art-directed variable slopes/rock and test bridge and A1 landing. No native production changes, adoption or main merge."
+}

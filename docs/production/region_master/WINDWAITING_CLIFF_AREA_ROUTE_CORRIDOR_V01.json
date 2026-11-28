@@ -1,0 +1,168 @@
+{
+  "schema": "two.cliff.area_route_corridor_candidate.v01",
+  "status": "PROVISIONAL_LOCAL_NOT_ADOPTED",
+  "source": {
+    "design_git_blob": "81e14da2ebb23adc4bb6ac63691d8d5d6b85f617",
+    "builder_git_blob": "1bc0bd1152955a1069af155cc32a78ed32b11d82",
+    "builder_head": "5f3b2ac5e5ab73aac584112f9f4a8e9e90e7d33a"
+  },
+  "method": "Independent algorithm transcription of V02 piecewise triangular surface; sample centerline and two lateral offsets every <=0.25 m, per-segment; not native render or navigation proof",
+  "route_width_m": 2,
+  "width_status": "authored candidate, not accepted",
+  "entry_connector": {
+    "original_boundary_xy_m": [
+      275,
+      62.5
+    ],
+    "interior_start_xy_m": [
+      273,
+      62.5
+    ],
+    "connection_gap_m": 2,
+    "physical_interface_status": "UNRESOLVED; boundary corridor must be stitched to adjacent area; do not treat inset as complete seam"
+  },
+  "original_xy_m": [
+    [
+      275,
+      62.5
+    ],
+    [
+      230,
+      105
+    ],
+    [
+      150,
+      150
+    ],
+    [
+      155,
+      175
+    ],
+    [
+      155,
+      200
+    ]
+  ],
+  "revised_interior_xy_m": [
+    [
+      273,
+      62.5
+    ],
+    [
+      230,
+      105
+    ],
+    [
+      150,
+      150
+    ],
+    [
+      155,
+      175
+    ],
+    [
+      155,
+      200
+    ]
+  ],
+  "original_measurement": {
+    "length_m": 204.17998833709277,
+    "max_grade_percent": 12.261220773391084,
+    "max_cross_grade_percent": 15.65324250166551,
+    "min_eastward_rim_offset_m": 103.65931372549021,
+    "missing_samples": 4,
+    "sample_count": 822,
+    "segments": [
+      {
+        "id": 1,
+        "length_m": 61.897092015699734,
+        "grade_max_percent": 2.4903168465729317,
+        "cross_grade_max_percent": 1.0414739965666442,
+        "missing_samples": 4
+      },
+      {
+        "id": 2,
+        "length_m": 91.7877987534291,
+        "grade_max_percent": 12.261220773391084,
+        "cross_grade_max_percent": 6.07766497704354,
+        "missing_samples": 0
+      },
+      {
+        "id": 3,
+        "length_m": 25.495097567963924,
+        "grade_max_percent": 7.462112560810566,
+        "cross_grade_max_percent": 14.938308875242967,
+        "missing_samples": 0
+      },
+      {
+        "id": 4,
+        "length_m": 25,
+        "grade_max_percent": 1.9562566279191174,
+        "cross_grade_max_percent": 15.65324250166551,
+        "missing_samples": 0
+      }
+    ]
+  },
+  "revised_measurement": {
+    "length_m": 202.74155988584835,
+    "max_grade_percent": 12.261220773391084,
+    "max_cross_grade_percent": 15.65324250166551,
+    "min_eastward_rim_offset_m": 103.65931372549021,
+    "missing_samples": 0,
+    "sample_count": 816,
+    "segments": [
+      {
+        "id": 1,
+        "length_m": 60.45866356445534,
+        "grade_max_percent": 2.513330215207853,
+        "cross_grade_max_percent": 0.9863056969276585,
+        "missing_samples": 0
+      },
+      {
+        "id": 2,
+        "length_m": 91.7877987534291,
+        "grade_max_percent": 12.261220773391084,
+        "cross_grade_max_percent": 6.07766497704354,
+        "missing_samples": 0
+      },
+      {
+        "id": 3,
+        "length_m": 25.495097567963924,
+        "grade_max_percent": 7.462112560810566,
+        "cross_grade_max_percent": 14.938308875242967,
+        "missing_samples": 0
+      },
+      {
+        "id": 4,
+        "length_m": 25,
+        "grade_max_percent": 1.9562566279191174,
+        "cross_grade_max_percent": 15.65324250166551,
+        "missing_samples": 0
+      }
+    ]
+  },
+  "goals": {
+    "centerline_grade_max_percent": 15,
+    "cross_grade_max_percent": 10,
+    "evidence": "provisional design screening only, not qualified engine targets"
+  },
+  "qa": {
+    "original_full_width_coverage": "FAIL",
+    "revised_full_width_coverage": "PASS",
+    "revised_centerline_grade": "PASS",
+    "revised_cross_grade": "FAIL",
+    "independent_reviewer": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_ANALYTIC",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "No native mesh execution or game collision/navmesh",
+    "Lateral offsets omit corner fillets and true swept corridor; sampled only, not continuous extrema",
+    "Eastward rim offset is not shortest distance",
+    "No measured uncertainty or qualified operation",
+    "No DEM or formal world transform",
+    "No change to protected native or existing launcher"
+  ]
+}

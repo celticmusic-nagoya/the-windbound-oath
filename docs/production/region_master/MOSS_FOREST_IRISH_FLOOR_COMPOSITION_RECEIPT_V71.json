@@ -1,0 +1,163 @@
+{
+  "schema": "two.region.a3.irish_floor_composition.v71",
+  "parent": "0d2d562559c53629cb553b237c9c41443726c14d",
+  "status": "IRISH_WOODLAND_SOURCE_GROUNDED_LOCAL_LAYOUT_AND_EXISTING_ASSET_FEASIBILITY_REQUESTED",
+  "prework": {
+    "main_head": "9d3514ce0d48ef6e36587eaccb3df6ffbe87de17",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_IRISH_EXISTING_FLOOR_KIT_FEASIBILITY_V71",
+    "owner_pr": 482,
+    "owner_head": "0d2d562559c53629cb553b237c9c41443726c14d",
+    "writer_lease_fencing_evidence": "Use existing successful Blender 5.3 Actions route and prior immutable artifact, isolated new local candidate; no shared writer takeover; CAS.",
+    "source_sha256": {
+      "native": "3c4d31a33e7b5fd5a10dbb7cfd3920a965f738a2196871515ac31c1120e0964d",
+      "archive": "754bb7fb9929c03cc3395987c2dfa595ec618f8045ace92c8311914ec672208c",
+      "terrain": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+      "extension": "2e557724020da3c7f7ed63f31423e0f213b29bce4ec66c609d291f70be66481a",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+      "existing_floor_sources": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564"
+    },
+    "dependency_shas": {
+      "v70": "b24d9afab9d9be1fe1873ac07a7eb502ee3bb1a6",
+      "v21": "8b4ff58d4c3a48ad3651cd97471cd9884c01bfc6",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "V69 exact original, 523 mesh fingerprints, old material assignments, all source data, V68 frozen ruin design, canon, runtime.",
+    "stage": "Local D1/D2 composition design and one bounded existing asset placement feasibility. No new precision mesh or formal placement; independent D4 not waived.",
+    "predecessor_gate_statuses": {
+      "D4_ruins": "NOT_RUN_INDEPENDENT",
+      "V69": "SCOPED_REPAIR_PASS",
+      "G2": "HOLD"
+    },
+    "acceptance_criteria": "Exact native SHA, 523 protected fingerprints unchanged on save/reopen, link existing data, positive full hull reservation margin >=.10m and obstacle gap >=.04m, low-root residual within [-.08,.22]m, <=600000 added instance triangles. Report actual accepted counts/rejections, matched camera render; stop if no viable placements. No G2 or D4 implied.",
+    "preflight_checks": "Latest main and canon, PR HEAD, actual source native/terrain/extension/CG and archive SHA, V70 actual renders inspected, native candidate code py_compile in workflow.",
+    "result": "READY_BOUNDED_FEASIBILITY_AND_SOURCE_INTAKE_ONLY",
+    "blockers": [
+      "Independent D4 of ruins absent",
+      "Independent D4 of new precision placement not passed",
+      "Native composition and new source intake not run at commit",
+      "No actual global terrain or Android acceptance"
+    ],
+    "checkpoint": "Preserve V69 unchanged"
+  },
+  "reference": {
+    "ecology": [
+      "https://www.npws.ie/nature-reserves/kerry/derrycunnihy-wood-nature-reserve",
+      "https://www.nationalparks.ie/killarney/nature-conservation/"
+    ],
+    "visual_reference_only": [
+      "https://www.guidekillarney.com/index.php/2018/05/22/ancient-oak-woodlands/",
+      "https://www.discoverkerry.com/listing/derrycunnihy-wood-nature-reserve/68513101/"
+    ],
+    "interpretation": "Damp oceanic oakwood, mosses and ferns on trunks and rocks, varied understory, broken deadwood, narrow trail, layered shade. Not a literal reconstruction or source of physical dimensions. Third-party photographs reference only, do not copy their pixels."
+  },
+  "design": {
+    "frame": "A3 east/north/up local, provisional terrain only",
+    "patches": [
+      [
+        "P01",
+        78,
+        -91,
+        3.2
+      ],
+      [
+        "P02",
+        80,
+        -97,
+        4
+      ],
+      [
+        "P03",
+        89,
+        -75,
+        3.8
+      ],
+      [
+        "P04",
+        103,
+        -82,
+        4
+      ],
+      [
+        "P05",
+        103,
+        -91,
+        3.8
+      ],
+      [
+        "P06",
+        108,
+        -103,
+        4
+      ],
+      [
+        "P07",
+        87,
+        -111,
+        4
+      ],
+      [
+        "P08",
+        70,
+        -91,
+        3.8
+      ]
+    ],
+    "screened_area_sum_m2": 350.6748734048931,
+    "screen_method": "Conservative .6m erosion of available area excluding V21 route, circle and view reserves; not native occupancy. Area sum per zone, not unique area.",
+    "targets_per_patch": {
+      "rock": 3,
+      "stump": 1,
+      "fern": 10,
+      "moss": 14
+    },
+    "max_targets": 224,
+    "triangle_budget": 600000,
+    "source_kit": "V21_R_, V21_M_, V21_U_, V18_0_ to V18_3_ exact existing native mesh data. Use existing PBR unchanged. Deterministic seed 2026112671, actual native hull and contact screening; target not acceptance.",
+    "local_outputs": {
+      "plan_json_sha256": "64a66d185198e299f9947e1ce5a4ce4258741b8219bb5e9c6a040e332477cd85",
+      "plan_png_sha256": "1575835ec0f20118ab4b299bc6bed732686c5a0138eb39a571f666a0e64dbe8b",
+      "script_sha256": "0137bbfc0816d57f6d89ad8c9fada7441bd5dbc748dde454f0d0d0c109909aea"
+    }
+  },
+  "source_intake": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "license": "CC0 provider pages",
+    "existing_reuse": [
+      "https://polyhaven.com/a/rock_moss_set_01",
+      "https://polyhaven.com/a/fern_02",
+      "https://polyhaven.com/a/tree_stump_01",
+      "https://polyhaven.com/a/forrest_ground_01"
+    ],
+    "new_candidates": [
+      "https://polyhaven.com/a/dead_tree_trunk",
+      "https://polyhaven.com/a/forest_leaves_02"
+    ],
+    "budget_bytes": 100663296,
+    "method": "Existing provider API, glTF dependencies or 2k diffuse/normalGL/roughness, exact size/MD5/SHA256; no claim of Irish capture location or native incorporation before inspection."
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py",
+    "source_artifact": 15080696517,
+    "method": "Reuse existing mesh data via linked instances; bounded scene feasibility, no new geometry; actual placement/height and native reopen, matched two-view renders. Preserve source."
+  },
+  "gates": {
+    "D4_ruins": "NOT_RUN_INDEPENDENT",
+    "D4_floor": "NOT_RUN",
+    "G2": "NOT_RUN_CANDIDATE",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect actual native and CC0 source artifacts; no duplicate dispatch. If viable, select real deadwood/moss floor inputs based on visual fidelity, close scoped design and independent review before precision placement or final integration. No adoption or merge."
+}

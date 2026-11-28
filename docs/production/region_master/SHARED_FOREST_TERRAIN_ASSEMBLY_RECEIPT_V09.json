@@ -1,0 +1,68 @@
+{
+  "schema": "two.region.photo_forest_assembly_receipt.v09",
+  "parent": "deef12e616215129a83caf0fab1add460a10b445",
+  "status": "EXACT_V02_TERRAIN_AND_V04_ROCK_PLACEMENT_ASSEMBLED_CANDIDATE",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "expansion": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "terrain_recovery": "a9ebd0569ef2626c82be8a17c26477cd77229a30",
+    "v04_qa": "92ec34742f6885366f3b6e7e6b61383dc74c1fd0",
+    "v07": "cc9d9595d95d8b41223e7d8ae1bca16386f20c94",
+    "v08": "43d80e1419b169ef4ffcd28523b963c3a34888da"
+  },
+  "inputs": {
+    "terrain_sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+    "rock_placement_sha256": "25d2273f16e37e94d6368e5ef109b03f02a5d1322ee946a1bf6784f0d1df1fb6",
+    "source_archive_sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564"
+  },
+  "outputs": {
+    "scene_sha256": "078a1c1c5f4af576866cdd76dad2fdc7e44d39206ae96c6b47117c152cbba786",
+    "scene_bytes": 11962216,
+    "assemble_script_sha256": "6452dc42b2ea52a710e8a6c6f991951c33fe796c7d5500b64e30f31444a2d3a7",
+    "preview_script_sha256": "0d38bd70bc513213f0d8d5da617417475acc13333027120f7d6f2df227678afd",
+    "qa_sha256": "ef9c9685bfeb6e3636bc8921dfe1100ee06582f019eeb22f36a415fe43cc35f7",
+    "preview_sha256": "2afc1bc1a5c39df2d87bc62851d009e90fd120d3c6a3e4a5c0c729dca2f70792",
+    "delivery": "Local scene, exact terrain GLB, scripts, QA and preview. Receipt only committed."
+  },
+  "measurements": {
+    "nodes": 13,
+    "unique_meshes": 7,
+    "terrain_faces": 6400,
+    "rock_instance_faces": 126254,
+    "total_instance_faces": 132654,
+    "terrain_geometry_exact": true,
+    "rock_binary_prefix_exact": true,
+    "rock_original_nodes_meshes_materials_images_accessors_exact": true,
+    "all_12_rocks_have_buried_vertices": true,
+    "maximum_sampled_burial_m": 0.11246514215470427,
+    "min_near_ground_vertices_abs_le_0_15m": 1363,
+    "render_views": 3,
+    "visible_rock_pixels": [
+      1048,
+      973,
+      10992
+    ]
+  },
+  "execution": "Actual local Python NumPy 2.3.5 trimesh 4.11.1. Exact V02 A3 terrain regenerated from existing recovery recipe; SHA matched. Original V04 placement GLB retained as byte-exact binary prefix with old metadata arrays unchanged. Appended terrain mesh, smooth normals, tangents, original archived forest ground base/normal/ARM maps and provisional 2m UVs. Reopened assembled GLB, verified exact terrain vertices and faces and 13 geometry nodes. Evaluated vertex height residuals by triangle interpolation on recovered terrain. Three shared-frame orthographic CPU previews using depth buffers to resolve terrain/rock occlusion; visual inspection confirms sparse linear arrangement, textured ground aliased/noisy, no convincing forest yet. Both scripts py_compile PASS. No new Actions or Blender.",
+  "limits": [
+    "V02 authored relief is exact historical candidate, not surveyed or official CG. No V04 ground tint recovery; V08 altered rock material held so V07 original rock material used.",
+    "Vertex sampled contact only; no continuous collision/traversability. No road grading, vegetation, tree/altar, lighting shadows, actual game camera, mipmaps or full PBR. No native Blender, independent D4/G2, runtime, Android or adoption. V05 LOD files still unavailable.",
+    "Do not claim final scenic quality. Sparse one-sided distribution remains provisional. Preview uses per-face approximate CPU normal/roughness lighting, not full renderer."
+  ],
+  "next": "Recover eligible vegetation library and route/protected polygons before layout; use existing source assets and independent candidate assembly, preserving arena/hero reserves. Obtain qualified actual Blender render and independent scene QA; avoid repeated minor material adjustments.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_FOREST_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_ASSEMBLY_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

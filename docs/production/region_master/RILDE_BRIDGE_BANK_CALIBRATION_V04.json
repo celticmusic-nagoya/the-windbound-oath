@@ -1,0 +1,94 @@
+{
+  "schema": "two.region.bank_transition_calibration.v04",
+  "parent": "a390efc4d77a52dfa09a4262acf3d15f82d0f1be",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "recovery": "8867c0ac5c3d784e0e7a8123020f9ef101653ff9",
+    "core": "21b2804db198aaf9429f5f959d68a955e5839593"
+  },
+  "script_git_blob": "5fe0d21a94a1298f06121f70e95f262bc7986350",
+  "execution": "Local Python compile and run; verified source SHA, GLB roundtrip, plot inspected. No Blender, Actions, engine or external writer. No native precision authoring; isolated calibration only.",
+  "runtime": {
+    "numpy": "2.3.5",
+    "trimesh": "4.11.1"
+  },
+  "qa": {
+    "status": "CALIBRATION_ONLY_NOT_PRODUCTION",
+    "source_bridge_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "source_terrain": "V01 formula reconstruction; original V03 combined GLB not available",
+    "frame": "bridge local, X east/Y up/Z south in GLB, provisional metre",
+    "patches": [
+      {
+        "side": "WEST",
+        "edge_x_m": 270,
+        "deck_z_m": 20.71000099182129,
+        "samples": 17,
+        "before_max_abs_joint_m": 0.09749755859375142,
+        "max_cut_m": 0.03424778691044455,
+        "max_fill_m": 0.10358492533365886,
+        "border_samples": 160,
+        "triangles": 3200,
+        "vertices": 1681,
+        "after_max_abs_joint_m": 0,
+        "max_border_residual_m": 9.5367431640625e-7,
+        "longitudinal_grade_max_percent": 3.0853271484375,
+        "cross_grade_max_percent": 2.82135009765625,
+        "max_bridge_intrusion_m": 0,
+        "roundtrip_max_error_m": 9.5367431640625e-7
+      },
+      {
+        "side": "EAST",
+        "edge_x_m": 330,
+        "deck_z_m": 21.07000160217285,
+        "samples": 17,
+        "before_max_abs_joint_m": 0.11825866699218679,
+        "max_cut_m": 0.04960943151403356,
+        "max_fill_m": 0.12761398597999857,
+        "border_samples": 160,
+        "triangles": 3200,
+        "vertices": 1681,
+        "after_max_abs_joint_m": 0,
+        "max_border_residual_m": 9.5367431640625e-7,
+        "longitudinal_grade_max_percent": 2.35137939453125,
+        "cross_grade_max_percent": 3.713226318359375,
+        "max_bridge_intrusion_m": 0,
+        "roundtrip_max_error_m": 9.5367431640625e-7
+      }
+    ],
+    "protected_bridge_meshes": 3,
+    "geometry_count": 5,
+    "sample_step_m": 0.25,
+    "criteria": {
+      "joint_max_m": 0.005,
+      "border_max_m": 0.00001,
+      "grade_long_percent": 15,
+      "grade_cross_percent": 10,
+      "intrusion_max_m": 0.005
+    },
+    "method": "Cubic smoothstep full-width terrain cut/fill, 5m fade in longitudinal and transverse directions; no bridge mutation",
+    "outputs": {
+      "glb_sha256": "17d56099d5077bd843b73f370398ae82b755a58cf2702472e149b4374652bbaa",
+      "preview_sha256": "fe342b12a3015720ed2f194d6443edcaac116acd384147fac85cd313ef341483",
+      "script_sha256": "c2a3acadb50b126ac66f80a3035570148cd35c2f8fb2e36c87478d24da461cf4"
+    },
+    "design": {
+      "D0": "PARTIAL",
+      "D1": "PARTIAL",
+      "D2": "PARTIAL_CALIBRATION",
+      "D3": "BLOCKED_ORIGINAL_TERRAIN",
+      "D4": "NOT_RUN"
+    },
+    "gates": {
+      "G1": "BLOCKED",
+      "G2": "NOT_RUN",
+      "G3": "PARTIAL_CALIBRATION",
+      "G4": "NOT_RUN"
+    },
+    "limitations": "Open patch surfaces are isolated replacement samples, not overlays to add to terrain; no actual V03 region integration, foundation strength, masonry, Blender or independent QA."
+  },
+  "next": "Recover original V03 combined GLB or independently verify the original river mesh, complete source-grounded bridge blueprint D0-D4, then apply locally bounded cut/fill as replacement surface and design abutments. Do not merge calibration overlays into world."
+}

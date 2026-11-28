@@ -1,0 +1,223 @@
+{
+  "schema": "two.world.c01.coastline_candidate.v1",
+  "stage": "W02_PRELIMINARY_GEOMETRY_REVISED_NOT_APPROVED",
+  "status": "PROCEDURAL_TOPOLOGY_CANDIDATE_CORRECTED_Y_AXIS",
+  "reference_frame": {
+    "name": "normalized_illustration",
+    "x": "east",
+    "y": "north",
+    "units": "arbitrary_normalized_0_to_100",
+    "metres_per_unit": null,
+    "origin_xyz_m": null,
+    "vertical_datum": null,
+    "projection": "fictional_non_georeferenced",
+    "coordinate_correction": "v01 prior points used screen-down Y despite x east/y north metadata; v02 coordinates reflect Y increasing north. Visual silhouette unchanged."
+  },
+  "continent_coastline": {
+    "ring": [
+      [
+        22,
+        82
+      ],
+      [
+        34,
+        90
+      ],
+      [
+        48,
+        87
+      ],
+      [
+        60,
+        92
+      ],
+      [
+        71,
+        82
+      ],
+      [
+        81,
+        84
+      ],
+      [
+        91,
+        69
+      ],
+      [
+        88,
+        54
+      ],
+      [
+        95,
+        41
+      ],
+      [
+        86,
+        28
+      ],
+      [
+        77,
+        23
+      ],
+      [
+        68,
+        10
+      ],
+      [
+        54,
+        13
+      ],
+      [
+        42,
+        7
+      ],
+      [
+        31,
+        16
+      ],
+      [
+        18,
+        19
+      ],
+      [
+        13,
+        33
+      ],
+      [
+        21,
+        41
+      ],
+      [
+        14,
+        51
+      ],
+      [
+        22,
+        61
+      ],
+      [
+        17,
+        71
+      ],
+      [
+        22,
+        82
+      ]
+    ],
+    "closed": true,
+    "self_intersection_pairs": [],
+    "area_normalized_squared": 5066,
+    "source_class": "UNMEASURED_DESIGN_CANDIDATE",
+    "source_reuse": [
+      "County Clare western coastal headland rhythm only",
+      "Burren upland-to-coast character only"
+    ],
+    "do_not_infer": [
+      "Ireland national outline",
+      "DEM elevation",
+      "true travel distances",
+      "hydrology watershed",
+      "political borders"
+    ]
+  },
+  "candidate_geographic_zones": [
+    {
+      "id": "WESTERN_KINGDOM_SPHERE",
+      "label": "西方王国圏",
+      "locator_xy": [
+        31,
+        50
+      ],
+      "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
+    },
+    {
+      "id": "NORTHERN_MOUNTAIN_FEDERATION_SPHERE",
+      "label": "北方山岳連邦圏",
+      "locator_xy": [
+        54,
+        76
+      ],
+      "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
+    },
+    {
+      "id": "EASTERN_CITY_STATES_SPHERE",
+      "label": "東方諸邦圏",
+      "locator_xy": [
+        78,
+        52
+      ],
+      "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
+    },
+    {
+      "id": "SOUTHWEST_COASTAL_STATES_SPHERE",
+      "label": "南西沿岸諸国圏",
+      "locator_xy": [
+        34,
+        28
+      ],
+      "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
+    },
+    {
+      "id": "SOUTHERN_ANCIENT_TERRITORIES_SPHERE",
+      "label": "南方古代領域圏",
+      "locator_xy": [
+        59,
+        23
+      ],
+      "classification": "CULTURAL_DIRECTIONAL_CANDIDATE"
+    }
+  ],
+  "rilde_locator": {
+    "xy": [
+      23,
+      54
+    ],
+    "kind": "CANDIDATE_WEST_COAST_VICINITY",
+    "exact_position": null,
+    "region_extent": null
+  },
+  "area_polygons": {
+    "RILDE_VILLAGE": null,
+    "WINDWAITING_CLIFF": null,
+    "COASTAL_MEADOW": null,
+    "RIVER_CORRIDOR": null,
+    "MOSS_FOREST_A1": null,
+    "MOSS_FOREST_A2": null,
+    "MOSS_FOREST_A3": null,
+    "DUNVAR_FORTRESS": null
+  },
+  "source_provenance": {
+    "canon_private_blob": "5a3cd66e4131a34de363782a2af8f0e4bb145464",
+    "reference_matrix_blob": "5461e4297e591f05b756b78202bd792c8ed8e955",
+    "approved_cliff_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "irish_geodata_bytes_sha256": null,
+    "irish_dem_verified": false
+  },
+  "qa": {
+    "polygon_closed": "PASS_LOCAL",
+    "polygon_self_intersections": "PASS_LOCAL",
+    "polygon_nonzero_area": "PASS_LOCAL",
+    "canon_spatial_validation": "BLOCKED",
+    "independent_art_review": "NOT_RUN",
+    "W01": "PARTIAL",
+    "W02": "PARTIAL_PROCEDURAL_CANDIDATE_ONLY",
+    "D0": "PARTIAL",
+    "D1": "BLOCKED",
+    "D2": "NOT_RUN",
+    "D3": "NOT_RUN",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN",
+    "north_south_orientation": "PASS_LOCAL_AFTER_Y_INVERSION",
+    "source_geodata_coverage": "BLOCKED_NOT_VERIFIED",
+    "design_visualization": "NOT_RUN"
+  },
+  "next": [
+    "Review candidate coast against terrain reference and approved story topology",
+    "Locate Irish source geodata and verify license CRS datum resolution and SHA",
+    "Reconcile regional locator and eight-area boundaries",
+    "Only then advance W03 elevation/hydrology dependencies"
+  ]
+}

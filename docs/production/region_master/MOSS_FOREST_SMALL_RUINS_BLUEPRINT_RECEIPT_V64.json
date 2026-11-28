@@ -1,0 +1,203 @@
+{
+  "schema": "two.region.a3.small_ruins.blueprint.v64",
+  "parent": "6e900087807006697b3b261924eecbf9ed30161e",
+  "status": "LOCAL_UV_CUTTER_DESIGN_VERIFIED_D4_INDEPENDENT_HOLD",
+  "prework": {
+    "main_head": "0d08922cc9e46e69ff72f0221d1f38f3832f8055",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SMALL_RUINS_LOCAL_V64",
+    "owner_pr": 482,
+    "owner_head": "6e900087807006697b3b261924eecbf9ed30161e",
+    "writer_lease_fencing_evidence": "Independent local design, read-only native artifact and candidate material acquisition; no shared native write or lease takeover; CAS non-force.",
+    "source_sha256": {
+      "v63": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+      "refs": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+      "native_conflict": "883938099b4043367617d79b5679c2b6f998305875d6b23502ecf81e92e96deb"
+    },
+    "dependencies": {
+      "v63": "fbfa17f56dc1505e65afccb6d52382182649d9fd",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "V63 exact rings, approved 2D references, V58 native, V62 terrace, legacy runtime and event state",
+    "stage": "D2/D3 local detail; D0 candidate texture source intake",
+    "predecessor_gate_statuses": {
+      "D0": "VERIFIED_GEOMETRY_REFERENCE",
+      "D1": "LOCAL_ONLY_WORLD_HOLD",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "Exact closed design triangulation, chart nonoverlap and >=8px rectangle border, metric edge error <=1e-9m, projected groove union exact, back thickness >.058m, normal depth tolerance 2mm, width tolerance 3mm, LOD omitted ring error <=25mm or retain LOD0.",
+    "preflight_checks": "Actual 21 source files SHA, source conflict archive CRC/SHA, exact local calculations, py_compile and output CRC, verify PR HEAD.",
+    "result": "READY_DESIGN_AND_MATERIAL_INTAKE_ONLY",
+    "blockers": [
+      "independent D4",
+      "actual material bytes and visual review",
+      "native Boolean, wear/ivy and after-cut UV, final placement/collision"
+    ],
+    "checkpoint": "V63 sources retained",
+    "next_stage": "Review actual source maps and request independent D4 of isolated module; no precision production before gate."
+  },
+  "native_conflict": {
+    "run": 45732398522,
+    "artifact": 15077202051,
+    "archive_sha256": "883938099b4043367617d79b5679c2b6f998305875d6b23502ecf81e92e96deb",
+    "source_sha256": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a",
+    "source_meshes": 523,
+    "object": "V58_SCENIC_GROVE_00",
+    "triangle": 299,
+    "material": "GM_eco_leafcard_oak",
+    "area_m2": 0.04083916628913413,
+    "min_height_above_pad_m": 2.146765997736388,
+    "counts": {
+      "old_pad": 1,
+      "foundation_envelope": 0,
+      "cap": 0,
+      "interaction": 0,
+      "access_on_pad": 0,
+      "access_ramp_envelope": 0,
+      "altar_assembly_envelope": 0,
+      "pad_above_walk": 1
+    },
+    "classification": "Leaf card in pad corner air only, no intersection with declared solid and access envelopes. Preserve tree; actual character collision and final global clearance not accepted."
+  },
+  "design": {
+    "modules": 3,
+    "base_triangles": 212,
+    "chart_count": 30,
+    "atlas_per_module": 1024,
+    "padding_px": 8,
+    "texels_per_m": 256,
+    "uv_overlap": 0,
+    "max_edge_residual_m": 9.71445146547012e-16,
+    "cutter_union_patches": 22,
+    "method": "V63 exact rings, 8 side strips unfolded by consecutive triangle edge lengths, two caps fan triangulated, 10 charts per module; ordered shelf pack 1024 atlas, 256px/m, 8px padding on each rectangle side. Exact projected path union buffer radius .009m, split on front triangles, lift by barycentric interpolation. Extrude from 1mm outside to 8mm inside along de-yawed +Y, opposing back-face overlay minimum thickness evaluated. Base rings retained, no Boolean executed.",
+    "rows": [
+      {
+        "id": "RUNE-S01",
+        "triangles": 92,
+        "cut_patches": 9,
+        "area_m2": 0.05134042277031559,
+        "residual_thickness_m": 0.30718257093456763,
+        "normal_depth_m": [
+          0.007916627821119578,
+          0.007979346466072939
+        ],
+        "lod1": {
+          "rings": [
+            0,
+            2,
+            4,
+            5
+          ],
+          "triangles": 60,
+          "error_m": 0.07639996207265902,
+          "status": "REJECT"
+        }
+      },
+      {
+        "id": "BOUND-S01",
+        "triangles": 60,
+        "cut_patches": 6,
+        "area_m2": 0.026205315706359266,
+        "residual_thickness_m": 0.4023783265051876,
+        "normal_depth_m": [
+          0.00797542518116256,
+          0.00797542518116256
+        ],
+        "lod1": {
+          "rings": [
+            0,
+            2,
+            3
+          ],
+          "triangles": 44,
+          "error_m": 0.02350820761389428,
+          "status": "DESIGN_CANDIDATE"
+        }
+      },
+      {
+        "id": "FRAG-S01",
+        "triangles": 60,
+        "cut_patches": 7,
+        "area_m2": 0.026882475990460716,
+        "residual_thickness_m": 0.5397560144274303,
+        "normal_depth_m": [
+          0.007795930781013395,
+          0.007795930781013395
+        ],
+        "lod1": {
+          "rings": [
+            0,
+            2,
+            3
+          ],
+          "triangles": 44,
+          "error_m": 0.0867709036291234,
+          "status": "REJECT"
+        }
+      }
+    ],
+    "limits": "Base triangulation only, UV charts pre-cut, real Boolean and material QA not run. Collision is conservative local hull, not runtime. LOD design screening only, no Android. Wear/ivy and prominent source fracture not fully closed; independent D4 not run."
+  },
+  "material_intake": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py",
+    "provider": "Poly Haven",
+    "author": "Rob Tuytel",
+    "license": "CC0",
+    "assets": [
+      {
+        "id": "rock_01",
+        "url": "https://polyhaven.com/a/rock_01",
+        "physical_width_m": 1.5
+      },
+      {
+        "id": "mossy_rock",
+        "url": "https://polyhaven.com/a/mossy_rock",
+        "physical_width_m": 3
+      }
+    ],
+    "maps": [
+      "2k JPEG Diffuse",
+      "2k JPEG nor_gl",
+      "2k JPEG Rough"
+    ],
+    "max_aggregate_bytes": 67108864,
+    "policy": "Original photo microstructure, physical UV scale per provider width, no baked directional lighting or sprite pixel reuse. Provider API file metadata, size, MD5 and SHA256 verified before storage. No production binding or adoption."
+  },
+  "outputs": {
+    "files_sha256": {
+      "design_v64.py": "22a56fa104d0f52de5cc5d57a23630aa023a5e63c98d0af5548a62c714a3743b",
+      "small_ruins_v64.json": "00eed401791c425126b2a5d47c3ae73fea90d183fa40b550864384a051ccbc3a",
+      "surface_uv_blueprint.png": "65ac8f9eb5aff1979b165587b38846382301afb42abf2f672ef1eae00d6d1ca7",
+      "v63_conflict.json": "0421f652178a04c5445fc00f0894ffad0afa39944423452c1403967d4985b9bd"
+    },
+    "package_sha256": "e328c8e1d2b9a27efe2d9f6ce8c8850549f4c34830a45d747b4b42faaf21cf30",
+    "bytes": 1215715,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Full coordinates and reproducible script in conversation attachment; compact recipe in PR."
+  },
+  "gates": {
+    "D0": "GEOMETRY_SOURCE_VERIFIED_MATERIAL_INTAKE_PENDING",
+    "D1": "LOCAL_SCOPE_WORLD_HOLD",
+    "D2": "LOCAL_UV_CUTTER_DESIGN_PARTIAL_WEAR",
+    "D3": "LOCAL_NUMERIC_SCREEN_PASS_NATIVE_UNCERTAINTY",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

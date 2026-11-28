@@ -1,0 +1,122 @@
+{
+  "schema": "two.region.moss_forest_landing_receipt.v11",
+  "parent": "03f06fe1b8972705df526022e34cd0899354d44e",
+  "status": "STOP_LOCAL_BANK_REGRADING_NO_QUALIFIED_LANDING",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v09": "168af298123b1828d04175325b22f2b7b6e34fd5"
+  },
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "frame": "provisional metres X east Y north Z up",
+  "criteria": {
+    "site_y_m": [
+      -240,
+      -155
+    ],
+    "site_step_m": 5,
+    "core_m": [
+      4,
+      4
+    ],
+    "core_slope_limit_pct": 15,
+    "outer_limit": "max(100%, source outer maximum +10 percentage points)",
+    "outer_boundary_residual_m": 1e-8,
+    "wet_overlap_limit_m2": 0.00001,
+    "outside_limit_m2": 0.000001
+  },
+  "attempts": [
+    {
+      "id": "V10",
+      "method": "smoothstep lowering of wet-edge strip to water elevation +0.08*east offset; 4/6/8m inland taper and 4m side taper",
+      "count": 54,
+      "pass": 0,
+      "core_grade_range_pct": [
+        8.317157989693923,
+        8.8154976617614
+      ],
+      "outer_max_range_pct": [
+        171.00887556351546,
+        253.7291152670539
+      ],
+      "cut_volume_range_m3": [
+        86.87380157332268,
+        194.72041143203796
+      ],
+      "script_sha256": "17c0fd60de3c3af41d522a7987a2ef749dae32360eadc4a463bf2c8cfdc3545f",
+      "script_git_fingerprint": "38fed7a65bd38f8612e5d15a66b75e35b52b6d36",
+      "json_sha256": "86f871c01d4ce2855b28ad79d07334850fc62ded2e634851003c9760afa1bcae"
+    },
+    {
+      "id": "V11",
+      "method": "minimum of source ground and distance-weighted upper envelope from fixed shelf samples; envelope 0.65/0.8/0.95; 18x23m extent",
+      "count": 54,
+      "pass": 0,
+      "outer_max_range_pct": [
+        95.49994174195717,
+        147.50585008621576
+      ],
+      "cut_volume_range_m3": [
+        183.5335238487338,
+        1383.401609942052
+      ],
+      "script_sha256": "7eccdba04bc40564873c046072324c2e6b73ef3a4eb47367f663fc6b28f3129f",
+      "script_git_fingerprint": "7583e923cb3bd2a86bf7f055570d1b43fd439c44",
+      "json_sha256": "c42f992939c6564d6741be96bfcb1eeca6c43c81aa955532b30016467b3f73a3",
+      "npz_sha256": "0690b11bdc72c2272d308c9ba0bb4e51c80c96e42deec220ba6b57d654377cc4",
+      "png_sha256": "c237fa84bfee3f6287b0d77ee64bf94927307c663b46834e3e0bd24fce6eea12"
+    }
+  ],
+  "best_rejected_v11": {
+    "y_m": -175,
+    "envelope_slope": 0.95,
+    "core_grade_pct": 8.730519418514657,
+    "outer_max_grade_pct": 118.94675925902465,
+    "outer_source_grade_pct": 89.86893845093789,
+    "cut_max_m": 2.4206117807351832,
+    "cut_volume_m3": 219.69737466378942,
+    "footprint_m2": 414,
+    "wet_overlap_m2": 0,
+    "outside_m2": 0,
+    "shore_residual_m": 0,
+    "outer_residual_m": 0,
+    "triangles": 16928,
+    "core_triangles": 640,
+    "shelf_exit_xy": [
+      335.2371025085449,
+      -175
+    ],
+    "shelf_exit_z_m": 5.22,
+    "trail_entry_rise_m": 13.787059097290038,
+    "minimum_path_at_15pct_m": 91.91372731526693,
+    "straight_distance_m": 70.9134471862038,
+    "local_pass": false
+  },
+  "minimum_path_range_at_15_pct_m": [
+    90.31372731526693,
+    97.11372731526693
+  ],
+  "execution": "Actual local Python NumPy/trimesh/Shapely/SciPy. Both methods executed, full rejection records saved locally. Input SHA checked before/after; V11 NPZ reopened exact. No Blender or Actions.",
+  "decision": "Stop further narrow-bank and local shelf correction loops. V09 long wall reservations and V10/V11 are rejected as production candidates. Preserve V02/V03 forest trail and V04 altar pad candidates. Resolve landing via separately reviewed area-scale river/forest landform redesign or an explicit story-scene interface approved by narrative owner; do not assume teleportation or canon change. Request D4 review; independent eligible work can proceed.",
+  "limitations": [
+    "Finite site and parameter search, not proof no possible bank design. Numeric limits authored provisional, not geotechnical standards. Lower bound is not actual route. Reconstructed terrain and water, official CG not verified.",
+    "Full scripts/JSON/NPZ/PNG remain local attachments; this commit stores receipt only, Git fingerprints are local fingerprints, not a claim of uploaded blobs.",
+    "No native geometry, D4, G2-G4, adoption or main merge."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_LANDING_INTERFACE",
+    "D2": "PARTIAL",
+    "D3": "FAIL_TESTED_LANDING_METHODS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

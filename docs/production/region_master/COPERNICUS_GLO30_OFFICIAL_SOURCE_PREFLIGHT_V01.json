@@ -1,0 +1,67 @@
+{
+  "schema": "two.region.copernicus_glo30_official_preflight.v1",
+  "status": "OFFICIAL_DOCUMENTATION_REVIEWED_RASTER_NOT_ACQUIRED",
+  "date": "2026-11-24",
+  "product": "COP-DEM GLO-30 DGED",
+  "data_kind": "DSM_NOT_BARE_EARTH_DTM",
+  "horizontal_crs": "EPSG:4326 WGS84 geographic (native DGED)",
+  "vertical_datum": "EGM2008 geoid EPSG:3855 (handbook statement; verify individual raster)",
+  "grid_spacing": "1 arc-second latitude/longitude (roughly 30m); not a uniform 30m projected grid",
+  "nominal_vertical_accuracy": "<4m absolute at 90% per official product specification; not a per-cell certified uncertainty",
+  "availability": "General public access to GLO-30/GLO-90 described by official CDSE; registration/CCM access may be required by selected delivery API",
+  "license": "Official CDSE free license with attribution/modified-data notice and liability disclaimer; exact license and distribution obligations must be checked before game redistribution",
+  "source_documents": [
+    {
+      "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+      "purpose": "official product, access, accuracy, attribution"
+    },
+    {
+      "url": "https://dataspace.copernicus.eu/sites/default/files/media/files/2024-06/geo1988-copernicusdem-spe-002_producthandbook_i5.0.pdf",
+      "purpose": "official CRS, vertical datum, GeoTIFF DGED, nodata"
+    },
+    {
+      "url": "https://dataspace.copernicus.eu/sites/default/files/media/files/2025-06/copernicus_contributing_mission_data_access_v2_cop_dem_licenses.pdf",
+      "purpose": "license text, per-product access and use restrictions"
+    },
+    {
+      "url": "https://documentation.v1.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM.html",
+      "purpose": "SentinelHub API may restrict COPERNICUS_30; do not infer public API availability from catalog access"
+    }
+  ],
+  "source_selection": {
+    "reference_region": "County Clare / Cliffs of Moher",
+    "official_terrain_copy_to_fictional_world": false,
+    "download_method": "UNSELECTED_AUTHENTICATED_PATH",
+    "tile_id": null,
+    "download_url": null,
+    "bytes_sha256": null,
+    "source_license_acceptance": "PENDING",
+    "metadata_crs_verified": false,
+    "vertical_datum_verified": false,
+    "coverage_verified": false,
+    "game_asset_derivative_redistribution_approved": false
+  },
+  "art_direction": {
+    "macro_terrain": "GLO-30 may inform noncanonical heightfield, ridge and drainage candidates after measurement",
+    "cliff": "Official CG and manually authored mesh/sculpt remain source of detailed overhangs, joints, fracture and silhouette",
+    "sea_level": "Fictional Z0 is not automatically EGM2008 height zero",
+    "georeferencing": "World-to-EPSG4326 and native Blender transforms unresolved"
+  },
+  "qa": {
+    "documentation_review": "PASS_SCOPE_LIMITED",
+    "dataset_access": "NOT_RUN",
+    "license_acceptance": "BLOCKED",
+    "raster_sha": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "ownership": {
+    "design_pr": 482,
+    "cliff_pr": 421,
+    "region_pr": 364,
+    "no_native_mutations": true,
+    "no_canon_adoption": true
+  }
+}

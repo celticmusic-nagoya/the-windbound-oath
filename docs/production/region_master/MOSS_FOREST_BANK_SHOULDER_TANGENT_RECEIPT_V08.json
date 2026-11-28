@@ -1,0 +1,95 @@
+{
+  "schema": "two.region.moss_forest_bank_shoulder_tangent_receipt.v08",
+  "parent": "7f766fb89bf20c329dc1d51d67e1a42a1e073604",
+  "status": "RIBBON_REPAIRED_SHOULDERS_LANDING_HOLD",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v06": "afe5f9cc2340affe83d0d925b60435f0f7ce2e8f"
+  },
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "3aee7f0034968cc9fc96a610df15f96f7b0d93ff078bd19f7e8c79508a9079e6",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "v07": {
+    "verdict": "REJECT_ALL_SEVEN_SHOULDER_WIDTHS",
+    "nominal_widths_m": [
+      0.5,
+      1,
+      1.5,
+      2,
+      3,
+      4,
+      5
+    ],
+    "reason": "Invalid offset polygons, folded triangles, excessive gradients, and for 5m side -1 wet overlap 2.8958518950542165m². V06 base ribbon itself contains 3 nonpositive XY-oriented triangles near terminal station 99.98673597241604m. Prior V06 slope-only pass superseded for structural feasibility.",
+    "landing": {
+      "shore_xy": [
+        327.8586311340332,
+        -150
+      ],
+      "launch_xy": [
+        332.8586311340332,
+        -150
+      ],
+      "water_z_m": 5.2,
+      "launch_z_m": 8.702484872714535,
+      "rise_m": 3.5024848727145352,
+      "direct_run_m": 5,
+      "minimum_run_at_15_pct_m": 23.349899151430236,
+      "source_max_grade_pct": 82.45555877690947,
+      "start_cross_correction_m": 0.824292264510234
+    },
+    "outputs": {
+      "script_sha256": "95aba80ab1661a65eae39ebc4d8c08b4aa6c160aac7c170e86ef40e2ae3eb555",
+      "json_sha256": "fe9d75541037c4434105d3e17bd117b4ce5835145affc4c84be8c5d8bc1e6da6",
+      "png_sha256": "b49de69ac6e345f457314c140c677749f034c5161c175b2b1912907e901308dd",
+      "delivery": "local files only"
+    }
+  },
+  "v08": {
+    "method": "Replace forced terminal normal with cubic Hermite terminal curve matching actual V03 tangent. Four terminal runs 8/12/16/20m; select largest sampled radius among ribbon passes. Recompute grade over full width.",
+    "selected": {
+      "terminal_run_m": 20,
+      "length_m": 96.8940506883624,
+      "min_sampled_radius_m": 5.148244414495608,
+      "folded_triangles": 0,
+      "min_signed_double_area_m2": 0.0502847307975612,
+      "max_long_pct": 11.695800014505648,
+      "max_cross_pct": 1.0204092515083776,
+      "wet_overlap_m2": 0,
+      "forest_overlap_m2": 0,
+      "outside_m2": 0,
+      "seam_xyz_error_m": 0,
+      "max_cut_m": 2.043349417654735,
+      "max_fill_m": 0.7780483247614143
+    },
+    "outputs": {
+      "script_blob": "cbef55ca76d349eefd54eab6f34bd92857784374",
+      "design_blob": "7e59c955e49dec73d3b72678574dbe0e0ddc544f",
+      "script_sha256": "a9d91537f8c0a0150d973f34eeb14b82bfab99de98fb89ef3edc0bd6556c26b9",
+      "design_sha256": "92538b17ab346959a8d58425a191c97d902a900e538c16dfc1176fcabb15aaca",
+      "npz_sha256": "79a119dd6afbab374f775a47f48ad215559ea160d2f9f0527c3fee799cc4fe23",
+      "png_sha256": "f2a0f0acc64c83ef0adab8720e855c2bd1e2b906758685d50667c78e50555a5d"
+    }
+  },
+  "execution": "Actual local Python, original SHA unchanged, reopened V08 NPZ exact design Z, preview inspected. Script and design Git blobs match local git hash-object. No Blender or Actions.",
+  "limits": [
+    "V08 ribbon-only result. Shoulder feasibility on repaired alignment not yet checked; selecting radius increases max assumed cut to 2.04m. No continuous curvature or terrain triangulation proof, no landing shelf, no approved CG, no independent D4. Native/ECO owners untouched."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_BANK_SHOULDERS_LANDING",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat uniform shoulder expansion on steep natural bank. Evaluate asymmetric bank treatment or alternative landing location with protected water footprint; choose a bounded design and request independent D4. No adoption/main merge."
+}

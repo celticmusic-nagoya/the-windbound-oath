@@ -1,0 +1,38 @@
+{
+  "schema": "two.region.moss_forest_bank_zones_receipt.v09",
+  "parent": "914a0fec9fc0ba7df893738ba74c3512bbc7d898",
+  "status": "HOLD_ART_DIRECTION_AND_LANDING",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v08": "815d537f6b2f9a105d01608b72a6114dc9968ed3"
+  },
+  "outputs": {
+    "script_blob": "259b6c471f4d7f4107d6e5c09f8f50555932d795",
+    "json_blob": "2ccd8edb0578183cca860b22a0aac60f069e30d9",
+    "script_sha256": "c296ebd6b56436fd702d8327ef876728192ad361afea7fac247039f99c090242",
+    "json_sha256": "8a5d4f489eb82ca08b270a89067437fd7f41a0be12b925df0907f7377863b9cb",
+    "npz_sha256": "b2572a4b4d17a3c2dc3af1b0d845a81664f1826ca68323a10cf6830745f4d16b",
+    "png_sha256": "d2c3616492922c76c5b1703301e5c964839d7ba26d7062e51fdf8451a3c9e2c1",
+    "binary_delivery": "local attachments only"
+  },
+  "execution": "Actual local Python, 3 source SHA matches before and after, 15 nominal widths per side, 388 intervals each, 11640 tests. Actual plan figure inspected, NPZ reopened exact. Script and JSON blobs match local Git fingerprints.",
+  "reproduction": "python zone_bank.py <recovered V03 GLB> <V08 bank route NPZ> <V03 forest shoulders NPZ> in scratch copy.",
+  "decision": "Do not author ~80m retaining walls on each side merely because 0.4m plan reservations fit. This would dominate natural woodland bank; suitability remains HOLD. Width scan not exhaustive and retaining reservations not structural designs. Change approach: test a different landing/short natural terraced bank corridor or resolve explicit story-only interface with narrative owner; independently review prior route and endpoints. Do not alter source or pretend D4 PASS.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_LANDING_AND_ART_DIRECTION",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "No actual wall, continuous seam, drainage, foundation, collision or Blender work. No official CG comparison. No formal adoption or main merge."
+  ]
+}

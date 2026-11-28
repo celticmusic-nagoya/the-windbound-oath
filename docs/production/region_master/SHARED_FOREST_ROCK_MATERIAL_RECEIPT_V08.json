@@ -1,0 +1,71 @@
+{
+  "schema": "two.region.photo_rock_material_receipt.v08",
+  "parent": "47f68a6188386f6611b3a25c59ca01ffd08fca83",
+  "status": "CANDIDATE_AB_MATERIAL_SCREEN_HOLD_SEMANTIC_MASK",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v07": "cc9d9595d95d8b41223e7d8ae1bca16386f20c94",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "source_glb_sha256": "451599a92e375059fda4c11fc9265e35dde547df6dbc65a6f0572b4d72ae9e88",
+    "placement_sha256": "25d2273f16e37e94d6368e5ef109b03f02a5d1322ee946a1bf6784f0d1df1fb6",
+    "archive_sha256": "cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564"
+  },
+  "outputs": {
+    "material_study_py": "2ce06702bc7430626318f6caa9ff2d1b49fe2026ef09906717654363016ec239",
+    "moss_mask_proxy_png": "df63d6e6b3fe23bd08f6b04bf2f3c15e381e3e1a4a61fc21f85c4aed1ae6f38e",
+    "basecolor_png": "efb575055a2c4389190baae06820518c020ea6abcb50bb64346f32aae84651d5",
+    "roughness_png": "9bb3a4147a7a101cc5f60eb309ceaf79b47b19e5fc07f4367649d3fc9694467b",
+    "preview_png": "c522a0843ce51ea730e2f372ec85dd29c3a4a6cdc7b4d461ee1247d263e44a10",
+    "library_glb": "a04137b6bf6cfd533e830cfbb44826c54751c885437973384b1fec933b18ae7e",
+    "placement_glb": "2809144b26665b18fc81d0ef721c97787a960887a68b390993c59a71223be1a0",
+    "delivery": "Local GLBs, maps, script, comparison and QA. Receipt only committed."
+  },
+  "measurements": {
+    "mask_proxy_active_fraction": 0.9034925708535013,
+    "mask_proxy_mean": 0.4965412831421434,
+    "max_basecolor_delta_8bit": 16,
+    "max_roughness_green_delta_8bit": 43,
+    "source_buffer_exact": true,
+    "original_images_material_exact": true,
+    "normal_bytes_exact": true,
+    "mesh_nodes_accessors_exact": true,
+    "reopen_nodes": [
+      6,
+      12
+    ],
+    "matched_silhouette_pixels": [
+      27826,
+      27826,
+      23199,
+      23199,
+      43838,
+      43838,
+      32717,
+      32717,
+      42165,
+      42165,
+      37909,
+      37909
+    ]
+  },
+  "execution": "Actual local Python py_compile and full execution. SHA pinned V07 exact GLBs and original Actions source archive. Appended two lossless candidate texture maps and a new material, retaining original embedded bytes. Reopened both GLBs, exact geometry, node transforms and accessors. Six matched orthographic A/B mesh views with real forest-ground texture on a diagnostic plane, approximate CPU shader. Visual inspection: greener olive hue, visible original rock details; weak contrast and broad color proxy on some flat faces; ground noisy and no shadows. No new Actions or Blender.",
+  "limits": [
+    "Mask is color-based proxy; 90.35% of non-dark texels have weight above 0.1, not moss coverage. This is not a reliable localized semantic mask or measured physical wetness. Hold adoption; use source-grounded authored/geometry-aware mask in actual scene if needed.",
+    "Diagnostic plane, not A3 terrain or physical contact. No native PBR, runtime, independent D4/G2 or G4. V05 binaries still missing."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_ACTUAL_SCENE",
+    "D2": "PARTIAL",
+    "D3": "HOLD_SEMANTIC_MASK",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_GLBS_REOPEN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Recover actual A3 terrain/native sources from owning workstream and build matched scene-level PBR comparison. Preserve V08 as color study; do not repeat minor threshold tuning without source/scene evidence. Recover V05 exact files or regenerate separately versioned LOD if necessary."
+}

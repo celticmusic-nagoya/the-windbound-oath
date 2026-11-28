@@ -1,0 +1,181 @@
+{
+  "schema": "two.region.access_bridge_candidate.v03",
+  "status": "PROVISIONAL_NOT_ADOPTED",
+  "source": {
+    "expansion_blob": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "expansion_glb_sha256": "06a61e83880af9ada3958aa780edd4730fa4bf7bbe2309aac16eb9ac33ba5644",
+    "region_plan_blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "main_agents_blob": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc"
+  },
+  "frame": {
+    "unit": "m",
+    "axes": "X east Y north Z up",
+    "gltf": "X east Y up Z south",
+    "canonical_transform": null
+  },
+  "fort": {
+    "changed_tiles": [
+      {
+        "id": "DUNVAR_FORTRESS",
+        "changed_vertices": 4040,
+        "max_abs_delta_m": 7.3142897538754
+      },
+      {
+        "id": "IF07_FORT_CONNECTOR",
+        "changed_vertices": 1470,
+        "max_abs_delta_m": 7.525036180030106
+      }
+    ],
+    "profile": "linear interpolation from plateau(x,300) to existing fort(x,575), north of 575 retained within float rounding",
+    "old_max_grade_percent": 23.26952112849483,
+    "new_max_sampled_grade_percent": 11.89331210773048,
+    "max_cross_grade_percent": 0.9097491665020385,
+    "sample_step_m": 0.25,
+    "width_m": 2,
+    "grade_goal_percent": 15,
+    "cross_goal_percent": 10,
+    "qa": "PROVISIONAL_SAMPLED_PASS_NOT_NAVIGATION",
+    "seams": [
+      {
+        "a": "COASTAL_MEADOW",
+        "b": "IF07_FORT_CONNECTOR",
+        "vertices": 21,
+        "max_delta_m": 9.525617485905968e-7
+      },
+      {
+        "a": "IF07_FORT_CONNECTOR",
+        "b": "DUNVAR_FORTRESS",
+        "vertices": 21,
+        "max_delta_m": 0
+      }
+    ],
+    "protected_meshes_exact": [
+      "COASTAL_MEADOW",
+      "IF01_CLIFF_CONNECTOR",
+      "IF03_RIVER_CONNECTOR",
+      "RILDE_VILLAGE",
+      "RIVER_CORRIDOR",
+      "RIVER_WATER_CLIPPED",
+      "MOSS_FOREST_A1",
+      "MOSS_FOREST_A2",
+      "MOSS_FOREST_A3"
+    ]
+  },
+  "bridge": {
+    "id": "EAST_RIVER_BRIDGE",
+    "origin_m": [
+      300,
+      0,
+      0
+    ],
+    "endpoints_xy_m": [
+      [
+        270,
+        0
+      ],
+      [
+        330,
+        0
+      ]
+    ],
+    "total_length_m": 60,
+    "deck_width_m": 4,
+    "arch_opening_width_m": 28,
+    "arch_rise_m": 12,
+    "deck_end_z_m": [
+      20.710000076293944,
+      21.070000686645507
+    ],
+    "central_water_z_m": 7,
+    "central_underside_z_m": 18,
+    "central_clearance_m": 11,
+    "centerline_end_ground_offset_m": 0.04,
+    "parts": [
+      {
+        "id": "EAST_RIVER_BRIDGE_ARCH",
+        "vertices": 964,
+        "triangles": 1924,
+        "watertight": true
+      },
+      {
+        "id": "NORTH_PARAPET",
+        "vertices": 964,
+        "triangles": 1924,
+        "watertight": true
+      },
+      {
+        "id": "SOUTH_PARAPET",
+        "vertices": 964,
+        "triangles": 1924,
+        "watertight": true
+      }
+    ],
+    "limits": "Mass only. No full width bank contact, foundation, masonry, structural engineering, collision, navigation or art acceptance."
+  },
+  "harbor": {
+    "locator_xy_m": [
+      -200,
+      -200
+    ],
+    "quay_candidate_xy_m": [
+      [
+        -174,
+        -184
+      ],
+      [
+        -165,
+        -204
+      ],
+      [
+        -175,
+        -225
+      ]
+    ],
+    "water_access_xy_m": [
+      [
+        -225,
+        -190
+      ],
+      [
+        -200,
+        -205
+      ],
+      [
+        -184,
+        -210
+      ]
+    ],
+    "road_interface_xy_m": [
+      -150,
+      -125
+    ],
+    "z_m": null,
+    "status": "PLAN_ONLY; shoreline and land connection not verified"
+  },
+  "artifacts": {
+    "combined_glb_sha256": "6f24df182e23ddd2bcbe784e13715c10c4b10042409d534ba6c11ca02fe7c77f",
+    "bridge_glb_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "preview_sha256": "a137156213c65039df4ddb6be902f916413fe7cc7e4905e4a4fd082e9594ccce",
+    "script_sha256": "98c7672ae54bc34d3c1bb305f09f9da7c10cc7f13c188c807cb7620cb95813b1",
+    "location": "local attachments only, binaries not committed"
+  },
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "BLOCKED",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_LOCAL_MESH",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Authored dimensions and height changes, no DEM or formal placement",
+    "Grade sampled on 3 longitudinal traces, no continuous full corridor or navigation proof; slope transition needs visual QA",
+    "Bridge foundation and full width contact not verified",
+    "Harbor plan only; forest vegetation, fort buildings, river mouth and cliff integration still outstanding",
+    "Blender and both shared engines not executed; initial main push run cannot be listed by PR-only connector",
+    "No protected source or owner writer modified; no formal adoption or main merge"
+  ]
+}

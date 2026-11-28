@@ -1,0 +1,115 @@
+{
+  "status": "RIBBON_ONLY_PASS_SHOULDERS_LANDING_HOLD",
+  "inputs_sha256": [
+    "52e447d0ffa806ecc49b8bb9737420bee7cfb1f6b0315e6677a962e21d7313ea",
+    "3aee7f0034968cc9fc96a610df15f96f7b0d93ff078bd19f7e8c79508a9079e6",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653"
+  ],
+  "before": {
+    "folded_triangles": 3,
+    "min_signed_double_area_m2": -0.03560814192387219,
+    "max_long_pct": 13.201132322647021,
+    "max_cross_pct": 4.649458810505698
+  },
+  "attempts": [
+    {
+      "terminal_run_m": 8,
+      "valid_polygon": true,
+      "outside_samples": 0,
+      "folded_triangles": 0,
+      "min_signed_double_area_m2": 0.002036886924551215,
+      "max_long_pct": 14.399641643970721,
+      "max_cross_pct": 2.7954389652593314,
+      "length_m": 99.51669292460939,
+      "min_sampled_radius_m": 1.0328388627942027,
+      "wet_overlap_m2": 0.0,
+      "forest_overlap_m2": 0.0,
+      "outside_m2": 0.0,
+      "max_cut_m": 1.6647221174653026,
+      "max_fill_m": 0.7780483247614143,
+      "seam_xyz_error_m": 0.0,
+      "pass_ribbon": true
+    },
+    {
+      "terminal_run_m": 12,
+      "valid_polygon": true,
+      "outside_samples": 0,
+      "folded_triangles": 0,
+      "min_signed_double_area_m2": 0.03294737048024311,
+      "max_long_pct": 12.324648087481366,
+      "max_cross_pct": 2.1185151785450467,
+      "length_m": 98.41583795849606,
+      "min_sampled_radius_m": 2.122936012281876,
+      "wet_overlap_m2": 0.0,
+      "forest_overlap_m2": 0.0,
+      "outside_m2": 0.0,
+      "max_cut_m": 1.7048473569040823,
+      "max_fill_m": 0.7780483247614143,
+      "seam_xyz_error_m": 0.0,
+      "pass_ribbon": true
+    },
+    {
+      "terminal_run_m": 16,
+      "valid_polygon": true,
+      "outside_samples": 0,
+      "folded_triangles": 0,
+      "min_signed_double_area_m2": 0.04489379310394452,
+      "max_long_pct": 11.86447172660134,
+      "max_cross_pct": 1.4083712604723568,
+      "length_m": 97.51890010422302,
+      "min_sampled_radius_m": 3.5792876485869494,
+      "wet_overlap_m2": 0.0,
+      "forest_overlap_m2": 0.0,
+      "outside_m2": 0.0,
+      "max_cut_m": 1.9015267340876107,
+      "max_fill_m": 0.7780483247614143,
+      "seam_xyz_error_m": 0.0,
+      "pass_ribbon": true
+    },
+    {
+      "terminal_run_m": 20,
+      "valid_polygon": true,
+      "outside_samples": 0,
+      "folded_triangles": 0,
+      "min_signed_double_area_m2": 0.0502847307975612,
+      "max_long_pct": 11.695800014505648,
+      "max_cross_pct": 1.0204092515083776,
+      "length_m": 96.8940506883624,
+      "min_sampled_radius_m": 5.148244414495608,
+      "wet_overlap_m2": 0.0,
+      "forest_overlap_m2": 0.0,
+      "outside_m2": 0.0,
+      "max_cut_m": 2.043349417654735,
+      "max_fill_m": 0.7780483247614143,
+      "seam_xyz_error_m": 0.0,
+      "pass_ribbon": true
+    }
+  ],
+  "selected": {
+    "terminal_run_m": 20,
+    "valid_polygon": true,
+    "outside_samples": 0,
+    "folded_triangles": 0,
+    "min_signed_double_area_m2": 0.0502847307975612,
+    "max_long_pct": 11.695800014505648,
+    "max_cross_pct": 1.0204092515083776,
+    "length_m": 96.8940506883624,
+    "min_sampled_radius_m": 5.148244414495608,
+    "wet_overlap_m2": 0.0,
+    "forest_overlap_m2": 0.0,
+    "outside_m2": 0.0,
+    "max_cut_m": 2.043349417654735,
+    "max_fill_m": 0.7780483247614143,
+    "seam_xyz_error_m": 0.0,
+    "pass_ribbon": true
+  },
+  "source_unchanged": true,
+  "limitations": [
+    "Sampled ribbon repair only. No native ground edit or continuous curvature proof. Full shoulder and landing redesign required; D4 not run."
+  ],
+  "outputs": {
+    "repair_tangent.py": "a9d91537f8c0a0150d973f34eeb14b82bfab99de98fb89ef3edc0bd6556c26b9",
+    "bank_route_v08.png": "f2a0f0acc64c83ef0adab8720e855c2bd1e2b906758685d50667c78e50555a5d",
+    "bank_route_v08.npz": "79a119dd6afbab374f775a47f48ad215559ea160d2f9f0527c3fee799cc4fe23"
+  }
+}

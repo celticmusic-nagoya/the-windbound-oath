@@ -1,0 +1,68 @@
+{
+  "status": "CANDIDATE_NOT_CANON",
+  "dependencies": [
+    {
+      "path": "docs/production/region_master/ALVERIA_W01_CONTINENT_TO_REGION_TOPOLOGY_V01.json",
+      "git_blob": "484fee575101559fa084f9b6226fe6cf0d2ce20b"
+    },
+    {
+      "path": "docs/production/region_master/ALVERIA_W02_C01_COASTLINE_CANDIDATE_V01.json",
+      "git_blob": "72e1e488bbe4c92fc5d473139d8eb1d00d07b084"
+    },
+    {
+      "path": "docs/production/region_master/RILDE_PROVISIONAL_SCHEMATIC_LAYOUT_V02.json",
+      "git_blob": "9f681d26c7aa9e421c143433b6d2603209b0f57a"
+    }
+  ],
+  "hierarchy": [
+    {
+      "id": "ALVERIA_CONTINENT",
+      "kind": "continent",
+      "geometry": null,
+      "canonical_outline": "UNVERIFIED"
+    },
+    {
+      "id": "ALVERIA_KINGDOM",
+      "kind": "kingdom",
+      "parent": "ALVERIA_CONTINENT",
+      "geometry": null,
+      "political_boundary": "UNVERIFIED"
+    },
+    {
+      "id": "RILDE_REGION",
+      "kind": "region",
+      "parent": "ALVERIA_KINGDOM",
+      "geometry": null,
+      "placement": "WEST_COAST_DIRECTIONAL_ONLY"
+    }
+  ],
+  "continent_frame": {
+    "name": "normalized_illustration",
+    "x": "east",
+    "y": "north",
+    "units": "arbitrary_normalized_0_to_100",
+    "metres_per_unit": null,
+    "origin_xyz_m": null,
+    "vertical_datum": null,
+    "projection": "fictional_non_georeferenced",
+    "coordinate_correction": "v01 prior points used screen-down Y despite x east/y north metadata; v02 coordinates reflect Y increasing north. Visual silhouette unchanged."
+  },
+  "region_frame": {
+    "origin": "RILDE_VILLAGE",
+    "x": "east",
+    "y": "north",
+    "unit": "dimensionless schematic unit",
+    "metric_scale": null,
+    "world_transform": null
+  },
+  "kingdom_boundary": null,
+  "capital_coordinate": null,
+  "continent_to_region_transform": null,
+  "svg": "ALVERIA_HIERARCHICAL_ATLAS_V01.svg",
+  "qa": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

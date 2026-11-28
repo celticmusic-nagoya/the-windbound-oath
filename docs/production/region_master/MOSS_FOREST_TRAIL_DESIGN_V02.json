@@ -1,0 +1,100 @@
+{
+  "status": "DESIGN_CANDIDATE_NOT_ADOPTED",
+  "source_sha256": {
+    "a1": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d",
+    "a2": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "a3": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b"
+  },
+  "previous_design_sha256": "e30fb940ed2ca2ce3b82d3ac5dddfa7c390247804df47fa14d4ec3aafdb4fcfd",
+  "checks": {
+    "mid": [
+      395.0,
+      -260.0
+    ],
+    "length_m": 407.5166611364689,
+    "radius_m": 12,
+    "corner_angle_deg": 25.49279547280307,
+    "outside_terrain_m2": 0.0,
+    "max_correction_m": 0.36006737637946173,
+    "max_cut_m": 0.36006737637946173,
+    "max_fill_m": 0.36006737637946173,
+    "mean_abs_correction_m": 0.051594833076848035,
+    "max_long_sampled_pct": 14.000000000003809,
+    "max_cross_sampled_pct": 9.000000000002013,
+    "max_triangle_long_bound_pct": 14.000000000003714,
+    "max_triangle_cross_bound_pct": 9.519537405339067,
+    "endpoint_residual_m": 0.0
+  },
+  "attempts": [
+    {
+      "mid": [
+        392.5,
+        -262.5
+      ],
+      "length_m": 409.1650164288794,
+      "radius_m": 12,
+      "corner_angle_deg": 31.557132343169634,
+      "outside_terrain_m2": 0.0,
+      "max_correction_m": 0.36208072622552123,
+      "max_cut_m": 0.3620807262255141,
+      "max_fill_m": 0.36208072622552123,
+      "mean_abs_correction_m": 0.05195551581053859,
+      "max_long_sampled_pct": 14.00000000000245,
+      "max_cross_sampled_pct": 8.838191390516174,
+      "max_triangle_long_bound_pct": 14.000000000002602,
+      "max_triangle_cross_bound_pct": 9.236536471453816,
+      "endpoint_residual_m": 0.0
+    },
+    {
+      "mid": [
+        395.0,
+        -260.0
+      ],
+      "length_m": 407.5166611364689,
+      "radius_m": 12,
+      "corner_angle_deg": 25.49279547280307,
+      "outside_terrain_m2": 0.0,
+      "max_correction_m": 0.36006737637946173,
+      "max_cut_m": 0.36006737637946173,
+      "max_fill_m": 0.36006737637946173,
+      "mean_abs_correction_m": 0.051594833076848035,
+      "max_long_sampled_pct": 14.000000000003809,
+      "max_cross_sampled_pct": 9.000000000002013,
+      "max_triangle_long_bound_pct": 14.000000000003714,
+      "max_triangle_cross_bound_pct": 9.519537405339067,
+      "endpoint_residual_m": 0.0
+    },
+    {
+      "mid": [
+        405.0,
+        -270.0
+      ],
+      "length_m": 407.1593903661743,
+      "radius_m": 12,
+      "corner_angle_deg": 20.328995593333218,
+      "outside_terrain_m2": 0.0,
+      "max_correction_m": 0.36117549572588104,
+      "max_cut_m": 0.36117549572588104,
+      "max_fill_m": 0.36117549572587393,
+      "mean_abs_correction_m": 0.05253441539544682,
+      "max_long_sampled_pct": 14.000000000004034,
+      "max_cross_sampled_pct": 9.000000000001862,
+      "max_triangle_long_bound_pct": 14.000000000004137,
+      "max_triangle_cross_bound_pct": 9.585139054701553,
+      "endpoint_residual_m": 0.0
+    }
+  ],
+  "station_count": 1632,
+  "sample_count": 14688,
+  "changed_sample_count": 3508,
+  "source_unchanged": true,
+  "limits": [
+    "Read-only proposed road height lattice, not modified native ground. No slope or continuity proof outside the 2m trail, cut/fill tie-in, collision, vegetation or actual altar.",
+    "12m radius and grade limits are provisional design choices; D4 independent review required. G1 BLOCKED; G2-G4 NOT_RUN."
+  ],
+  "outputs": {
+    "design_v02.py": "de7a8da63756612d65a99751c212c0efefb39543e4fa759b12b9b8eade6bead0",
+    "forest_trail_design_v02.npz": "09d94cee74a58fcc09dd0999a9b091c60f540b899ebd8ea3a7c061c658746d5d",
+    "forest_trail_v02.png": "da0cea00bd3b4ff24634790e7591b012b22e5dc950e6154cd60f6215d3ea2da6"
+  }
+}

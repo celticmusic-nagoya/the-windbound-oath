@@ -1,0 +1,151 @@
+{
+  "schema": "two.region.a3.irish_floor_material_lod_result.v74",
+  "parent": "c76583407b08a1f43d020f0461a34d1935df399f",
+  "status": "V73_NATIVE_LOD_MATERIAL_DEADWOOD_VERIFIED_SCENE_ART_HOLD_PROTECTION_CAUSE_IDENTIFIED",
+  "prework": {
+    "main_head": "2f5195c0787a9a323e6dc14f8764476cf01727f4",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_V73_RESULT_AND_RESERVATION_DIAGNOSTIC_V74",
+    "owner_pr": 482,
+    "owner_head": "c76583407b08a1f43d020f0461a34d1935df399f",
+    "writer_lease_fencing_evidence": "Read-only archived native result and local ground-plan analysis; no shared writer or dispatch; expected HEAD CAS.",
+    "dependency_shas": {
+      "v73": "37a39728285321f82698d8c4874742ee9ce95aa0",
+      "script": "a16bae628a7fa3b6fef7762f3832237788ef3381",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "Exact V71 and V73 native files, all source maps, reserves, V68 frozen design, canon and runtime",
+    "stage": "Recover actual native result and bounded ground-plan diagnosis; no new precision authoring",
+    "predecessor_gate_statuses": {
+      "D4": "NOT_RUN",
+      "G2": "SELF_HOLD",
+      "G3": "V73_PENDING"
+    },
+    "acceptance_criteria": "Actual native/archive SHA, CRC, output SHA, saved/reopened native evidence, evaluate matched images; ground-plan diagnosis with explicit frame, union and origin-only limit.",
+    "preflight_checks": "Latest main and handoff retrieved; exact PR HEAD and successful job; archived bytes and output SHA verified; exact source CG SHA and visual crop; matched render inspection.",
+    "result": "VERIFIED_SCOPED_NATIVE_FEASIBILITY_NOT_G2",
+    "blockers": [
+      "Scene art HOLD: open horizon, bare ground, proxy altar, repetitive trees",
+      "Independent D4 and G2 absent",
+      "Actual runtime navmesh and Android not verified"
+    ],
+    "checkpoint": "Preserve V73 native; V71 and V69 original unchanged"
+  },
+  "execution": {
+    "run": 45742571812,
+    "job": 139650899738,
+    "artifact": 15081683559,
+    "archive_sha256": "e2eb7fc32c47695ff22edf889c0cf76c98e609d80594ba12826afb2a5ffc2787",
+    "archive_bytes": 121711968,
+    "artifact_expires_at": "2026-12-10T02:30:28Z",
+    "crc": "PASS",
+    "output_sha_checks": "3/3",
+    "qa_sha256": "f133fec17bf731b35769b37eafb160373c496a5e43fde7a7cb1a51db4a768e65",
+    "native_sha256": "9ae2baa35f9d9d11a17a720f1e8fa1dc7cda90e40275a581b788d118b66bfbf2",
+    "native_bytes": 120418976,
+    "blender": "5.3.0",
+    "protected_meshes_exact": 683,
+    "scoped_changed": 8,
+    "stump_lod": {
+      "source_triangles": 41046,
+      "candidate_triangles": 10260,
+      "instances": 6,
+      "removed_triangles": 184716,
+      "placed_sampled_max_m": 0.009513921300759287,
+      "bounds_delta_m": 0.0007466371816198247,
+      "accepted": true,
+      "limit": "Vertex-to-surface samples only, not certified Hausdorff, silhouette or UV error."
+    },
+    "deadwood": {
+      "count": 1,
+      "source_triangles": 101802,
+      "location": [
+        89.86539019464705,
+        -109.10171302296712,
+        28.953223985433578
+      ],
+      "reserve_gap_m": 8.025157558230736,
+      "obstacle_gap_lower_bound_m": 0.15,
+      "root_residual_m": [
+        -0.05,
+        0.09084462076425552
+      ],
+      "limit": "Conservative footprint and sampled contact, not physical collision."
+    },
+    "net_delta_triangles": -82914,
+    "added_total_triangles": 516805,
+    "remaining_budget_triangles": 83195,
+    "material": {
+      "asset": "forest_leaves_02",
+      "provider": "https://polyhaven.com/a/forest_leaves_02",
+      "repeat_m": 3,
+      "source_files_verified": 8,
+      "method": "Shared continuous world-space noise blend, separate PBR, no geometry displacement"
+    },
+    "render_shas": [
+      "6b2cf299b02c79adce95540b6635541a82ff1259eab3456af52d77d11b68cebf",
+      "a2ac3442d1bcb55dd64955e423ff087bb47ed41e4d117a5b75aefe0f6ebbc672"
+    ]
+  },
+  "visual": {
+    "comparison_sha256": "524b3a477a771262661769ddcd765e88badba997f6516a067d4e6b1fcd93fdfc",
+    "assessment": "Actual V72/V73 matched render: photo leaf litter now visible, deadwood visible in distance, but floor remains tan/open and art direction not close to official CG damp dense forest. No independent G2."
+  },
+  "diagnosis": {
+    "method": "Ground-plan diagnostic strip, 25m along actual V72 camera-to-altar direction, trapezoid width 6m near to 16m far, not exact camera frustum. Union prior 5m route, 4 event circle and 2 sight corridor buffers (64 segments per quadrant), intersect strip, count actual V71 matrix translation origins, not footprint or occupancy.",
+    "frame": "A3 local XY meters",
+    "polygon_xy": [
+      [
+        76.32592786131016,
+        -83.14291147453953
+      ],
+      [
+        80.01512133302577,
+        -78.41111989753078
+      ],
+      [
+        102.80524746365856,
+        -89.8395997155052
+      ],
+      [
+        92.96739820575027,
+        -102.45771058752852
+      ]
+    ],
+    "strip_area_m2": 275,
+    "protected_union_m2": 256.7097703021998,
+    "free_m2": 18.290229697800513,
+    "protected_fraction": 0.9334900738261812,
+    "added_origins_inside": {
+      "fern": 2,
+      "rock": 0,
+      "moss": 0,
+      "stump": 0
+    },
+    "total_added_origins": 168,
+    "source_qa_sha256": "9aff33210642ddb3acdae13912ad6fe73321382f6073eff8d5b9177d1804013f",
+    "official_cg_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "audit_json_sha256": "cdd5c27262ddc5b8d0c4b6a1cd4192fd83302c32bb83ddbac3fffef4d466a807",
+    "audit_script_sha256": "cb4a4f211e4310b7dd390280683b5174866b52299782415edbb5ad02342ac783",
+    "audit_figure_sha256": "556ab002f87a6c3d1e4132412cd07300ca16887f8baa63a7e10ae4df00e99954",
+    "limit": "Diagnostic only; does not establish full scene visible coverage, true physical collision or permission to reduce reservations."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_SCENE_CANDIDATE",
+    "G2": "SELF_HOLD",
+    "G3": "SCOPED_NATIVE_LOD_MATERIAL_REOPEN_PASS",
+    "G4": "NOT_RUN"
+  },
+  "next": "Do not repeat count-only scatter or LOD reduction. Separate nonphysical surface cover and low visual foliage from solid obstacles and protected event surfaces in scoped design; no reduction of route/event/sight protection without verified interface and D4. Use official CG and Irish damp oakwood reference; prioritize continuous green ground and deliberate depth layers, not extra uniform trees. No adoption/main merge."
+}

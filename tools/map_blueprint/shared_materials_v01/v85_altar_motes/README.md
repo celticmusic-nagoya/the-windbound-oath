@@ -1,0 +1,5 @@
+# V85 altar floating-light candidate
+
+Source: V82 independent rune GLB SHA f6a9e4e60f10c85fe9dba133c53831ea46c7f2d96d3597dcf70e7c319a062b86; V84 dormant GLB SHA 47ac77303797e67b1bfe2dd2b67895149ba2d6aec1edef1a0ffcfe31d1050913. Use only the VFX root, not the base. Coordinate is the measured provisional GLB floor anchor; no canonical placement. The existing v82_altar_vfx_timeline.mjs provides explicit monotonic event-driven activation. No event wiring or SAVE changes.
+
+Run `node test_pool.mjs` (mock interface, not actual rendering). Local exact-byte test 20/20 PASS. The separately authored mote prototype has 6 triangles, 64x64 soft alpha, SHA c7bca378f35c2c7de86965bcefbe3ba1cdd10292390e78ad6403fb6ce54b4526; local ZIP 1ec722169ddba7cd98f0a8d924b6e7158de133a31b6d5d3acd4277a102129246. Prototype bytes not included in this commit; preserve through qualified private storage before production integration. Max 24 particles plus one core. No shared base material mutation. Unlit alpha is not bloom or light casting. This adapter is a candidate; actual renderer tests, runtime event integration, independent G2/G4, and formal adoption remain open.

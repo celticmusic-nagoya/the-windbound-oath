@@ -1,0 +1,93 @@
+{
+  "schema": "two.region.a3.terrain_color_repair.v69",
+  "parent": "d8448eeb0aa04e25f1d944ac0ad8b17e62de0d28",
+  "status": "LOCAL_RECIPE_CHECK_PASS_NATIVE_REPAIR_REQUESTED",
+  "prework": {
+    "main_head": "9fa081fb2b3bc6e0a957995a397ccffb98230ced",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SCENIC_EXISTING_MATERIAL_INPUT_REPAIR_V69",
+    "owner_pr": 482,
+    "owner_head": "d8448eeb0aa04e25f1d944ac0ad8b17e62de0d28",
+    "writer_lease_fencing_evidence": "New isolated V58 native checkpoint, no shared writer or takeover; prior run completed, expected-HEAD CAS.",
+    "source_sha256": {
+      "native": "24bd47906a6ce456441147021929d543ee700624fc6779fc7e251133a196298a",
+      "archive": "1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e",
+      "terrain": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b",
+      "extension": "2e557724020da3c7f7ed63f31423e0f213b29bce4ec66c609d291f70be66481a",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependency_shas": {
+      "v19_recipe": "b3b28261fc0a253c5447786d23bffb824306aa68",
+      "v58_recipe": "c415f5d7eab35daba0cb6a71d11f6a7f59a24060",
+      "v68": "bd267bbe7017dc1fe052fcf3f34f046358b7ac19",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All existing 523 meshes, transforms, UV and material assignments; original V19 vertex colors, all source bytes, V68 frozen design, legacy gameplay.",
+    "stage": "Existing qualified material input repair only; no new geometry or material design and no D4 waiver",
+    "predecessor_gate_statuses": {
+      "D4_ruins": "NOT_RUN_INDEPENDENT",
+      "V58": "CANDIDATE_HOLD"
+    },
+    "acceptance_criteria": "Fail closed unless shared existing vertex color shader, original POINT FLOAT_COLOR layer and missing extension layer verified; all original vertex values reproduce V19 within 1e-6; 33 seam points with UV,height <=1e-6; restored boundary exact RGBA; protected 523 mesh fingerprints unchanged after save/reopen; matched renders visually inspected separately.",
+    "preflight_checks": "Actual local reconstructed GLB and native archive SHA, actual V58 render and official CG inspected; source code compared V19 vs V58; numeric formula check PASS; native script py_compile and exact runtime checks in existing job.",
+    "result": "READY_EXISTING_INPUT_REPAIR_ONLY",
+    "blockers": [
+      "D4 V68 independent response absent",
+      "Native run and art assessment not yet available",
+      "Final terrain/world placement and G4 unresolved"
+    ],
+    "checkpoint": "Exact V58 preserved"
+  },
+  "cause": {
+    "existing_shader": "V19_ground_color Vertex Color -> MULTIPLY with original photo ground diffuse",
+    "omission": "V58 shares existing terrain material and UVMap, creates no V19_ground_color on added mesh. Actual V58 render dark at sharp tile edge. Source code evidence; native assertion pending."
+  },
+  "local_check": {
+    "source_vertices": 3321,
+    "extension_vertices": 705,
+    "seam_vertices": 33,
+    "max_height_delta_m": 0,
+    "max_computed_rgba_delta": 0,
+    "extension_rgba_min": [
+      0.7801731824874878,
+      0.9450865983963013,
+      0.6742424368858337,
+      1
+    ],
+    "extension_rgba_max": [
+      0.8598370552062988,
+      0.9849185347557068,
+      0.785771906375885,
+      1
+    ],
+    "sha256": {
+      "script": "a45d23756bdf70b873bb3c2f3a7c03ae8a87b00290f63461075a35c79112dcda",
+      "qa": "bda2710012c2326d2ba699cecb370726510abc97a84359980de4d91fbde44e5f",
+      "figure": "0f2d8aedb413e83b20324d0a20cd57912a3365f4509b7dd138f84ad421ea1b7b"
+    },
+    "limits": "Local GLB recipe check only, computed colors not native render."
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py",
+    "source_artifact": 15075731907,
+    "method": "Restore V19 exact formula in source-local frame, exact copy boundary values, save/reopen isolated copy, matched V58 views 0 and 2, all geometry/UV/material assignments unchanged. No new artist design."
+  },
+  "gates": {
+    "D4_ruins": "NOT_RUN_INDEPENDENT",
+    "G2": "NOT_RUN_CORRECTED",
+    "G3": "LOCAL_RECIPE_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect actual native result and matched renders; if assertion fails identify cause without unchanged retry. Preserve ruins frozen, no formal adoption or main merge."
+}

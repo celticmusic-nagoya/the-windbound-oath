@@ -1,0 +1,87 @@
+{
+  "schema": "two.region.river_forest_interface.v32",
+  "status": "DRY_INTERFACE_GAP_CLOSED_LANDING_HOLD",
+  "parent": "5b8b8a47e5ff1ac8479c69876d7535ceeef86613",
+  "dependencies": {
+    "v31_receipt": "67b9e54f7f0a2bc73c731c36334fc989c8a30f51",
+    "v31_glb_sha256": "ac8ad8a14cc5b30712a11d7694dfd22a97714cfedb394e06554fbba046549dd6",
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "trail_v02": "053220f5bb45e95aa31f3d4296f98d95f25d05e9",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "method": "Change from path-only search to area interface reconstruction. Constrained triangulation on exact V31 lower bank and A1 boundary, with interior centroid subdivision. All original geometry and water preserved; 1 new open south edge. No formal-scale assignment.",
+  "qa": {
+    "area_m2": 624.1879057206679,
+    "vertices": 84,
+    "triangles": 123,
+    "boundary_vertices": 43,
+    "lower_shared_edges": 22,
+    "a1_shared_edges": 20,
+    "new_south_edge": 1,
+    "shared_vertex_delta_m": 0,
+    "existing_overlap_m2": 0,
+    "wet_overlap_m2": 0,
+    "max_grade_pct": 5.483691010096093,
+    "p95_grade_pct": 5.245514219842424,
+    "reopen_max_error_m": 0.000010172526060614473,
+    "reopen_footprint_difference_m2": 0,
+    "all_six_existing_meshes_exact": true,
+    "total_triangles": 86824
+  },
+  "landing": {
+    "y_m": [
+      -295,
+      -285,
+      -275,
+      -265
+    ],
+    "missing_ground_samples_before": [
+      74,
+      116,
+      158,
+      176
+    ],
+    "missing_ground_samples_after": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "sample_spacing_m": 0.1,
+    "minimum_15pct_route_length_m": [
+      102.37194519509043,
+      101.51394908396014,
+      100.54358211360629,
+      99.576753292558
+    ],
+    "direct_distance_m": [
+      67.1863081289633,
+      58.83714812939185,
+      52.478567053607705,
+      46.6223122549708
+    ],
+    "decision": "All four profiles now have continuous ground samples, but lower bank remains steep and 99.6–102.4m theoretical grade-limited access length is greater than direct distances. These are lower bounds, not actual routes. Do not repeat V31 switchbacks without joint graded landform and full-width QA."
+  },
+  "outputs": {
+    "glb_sha256": "8cefe04377488074bac0712c40c33f12f39dd8439f4da947ada4041e5b26f2b4",
+    "sheet_sha256": "167abd53a4e439f6197c7c3a69688cebb919db1353f20a9c35b9bdc406ff92be",
+    "script_sha256": "42114befff77c4b70a79ddcb356adf7137b3c6977f17c1e8d9ded7c445b2e14e",
+    "qa_sha256": "63f395e8194406f40c36f00920762546d448a52ce65de23fdf1d074cb49b3c79",
+    "package_sha256": "2f381090285d9abe42f32d32dda4644c36f92c2f5370fac729eeeddf45864de1",
+    "package_bytes": 1178656,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; executed build script, actual GLB, QA and inspected sheet packaged; binary not committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "LOCAL_GLB_INTERFACE_PASS_ONLY",
+    "G4": "NOT_RUN"
+  },
+  "next": "Jointly design broader east-bank valley and access route on connected ground, preserve channel and trail and verify cut/fill and full-width shoulder. New southern interface and native integration remain open. No formal adoption or main merge."
+}

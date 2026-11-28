@@ -1,0 +1,104 @@
+{
+  "schema": "two.region.moss_forest_sanctuary_approach.v47b",
+  "status": "LOCAL_CONFORMING_RAMP_MAIN_SURFACE_SCREEN_PASS_NUMERIC_FRINGE_HOLD",
+  "parent": "352f824adea8b2363fcd8ed4c102ad103ed26f3c",
+  "dependencies": {
+    "v46b_receipt": "cca4d08957aec2d24b8b0507a2c41a19b7174c9d",
+    "v46b_glb_sha256": "96a4da5b97136246060223dd60b2504e7246ff782a8fefa6046ab1555fc9ac7d",
+    "v45d_glb_sha256": "b8ba6c29ebc75816943988956e9ed5b68e66b1d746481844be8fece2b93fe1bc",
+    "route_audit_sha256": "96c2d87f51ca8f431f6e47c869c888726fccf636da56f25d88a186dc9ff59c55",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6"
+  },
+  "scope": "Isolated design feasibility, V45D and V46B original files unchanged, no D4-approved precision or native edit. Exact previous flat height, 3m approach, 4x6m pad, entry profile retained. Explicit 0.25m longitudinal breaklines and normalized cross section; 1.5m side and tail transition designer choice.",
+  "ramp": {
+    "vertices": 1155,
+    "faces": 2176,
+    "footprint_m2": 75,
+    "approach_faces": 480,
+    "standalone_long_pct": 12.39611875009851,
+    "standalone_cross_pct": 6.383487520674233,
+    "standalone_shoulder_pct": 28.62569347823919,
+    "max_correction_m": 0.22046375421286868,
+    "cut_approx_m3": 2.589917998650729,
+    "fill_approx_m3": 2.7518071221882217,
+    "entry_source_delta_m": 0.0000011424835193452054,
+    "output_sha256": "3eecd7edd7cf8b83b17869040ad4bd9b1342bc8a4c80387ce50395aa8a547590"
+  },
+  "trials": [
+    {
+      "id": "A",
+      "method": "Noded edge overlay, source-first quantized vertex deduplication",
+      "status": "REJECT",
+      "cause": "Source height incorrectly retained at interior existing vertices; maximum reconcile .2011013m; approach longitudinal 354.92%, pad grade 2544.04%."
+    },
+    {
+      "id": "B",
+      "method": "Re-evaluate quantized interior XY from target plane; source priority only at boundary; no global tolerance weld.",
+      "status": "LOCAL_MAIN_SURFACE_SCREEN_PASS",
+      "cells": 3428,
+      "source_faces_intersected": 116,
+      "faces": 142072,
+      "vertices": 71327,
+      "collapsed_faces": 0,
+      "nonmanifold_edges": 0,
+      "missing_original_boundary_edges": 0,
+      "new_boundary_edges": 0,
+      "main_ramp_long_pct": 12.396098924893803,
+      "main_ramp_cross_pct": 6.383987624462757,
+      "main_pad_grade_pct": 0,
+      "shoulder_max_pct": 28.62569347823919,
+      "outer_boundary_interpolation_correction_m": 0.00010358098803919802,
+      "source_and_output_area_m2": 65000,
+      "reopen_exact": true
+    }
+  ],
+  "boundary_audit": {
+    "local_coverage_symdiff_m2": 0,
+    "local_overlap_numeric_residual_m2": -2.842170943040401e-14,
+    "road_2m_changed_face_overlap_m2": 0,
+    "full_5m_ribbon_changed_face_overlap_m2": 0.000007955754274616823,
+    "max_height_difference_on_5m_overlap_m": 1.4699323713784906e-7,
+    "pad_coverage_m2": 24,
+    "pad_max_target_residual_m": 0.0000012245310614389382,
+    "pad_nonflat_fringe_m2": 0.000029572442539497026,
+    "pad_cross_over_10_fringe_m2": 0.000010953335325209487,
+    "ramp_exact_footprint_m2": 16.5,
+    "ramp_exact_footprint_max_long_pct": 13.526605224381056,
+    "ramp_exact_footprint_max_cross_pct": 11.911677825203672,
+    "ramp_cross_over_10_fringe_m2": 0.000002159413619127667,
+    "body_interaction_grade_pct": 0,
+    "body_interaction_max_residual_m": 5.979797315092128e-7,
+    "decision": "Main designed face grades meet thresholds, exact footprint boundary has microscopic float32 fringe exceeding cross limit; no unconditional PASS or physical tolerance assumed. Retain candidate pending independent D4 and runtime traversal."
+  },
+  "render": {
+    "method": "Actual VTK EGL offscreen matched two views of reopened GLBs, localized geometry diagnostic. First full route/plot attempt timed out, removed duplicated full route check and cropped render to local region.",
+    "self_review": "Geometry readable; existing vertex-color interpolation streaks at ramp start, no final materials, altar or foliage."
+  },
+  "outputs": {
+    "glb_sha256": "083e38769b386d6a450bab2502395627c940daa1e5d5995722d0b8b0e7d5fc95",
+    "ramp_script_sha256": "a3a3bb64a30a3dc56b5a68a4ddd9df5b699d93920fb76d980107f5c258394405",
+    "conform_b_script_sha256": "200ff65a50c11e116336b7aa543912fa4fedcd28e34f924d63f7e9b4253257aa",
+    "boundary_qa_sha256": "201b3d049a9a3f130e0a2e19f539ff95dbed7cdbcb0b4ed472afedc3fcc0c295",
+    "conform_b_qa_sha256": "ada84e11d75130bbfe3ce6df520334bc5cb7990abf209369226a0dcf5947ceed",
+    "road_guard_qa_sha256": "31d17fe2e067e725dca0065c038b471713b668bc3da3da08fc427cf53d816e36",
+    "comparison_sha256": "3f1bccf5351a925037f32f2984c43e2aac5d0b3d11029e8a932a827725367773",
+    "sheet_sha256": "954ea985d265705dd41f9f6b5f3a7157e25ed2a1111984680342d307d3e504bf",
+    "package_sha256": "76d6d06321d87cb88f2110bcfb527a02acfdad57a332dd2c7912985d90ac57c9",
+    "package_bytes": 1553791,
+    "zip_crc": "PASS",
+    "location": "ChatGPT local attachments; no binary committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "HOLD_NUMERIC_FRINGE_LANDING_HYDROLOGY",
+    "G2": "HOLD_GEOMETRY_ONLY",
+    "G3": "LOCAL_MAIN_SURFACE_TOPOLOGY_REOPEN_PASS_NOT_NATIVE",
+    "G4": "NOT_RUN"
+  },
+  "next": "Stop further micro-boundary edits pending independent tolerance/retopology QA. Proceed independent A2 southern drainage and later photo-material/forest integration. No altar body, native Blender, formal adoption, publication or main merge."
+}

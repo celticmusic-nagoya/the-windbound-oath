@@ -1,0 +1,168 @@
+{
+  "schema": "two.region.topology_constraints.v1",
+  "status": "DESIGN_CANDIDATE_NOT_METRIC",
+  "scope": "AIDAN_PROLOGUE_REGION",
+  "basis": {
+    "main_policy": "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
+    "region_master_blob": "d85989416e5ab769ef9a1a74439be5faf96e6348",
+    "interface_blob": "d1b48b33672e11cc97f4a5632247206196385563",
+    "cliff_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07",
+    "reference_class": "source-derived directional constraints; not measured geometry"
+  },
+  "frame": {
+    "x": "east",
+    "y": "north",
+    "z": "up",
+    "unit": "m",
+    "sea_level_z": 0,
+    "region_origin_xyz_m": null
+  },
+  "hard_directional_constraints": [
+    {
+      "id": "TC01",
+      "subject": "WINDWAITING_CLIFF",
+      "relation": "west_to_northwest_of",
+      "object": "RILDE_VILLAGE",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC02",
+      "subject": "RIVER_CORRIDOR",
+      "relation": "east_of",
+      "object": "RILDE_VILLAGE",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC03",
+      "subject": "RIVER_CORRIDOR",
+      "relation": "flow_north_to_south",
+      "object": "SEA_MOUTH_UNLOCATED",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC04",
+      "subject": "DUNVAR_FORTRESS",
+      "relation": "north_of",
+      "object": "RILDE_VILLAGE",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC05",
+      "subject": "MOSS_FOREST_A1",
+      "relation": "southeast_downstream_of",
+      "object": "RILDE_VILLAGE",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC06",
+      "subject": "FISHING_HARBOUR",
+      "relation": "southwest_cove_of",
+      "object": "RILDE_VILLAGE",
+      "confidence": "source_directional",
+      "geometry_xyz_m": null
+    },
+    {
+      "id": "TC07",
+      "subject": "SEA_CLIFF",
+      "relation": "distinct_from",
+      "object": "EAST_RIVERBANK_CLIFF",
+      "confidence": "source_canonical_distinction",
+      "geometry_xyz_m": null
+    }
+  ],
+  "separate_graphs": {
+    "narrative": [
+      "RILDE_VILLAGE",
+      "RIVER_ESCAPE",
+      "CLIFF_COLLAPSE",
+      "MOSS_FOREST_A1",
+      "MOSS_FOREST_A2",
+      "MOSS_FOREST_A3",
+      "DUNVAR_FORTRESS"
+    ],
+    "physical_traversal_edges": null,
+    "hydrology_edges": [
+      {
+        "from": "NORTHERN_UPSTREAM_UNLOCATED",
+        "to": "EAST_RIVER_CORRIDOR",
+        "status": "DIRECTION_ONLY"
+      },
+      {
+        "from": "EAST_RIVER_CORRIDOR",
+        "to": "SOUTHERN_DOWNSTREAM_UNLOCATED",
+        "status": "DIRECTION_ONLY"
+      }
+    ]
+  },
+  "C01": {
+    "coastline_polygon_xyz_m": null,
+    "headland_polygon_xyz_m": null,
+    "harbour_cove_polygon_xyz_m": null,
+    "requirements": [
+      "closed non-self-intersecting coastline",
+      "sea-facing cliff west-northwest of village",
+      "separate southwest fishing cove"
+    ]
+  },
+  "C02": {
+    "terrain_elevation_grid": null,
+    "contours_xyz_m": null,
+    "vertical_datum": "fictional sea Z=0; physical terrain elevations unknown",
+    "requirements": [
+      "continuous area boundary elevations",
+      "independent source-to-world camera calibration",
+      "slope and uncertainty measured"
+    ]
+  },
+  "C03": {
+    "river_centerline_xyz_m": null,
+    "watershed_polygons_xyz_m": null,
+    "bridge_crossing_xyz_m": null,
+    "river_mouth_xyz_m": null,
+    "requirements": [
+      "north-to-south flow",
+      "separate eastern riverbank cliff",
+      "connected flow to sea",
+      "bridge and game escape topology verified separately"
+    ]
+  },
+  "dependencies": {
+    "country_coastline_design": "BLOCKED",
+    "elevation_datum_and_raster": "BLOCKED",
+    "river_path_geometry": "BLOCKED",
+    "area_boundary_transforms": "BLOCKED",
+    "independent_design_QA": "NOT_RUN"
+  },
+  "prework_receipt": {
+    "main_policy_sha": "84f4f62dd895005b8c52668814eef75d33bd9699",
+    "owning_design_pr": 482,
+    "other_owners": [
+      364,
+      421,
+      468
+    ],
+    "owner_lease": "NOT_VERIFIED_NO_PRODUCTION_WRITES",
+    "stage": "C01_C03_TOPOLOGY_CONSTRAINTS",
+    "result": "BLOCKED_FOR_METRIC_BLUEPRINT",
+    "protected_scope": [
+      "canon",
+      "native_assets",
+      "runtime_maps",
+      "other_PR_writers"
+    ],
+    "next_stage": "source-grounded coastline and hydrology candidate geometry with explicit provisional status"
+  },
+  "qa": {
+    "constraint_ids_unique": "PASS_LOCAL",
+    "no_fabricated_world_coordinates": "PASS_LOCAL",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  }
+}

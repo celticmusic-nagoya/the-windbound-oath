@@ -1,0 +1,217 @@
+{
+  "schema": "two.region.harbor_design_receipt.v02",
+  "status": "PLAN_AND_PROPOSED_GRADE_PASS_ONLY_NOT_ADOPTED",
+  "parent": "2788399533c27384deb453e7f38831e13984022d",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "area_plan": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "access_v03": "250c61114b4779b6349bfbc3c4f6ae2eeacb9b9a",
+    "core_v01": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "geography_contract": "6943ac3ce21003b49e91c6d1cb5989aa6c02e7df",
+    "bridge_v05": "8ed9d363e0e6a602f187c63fc44c0b616e20dad2"
+  },
+  "frame": {
+    "axes": "X east Y north Z up",
+    "units": "provisional metre",
+    "canonical_transform": null,
+    "sea_datum_m": 0,
+    "sea_datum_status": "assumed, not tide measurement"
+  },
+  "geometry": {
+    "quay_water_edge_xy": [
+      [
+        -188.6,
+        -184
+      ],
+      [
+        -176.6,
+        -204
+      ],
+      [
+        -170,
+        -215
+      ],
+      [
+        -186,
+        -225
+      ]
+    ],
+    "apron_polygon_xy": [
+      [
+        -188.6,
+        -184
+      ],
+      [
+        -176.6,
+        -204
+      ],
+      [
+        -170,
+        -215
+      ],
+      [
+        -186,
+        -225
+      ],
+      [
+        -179,
+        -225
+      ],
+      [
+        -163,
+        -215
+      ],
+      [
+        -169.6,
+        -204
+      ],
+      [
+        -181.6,
+        -184
+      ],
+      [
+        -188.6,
+        -184
+      ]
+    ],
+    "road_control_xy": [
+      [
+        -150,
+        -125
+      ],
+      [
+        -105,
+        -155
+      ],
+      [
+        -115,
+        -180
+      ],
+      [
+        -138,
+        -202
+      ],
+      [
+        -170,
+        -205
+      ]
+    ],
+    "road_width_m": 3,
+    "berth_envelope_bounds_xy": [
+      [
+        -208,
+        -181,
+        -198,
+        -178
+      ],
+      [
+        -205,
+        -218,
+        -195,
+        -215
+      ],
+      [
+        -213,
+        -226,
+        -203,
+        -223
+      ]
+    ],
+    "boat_access_centerline_xy": [
+      [
+        -225,
+        -190
+      ],
+      [
+        -200,
+        -205
+      ],
+      [
+        -184,
+        -210
+      ]
+    ],
+    "boat_access_width_m": 4
+  },
+  "reproduction": {
+    "coast": "area plan coastline x100; authored, not survey",
+    "road": "quadratic Bezier corners with cutback min(8m,0.3*prev segment length,0.3*next segment length), 17 samples including endpoints each corner",
+    "height": "Hermite profile between reconstructed V01 plateau at road start and proposed apron +2m; initial derivative calculated from first 0.25m sampled chord of plateau, final derivative zero; samples equally spaced ceil(length/.25)+1",
+    "plan": "Shapely polygon intersections, 1.5m road buffer flat cap and 2m boat access buffer flat cap; round joins; road-apron overlap uses round-cap road buffer",
+    "versions": {
+      "numpy": "2.3.5",
+      "shapely": "2.1.2"
+    }
+  },
+  "attempts": [
+    {
+      "id": "HARBOR-V01",
+      "plan_test_pass": false,
+      "road_apron_overlap_m2": 0,
+      "access_berth_overlap_m2": 14.70522184569598,
+      "max_grade_percent": 14.920024338397994,
+      "cause": "road endpoint did not reach apron, boat parking crossed access corridor",
+      "correction": "extend road endpoint to apron and relocate berth envelopes away from access corridor"
+    }
+  ],
+  "checks": {
+    "apron_outside_land_m2": 0,
+    "road_outside_land_m2": 0,
+    "road_apron_overlap_m2": 6.381307941802895,
+    "berth_land_overlap_m2": 0,
+    "berth_pair_overlap_m2": 0,
+    "access_land_overlap_m2": 0,
+    "access_berth_overlap_m2": 0,
+    "road_length_m": 141.81800985969474,
+    "route_start_z_reconstructed_m": 14.971905123326291,
+    "route_end_z_proposed_m": 2,
+    "sampled_max_grade_pct": 13.507436929740068,
+    "sample_count": 569,
+    "quay_edge_length_m": 55.01986401215406,
+    "apron_area_m2": 287,
+    "plan_test_pass": true,
+    "grade_candidate_pass": true
+  },
+  "bridge_springer_alternative": {
+    "method": "intersect V05 end polygons with measured original bridge silhouette, design test only",
+    "west_retained_area_ratio": 0.7103537386851124,
+    "east_retained_area_ratio": 0.7066703236303292,
+    "verdict": "REJECT_FOR_PRODUCTION_NO_SUPPORT_VERIFICATION",
+    "source_bridge_sha256": "83a686b88b556e1f38632f381e433ea7b21b9ceaeedbc5f6e0461de9d8c4e73f",
+    "original_unchanged": true
+  },
+  "artifacts": {
+    "delivery": "local attachments; exact bytes not in GitHub",
+    "sha256": {
+      "design_harbor.py": "b70455bea2669552bc3ba70a50eb48e0f815cf96a13e3846747bca56c3b465b0",
+      "harbor_design_v02.json": "4103b8cd1e974677bf2c7134622542ceefda78e43852fbd27d120c9b98cc5175",
+      "harbor_plan_v02.png": "d033b31d749de7c1f858b398184b9d069f580d8ebce50649abcbe69ce10dddf6",
+      "harbor_plan_v02.svg": "92265bd926835611890cb519a2a3269ab1ee92e83c02dcb2e0cc0b254bb0216d"
+    }
+  },
+  "execution": "Actual local Python with Shapely, two plan variants, viewed V02 drawing, no native or Actions runs",
+  "design": {
+    "D0": "PARTIAL_CG_PIXELS_UNAVAILABLE",
+    "D1": "PARTIAL_ORIGINAL_TERRAIN_UNAVAILABLE",
+    "D2": "PARTIAL_PLAN_LONGITUDINAL_PROFILE",
+    "D3": "HOLD_SHORE_TIDE_DEPTH_AND_CROSS_SECTION",
+    "D4": "NOT_RUN"
+  },
+  "gates": {
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "limitations": [
+    "Provisional metrics and assumed datum, no surveyed shoreline or actual terrain.",
+    "Boat envelopes are reservations only; mooring fixtures, navigable approach to each, depths and tide unresolved.",
+    "Apron width 7m east offset, not constant perpendicular width.",
+    "Village road full-width terrain seam, cross grade, terrain earthworks, foundation and native model unverified.",
+    "No changes to bridge, PR363, PR364 or official source; no adoption or main merge."
+  ],
+  "next": "Develop cross sections and shoreline/basin surface design, resolve berth access and quay mooring connections; recover original CG and terrain, independent D4 before precision geometry."
+}

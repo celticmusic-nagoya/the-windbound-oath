@@ -1,0 +1,108 @@
+{
+  "schema": "two.region.moss_forest_native_interface.v52",
+  "parent": "7ac243edc2eb5c95aa44af8e522292af7fddc5f9",
+  "status": "EXACT_NATIVE_AND_CG_RECOVERED_LOCAL_VIRTUAL_REPAIR_SCREEN_NATIVE_RUN_PENDING",
+  "dependencies": {
+    "agents": "880a037af588e66762ab51ef850f8bf875b85748",
+    "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+    "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+    "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "v51": "4141aa6349807c015fd19951eca0610c1bda682b",
+    "v21": "8b4ff58d4c3a48ad3651cd97471cd9884c01bfc6",
+    "native_recipe": "9fb8e6985171fc87ec8f189a79be1c904d902d31",
+    "v47b": "6bff1d308103ed77b07c9abe244956957dce8f6f"
+  },
+  "recovery": {
+    "v21_run": 45631347949,
+    "v21_artifact": 15032255249,
+    "v21_archive_sha256": "5a1b341e455e7cbfda7d13716e8888f119a92380f727cd53511a4be5983e3d61",
+    "v21_native_sha256": "69789159a2f0502706fb0d1bc0e9f3a62fdb68dfea852fc81ee2b0d7ee86ce05",
+    "v19b_artifact": 15029479327,
+    "v19b_archive_sha256": "f3dfb34f87557391372a7732d32602c125648e8eeaa481505dc936e27350578e",
+    "official_cg_sha256": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620",
+    "crc_and_7_recorded_output_hashes": "PASS",
+    "previous_native_stats": {
+      "mesh_objects": 479,
+      "triangles": 926746,
+      "packed_images": 34,
+      "external_images": 0
+    }
+  },
+  "interface": {
+    "v51_glb_sha256": "188f1aca8195326adf17b329387942c4991207207061498952dc3fd2b7aa6b21",
+    "sample_count": 21,
+    "max_delta_m": 0,
+    "basis": "actual reopened V51 GLB vs V21 source-recipe float32, not native mesh until run",
+    "frame": "provisional east/north/up; A3 native origin [600,-400,0]; V51 [500,-400,0]"
+  },
+  "rock_repair_preflight": {
+    "basis": "exact source scan vertices, source transform and original V21 reported gaps, triangle interpolation; previous original gap residual <=2.16e-6m and root residual <=3.01e-6m. Search minimum displacement with conservative obstacle lower bound; provisional margin .05m, not accepted physical tolerance.",
+    "candidates": [
+      {
+        "name": "V21_R_002",
+        "old_gap": -0.21348104145198743,
+        "move_xy_m": 0.275,
+        "delta": [
+          0.22247967345311057,
+          0.1616409443804301,
+          -0.000006120060319858567
+        ],
+        "new_gap": 0.05079134118891204,
+        "conservative_obstacle_gap": 0.77556481809109
+      },
+      {
+        "name": "V21_R_008",
+        "old_gap": -0.14331462754618673,
+        "move_xy_m": 0.2,
+        "delta": [
+          0.1576021507213444,
+          0.12313229506513167,
+          -0.000002806812226197053
+        ],
+        "new_gap": 0.05069772284822793,
+        "conservative_obstacle_gap": 0.35125816475407484
+      },
+      {
+        "name": "V21_R_011",
+        "old_gap": -1.2648504665445959,
+        "move_xy_m": 1.325,
+        "delta": [
+          1.2285186073009933,
+          0.4963537362760834,
+          -0.01979657747185115
+        ],
+        "new_gap": 0.05267959248416787,
+        "conservative_obstacle_gap": 0.12609378247108527
+      }
+    ],
+    "status": "VIRTUAL_ONLY_NO_NATIVE_CHANGE"
+  },
+  "art_review": "Official CG recovered and visually inspected. Prior V21 renders still wide bare foreground/open skyline, repetitive crowns, absent hero trees/altar, no visible gorge. No matched CG camera or metric inference. G2 HOLD.",
+  "native_execution": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_forest_v52.py",
+    "workflow": ".github/workflows/two-shared-material-recovery.yml",
+    "scope": "New script path only, existing PR #482 synchronize; no default material recovery on isolated change; read-only native actual seam and virtual candidate measurement; no native mutation, source sha and all mesh transforms protected."
+  },
+  "outputs": {
+    "audit_script_sha256": "0b881c92d6ae82ff575f1b3e6f9a395c013b2154ab56f855251717feb9b6c842",
+    "repair_script_sha256": "4bda82ceac32998b60e130f46738a67556ab2e5b3bb2c014fb12503630d86f7e",
+    "qa_sha256": "e18e405abb4a98a544bf76f10b14bf85985b67979481a5bf255d73c01fff7372",
+    "repair_qa_sha256": "930adc34bb967ead6da8adbccab6ba856527349eec8450a8d8163363bb160120",
+    "interface_png_sha256": "cd1ed8c9f286c6f7a264b44b18bbe176cb54e37dbeca030dac49807d7d86d9a9",
+    "art_comparison_sha256": "c024be1ed3dbb95479c73054cba9f436d6e102816735e01bd4e3aa1882ad5534"
+  },
+  "gates": {
+    "D0": "SOURCE_RECOVERED_SCOPE_PARTIAL",
+    "D1": "HOLD_FULL_COMPOSITION",
+    "D2": "PARTIAL_INTERFACE",
+    "D3": "VIRTUAL_NUMERIC_SCREEN",
+    "D4": "NOT_RUN",
+    "G1": "HOLD_FULL_LAYOUT",
+    "G2": "SELF_HOLD",
+    "G3": "PRIOR_NATIVE_SAVE_REOPEN_SHA_VERIFIED_CURRENT_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect V52 native virtual QA, independent D4 for placements and source-grounded hero tree/altar composition; no V47B final mesh or C03 receiver yet. No adoption/main merge."
+}

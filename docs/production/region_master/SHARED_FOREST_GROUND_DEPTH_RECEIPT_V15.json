@@ -1,0 +1,273 @@
+{
+  "schema": "two.region.forest_ground_and_depth_study.v15",
+  "parent": "a1d8dc2cbd66a1d822321bb9140298cbd50127e1",
+  "status": "REVERSIBLE_COMPOSITION_AND_PHOTO_GROUND_TINT_CANDIDATE_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gate": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "geography": "6943ac3ce21003b49e91c6d1cb5989aa6c02e7df",
+    "v14": "55ef5954607c07a78516d8283306c911c94dd00c",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "scene_sha256": "77e1145c91f316f0e8cecef9aee0f8a21957befc55b6cf2abe9aa9e47b4631ae"
+  },
+  "execution": {
+    "a": "Actual local Python: relocate all 8 trees conservatively outside both test frusta to two background bands, full projected crown protected buffer / overlap screen; add authored linear COLOR_0 mask to 3321 existing terrain vertices using distance to provisional route and multi-frequency variation. Exact old photo PBR textures, UV, positions, faces retained. No new material acquisition.",
+    "b": "40 existing understory placements (28 grass and 12 moss) moved from outside both view frusta to eight clusters, screen actual low-2m tree geometry instead of full canopy. Root sampling and projected low-level footprints; all fit. Inspected matched shadowed views: dark flat moss cushions and overly dark terrain were art defects.",
+    "c": "Restore 12 moss nodes to V15A positions, retain grass and trees, blend tint 28% toward white in linear space with appended COLOR_0. Restored moss clearance to relocated grass and trees verified. Source buffers retained. Reopen and matched shadowed views PASS technical. py_compile on executed scripts. V15C candidate selected for continuation; no G2 PASS."
+  },
+  "measurement": {
+    "trees_relocated": 8,
+    "grass_relocated": 28,
+    "moss_relocated_final": 0,
+    "total_triangles": 828894,
+    "reopen_geometry_nodes": 600,
+    "tree_count": 75,
+    "source_vertex_color_count": 3321,
+    "min_tree_protected_gap_m": 1.6035478414422724,
+    "min_tree_obstacle_gap_m": 0.7473440579520494,
+    "understory_stage_min_protected_gap_m": 0.960894109815768,
+    "understory_stage_min_obstacle_gap_m": 0.12488520987456056,
+    "understory_stage_min_pair_gap_m": 0.10824092962717735,
+    "understory_stage_max_burial_m": 0.026830112065105993,
+    "understory_stage_max_nearest_root_abs_m": 0.0021793413517698923,
+    "restored_moss_min_gap_to_moved_grass_trees_m": 28.79437846897874,
+    "visible_vegetation_pixels_v14": [
+      158007,
+      224271
+    ],
+    "visible_vegetation_pixels_v15c": [
+      170118,
+      232446
+    ],
+    "sky_pixels_v14": [
+      43627,
+      29283
+    ],
+    "sky_pixels_v15c": [
+      41734,
+      25816
+    ],
+    "terrain_only_shadow_control_false_positive": [
+      0,
+      0
+    ],
+    "notes": "Two specific evaluation cameras; not overall forest cover or general gameplay. Understory minimum metrics conservatively include subsequently restored moss. Ground tint not semantic/physical calibration."
+  },
+  "final_translation_delta_glb_local_xyz_m": {
+    "V11_026_tree_forest_tall_a": [
+      58.293357254676565,
+      28.678369180793993,
+      91.45980728305867
+    ],
+    "V11_064_tree_deciduous_a": [
+      -43.41325882166649,
+      30.572895579757073,
+      63.80790707489502
+    ],
+    "V11_075_tree_deciduous_a": [
+      52.24692070626854,
+      28.670587705244987,
+      89.191988824463
+    ],
+    "V11_040_tree_forest_tall_a": [
+      -42.554864938255236,
+      28.07546812272263,
+      79.76442765215087
+    ],
+    "V11_011_tree_forest_tall_a": [
+      42.58810148609925,
+      28.696556761703253,
+      90.32610743117195
+    ],
+    "V11_043_tree_forest_tall_a": [
+      -14.381093407341908,
+      30.103672244791333,
+      72.6350175790207
+    ],
+    "V11_002_tree_forest_tall_a": [
+      62.09201210767016,
+      28.67239191920104,
+      92.29716574162781
+    ],
+    "V11_028_tree_forest_tall_a": [
+      -28.00584185687439,
+      29.141904491627006,
+      77.31364319616779
+    ],
+    "V11_126_grass_tuft_short": [
+      12.544422633893001,
+      32.896377694723576,
+      39.574032978264235
+    ],
+    "V11_297_grass_meadow": [
+      12.976234423155317,
+      32.73821166774466,
+      41.111772224976306
+    ],
+    "V11_311_grass_meadow": [
+      9.415674577418805,
+      32.911432835078756,
+      42.79384847961378
+    ],
+    "V11_201_grass_tuft_short": [
+      16.267727908681174,
+      32.06803385207152,
+      45.821403468818566
+    ],
+    "V11_140_grass_tuft_short": [
+      9.058346355542131,
+      33.36121876906427,
+      37.733779429582654
+    ],
+    "V11_227_grass_tuft_short": [
+      0.619814491821272,
+      34.148874490973824,
+      36.28892438384629
+    ],
+    "V11_266_grass_meadow": [
+      18.732550845996098,
+      31.967430538343816,
+      44.031154118960266
+    ],
+    "V11_262_grass_meadow": [
+      19.47635014973411,
+      31.6840494193584,
+      47.06706041015777
+    ],
+    "V11_171_grass_tuft_short": [
+      11.195757137308757,
+      33.21743595273289,
+      37.022985968537725
+    ],
+    "V11_143_grass_tuft_short": [
+      14.253119920066611,
+      32.53655622358409,
+      42.16803420035681
+    ],
+    "V11_232_grass_tuft_short": [
+      7.920248930277023,
+      33.24995102033216,
+      40.24227182610122
+    ],
+    "V11_316_grass_meadow": [
+      13.455126296056251,
+      32.39611996672888,
+      44.85833422839658
+    ],
+    "V11_216_grass_tuft_short": [
+      6.920150589170766,
+      33.41045449355935,
+      39.33812543847987
+    ],
+    "V11_261_grass_meadow": [
+      4.0295356431224425,
+      33.64312096847138,
+      39.21321281855647
+    ],
+    "V11_322_grass_meadow": [
+      17.955467862867486,
+      32.12393243256557,
+      42.9287816192291
+    ],
+    "V11_276_grass_meadow": [
+      19.871422554029348,
+      31.56906721723648,
+      48.19144960684833
+    ],
+    "V11_307_grass_meadow": [
+      12.16960720963458,
+      33.10245027311642,
+      37.339465295229004
+    ],
+    "V11_188_grass_tuft_short": [
+      14.778516590311156,
+      32.70059280421135,
+      39.26723296549862
+    ],
+    "V11_195_grass_tuft_short": [
+      8.233302965697309,
+      33.16278244093352,
+      40.92897025186505
+    ],
+    "V11_268_grass_meadow": [
+      14.882230990709497,
+      32.284267090847564,
+      44.689580777935056
+    ],
+    "V11_320_grass_meadow": [
+      8.911106098910933,
+      33.27851530123721,
+      38.91930412635494
+    ],
+    "V11_274_grass_meadow": [
+      2.0566342567599873,
+      33.89686375783617,
+      38.00499853827756
+    ],
+    "V11_172_grass_tuft_short": [
+      17.84169108725477,
+      32.19664044708591,
+      42.03631507341981
+    ],
+    "V11_319_grass_meadow": [
+      21.703478511150347,
+      31.319913699782905,
+      49.321187629496904
+    ],
+    "V11_299_grass_meadow": [
+      11.336666377118554,
+      33.0899090798249,
+      38.50285044012392
+    ],
+    "V11_147_grass_tuft_short": [
+      14.289776543451417,
+      32.59192816320263,
+      41.342660327033826
+    ],
+    "V11_162_grass_tuft_short": [
+      9.186154544374482,
+      33.13019229597581,
+      40.38145631038965
+    ],
+    "V11_197_grass_tuft_short": [
+      15.1439634936202,
+      32.30616022910356,
+      44.06631674014126
+    ]
+  },
+  "outputs": {
+    "v15a_sha256": "d9ea20bd3fa62f9cf298acde764594443a0562162d7ef9deb3445eb4ae1efd43",
+    "v15b_sha256": "e96234585eb3b89d4bb2b3c2ca776c892aa818391f2fa7ea2b619738c71139da",
+    "v15c_sha256": "09366ffaf5b1f6657b1b9ca158c9681d0d52537a4a90bf94f7ac25ec6f2162f1",
+    "final_bytes": 47420560,
+    "compose_py_sha256": "68efd021bae9daf6d8935e00e8c5f0721c161785729acea18b56e737471039f5",
+    "understory_py_sha256": "01515bfdfa46997971ba67855edfd27dfbc61ff34c84cdfcdbb046ea8ae86349",
+    "correct_py_sha256": "bde63fdd963dfe987d42484dabfa2f50e5fb5ac51a646ed9a729ec43b9a5a43c",
+    "preview_c_py_sha256": "2930cddf87650452407eb0f4f1d55787a7938050b64b78c0f336d34388866be7",
+    "qa_sha256": "01743476b9e89ec226f4b2a06e672fbb0d4ce6fe743ad5bbbc9271a375af824f",
+    "understory_qa_sha256": "5f9629e3c6d5ed047a189786bad007fa6e070837ad8ec48adffdda0ba901b893",
+    "correction_qa_sha256": "705e8878ed408d60adf76d691a6e1db1f8cae76d5fc23168328dd1814fa1ec46",
+    "shadow_c_qa_sha256": "74d184ecd72b9e535824c459b81d6628f6c6e15242ff62f6c0af80a2880963ca",
+    "comparison_sha256": "8db684c18b454288089eb064f7333d9fc203d2d02758ec812bead923858cd429",
+    "reproduction_qa_zip_sha256": "7f24f3d72d8aab4d279a1c879b3d1d3e8d01cc58c0344ba56f8860677167e13c",
+    "delivery": "Local candidate GLBs and scripts/QA ZIP, receipt including exact final translation delta committed; no actual binary on GitHub."
+  },
+  "art_review": "Self HOLD. Visible modest improved understory and distant layering without extra triangles, but wide bare reserved corridor, primitive and repetitive crowns/branches, sparse woodland and insufficient light/material quality. V15B moss rejected in favor of V15C. No full PBR/Blender in local environment (executable and bpy absent); no new Actions dispatched. Existing source acquisition is qualified, but locally assembled GLB cannot be transferred by available GitHub binary upload interface. Official CG bytes still unresolved.",
+  "next": "Switch method from repeated CPU layout tuning to native render input recovery: reconstruct from retained exact source artifacts and SHA-locked recipes in approved isolated GitHub Actions, or qualified binary transfer if available. Preserve current V15C. Establish editable Blender source and matched real-lighting renders, then source-grounded hero tree design and independent G2. Do not blindly repeat density/tint edits.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT_SELF_HOLD",
+    "G3": "PARTIAL_GLTF_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

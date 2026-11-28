@@ -1,0 +1,475 @@
+{
+  "schema": "two.region.a3.ruin_blueprint_design.v59",
+  "status": "SOURCE_GROUNDED_DIMENSIONAL_DESIGN_CANDIDATE_D4_HOLD",
+  "units": "m",
+  "frame": "right handed local x transverse y forward/rear z up; each asset independent origin, world placement not adopted",
+  "authority": "Director 2D ruin asset reference, new design permitted; precision blueprint before model",
+  "sources": {
+    "main": "d608469af9457937d22c5e2d4369fcecb1358926",
+    "artifact": 15076007596,
+    "run": 45729087247,
+    "archive_sha256": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+    "source_checks": "21/21 SHA256 and Git blob SHA1/size, CRC PASS",
+    "altar": "assets/images/environments/moss_ancient_altar_idle_v1.png",
+    "gate": "img/field/moss/art/anc_arch_broken_01.png",
+    "small": [
+      "anc_rune_broken_01.png",
+      "anc_boundary_stone_01.png",
+      "ruins_stone_02.png"
+    ],
+    "map": "data/maps/moss_forest_03_ancient_grove.json",
+    "brief": "docs/art/chatgpt_moss_forest_map_brief.md",
+    "runtime": "js/altar-art.js"
+  },
+  "observations": {
+    "altar": "circular stepped paving, giant upright slab, flanking smaller arches and broken pillars, concentric blue rune floor, ivy/moss/roots/white flowers. Not rectangular table.",
+    "gate": "separate field p_gate; uneven stone arch, diamond motifs, right fragmented masonry and debris; do not move story barrier to altar",
+    "small": "tapered cracked standing stones, diamond markings, carved fragments and spiral"
+  },
+  "design_parameters": {
+    "altar": {
+      "part_count": 27,
+      "proposed_pad": [
+        8,
+        8
+      ],
+      "original_pad": [
+        6,
+        4
+      ],
+      "bounds": [
+        [
+          -3.26,
+          -2.6,
+          0
+        ],
+        [
+          3.26,
+          3.28,
+          3.52
+        ]
+      ],
+      "disks": [
+        {
+          "id": "ALT-T01",
+          "r": 2.6,
+          "z": [
+            0,
+            0.18
+          ]
+        },
+        {
+          "id": "ALT-T02",
+          "r": 2.3,
+          "z": [
+            0.18,
+            0.36
+          ]
+        },
+        {
+          "id": "ALT-T03",
+          "r": 2,
+          "z": [
+            0.36,
+            0.54
+          ]
+        }
+      ],
+      "disk_samples": 96,
+      "top_blocks": 24,
+      "step_rise": 0.18,
+      "radial_tread": 0.3,
+      "monolith": {
+        "center": [
+          0,
+          2.96
+        ],
+        "base_sections": [
+          [
+            0,
+            1.36,
+            0.64,
+            0.09
+          ],
+          [
+            0.18,
+            1.36,
+            0.64,
+            0.09
+          ]
+        ],
+        "body_sections": [
+          [
+            0.18,
+            1.18,
+            0.53,
+            0.09
+          ],
+          [
+            1.2,
+            1.13,
+            0.5,
+            0.08
+          ],
+          [
+            2.95,
+            1.07,
+            0.47,
+            0.13
+          ],
+          [
+            3.42,
+            0.9,
+            0.4,
+            0.16
+          ],
+          [
+            3.52,
+            0.62,
+            0.34,
+            0.12
+          ]
+        ]
+      },
+      "side_arch": {
+        "centers": [
+          [
+            -2.46,
+            2.62
+          ],
+          [
+            2.46,
+            2.62
+          ]
+        ],
+        "inner_r": 0.47,
+        "outer_r": 0.8,
+        "spring": 1.38,
+        "depth": 0.52,
+        "wedge_count": 7,
+        "wedge_curve_samples": 5,
+        "pier_center_offset": 0.635,
+        "pier_sections": [
+          [
+            0,
+            0.33,
+            0.62,
+            0.035
+          ],
+          [
+            0.32,
+            0.33,
+            0.56,
+            0.025
+          ],
+          [
+            1.38,
+            0.33,
+            0.52,
+            0.02
+          ]
+        ]
+      },
+      "short_stone_centers_heights": [
+        [
+          -2.85,
+          -0.46,
+          1.08
+        ],
+        [
+          2.85,
+          -0.46,
+          1.08
+        ],
+        [
+          -2.15,
+          -2.2,
+          0.66
+        ],
+        [
+          2.15,
+          -2.2,
+          0.66
+        ]
+      ],
+      "short_stone_sections_rule": "[0,.44,.44,.06],[.12,.42,.42,.04],[h-.10,.34,.32,.04],[h,.28,.27,.06]",
+      "interaction_local_bounds": [
+        -1.15,
+        -1.4,
+        1.15,
+        0.1
+      ],
+      "interaction_area": 3.45,
+      "deck_z": 0.54,
+      "interaction_edge_gap": 0.18716226345670733,
+      "rune": {
+        "circles": [
+          0.31,
+          0.67,
+          1.06,
+          1.49,
+          1.6
+        ],
+        "rays_deg": [
+          0,
+          90,
+          180,
+          270
+        ],
+        "ray_radii": [
+          0.33,
+          0.75,
+          1.22,
+          1.74
+        ],
+        "diamonds_center_r": 1.22,
+        "diamond_wh": [
+          0.28,
+          0.23
+        ],
+        "center_diamond_wh": [
+          0.36,
+          0.36
+        ],
+        "width": 0.018,
+        "depth": 0.008,
+        "semantic_identity": "UNASSIGNED"
+      }
+    },
+    "gate": {
+      "parts": 17,
+      "outer_bounds": [
+        [
+          -2.22,
+          -0.46,
+          0
+        ],
+        [
+          2.22,
+          0.46,
+          4.0325
+        ]
+      ],
+      "reserve": [
+        5,
+        2
+      ],
+      "opening": 3.3,
+      "walk": 3,
+      "pier_centers": [
+        -1.935,
+        1.935
+      ],
+      "pier_wh": [
+        0.57,
+        0.92
+      ],
+      "chamfer": 0.035,
+      "pier_z": [
+        0,
+        0.32,
+        0.9,
+        1.45,
+        1.82
+      ],
+      "inner_r": 1.65,
+      "outer_r": 2.22,
+      "outer_radius_offsets_at_10_equal_angles": [
+        0,
+        -0.04,
+        -0.02,
+        -0.045,
+        0,
+        -0.015,
+        -0.06,
+        -0.025,
+        -0.045,
+        0
+      ],
+      "spring": 1.82,
+      "arch_depth": 0.82,
+      "wedge_count": 9,
+      "wedge_curve_samples": 5,
+      "diamonds_z": [
+        0.64,
+        1.18
+      ],
+      "outer_diamond_wh": [
+        0.2,
+        0.31
+      ],
+      "inner_diamond_wh": [
+        0.09,
+        0.15
+      ],
+      "groove_width": 0.018,
+      "groove_depth": 0.008
+    },
+    "small": {
+      "rune_stone": {
+        "yaw_deg": 8,
+        "sections": [
+          [
+            0,
+            0.78,
+            0.57,
+            0.09
+          ],
+          [
+            0.25,
+            0.68,
+            0.48,
+            0.06
+          ],
+          [
+            0.92,
+            0.53,
+            0.42,
+            0.07
+          ],
+          [
+            1.65,
+            0.46,
+            0.35,
+            0.06
+          ],
+          [
+            2.05,
+            0.3,
+            0.28,
+            0.08
+          ],
+          [
+            2.18,
+            0.16,
+            0.18,
+            0.05
+          ]
+        ]
+      },
+      "boundary_stone": {
+        "yaw_deg": -7,
+        "sections": [
+          [
+            0,
+            0.64,
+            0.56,
+            0.07
+          ],
+          [
+            0.18,
+            0.57,
+            0.5,
+            0.06
+          ],
+          [
+            0.72,
+            0.48,
+            0.4,
+            0.08
+          ],
+          [
+            0.96,
+            0.27,
+            0.3,
+            0.09
+          ]
+        ]
+      },
+      "fragment": {
+        "yaw_deg": 17,
+        "sections": [
+          [
+            0,
+            1.3,
+            0.72,
+            0.09
+          ],
+          [
+            0.2,
+            1.23,
+            0.62,
+            0.08
+          ],
+          [
+            0.6,
+            0.96,
+            0.52,
+            0.1
+          ],
+          [
+            0.72,
+            0.55,
+            0.36,
+            0.09
+          ]
+        ]
+      }
+    },
+    "section_format": "[z,width,depth,corner chamfer]; clockwise/ordered eight XY corners, rotate local yaw. Disk sampled at equal angles. Wedge extrude exact shared xz section at +/-half depth; no through gaps.",
+    "surface": {
+      "joint_width": 0.012,
+      "recess": 0.008,
+      "uv0_tile_m": 1,
+      "uv1_unique_mask": true,
+      "stone_maps": [
+        "basecolor",
+        "normal_gl",
+        "roughness"
+      ],
+      "emission_separate": true,
+      "wear": "5 provisional locator coordinates in local JSON; exact native surface intersection and nonbearing distance not verified. Moss/ivy not on walkway or interaction. No new semantic rune or event."
+    },
+    "qa": {
+      "source_dimension_inference": false,
+      "altar_new_pad_covers_parts": true,
+      "interaction_covered": true,
+      "interaction_obstacle_overlap_m2": 0,
+      "dais_low_obstacle_overlap_m2": 0,
+      "gate_pier_walk_overlap_m2": 0,
+      "gate_neighbor_mating_endpoints_match": true,
+      "gate_each_geometric_bearing_area_m2": 0.4674,
+      "side_arch_each_contact_m2": 0.1708,
+      "minimum_bearing_fraction": 0.9953379953379955,
+      "limitations": "Not structural analysis, collision, native measurement or D4. Candidate small ruins only three views; precise chips/ivy/moss, broken rubble extents and reverse details require design closure."
+    },
+    "interfaces": {
+      "existing_altar_origin": [
+        693.9431596631828,
+        -493.0743278729908,
+        27.988129971478276
+      ],
+      "existing_altar_body_envelope": [
+        2.4,
+        1.2,
+        1.24
+      ],
+      "original_pad": [
+        6,
+        4
+      ],
+      "existing_interaction_area": 3.45,
+      "existing_altar_and_pad_protected": true,
+      "gate_reserve_center": [
+        649.4086975333789,
+        -458.35254383958363
+      ],
+      "gate_reserve": [
+        5,
+        2
+      ],
+      "blocker": "8x8 proposed altar pad and deck at .54m cannot replace original 6x4m pad, event approach/terrain/weapon/collision until independently validated. Keep V05/V47B and V58 unchanged. Separate gate event and altar trigger."
+    },
+    "gates": {
+      "D0": "SOURCE_BYTES_VERIFIED",
+      "D1": "HOLD_PAD_EVENT_AND_WORLD_INTERFACE",
+      "D2": "PARTIAL_DIMENSIONAL_AND_DETAIL",
+      "D3": "PARTIAL_TARGETS_TOLERANCES_AND_OPERATIONS",
+      "D4": "NOT_RUN_INDEPENDENT",
+      "G1": "HOLD",
+      "G2": "NOT_RUN",
+      "G3": "NOT_RUN",
+      "G4": "NOT_RUN"
+    }
+  }
+}

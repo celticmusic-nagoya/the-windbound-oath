@@ -1,0 +1,94 @@
+{
+  "schema": "two.region.riparian_egl_render_validation.v40",
+  "status": "EGL_STANDARD_AND_INSTANCED_DIAGNOSTIC_PASS_NATIVE_WEBGL_BLOCKED",
+  "parent": "ce316cb956a564f012e79273c526f7d30c1ddf49",
+  "dependencies": {
+    "v39_receipt": "173de657c4d0d627b57d05028679547b30c2fa47",
+    "v38b_sha256": "72b5d4dc8ab555b389cc61856a246beb3e9f7380bb9c710222625c26f173038b",
+    "v39_standard_sha256": "84e7f5e94ae7f298cb93d1a9fc31129800a17144a8cbbf8b72dcad76da84e2df",
+    "v39_instanced_sha256": "b20d8e1098bb84b2259ffec65d5314206c19c5908dd15ba217ba20749ac2f719",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "attempts": [
+    {
+      "method": "Blender native intake",
+      "status": "BLOCKED",
+      "cause": "No local Blender binary or established authenticated Actions intake of private GLB"
+    },
+    {
+      "method": "Chromium WebGL2 local HTTP",
+      "status": "BLOCKED",
+      "cause": "ERR_BLOCKED_BY_ADMINISTRATOR"
+    },
+    {
+      "method": "Chromium offline file picker",
+      "status": "BLOCKED",
+      "cause": "WebGL2 context unavailable"
+    },
+    {
+      "method": "VTK GLTFImporter direct EXT_mesh_gpu_instancing",
+      "status": "UNSUPPORTED_OR_FAIL",
+      "cause": "metadata loading error, zero actors, zero polygons"
+    },
+    {
+      "method": "VTK offscreen EGL standard GLBs",
+      "status": "PASS",
+      "views": 3,
+      "actors": 250,
+      "polygons": 416583,
+      "pixel_mae": [
+        0,
+        0,
+        0
+      ],
+      "bounds_exact": true
+    },
+    {
+      "method": "Direct OpenGL 4.5 EGL drawElements/DrawElementsInstanced",
+      "status": "PASS_DIAGNOSTIC",
+      "renderer": "Mesa llvmpipe software renderer",
+      "views": 3,
+      "draws": [
+        250,
+        64
+      ],
+      "instanced_calls": 28,
+      "triangles": 416583,
+      "gl_errors": 0,
+      "pixel_mae": [
+        0.00006810035842293906,
+        0.00008960573476702509,
+        0.00014755077658303465
+      ],
+      "fraction_pixels_delta_gt8": [
+        0.0000035842293906810035,
+        0.0000035842293906810035,
+        0.00001075268817204301
+      ],
+      "limits": "Flat diagnostic materials, vertex colors, depth alpha. No photo texture, alpha mask, full PBR, runtime shader or benchmark. Standard textured VTK renders visually inspected; angular shoreline and sparse composition remain."
+    }
+  ],
+  "outputs": {
+    "vtk_script_sha256": "61ad571ddc2337a4b3d9fadfea3a59dc09eb02dfaee4000038b6b14f64d0b096",
+    "egl_script_sha256": "061c020262b6401c6f85146ee45ede9d9a982b3c02260ee1caa95131274c3012",
+    "standard_qa_sha256": "5380f391cc218df77af3cf06349b9b11a3ffa1b724ae6aead19111128549ae44",
+    "instancing_qa_sha256": "ea64ff07820ca27fbf5d7dc9b42e01f6489c881479d0c00e55da9d1010f64e85",
+    "package_sha256": "bbc0abeba3b40922b81df61f3ae3339564159388d82254819e2fe6bcb8c57fa8",
+    "package_bytes": 1503380,
+    "zip_crc": "PASS",
+    "location": "ChatGPT attachments; scripts, failed browser diagnostics and actual render evidence included; no binary committed"
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_METRIC_LANDING",
+    "G2": "HOLD_NO_ART_CHANGE",
+    "G3": "LOCAL_EGL_DIAGNOSTIC_PASS_NATIVE_BLOCKED",
+    "G4": "BLOCKED_WEBGL2_CONTEXT_ANDROID_NOT_RUN"
+  },
+  "decision": "Keep standard GLB as compatibility fallback. Do not treat VTK direct instanced failure as proof production loader cannot support the extension. Do not repeat blocked browser or Blender routes unchanged. No geometry alteration, formal adoption, publication or main merge.",
+  "next": "Use authenticated qualified Blender intake when available; separate native terrain morphology design and actual engine loader/Android tests. Existing private checkpoint preserved."
+}

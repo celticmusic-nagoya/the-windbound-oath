@@ -1,0 +1,250 @@
+{
+  "schema": "two.region.a3.small_ruins.material_fracture.v65",
+  "parent": "4621f79db703a2fd70cfd597b4b73703a9bb5fe4",
+  "status": "SOURCE_PBR_VERIFIED_FRACTURE_BLUEPRINT_AND_ACTUAL_BASE_MATERIAL_FEASIBILITY_D4_HOLD",
+  "prework": {
+    "main_head": "92e547298612ca5d69d207136312635a60c63d45",
+    "policy_blob_shas": {
+      "agents": "e4bacac16e8c8cc71627562764e723ec86104769",
+      "index": "f4d22d3e956ed108dc1cbb25a2529d7590658eb3",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_SMALL_RUINS_V65",
+    "owner_pr": 482,
+    "owner_head": "4621f79db703a2fd70cfd597b4b73703a9bb5fe4",
+    "writer_lease_fencing_evidence": "Local design/feasibility copy only; no shared native writer or lease takeover. CAS branch update.",
+    "protected_scope": "V64 ring/face design and all source files, V58 native, canon and runtime",
+    "predecessor_gate_statuses": {
+      "D0": "GEOMETRY_VERIFIED_MATERIAL_PENDING",
+      "D1": "LOCAL_ONLY",
+      "D2": "PARTIAL",
+      "D3": "PARTIAL",
+      "D4": "NOT_RUN"
+    },
+    "acceptance_criteria": "6 map size MD5 and SHA exact, 21 refs SHA exact, preserved base triangles, no fracture-glyph intersection, minimum outline margin .006m, residual thickness >.05m, PBR bound actual preview and GLB reopen",
+    "preflight_checks": "Actual local SHA locks and CRC, exact projected overlay and rear thickness, closed winding, py_compile, GLB reopen, actual three-view render review",
+    "result": "READY_LOCAL_DESIGN_AND_MATERIAL_FEASIBILITY_ONLY",
+    "blockers": [
+      "independent D4",
+      "physical fracture/engraving and ivy not modeled",
+      "native UV seam and material QA",
+      "runtime placement"
+    ],
+    "checkpoint": "V64 source unchanged"
+  },
+  "dependencies": {
+    "v64": "6891eaa983a22c8eb70e7723da5e0286b0d014a8",
+    "v63": "fbfa17f56dc1505e65afccb6d52382182649d9fd",
+    "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+  },
+  "source": {
+    "v64": "00eed401791c425126b2a5d47c3ae73fea90d183fa40b550864384a051ccbc3a",
+    "v63": "7dfdfe3dc579cfe2009276e172fdbea6e0e7fb08c734a7883fcb47650840d8c3",
+    "reference_archive": "df2cf90dd0a1ec3c95cfa78d13a901acc109c77a4204361e8d242c2bd908112d",
+    "reference_files_verified": 21,
+    "material_run": 45733249011,
+    "artifact": 15076858433,
+    "archive_sha256": "b2ca93d43c849745e454980b3473dcaca8e2b075d15621c50cf0f18832b25ee5",
+    "archive_crc": "PASS",
+    "total_map_bytes": 19556005,
+    "license": "Poly Haven CC0, prior provider evidence, candidate only",
+    "maps": [
+      [
+        "rock_01",
+        "diff",
+        3020379,
+        "fd84a894b55e56b17bdfdeec99277f92",
+        "fe9013368539b5604602e64bfa48bef1a2a4c452fcb6894868fb556d0b14501c"
+      ],
+      [
+        "rock_01",
+        "nor_gl",
+        2989093,
+        "1b75b6018dcaa4a6335b9a9b70352651",
+        "70427a2c81f85c0e1ee4a147e273d028c3d0188bad2583f2509d6df9a3d55b89"
+      ],
+      [
+        "rock_01",
+        "rough",
+        1772336,
+        "cdaa2b58562517340a9c9d00757cb71d",
+        "fad2e7353b9af032a36d394d33b23154ec7bce3371f9e9436cf318c5f863d64d"
+      ],
+      [
+        "mossy_rock",
+        "diff",
+        4535360,
+        "8e55bbeeef1db0d2d0cae85515812c46",
+        "98ecbd1d19953433f5909b79958992b1da2b45addbee772d1d4c27287f368499"
+      ],
+      [
+        "mossy_rock",
+        "nor_gl",
+        4033031,
+        "e6b611c8a6f8e3276e7f5491c8e66a0f",
+        "78c05b52eb78617fcce4fde7a9ac4872a9725fb2d13aff33248cbdb9c6330563"
+      ],
+      [
+        "mossy_rock",
+        "rough",
+        3205806,
+        "0b4bbecd6af36e343d05ed11914bb18f",
+        "341c4f85e9b350738d30e82e616177316cc5fcbc3e8b5ee9777db47dfc5e6b7a"
+      ]
+    ],
+    "map_row_format": "asset,map,bytes,provider_md5,sha256; all 2048x2048 exact"
+  },
+  "design": {
+    "frame": "V63 de-yawed front x,z in meters; preserve V64 exact rings",
+    "rows": [
+      {
+        "id": "RUNE-S01",
+        "path_xz": [
+          [
+            -0.209,
+            1.63
+          ],
+          [
+            -0.145,
+            1.61
+          ],
+          [
+            -0.095,
+            1.568
+          ],
+          [
+            -0.023,
+            1.58
+          ],
+          [
+            0.045,
+            1.54
+          ],
+          [
+            0.079,
+            1.53
+          ]
+        ],
+        "width_m": 0.02,
+        "depth_m": 0.023,
+        "glyph_gap_m": 0.0750523700621923,
+        "outline_gap_m": 0.017932507954522947,
+        "residual_thickness_m": 0.32796276905501054,
+        "patches": 2,
+        "ivy_edge": 6,
+        "covered_pixels": 272151
+      },
+      {
+        "id": "BOUND-S01",
+        "path_xz": [
+          [
+            -0.042,
+            0.755
+          ],
+          [
+            0.025,
+            0.786
+          ],
+          [
+            0.062,
+            0.768
+          ],
+          [
+            0.109,
+            0.803
+          ],
+          [
+            0.172,
+            0.791
+          ]
+        ],
+        "width_m": 0.014,
+        "depth_m": 0.016,
+        "glyph_gap_m": 0.0986554577418792,
+        "outline_gap_m": 0.012993536651574015,
+        "residual_thickness_m": 0.34650051848821783,
+        "patches": 1,
+        "ivy_edge": 2,
+        "covered_pixels": 137541
+      },
+      {
+        "id": "FRAG-S01",
+        "path_xz": [
+          [
+            -0.362,
+            0.55
+          ],
+          [
+            -0.22,
+            0.568
+          ],
+          [
+            -0.11,
+            0.54
+          ],
+          [
+            0.015,
+            0.566
+          ],
+          [
+            0.118,
+            0.535
+          ],
+          [
+            0.25,
+            0.553
+          ]
+        ],
+        "width_m": 0.018,
+        "depth_m": 0.021,
+        "glyph_gap_m": 0.052512975911607446,
+        "outline_gap_m": 0.06212735360445199,
+        "residual_thickness_m": 0.5047542650406422,
+        "patches": 2,
+        "ivy_edge": 6,
+        "covered_pixels": 233766
+      }
+    ],
+    "recipe": "Buffer path by half width with quad_segs=8. Clip on front triangles, lift via barycentric plane, extrude +Y depth with 1mm outside start. Overlay back projected triangles for residual thickness, exact area coverage. Ivy anchors are original section ring edge vertices, offset 12mm radial, 9mm stem radius and 45mm leaf width; not generated or contact certified.",
+    "material_recipe": "Rasterize exact V64 UV1 per triangle, interpolate metric UV0 and local xyz. Sample actual source maps at 1.5m and 3m repeat (prior provider scale). Position weight w=clamp(.08+.66exp(-7h)+.52exp(-8(1-h))+.31clamp((abs(x)/.30-.25)/.75)+.30(.25+.2sin(13x+7y+5z)sin(9y-8z))), h=clamp(z/H). Blend basecolor in linear RGB, normals normalized vector blend, roughness linear; metallic zero, no baked lighting; nearest dilation up to 8 pixels. UV1 per chart, phase discontinuities not closed.",
+    "geometry": "212 original base triangles, 3 closed consistently wound designs, no actual cuts, no altered source ring/face coordinates (export vertex splitting and local display translation only)."
+  },
+  "feasibility": {
+    "glb_sha256": "7879ba5440c37a736a67e0b77a1a618db2be75728dc75b98753d6b3a8eeacadb",
+    "bytes": 3822452,
+    "reopen_faces": 212,
+    "method": "Actual VTK EGL GLB PBR render, three views, 3/3 actors basecolor normal material bound, not Blender",
+    "art": "HOLD. Stone grain and moss visible, faceted geometry and sparse form do not meet original 2D weathered silhouette or engraved motif fidelity. No physical engraving/ivy, chart phase discontinuity and dark light test. Do not treat as G2.",
+    "source_unchanged": true
+  },
+  "outputs": {
+    "design_json_sha256": "276691c1d57d9daf41a3d14d6da8761d24f397ecfb858009135bbb89e80f55e2",
+    "design_script_sha256": "e3e35b1feb2af925eddf6c1594df4733c186805a1548e7c3a3a13c8866068e02",
+    "render_script_sha256": "a72dacf0c8107b2b2921d86aa4718e23b3511f0d0c17c32891481d3be22aeb81",
+    "design_sheet_sha256": "99f8d886f271cd6dc46b08725aec9048d8a9d9d5d38eccb96ea89e0e82b4bb35",
+    "render_sheet_sha256": "c0317ad461dbb0b3a97c268f28d2f3e9d10bb1da572d4b2264e181282ea9c3bb",
+    "package_sha256": "f24ae15aa1d327a92238b53851fabd550f91f3b8feb4e9368d30ec3fc036ecdd",
+    "package_bytes": 9683217,
+    "CRC": "PASS",
+    "py_compile": "PASS",
+    "location": "Full script and material atlas/GLB in conversation package, compact recipe in PR. No native write."
+  },
+  "gates": {
+    "D0": "VERIFIED_SOURCE_BYTES",
+    "D1": "LOCAL_SCOPE_GLOBAL_HOLD",
+    "D2": "DETAILED_FRACTURE_MOTIF_UV_TARGETS_PARTIAL_IVY",
+    "D3": "NUMERIC_DESIGN_SCREEN_PASS_NATIVE_NOT_RUN",
+    "D4": "NOT_RUN_INDEPENDENT",
+    "G1": "HOLD",
+    "G2": "SELF_HOLD_FEASIBILITY",
+    "G3": "GLB_FEASIBILITY_REOPEN_PASS_NATIVE_NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "No repeated swatches. Independent D4 review of local small-ruin scope; assess silhouette/physical cuts and ivy requirements; precision Blender only after relevant gate. Preserve originals. No adoption/main merge or public native redistribution."
+}

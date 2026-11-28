@@ -1,0 +1,256 @@
+{
+  "schema": "two.region.river_design.v26",
+  "status": "PROVISIONAL_AUTHORED_HYDROLOGY_DESIGN_NOT_ADOPTED",
+  "dependencies": {
+    "region_plan": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "core": "21b2804db198aaf9429f5f959d68a955e5839593",
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "dsm_reference": "d511ab6e6447332acdd9fcabb3d0a219ef840e7d"
+  },
+  "sources": [
+    {
+      "name": "Shannon",
+      "url": "https://www.catchments.ie/download/shannon-river-basin-district-river-basin-management-plan-2009-2015/",
+      "use": "country-scale catchment organization, trunk and tributaries"
+    },
+    {
+      "name": "Inagh",
+      "url": "https://www.npws.ie/protected-sites/sac/000036",
+      "use": "coast-connected estuary archetype"
+    },
+    {
+      "name": "Blackwater",
+      "url": "https://www.npws.ie/protected-sites/sac/002170",
+      "use": "wooded banks and floodplain archetype"
+    },
+    {
+      "name": "Caragh",
+      "url": "https://www.npws.ie/protected-sites/sac/000365",
+      "use": "upland catchment and woodland waterways"
+    },
+    {
+      "name": "EPA River Network Routes",
+      "url": "https://data.gov.ie/dataset/river-network-routes",
+      "license": "CC BY 4.0",
+      "bytes_sha256": null,
+      "usage": "pending actual vector acquisition; no copied geometry"
+    }
+  ],
+  "country_design": {
+    "method": "hierarchical drainage: watershed divides -> main drainage -> tributaries -> estuarine outlets; routes and crossings derived after elevation; do not add canonical river names",
+    "world_coordinates": null,
+    "world_scale": null,
+    "catchment_boundaries": null
+  },
+  "frame": {
+    "axes": "X east Y north Z up",
+    "unit": "provisional authored m",
+    "scale_m_per_schematic_unit": 100,
+    "canonical_transform": null,
+    "vertical_datum": "fictional local sea zero, not EGM2008"
+  },
+  "main": [
+    {
+      "xy": [
+        315,
+        800
+      ],
+      "water_z_m": 22,
+      "width_m": 4,
+      "station_m": 0
+    },
+    {
+      "xy": [
+        290,
+        500
+      ],
+      "water_z_m": 15,
+      "width_m": 6,
+      "station_m": 301.03986446980736
+    },
+    {
+      "xy": [
+        315,
+        250
+      ],
+      "water_z_m": 10,
+      "width_m": 8,
+      "station_m": 552.2867549978296
+    },
+    {
+      "xy": [
+        300,
+        0
+      ],
+      "water_z_m": 7,
+      "width_m": 9,
+      "station_m": 802.7363507251935
+    },
+    {
+      "xy": [
+        320,
+        -170
+      ],
+      "water_z_m": 4.96,
+      "width_m": 10,
+      "station_m": 973.9087784114304
+    },
+    {
+      "xy": [
+        338.8235294118,
+        -250
+      ],
+      "water_z_m": 4,
+      "width_m": 11,
+      "station_m": 1056.0934805129584
+    },
+    {
+      "xy": [
+        360,
+        -340
+      ],
+      "water_z_m": 2.8,
+      "width_m": 12,
+      "station_m": 1148.5512703771603
+    },
+    {
+      "xy": [
+        260,
+        -440.00000000000006
+      ],
+      "water_z_m": 1.5,
+      "width_m": 18,
+      "station_m": 1289.9726266144698
+    },
+    {
+      "xy": [
+        0,
+        -480
+      ],
+      "water_z_m": 0.5,
+      "width_m": 24,
+      "station_m": 1553.0315553737878
+    },
+    {
+      "xy": [
+        -280,
+        -500
+      ],
+      "water_z_m": 0,
+      "width_m": 34,
+      "station_m": 1833.7449323261517
+    }
+  ],
+  "main_length_m": 1833.7449323261517,
+  "reach_grade_percent": [
+    2.3252734359047196,
+    1.9900743804199785,
+    1.1978458145589344,
+    1.1917807251874513,
+    1.1681006020001754,
+    1.2978895577782135,
+    0.9192388155425115,
+    0.380142960634853,
+    0.17811762496977418
+  ],
+  "tributary": [
+    {
+      "xy": [
+        490,
+        -120
+      ],
+      "water_z_m": 18
+    },
+    {
+      "xy": [
+        445,
+        -155
+      ],
+      "water_z_m": 12
+    },
+    {
+      "xy": [
+        395,
+        -190
+      ],
+      "water_z_m": 7
+    },
+    {
+      "xy": [
+        370,
+        -220
+      ],
+      "water_z_m": 5.5
+    },
+    {
+      "xy": [
+        338.8235294118,
+        -250
+      ],
+      "water_z_m": 4
+    }
+  ],
+  "sections": [
+    {
+      "id": "RIV-NORTH",
+      "station_xy": [
+        315,
+        250
+      ],
+      "water_z_m": 10,
+      "water_width_m": 8,
+      "bed_depth_m": 1.2
+    },
+    {
+      "id": "RIV-BRIDGE",
+      "station_xy": [
+        300,
+        0
+      ],
+      "water_z_m": 7,
+      "water_width_m": 9,
+      "bed_depth_m": 1.6,
+      "bridge_deck_z_m": null,
+      "bank_cliff": "separate event module, no height certified"
+    },
+    {
+      "id": "RIV-FOREST",
+      "station_xy": [
+        338.8235294118,
+        -250
+      ],
+      "water_z_m": 4,
+      "water_width_m": 11,
+      "bed_depth_m": 1.6,
+      "landing": "east bank corridor to A1, exact landing and traversable geometry unresolved"
+    },
+    {
+      "id": "RIV-MOUTH",
+      "station_xy": [
+        -280,
+        -500
+      ],
+      "water_z_m": 0,
+      "water_width_m": 34,
+      "bed_depth_m": 1.2,
+      "tidal_range_m": null
+    }
+  ],
+  "qa": {
+    "main_descending": true,
+    "main_southward": true,
+    "main_centerline_on_land": true,
+    "tributary_on_land": true,
+    "tributary_descending": true,
+    "confluence_exact": true,
+    "mouth_on_coast": true,
+    "bridge_anchor_preserved": true,
+    "existing_core_water_profile_preserved": true
+  },
+  "limits": [
+    "Widths and water elevations outside existing core profile are newly authored candidate values, not Ireland measurements.",
+    "No physical terrain carve, catchment accumulation, flow discharge, tidal or flood modelling; no riverbank cliff drop or game event implementation.",
+    "Core width target not existing clipped shore width. No formal world placement or D4/G1-G4 pass. Harbor remains separate."
+  ],
+  "next": "Retrieve EPA vector samples, calculate sinuosity and branching; then fit revised terrain to sections, derive wet mesh at terrain intersection, preserve seams and validate bridge and landing."
+}

@@ -1,0 +1,134 @@
+{
+  "schema": "two.region.a3.distance_layer_feasibility.v75",
+  "parent": "17e21887db21d9569d3ba02e8384ef0dd0ee642a",
+  "status": "LOCAL_SOURCE_IMPOSTOR_CAPTURE_COMPLETE_FIXED_VISTA_NATIVE_TEST_REQUESTED",
+  "prework": {
+    "main_head": "3de7da3326f705421a3072ff134e3cb69f972a1e",
+    "policy_blob_shas": {
+      "agents": "635c8060deca03ead2efcf0ebf30b1d3cd08c931",
+      "index": "f49a5079f1612397f3abd4e8e774bcd81580e408",
+      "registry": "b77cc686cbaec51f99f797a12dbb5d069a94f456",
+      "rules": "5cf84160a7b849f4f3a8cb8eae19120f8d7acf43",
+      "os": "241f5026e3817559dd95b715d286bb13ee0bc787",
+      "prework": "84f4f62dd895005b8c52668814eef75d33bd9699",
+      "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+      "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+      "photo": "2fe74018f1772f57a5dae1e37cfbc7ffb979c36b"
+    },
+    "scope_id": "A3_DISTANCE_LAYER_FIXED_VISTA_FEASIBILITY_V75",
+    "owner_pr": 482,
+    "owner_head": "17e21887db21d9569d3ba02e8384ef0dd0ee642a",
+    "writer_lease_fencing_evidence": "Existing isolated qualified runner; completed prior run; new candidate only; expected HEAD CAS; no shared writer",
+    "source_sha256": {
+      "native": "9ae2baa35f9d9d11a17a720f1e8fa1dc7cda90e40275a581b788d118b66bfbf2",
+      "archive": "e2eb7fc32c47695ff22edf889c0cf76c98e609d80594ba12826afb2a5ffc2787",
+      "scan": "986c89e0753feac3a3c78a97bb2ef94abccf467aec6def8ba1b7cef5fdf3b8ea",
+      "cg": "abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620"
+    },
+    "dependency_shas": {
+      "spec": "a1638c8ff3e9fd6acadc07289039d021a5fa01fc",
+      "v74": "f1745b6bb41a81ef5be22102f69277c2f08f8bb7",
+      "canon": "c20fc9b7ea7aaa0de7449e110463225dab07573e"
+    },
+    "protected_scope": "All original V73 objects, terrain, material, route/event reservations, collision and V68 frozen ruin design; no #421 source edits",
+    "stage": "D1/D2/D3 bounded local scenic feasibility, no precision production D4 waiver",
+    "predecessor_gate_statuses": {
+      "D4": "NOT_RUN",
+      "G2": "SELF_HOLD",
+      "G3": "V73_SCOPED_PASS"
+    },
+    "acceptance_criteria": "Local exact scan SHA, actual 8 directions plus 2 diagnostics, alpha and clipping, 2048x1024 atlas and SHA. Native source exact SHA, 692 original signatures unchanged after reopen, three distinct captures, conservative original bbox gap >.5m, <=42 new triangles, fixed vista comparison and lateral diagnostic only.",
+    "preflight_checks": "Latest main and relevant handoff, existing PR/HEAD, V73 exact native and CG SHA verified; actual V73 render and CG inspected; exact scan GLB primitive count 3 verified; local script execution and archive CRC. Native py_compile in workflow.",
+    "result": "READY_ISOLATED_FEASIBILITY_ONLY",
+    "blockers": [
+      "D4 independent absent",
+      "No authoritative far terrain elevation/reachability",
+      "8-angle nearest texture silhouette mismatch and fixed lighting",
+      "No Android/G4"
+    ],
+    "checkpoint": "V73 unchanged"
+  },
+  "local": {
+    "method": "Actual VTK EGL PBR scan 8 azimuths at 45 deg increments and two intermediate views, 512 square orthographic 17m, three exact material primitives. Initial assertion wrongly expected two actors; inspected source GLB and corrected to 3. No unchanged retry. 504 px cells in 512 px grid with 4px gutter and RGB dilation, 2048x1024 RGBA8, no measured KTX2/mip qualification.",
+    "source_triangles": 1599403,
+    "proposed_card_triangles": 2,
+    "atlas_bytes_rgba8": 8388608,
+    "mip_chain_approx_bytes": 11184811,
+    "intermediate_binary_iou": [
+      0.5825133010028721,
+      0.5731438571474868
+    ],
+    "soft_iou_by_square_px": {
+      "32": [
+        0.7586673493270919,
+        0.6933958806714066
+      ],
+      "64": [
+        0.7066216120334894,
+        0.6648641834120512
+      ],
+      "128": [
+        0.6619023570113588,
+        0.6323528762867947
+      ],
+      "512": [
+        0.5714871475827299,
+        0.5634323333464007
+      ]
+    },
+    "decision": "Reject 8-angle scheme for near or automatic arbitrary view transitions; test only distant fixed vista; multiple native variants instead of repeating one scan.",
+    "layout": {
+      "planes_m": [
+        75,
+        100,
+        125
+      ],
+      "offsets_m": [
+        -36,
+        -24,
+        -12,
+        0,
+        12,
+        24,
+        36
+      ],
+      "card_size": "17*(.88+.09*((i*3+j*2)%5))",
+      "conservative_terrain_bbox_xy": [
+        -100,
+        -135,
+        135,
+        0
+      ],
+      "candidate_count": 19,
+      "min_gap_m": 2.2723392925317683,
+      "z": "UNRESOLVED, no canonical height."
+    },
+    "sha256": {
+      "script": "6f8e406dcb44fe94fb6953e53d4155dfbcf338b779ef240e52fcec6d1be44e32",
+      "pack": "b5e785256290d9dde160bb79119704bfdaef0b0e3c0d6beb13bfd79069be4331",
+      "qa": "7fc12f08cf1a8a133d4397411570fb6cdf62df9026db45eda5ba9a302c366519",
+      "atlas": "52d55fa8752c6bb466608eecbdc66de50b06ae2c50242108f6f3aafa1edf5f64",
+      "sheet": "36030717865dcfda5ea7b2e96ea2a48fab3ce77eb7ebd760b940f01a39953321",
+      "angle": "bbc7835ba9a207f05f801642738df1d32b5a49587971f5a72f986a3dee4d385d",
+      "plan": "824524042dafdcca5f34c21bda25617200e4a3b7dbef10b274812ef72ece92ec",
+      "package": "1f38386f552df978d2f7375f3d09a5fe467a126154bbbd38479c4da3e4a78684"
+    },
+    "package_bytes": 4453843,
+    "crc": "PASS",
+    "py_compile": "PASS",
+    "location": "Conversation-local exact asset package, no public distribution."
+  },
+  "native": {
+    "status": "NOT_RUN_AT_COMMIT",
+    "script": "tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py",
+    "source_artifact": 15081683559,
+    "method": "Use distinct native T/D broadleaf tree variants and hero scan group in isolated capture scenes; transparent scene-linear EXR captures; fixed-light emission/transparent cards only beyond conservative all-old-object bounds, three layers at test depths, illustrative Z from local pad reference with stated offsets (not surveyed or canonical ground). Save isolated candidate, original mesh fingerprints unchanged, reopen and matched V73 camera + 8m lateral diagnostic. No ground material changes (separate future A/B). No runtime collision removal."
+  },
+  "gates": {
+    "D4": "NOT_RUN",
+    "G2": "NOT_RUN_NATIVE_CANDIDATE",
+    "G3": "LOCAL_CAPTURE_PASS_NATIVE_PENDING",
+    "G4": "NOT_RUN"
+  },
+  "next": "Inspect actual native fixed-vista result, reject visible flat cards/floating bases, do not automatically extend to all maps. Close independent design scope and actual reachable envelope before production use. Separate near ground PBR A/B, preserve V73. No adoption/main merge."
+}

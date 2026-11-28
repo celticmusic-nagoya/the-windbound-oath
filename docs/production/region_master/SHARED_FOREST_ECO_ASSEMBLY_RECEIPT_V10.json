@@ -1,0 +1,90 @@
+{
+  "schema": "two.region.forest_eco_assembly_receipt.v10",
+  "parent": "45c4153c903a275f1890d367dc56b62dc25b0dcb",
+  "status": "ACTUAL_EXISTING_ECO_CANDIDATE_ASSEMBLY_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "regional_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "eco_owner_pr": 357,
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "eco_manifest": "9de4e471f7667c54b58b47f6fb72f91cf65eeef2",
+    "v09": "f0995dbec6d844fc3b32e05ac16381ea785079a3",
+    "sanctuary": "d640ef49f81531cc2b714b7d25150747c982f450",
+    "gate": "e45210ba8925df3eec04d3ad12ae4bd29512d158",
+    "route_v01": "46add3eb6c8c422ef998f6265dbd1568cc75b9c7",
+    "route_v02_receipt": "d3c22be28b559cf728060aab8239b62888fb5103"
+  },
+  "inputs": {
+    "scene_sha256": "078a1c1c5f4af576866cdd76dad2fdc7e44d39206ae96c6b47117c152cbba786",
+    "eco_archive": {
+      "run": 44729458641,
+      "artifact": 14626151525,
+      "head": "0605b71f9f2554712f37fba0cd54cacf04af4cc8",
+      "sha256": "821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90",
+      "expires": "2026-12-20T11:44:22Z",
+      "verified_sha_entries": 99,
+      "crc": "PASS",
+      "archived_tech_qa": {
+        "pass": 88,
+        "fail": 0
+      },
+      "limit": "Archive run had prior determinism failure; selected six LOD files match the current owner manifest and archive checksums; not a claim of whole package byte identity or independent G2."
+    }
+  },
+  "outputs": {
+    "scene_sha256": "22b596f31060540caad19b5643191aa5a01e95ef1d333a8bf3e95a9f796392b8",
+    "assemble_py_sha256": "9f9c037168709220148cd785da03a1d382354288633be6bf84dad30370449b50",
+    "preview_py_sha256": "96f179dcc5f5825b6082d09141d34447a5fc82f4428bf3da0476224a06a2de34",
+    "qa_sha256": "6c07b27ad5fb18915dc04aa7b8ee2b840f2e98e38f81549b53894834a12618a1",
+    "preview_qa_sha256": "7dce4c83ced036973da34201f6c0b792f51eea5b8eda2eb476e906f01132cd67",
+    "preview_sha256": "c306228e96508ad227f0c2f2e757e406bbdf1e0d81375eb685d751b33b646208",
+    "delivery": "Actual GLB, scripts, full per-placement QA and PNG local; receipt only committed."
+  },
+  "measurements": {
+    "vegetation_instances": 198,
+    "counts": {
+      "tree_forest_tall_a_LOD1": 28,
+      "tree_deciduous_a_LOD1": 10,
+      "shrub_round_a_LOD1": 34,
+      "grass_tuft_short_LOD1": 60,
+      "grass_meadow_LOD1": 36,
+      "moss_cushion_a_LOD0": 30
+    },
+    "total_instance_triangles": 415012,
+    "previous_scene_triangles": 132654,
+    "reopen_geometry_nodes": 283,
+    "reopen_unique_geometry": 16,
+    "minimum_protected_proxy_gap_m": 0.77214432163962,
+    "minimum_projected_pair_gap_m": 0.20045590332166227,
+    "minimum_rock_gap_m": 0.4986012429956166,
+    "minimum_sampled_root_residual_m": -0.09781045092633889,
+    "maximum_nearest_root_vertex_abs_m": 0.017949882283932794,
+    "source_buffer_metadata_preserved": true,
+    "selected_six_source_buffers_exact": true,
+    "preview_views": 2,
+    "vegetation_visible_pixels": [
+      59240,
+      111278
+    ]
+  },
+  "execution": "Actual local Python. Verified authenticated existing ECO archive SHA, CRC and 99 checksum entries. Selected six exact manifest-matched GLBs. Deterministic seeded placement in partial A3 focus bounds; conservative projected convex footprint exclusions, 5m route centerline buffer, 11m arena, 8m hero, 10m gate, 7m altar and planar camera ray buffers. Root vertex grounding on exact V02 triangulated terrain. All 198 requested candidates placed. Appended source buffers and remapped references; V09 scene prefix and metadata exact, source vegetation buffers exact, reopen total face count matches. Rendered actual mesh A/B views with vertex color and alpha cutoff, CPU base-color directional shading. py_compile PASS. Viewed both: sparse distribution, repeated crowns, ground texture aliasing, no compelling sanctuary depth. No Blender/Actions newly executed.",
+  "limits": [
+    "ECO procedural candidate not formally adopted; current assembly no independent G2. Source forest trees are not hero old tree. No fern asset in recovered archive. No tree/altar/actual gate placement or final road geometry.",
+    "Route and reservations provisional; sampled root contact and planar clearance only, not actual collision, continuous surface contact, 3D sightline or gameplay proof. No runtime LOD or wind; fixed LOD1 plus LOD0 moss. CPU preview lacks actual normal/roughness, mipmaps, shadows and full PBR. No D4, Android, native or main integration."
+  ],
+  "next": "Improve actual scene composition with tiered canopy and foreground understory using source-grounded design, not blind count inflation. Qualify Blender scene rendering and texture filtering; recover existing V05 rock LOD or separately versioned equivalent; review forest art and protected gameplay clearances before adoption.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_SCENE_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_SOURCE_AND_ASSEMBLY_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

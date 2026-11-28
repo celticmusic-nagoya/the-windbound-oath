@@ -1,0 +1,221 @@
+{
+  "schema": "two.region.core_area_surfaces.v01",
+  "status": "PROVISIONAL_DESIGN_NOT_ADOPTED",
+  "source": {
+    "region_plan_blob": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "cliff_control_blob": "81e14da2ebb23adc4bb6ac63691d8d5d6b85f617",
+    "main_agents_blob": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "cliff_cg_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
+  },
+  "frame": {
+    "unit": "m",
+    "origin": "RILDE_VILLAGE",
+    "axes": "X east, Y north, Z up",
+    "gltf": "X east, Y up, Z south",
+    "authored_m_per_schematic_unit": 100,
+    "canonical_transform": null,
+    "rotation_z_deg": 0
+  },
+  "sample_step_m": 2.5,
+  "tiles": [
+    {
+      "id": "RILDE_VILLAGE",
+      "bounds": [
+        -150,
+        -125,
+        150,
+        112.5
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 11616,
+      "triangles": 22800,
+      "sha256": "26423b38a20f2729b246e257a952b3b23e2fe7c2966c5530423c23b2a0a85d9f",
+      "geometry": "open surface",
+      "glb_reopen_counts_match": true
+    },
+    {
+      "id": "COASTAL_MEADOW",
+      "bounds": [
+        -150,
+        112.5,
+        150,
+        300
+      ],
+      "translation": [
+        0,
+        200,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 9196,
+      "triangles": 18000,
+      "sha256": "34b0fafd089b0b1aa46eb684357aa412f1997aac0559ae0d72722940df6df01d",
+      "geometry": "open surface",
+      "glb_reopen_counts_match": true
+    },
+    {
+      "id": "RIVER_CORRIDOR",
+      "bounds": [
+        225,
+        -250,
+        375,
+        250
+      ],
+      "translation": [
+        300,
+        0,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 12261,
+      "triangles": 24000,
+      "sha256": "db4a73324ec35866795b9edbdb595855d9dd0f32746803e5b62be87679e2d6a0",
+      "geometry": "open surface",
+      "glb_reopen_counts_match": true
+    },
+    {
+      "id": "IF01_CLIFF_CONNECTOR",
+      "bounds": [
+        -175,
+        37.5,
+        -150,
+        87.5
+      ],
+      "translation": [
+        -162.5,
+        62.5,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 231,
+      "triangles": 400,
+      "sha256": "25ec87e9eccb14026e01c2d650e49fd9d55c82fec7deaadc633df8370a7b9395",
+      "geometry": "open surface",
+      "glb_reopen_counts_match": true
+    },
+    {
+      "id": "IF03_RIVER_CONNECTOR",
+      "bounds": [
+        150,
+        -25,
+        225,
+        25
+      ],
+      "translation": [
+        187.5,
+        0,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "vertices": 651,
+      "triangles": 1200,
+      "sha256": "201146dd8f455aed096c7be75045c10d237ca2bcc1b8a555edfcea274d51af8a",
+      "geometry": "open surface",
+      "glb_reopen_counts_match": true
+    }
+  ],
+  "height_model": {
+    "plateau": "18+3*sin(pi*y/300)+.006*(x+175)+.85*sin((x+175)/74)*sin(y/85)",
+    "river_center_y_m": [
+      -250,
+      -170,
+      0,
+      250
+    ],
+    "river_center_x_m": [
+      338.8235294118,
+      320,
+      300,
+      315
+    ],
+    "water_z": "4+.012*(y+250)",
+    "bed_z": "water_z-1.6",
+    "blend": "t=clamp((abs(x-center_x)-5)/25,0,1); s=t*t*(3-2*t); z=bed_z*(1-s)+plateau*s"
+  },
+  "seams": [
+    {
+      "a": "RILDE_VILLAGE",
+      "b": "COASTAL_MEADOW",
+      "samples": 121,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "IF01_CLIFF_CONNECTOR",
+      "b": "RILDE_VILLAGE",
+      "samples": 21,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "RILDE_VILLAGE",
+      "b": "IF03_RIVER_CONNECTOR",
+      "samples": 21,
+      "max_xyz_delta_m": 0
+    },
+    {
+      "a": "IF03_RIVER_CONNECTOR",
+      "b": "RIVER_CORRIDOR",
+      "samples": 21,
+      "max_xyz_delta_m": 0
+    }
+  ],
+  "cliff_edge_formula": {
+    "samples": 21,
+    "max_delta_m": 0,
+    "native_comparison": "NOT_RUN"
+  },
+  "river": {
+    "water_width_m": 9,
+    "water_z_south_north_m": [
+      4,
+      10
+    ],
+    "northward_grade_percent": 1.2,
+    "water_sha256": "b18ea41a16d358cef0ad3aeef20c8a4849f43e82fe33ff31865701fb318aa542",
+    "shoreline_contact": "NOT_MET; fixed 9m water plane does not extend to the terrain-water intersection; next revision must solve variable shoreline from actual mesh",
+    "mouth_connection": "NOT_BUILT"
+  },
+  "bridge_envelope": {
+    "endpoints_xy_m": [
+      [
+        270,
+        0
+      ],
+      [
+        330,
+        0
+      ]
+    ],
+    "deck_z_m": 21.28,
+    "water_clearance_m": 14.28,
+    "status": "authored placeholder, not accepted bridge span; revise bank approach, clearance and pier feasibility"
+  },
+  "artifacts": {
+    "location": "ChatGPT attachments only; not committed binaries",
+    "combined_glb_sha256": "4aba238a8ffa677f124acfb8595afbeb5a10ba753abbb71153e6bcd6bf044131",
+    "qa_json_sha256": "5277b3b314d7b38fa4387b3dd06769b64a07af6180a7f9229ab47c21b086ebed",
+    "script_sha256": "95089a9eac363ffef9534cfe4e84c43297e9927cc5b8c8c66ec5bf7c077addb8",
+    "plan_png_sha256": "ed5a22ccbac4c3bea924921d6960475c249f2dbd8ad9642f093150219dc1bc31"
+  },
+  "qa": {
+    "terrain_vertices": 33955,
+    "terrain_triangles": 66400,
+    "combined_reopen_geometries": 6,
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "PARTIAL_LOCAL_SURFACE_SEAM",
+    "G4": "NOT_RUN",
+    "independent": "NOT_RUN"
+  },
+  "limitations": [
+    "No real DEM, metric values authored, not adopted",
+    "No harbor, building, stone bridge, riverbank cliff, forest or fort geometry yet",
+    "No Blender or shared engine execution, no native seam comparison, no collision/navmesh",
+    "No overwrite or writer changes in #421/#364",
+    "#506 initial main run cannot be listed via PR-only connector; no duplicate dispatch"
+  ]
+}

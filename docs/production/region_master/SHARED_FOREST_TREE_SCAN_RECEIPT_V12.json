@@ -1,0 +1,88 @@
+{
+  "schema": "two.region.forest_tree_and_scan_study.v12",
+  "parent": "9f9dc63097facd19c258e9fd2f746c72d2ae875b",
+  "status": "REVERSIBLE_TREE_VARIANTS_AND_CC0_STUMP_CANDIDATE_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v11": "ef82b7c232204bd2ee0c344cdfbc2b2833c779dd",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "v11_scene_sha256": "8fcf25f53842df8e5ae02a019f9b4b195b0b5cba30c24701996da74bc5f2dfc5",
+    "v11_qa_sha256": "f3548c7ee0547a5f731b8f23bee0a34bf8452a5aab67ed309c2525a8ea203885"
+  },
+  "acquisition": {
+    "asset": "ph_tree_stump_01",
+    "provider": "Poly Haven",
+    "author": "Rob Tuytel",
+    "license": "CC0",
+    "asset_page": "https://polyhaven.com/a/tree_stump_01",
+    "workflow_blob": "1228a78c4023dcb5e8adf41f6e3d154efdc27eb3",
+    "run": 45619327603,
+    "conclusion": "success",
+    "artifact": 15023498109,
+    "archive_sha256": "1a83910660fe9c7ed3fa32ec4c18b00b99210fb056b7a8644bc93c6587376898",
+    "expires": "2026-12-09T13:02:11Z",
+    "verified_files": 5,
+    "crc": "PASS",
+    "sha256_md5_bytes": "PASS",
+    "method": "Changed existing scoped intake workflow to stump for PR event, retained explicit forest manual option. No new workflow or duplicate dispatch."
+  },
+  "morphology": {
+    "method": "Height-dependent smooth horizontal shear applied consistently to trunk and foliage; recomputed normals via inverse transpose and tangents via Jacobian, retained indices, UV, wind and materials. First oscillatory shear rejected because minimum triangle area ratio 0.2859, below 0.45. Replaced with monotone cubic shear.",
+    "variants": 6,
+    "trees_changed": 74,
+    "trees_held": 1,
+    "root_vertices_exact": true,
+    "max_local_displacement_m": 0.8000000715255737,
+    "min_triangle_area_ratio": 0.7988574504852295,
+    "new_degenerate_triangles": 0,
+    "min_tree_protected_gap_m": 0.8156285774726837,
+    "max_pair_crown_hull_overlap": 0.4713089980992645,
+    "crown_hull_union_m2": 5963.313020132847,
+    "triangles": 723327,
+    "geometry_nodes": 549,
+    "source_buffer_exact": true
+  },
+  "stump": {
+    "source_vertices": 22472,
+    "source_triangles": 41046,
+    "instances": 3,
+    "minimum_protected_gap_m": 6.254702333077068,
+    "minimum_obstacle_gap_m": 0.38790001153219134,
+    "max_sampled_burial_m": 0.07205432276136037,
+    "total_instance_triangles": 846465,
+    "reopen_geometry_nodes": 552,
+    "source_bytes_preserved": true
+  },
+  "outputs": {
+    "tree_scene_sha256": "b564868bea22b76fdbf80b109a7e970b6b0d70632d2639fbb9a9352f045191be",
+    "scan_glb_sha256": "43769be27fabf5719233a686ee5ab910ce6f86d82abadc39f06d0e313af5bff9",
+    "integrated_scene_sha256": "0149abf289aedfe9d6d646810e544e950575f5a546c431821aa012e639c7f000",
+    "warp_script_sha256": "325783ecfdb56e86d5fa54b18319202ff02eaba30aa7954ced4b70291e872a3a",
+    "stump_script_sha256": "392474c6ded1da322696f1af2d060ad2ee17aab135645d2443e56ad9202af0fc",
+    "tree_qa_sha256": "5641eb6c1f54826c0d66518565ba926d4c6639b722809bcb1f5579f376d5ea51",
+    "stump_qa_sha256": "bca8b797fc4b4122f6b1d01dcadfa55e0f2b8f937e29b564b5b51392b37055a9",
+    "tree_preview_sha256": "e6d0d64551e0bc7419bc94fd63801df615ab9e33b473750d025adfe2d7532289",
+    "scan_preview_sha256": "2151b667a09d914e3016de93dcf8702ae4cfd2475a78874afcf74df05c5383ee",
+    "integrated_closeup_sha256": "1d34d321f729a71640b8eefc5fd502be18b9cb34d847d5ea25c077bc6fc175cf",
+    "delivery": "Local GLBs, scripts and QA; original stump source retained in authenticated Actions artifact. Receipt only committed for local products."
+  },
+  "limits": [
+    "Tree variation is a shear study, not anatomically rebuilt oak branches. No new fern, oak bark or fallen log source acquired. Real scan cut perimeter and ground texture need blending; 41k triangles per stump is expensive. The two integrated close views have heavy foliage occlusion (second view does not show stump); not successful gameplay framing. CPU previews not Blender/PBR. No native edits, independent D4/G2, runtime, Android or main merge."
+  ],
+  "next": "Acquire licensed fern and bark with provider checksums using qualified source intake; do not repeat small shear tuning. Test stump LOD and actual low-camera visibility, then true native lighting and scene-level independent review.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_ACTUAL_SCENE_ART",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_SOURCE_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

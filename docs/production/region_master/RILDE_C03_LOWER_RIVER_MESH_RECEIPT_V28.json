@@ -1,0 +1,84 @@
+{
+  "schema": "two.region.river_lower_mesh.v28",
+  "status": "LOCAL_CORE_LOWER_MESH_REOPEN_PASS_TRIBUTARY_HOLD",
+  "parent": "732b7b880f4f7e4a8cc79a250af415798dbcad6b",
+  "dependencies": {
+    "design": "dc2051c9e9b876d262c08f557e8816ece8e12ba2",
+    "plan": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "v27_receipt": "8973ebc6e85d92fb27eb347e1dc89df38497c73e",
+    "v27_glb_sha256": "2a8cd97cde2463b002a72169d63028653daee9a06446fb1ea1257a2207591f1e",
+    "precedence": "33abd91f31b393cce21f8eee8162eec76cfccd43",
+    "agents": "90c45176dff44897845fe2f29cfa5bb78d9006a0",
+    "registry": "e56d5ae0b1286de39c11129c9c329f55f8f3ed7b",
+    "rules": "b3f8bdcc2e2c1a8b4b725f213535c627f9bcada9",
+    "index": "6edc2f92de10985e2227f09277795f13dc4bb925",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "gates": "3586dae4a11fd1fe37960a2e20d28a2699a179ae"
+  },
+  "frame": "Existing authored local m, not canonical; V26 control points preserved; smoothed interpolated centerline, asymmetrical valley ribbon",
+  "lower": {
+    "length_m": 783.5858960501732,
+    "ground_vertices": 19276,
+    "ground_triangles": 37800,
+    "water_vertices": 7438,
+    "water_triangles": 13537,
+    "water_components": 1,
+    "water_range_m": [
+      0,
+      4
+    ],
+    "land_outside_m2": 0,
+    "protected_a1_overlap_m2": 0,
+    "min_projected_double_area_m2": 0.013547692300886078,
+    "shoreline_preexport_residual_m": 4.440892098500626e-16,
+    "footprint_valid": true
+  },
+  "combined": {
+    "vertices": 40679,
+    "triangles": 77822,
+    "exact_all_four_meshes_reopen": true,
+    "ground_seam": {
+      "vertices": 61,
+      "max_xyz_delta_m": 0
+    },
+    "water_seam": {
+      "vertices": 10,
+      "max_xyz_delta_m": 0
+    },
+    "source_sha_preserved": true,
+    "sha256": "cb18018be81531239c1d29814d865a6e771c5927570b0d116c91446edd9619f3"
+  },
+  "recovery": [
+    {
+      "attempt": "V28A",
+      "failure": "4 triangles with inverted projected area at station 87.5–90m; min double area -0.04215714703355108",
+      "change": "Narrow inner bank in high-curvature reach; keep core seam"
+    },
+    {
+      "attempt": "V28B",
+      "failure": "0.11824500030886467 m² outside land at terminal coastal vertex",
+      "change": "Make mouth center exact coastline corner, preserve original seam with local taper; no repeated unchanged run"
+    }
+  ],
+  "tributary": {
+    "status": "HOLD_EXISTING_TILE_CONFLICT",
+    "a1_centerline_overlap_m": 149.282548037252,
+    "core_centerline_overlap_m": 51.07654508395956,
+    "decision": "Do not carve overlapping A1/core without coordinated new terrain and protected-route checks; retain V26 tributary as design only."
+  },
+  "outputs": {
+    "lower_glb_sha256": "81fe064eddca33842a66d1eb4e9a62aff3e13002fd890357d6ea357e6f7650f7",
+    "sheet_sha256": "9f8212396836992d8b6b15f7c56b6e07987bbdaa4c0d55654a1e9279a548ba7e",
+    "build_sha256": "dbd4bb8b2ab65369bed5482f07599d39e2401db52787d16b21006ea9a5917046",
+    "combine_sha256": "9a0e6598150b0b6d3ca6b4dca5be7c1042696994524cdd4ad850a4a2ca084897",
+    "qa_sha256": "8d031ad6cd582c4cd6a8c81871dfa579dc2a5370ff20c75188f35976df78d7a7",
+    "combined_qa_sha256": "e4c6cfd4061cea7f98253ae4b54795b3fc49f1f0b64fd25ce293e85cc44d9146",
+    "package_sha256": "f452eca09613e74fe6b2cad8f0bd80c4ffce4c2809ab075fb2317d8c0e71f120",
+    "package_bytes": 1436300,
+    "location": "ChatGPT attachments; native and binary not committed"
+  },
+  "limits": [
+    "Separate open tiles with coordinate matched boundaries; not welded topology. Coast endpoint only, sea/tide mesh unbuilt. No tributary carve. No native Blender, photo-material, navigation, independent D4/G2 or G4 certification."
+  ],
+  "next": "Resolve tributary intersections in a shared terrain design copy, protect A1 path/landing and core bridge; create coast/sea interface; native and matched render QA before adoption."
+}

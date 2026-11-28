@@ -1,0 +1,384 @@
+{
+  "status": "DESIGN_SCREEN_ONLY",
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394"
+  ],
+  "source_unchanged": true,
+  "road_samples": 651,
+  "camera_positions": 35,
+  "ray_count": 420,
+  "ray_step_max_m": 0.25,
+  "ground_clearance_threshold_m": 0.05,
+  "targets": {
+    "fall_upper": [
+      468.25,
+      -385.0,
+      23.21199553361176
+    ],
+    "fall_mid": [
+      467.75,
+      -385.0,
+      22.201995533611758
+    ],
+    "fall_lower": [
+      467.25,
+      -385.0,
+      21.19199553361176
+    ],
+    "A2-ECO-0001": [
+      470.5045353017872,
+      -361.9356466211424,
+      29.68394292371392
+    ],
+    "A2-ECO-0002": [
+      499.6044679970663,
+      -380.1906716245433,
+      33.613856384172145
+    ],
+    "A2-ECO-0003": [
+      532.9841703347997,
+      -320.37994480242475,
+      31.890840486810127
+    ]
+  },
+  "summary": [
+    {
+      "eye_m": 1.65,
+      "target": "fall_upper",
+      "views": 35,
+      "clear": 2,
+      "terrain_blocked": 10,
+      "envelope_blocked": 32
+    },
+    {
+      "eye_m": 1.65,
+      "target": "fall_mid",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 29,
+      "envelope_blocked": 33
+    },
+    {
+      "eye_m": 1.65,
+      "target": "fall_lower",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 35,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 1.65,
+      "target": "A2-ECO-0001",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 0,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 1.65,
+      "target": "A2-ECO-0002",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 0,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 1.65,
+      "target": "A2-ECO-0003",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 0,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 3.5,
+      "target": "fall_upper",
+      "views": 35,
+      "clear": 3,
+      "terrain_blocked": 3,
+      "envelope_blocked": 32
+    },
+    {
+      "eye_m": 3.5,
+      "target": "fall_mid",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 29,
+      "envelope_blocked": 32
+    },
+    {
+      "eye_m": 3.5,
+      "target": "fall_lower",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 35,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 3.5,
+      "target": "A2-ECO-0001",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 0,
+      "envelope_blocked": 35
+    },
+    {
+      "eye_m": 3.5,
+      "target": "A2-ECO-0002",
+      "views": 35,
+      "clear": 5,
+      "terrain_blocked": 0,
+      "envelope_blocked": 30
+    },
+    {
+      "eye_m": 3.5,
+      "target": "A2-ECO-0003",
+      "views": 35,
+      "clear": 0,
+      "terrain_blocked": 0,
+      "envelope_blocked": 35
+    }
+  ],
+  "reserved_observation": [
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "fall_upper",
+      "ground_min_clearance_m": 0.06674193772643378,
+      "ground_blocked": false,
+      "envelope_blockers": [],
+      "clear_screen": true
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "fall_mid",
+      "ground_min_clearance_m": -0.8969851462486176,
+      "ground_blocked": true,
+      "envelope_blockers": [],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "fall_lower",
+      "ground_min_clearance_m": -1.8610841192466943,
+      "ground_blocked": true,
+      "envelope_blockers": [
+        "A2-ECO-0314"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "A2-ECO-0001",
+      "ground_min_clearance_m": 1.6499999999999986,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0045",
+        "A2-ECO-0104"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "A2-ECO-0002",
+      "ground_min_clearance_m": 1.6499999999999986,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0066"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 1.65,
+      "target": "A2-ECO-0003",
+      "ground_min_clearance_m": 1.6499999999999986,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0046",
+        "A2-ECO-0064"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "fall_upper",
+      "ground_min_clearance_m": 0.13557914702876062,
+      "ground_blocked": false,
+      "envelope_blockers": [],
+      "clear_screen": true
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "fall_mid",
+      "ground_min_clearance_m": -0.8284666277301014,
+      "ground_blocked": true,
+      "envelope_blockers": [],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "fall_lower",
+      "ground_min_clearance_m": -1.7928813542697384,
+      "ground_blocked": true,
+      "envelope_blockers": [
+        "A2-ECO-0335",
+        "A2-ECO-0430"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "A2-ECO-0001",
+      "ground_min_clearance_m": 3.5,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0045",
+        "A2-ECO-0104"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "A2-ECO-0002",
+      "ground_min_clearance_m": 3.5,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0066"
+      ],
+      "clear_screen": false
+    },
+    {
+      "station_m": 167.65400344731492,
+      "camera_index": 276,
+      "eye_m": 3.5,
+      "target": "A2-ECO-0003",
+      "ground_min_clearance_m": 3.5,
+      "ground_blocked": false,
+      "envelope_blockers": [
+        "A2-ECO-0046",
+        "A2-ECO-0064"
+      ],
+      "clear_screen": false
+    }
+  ],
+  "lod": [
+    {
+      "profile": "A_detail",
+      "thresholds_m": [
+        18,
+        40,
+        75,
+        120
+      ],
+      "fractions": [
+        1,
+        0.35,
+        0.1
+      ],
+      "impostor_triangles": 12,
+      "peak_tree_triangles": 284847,
+      "p95_tree_triangles": 277290.0,
+      "mean_tree_triangles": 222284.0583717358,
+      "peak_station_m": 187.39270131965154,
+      "peak_counts_by_tier": [
+        9,
+        29,
+        47,
+        22,
+        0
+      ],
+      "screen_under_150k": false
+    },
+    {
+      "profile": "B_balanced",
+      "thresholds_m": [
+        12,
+        30,
+        60,
+        100
+      ],
+      "fractions": [
+        1,
+        0.25,
+        0.06
+      ],
+      "impostor_triangles": 12,
+      "peak_tree_triangles": 142242,
+      "p95_tree_triangles": 137219.0,
+      "mean_tree_triangles": 107348.07680491552,
+      "peak_station_m": 149.4144471855355,
+      "peak_counts_by_tier": [
+        6,
+        17,
+        35,
+        43,
+        6
+      ],
+      "screen_under_150k": true
+    },
+    {
+      "profile": "C_mobile",
+      "thresholds_m": [
+        8,
+        22,
+        48,
+        90
+      ],
+      "fractions": [
+        1,
+        0.18,
+        0.04
+      ],
+      "impostor_triangles": 12,
+      "peak_tree_triangles": 75034,
+      "p95_tree_triangles": 68903.0,
+      "mean_tree_triangles": 48756.399385560675,
+      "peak_station_m": 153.16230121192854,
+      "peak_counts_by_tier": [
+        4,
+        7,
+        34,
+        48,
+        14
+      ],
+      "screen_under_150k": true
+    }
+  ],
+  "lod0_all_known_trees": 1235944,
+  "hero_assumed_lod0": 20000,
+  "all_tree_lod0_including_hero_assumption": 1295944,
+  "provisional_tree_budget": 150000,
+  "limitations": [
+    "Ground sampling only, not continuous exact ray intersection. Full opaque cylinders deliberately conservative; unknown canopy/trunk origin and shape. Eye heights and waterfall target heights provisional. No camera frustum or player movement check.",
+    "LOD triangle targets are design allocations only, no generated LOD meshes or Android test; hero 20k assumed, impostor 12 triangles assumed; excludes rocks, understory, terrain, water, shadows, texture/overdraw and draw calls. No visual quality or final D4."
+  ],
+  "outputs": {
+    "audit_view_lod.py": "b6cb1fd9eede55173d7a5948ab37b5a8c115e77320e071b7dcc89607b81c7415",
+    "view_samples.csv": "8ac64f8ea83afa4d92d5c6837677bb300180048ad401d69cd8607c12f6deb6e2",
+    "a2_view_lod_v05.png": "4d65f37c8a85ed6be77bf04d4de687a2ea373ba3d9ba886c82253fc5ea03ac56"
+  }
+}

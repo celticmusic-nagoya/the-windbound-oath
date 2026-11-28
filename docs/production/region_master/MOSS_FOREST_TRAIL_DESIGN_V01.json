@@ -1,0 +1,170 @@
+{
+  "schema": "two.region.moss_forest_trail_design.v01",
+  "status": "CANDIDATE_DIRECTIONAL_MACHINE_CHECK_NOT_ADOPTED",
+  "parent": "1359af7a00ad184a7ec2b96d6f958d9ec3fe2fe0",
+  "source_blobs": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "plan": "f5c7313464c9e6020c72cbd291caff5dd19e1fbb",
+    "interfaces": "bc28c422352546f81f8922ed8f5b913efdd81266",
+    "expansion": "dc06678c3ac274b2d2b63de0926b42bde9758504",
+    "harbor_v13": "86014e2e1d737f0f2a5ffa6ad626560f969620c8"
+  },
+  "inputs": [
+    {
+      "id": "MOSS_FOREST_A1",
+      "translation": [
+        400,
+        -200,
+        0
+      ],
+      "sha256": "b5e3d099fedbf694d38331bd41ff947bc38f1e48fa9b785d22839c1ff140b19d"
+    },
+    {
+      "id": "MOSS_FOREST_A2",
+      "translation": [
+        500,
+        -300,
+        0
+      ],
+      "sha256": "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc"
+    },
+    {
+      "id": "MOSS_FOREST_A3",
+      "translation": [
+        600,
+        -400,
+        0
+      ],
+      "sha256": "e955b7ba95c01520b867dc7279b23ec8b18dd4da26e9764d31b69e1369dee98b"
+    }
+  ],
+  "frame": "provisional m X east Y north Z up; canonical transform null",
+  "route_width_m": 2,
+  "route_xy": [
+    [
+      380,
+      -230
+    ],
+    [
+      392.5,
+      -262.5
+    ],
+    [
+      515,
+      -352.5
+    ],
+    [
+      522.5,
+      -355
+    ],
+    [
+      530,
+      -370
+    ],
+    [
+      535,
+      -370
+    ],
+    [
+      537.5,
+      -375
+    ],
+    [
+      540,
+      -375
+    ],
+    [
+      545,
+      -382.5
+    ],
+    [
+      690,
+      -490
+    ]
+  ],
+  "seams": [
+    {
+      "y_m": -300,
+      "xy_m": [
+        443.5416666666667,
+        -300
+      ],
+      "z_m": 24.29829374949137
+    },
+    {
+      "y_m": -400,
+      "xy_m": [
+        568.6046511627907,
+        -400
+      ],
+      "z_m": 36.51701940492141
+    }
+  ],
+  "checks": {
+    "length_m": 414.1113940044887,
+    "area_m2": 831.0845291246554,
+    "outside_terrain_m2": 0,
+    "triangles_intersected": 722,
+    "max_triangle_grade_pct": 16.839445149375933,
+    "max_full_width_long_pct": 14.989165227580342,
+    "max_full_width_cross_pct": 9.955215454101562,
+    "profile_samples": 1658,
+    "max_sampled_longitudinal_grade_pct": 14.799995397891074,
+    "endpoint_z_m": [
+      19.00705909729004,
+      27.909822463989258
+    ],
+    "inputs_unchanged": true
+  },
+  "attempts": [
+    {
+      "id": "A",
+      "method": "isotropic 15%, finite 2.5m lattice",
+      "result": "NO_PATH_FOUND",
+      "allowed_nodes": 8222,
+      "direct_grade_max_pct": 17.671869697563945,
+      "over_limit_area_m2": 120.7548260749777
+    },
+    {
+      "id": "B",
+      "method": "isotropic 18%",
+      "result": "REJECT_LONGITUDINAL",
+      "max_centerline_pct": 16.74883936291019
+    },
+    {
+      "id": "C",
+      "method": "24 directions, separate 15% long / 10% cross, line-of-sight simplification",
+      "result": "DIRECTIONAL_SEGMENT_CHECK_PASS"
+    }
+  ],
+  "execution": "Local Python NumPy 2.3.5, trimesh 4.11.1, Shapely 2.1.2; computed polygon intersections and triangle gradients; verified source SHA before/after. Viewed actual plan and profile. No Blender or Actions.",
+  "outputs": {
+    "script_blob": "74687dd3a780072341ef9931e4c56ec3c74f90f4",
+    "script_sha256": "3fc92ebbf0e1e2f8de5a78b7c63f73b149a4056e1b4791191c83efde6aa39c75",
+    "local_design_qa_sha256": "e30fb940ed2ca2ce3b82d3ac5dddfa7c390247804df47fa14d4ec3aafdb4fcfd",
+    "profile_csv_sha256": "355309ad4efd113cf3df365e95c7df7061c20007d45009e3d27f06f377d4caf5",
+    "preview_sha256": "d8a19141a672253b6c33b5e212edb36af99dafc5845474cf0369b2fa9b237fb2",
+    "note": "Local design QA includes appended attempts ledger; script regenerates geometric results."
+  },
+  "reproduction": "Run tools/map_blueprint/rilde_forest_route_v01/design_forest.py <folder with three SHA-pinned forest GLBs> in disposable scratch copy; use existing region recovery recipes to reconstruct exact tiles.",
+  "limits": [
+    "A1 start not a river landing; A3 endpoint is near plan altar locator, not actual altar. No source CG comparison.",
+    "Tight zigzags remain; no corner smoothing or turning QA. Margins are small; do not infer gameplay or final navigability.",
+    "No ECO/BUILD asset edits; no native mesh or adoption."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL_TRAIL",
+    "D3": "HOLD_CORNER_AND_ENDPOINT",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "next": "Optimize curvature and grade margins jointly, then design provisional clearing and vegetation exclusion corridor on exact terrain; keep existing ECO PR isolated."
+}

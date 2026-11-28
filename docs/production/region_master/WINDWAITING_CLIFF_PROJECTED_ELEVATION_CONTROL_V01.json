@@ -1,0 +1,168 @@
+{
+  "schema": "two.map.cliff.cg_projected_elevation_control.v01",
+  "id": "WINDWAITING_CLIFF_PROJECTED_ELEVATION_CONTROL_V01",
+  "basis": {
+    "source_trace_path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_V03.json",
+    "source_trace_git_blob": "0b96f5e44a9a2b0d5c9393d7be8b30bfcc449232",
+    "approved_image_sha256": "db0b1f6ae12892047c0def8af53c2bab54b294b76afc08565bf1670252d94a07"
+  },
+  "projection": {
+    "kind": "SOURCE_CAMERA_IMAGE_SPACE",
+    "is_orthographic_elevation": false,
+    "source_image_px": [
+      1672,
+      941
+    ],
+    "camera_intrinsics": null,
+    "camera_extrinsics": null,
+    "world_to_image_matrix": null,
+    "reference_world_scale_m_per_px": null
+  },
+  "segments": [
+    {
+      "id": "HEADLAND_RIM",
+      "trace_feature": "primary_headland_upper_rim",
+      "points_xy_px": [
+        [
+          450,
+          564
+        ],
+        [
+          544,
+          548
+        ],
+        [
+          645,
+          526
+        ],
+        [
+          740,
+          510
+        ],
+        [
+          836,
+          499
+        ],
+        [
+          918,
+          505
+        ],
+        [
+          1005,
+          523
+        ],
+        [
+          1048,
+          539
+        ]
+      ],
+      "render_target": "camera_projected_silhouette",
+      "world_xyz_m": null
+    },
+    {
+      "id": "HEADLAND_FACE_EDGE",
+      "trace_feature": "headland_face_visible_outer_edge",
+      "points_xy_px": [
+        [
+          1048,
+          539
+        ],
+        [
+          1056,
+          574
+        ],
+        [
+          1073,
+          614
+        ],
+        [
+          1080,
+          662
+        ],
+        [
+          1097,
+          724
+        ]
+      ],
+      "render_target": "camera_projected_visible_outer_edge",
+      "world_xyz_m": null
+    },
+    {
+      "id": "NEAR_RIM",
+      "trace_feature": "near_cliff_upper_rim",
+      "points_xy_px": [
+        [
+          565,
+          585
+        ],
+        [
+          655,
+          580
+        ],
+        [
+          739,
+          577
+        ],
+        [
+          823,
+          570
+        ],
+        [
+          878,
+          583
+        ],
+        [
+          900,
+          616
+        ]
+      ],
+      "render_target": "camera_projected_silhouette",
+      "world_xyz_m": null
+    },
+    {
+      "id": "NEAR_FACE_EDGE",
+      "trace_feature": "near_cliff_face_outer_edge",
+      "points_xy_px": [
+        [
+          900,
+          616
+        ],
+        [
+          925,
+          653
+        ],
+        [
+          942,
+          702
+        ],
+        [
+          955,
+          750
+        ]
+      ],
+      "render_target": "camera_projected_visible_outer_edge",
+      "world_xyz_m": null
+    }
+  ],
+  "comparison": {
+    "method": "render matching source camera and compare projected landmark pixels",
+    "pixel_residuals_px": null,
+    "uncertainty_px": "source trace manual, range 8–40 px; not calibrated",
+    "tolerance_px": null,
+    "acceptance": "HOLD until camera registration, tolerance and independent tracing"
+  },
+  "protected": [
+    "approved source CG",
+    "PR #421 native cliff assets",
+    "existing geometry and textures"
+  ],
+  "qa": {
+    "trace_points_within_source_image": "PASS",
+    "independent_source_image_accuracy": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "warning": "These are perspective image-plane curves, NOT a metrically scaled cliff elevation, cross-section, depth profile, or mesh vertex target."
+}

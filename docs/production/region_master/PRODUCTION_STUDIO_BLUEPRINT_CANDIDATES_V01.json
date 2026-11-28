@@ -1,0 +1,191 @@
+{
+  "schema": "two.production-studio.blueprint-candidates.v1",
+  "status": "STAGING_ONLY_NOT_DEPLOYED",
+  "source_branch": "docs/ireland-world-source-grounded-plan-20261123",
+  "entries": [
+    {
+      "id": "ireland-story-topology-v04",
+      "name": "物語接続図 v0.4",
+      "path": "docs/production/region_master/IRELAND_STORY_TOPOLOGY_V04.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-region-master-json",
+      "note": "Narrative topology only; not measured geography"
+    },
+    {
+      "id": "ireland-country-source-contract-v04",
+      "name": "国土図面・入力資料契約 v0.4",
+      "path": "docs/production/region_master/IRELAND_COUNTRY_DRAWING_SOURCE_CONTRACT_V04.md",
+      "mime": "text/markdown",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-repository-source",
+      "note": "Specification, not rendered terrain"
+    },
+    {
+      "id": "ireland-continuity-v01",
+      "name": "国土・エリア設計継続資料 v0.1",
+      "path": "docs/production/region_master/IRELAND_COUNTRY_AREA_BLUEPRINT_CONTINUITY_V01.md",
+      "mime": "text/markdown",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "public-repository-source",
+      "note": "Already on main"
+    },
+    {
+      "id": "rilde-c01-c03-directional-v01",
+      "name": "リルド地方 C-01〜C-03 方向配置図 v0.1",
+      "path": "docs/production/region_master/RILDE_C01_C03_DIRECTIONAL_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved directional canon, derived nonmetric diagram",
+      "note": "Direction-only schematic; no real coastline, terrain elevations or distances"
+    },
+    {
+      "id": "rilde-c01-c03-directional-data-v01",
+      "name": "リルド地方 C-01〜C-03 設計データ v0.1",
+      "path": "docs/production/region_master/RILDE_C01_C03_DIRECTIONAL_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "derived nonmetric drawing metadata",
+      "note": "No metric coordinates; G1 blocked"
+    },
+    {
+      "id": "rilde-c02-c03-section-svg",
+      "name": "C-02断面・C-03河川模式図",
+      "path": "docs/production/region_master/RILDE_C02_C03_SECTION_HYDROLOGY_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "regional directional canon; nonmetric design",
+      "note": "Schematic only; no measured elevations, river geometry or buildable mesh"
+    },
+    {
+      "id": "rilde-c02-c03-section-json",
+      "name": "C-02・C-03設計JSON",
+      "path": "docs/production/region_master/RILDE_C02_C03_SECTION_HYDROLOGY_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "regional directional canon; nonmetric design",
+      "note": "Schematic only; no measured elevations, river geometry or buildable mesh"
+    },
+    {
+      "id": "rilde-c01-c03-integrated-interfaces-v01",
+      "name": "C-01〜C-03 統合・8エリア接続候補図",
+      "path": "docs/production/region_master/RILDE_C01_C03_INTEGRATED_INTERFACES_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "eight-area interface JSON and directional source constraints",
+      "note": "Dashed candidate interfaces, not measured adjacency or build-ready terrain"
+    },
+    {
+      "id": "rilde-eight-area-section-slots-svg",
+      "name": "8エリア平面・縦横断面設計枠 v0.1 (svg)",
+      "path": "docs/production/region_master/RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "source drawing contract v0.4",
+      "note": "Eight area drawing slots only, not surveyed terrain"
+    },
+    {
+      "id": "rilde-eight-area-section-slots-json",
+      "name": "8エリア平面・縦横断面設計枠 v0.1 (json)",
+      "path": "docs/production/region_master/RILDE_EIGHT_AREA_PLAN_SECTION_SLOTS_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "source drawing contract v0.4",
+      "note": "Eight area drawing slots only, not surveyed terrain"
+    },
+    {
+      "id": "windwaiting-cliff-cg-trace-v03-svg",
+      "name": "風待ちの崖 正式CG輪郭計測 v0.3 (svg)",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_V03.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved game CG SHA db0b1f6a; derived vector pixel trace",
+      "note": "45 approximate pixel points across 7 features; no metric 3D dimensions"
+    },
+    {
+      "id": "windwaiting-cliff-cg-trace-v03-json",
+      "name": "風待ちの崖 正式CG輪郭計測 v0.3 (json)",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_V03.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved game CG SHA db0b1f6a; derived vector pixel trace",
+      "note": "45 approximate pixel points across 7 features; no metric 3D dimensions"
+    },
+    {
+      "id": "windwaiting-cliff-projected-elevation-control-v01-svg",
+      "name": "崖・投影輪郭比較設計 v0.1 (svg)",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_PROJECTED_ELEVATION_CONTROL_V01.svg",
+      "mime": "image/svg+xml",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved CG traced pixel coordinates v03",
+      "note": "23 source-camera pixel landmarks, not orthographic elevation or world geometry"
+    },
+    {
+      "id": "windwaiting-cliff-projected-elevation-control-v01-json",
+      "name": "崖・投影輪郭比較設計 v0.1 (json)",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_PROJECTED_ELEVATION_CONTROL_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "approved CG traced pixel coordinates v03",
+      "note": "23 source-camera pixel landmarks, not orthographic elevation or world geometry"
+    },
+    {
+      "id": "windwaiting-cliff-cg-trace-geometry-audit-v01",
+      "name": "崖CG輪郭 画像座標QA v0.1",
+      "path": "docs/production/region_master/WINDWAITING_CLIFF_CG_TRACE_GEOMETRY_AUDIT_V01.json",
+      "mime": "application/json",
+      "qa": "G1_BLOCKED",
+      "adoption": "DESIGN_CANDIDATE",
+      "privacy": "PUBLIC_SAFE",
+      "basis": "45 pixel landmarks in approved CG trace v03",
+      "note": "Computed image-space lengths and bounds; no matched-camera render comparison"
+    }
+  ],
+  "not_included": [
+    "private handoff source files",
+    "native Blender assets",
+    "unverified rendered terrain",
+    "private handoff original files and secrets"
+  ],
+  "integration_contract": {
+    "gallery_current_formats": [
+      "png",
+      "jpg",
+      "jpeg",
+      "glb",
+      "vrm"
+    ],
+    "blueprint_svg_requires": "explicit new viewer path or approved raster conversion with source SHA",
+    "markdown_requires": "safe text renderer or GitHub link",
+    "publisher_owner": "Production Studio owning PR; coordinate before integration",
+    "publication": "requires separate authorized publisher and eligibility QA"
+  }
+}

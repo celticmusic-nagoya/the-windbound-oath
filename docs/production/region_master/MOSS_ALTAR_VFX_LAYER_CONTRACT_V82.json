@@ -1,0 +1,33 @@
+{
+  "status": "candidate; director-approved non-emissive default and separate VFX; timing provisional",
+  "source": "V82-A native SHA 570e20fa707a18a92256cce78832909049004f3087d1e444492f18229b6a3fb2",
+  "assets": {
+    "base": "v82_altar_dormant.glb",
+    "vfx": "v82_altar_rune_vfx.glb",
+    "shared_transform": "existing provisional scene coordinates"
+  },
+  "default": {
+    "visible": false,
+    "emission": 0
+  },
+  "stages": [
+    "01_stele",
+    "02_posts",
+    "03_floor"
+  ],
+  "event_contract": {
+    "activation": "explicit existing scene event only; no proximity auto-trigger",
+    "reset": "disable VFX and cancel animation on scene exit or replay",
+    "save": "do not add new save field; existing scenario state controls replay",
+    "reduced_motion": "static staged reveal without pulses or particle animation"
+  },
+  "unresolved": [
+    "timing",
+    "engraved dormant geometry",
+    "floating particle asset",
+    "bloom",
+    "runtime adapter",
+    "D2 geometry",
+    "Android G4"
+  ]
+}

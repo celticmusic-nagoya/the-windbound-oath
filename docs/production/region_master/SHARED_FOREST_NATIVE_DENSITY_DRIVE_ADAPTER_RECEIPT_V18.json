@@ -1,0 +1,64 @@
+{
+  "schema": "two.region.forest_native_density_private_drive_adapter.v18",
+  "parent": "63c75152ee9e847b4dc0a4df62b451dd222380b0",
+  "status": "NATIVE_DENSITY_RUN_STARTED_PRIVATE_DRIVE_ADAPTER_LOCAL_PASS",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v17": "3501adcdffa7f75084002bbc209cff9a7108397e",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "manifest": {
+    "source_glb_sha256": "09366ffaf5b1f6657b1b9ca158c9681d0d52537a4a90bf94f7ac25ec6f2162f1",
+    "raw_sha256": "fe58db17c2e8d8b6a3706c857a615999980673c5f104c7bd3b2987da5ba106bf",
+    "git_blob": "a74eb2e90048e0d71cd5b1a4b0b0820044e43fe1",
+    "local_git_blob_exact": true,
+    "placements": 391,
+    "counts": {
+      "trees": 75,
+      "fern": 48,
+      "grass": 220,
+      "shrubs": 48
+    },
+    "max_position_error_m": 0.008161213487223646,
+    "max_yaw_error_rad": 0.00004740239369027677,
+    "max_scale_error": 0.00004993530490504661,
+    "qa_sha256": "56380d2be56bd89c55b1a790b2bce510977d224923eff1232a773098b1b1cc42",
+    "method": "Local actual exact V15C GLB extraction, bounded quantization, lossless compressed text; committed directly as text, not via Drive. Local source and remote Git blob identical."
+  },
+  "native": {
+    "prior_pilot_sha256": "64a959e42ab7e3b97ce7308de8dd9b73e840ab91f7c074d069662ce72d094504",
+    "prior_archive": 15026419458,
+    "script_blob": "b6d666716c369d3ff9b0fefd6c0dbe2b97a29cc3",
+    "workflow_blob": "45526acda45a7a3dbf5bd1630fbeebb069e1d44a",
+    "run": 45627447568,
+    "head": "72a558838cc97710ce837759992658b43338d204",
+    "job": 139251778326,
+    "last_observed": "in_progress checkout; no artifact",
+    "target": "399 mesh objects, 391 vegetation placements, retain eight terrain/rock/stump objects; compare two views in original lighting and modified lighting, save/reopen native copy",
+    "limits": "Original pilot mesh variants, not full V15C exact geometry; 70 moss, seven rocks and one stump absent; four renders and native save/reopen not yet verified."
+  },
+  "drive": {
+    "adapter_blob": "1624bde136726d3eaf7f22e40f1cb0386a791416",
+    "local_git_blob_exact": true,
+    "local_tests": [
+      "py_compile PASS",
+      "exact approved archive and GLB SHA/size PASS",
+      "missing auth fail closed PASS",
+      "wrong input fail closed PASS"
+    ],
+    "zip_sha256": "ab35c88f7cf53781edf0dd2aec2e75074adb7308abb5b0f40fc1e565c64a7dca",
+    "setup_doc_blob": "cbf85ef2404c599ece3bb9b93894bdb20b121db6",
+    "live_auth": "NOT_CONFIGURED: no available GitHub secret/cloud IAM management tools. No credentials or private Drive IDs committed, no public sharing. Proposed keyless WIF scoped to dedicated reader of only approved file; no permission changes or new costs. User-side Cloud administrator setup required."
+  },
+  "next": "Verify exact native density run output and inspect matched views; if failure use actual logs and diagnose. Configure dedicated read-only WIF access before explicit full-scene job, exact-byte transfer first; do not re-run unchanged pilot. No full native pass or formal adoption.",
+  "gates": {
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "MANIFEST_AND_LOCAL_TRANSFER_VALIDATION_PASS_NATIVE_DENSITY_PENDING",
+    "G4": "NOT_RUN"
+  }
+}

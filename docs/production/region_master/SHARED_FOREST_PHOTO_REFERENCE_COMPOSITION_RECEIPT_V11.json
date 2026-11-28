@@ -1,0 +1,117 @@
+{
+  "schema": "two.region.forest_photo_reference_composition.v11",
+  "parent": "e56a13cbb65ca0a1aa51329e7428c9f96b56df59",
+  "status": "PHOTO_REFERENCE_GUIDED_CANOPY_STUDY_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v10": "0b7654d48f61d4789f65426911f7a589b17023cb",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6"
+  },
+  "reference_observations": [
+    {
+      "url": "https://www.nationalparks.ie/killarney/nature-conservation/",
+      "use": "Ecological reference. Mature sessile oak canopy typically 13–20 m, holly understory, birch/rowan variation. Not a measured TWO target."
+    },
+    {
+      "url": "https://www.npws.ie/nature-reserves/kerry/derrycunnihy-wood-nature-reserve",
+      "use": "Humid native oak woodland and epiphytic moss/ferns."
+    },
+    {
+      "url": "https://www.nationalparks.ie/killarney/things-to-do/",
+      "use": "Observed photo of overhead branches, path and irregular moss/fern edges. Reference only."
+    },
+    {
+      "url": "https://www.discoverkerry.com/listing/derrycunnihy-wood-nature-reserve/68513101/",
+      "use": "Observed woodland path photo: layered vegetation and moss rocks. Reference only."
+    },
+    {
+      "url": "https://jimmymcdonnell.ie/the-rainforests-of-killarney-national-park/",
+      "use": "Photographer's woodland and fallen branch study; reference only."
+    }
+  ],
+  "pinterest": "Search attempted; no usable specific pin verified. No Pinterest photo downloaded or embedded.",
+  "new_asset_candidate": {
+    "url": "https://polyhaven.com/a/fern_02",
+    "license": "CC0",
+    "authors": [
+      "Rico Cilliers (modeling)",
+      "Rob Tuytel (scanning)"
+    ],
+    "provider_width_m": 2,
+    "provider_triangles_approx": 6000,
+    "bytes": "NOT_ACQUIRED",
+    "blocker": "Local curl exit 6 DNS failure; provider API inaccessible via web. No new source hashes invented.",
+    "next": "Recover via qualified authenticated runner, provider size+MD5, SHA256 lock, glTF dependencies and alpha/LOD QA before placement."
+  },
+  "inputs": {
+    "v09_scene_sha256": "078a1c1c5f4af576866cdd76dad2fdc7e44d39206ae96c6b47117c152cbba786",
+    "v10_scene_sha256": "22b596f31060540caad19b5643191aa5a01e95ef1d333a8bf3e95a9f796392b8",
+    "eco_archive_sha256": "821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90"
+  },
+  "method": "Rebuild isolated layout from exact V09 scene and six archive-matched ECO assets. Seed 2026112511; clustered tree centers, scales 1.55–2.2 by type, minimum 4m trunk center separation, root footprint clearances instead of rejecting crown overlap, maximum 48% smaller projected hull intersection. Full projected hull still excluded from protected plan buffers. Understory clustered near rocks. Keep original photo forest ground/rock maps and source geometry. No photo compositing into render.",
+  "measurements": {
+    "before": {
+      "plants": 198,
+      "trees": 38,
+      "crown_projected_hull_union_m2": 1238.5680820527612,
+      "triangle_instances": 415012,
+      "vegetation_pixels": [
+        59240,
+        111278
+      ]
+    },
+    "after": {
+      "plants": 413,
+      "trees": 75,
+      "shrubs": 48,
+      "grass": 220,
+      "moss": 70,
+      "crown_projected_hull_union_m2": 5893.502111922845,
+      "crown_hull_fraction_of_focus": 0.4849820697764026,
+      "maximum_pair_crown_hull_overlap": 0.47656233352226013,
+      "tree_heights_m": [
+        10.261416547107567,
+        16.37671582484084
+      ],
+      "triangle_instances": 723327,
+      "vegetation_pixels": [
+        234245,
+        355242
+      ],
+      "reopen_geometry_nodes": 549,
+      "min_protected_gap_m": 0.7540549065515544,
+      "min_ground_obstacle_gap_m": 0.20080120806188778,
+      "min_rock_gap_m": 0.4086551695163027,
+      "min_root_vertex_residual_m": -0.13179686663143286,
+      "max_nearest_root_vertex_abs_m": 0.017854085165573963
+    }
+  },
+  "outputs": {
+    "scene_sha256": "8fcf25f53842df8e5ae02a019f9b4b195b0b5cba30c24701996da74bc5f2dfc5",
+    "assemble_py_sha256": "cd100e6ecbf8b36e87065ffb474f4f568a99ef7165ac436035295b65c102898e",
+    "preview_py_sha256": "17484fe4a4859f509a98b6407476e31866ca98a9c4c5d6c6078841126dc6e01b",
+    "qa_sha256": "f3548c7ee0547a5f731b8f23bee0a34bf8452a5aab67ed309c2525a8ea203885",
+    "comparison_png_sha256": "e239d854a156dbe43124440730b235c3e4e50038bf008874909a7e16eda11344",
+    "delivery": "Local GLB, scripts, QA and image; receipt only on PR."
+  },
+  "execution": "Actual local Python. Exact source SHA, ECO archive CRC and all 99 archive checksums verified. All 413 requested instances placed; old V09 metadata and buffer and six appended source buffers exact; reopen triangle count equals expected. Both scripts py_compile PASS. Re-rendered V10 and V11 at same two cameras and CPU shader; initial fixed ground prefilter missed material name, corrected to actual name and rerendered both; 32px per tile preview prefilter reduces noise only in preview. Compared final images. Crown closure improves, but generic crown masses, repetitive trunks and bare protected route band remain; G2 HOLD, no native scene. No new Actions dispatched.",
+  "limits": [
+    "Crown convex hull union is projected envelope proxy, not leaf cover or photograph-calibrated canopy closure. No species-level oak identification; scaling existing two tree forms is composition study, not morphology improvement. Planar crown overlap not 3D branch collision proof. No fern bytes, deadwood, photo bark, full PBR/shadow or actual camera, no native Blender, G2 independent, Android, D4 or main merge. Triangle load increased; no FPS claim. Keep V10 intact."
+  ],
+  "next": "Prioritize scanned fern and bark, branched irregular oak morphology and moss-covered deadwood; preserve canopy variation and playable visibility; no further count inflation until matched Blender scene with actual canopy and foliage QA. Reuse qualified existing acquisition/renderer routes; source hashes before import.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_NATIVE_FOREST_ART",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT",
+    "G3": "PARTIAL_ASSEMBLY_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

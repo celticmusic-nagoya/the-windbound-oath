@@ -1,0 +1,110 @@
+{
+  "schema": "two.region.forest_colony_shadow_study.v14",
+  "parent": "7021b6f7c88e25a86ad6521f7b71a9a1af11cefc",
+  "status": "REVERSIBLE_COLONY_PLACEMENT_AND_GEOMETRY_SHADOW_STUDY_NOT_ADOPTED",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "hybrid": "ef0f4878b7af7303dfbac2dde2de88df9680b9d6",
+    "design_gate": "3586dae4a11fd1fe37960a2e20d28a2699a179ae",
+    "geography": "6943ac3ce21003b49e91c6d1cb5989aa6c02e7df",
+    "v13": "0ec7206007ae89017d6a7d4408313b92160d0852",
+    "eco_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68",
+    "world_owner_head": "8e800246b16125506c46a051588b7ad18905ace6",
+    "source_scene_sha256": "f105dd10841464b732c9655faa1b9b895e9e0ecc44e2d52f5ffb7145f6b20ffd",
+    "source_preview_sha256": "4d00bfa28768779eedbeabacf88f7bb35a9d7d3c252a0578ac55d6cf005bc687"
+  },
+  "placement": {
+    "method": "Reversible transform-only relocation of 24 of 48 scan ferns toward six clusters near the two recorded camera positions. Same scale, rotation, mesh and material; actual projected convex hulls of all existing nonterrain nonfern geometry as conservative obstacles; unchanged 5m route buffer, sanctuary and camera reservations. Seed 2026112514. First four-cluster attempt radius 3.4m failed fit; replaced with six seed patches radius 4.5m, 4 instances each, successful. No count increase.",
+    "centers_world_xy_m": [
+      [
+        610,
+        -439.5
+      ],
+      [
+        615.5,
+        -440.5
+      ],
+      [
+        621.5,
+        -445
+      ],
+      [
+        626.5,
+        -449.5
+      ],
+      [
+        626,
+        -455
+      ],
+      [
+        631.5,
+        -453
+      ]
+    ],
+    "minimum_protected_gap_m": 0.8327278766555087,
+    "minimum_obstacle_gap_m": 0.12100793408816464,
+    "minimum_new_fern_gap_m": 0.15725831002009868,
+    "maximum_sampled_root_burial_m": 0.10168619812760227,
+    "max_nearest_root_abs_m": 0.0006940192402673517,
+    "fern_count": 48,
+    "triangles": 828894,
+    "unchanged_gltf_nodes": 453,
+    "reopen_geometry_nodes": 600,
+    "buffer_and_nonnode_metadata_exact": true,
+    "repeat_scene_and_qa_sha_exact": true
+  },
+  "render": {
+    "method": "Same two V13 perspective cameras, same 60deg FOV, base color, UV, depth and alpha. Real geometry directional shadow raster with alpha cutout and orthographic light-depth map; 4096^2, texel 0.04804879299231908m, 25 tap PCF, bias 0.085m. Reconstruct visible world positions from camera depth, apply authored ambient/direct multiplier preserving fog. No shadows baked into GLB.",
+    "fern_visible_pixels_before": [
+      5791,
+      6558
+    ],
+    "fern_visible_pixels_after": [
+      24705,
+      14860
+    ],
+    "terrain_shadow_fraction": [
+      0.8507727622459111,
+      0.899938617297797
+    ],
+    "terrain_only_control_false_shadow_fraction": [
+      0,
+      0
+    ],
+    "shadow_occupied_texels": 7159933,
+    "review": "Self HOLD: stronger foreground and cast shadow, but uniformly broad dark masses, open skyline, bare ground, repeated tree structures and primitive branches remain. No native Blender or full physically based lighting."
+  },
+  "outputs": {
+    "scene_sha256": "77e1145c91f316f0e8cecef9aee0f8a21957befc55b6cf2abe9aa9e47b4631ae",
+    "scene_bytes": 47340328,
+    "replay_blob": "5a2611acbee855a10c8f6d021929d0a5f7e019f7",
+    "replay_commit": "7021b6f7c88e25a86ad6521f7b71a9a1af11cefc",
+    "colonies_py_sha256": "05922f40d2cfb460f754b513bf7314382f4f60053d6b8657c664ac99150f4413",
+    "rejected_script_sha256": "f28695cb8bf5646eadc08e45b9d50ecd813a12f140716310fd29a3275853f402",
+    "shadow_py_sha256": "c0c4ac703a699ae9cfd1854a0c41f9533c77b7a83e2ab89e29f995f0b296d784",
+    "colony_qa_sha256": "b593fbe87cb95ea8df64088130e5d7c18c2465c9860cb8cce3a4b12978f59f7f",
+    "shadow_qa_sha256": "ffdb36fd2cfbe31ce608042f002db9cd8cea4ae9ed05ad1356eaa0693d43b254",
+    "shadow_ab_sha256": "23640adfa91fa5ed1955f5d0dee4c01644183ccd827e44d75af4ca2033fa98c1",
+    "before_after_sha256": "4914cb19bcebb6e6d541c111de2796e3fbf327bea88ac011d61e1b382f91a11d",
+    "reproduction_zip_sha256": "6ce3d44160ff55286731b0fb36a7f38d5da864208d99ac158a3c21af676af72a",
+    "delivery": "Local GLB and QA/reproduction zip; replay script and receipt committed, exact readback. No new Actions execution."
+  },
+  "limits": [
+    "Candidate-only; not official CG. Planar footprint and sampled grounding, not navigation. Shadow preview is CPU diagnostic, no full PBR, indirect illumination, native rendering, actual game integration or Android. No new hero-tree precision work without D4. Prior owners untouched."
+  ],
+  "next": "Prioritize true native render access and deeper forest silhouette / background and ground material differentiation, rather than further unmeasured count increases. Actual old-tree blueprint D4 and independent G2 required. Preserve V13/V14 candidates.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "HOLD_FOREST_COMPOSITION",
+    "D2": "PARTIAL",
+    "D3": "HOLD",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED_OFFICIAL_CG",
+    "G2": "NOT_RUN_INDEPENDENT_SELF_HOLD",
+    "G3": "PARTIAL_ASSEMBLY_REOPEN",
+    "G4": "NOT_RUN"
+  }
+}

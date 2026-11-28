@@ -1,0 +1,89 @@
+{
+  "schema": "two.region.moss_a2_junction_lod_receipt.v10",
+  "parent": "c0b99b8e2e13a0d0e1a4155ca8a5cff45509a6d5",
+  "status": "PLAN_PARTITION_PASS_HOLD_NATIVE_SEAM_AND_ASSETS",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v09": "87e18f459f6d42dc5892517597ae0edd723eb81f"
+  },
+  "inputs_sha256": [
+    "2f08043e4f4ecb8c0c1104e48cba0b331cdb3f57afbee6692279031d6d2400fc",
+    "4540ea97d6375515957883be200085025b2546f21b27eaf73454460547af4a54",
+    "67add93ee010f0c8bb19d2385c2159587e0ad3fc10082a0043bc4d50b9393653",
+    "a488d0aa7c421fde2353acdea82f9fdec5fe1f6d52a3eb3ed3d13ac4cd599265",
+    "40f8ea9359aeb3cd69c742fb366728c89b1a80670059cd7e40a263a790db9c03",
+    "4dd0ce597c90339e38c7589e2ab42ed9837924e6d38226c42065a89766871394"
+  ],
+  "junction": {
+    "original_overlap_m2": 5.079164714784947,
+    "clipped_overlap_m2": 0,
+    "clipped_area_m2": 97.74953370040365,
+    "coverage_symmetric_difference_m2": 1.4717343148210396e-14,
+    "triangle_count": 5282,
+    "seam_length_m": 2.031665885913957,
+    "seam_evaluation_points": 329,
+    "max_seam_residual_m": 0.0002255585214641087,
+    "max_original_overlap_residual_m": 0.0006042511955186569
+  },
+  "lod": {
+    "samples_main": 651,
+    "samples_spur": 347,
+    "provisional_tree_cap": 150000,
+    "V09_main_peak": [
+      269035,
+      138548,
+      77152
+    ],
+    "V09_spur_peak": [
+      270568,
+      142232,
+      86383
+    ],
+    "profiles": [
+      "detail",
+      "balanced",
+      "mobile"
+    ],
+    "selected": "balanced"
+  },
+  "margins": {
+    "below_10cm": 9,
+    "trees_below_10cm": [
+      "A2-ECO-0045",
+      "A2-ECO-0102"
+    ],
+    "min_m": 0.008846747175688674,
+    "minimum_id": "A2-ECO-0381",
+    "below_20cm": 16,
+    "below_30cm": 25
+  },
+  "outputs": {
+    "script_local_git_fingerprint": "241dc97b753b47beb8156750e4b90ba738543137",
+    "qa_local_git_fingerprint": "baa8eafade0c11d5c0e6704e5a556f3e35783370",
+    "script_sha256": "06243822c3330c2eadb4ad0b1d7ee2b10829c52a2f4b6ce35a7f13ed381abc22",
+    "qa_sha256": "2d7833dc15c3345a1cfaa344f46c673f7f5eb754491d13c0d693d8f55b674498",
+    "npz_sha256": "c5f529f863766221d1fddc561ef2e16bed15b1d70b8aa0683bbb706465022d0f",
+    "png_sha256": "231b0ce5afd00b76fe6e7aeacff37e722c7aad43a8919221ca0898c75b266c7b",
+    "delivery": "Local exact script/JSON/NPZ/PNG; receipt only committed in this operation."
+  },
+  "execution": "Actual Python with six SHA-verified inputs unchanged. Affine plane overlap intersection, constrained triangulation of clipped spur, seam proximity check, LOD comparison and margin sensitivity. NPZ reopened exactly; figure inspected.",
+  "reproduction": "python audit.py <A2 GLB> <V02 valley NPZ> <V03 shoulders NPZ> <V09 placements CSV> <V07 spur NPZ> <V04 placements CSV>",
+  "limitations": [
+    "Clipped triangle soup not a welded conforming mesh; no native or drainage verification. LOD targets only, not actual performance. Margin estimates use assumed placement envelopes."
+  ],
+  "decision": "Preserve V09 layout; do not repeatedly repack before qualified real asset dimensions. Request independent D4 for dry-land scope, excluding unresolved hydrology explicitly subject to reviewer acceptance. Next exact junction topology/weld design or other independent A3 landscape scope; no native precision work until applicable D4.",
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_NATIVE_SEAM_ASSET_DIMENSIONS",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}

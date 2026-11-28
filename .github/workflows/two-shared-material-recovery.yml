@@ -1,0 +1,2152 @@
+name: TWO shared material recovery
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+    paths:
+      - 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json'
+      - 'tools/map_blueprint/shared_materials_v01/material_cache.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_ruin_refs_v59.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'
+      - 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'
+      - 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py'
+      - 'tools/map_blueprint/shared_materials_v01/prepare_v90_from_verified.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py'
+      - 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py'
+      - 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
+      - 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py'
+      - 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'
+      - 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'
+      - '.github/workflows/two-shared-material-recovery.yml'
+  workflow_dispatch:
+    inputs:
+      source_set:
+        description: Locked source set to recover
+        type: choice
+        options: [river-gravel, ireland-river, ireland-dem, native-floor, native-art, native-density, native-pilot, fern-alpha, fern-bark, stump, forest]
+        default: river-gravel
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: two-shared-material-recovery-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check changed intake inputs only
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+          ACTION: ${{ github.event.action }}
+        shell: bash
+        run: |
+          if [[ "$ACTION" == synchronize ]]; then
+            git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V81 isolated sanctuary/trail candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V80 isolated moss-forest root/LOD candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V79 isolated enclosed canopy candidate only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V77 isolated far relief and lower background PBR.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V76 isolated material A/B only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V75 isolated fixed-vista feasibility only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V73 isolated material/LOD feasibility only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V72 render-only recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V71 isolated composition and source intake only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py' 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V69 isolated terrain color correction only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V64 ruin material intake only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V63 exact conflict only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V61 read-only native interface survey.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V59 2D references only.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_ruin_refs_v59.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V58 isolated scenery study, no default recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V57 independent composition, no default recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V55 source intake is independent, avoid default river-gravel recovery.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            # V52 native virtual audit is independent; do not recover materials again for its isolated change.
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py' '.github/workflows/two-shared-material-recovery.yml'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+          fi
+          echo 'run=true' >> "$GITHUB_OUTPUT"
+      - name: Recover only selected locked sources
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') != 'native-pilot' && (inputs.source_set || 'river-gravel') != 'native-density' && (inputs.source_set || 'river-gravel') != 'native-art' && (inputs.source_set || 'river-gravel') != 'native-floor' && (inputs.source_set || 'river-gravel') != 'ireland-dem' && (inputs.source_set || 'river-gravel') != 'ireland-river'
+        env:
+          SOURCE_SET: ${{ inputs.source_set || 'river-gravel' }}
+        shell: bash
+        run: |
+          case "$SOURCE_SET" in
+            river-gravel) python tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py "$RUNNER_TEMP/two-material-cache" "$RUNNER_TEMP/material-recovery.json"; exit $? ;;
+            fern-alpha) python 'tools/map_blueprint/shared_materials_v01/intake_fern_bark.py' "$RUNNER_TEMP/two-material-cache" "$RUNNER_TEMP/material-recovery.json" alpha; exit $? ;;
+            fern-bark) python 'tools/map_blueprint/shared_materials_v01/intake_fern_bark.py' "$RUNNER_TEMP/two-material-cache" "$RUNNER_TEMP/material-recovery.json"; exit $? ;;
+            stump) assets=(--asset ph_tree_stump_01) ;;
+            forest) assets=(--asset ph_forrest_ground_01 --asset ph_grassy_cobblestone --asset ph_rock_moss_set_01) ;;
+            *) exit 2 ;;
+          esac
+          python 'tools/map_blueprint/shared_materials_v01/material_cache.py' --catalog 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' "${assets[@]}" --out "$RUNNER_TEMP/two-material-cache" --report "$RUNNER_TEMP/material-recovery.json"
+      - name: Preserve exact source candidate files and report
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') != 'native-pilot' && (inputs.source_set || 'river-gravel') != 'native-density' && (inputs.source_set || 'river-gravel') != 'native-art' && (inputs.source_set || 'river-gravel') != 'native-floor' && (inputs.source_set || 'river-gravel') != 'ireland-dem' && (inputs.source_set || 'river-gravel') != 'ireland-river'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-shared-material-${{ inputs.source_set || 'river-gravel' }}-candidates
+          path: |
+            ${{ runner.temp }}/two-material-cache
+            ${{ runner.temp }}/material-recovery.json
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Native pilot exact artifact intake
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-pilot'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
+          recover() {
+            local id="$1" expected="$2" f="$RUNNER_TEMP/v16-$1.zip"
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$f"
+            printf '%s  %s\n' "$expected" "$f" | sha256sum -c -
+            unzip -tq "$f"
+            mkdir -p "$RUNNER_TEMP/v16-input/$id"
+            unzip -q "$f" -d "$RUNNER_TEMP/v16-input/$id"
+          }
+          recover 14626151525 821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90
+          recover 15017224941 cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564
+          recover 15023498109 1a83910660fe9c7ed3fa32ec4c18b00b99210fb056b7a8644bc93c6587376898
+          recover 15023783357 620d6f222d3b4613f7140c47342b973fe603125de4cc387492d47269f3420343
+          recover 15024936587 05cb8bcc0edf09943b21e6af6207e2eb1825b3c9c2268754f210f070b5218a0d
+          echo 'V16_FIVE_ARCHIVES_SHA_PASS' > "$RUNNER_TEMP/v16-output/intake.txt"
+      - name: Install approved Blender and render isolated subset
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-pilot'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_v16.py -- "$RUNNER_TEMP/v16-input" "$RUNNER_TEMP/v16-output"
+      - name: Preserve native pilot and render evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-pilot'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v16-native-pilot
+          path: ${{ runner.temp }}/v16-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Recover verified pilot for native density study
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-density'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v18-input" "$RUNNER_TEMP/v18-output"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15026419458/zip" > "$RUNNER_TEMP/v18-pilot.zip"
+          printf '%s  %s\n' 9ec037afa4b944dbbe73ace584445ca6de663ac12239e4493d760a55e445b7d0 "$RUNNER_TEMP/v18-pilot.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v18-pilot.zip"
+          unzip -q "$RUNNER_TEMP/v18-pilot.zip" -d "$RUNNER_TEMP/v18-input"
+          echo 'V18_NATIVE_PILOT_ARCHIVE_SHA_PASS' > "$RUNNER_TEMP/v18-output/intake.txt"
+      - name: Execute approved Blender density and lighting study
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-density'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          model="$(find "$RUNNER_TEMP/v18-input" -type f -name forest_v16_native_pilot.blend)"
+          test -f "$model"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_density_v18.py -- "$model" tools/map_blueprint/shared_materials_v01/v15c_vegetation_transforms_v18.txt "$RUNNER_TEMP/v18-output"
+      - name: Preserve V18 native density and lighting evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-density'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v18-native-density
+          path: ${{ runner.temp }}/v18-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Recover V18 native checkpoint
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-art'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v19-input" "$RUNNER_TEMP/v19-output"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15028119073/zip" > "$RUNNER_TEMP/v19.zip"
+          printf '%s  %s\n' f3c4e792e7d99cfe0ce1bece45d80d935655be269e3303dc5c99547d5702e864 "$RUNNER_TEMP/v19.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v19.zip"
+          unzip -q "$RUNNER_TEMP/v19.zip" -d "$RUNNER_TEMP/v19-input"
+          echo V19_CHECKPOINT_ARCHIVE_SHA_PASS > "$RUNNER_TEMP/v19-output/intake.txt"
+          # Read-only recovery of the existing official source from its immutable commit.
+          # Failure here blocks canon comparison, not independent material evaluation.
+          cg="$RUNNER_TEMP/v19-official-cg.png"
+          if git show dc17dd4846f35ea1f5dea25168eec9ddb50a3838:assets/sources/lind-world-20261116/original.png > "$cg" 2>/dev/null && printf '%s  %s\n' abbb3997b63ea5d86eea01f68bd220f0713baf4e90afaaa37684ec2687dc0620 "$cg" | sha256sum -c -; then
+            cp "$cg" "$RUNNER_TEMP/v19-output/official_cg_verified.png"
+            echo OFFICIAL_CG_SHA_PASS > "$RUNNER_TEMP/v19-output/official_cg_status.txt"
+          else
+            echo OFFICIAL_CG_BYTES_UNVERIFIED > "$RUNNER_TEMP/v19-output/official_cg_status.txt"
+          fi
+      - name: Execute V19B corrected native forest art study
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-art'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_art_v19.py -- "$RUNNER_TEMP/v19-input/forest_v18_native_density.blend" "$RUNNER_TEMP/v19-output"
+      - name: Preserve V19 native art evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-art'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v19b-native-art
+          path: ${{ runner.temp }}/v19-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Recover V19B native checkpoint and floor sources
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-floor'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v21-input" "$RUNNER_TEMP/v21-output"
+          recover() {
+            local id="$1" expected="$2" f="$RUNNER_TEMP/v21-$1.zip"
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$f"
+            printf '%s  %s\n' "$expected" "$f" | sha256sum -c -
+            unzip -tq "$f"
+            mkdir -p "$RUNNER_TEMP/v21-input/$id"
+            unzip -q "$f" -d "$RUNNER_TEMP/v21-input/$id"
+          }
+          recover 15029479327 f3dfb34f87557391372a7732d32602c125648e8eeaa481505dc936e27350578e
+          recover 14626151525 821dbac2f1f5a441e6aba89e527b97692eaf79db23f7c50eb466cd978728ae90
+          recover 15017224941 cd1a49b078fc92c23f02e1b05e33ac6ba351c035a30e71eeb3870bb200436564
+          recover 15023498109 1a83910660fe9c7ed3fa32ec4c18b00b99210fb056b7a8644bc93c6587376898
+          echo V21_FOUR_ARCHIVES_SHA_PASS > "$RUNNER_TEMP/v21-output/intake.txt"
+      - name: Native V21 forest floor reconstruction and diagnostic renders
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-floor'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python tools/map_blueprint/shared_materials_v01/native_forest_floor_v21.py -- "$RUNNER_TEMP/v21-input/15029479327/forest_v19_native_art.blend" "$RUNNER_TEMP/v21-input" tools/map_blueprint/shared_materials_v01/floor_transforms_v21.txt "$RUNNER_TEMP/v21-output"
+      - name: Preserve V21 native floor evidence
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'native-floor'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v21-native-floor
+          path: ${{ runner.temp }}/v21-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Acquire remaining southwest Irish terrain reference raster
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'ireland-dem'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v23-output"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-gdal python3-numpy
+          /usr/bin/python3 tools/map_blueprint/shared_materials_v01/ireland_dem_v24_southwest.py "$RUNNER_TEMP/v23-output"
+      - name: Preserve exact DSM source and measured reference outputs
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'ireland-dem'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-ireland-dem-v24-southwest
+          path: ${{ runner.temp }}/v23-output
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Acquire bounded EPA river vector reference samples
+        if: steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'ireland-river'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v26-river"
+          python tools/map_blueprint/shared_materials_v01/ireland_river_reference_v26.py "$RUNNER_TEMP/v26-river"
+      - name: Preserve river source and metrics
+        if: always() && steps.scope.outputs.run == 'true' && (inputs.source_set || 'river-gravel') == 'ireland-river'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-ireland-river-reference-v26
+          path: ${{ runner.temp }}/v26-river
+          retention-days: 14
+          if-no-files-found: error
+
+  v52-native-virtual:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V52-specific input change
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover verified V21 source and execute read-only native survey
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v52-in" "$RUNNER_TEMP/v52-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15032255249/zip" > "$RUNNER_TEMP/v52.zip"
+          printf '%s  %s\n' 5a1b341e455e7cbfda7d13716e8888f119a92380f727cd53511a4be5983e3d61 "$RUNNER_TEMP/v52.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v52.zip"
+          unzip -q "$RUNNER_TEMP/v52.zip" -d "$RUNNER_TEMP/v52-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_forest_v52.py' -- "$RUNNER_TEMP/v52-in/forest_v21_native_floor.blend" "$RUNNER_TEMP/v52-out"
+      - name: Preserve actual native read-only evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-forest-v52-native-virtual-qa
+          path: ${{ runner.temp }}/v52-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v55-hero-source:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V55 intake-only scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Acquire official 1K model and verify provider checksums
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/v55-source"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_hero_tree_v55.py' "$RUNNER_TEMP/v55-source" "$RUNNER_TEMP/v55-report.json"
+      - name: Preserve exact candidate source and intake evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-hero-tree-v55-island-source
+          path: |
+            ${{ runner.temp }}/v55-source
+            ${{ runner.temp }}/v55-report.json
+          retention-days: 14
+          if-no-files-found: error
+
+  v57-native-sanctuary:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V57-specific scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact native and scan checkpoints
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v57-native" "$RUNNER_TEMP/v57-input" "$RUNNER_TEMP/v57-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15032255249/zip" > "$RUNNER_TEMP/v57-native.zip"
+          printf '%s  %s\n' 5a1b341e455e7cbfda7d13716e8888f119a92380f727cd53511a4be5983e3d61 "$RUNNER_TEMP/v57-native.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v57-native.zip"
+          unzip -q "$RUNNER_TEMP/v57-native.zip" -d "$RUNNER_TEMP/v57-native"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15073087704/zip" > "$RUNNER_TEMP/v57-scan.zip"
+          printf '%s  %s\n' 3a1f4b37db5eded7d7f64e8afe8f8a361d4bbf9b4bdf444eeba18f0345cd67d5 "$RUNNER_TEMP/v57-scan.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v57-scan.zip"
+          unzip -q "$RUNNER_TEMP/v57-scan.zip" -d "$RUNNER_TEMP/v57-input"
+      - name: Execute actual Blender 5.3 composition study
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v57.py' -- "$RUNNER_TEMP/v57-native/forest_v21_native_floor.blend" "$RUNNER_TEMP/v57-input" "$RUNNER_TEMP/v57-out"
+      - name: Preserve isolated scene and actual render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-sanctuary-v57-native-composition
+          path: ${{ runner.temp }}/v57-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v58-native-scenery:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V58-specific scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V57 exact native checkpoint
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v58-in" "$RUNNER_TEMP/v58-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15075315647/zip" > "$RUNNER_TEMP/v58.zip"
+          printf '%s  %s\n' fd7808276992a14169fe772a6f60535853a72dae3122bc09f003e0cc318327d3 "$RUNNER_TEMP/v58.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v58.zip"
+          unzip -q "$RUNNER_TEMP/v58.zip" -d "$RUNNER_TEMP/v58-in"
+      - name: Actual Blender geometry and lighting comparison
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_sanctuary_v58.py' -- "$RUNNER_TEMP/v58-in/v57_sanctuary_composition.blend" "$RUNNER_TEMP/v58-out"
+      - name: Preserve native scenic candidate and evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-sanctuary-v58-native-scenery
+          path: ${{ runner.temp }}/v58-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v59-ruin-references:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V59 reference scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_ruin_refs_v59.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Extract exact 2D reference files
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_ruin_refs_v59.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_ruin_refs_v59.py' "$RUNNER_TEMP/v59-refs"
+      - name: Preserve verified references
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v59-ruin-2d-references
+          path: ${{ runner.temp }}/v59-refs
+          retention-days: 14
+          if-no-files-found: error
+
+  v61-native-terrace-audit:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V61 audit scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V58 and survey native interfaces
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v61-in" "$RUNNER_TEMP/v61-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15075731907/zip" > "$RUNNER_TEMP/v61.zip"
+          printf '%s  %s\n' 1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e "$RUNNER_TEMP/v61.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v61.zip"
+          unzip -q "$RUNNER_TEMP/v61.zip" -d "$RUNNER_TEMP/v61-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_terrace_audit_v61.py' -- "$RUNNER_TEMP/v61-in/v58_scenic_composition.blend" "$RUNNER_TEMP/v61-out"
+      - name: Preserve read-only native evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v61-native-terrace-audit
+          path: ${{ runner.temp }}/v61-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v63-native-conflict:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V63 audit scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V58 and survey native interfaces
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v63-in" "$RUNNER_TEMP/v63-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15075731907/zip" > "$RUNNER_TEMP/v63.zip"
+          printf '%s  %s\n' 1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e "$RUNNER_TEMP/v63.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v63.zip"
+          unzip -q "$RUNNER_TEMP/v63.zip" -d "$RUNNER_TEMP/v63-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_terrace_conflict_v63.py' -- "$RUNNER_TEMP/v63-in/v58_scenic_composition.blend" "$RUNNER_TEMP/v63-out"
+      - name: Preserve read-only native evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v63-native-conflict
+          path: ${{ runner.temp }}/v63-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v64-ruin-materials:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V64 material-only scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Verify and acquire two CC0 PBR texture sets
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          set -euo pipefail
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_ruin_materials_v64.py' "$RUNNER_TEMP/v64-materials" "$RUNNER_TEMP/v64-materials/report.json"
+      - name: Preserve exact candidate maps and provenance
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v64-ruin-materials
+          path: ${{ runner.temp }}/v64-materials
+          retention-days: 14
+          if-no-files-found: error
+
+  v69-terrain-color:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V69 audit scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V58 and repair missing shader input
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v69-in" "$RUNNER_TEMP/v69-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15075731907/zip" > "$RUNNER_TEMP/v69.zip"
+          printf '%s  %s\n' 1905b220599e4af4f36e00273ed9692b260649e4440ff7d7e1b1de823ed7233e "$RUNNER_TEMP/v69.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v69.zip"
+          unzip -q "$RUNNER_TEMP/v69.zip" -d "$RUNNER_TEMP/v69-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_terrain_color_v69.py' -- "$RUNNER_TEMP/v69-in/v58_scenic_composition.blend" "$RUNNER_TEMP/v69-out"
+      - name: Preserve isolated corrected native and matched renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v69-terrain-color
+          path: ${{ runner.temp }}/v69-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v71-irish-floor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V71 floor scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V69 and test existing forest kit placement
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v71-in" "$RUNNER_TEMP/v71-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15080696517/zip" > "$RUNNER_TEMP/v71.zip"
+          printf '%s  %s\n' 754bb7fb9929c03cc3395987c2dfa595ec618f8045ace92c8311914ec672208c "$RUNNER_TEMP/v71.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v71.zip"
+          unzip -q "$RUNNER_TEMP/v71.zip" -d "$RUNNER_TEMP/v71-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v71.py' -- "$RUNNER_TEMP/v71-in/v69_terrain_color_recovery.blend" "$RUNNER_TEMP/v71-out"
+      - name: Preserve isolated composition and matched renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v71-irish-floor
+          path: ${{ runner.temp }}/v71-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v71-irish-source-intake:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V71 source scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Acquire CC0 deadwood and damp ground source candidates
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py'
+          python 'tools/map_blueprint/shared_materials_v01/intake_irish_floor_v71.py' "$RUNNER_TEMP/v71-sources" "$RUNNER_TEMP/v71-sources/report.json"
+      - name: Preserve provider-verified source candidates
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v71-irish-source-intake
+          path: ${{ runner.temp }}/v71-sources
+          retention-days: 14
+          if-no-files-found: error
+
+  v72-floor-render-recovery:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V72 render recovery scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V71 checkpoint and render only
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v72-in" "$RUNNER_TEMP/v72-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15081142222/zip" > "$RUNNER_TEMP/v72.zip"
+          printf '%s  %s\n' 7939b66c6d00c78974f77f6837d497b1977e6f6aceca987a9f79cbc7f65cd314 "$RUNNER_TEMP/v72.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v72.zip"
+          unzip -q "$RUNNER_TEMP/v72.zip" -d "$RUNNER_TEMP/v72-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/render_irish_floor_v72.py' -- "$RUNNER_TEMP/v72-in/v71_irish_floor_feasibility.blend" "$RUNNER_TEMP/v72-out"
+      - name: Preserve matched render evidence only
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v72-floor-render-recovery
+          path: ${{ runner.temp }}/v72-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v73-irish-material-lod:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V73 material/LOD scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V71 and V71 sources; test material and LOD
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v73-in" "$RUNNER_TEMP/v73-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15081142222/zip" > "$RUNNER_TEMP/v73.zip"
+          printf '%s  %s\n' 7939b66c6d00c78974f77f6837d497b1977e6f6aceca987a9f79cbc7f65cd314 "$RUNNER_TEMP/v73.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v73.zip"
+          unzip -q "$RUNNER_TEMP/v73.zip" -d "$RUNNER_TEMP/v73-in"
+          mkdir -p "$RUNNER_TEMP/v73-sources"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15080758554/zip" > "$RUNNER_TEMP/v73-sources.zip"
+          printf '%s  %s\n' 54a89abb4f9851c39d63624921567c402bf0c908a4781402911d3a5153f3d79b "$RUNNER_TEMP/v73-sources.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v73-sources.zip"
+          unzip -q "$RUNNER_TEMP/v73-sources.zip" -d "$RUNNER_TEMP/v73-sources"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_irish_floor_v73.py' -- "$RUNNER_TEMP/v73-in/v71_irish_floor_feasibility.blend" "$RUNNER_TEMP/v73-sources" "$RUNNER_TEMP/v73-out"
+      - name: Preserve isolated candidate and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v73-irish-material-lod
+          path: ${{ runner.temp }}/v73-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v75-fixed-vista:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V75 fixed vista scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V73 and test fixed-vista layers
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v75-in" "$RUNNER_TEMP/v75-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15081683559/zip" > "$RUNNER_TEMP/v75.zip"
+          printf '%s  %s\n' e2eb7fc32c47695ff22edf889c0cf76c98e609d80594ba12826afb2a5ffc2787 "$RUNNER_TEMP/v75.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v75.zip"
+          unzip -q "$RUNNER_TEMP/v75.zip" -d "$RUNNER_TEMP/v75-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_far_forest_v75.py' -- "$RUNNER_TEMP/v75-in/v73_irish_material_lod_feasibility.blend" "$RUNNER_TEMP/v75-out"
+      - name: Preserve isolated scenic candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v75-fixed-vista
+          path: ${{ runner.temp }}/v75-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v76-moss-floor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V76 moss floor scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V73 and compare moss floor material
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v76-in" "$RUNNER_TEMP/v76-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15081683559/zip" > "$RUNNER_TEMP/v76.zip"
+          printf '%s  %s\n' e2eb7fc32c47695ff22edf889c0cf76c98e609d80594ba12826afb2a5ffc2787 "$RUNNER_TEMP/v76.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v76.zip"
+          unzip -q "$RUNNER_TEMP/v76.zip" -d "$RUNNER_TEMP/v76-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_floor_v76.py' -- "$RUNNER_TEMP/v76-in/v73_irish_material_lod_feasibility.blend" "$RUNNER_TEMP/v76-out"
+      - name: Preserve isolated floor material candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v76-moss-floor
+          path: ${{ runner.temp }}/v76-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v77-far-relief:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V77 far relief scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V76 and test continuous textured scenic relief
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v77-in" "$RUNNER_TEMP/v77-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15086058841/zip" > "$RUNNER_TEMP/v77.zip"
+          printf '%s  %s\n' 88c3efae3eca04876d97d1bcc5a439164488a3d3be0758c9658f754e0516c635 "$RUNNER_TEMP/v77.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v77.zip"
+          unzip -q "$RUNNER_TEMP/v77.zip" -d "$RUNNER_TEMP/v77-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_far_relief_v77.py' -- "$RUNNER_TEMP/v77-in/v76_moss_floor_feasibility.blend" "$RUNNER_TEMP/v77-out"
+      - name: Preserve isolated textured relief candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v77-far-relief
+          path: ${{ runner.temp }}/v77-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v78-woodland-relief:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V78 woodland relief scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V77 and test woodland understory
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v78-in" "$RUNNER_TEMP/v78-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15086832595/zip" > "$RUNNER_TEMP/v78.zip"
+          printf '%s  %s\n' 370a17dbb27a9768b56aabee50d32aae8e2d8dfee69149407ff5ce6d833c3ff1 "$RUNNER_TEMP/v78.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v78.zip"
+          unzip -q "$RUNNER_TEMP/v78.zip" -d "$RUNNER_TEMP/v78-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_woodland_relief_v78.py' -- "$RUNNER_TEMP/v78-in/v77_far_relief_feasibility.blend" "$RUNNER_TEMP/v78-out"
+      - name: Preserve isolated textured relief candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v78-woodland-relief
+          path: ${{ runner.temp }}/v78-out
+          retention-days: 14
+          if-no-files-found: error
+  v79-enclosed-canopy:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V79 enclosed canopy scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V78 and build enclosed canopy candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v79-in" "$RUNNER_TEMP/v79-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15089860695/zip" > "$RUNNER_TEMP/v78.zip"
+          printf '%s  %s\n' 075fbd536f35a0588302db2dd7c1a6f248b50b74e2e4014837bad0058832dcb6 "$RUNNER_TEMP/v78.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v78.zip"
+          unzip -q "$RUNNER_TEMP/v78.zip" -d "$RUNNER_TEMP/v79-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py' -- "$RUNNER_TEMP/v79-in/v78_woodland_feasibility.blend" "$RUNNER_TEMP/v79-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_enclosed_canopy_v79.py' "$RUNNER_TEMP/v79-out/"
+          (cd "$RUNNER_TEMP/v79-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated canopy candidate, renders, GLB and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v79-enclosed-canopy
+          path: ${{ runner.temp }}/v79-out
+          retention-days: 14
+          if-no-files-found: error
+  v80-moss-forest:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V80 moss forest scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V79 and build root/floor/LOD candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v80-in" "$RUNNER_TEMP/v80-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15092623768/zip" > "$RUNNER_TEMP/v79.zip"
+          printf '%s  %s\n' 335de024f3e2fcb6a12bd496d224aacbf9aa12175da8a7722c921c7365b1c114 "$RUNNER_TEMP/v79.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v79.zip"
+          unzip -q "$RUNNER_TEMP/v79.zip" -d "$RUNNER_TEMP/v80-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py' -- "$RUNNER_TEMP/v80-in/v79_enclosed_canopy.blend" "$RUNNER_TEMP/v80-out" --v79-renders "$RUNNER_TEMP/v80-in/renders"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v80.py' "$RUNNER_TEMP/v80-out/"
+          (cd "$RUNNER_TEMP/v80-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated V80 candidate, renders, GLB and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v80-moss-forest
+          path: ${{ runner.temp }}/v80-out
+          retention-days: 14
+          if-no-files-found: error
+  v81-moss-forest:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V81 moss forest scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V80 and build sanctuary/trail/density candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v81-in" "$RUNNER_TEMP/v81-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15101780672/zip" > "$RUNNER_TEMP/v80.zip"
+          printf '%s  %s\n' 9eb241c84735d0587a9254b52598edce70fb513a2f72483c61c05835f5651ba3 "$RUNNER_TEMP/v80.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v80.zip"
+          unzip -q "$RUNNER_TEMP/v80.zip" -d "$RUNNER_TEMP/v81-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' -- "$RUNNER_TEMP/v81-in/v80_moss_forest.blend" "$RUNNER_TEMP/v81-out" --v80-renders "$RUNNER_TEMP/v81-in/renders" --ref assets/images/environments/moss_ancient_altar_idle_v1.png
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v81.py' "$RUNNER_TEMP/v81-out/"
+          (cd "$RUNNER_TEMP/v81-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated V81 candidate, renders, GLB and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v81-moss-forest
+          path: ${{ runner.temp }}/v81-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82a-visibility:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-A visibility scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V81 and render reversible visibility candidate
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82a-in" "$RUNNER_TEMP/v82a-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15174560838/zip" > "$RUNNER_TEMP/v81.zip"
+          printf '%s  %s\n' e9cf0229a2718f05a688b170d30c5afc4faef70493c79fc7a37bbf3012f23ca6 "$RUNNER_TEMP/v81.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v81.zip"
+          unzip -q "$RUNNER_TEMP/v81.zip" -d "$RUNNER_TEMP/v82a-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' -- "$RUNNER_TEMP/v82a-in/v81_moss_forest.blend" "$RUNNER_TEMP/v82a-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_visibility.py' "$RUNNER_TEMP/v82a-out/"
+          (cd "$RUNNER_TEMP/v82a-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve isolated V82-A candidate, renders and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82a-visibility
+          path: ${{ runner.temp }}/v82a-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82-altar-layers:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check altar layers scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V82-A, split dormant altar and rune VFX
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82layers-in" "$RUNNER_TEMP/v82layers-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15174709955/zip" > "$RUNNER_TEMP/v82a.zip"
+          printf '%s  %s\n' d9ae372061321e2a5867d8da99a45fcb6f648cc3109d2b0bbdd3b20a86a26bab "$RUNNER_TEMP/v82a.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82a.zip"
+          unzip -q "$RUNNER_TEMP/v82a.zip" -d "$RUNNER_TEMP/v82layers-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py' -- "$RUNNER_TEMP/v82layers-in/v82a_visibility_candidate.blend" "$RUNNER_TEMP/v82layers-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_altar_layers.py' "$RUNNER_TEMP/v82layers-out/"
+          (cd "$RUNNER_TEMP/v82layers-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve separate altar and VFX GLBs, editable native and renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82-altar-layers
+          path: ${{ runner.temp }}/v82layers-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82b-stone-material:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-B stone material scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact split altar and render stone material A/B
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82b-in" "$RUNNER_TEMP/v82b-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176206406/zip" > "$RUNNER_TEMP/v82layers.zip"
+          printf '%s  %s\n' df73a27e21383029cdac60b7beb11dbd25f21ae49755cf6d37b4cd2b22bdbb30 "$RUNNER_TEMP/v82layers.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82layers.zip"
+          unzip -q "$RUNNER_TEMP/v82layers.zip" -d "$RUNNER_TEMP/v82b-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py' -- "$RUNNER_TEMP/v82b-in/v82_altar_layers.blend" "$RUNNER_TEMP/v82b-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_material.py' "$RUNNER_TEMP/v82b-out/"
+          (cd "$RUNNER_TEMP/v82b-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V82-B material candidate, native and matched previews
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82b-stone-material
+          path: ${{ runner.temp }}/v82b-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82c-ivy-study:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-C ivy scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact split altar, build ivy study and inspect oak
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82c-in" "$RUNNER_TEMP/v82c-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176206406/zip" > "$RUNNER_TEMP/v82layers.zip"
+          printf '%s  %s\n' df73a27e21383029cdac60b7beb11dbd25f21ae49755cf6d37b4cd2b22bdbb30 "$RUNNER_TEMP/v82layers.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82layers.zip"
+          unzip -q "$RUNNER_TEMP/v82layers.zip" -d "$RUNNER_TEMP/v82c-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py' -- "$RUNNER_TEMP/v82c-in/v82_altar_layers.blend" "$RUNNER_TEMP/v82c-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_ivy_study.py' "$RUNNER_TEMP/v82c-out/"
+          (cd "$RUNNER_TEMP/v82c-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V82-C ivy candidate, native and oak inventory
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82c-ivy-study
+          path: ${{ runner.temp }}/v82c-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82d-oak-lod:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-D oak LOD scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact split altar, create independent oak LOD and compare alpha
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82d-in" "$RUNNER_TEMP/v82d-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176206406/zip" > "$RUNNER_TEMP/v82layers.zip"
+          printf '%s  %s\n' df73a27e21383029cdac60b7beb11dbd25f21ae49755cf6d37b4cd2b22bdbb30 "$RUNNER_TEMP/v82layers.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82layers.zip"
+          unzip -q "$RUNNER_TEMP/v82layers.zip" -d "$RUNNER_TEMP/v82d-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py' -- "$RUNNER_TEMP/v82d-in/v82_altar_layers.blend" "$RUNNER_TEMP/v82d-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_lod_candidate.py' "$RUNNER_TEMP/v82d-out/"
+          (cd "$RUNNER_TEMP/v82d-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V82-D oak candidate, native, GLB and alpha evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82d-oak-lod
+          path: ${{ runner.temp }}/v82d-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82e-stone-atlas-fix:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-E atlas correction scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V82-B, replace invalid atlas with SHA-locked tileable PBR
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82e-in" "$RUNNER_TEMP/v82e-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176297263/zip" > "$RUNNER_TEMP/v82b.zip"
+          printf '%s  %s\n' ea213efb502b7e955efe97e73ce4ebae2d6cf4fc2ee6621877afd8baed9a78e1 "$RUNNER_TEMP/v82b.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82b.zip"
+          unzip -q "$RUNNER_TEMP/v82b.zip" -d "$RUNNER_TEMP/v82e-in"
+          mkdir -p "$RUNNER_TEMP/v82e-out/source_pbr"
+          curl --fail --location --silent --show-error --max-time 120 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_diff_2k.jpg' -o "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_diff_2k.jpg"
+          printf '%s  %s\n' 89e1dce61cf53decf586bd123b9280365e447019ebedaf3b8e48663ab37eab30 "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_diff_2k.jpg" | sha256sum -c -
+          curl --fail --location --silent --show-error --max-time 120 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_nor_gl_2k.jpg' -o "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_nor_gl_2k.jpg"
+          printf '%s  %s\n' ea6042cdb95576d9c2d67c7fa26e3648cca09d8d2fcaf4dfe7d6052a970d7b28 "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_nor_gl_2k.jpg" | sha256sum -c -
+          curl --fail --location --silent --show-error --max-time 120 'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/castle_wall_slates/castle_wall_slates_rough_2k.jpg' -o "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_rough_2k.jpg"
+          printf '%s  %s\n' 84fe81f77d25e4dc37be41174b0a1fa85e8aece244eabe54ed48c542cb5bed08 "$RUNNER_TEMP/v82e-out/source_pbr/castle_wall_slates_rough_2k.jpg" | sha256sum -c -
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py' -- "$RUNNER_TEMP/v82e-in/v82b_stone_candidate.blend" "$RUNNER_TEMP/v82e-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_stone_atlas_fix.py' "$RUNNER_TEMP/v82e-out/"
+          (cd "$RUNNER_TEMP/v82e-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V82-E native and material diagnostic renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82e-stone-atlas-fix
+          path: ${{ runner.temp }}/v82e-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v82f-floor-repair:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V82-F floor topology scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V82-E and reconstruct measured central substrate (F3)
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v82f-in" "$RUNNER_TEMP/v82f-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15177030518/zip" > "$RUNNER_TEMP/v82e.zip"
+          printf '%s  %s\n' d1a36847e95f2ea29306b0227213a48ffcc401b9963ccd127929109d3ca80f67 "$RUNNER_TEMP/v82e.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82e.zip"
+          unzip -q "$RUNNER_TEMP/v82e.zip" -d "$RUNNER_TEMP/v82f-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py' -- "$RUNNER_TEMP/v82f-in/v82e_tileable_stone.blend" "$RUNNER_TEMP/v82f-out" 2>&1 | tee "$RUNNER_TEMP/v82f-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v82_floor_repair.py' "$RUNNER_TEMP/v82f-out/"
+          (cd "$RUNNER_TEMP/v82f-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V82-F native and topology evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v82f-floor-repair
+          path: ${{ runner.temp }}/v82f-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v83-sanctuary-integration:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V83 sanctuary integration scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Integrate corrected floor, stone, ivy and dormant/active VFX
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v83-in" "$RUNNER_TEMP/v83-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15177481071/zip" > "$RUNNER_TEMP/v82f.zip"
+          printf '%s  %s\n' 51fefab535faa7d2da6fefc322941858a6436595a6956665c9ab602679493337 "$RUNNER_TEMP/v82f.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82f.zip"
+          unzip -q "$RUNNER_TEMP/v82f.zip" -d "$RUNNER_TEMP/v83-in"
+          mkdir -p "$RUNNER_TEMP/v83-ivy"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15175858305/zip" > "$RUNNER_TEMP/v82c.zip"
+          printf '%s  %s\n' 392ddf38f16ddb656728038962f39f8344d605519fd05bd8a8fa14e06dd72e71 "$RUNNER_TEMP/v82c.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82c.zip"
+          unzip -q "$RUNNER_TEMP/v82c.zip" -d "$RUNNER_TEMP/v83-ivy"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' -- "$RUNNER_TEMP/v83-in/v82f_floor_native_repair.blend" "$RUNNER_TEMP/v83-out" 2>&1 | tee "$RUNNER_TEMP/v83-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v83_sanctuary_integration.py' "$RUNNER_TEMP/v83-out/"
+          (cd "$RUNNER_TEMP/v83-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V83 candidate and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v83-sanctuary-integration
+          path: ${{ runner.temp }}/v83-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v84-pbr-export:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V84 PBR export scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover verified V83 and bake used stone material slots (V84-F2)
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v84-in" "$RUNNER_TEMP/v84-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176929895/zip" > "$RUNNER_TEMP/v83.zip"
+          printf '%s  %s\n' d83d30e4d3859255faeacfa188d79a3bd94114adef148a3dfcf27c47ded2e4c6 "$RUNNER_TEMP/v83.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v83.zip"
+          unzip -q "$RUNNER_TEMP/v83.zip" -d "$RUNNER_TEMP/v84-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py' -- "$RUNNER_TEMP/v84-in/v83_sanctuary_candidate.blend" "$RUNNER_TEMP/v84-out" 2>&1 | tee "$RUNNER_TEMP/v84-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v84_pbr_export.py' "$RUNNER_TEMP/v84-out/"
+          (cd "$RUNNER_TEMP/v84-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V84 PBR candidate and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v84-pbr-export
+          path: ${{ runner.temp }}/v84-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v85-light-study:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V85 light study scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V84 and compare balanced ambient light
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v85-in" "$RUNNER_TEMP/v85-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15178552814/zip" > "$RUNNER_TEMP/v84.zip"
+          printf '%s  %s\n' f7cf35f137e67627b43dcc7acd96f0f964783b7452da41a11ebb1e5a4cbcc27b "$RUNNER_TEMP/v84.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v84.zip"
+          unzip -q "$RUNNER_TEMP/v84.zip" -d "$RUNNER_TEMP/v85-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' -- "$RUNNER_TEMP/v85-in/v84_pbr_export_candidate.blend" "$RUNNER_TEMP/v85-out" 2>&1 | tee "$RUNNER_TEMP/v85-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v85_light_study.py' "$RUNNER_TEMP/v85-out/"
+          (cd "$RUNNER_TEMP/v85-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V85 light candidate and renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v85-light-study
+          path: ${{ runner.temp }}/v85-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v86-trail-fill:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V86 local trail fill scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V85 and test centerline-qualified local fill (F2)
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v86-in" "$RUNNER_TEMP/v86-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15179800899/zip" > "$RUNNER_TEMP/v85.zip"
+          printf '%s  %s\n' 672fa490adc6b5a74f0885649498e2ed6b02e191bb626df31b2c2fb4a7efe0fe "$RUNNER_TEMP/v85.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v85.zip"
+          unzip -q "$RUNNER_TEMP/v85.zip" -d "$RUNNER_TEMP/v86-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py' -- "$RUNNER_TEMP/v86-in/v85_light_candidate.blend" "$RUNNER_TEMP/v86-out" 2>&1 | tee "$RUNNER_TEMP/v86-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v86_trail_fill.py' "$RUNNER_TEMP/v86-out/"
+          (cd "$RUNNER_TEMP/v86-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V86 trail fill candidate and renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v86-trail-fill
+          path: ${{ runner.temp }}/v86-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v87-dormant-inlay:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check V87 native inlay scope
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover V86, reconstruct inlay and render dormant/active
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v87-in" "$RUNNER_TEMP/v87-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15180621277/zip" > "$RUNNER_TEMP/v86.zip"
+          printf '%s  %s\n' 3a69c165086aaa2dbdfaca752e61873d31817cf275f685398abaea702d4f5a4d "$RUNNER_TEMP/v86.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v86.zip"
+          unzip -q "$RUNNER_TEMP/v86.zip" -d "$RUNNER_TEMP/v87-in"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15178552814/zip" > "$RUNNER_TEMP/v84.zip"
+          printf '%s  %s\n' f7cf35f137e67627b43dcc7acd96f0f964783b7452da41a11ebb1e5a4cbcc27b "$RUNNER_TEMP/v84.zip" | sha256sum -c -
+          unzip -p "$RUNNER_TEMP/v84.zip" v84_sanctuary_dormant.glb > "$RUNNER_TEMP/v84.glb"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176206406/zip" > "$RUNNER_TEMP/v82.zip"
+          printf '%s  %s\n' df73a27e21383029cdac60b7beb11dbd25f21ae49755cf6d37b4cd2b22bdbb30 "$RUNNER_TEMP/v82.zip" | sha256sum -c -
+          python -m pip install --disable-pip-version-check numpy==2.3.5 scipy==1.16.3 Pillow==12.3.0
+          python 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py' "$RUNNER_TEMP/v84.glb" "$RUNNER_TEMP/v82.zip" "$RUNNER_TEMP/v87-out/projection"
+          node 'tools/map_blueprint/shared_materials_v01/v85_altar_motes/test_pool.mjs'
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' -- "$RUNNER_TEMP/v87-in/v86_trail_fill_candidate.blend" "$RUNNER_TEMP/v87-out" 2>&1 | tee "$RUNNER_TEMP/v87-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_moss_forest_v87_dormant_inlay.py' "$RUNNER_TEMP/v87-out/"
+          (cd "$RUNNER_TEMP/v87-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V87 native and render evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v87-dormant-inlay
+          path: ${{ runner.temp }}/v87-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v88-oak-impostor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V88 oak production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact native oak and render missing angles
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v88-in" "$RUNNER_TEMP/v88-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176576457/zip" > "$RUNNER_TEMP/v82d.zip"
+          printf '%s  %s\n' 3619eecff599eeb84cac584628b65b6032a698d873fb7921de0a3469e5ae506a "$RUNNER_TEMP/v82d.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82d.zip"
+          unzip -q "$RUNNER_TEMP/v82d.zip" -d "$RUNNER_TEMP/v88-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
+          python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==12.3.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' -- "$RUNNER_TEMP/v88-in/v82d_oak_candidate.blend" "$RUNNER_TEMP/v88-out" 2>&1 | tee "$RUNNER_TEMP/v88-out/blender.log"
+          python 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py' "$RUNNER_TEMP/v88-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_v88_impostor_views.py' 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py' "$RUNNER_TEMP/v88-out/"
+          (cd "$RUNNER_TEMP/v88-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V88 source views, atlas and geometry evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v88-oak-impostor
+          path: ${{ runner.temp }}/v88-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v89-oak-leaf-detail:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V89 oak leaf production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact native oak and simplify internal leaf topology
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v89-in" "$RUNNER_TEMP/v89-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15176576457/zip" > "$RUNNER_TEMP/v82d.zip"
+          printf '%s  %s\n' 3619eecff599eeb84cac584628b65b6032a698d873fb7921de0a3469e5ae506a "$RUNNER_TEMP/v82d.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v82d.zip"
+          unzip -q "$RUNNER_TEMP/v82d.zip" -d "$RUNNER_TEMP/v89-in"
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py'
+          python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==12.3.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' -- "$RUNNER_TEMP/v89-in/v82d_oak_candidate.blend" "$RUNNER_TEMP/v89-out" 2>&1 | tee "$RUNNER_TEMP/v89-out/blender.log"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py' "$RUNNER_TEMP/v89-out/"
+      - name: Record V89 checkpoint manifest
+        if: always() && steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/v89-out"
+          cp 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' 'tools/map_blueprint/shared_materials_v01/v89_leaf_reduce.py' "$RUNNER_TEMP/v89-out/"
+          (cd "$RUNNER_TEMP/v89-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V89 native candidate and matched views
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v89-oak-leaf-detail
+          path: ${{ runner.temp }}/v89-out
+          retention-days: 14
+          if-no-files-found: error
+
+  v90-engraving-bump:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V90 engraving production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/prepare_v90_from_verified.py' 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact official CG from repository object for review
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v90-cg-review"
+          CG_BLOB=9e18809ecb712524b47c9b00ad3ec02734347d08
+          if git cat-file -e "${CG_BLOB}^{blob}"; then
+            git cat-file blob "$CG_BLOB" > "$RUNNER_TEMP/v90-cg-review/moss_ancient_altar_idle_v1.png"
+            test "$(git hash-object "$RUNNER_TEMP/v90-cg-review/moss_ancient_altar_idle_v1.png")" = "$CG_BLOB"
+            (cd "$RUNNER_TEMP/v90-cg-review" && sha256sum moss_ancient_altar_idle_v1.png > SHA256SUMS)
+          else
+            printf 'CG_BLOB_UNAVAILABLE %s\n' "$CG_BLOB" > "$RUNNER_TEMP/v90-cg-review/status.txt"
+          fi
+      - name: Preserve official CG for restricted review
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v90-cg-review-only
+          path: ${{ runner.temp }}/v90-cg-review
+          retention-days: 14
+          if-no-files-found: error
+      - name: Recover exact sources and reconstruct V90 inputs
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v90-in" "$RUNNER_TEMP/v90-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15178552814/zip" > "$RUNNER_TEMP/v84.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15180309324/zip" > "$RUNNER_TEMP/v87.zip"
+          printf '%s  %s\n' f7cf35f137e67627b43dcc7acd96f0f964783b7452da41a11ebb1e5a4cbcc27b "$RUNNER_TEMP/v84.zip" | sha256sum -c -
+          printf '%s  %s\n' 311c389daef670bdb39a3dab8bd061fd6e62056397f37880eaa0dfee01c0a081 "$RUNNER_TEMP/v87.zip" | sha256sum -c -
+          python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==12.3.0 scipy==1.17.0
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/prepare_v90_from_verified.py' 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py'
+          python 'tools/map_blueprint/shared_materials_v01/prepare_v90_from_verified.py' --v84 "$RUNNER_TEMP/v84.zip" --v87 "$RUNNER_TEMP/v87.zip" --out "$RUNNER_TEMP/v90-out/maps"
+          unzip -p "$RUNNER_TEMP/v87.zip" v87_dormant_inlay_candidate.blend > "$RUNNER_TEMP/v90-in/v87_dormant_inlay_candidate.blend"
+          printf '%s  %s\n' 7f439b39cc8f7ad1c8702b65b55fa268cd74df1a2ad6720c9d3c73dd0b946222 "$RUNNER_TEMP/v90-in/v87_dormant_inlay_candidate.blend" | sha256sum -c -
+      - name: Apply non-destructive native bump and render five views
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py' -- "$RUNNER_TEMP/v90-in/v87_dormant_inlay_candidate.blend" "$RUNNER_TEMP/v90-out/maps" "$RUNNER_TEMP/v90-out" 2>&1 | tee "$RUNNER_TEMP/v90-out/blender.log"
+      - name: Record V90 checkpoint manifest
+        if: always() && steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/v90-out"
+          cp 'tools/map_blueprint/shared_materials_v01/prepare_v90_from_verified.py' 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py' "$RUNNER_TEMP/v90-out/"
+          (cd "$RUNNER_TEMP/v90-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+      - name: Preserve V90 native and actual renders
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v90-engraving-bump
+          path: ${{ runner.temp }}/v90-out
+          retention-days: 14
+          if-no-files-found: error
+  v94-forest-floor:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope V94 forest floor production
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Recover exact V90 native and build forest floor / sanctuary dressing
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v94-in" "$RUNNER_TEMP/v94-out"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15192905787/zip" > "$RUNNER_TEMP/v90.zip"
+          printf '%s  %s\n' 48f1eded90064cd77e52e99cc569f5c783ed26506fc9b31769b495042df50ad5 "$RUNNER_TEMP/v90.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v90.zip"
+          unzip -p "$RUNNER_TEMP/v90.zip" v90_bump_candidate.blend > "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend"
+          printf '%s  %s\n' bdf76b553f04427eb3408fdee0a0aa1dc32e658b8c53f44eb638a4460823d446 "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend" | sha256sum -c -
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py' -- "$RUNNER_TEMP/v94-in/v90_bump_candidate.blend" "$RUNNER_TEMP/v94-out" 2>&1 | tee "$RUNNER_TEMP/v94-blender.log" | grep -E '^V94_|Error|Traceback' || true
+          test -f "$RUNNER_TEMP/v94-out/v94_qa.json"
+          cp 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py' "$RUNNER_TEMP/v94-out/"
+          (cd "$RUNNER_TEMP/v94-out" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+          mkdir -p "$RUNNER_TEMP/v94-review"
+          cp "$RUNNER_TEMP/v94-out/review_only/"*.png "$RUNNER_TEMP/v94-out/v94_qa.json" "$RUNNER_TEMP/v94-review/"
+          (cd "$RUNNER_TEMP/v94-review" && sha256sum * > SHA256SUMS)
+      - name: Preserve V94 native candidate, renders and QA
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-forest-floor
+          path: ${{ runner.temp }}/v94-out
+          retention-days: 14
+          if-no-files-found: error
+      - name: Preserve V94 review-only images (no native)
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-review-only
+          path: ${{ runner.temp }}/v94-review
+          retention-days: 14
+          if-no-files-found: warn
+
+  v94-clearance-qa:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope read-only V94 clearance QA
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Cheap exact-revision preflight
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'
+          python 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' --self-test
+      - name: Read-only mesh audit of locked V94 native
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v94-qa-in" "$RUNNER_TEMP/v94-qa-evidence"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15244551240/zip" > "$RUNNER_TEMP/v94-qa.zip"
+          printf '%s  %s\n' d5d4a7f3735801bea0a9eef3741ecc35cdd61923f32e39013ac5a5b1785745b1 "$RUNNER_TEMP/v94-qa.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v94-qa.zip"
+          unzip -p "$RUNNER_TEMP/v94-qa.zip" v94_forest_floor.blend > "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend"
+          printf '%s  %s\n' e369bdbab0c6301c0168a74fb1082ca850e1f8f0f5a5e6ca9bd805cb74898600 "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend" | sha256sum -c -
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' -- "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend" "$RUNNER_TEMP/v94-qa-out" 2>&1 | tee "$RUNNER_TEMP/v94-qa-evidence/blender.log"
+      - name: Preserve audit only
+        if: always() && steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/v94-qa-evidence"
+          cp 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' "$RUNNER_TEMP/v94-qa-evidence/"
+          if test -f "$RUNNER_TEMP/v94-qa-out/v94_clearance_qa.json"; then cp "$RUNNER_TEMP/v94-qa-out/v94_clearance_qa.json" "$RUNNER_TEMP/v94-qa-evidence/"; fi
+          (cd "$RUNNER_TEMP/v94-qa-evidence" && sha256sum * > SHA256SUMS)
+      - name: Upload scoped audit
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-clearance-qa
+          path: ${{ runner.temp }}/v94-qa-evidence
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,76 @@
+{
+  "schema": "two.region.moss_a3_material_study_receipt.v07",
+  "parent": "eccef3abde9279909fc36efd366868ac4554005a",
+  "status": "ORIGINAL_PROCEDURAL_MATERIAL_STUDY_NOT_SCAN_OR_D4",
+  "sources": {
+    "agents": "28eb5a71e52a5d0a9a3767b599c8f9e1e58e96dc",
+    "index": "a3abdc409936a3258b0017eb539d2c803e15bcfa",
+    "registry": "2dce92682db8f74a406f87c7bfa20dfcc91e5d12",
+    "rules": "9c3d30c61f29bcf8fbc904a1d461f8fa91cba67a",
+    "v06": "acbbffca333b087ee3dc93fd89da4c6940ff2792",
+    "regional_owner_head": "133cdf7e76417e1127d88129deb900939901e220",
+    "ecology_owner_head": "1c8d0ebf69022f83806a837669ce57156b0dbb68"
+  },
+  "input_sha256": "7d44fa5f33545d00caeb52b450ad2e570973050b88bc2b69555b0518eb3f3c94",
+  "blocker": {
+    "provider": "Poly Haven candidate CC0 sources retained; no bytes acquired",
+    "local": "curl exit 6 DNS could not resolve api.polyhaven.com",
+    "web": "three exact file API URLs inaccessible",
+    "alternate_download": "container download refused because URL not successfully viewed",
+    "d4": "latest 44 issue comments checked; latest A3 comment 7160530881 is review request, not response"
+  },
+  "outputs": {
+    "script_sha256": "11968bb20b516e35b56fe9e6f30d76279f370a912044528c9c2cece4306ec26a",
+    "qa_sha256": "2ef412fc4337924375018aa3c772c4501b0ff75de8aedc631c7e93a038a97518",
+    "preview_sha256": "62a4c26de2b6118e25b7abd09d302adf811a2288643d5673d14f24c23e13f46e",
+    "zip_sha256": "c1a6630b262f7f95d771ec17998c9a4619b58549099232cedb39d05dd2ae96bd",
+    "zip_bytes": 17568635,
+    "script_local_git_fingerprint": "f1b1bed2e3105868f6603206c1dbc24ca20551ca",
+    "qa_local_git_fingerprint": "15129765c725d2340ec1d870ba3cf420feddbf96",
+    "delivery": "Local 12 maps, script, QA, preview, ZIP. Receipt only committed; full outputs not in Git."
+  },
+  "execution": "Actual local Python, periodic procedural synthesis with seed 20261125, three 1024x1024 materials each basecolor/normal GL/roughness/16-bit height. All 12 PNGs reopened exact, second full execution all 15 hashes matched, ZIP integrity PASS, preview inspected. V06 source unchanged. No external scans or Blender.",
+  "measurements": {
+    "roughness_float_ranges": {
+      "bark": [
+        0.8107471711063975,
+        0.94
+      ],
+      "stone": [
+        0.7375250461960232,
+        0.92
+      ],
+      "moss_stone": [
+        0.8008664122888411,
+        0.98
+      ]
+    },
+    "max_decoded_normal_length_error": 0.006453608379858755,
+    "height_amplitudes_m": [
+      0.008,
+      0.006,
+      0.008
+    ],
+    "tile_scales_m": [
+      1.5,
+      1,
+      1
+    ]
+  },
+  "reproduction": "python generate_materials.py <V06 QA JSON> ; outputs written next to script. Dependencies NumPy SciPy Pillow.",
+  "decision": "Keep independently authored study, not substitute for official reference or photogrammetry. No further unchanged external fetch retry. Next eligible work: improve material morphology only against concrete visual findings or recover authenticated CC0 source via qualified runner; request independent review of study and actual source scope. Do not advance held native geometry without D4.",
+  "limits": [
+    "1K study vs 2K hero target, visually repetitive bark, noisy stone, moss distribution not scene-aware. Roughness targets checked before 8-bit quantization. Seam statistics are cyclic diagnostic, not physical calibration. No UV/bake, actual PBR render, runtime displacement, Android QA, formal adoption, or merge."
+  ],
+  "gates": {
+    "D0": "PARTIAL",
+    "D1": "PARTIAL",
+    "D2": "PARTIAL",
+    "D3": "HOLD_SOURCE_AND_GEOMETRY",
+    "D4": "NOT_RUN",
+    "G1": "BLOCKED",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN_NATIVE",
+    "G4": "NOT_RUN"
+  }
+}
