@@ -1,10 +1,12 @@
-name: Morwen public runner private recovery
+name: Morwen public runner private Front trial
 on:
   pull_request:
     paths:
       - '.github/workflows/morwen-public-native-recovery.yml'
       - 'tools/production_qa/morwen_public_recovery*'
       - 'tools/production_qa/test_morwen_public_recovery.py'
+      - 'tools/production_qa/morwen_public_front*'
+      - 'tools/production_qa/test_morwen_public_front_trial.py'
   push:
     branches: [main]
     paths: ['.github/workflows/morwen-public-native-recovery.yml']
@@ -29,10 +31,13 @@ jobs:
           bash -n tools/production_qa/morwen_public_recovery_startup.sh
           python3 -m py_compile tools/production_qa/morwen_public_recovery.py
           python3 tools/production_qa/test_morwen_public_recovery.py
+          bash -n tools/production_qa/morwen_public_front_trial.sh
+          python3 -m py_compile tools/production_qa/morwen_public_front_trial.py
+          python3 tools/production_qa/test_morwen_public_front_trial.py
   recover:
     if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor_id == '315379131' && github.run_attempt == 1 && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 35
     environment: two-private-preservation
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -56,12 +61,12 @@ jobs:
           bash -n tools/production_qa/morwen_public_recovery_startup.sh
           python3 tools/production_qa/test_morwen_public_recovery.py
           swiftc qualified-vroid/tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-      - name: Verify active-job exclusion and restore exact private native (stage-coded diagnostics)
+      - name: Verify active-job exclusion and restore exact durable W108 with pinned trial worker
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_recovery.py restore
+        run: python3 tools/production_qa/morwen_public_front_trial.py prepare
       - name: Install the previously qualified signed VRoid build
         shell: bash
         run: |
@@ -82,17 +87,31 @@ jobs:
             hdiutil detach "$RUNNER_TEMP/vroid-mount"
           ) > evidence/install.log 2>&1 || { echo SIGNED_INSTALL_BLOCKED; exit 1; }
           echo SIGNED_INSTALL_PASS
-      - name: Reopen native read only with no credentials in the GUI step
+      - name: Recheck live owner and exclusion before isolated native trial
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_public_front_trial.py fence
+      - name: Reopen and perform scoped F06 candidate trial without credentials
+        id: front_trial
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           cd "$RUNNER_TEMP/morwen-private-recovery"
-          bash "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_recovery_startup.sh" > evidence/gui.log 2>&1 || { echo NATIVE_REOPEN_BLOCKED; exit 1; }
-          echo NATIVE_REOPEN_READONLY_PASS
+          bash "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_front_trial.sh" > evidence/gui.log 2>&1 || { echo FRONT_TRIAL_BLOCKED_PRIVATE_EVIDENCE; exit 1; }
+          echo FRONT_TRIAL_SAVED_REOPENED_NOT_ADOPTED
       - name: Preserve only in existing private Release transport and read back
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_recovery.py preserve
+        run: python3 tools/production_qa/morwen_public_front_trial.py preserve
+      - name: Preserve failed trial evidence only in private quarantine
+        if: failure() && steps.front_trial.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_public_front_trial.py quarantine

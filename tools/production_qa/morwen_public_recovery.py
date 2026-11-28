@@ -100,11 +100,21 @@ def preserve(api,env,root):
             info=zipfile.ZipInfo(name);info.external_attr=0o100600<<16;z.writestr(info,data)
     raw=buf.getvalue();require(0<len(raw)<=CAP)
     with zipfile.ZipFile(io.BytesIO(raw)) as z:verify_inventory(z);require(all(z.read(n)==v for n,v in members.items()))
+    publish_private(api,env,raw,'recovery')
+def publish_private(api,env,raw,kind):
+    # Both fixed routes use the same reviewed private Release protocol.
+    identity(env);token=env['DEST_TOKEN']
+    require(kind in ('recovery','front_trial','front_trial_quarantine') and 0<len(raw)<=CAP)
+    prefix,name,body={
+        'recovery':('morwen-native-recovery-run-','Morwen-native-recovery.zip','Read-only native recovery evidence. NOT_ADOPTED.'),
+        'front_trial':('morwen-native-front-trial-run-','Morwen-native-front-trial.zip','Isolated native Front trial; independent design/art/technical QA pending. NOT_ADOPTED.'),
+        'front_trial_quarantine':('morwen-native-front-quarantine-run-','Morwen-native-front-quarantine.zip','Failed trial evidence only. QUARANTINED; do not resume or adopt without QA.')
+    }[kind]
     stage('PRIVATE_DESTINATION_RECHECK');private(api,token);check_active(api,token,env['GH_TOKEN'],env['GITHUB_RUN_ID'])
     ref=api(token,'GET',BASE+'/git/ref/heads/main')
     target=ref.get('object',{}).get('sha','')
     require(ref.get('ref')=='refs/heads/main' and re.fullmatch(r'[0-9a-f]{40}',target))
-    tag='morwen-native-recovery-run-'+env['GITHUB_RUN_ID'];name='Morwen-native-recovery.zip'
+    tag=prefix+env['GITHUB_RUN_ID']
     from release_transport import TransportError
     stage('PRIVATE_RELEASE_ABSENCE')
     for page in range(1,21):
@@ -117,7 +127,7 @@ def preserve(api,env,root):
         except TransportError as e:require(e.status==404)
         else:raise ValueError('exists')
     stage('PRIVATE_DRAFT_CREATE');private(api,token)
-    rel=api(token,'POST',BASE+'/releases',json.dumps(dict(tag_name=tag,target_commitish=target,name=tag,body='Read-only native recovery evidence. NOT_ADOPTED.',draft=True,prerelease=True,make_latest='false')).encode())
+    rel=api(token,'POST',BASE+'/releases',json.dumps(dict(tag_name=tag,target_commitish=target,name=tag,body=body,draft=True,prerelease=True,make_latest='false')).encode())
     rid=rel.get('id');require(type(rid) is int and rid>0 and rel.get('draft') is True and rel.get('tag_name')==tag)
     stage('PRIVATE_ASSET_UPLOAD');private(api,token)
     asset=api(token,'POST','https://uploads.github.com/repos/'+DEST+'/releases/'+str(rid)+'/assets?name='+name,raw,'application/zip')
