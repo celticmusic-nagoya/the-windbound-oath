@@ -8,10 +8,10 @@ test("recognizes live face, wardrobe, textile, blueprint and HOME receipts",()=>
  const rows=selectRecentArtifacts({artifacts:[art(1,"main","morwen-isolated-vroid-reopen-review"),art(2,"main","morwen-parallel-C-wardrobe"),art(3,"asset/morwen-measured-textile-20261125","morwen-measured-textile-not-adopted"),art(4,"feature/lind-village-world-integration-plan-01","aidan-measured-blueprint"),art(5,"feature/lind-village-world-integration-plan-01","home-cross-run-qa-45607836766")]});
  assert.deepEqual(Array.from(rows,x=>x.id),[5,4,3,2,1]);assert.match(rows[4].filter,/mouth-reopened/);
 });
-test("rejects expired, unrelated, fork, malformed, duplicate and unknown-source records",()=>{
+test("rejects expired, wrong repository, fork, malformed and duplicate; same-repo unknown sources are metadata only",()=>{
  const a=art(1,"main","morwen-isolated-vroid-reopen-review");
  const rows=selectRecentArtifacts({artifacts:[a,a,art(2,"main","unrelated"),art(3,"evil","morwen-isolated-vroid-reopen-review"),art(4,"main",a.name,{expired:true}),art(5,"main",a.name,{workflow_run:{...a.workflow_run,head_repository_id:2}}),art(6,"main",a.name,{workflow_run:{...a.workflow_run,head_sha:"bad"}}),art(7,"main",a.name,{workflow_run:{...a.workflow_run,repository_id:2,head_repository_id:2}}),null]});
- assert.equal(rows.length,1);assert.equal(rows[0].id,1);
+ assert.deepEqual(Array.from(rows,x=>x.id),[3,2,1]);assert.ok(rows[0].metadataOnly&&rows[1].metadataOnly&&!rows[2].metadataOnly);
 });
 test("invalid API shape and bounded result",()=>{assert.throws(()=>selectRecentArtifacts({workflow_runs:[]}));assert.equal(selectRecentArtifacts({artifacts:Array.from({length:60},(_,i)=>art(i+1,"main","morwen-isolated-vroid-reopen-review"))}).length,30);});
 
@@ -58,7 +58,7 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
  const unrelated=art(6,"feature/lind-ecology-01","unknown-source");
  const data={artifacts:[eco,pkg,brass,gold,photo,unrelated,...Array.from({length:40},(_,i)=>art(100+i,"main","morwen-isolated-vroid-reopen-review"))]};
  assert.equal(selectRecentArtifacts(data).length,30);
- assert.deepEqual(Array.from(selectRecentArtifacts(data,"リルド村・植生"),x=>x.id),[2,1]);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data,"リルド村・植生"),x=>x.id),[6,2,1]);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"モルウェン・材質研究"),x=>x.id),[5,4,3]);
  assert.equal(selectRecentArtifacts(data,"unknown").length,0);
 });
@@ -66,14 +66,14 @@ test("ECO and measured material sources are recognized; filter before 30-row lim
 test("observed current hero-tree and native forest evidence is discoverable, with branch and name constraints",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const rows=selectRecentArtifacts({artifacts:[art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(9,"other", "two-hero-tree-v55-island-source"),art(8,branch,"two-forest-unknown")]});
- assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・森林"]);
+ assert.deepEqual(Array.from(rows,x=>x.category),["世界・樹木","世界・森林","世界・森林","世界・森林"]);assert.equal(rows.find(x=>x.id===9).metadataOnly,true);
 });
 
 test("sanctuary and future versioned world evidence are visible without weakening branch boundaries",()=>{
  const branch="docs/ireland-world-source-grounded-plan-20261123";
  const data={artifacts:[art(15075315647,branch,"two-sanctuary-v57-native-composition"),art(15073087704,branch,"two-hero-tree-v55-island-source"),art(15072796460,branch,"two-forest-v52-native-virtual-qa"),art(11,branch,"two-river-v99-native-review"),art(12,"other","two-river-v99-native-review"),art(13,branch,"two-forest-unknown"),art(14,branch,"two-river-v99-native-review",{expired:true})]};
- assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,11]);
- assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);
+ assert.deepEqual(Array.from(selectRecentArtifacts(data),x=>x.id),[15075315647,15073087704,15072796460,13,12,11]);
+ assert.equal(selectRecentArtifacts(data,"世界・聖域")[0].id,15075315647);assert.equal(selectRecentArtifacts(data).find(x=>x.id===12).metadataOnly,true);
  assert.deepEqual(Array.from(selectRecentArtifacts(data,"世界・河川／水辺"),x=>x.id),[11]);
 });
 
