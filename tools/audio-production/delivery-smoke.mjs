@@ -5,12 +5,13 @@ import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const {chromium}=createRequire(new URL('../production-studio/package.json',import.meta.url))('playwright');
 const root=resolve(process.argv[2]);
+const roles=process.argv[3]==='loop'?['loop']:['loop','oneshot'];
 const browser=await chromium.launch({args:['--autoplay-policy=no-user-gesture-required']});
 try{
  const page=await browser.newPage({viewport:{width:390,height:844}});
  await page.goto('about:blank');
  const results={};
- for(const role of ['loop','oneshot']){
+ for(const role of roles){
   const receipt=JSON.parse(await readFile(join(root,role,'delivery.json'),'utf8'));
   for(const [format,meta] of Object.entries(receipt.formats)){
    const bytes=await readFile(join(root,role,meta.file));
