@@ -1,6 +1,8 @@
 """Conservative handling of expired, already-published pinned artifact receipts."""
 from datetime import datetime, timezone
 import re
+import json
+from pathlib import Path
 
 def recorded_expired_404(item, stderr, now):
     """404 alone is insufficient: require exact recorded expiry and entry pins."""
@@ -99,12 +101,38 @@ def archive_budget(item):
         raise ValueError("unqualified large archive exception")
     return _V82E[-1]
 
+def retained_legacy_snapshot(item, history):
+    """Retention-only for three exact pre-receipt groups, never new publication approval."""
+    try:
+        snapshot=json.loads(Path(__file__).with_name("retained-legacy-history.json").read_text())
+        if snapshot["version"]!=1 or history.get("version")!=1:
+            return False
+        groups=[g for g in snapshot["groups"] if g["selection"]["artifact_id"]==item.get("artifact_id")]
+        if len(groups)!=1 or groups[0]["selection"]!=item:
+            return False
+        expected=groups[0]["entries"]
+        actual=[e for e in history["entries"] if e.get("artifact_id")==item["artifact_id"]]
+        if len(actual)!=len(expected) or not expected:
+            return False
+        if len({e["sha256"] for e in expected})!=len(expected):
+            return False
+        for e in expected:
+            if not re.fullmatch(r"[a-f0-9]{64}",e["sha256"]) or e["path"]!="published/"+e["sha256"]+".png":
+                return False
+            if sum(row==e for row in actual)!=1 or sum(row.get("sha256")==e["sha256"] for row in history["entries"])!=1:
+                return False
+        return True
+    except (OSError,KeyError,ValueError,TypeError,AttributeError):
+        return False
+
 def reusable_group_kind(item, history, approvals):
     """Single decision shared by discovery capacity and archive fetching."""
     archive_budget(item)  # validate the immutable large-archive exception first
     if (item.get("reuse_retained") is True and "exact_archive_bytes" in item
         and retained_receipt_matches(item, history)):
         return "legacy"
+    if retained_legacy_snapshot(item, history):
+        return "historical"
     if reusable_published_images(item, history, approvals):
         return "ordinary"
     return None
