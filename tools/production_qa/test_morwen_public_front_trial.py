@@ -36,4 +36,15 @@ class Test(unittest.TestCase):
             with patch.object(r,'publish_private') as pub:
                 with self.assertRaises((ValueError,FileNotFoundError)):t.preserve(None,{'RUNNER_TEMP':d},Path(d))
                 pub.assert_not_called()
+    def test_quarantine_does_not_promote(self):
+        native,source=fixture()
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);(root/'evidence').mkdir();(root/'source.zip').write_bytes(source);(root/'Morwen-resume.vroid').write_bytes(native)
+            (root/'evidence'/'gui.log').write_text('mock blocked')
+            (root/'evidence'/'model.vroid').write_bytes(b'unverified')
+            with patch.multiple(r,NATIVE_SHA=r.sha(native),ARCHIVE_SHA=r.sha(source),ARCHIVE_BYTES=len(source)):
+                m=t.quarantine_members(root,dict(RUNNER_TEMP=d,GITHUB_RUN_ID='1'))
+                self.assertNotIn('candidate.vroid',m)
+                self.assertNotIn('quarantined-native.vroid',m)
+                self.assertEqual(json.loads(m['receipt.json'])['status'],'QUARANTINED_FAILED_TRIAL_NOT_ADOPTED')
 if __name__=='__main__':unittest.main()

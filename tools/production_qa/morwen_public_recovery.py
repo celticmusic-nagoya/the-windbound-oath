@@ -104,10 +104,11 @@ def preserve(api,env,root):
 def publish_private(api,env,raw,kind):
     # Both fixed routes use the same reviewed private Release protocol.
     identity(env);token=env['DEST_TOKEN']
-    require(kind in ('recovery','front_trial') and 0<len(raw)<=CAP)
+    require(kind in ('recovery','front_trial','front_trial_quarantine') and 0<len(raw)<=CAP)
     prefix,name,body={
         'recovery':('morwen-native-recovery-run-','Morwen-native-recovery.zip','Read-only native recovery evidence. NOT_ADOPTED.'),
-        'front_trial':('morwen-native-front-trial-run-','Morwen-native-front-trial.zip','Isolated native Front trial; independent design/art/technical QA pending. NOT_ADOPTED.')
+        'front_trial':('morwen-native-front-trial-run-','Morwen-native-front-trial.zip','Isolated native Front trial; independent design/art/technical QA pending. NOT_ADOPTED.'),
+        'front_trial_quarantine':('morwen-native-front-quarantine-run-','Morwen-native-front-quarantine.zip','Failed trial evidence only. QUARANTINED; do not resume or adopt without QA.')
     }[kind]
     stage('PRIVATE_DESTINATION_RECHECK');private(api,token);check_active(api,token,env['GH_TOKEN'],env['GITHUB_RUN_ID'])
     ref=api(token,'GET',BASE+'/git/ref/heads/main')

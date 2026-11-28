@@ -39,7 +39,11 @@ MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
 source tools/author_vroid_W110.sh
 # Survey only: do not create a shared material or apply textures without qualification.
 # The already-saved/reopened F06 trial must survive a survey failure.
-if (source tools/w112_material_survey.sh) > evidence/W112-survey.log 2>&1; then
+set +e
+(set -euo pipefail; source tools/w112_material_survey.sh) > evidence/W112-survey.log 2>&1
+survey_rc=$?
+set -e
+if test "$survey_rc" = 0; then
   echo MATERIAL_CONTROLS_OBSERVED_NO_MUTATION > evidence/W112-material-status.txt
 else
   echo MATERIAL_SURVEY_HOLD_NO_MUTATION > evidence/W112-material-status.txt

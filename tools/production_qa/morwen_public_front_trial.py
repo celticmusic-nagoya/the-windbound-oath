@@ -93,8 +93,32 @@ def trial_members(root,env):
     result['receipt.json']=json.dumps(dict(status='ISOLATED_NATIVE_CANDIDATE_NOT_ADOPTED',source_sha256=r.NATIVE_SHA,candidate_sha256=r.sha(cand),source_release_asset_id=REL,public_run_id=env['GITHUB_RUN_ID'],worker_head=WORKER_HEAD,design_gate='HOLD_PROVISIONAL_2D',independent_g2_g3_g4='NOT_RUN',material_edit='NOT_RUN'),sort_keys=True).encode()
     result['SHA256SUMS.json']=json.dumps({k:r.sha(v) for k,v in result.items()},sort_keys=True).encode()
     return result
-def preserve(api,env,root):
-    r.stage('FRONT_TRIAL_CANDIDATE_CHECK');members=trial_members(root,env)
+def quarantine_members(root,env):
+    # Never elevate partial native bytes into a verified candidate.
+    ev=root/'evidence'
+    source=(root/'source.zip').read_bytes()
+    native=r.extract(source)
+    r.require((Path(env['RUNNER_TEMP'])/'Morwen-resume.vroid').read_bytes()==native)
+    result={}
+    for p in sorted(ev.iterdir()):
+        if p.is_symlink() or not p.is_file():continue
+        if not (re.fullmatch(r'W110-[A-Za-z0-9-]+\.(png|json|txt)',p.name) or p.name in ('gui.log','reopen-status.txt','recovery-result.txt','resumed-editor.png','checkpoint-reopened.png','W112-survey.log','W112-material-status.txt')):continue
+        if 0<p.stat().st_size<=2*1024*1024 and sum(map(len,result.values()))+p.stat().st_size<=28*1024*1024:result[p.name]=p.read_bytes()
+    # Only keep native bytes with a matching existing save receipt and archive integrity.
+    saved=ev/'W110-saved-unverified.vroid'
+    receipt=ev/'W110-checkpoint-receipt.json'
+    if saved.is_file() and receipt.is_file() and not saved.is_symlink() and 0<saved.stat().st_size<=16*1024*1024:
+        data=saved.read_bytes();rec=json.loads(receipt.read_text())
+        if rec.get('status')=='SAVED_REOPEN_PENDING' and rec.get('source_sha256')==r.NATIVE_SHA and rec.get('candidate_sha256')==r.sha(data) and r.sha(data)!=r.NATIVE_SHA:
+            with zipfile.ZipFile(io.BytesIO(data)) as z:
+                r.require(z.testzip() is None and set(z.namelist())=={'meta.json','v1model/meta.json','v1model/data.bin','thumbnails/thumbnail.jpg'})
+            result['quarantined-native.vroid']=data
+    r.require(bool(result))
+    result['receipt.json']=json.dumps(dict(status='QUARANTINED_FAILED_TRIAL_NOT_ADOPTED',source_sha256=r.NATIVE_SHA,public_run_id=env['GITHUB_RUN_ID'],native_reopen='NOT_VERIFIED',candidate_present='quarantined-native.vroid' in result),sort_keys=True).encode()
+    result['SHA256SUMS.json']=json.dumps({k:r.sha(v) for k,v in result.items()},sort_keys=True).encode()
+    return result
+def preserve(api,env,root,quarantine=False):
+    r.stage('FRONT_TRIAL_CANDIDATE_CHECK');members=quarantine_members(root,env) if quarantine else trial_members(root,env)
     buf=io.BytesIO()
     with zipfile.ZipFile(buf,'w',compression=zipfile.ZIP_STORED) as z:
         for name,data in members.items():
@@ -102,15 +126,16 @@ def preserve(api,env,root):
     raw=buf.getvalue()
     with zipfile.ZipFile(io.BytesIO(raw)) as z:r.verify_inventory(z);r.require(all(z.read(n)==v for n,v in members.items()))
     r.stage('FRONT_TRIAL_FINAL_EXCLUSION');gate(api,env)
-    r.publish_private(api,env,raw,'front_trial')
+    r.publish_private(api,env,raw,'front_trial_quarantine' if quarantine else 'front_trial')
 def main():
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'private-preservation'))
     from release_transport import request
     env=os.environ.copy();root=Path(env['RUNNER_TEMP'])/'morwen-private-recovery'
     r.require(root.is_dir() and not root.is_symlink() and root.stat().st_mode&0o077==0)
-    r.require(len(sys.argv)==2 and sys.argv[1] in ('prepare','fence','preserve'))
+    r.require(len(sys.argv)==2 and sys.argv[1] in ('prepare','fence','preserve','quarantine'))
     if sys.argv[1]=='fence':gate(request,env);return
-    (prepare if sys.argv[1]=='prepare' else preserve)(request,env,root)
+    if sys.argv[1]=='prepare':prepare(request,env,root)
+    else:preserve(request,env,root,quarantine=sys.argv[1]=='quarantine')
 if __name__=='__main__':
     try:main()
     except Exception as exc:

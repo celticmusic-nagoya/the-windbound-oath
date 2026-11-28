@@ -94,6 +94,7 @@ jobs:
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
         run: python3 tools/production_qa/morwen_public_front_trial.py fence
       - name: Reopen and perform scoped F06 candidate trial without credentials
+        id: front_trial
         shell: bash
         run: |
           set -euo pipefail
@@ -107,3 +108,10 @@ jobs:
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
         run: python3 tools/production_qa/morwen_public_front_trial.py preserve
+      - name: Preserve failed trial evidence only in private quarantine
+        if: failure() && steps.front_trial.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_public_front_trial.py quarantine
