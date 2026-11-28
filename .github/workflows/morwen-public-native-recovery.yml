@@ -7,6 +7,7 @@ on:
       - 'tools/production_qa/test_morwen_public_recovery.py'
       - 'tools/production_qa/morwen_public_front*'
       - 'tools/production_qa/test_morwen_public_front_trial.py'
+      - 'tools/production_qa/test_morwen_public_front_adapt.py'
   push:
     branches: [main]
     paths: ['.github/workflows/morwen-public-native-recovery.yml']
@@ -34,6 +35,9 @@ jobs:
           bash -n tools/production_qa/morwen_public_front_trial.sh
           python3 -m py_compile tools/production_qa/morwen_public_front_trial.py
           python3 tools/production_qa/test_morwen_public_front_trial.py
+          bash -n tools/production_qa/morwen_public_front_visibility.sh
+          python3 -m py_compile tools/production_qa/morwen_public_front_adapt.py
+          python3 tools/production_qa/test_morwen_public_front_adapt.py
   recover:
     if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor_id == '315379131' && github.run_attempt == 1 && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
     runs-on: macos-15
@@ -93,7 +97,7 @@ jobs:
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
         run: python3 tools/production_qa/morwen_public_front_trial.py fence
-      - name: Reopen and perform scoped F06 candidate trial without credentials
+      - name: Reopen and perform F06 trial with bounded visibility isolation
         id: front_trial
         shell: bash
         run: |

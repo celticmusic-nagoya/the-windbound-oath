@@ -7,6 +7,9 @@ test "$(git -C "$GITHUB_WORKSPACE/qualified-vroid" hash-object tools/production_
 mkdir -p qualified-vroid/tools/production_qa
 cp "$GITHUB_WORKSPACE/qualified-vroid/tools/production_qa/morwen_vroid_session.sh" qualified-vroid/tools/production_qa/
 bash -n tools/author_vroid_W110.sh
+python3 "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_front_adapt.py" tools/author_vroid_W110.sh "$RUNNER_TEMP/author_vroid_W120.sh"
+bash -n "$RUNNER_TEMP/author_vroid_W120.sh"
+bash -n "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_front_visibility.sh"
 bash -n tools/w112_material_survey.sh
 swiftc tools/vroid_hair_stroke_qualification_W31.swift -o "$RUNNER_TEMP/two-gui-author"
 swiftc tools/vroid_group_row_locator_W34.swift -o "$RUNNER_TEMP/w34-row-locator"
@@ -36,7 +39,7 @@ PY
 source "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_recovery_startup.sh"
 gui="$RUNNER_TEMP/two-gui-author"
 MORWEN_READONLY_NATIVE="$HOME/Documents/Morwen-resume.vroid"
-source tools/author_vroid_W110.sh
+source "$RUNNER_TEMP/author_vroid_W120.sh"
 # Survey only: do not create a shared material or apply textures without qualification.
 # The already-saved/reopened F06 trial must survive a survey failure.
 set +e
