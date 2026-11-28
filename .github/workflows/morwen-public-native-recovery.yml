@@ -1,4 +1,4 @@
-name: Morwen public runner private Front trial
+name: Morwen public runner private Front trial (W128 new independent guide)
 on:
   pull_request:
     paths:
@@ -8,6 +8,10 @@ on:
       - 'tools/production_qa/morwen_public_front*'
       - 'tools/production_qa/test_morwen_public_front_trial.py'
       - 'tools/production_qa/test_morwen_public_front_adapt.py'
+      - 'tools/production_qa/morwen_w128*'
+      - 'tools/production_qa/test_morwen_w128_guide.py'
+      - 'tools/production_qa/morwen_label_boxes.swift'
+      - 'tools/production_qa/morwen_w125_save_return.py'
   push:
     branches: [main]
     paths: ['.github/workflows/morwen-public-native-recovery.yml']
@@ -38,10 +42,17 @@ jobs:
           bash -n tools/production_qa/morwen_public_front_visibility.sh
           python3 -m py_compile tools/production_qa/morwen_public_front_adapt.py
           python3 tools/production_qa/test_morwen_public_front_adapt.py
+          bash -n tools/production_qa/morwen_w128_trial.sh
+          bash -n tools/production_qa/morwen_w128_new_guide.sh
+          python3 -m py_compile tools/production_qa/morwen_w128_trial.py tools/production_qa/morwen_w128_guide.py tools/production_qa/morwen_w125_save_return.py
+          test "$(git hash-object tools/production_qa/morwen_w125_save_return.py)" = f927d3f5e510bb9c76607178a086cf26d4476a59
+          python3 -m venv "$RUNNER_TEMP/w128-venv"
+          "$RUNNER_TEMP/w128-venv/bin/pip" install --only-binary=:all: 'Pillow==12.3.0' 'numpy>=2.0,<3'
+          "$RUNNER_TEMP/w128-venv/bin/python" tools/production_qa/test_morwen_w128_guide.py
   recover:
     if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor_id == '315379131' && github.run_attempt == 1 && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
     runs-on: macos-15
-    timeout-minutes: 35
+    timeout-minutes: 45
     environment: two-private-preservation
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -65,12 +76,12 @@ jobs:
           bash -n tools/production_qa/morwen_public_recovery_startup.sh
           python3 tools/production_qa/test_morwen_public_recovery.py
           swiftc qualified-vroid/tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
-      - name: Verify active-job exclusion (bounded full rescan) and restore exact durable W108 with pinned trial worker
+      - name: Verify active-job exclusion (bounded full rescan) and restore exact durable W108 with pinned W128 helpers
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_front_trial.py prepare
+        run: python3 tools/production_qa/morwen_w128_trial.py prepare
       - name: Install the previously qualified signed VRoid build
         shell: bash
         run: |
@@ -96,26 +107,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_front_trial.py fence
-      - name: Reopen and perform F06 trial with bounded visibility isolation
+        run: python3 tools/production_qa/morwen_w128_trial.py fence
+      - name: Reopen and add independent new guide G2 with measured F06/F01 strokes (W128)
         id: front_trial
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           cd "$RUNNER_TEMP/morwen-private-recovery"
-          bash "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_front_trial.sh" > evidence/gui.log 2>&1 || { echo FRONT_TRIAL_BLOCKED_PRIVATE_EVIDENCE; exit 1; }
-          echo FRONT_TRIAL_SAVED_REOPENED_NOT_ADOPTED
+          bash "$GITHUB_WORKSPACE/tools/production_qa/morwen_w128_trial.sh" > evidence/gui.log 2>&1 || { echo W128_BLOCKED_PRIVATE_EVIDENCE_STAGE_$(cat evidence/W128-status.txt 2>/dev/null | tr -cd 'A-Z0-9_' || true); exit 1; }
+          echo W128_SAVED_REOPENED_NOT_ADOPTED_STAGE_$(cat evidence/W128-status.txt | tr -cd 'A-Z0-9_')
       - name: Preserve only in existing private Release transport and read back
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_front_trial.py preserve
+        run: python3 tools/production_qa/morwen_w128_trial.py preserve
       - name: Preserve failed trial evidence only in private quarantine
         if: failure() && steps.front_trial.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
           MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
-        run: python3 tools/production_qa/morwen_public_front_trial.py quarantine
+        run: python3 tools/production_qa/morwen_w128_trial.py quarantine

@@ -1,0 +1,562 @@
+{
+ "completion": {
+  "F01": {
+   "after_sha256": "3d79c1b311f78e5046caa51dda733b0ffce4bddc00f931ca64890828e6461692",
+   "before_sha256": "999bf0e32e22df8faf77c2191b8f8bd74dd5710c1c3f526f62c163d0f8d7faa3",
+   "completion_fraction": 0.6129,
+   "first_drawn_index": 2,
+   "invariant_region_max_diff": 0,
+   "last_contiguous_index": 18,
+   "points": 31,
+   "verdict": "TRUNCATED"
+  },
+  "F02": {
+   "after_sha256": "d205cc89dcd727f37c59e576ff655d4597ea54703c9d645d57798e2c5d3b9350",
+   "before_sha256": "a8a561d1c2331e9ff9593ea8370a41ebab5ae47237f6b9bf98143724e6ed7e76",
+   "completion_fraction": 1.0,
+   "first_drawn_index": 1,
+   "invariant_region_max_diff": 0,
+   "last_contiguous_index": 24,
+   "points": 25,
+   "verdict": "COMPLETE"
+  },
+  "F03": {
+   "after_sha256": "c89a31f15f98c8cce3e62d06eedba4fdb7235d55cd6c47e1171a9cee719624a0",
+   "before_sha256": "144ca6da79d99d050a6e2d011bcff3cc20a58a032e9e8b0277404afa83b618ad",
+   "completion_fraction": 1.0,
+   "first_drawn_index": 1,
+   "invariant_region_max_diff": 0,
+   "last_contiguous_index": 28,
+   "points": 29,
+   "verdict": "COMPLETE"
+  },
+  "F04": {
+   "after_sha256": "a8a561d1c2331e9ff9593ea8370a41ebab5ae47237f6b9bf98143724e6ed7e76",
+   "before_sha256": "c89a31f15f98c8cce3e62d06eedba4fdb7235d55cd6c47e1171a9cee719624a0",
+   "completion_fraction": 1.0,
+   "first_drawn_index": 1,
+   "invariant_region_max_diff": 0,
+   "last_contiguous_index": 27,
+   "points": 28,
+   "verdict": "COMPLETE"
+  },
+  "F05": {
+   "after_sha256": "999bf0e32e22df8faf77c2191b8f8bd74dd5710c1c3f526f62c163d0f8d7faa3",
+   "before_sha256": "d205cc89dcd727f37c59e576ff655d4597ea54703c9d645d57798e2c5d3b9350",
+   "completion_fraction": 1.0,
+   "first_drawn_index": 1,
+   "invariant_region_max_diff": 0,
+   "last_contiguous_index": 26,
+   "points": 27,
+   "verdict": "COMPLETE"
+  }
+ },
+ "envelopes": {
+  "flank": {
+   "lanes": [
+    "F01",
+    "F06"
+   ],
+   "max_left_extension_px": 7.73,
+   "max_right_extension_px": 6.52,
+   "target_bounds_blueprint_px": [
+    159.6,
+    30.89,
+    261.27,
+    116.07
+   ],
+   "target_bounds_px": [
+    473,
+    317,
+    547,
+    379
+   ]
+  },
+  "sideL": {
+   "lanes": [
+    "SL01",
+    "SL02",
+    "SL03"
+   ],
+   "max_left_extension_px": 33.55,
+   "max_right_extension_px": 0.0,
+   "target_bounds_blueprint_px": [
+    122.51,
+    18.52,
+    202.2,
+    195.76
+   ],
+   "target_bounds_px": [
+    446,
+    308,
+    504,
+    437
+   ]
+  },
+  "sideR": {
+   "lanes": [
+    "SR01",
+    "SR02",
+    "SR03"
+   ],
+   "max_left_extension_px": 0.0,
+   "max_right_extension_px": 31.05,
+   "target_bounds_blueprint_px": [
+    224.18,
+    19.89,
+    301.12,
+    195.76
+   ],
+   "target_bounds_px": [
+    520,
+    309,
+    576,
+    437
+   ]
+  }
+ },
+ "inputs": {
+  "reference_clean_guide": {
+   "name": "W108-F03-ready.png",
+   "sha256": "144ca6da79d99d050a6e2d011bcff3cc20a58a032e9e8b0277404afa83b618ad"
+  },
+  "w116_release_asset": {
+   "id": 804317484,
+   "sha256": "07651177bdc4fe09d95efadc87691a6aa9c6d92c39ae26946c60100c23fd37ea"
+  },
+  "w118_quarantine_asset": {
+   "id": 804538117,
+   "sha256": "369730d0ac791175cc1c964d7c7142bd6a36338e41e91c316f61b3329ec15b11"
+  },
+  "w120_quarantine_asset": {
+   "id": 804739416,
+   "run": "46150846797",
+   "sha256": "44f882feb5e8c35f87d6ad5d1087343fa4a3b2cc82357655e33386ff2d4ae063"
+  },
+  "w92_blueprint_git_blob": "3e71d075742a28397b5c02b0c66b22a940567274",
+  "worker_blobs": {
+   "author_vroid_W110.sh": "4e83be76cee5929c8b3fe0ebdaefef625cdbf4da",
+   "w107_brush.py": "f55d87a7138108df3cc830537b90ee5a8337cdee",
+   "w108_guide_fit.py": "675fc50e1e7ed5270100e00fe0a332b487ae7658",
+   "w110_camera_register.py": "1d0e41680f75b103745154aaf68a374064307cee"
+  }
+ },
+ "schema": "morwen_w121a_real_receipt",
+ "status": "INDEPENDENT_READ_ONLY_ANALYSIS_NOT_ADOPTED",
+ "support_v2": {
+  "W108-F01-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 6,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 12,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 10,
+     "legacy_unsupported_at_5px": 12,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 8,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 6,
+     "legacy_unsupported_at_5px": 1,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "999bf0e32e22df8faf77c2191b8f8bd74dd5710c1c3f526f62c163d0f8d7faa3",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1220,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.6797
+  },
+  "W108-F02-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 8,
+     "legacy_unsupported_at_5px": 7,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 11,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 4,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "a8a561d1c2331e9ff9593ea8370a41ebab5ae47237f6b9bf98143724e6ed7e76",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1414,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.7877
+  },
+  "W108-F03-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 3,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 4,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "144ca6da79d99d050a6e2d011bcff3cc20a58a032e9e8b0277404afa83b618ad",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1795,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 1.0
+  },
+  "W108-F04-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 6,
+     "legacy_unsupported_at_5px": 7,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 3,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 4,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "c89a31f15f98c8cce3e62d06eedba4fdb7235d55cd6c47e1171a9cee719624a0",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1604,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.8936
+  },
+  "W108-F05-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 6,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 12,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 11,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 2,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 4,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "d205cc89dcd727f37c59e576ff655d4597ea54703c9d645d57798e2c5d3b9350",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1325,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.7382
+  },
+  "W108-F06-ready": {
+   "camera_scale_ratio": 1.0,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.734
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 6,
+     "verdict": "HOLD",
+     "worst_signed_distance_px": -1.819
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 12,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.904
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 10,
+     "legacy_unsupported_at_5px": 12,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.683
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 8,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.343
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 6,
+     "legacy_unsupported_at_5px": 1,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.517
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "3d79c1b311f78e5046caa51dda733b0ffce4bddc00f931ca64890828e6461692",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1202,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.6696
+  },
+  "W118_W110-before-brush": {
+   "camera_scale_ratio": 0.995,
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.658
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 8,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.039
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 11,
+     "legacy_unsupported_at_5px": 8,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -4.525
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 10,
+     "legacy_unsupported_at_5px": 11,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -3.99
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 7,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "PASS",
+     "worst_signed_distance_px": -2.374
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 6,
+     "legacy_unsupported_at_5px": 1,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.333
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "live_sha256": "9d08b7213867de7d7d400360245d116b16fb4809acec512bda858d1ded68e175",
+   "live_wire_outside_silhouette_px": 0,
+   "live_wire_px": 1202,
+   "stray_live_wire_px": 0,
+   "visible_fraction": 0.6764
+  },
+  "negative_control_wrong_scale": {
+   "camera_scale_ratio": 0.9375,
+   "guide_geometry": "MOVED_OR_NEW_GUIDE",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 4,
+     "legacy_unsupported_at_5px": 0,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": 5.646
+    },
+    "F02": {
+     "legacy_max_chebyshev_px": 9,
+     "legacy_unsupported_at_5px": 12,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": -1.541
+    },
+    "F03": {
+     "legacy_max_chebyshev_px": 12,
+     "legacy_unsupported_at_5px": 7,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": -4.655
+    },
+    "F04": {
+     "legacy_max_chebyshev_px": 9,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": -4.131
+    },
+    "F05": {
+     "legacy_max_chebyshev_px": 9,
+     "legacy_unsupported_at_5px": 9,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": -2.274
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 6,
+     "legacy_unsupported_at_5px": 1,
+     "verdict": "HOLD_GUIDE_GEOMETRY",
+     "worst_signed_distance_px": 3.791
+    }
+   },
+   "live_on_mapped_wire_fraction": 0.7945,
+   "live_sha256": "3d79c1b311f78e5046caa51dda733b0ffce4bddc00f931ca64890828e6461692",
+   "live_wire_outside_silhouette_px": 181,
+   "live_wire_px": 1202,
+   "stray_live_wire_px": 247,
+   "visible_fraction": 0.3626
+  }
+ },
+ "w120": {
+  "completion_F06": {
+   "after_sha256": "3161bd95bf5fcf8bd4733b2fc5f7e004156c1bb1d2b80434ea8b6ca79abda452",
+   "before_sha256": "55251f53800e7f1bd8cd893309dea53801b632730feb3d2d52c1935ecc425f94",
+   "completion_fraction": 1.0,
+   "invariant_region_max_diff": 0,
+   "points": 27,
+   "verdict": "COMPLETE"
+  },
+  "prediction_truncation": "REFUTED",
+  "stop_stage": "SAVE_DIALOG_STILL_VISIBLE_AFTER_SAVE_AS_NEW_CLICK",
+  "support_v2_isolated": {
+   "guide_geometry": "UNCHANGED",
+   "lanes": {
+    "F01": {
+     "legacy_max_chebyshev_px": 5,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 5.658
+    },
+    "F06": {
+     "legacy_max_chebyshev_px": 3,
+     "verdict": "OUTSIDE",
+     "worst_signed_distance_px": 4.333
+    }
+   },
+   "live_on_mapped_wire_fraction": 1.0,
+   "stray_live_wire_px": 0
+  },
+  "visibility_status": "ISOLATED_GUIDE_FIT_PASS"
+ }
+}
