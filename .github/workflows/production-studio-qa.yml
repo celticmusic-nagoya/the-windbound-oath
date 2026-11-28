@@ -6,6 +6,7 @@ on:
       - '.github/workflows/production-studio-qa.yml'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: studio-qa-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -49,6 +50,31 @@ jobs:
       - name: Verify live production metadata refresh
         run: node --test test_recent_review_artifacts.cjs
       - run: node studio-smoke.mjs
+      - name: Restore exact existing Rilde review packets for one-off migration QA
+        if: github.head_ref == 'studio/rilde-music-ab-review-20261128'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir "$RUNNER_TEMP/rilde-music-review"
+          export TWO_MUSIC_TEST_DIR="$RUNNER_TEMP/rilde-music-review"
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/15260444465/zip > "$TWO_MUSIC_TEST_DIR/a01.zip"
+          gh api repos/$GITHUB_REPOSITORY/actions/artifacts/15261507321/zip > "$TWO_MUSIC_TEST_DIR/a02.zip"
+          python - <<'PY'
+          import os,pathlib,hashlib,zipfile
+          p=pathlib.Path(os.environ['TWO_MUSIC_TEST_DIR'])
+          for name,size,digest,n,opus in [
+            ('a01',412600,'6c2125a6cdc89c73f249786f6e83aea3d6da26fdab716185fc59bd1129476e62',408435,'00ffc1e7c44bb5b44549a1464f170965985a082229820cca3eefc483ef8f3136'),
+            ('a02',360993,'98037f0f425e478fbaba510da1e044ef685e4a593dabb60b7432323bb1043288',356433,'41769209ea7e6fd679c6c117de0834fc09d397c3cc991ec6bceb4cbc1e62bf52')]:
+              b=(p/(name+'.zip')).read_bytes()
+              assert len(b)==size and hashlib.sha256(b).hexdigest()==digest
+              with zipfile.ZipFile(p/(name+'.zip')) as z:
+                  assert z.testzip() is None and z.namelist().count('delivery.ogg')==1
+                  data=z.read('delivery.ogg')
+                  assert len(data)==n and hashlib.sha256(data).hexdigest()==opus
+                  (p/(name+'.ogg')).write_bytes(data)
+          print('PASS: exact review archives and Ogg hashes')
+          PY
+          echo "TWO_MUSIC_TEST_DIR=$TWO_MUSIC_TEST_DIR" >> "$GITHUB_ENV"
       - name: Verify local audio comparison and playback
         run: node audio-compare-smoke.mjs
       - name: Verify live WIP and mobile touch navigation
