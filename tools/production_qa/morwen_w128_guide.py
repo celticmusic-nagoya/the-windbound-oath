@@ -442,6 +442,18 @@ def shoulder(png, rows_path, reg_path, guide_json, out, margin=2.0, max_move=10.
         print(" ".join(f"{v:.8f}" for v in dr))
 
 
+def plan(guide_json):
+    """W132 adjustment choice: crown only while some lane root is outside the guide; otherwise a
+    shoulder move while a flank lane body exceeds DRAW_LIMIT - 0.5; else none."""
+    gd = json.loads(Path(guide_json).read_text())
+    if max(gd["lanes"][l]["root_deficit_px"] for l in LANES) > 0:
+        print("crown")
+    elif max(gd["lanes"][l]["body_deficit_px"] for l in DRAW_LANES) > DRAW_LIMIT - 0.5:
+        print("shoulder")
+    else:
+        print("none")
+
+
 def main(argv):
     cmd, *args = argv
     if cmd == "groups":
@@ -453,6 +465,8 @@ def main(argv):
         crown(*args)
     elif cmd == "shoulder":
         shoulder(*args)
+    elif cmd == "plan":
+        plan(*args)
     elif cmd == "points":
         points(*args)
     elif cmd == "complete":

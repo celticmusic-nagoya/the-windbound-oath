@@ -212,6 +212,22 @@ def test_w131_shoulder(tmp):
     assert sd["sides"]["left"]["point"] == [484.0, 318.0] and sd["sides"]["left"]["target"][0] < 484 and sd["sides"]["left"]["target"][1] < 318
 
 
+def test_w132_plan(tmp):
+    g = {"lanes": {l: {"root_deficit_px": -2.0, "body_deficit_px": -3.0} for l in w.LANES}}
+    p = Path(tmp) / "g.json"
+    def run(mod):
+        d = json.loads(json.dumps(g)); mod(d); p.write_text(json.dumps(d))
+        import io, contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            w.plan(p)
+        return buf.getvalue().strip()
+    assert run(lambda d: None) == "none"
+    assert run(lambda d: d["lanes"]["F03"].update(root_deficit_px=0.4)) == "crown"
+    assert run(lambda d: d["lanes"]["F01"].update(body_deficit_px=2.2)) == "shoulder"   # W131 state
+    assert run(lambda d: d["lanes"]["F03"].update(body_deficit_px=5.0)) == "none"       # center lane body is not a flank target
+
+
 def main():
     tests = [v for k, v in globals().items() if k.startswith("test_")]
     for fn in tests:
