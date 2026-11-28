@@ -22,6 +22,11 @@ try{
  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
  const errors=[],writes=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',req=>{if(!['GET','HEAD'].includes(req.method()))writes.push(req.url());});
  await page.route('https://**/*',route=>route.fulfill({status:503,body:'fixture offline'}));
+ await page.addInitScript(()=>{
+  const original=AudioContext.prototype.createGain;
+  window.__audioTestGains=[];
+  AudioContext.prototype.createGain=function(){const node=original.call(this);window.__audioTestGains.push(node);return node;};
+ });
  await page.goto(host+'/index.html');
  const a=fixture(16000),b=fixture(8000);
  const receipt={schema:'two.audio.candidate.v1',candidate_only:true,preset:'warm',backend:'synthetic fixture',source_sha256:a.sha,output_sha256:b.sha,before:a.m,after:b.m};
@@ -43,8 +48,11 @@ try{
  await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('紐付け一致'));
  assert.match(await page.locator('#audio-loudness-a').innerText(),/-10.00 LUFS/);
  await page.locator('#audio-match-level').check();await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('A -6.00 dB / B 0.00 dB'));
- await page.locator('#audio-match-level').uncheck();assert.match(await page.locator('#audio-gain-status').innerText(),/補正なし/);
- await loud({...lm,source_receipt_sha256:'0'.repeat(64)});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('拒否'));assert.equal(await page.locator('#audio-loudness-results').isVisible(),false);
+ const applied=await page.evaluate(()=>window.__audioTestGains.map(n=>n.gain.value));
+ assert.equal(applied.length,2);assert.ok(Math.abs(applied[0]-Math.pow(10,-6/20))<1e-6);assert.equal(applied[1],1);
+ await page.locator('#audio-match-level').uncheck();assert.deepEqual(await page.evaluate(()=>window.__audioTestGains.map(n=>n.gain.value)),[1,1]);assert.match(await page.locator('#audio-gain-status').innerText(),/補正なし/);
+ await page.locator('#audio-match-level').check();await page.waitForFunction(()=>document.querySelector('#audio-gain-status').textContent.includes('A -6.00 dB'));
+ await loud({...lm,source_receipt_sha256:'0'.repeat(64)});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('拒否'));assert.equal(await page.locator('#audio-loudness-results').isVisible(),false);assert.deepEqual(await page.evaluate(()=>window.__audioTestGains.map(n=>n.gain.value)),[1,1]);
  await loud({schema:'two.audio.packet-inspection.v1',candidate_only:true,pairs:{warm:lm,conflict:{...lm,after:{...lm.after,integrated_lufs:-17},delta_lufs:-7}}});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-loudness-status').textContent.includes('競合'));
  await page.locator('#audio-loudness').setInputFiles([]);
  await rec({...receipt,output_sha256:'0'.repeat(64)});await page.locator('#audio-check').click();await page.waitForFunction(()=>document.querySelector('#audio-status').textContent.includes('SHA-256不一致'));assert.equal(await page.locator('#audio-results').isVisible(),false);
