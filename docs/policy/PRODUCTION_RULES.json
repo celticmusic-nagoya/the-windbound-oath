@@ -432,7 +432,7 @@
     "unverified_tool_features_assumed": false,
     "editable_originals_preservation_required": true,
     "handoff_requires_retrievable_files": true,
-    "principal_agent_current": "Claude",
+    "principal_agent_current": "resolve_live_owning_PR_and_qualified_writer",
     "fixed_ai_roles": false,
     "morwen_proportion_correction": {
       "approved": "2026-11-27",
@@ -448,7 +448,13 @@
     "primary_environment": "VRoid_Studio",
     "primary_environment_change_requires_director_approval": true,
     "supplementary_tool_limit_evidence_required": true,
-    "clarified": "2026-11-28"
+    "clarified": "2026-11-28",
+    "last_recorded_principal_agent": {
+      "agent": "Claude",
+      "date": "2026-11-27",
+      "status": "HISTORICAL_STARTING_POINTER_NOT_FIXED_ROLE",
+      "owner_pr": 427
+    }
   },
   "morwen_verified_transfer_evidence": {
     "scope": "Morwen #427 only",
@@ -511,6 +517,7 @@
       "policy_conflict_status"
     ],
     "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
-    "status": "POLICY_ONLY_RUNTIME_ENFORCEMENT_NOT_VERIFIED"
+    "status": "POLICY_ONLY_RUNTIME_ENFORCEMENT_NOT_VERIFIED",
+    "live_owner_not_fixed_AI_required": true
   }
 }
