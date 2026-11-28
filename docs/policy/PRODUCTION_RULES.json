@@ -8,7 +8,10 @@
     "destructive_deletion",
     "publication",
     "added_cost",
-    "protected_production_asset_change"
+    "protected_production_asset_change",
+    "forced_lease_reclaim",
+    "credential_or_repository_permission_expansion",
+    "new_external_connection"
   ],
   "qa": {
     "required": [
@@ -20,6 +23,7 @@
     "verdicts": [
       "PASS",
       "FAIL",
+      "HOLD",
       "BLOCKED",
       "NOT_RUN"
     ],
@@ -431,7 +435,24 @@
     "retain_private_originals_and_receipts": true,
     "avoid_unnecessary_reexport": true,
     "temporary_artifact_expiry_check": true,
-    "formal_adoption_or_blanket_permission": false
+    "formal_adoption_or_blanket_permission": false,
+    "morwen_public_recovery": {
+      "scope": "Morwen #427 exact read-only W108 recovery only",
+      "status": "VERIFIED_SCOPED_READONLY_RECOVERY",
+      "run_id": 46139309085,
+      "job_id": 140961494922,
+      "reviewed_main": "01462d2f2fdca9e7558e56f356ab64c207892802",
+      "evidence": "https://github.com/celticmusic-nagoya/the-windbound-oath/pull/427#issuecomment-7238578428",
+      "source_checkpoint": "W108",
+      "source_artifact_id": 15243366155,
+      "private_release_asset_id": 804317484,
+      "private_readback_verified_in_runner": true,
+      "independent_release_metadata_verified": true,
+      "independent_off_runner_release_bytes": "NOT_RUN",
+      "public_artifact_count": 0,
+      "native_authoring_on_public_route": "NOT_RUN",
+      "formal_adoption": false
+    }
   },
   "hybrid_custom_character_production_v7": {
     "approved": "2026-11-27",
