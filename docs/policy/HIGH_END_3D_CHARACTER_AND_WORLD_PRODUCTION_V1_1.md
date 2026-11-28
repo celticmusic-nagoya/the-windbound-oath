@@ -29,8 +29,8 @@ Status: DIRECTOR-APPROVED POLICY. Applies repository-wide after merge into main.
 - Record PASS/FAIL/BLOCKED/NOT_RUN per gate; official adoption requires four PASS. Never conflate script execution, CI, render completion and art acceptance.
 
 ## Retry and safe autonomy
-- Follow docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md: stop **same root-cause / same method** after two ineffective attempts; switch structurally with measurable hypothesis, preserve full attempt ledger. Do not stop unrelated work.
-- Work on dedicated branches and Draft PRs; do not overwrite canonical originals, delete destructively, merge main, or publish without explicit approval.
+- Follow docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V3.md: after two ineffective attempts with the same root cause reassess evidence, continue only with a credible bounded correction or switch structurally; preserve full attempt ledger. Do not stop unrelated work.
+- Work on dedicated branches and Draft PRs; ordinary scoped integration follows current AGENTS after QA; never overwrite canonical originals, delete destructively or newly publish without separate explicit approval.
 - Continue approved non-destructive work autonomously. Do not claim to have invoked an unavailable AI, editor, service, or test.
 - Split independent tasks across ChatGPT (specification/independent QA), Codex (Blender/code/CI), optional Claude (review), GitHub Actions (execution/renders/technical QA), respecting actual capabilities and permissions. Use PRs and artifacts for handoffs.
 

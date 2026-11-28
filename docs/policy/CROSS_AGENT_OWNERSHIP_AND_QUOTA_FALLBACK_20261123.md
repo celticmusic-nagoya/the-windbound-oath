@@ -2,7 +2,9 @@
 
 Status: director-approved operational assignment and safe handoff rules. This document supplements, and does not supersede, current main AGENTS.md, POLICY_REGISTRY.json, PRODUCTION_RULES.json, TWO_PRODUCTION_OS_V1.md and CONTINUITY_AND_PRODUCTION_READINESS_20261123.md. Later explicit approvals take precedence. Assignment is not proof of implementation or production readiness.
 
-## Primary responsibility (one writer per asset × stage × PR)
+## Responsibility map (dated assignments; resolve live owner before work)
+
+These are historical starting pointers to existing workstreams, not fixed AI restrictions or grants of writer authority. The current AGENTS and live owner/STOP_ACK/CAS/fence determine assignment. Any qualified AI may execute independent approved tasks, and a missing connector method must not erase an existing authorized route.
 
 | Scope | Primary | Boundary |
 | --- | --- | --- |
@@ -35,7 +37,7 @@ Record each material stage change in the owning PR and existing Production OS qu
 - Asset owners author actual blueprint and native work in their existing PRs; independent visual G2 and measured G1/G3/G4 remain owner-specific. No cross-owner writes without a verified handoff.
 - Studio consumes only authenticated, provenance-checked, publication-eligible records; displays current/candidate/quarantine/adopted distinctly and unknown/expired evidence explicitly. Public site is read-only; publication is separately approved.
 - Readiness vocabulary: POLICY_ONLY, IMPLEMENTED, ISOLATED_PASS, PRODUCTION_VERIFIED, BLOCKED, NOT_RUN. Require revision-specific evidence; a successful CI, isolated Blender test, same-run reopen or merged PR does not prove production-ready cross-run recovery, 60–360 minute runs, or G1–G4.
-- Adoption, main merges, canon changes, protected asset changes, destructive deletion, new publication, added cost and forced recovery require the appropriate separate explicit approval. This approval authorizes only this policy merge, not future merges or actions.
+- Ordinary scoped reviewed main integration follows current AGENTS after QA; adoption, canon changes, protected asset changes, destructive deletion, new publication, added cost and forced recovery require separate explicit approval.
 
 ## Minimal handoff test matrix (NOT_RUN until independently evidenced)
 

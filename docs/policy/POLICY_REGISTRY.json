@@ -28,14 +28,14 @@
     "docs/policy/CONTINUITY_AND_PRODUCTION_READINESS_20261123.md",
     "docs/policy/CROSS_AGENT_OWNERSHIP_AND_QUOTA_FALLBACK_20261123.md",
     "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
-    "docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md"
+    "docs/policy/CROSS_AI_PROGRESS_AND_MAIN_SYNC_20261123.md",
+    "docs/policy/CROSS_DOMAIN_BLUEPRINT_COMPLETION_GATES_20261123.md"
   ],
   "superseded": [
-    "docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md",
     "docs/design/FIELD_HD_PIXEL_OFFICIAL_PIPELINE.md",
     "docs/design/FIELD_VISUAL_OVERHAUL_20261108.md"
   ],
-  "historical_scope": "Superseded documents are not production instructions; preserve shipped runtime and source evidence. Other older documents are reference only unless explicitly approved and consistent.",
+  "historical_scope": "Only active registered and current explicitly referenced scoped rules govern. Superseded/retired documents and old chats/PRs/checkpoints are evidence only. Preserve Git history, canonical sources, shipped runtime and technical evidence. Remove conflicting instructions from current main during policy migration; keep required legacy paths as evidence-only pointers.",
   "delivery_closure": {
     "approved": "2026-11-24",
     "policy": "AGENTS.md#mandatory-main-delivery-closure-director-approved-2026-11-24",
@@ -122,6 +122,21 @@
       "status": "RETIRED_NOT_INSTRUCTION",
       "revision": "b8780771b5f3212745d002ffd8c876ba01429fad",
       "history_url": "https://github.com/celticmusic-nagoya/the-windbound-oath/blob/b8780771b5f3212745d002ffd8c876ba01429fad/docs/policy/MORWEN_EARLY_BLENDER_TRANSFER_20261126.md"
+    },
+    {
+      "scope": "Causal Retry v2",
+      "status": "RETIRED_NOT_INSTRUCTION",
+      "revision": "3beca0e4a456c5c28fd1e656fcffeab2fde7bd17",
+      "history_url": "https://github.com/celticmusic-nagoya/the-windbound-oath/blob/3beca0e4a456c5c28fd1e656fcffeab2fde7bd17/docs/policy/CAUSAL_RETRY_AND_METHOD_SWITCH_V2.md"
     }
-  ]
+  ],
+  "task_start_reconciliation": {
+    "approved": "2026-11-28",
+    "scope": "all tasks, agents and automations",
+    "policy": "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "authority": "live_main_plus_latest_scoped_director_instruction",
+    "reuse_successful_routes": true,
+    "status": "POLICY_ONLY_RUNTIME_ENFORCEMENT_NOT_VERIFIED"
+  }
 }

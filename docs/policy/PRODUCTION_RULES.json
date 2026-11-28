@@ -432,7 +432,7 @@
     "unverified_tool_features_assumed": false,
     "editable_originals_preservation_required": true,
     "handoff_requires_retrievable_files": true,
-    "principal_agent_current": "Claude",
+    "principal_agent_current": "resolve_live_owning_PR_and_qualified_writer",
     "fixed_ai_roles": false,
     "morwen_proportion_correction": {
       "approved": "2026-11-27",
@@ -448,7 +448,13 @@
     "primary_environment": "VRoid_Studio",
     "primary_environment_change_requires_director_approval": true,
     "supplementary_tool_limit_evidence_required": true,
-    "clarified": "2026-11-28"
+    "clarified": "2026-11-28",
+    "last_recorded_principal_agent": {
+      "agent": "Claude",
+      "date": "2026-11-27",
+      "status": "HISTORICAL_STARTING_POINTER_NOT_FIXED_ROLE",
+      "owner_pr": 427
+    }
   },
   "morwen_verified_transfer_evidence": {
     "scope": "Morwen #427 only",
@@ -477,5 +483,41 @@
       "measurement_and_qa": "NOT_RUN"
     },
     "authoring_authority": false
+  },
+  "task_start_reconciliation": {
+    "approved": "2026-11-28",
+    "policy": "docs/policy/MANDATORY_PREWORK_RULE_RECONCILIATION_20261123.md",
+    "scope": "all_tasks_agents_automations",
+    "resolve_live_main_head": true,
+    "fetch_same_revision_current_entry_documents": [
+      "AGENTS.md",
+      "docs/production/SESSION_CONTINUITY_INDEX.md",
+      "docs/policy/POLICY_REGISTRY.json",
+      "docs/policy/PRODUCTION_RULES.json"
+    ],
+    "fetch_relevant_active_policies": true,
+    "old_chat_uploaded_rules_and_historical_receipts_are_authority": false,
+    "policy_migration_remove_conflicting_directives_and_check_references": true,
+    "verify_latest_owner_handoff_and_actual_input": true,
+    "prior_success_and_failure_evidence_required": true,
+    "check_local_and_remote_capabilities_separately": true,
+    "check_existing_authorized_push_comment_and_dispatch_routes": true,
+    "missing_dispatch_alone_is_blocker": false,
+    "verify_current_trigger_owner_actor_revision_input_and_active_runs": true,
+    "restore_verified_bytes_and_reuse_unchanged_evidence": true,
+    "requalify_changed_delta_only": true,
+    "no_unchanged_failed_retry": true,
+    "no_new_parallel_engine": true,
+    "receipt_fields": [
+      "execution_route",
+      "prior_success_evidence",
+      "prior_failure_evidence",
+      "reuse_or_delta_reason",
+      "artifact_restore_status",
+      "policy_conflict_status"
+    ],
+    "evidence": "docs/production/VERIFIED_VROID_BLENDER_EXECUTION_AND_RECOVERY_20261126.md",
+    "status": "POLICY_ONLY_RUNTIME_ENFORCEMENT_NOT_VERIFIED",
+    "live_owner_not_fixed_AI_required": true
   }
 }
