@@ -72,25 +72,28 @@ def loudness(path, ffmpeg):
 def inspect_pair(source, candidate, receipt_path, ffmpeg):
     if receipt_path.is_symlink() or not receipt_path.is_file() or not 0<receipt_path.stat().st_size<=65536:
         raise ValueError("invalid receipt")
-    receipt=json.loads(receipt_path.read_text())
+    receipt_bytes=receipt_path.read_bytes()
+    receipt=json.loads(receipt_bytes)
     if receipt.get("schema")!="two.audio.candidate.v1" or receipt.get("candidate_only") is not True:
         raise ValueError("not a candidate v1 receipt")
     metrics=[]
     for file,key,phase in ((source,"source_sha256","before"),(candidate,"output_sha256","after")):
+        pcm=checked_wav(file)
         expected=receipt[key]
         if not isinstance(expected,str) or not HEX.fullmatch(expected) or sha(file)!=expected:
             raise ValueError("audio SHA mismatch")
-        pcm=checked_wav(file)
         match_pcm(pcm,receipt[phase])
         stats=loudness(file,ffmpeg)
         if sha(file)!=expected:
             raise ValueError("audio changed during inspection")
         metrics.append(dict(sha256=expected,pcm=pcm,**stats))
+    if receipt_path.read_bytes()!=receipt_bytes:
+        raise ValueError("receipt changed during inspection")
     a,b=metrics
     if a["pcm"]["channels"]!=b["pcm"]["channels"] or a["pcm"]["frames"]!=b["pcm"]["frames"] or b["pcm"]["full_scale_samples"] or b["pcm"]["sample_peak_dbfs"]>-1:
         raise ValueError("candidate PCM integrity/headroom failed")
     return dict(schema="two.audio.loudness-inspection.v1",candidate_only=True,
-        source_receipt_sha256=sha(receipt_path),backend=subprocess.check_output([ffmpeg,"-version"],text=True,timeout=10).splitlines()[0],
+        source_receipt_sha256=__import__("hashlib").sha256(receipt_bytes).hexdigest(),backend=subprocess.check_output([ffmpeg,"-version"],text=True,timeout=10).splitlines()[0],
         backend_sha256=sha(ffmpeg),method="FFmpeg loudnorm input statistics; null sink; no normalization written",
         before=a,after=b,delta_lufs=round(b["integrated_lufs"]-a["integrated_lufs"],2),
         qa={"sha_pcm":"PASS","lufs":"MEASURED","true_peak":"MEASURED",
