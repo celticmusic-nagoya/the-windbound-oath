@@ -46,6 +46,7 @@ on:
       - 'tools/map_blueprint/shared_materials_v01/pack_oak_v88_atlas.py'
       - 'tools/map_blueprint/shared_materials_v01/project_v87_dormant_inlay.py'
       - 'tools/map_blueprint/shared_materials_v01/native_forest_floor_v94.py'
+      - 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'
       - '.github/workflows/two-shared-material-recovery.yml'
   workflow_dispatch:
     inputs:
@@ -85,6 +86,9 @@ jobs:
             fi
             # V81 isolated sanctuary/trail candidate only.
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_v90_bump_study.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
+              echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
+            fi
+            if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
               echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0
             fi
             if ! git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/native_oak_v89_leaf_detail.py' && git diff --quiet "$BEFORE" HEAD -- 'docs/production/region_master/SHARED_PHOTO_MATERIAL_CATALOG_V01.json' 'tools/map_blueprint/shared_materials_v01/material_cache.py' 'tools/map_blueprint/shared_materials_v01/intake_river_gravel_v35.py'; then
@@ -2087,3 +2091,62 @@ jobs:
           path: ${{ runner.temp }}/v94-review
           retention-days: 14
           if-no-files-found: warn
+
+  v94-clearance-qa:
+    if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.number == 482 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scope read-only V94 clearance QA
+        id: scope
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          git cat-file -e "$BEFORE^{commit}" || { echo 'run=false' >> "$GITHUB_OUTPUT"; exit 0; }
+          if git diff --quiet "$BEFORE" HEAD -- 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'; then echo 'run=false' >> "$GITHUB_OUTPUT"; else echo 'run=true' >> "$GITHUB_OUTPUT"; fi
+      - name: Cheap exact-revision preflight
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py'
+          python 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' --self-test
+      - name: Read-only mesh audit of locked V94 native
+        if: steps.scope.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v94-qa-in" "$RUNNER_TEMP/v94-qa-evidence"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/15244551240/zip" > "$RUNNER_TEMP/v94-qa.zip"
+          printf '%s  %s\n' d5d4a7f3735801bea0a9eef3741ecc35cdd61923f32e39013ac5a5b1785745b1 "$RUNNER_TEMP/v94-qa.zip" | sha256sum -c -
+          unzip -tq "$RUNNER_TEMP/v94-qa.zip"
+          unzip -p "$RUNNER_TEMP/v94-qa.zip" v94_forest_floor.blend > "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend"
+          printf '%s  %s\n' e369bdbab0c6301c0168a74fb1082ca850e1f8f0f5a5e6ca9bd805cb74898600 "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend" | sha256sum -c -
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1 libegl1 libglx-mesa0 libxrender1 libxi6 libxkbcommon0
+          bash tools/production_qa/install_blender_530.sh "$RUNNER_TEMP/blender530"
+          "$RUNNER_TEMP/blender530/blender" -b --factory-startup --python-exit-code 1 --python 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' -- "$RUNNER_TEMP/v94-qa-in/v94_forest_floor.blend" "$RUNNER_TEMP/v94-qa-out" 2>&1 | tee "$RUNNER_TEMP/v94-qa-evidence/blender.log"
+      - name: Preserve audit only
+        if: always() && steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/v94-qa-evidence"
+          cp 'tools/map_blueprint/shared_materials_v01/qa_v94_clearance.py' "$RUNNER_TEMP/v94-qa-evidence/"
+          if test -f "$RUNNER_TEMP/v94-qa-out/v94_clearance_qa.json"; then cp "$RUNNER_TEMP/v94-qa-out/v94_clearance_qa.json" "$RUNNER_TEMP/v94-qa-evidence/"; fi
+          (cd "$RUNNER_TEMP/v94-qa-evidence" && sha256sum * > SHA256SUMS)
+      - name: Upload scoped audit
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-v94-clearance-qa
+          path: ${{ runner.temp }}/v94-qa-evidence
+          retention-days: 14
+          if-no-files-found: error
