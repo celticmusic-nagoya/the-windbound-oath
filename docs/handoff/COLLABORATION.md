@@ -1,5 +1,7 @@
 # GitHub経由の共同開発運用（Claude / Codex）
 
+**Current authority (2026-11-28):** Read [AGENTS.md](../../AGENTS.md), [policy registry](../policy/POLICY_REGISTRY.json) and [production rules](../policy/PRODUCTION_RULES.json) at live main. The older role assignments, branch-name restrictions, direct-main-push exceptions, merge-agent restrictions, and mandatory per-task waiting below are historical and superseded wherever inconsistent with current Production-First v6, v7 and scoped public-first rules. Current operation: any qualified live owner may execute approved reversible work; ordinary scoped reviewed PR integration follows AGENTS after applicable QA, never direct main commits. Retain canon, independent QA, actual ownership, generated-file safeguards, STOP_ACK/CAS/fencing where required, protected originals and separate approval for protected/irreversible actions. This reconciliation grants no new permissions.
+
 作者指示による運用。チャットだけに決定を残さず、GitHub上の資料とブランチを進捗共有のsource of truthとする。従来の担当規則と相違する場合は本指示を優先。
 
 > 2026-10-20 更新: 本書 §1・§6 の main 更新に関する包括承認は**維持**する。そのうえで `AI_HANDOFF_PROTOCOL.md` §5-6 の安全条件（正典・確定仕様の不変、独立QA、直前のHEAD・差分・競合確認、事後報告、停止条件）を追加する。

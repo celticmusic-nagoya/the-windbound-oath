@@ -1,5 +1,7 @@
 # AI Handoff Protocol v1 — THE WINDBOUND OATH
 
+**Current authority (2026-11-28):** Read [AGENTS.md](../../AGENTS.md), [policy registry](../policy/POLICY_REGISTRY.json) and [production rules](../policy/PRODUCTION_RULES.json) at live main. The older role assignments, branch-name restrictions, direct-main-push exceptions, merge-agent restrictions, and mandatory per-task waiting below are historical and superseded wherever inconsistent with current Production-First v6, v7 and scoped public-first rules. Current operation: any qualified live owner may execute approved reversible work; ordinary scoped reviewed PR integration follows AGENTS after applicable QA, never direct main commits. Retain canon, independent QA, actual ownership, generated-file safeguards, STOP_ACK/CAS/fencing where required, protected originals and separate approval for protected/irreversible actions. This reconciliation grants no new permissions.
+
 Status: ACTIVE (user decision 2026-10-20; applied after independent QA)  
 Tracking: https://github.com/celticmusic-nagoya/the-windbound-oath/issues/5
 
