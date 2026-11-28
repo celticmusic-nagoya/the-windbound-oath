@@ -34,6 +34,8 @@ jobs:
               f.write(f'a01={str(a01).lower()}\na02={str(a02).lower()}\n')
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               f.write('button_probe='+str(root+'probe_button_accordion.py' in paths).lower()+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('cc0_transport='+str(root+'stage_public_cc0.py' in paths).lower()+'\n')
           print('Music delta: A01',a01,'A02',a02)
           PY
       - name: Verify or install distribution FFmpeg
@@ -50,6 +52,18 @@ jobs:
           python -m py_compile tools/audio-production/probe_button_accordion.py
           python tools/audio-production/probe_button_accordion.py "$RUNNER_TEMP/button-accordion-probe"
           rm -f "$RUNNER_TEMP/button-accordion-probe/button_probe.wav"
+      - name: Stage exact already-public CC0 subset for local acquisition
+        if: steps.scope.outputs.cc0_transport == 'true'
+        run: |
+          python -m py_compile tools/audio-production/stage_public_cc0.py
+          python tools/audio-production/stage_public_cc0.py "$RUNNER_TEMP/cc0-source-subset"
+      - uses: actions/upload-artifact@v4
+        if: steps.scope.outputs.cc0_transport == 'true'
+        with:
+          name: upstream-public-cc0-accordion-subset
+          path: ${{ runner.temp }}/cc0-source-subset/
+          retention-days: 1
+          if-no-files-found: error
       - name: Actual offline audio processing and QA
         run: |
           python -m py_compile tools/audio-production/process_audio.py tools/audio-production/inspect_audio.py tools/audio-production/export_delivery.py
