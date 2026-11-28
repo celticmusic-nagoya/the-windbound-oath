@@ -50,11 +50,12 @@ function inferCategory(branch,name){
  if(/terrain|dem|terrace/.test(key))return "世界・地形";
  if(/plant|grass|flower|fern/.test(key))return "世界・植物／草花";
  if(/blueprint|ireland-world|region|area-map/.test(key))return "地図・エリア設計";
+ if(/(?:^|[\s/_.-])(?:audio|music|bgm|sound)(?:$|[\s/_.-])/.test(key))return "音楽・音響";
  if(/studio|preservation|engine|qualification|infra|recovery|handoff/.test(key))return "制作基盤・QA";
  if(/game|runtime|battle|ui-ux|webgl/.test(key))return "ゲーム・UI／実装";
  return FALLBACK;
 }
-const CATEGORIES=[...new Set([...RULES.map(r=>r[2]),"モルウェン・Blender移行／造形","制作基盤・QA","ゲーム・UI／実装",FALLBACK])];
+const CATEGORIES=[...new Set([...RULES.map(r=>r[2]),"モルウェン・Blender移行／造形","制作基盤・QA","ゲーム・UI／実装","音楽・音響",FALLBACK])];
 function safeLabel(s){return typeof s==="string"&&s.length>0&&s.length<=180&&!/[\x00-\x1f\x7f]/.test(s);}
 function selectLiveRuns(data){
  if(!Array.isArray(data?.workflow_runs))throw Error("Actions一覧形式不正");
@@ -86,7 +87,8 @@ const SOURCE_LINKS=[
  ["世界・遺跡","/pull/482"],
  ["世界・聖域","/pull/482"],
  ["世界・新規制作証跡（未分類）","/pull/482"],
- ["地図・エリア設計","/pull/482"]
+ ["地図・エリア設計","/pull/482"],
+ ["音楽・音響","/pull/631"]
 ];
 const isId=n=>Number.isSafeInteger(n)&&n>0;
 const REFRESH_MS=5*60*1000, RETRY_MS=15*60*1000, PRESERVATION_MS=30*60*1000;
@@ -141,7 +143,7 @@ function selectRecentArtifacts(data,category="",limit=30){
   const w=a?.workflow_run;
   if(!isId(a?.id)||seen.has(a.id)||!isId(w?.id)||typeof a.name!=="string"||
      typeof w.head_branch!=="string"||!/^[a-f0-9]{40}$/.test(w.head_sha||"")||
-     !isId(w.repository_id)||w.repository_id!==w.head_repository_id||
+     w.repository_id!==REPO_ID||w.repository_id!==w.head_repository_id||
      a.expired!==false||!isId(a.size_in_bytes)||!Number.isFinite(Date.parse(a.created_at)))continue;
   if(w.head_branch==="docs/ireland-world-source-grounded-plan-20261123"&&a.name.startsWith("two-")&&!/^two-[a-z0-9][a-z0-9-]{0,159}$/i.test(a.name))continue;
  const rule=RULES.find(([branch,pattern])=>w.head_branch===branch&&pattern.test(a.name));
@@ -151,13 +153,45 @@ function selectRecentArtifacts(data,category="",limit=30){
   const classified=rule?rule[2]:inferCategory(w.head_branch,a.name);
   if(category&&classified!==category)continue;
   seen.add(a.id);
-  rows.push({id:a.id,run:w.id,name:a.name,head:w.head_sha,category:classified,filter:rule?rule[3]:"",metadataOnly:!rule,
+  rows.push({id:a.id,run:w.id,name:a.name,head:w.head_sha,branch:w.head_branch,category:classified,filter:rule?rule[3]:"",metadataOnly:!rule,
     created:a.created_at,expires:a.expires_at||"",bytes:a.size_in_bytes,
     digest:/^sha256:[a-f0-9]{64}$/.test(a.digest||"")?a.digest:""});
  }
  return rows.sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id).slice(0,limit);
 }
-if(typeof module!=="undefined")module.exports={selectRecentArtifacts,selectPreservationRuns,refreshDelay,selectLiveRuns,swipeDirection,inferCategory,selectProductionReports,mergeProductionReports};
+// Metadata only; never proof of backup or restoration.
+const HOUR=3600000;
+function expiryState(row,now){
+ const end=typeof row.expires==="string"?Date.parse(row.expires):NaN;
+ if(!Number.isFinite(end)||!Number.isFinite(now))return "unknown";
+ if(end<=now)return "elapsed";
+ if(end-now<=48*HOUR)return "urgent";
+ if(end-now<=168*HOUR)return "soon";
+ return "later";
+}
+function expirySummary(rows,now){
+ const out={elapsed:0,urgent:0,soon:0,later:0,unknown:0};
+ for(const row of rows)out[expiryState(row,now)]++;
+ return out;
+}
+function orderExpiry(rows,now){
+ const priority={urgent:0,soon:1,unknown:2,elapsed:3,later:4};
+ return rows.filter(x=>expiryState(x,now)!=="later").slice().sort((a,b)=>{
+  const av=expiryState(a,now),bv=expiryState(b,now);
+  return priority[av]-priority[bv]||(Number.isFinite(Date.parse(a.expires))&&Number.isFinite(Date.parse(b.expires))?Date.parse(a.expires)-Date.parse(b.expires):0)||b.id-a.id;
+ });
+}
+function recoveryLocator(row,observedAt){
+ if(!isId(row?.id)||!isId(row.run)||!safeLabel(row.name)||!safeLabel(row.branch)||!/^[a-f0-9]{40}$/.test(row.head||"")||!isId(row.bytes)||!Number.isFinite(Date.parse(observedAt)))throw Error("復元情報不正");
+ return {schema:"two.studio.artifact-locator.v1",repository:REPO,artifact_id:row.id,run_id:row.run,head_sha:row.head,head_branch:row.branch,name:row.name,
+  archive_bytes:row.bytes,archive_digest:/^sha256:[a-f0-9]{64}$/.test(row.digest||"")?row.digest:null,
+  created_at:Number.isFinite(Date.parse(row.created))?row.created:null,
+  expires_at:Number.isFinite(Date.parse(row.expires))?row.expires:null,metadata_observed_at:observedAt,
+  original_artifact_url:GH+"/actions/runs/"+row.run+"/artifacts/"+row.id,
+  preservation_status:"UNVERIFIED",byte_verification:"NOT_RUN",adoption:"UNDETERMINED",
+  note:"Public metadata locator only. Not a backup, approval, source availability guarantee or evidence of restoration. Verify exact bytes with authorized owner and preservation ledger."};
+}
+if(typeof module!=="undefined")module.exports={expiryState,expirySummary,orderExpiry,recoveryLocator,selectRecentArtifacts,selectPreservationRuns,refreshDelay,selectLiveRuns,swipeDirection,inferCategory,selectProductionReports,mergeProductionReports};
 if(typeof document==="undefined")return;
 const area=document.getElementById("recent-review-artifacts"),status=document.getElementById("recent-review-status"),refresh=document.getElementById("refresh-recent-review");
 if(!area||!status||!refresh)return;
@@ -179,7 +213,12 @@ const sources=make("p","過去の成果物・一覧未検出時： ");sources.cl
 for(const [name,path] of SOURCE_LINKS){const link=make("a",name+" / 担当PR");link.href=GH+path;link.rel="noopener noreferrer";sources.append(link,make("span","　"));}
 const categoryGrid=make("div","");categoryGrid.id="recent-category-grid";categoryGrid.className="recent-category-grid";categoryGrid.setAttribute("aria-label","制作領域別の成果物件数");
 const searchLabel=make("label","制作成果物を検索");const search=make("input","");search.type="search";search.id="recent-review-search";search.placeholder="名称・バージョン・HEAD・Artifact ID";searchLabel.htmlFor=search.id;
-refresh.after(cadence,categoryLabel,categorySelect,sources,categoryGrid,searchLabel,search);
+const expiryBox=make("div","");expiryBox.className="tile";
+const expiryHeading=make("h3","期限・復元情報");
+const expiryStatus=make("p","未取得");expiryStatus.id="artifact-expiry-summary";expiryStatus.setAttribute("role","status");
+const expiryToggle=make("button","期限確認を優先");expiryToggle.type="button";expiryToggle.id="artifact-expiry-toggle";expiryToggle.setAttribute("aria-pressed","false");
+expiryBox.append(expiryHeading,make("p","最新取得範囲の期限情報。原本保全の有無は未確認。必要な成果物だけ担当PR・既存非公開保全経路で確認してください。"),expiryStatus,expiryToggle);
+refresh.after(cadence,categoryLabel,categorySelect,sources,categoryGrid,searchLabel,search,expiryBox);
 const reportsHeading=make("h3","新着制作報告（画像未登録・チャット内制作を含む）");
 reportsHeading.id="recent-production-reports-title";
 const reportsStatus=make("p","未取得");reportsStatus.setAttribute("role","status");
@@ -197,7 +236,8 @@ back.type=forward.type="button";swipeBar.append(back,forward);
 const more=make("button","さらに表示");more.type="button";more.hidden=true;
 if(typeof area.before==="function")area.before(reportsHeading,reportHint,reportsStatus,reportsArea,swipeHint,swipeBar,liveHeading,liveStatus,liveArea,artifactHeading);
 if(typeof area.after==="function")area.after(more);
-let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastError="",runSnapshot=[],runError="",runStamp="",visibleLimit=30;
+let generation=0,timer=null,nextDue=0,busy=false,snapshot=null,lastSuccess="",lastObservedAt="",lastError="",runSnapshot=[],runError="",runStamp="",visibleLimit=30,expiryFirst=false;
+expiryToggle.addEventListener("click",()=>{expiryFirst=!expiryFirst;expiryToggle.setAttribute("aria-pressed",String(expiryFirst));expiryToggle.textContent=expiryFirst?"すべての期限を表示":"期限確認を優先";visibleLimit=30;renderRecent();});
 let reportRows=[],reportStamp="",reportError="",preservationDue=0;
 let visibleCategories=[""];
 function renderReports(){
@@ -269,6 +309,8 @@ async function updatePreservation(){
 function renderRecent(){
  if(!snapshot&&!runSnapshot.length){liveStatus.textContent=runError?"取得失敗: "+runError:"未取得";return;}
  const all=snapshot?selectRecentArtifacts(snapshot,"",100):[];
+ const now=Date.now(),risk=expirySummary(all,now);
+ expiryStatus.textContent=snapshot?("取得 "+all.length+"件｜48時間以内 "+risk.urgent+"件 / 2〜7日以内 "+risk.soon+"件 / 期限経過 "+risk.elapsed+"件 / 期限不明 "+risk.unknown+"件"+(lastError?"｜取得失敗・前回記録":"")+"｜保全未確認"):"未取得";
  const counts=new Map();for(const x of all)counts.set(x.category,(counts.get(x.category)||0)+1);
  const runCounts=new Map();for(const x of runSnapshot)runCounts.set(x.category,(runCounts.get(x.category)||0)+1);
  visibleCategories=["",...CATEGORIES.filter(name=>counts.has(name)||runCounts.has(name)||name.startsWith("世界・")||name===categorySelect.value)];
@@ -280,7 +322,8 @@ function renderRecent(){
  }
  const query=String(search.value||"").trim().toLowerCase();
  const filtered=all.filter(x=>(!categorySelect.value||x.category===categorySelect.value)&&(!query||[x.name,x.category,x.head,x.id,x.run].join(" ").toLowerCase().includes(query)));
- const rows=filtered.slice(0,visibleLimit);more.hidden=rows.length>=filtered.length;
+ const eligible=expiryFirst?orderExpiry(filtered,now):filtered;
+ const rows=eligible.slice(0,visibleLimit);more.hidden=rows.length>=eligible.length;
  const runRows=runSnapshot.filter(x=>(!categorySelect.value||x.category===categorySelect.value)&&(!query||[x.name,x.category,x.head,x.id].join(" ").toLowerCase().includes(query)));
  liveArea.replaceChildren();
  for(const x of runRows.slice(0,visibleLimit)){
@@ -290,16 +333,23 @@ function renderRecent(){
   card.append(label,make("h4",x.category),make("p",x.name),make("p","更新 "+new Date(x.updated).toLocaleString("ja-JP")+" / HEAD "+x.head.slice(0,12)),make("p","公開実行情報のみ・成果物とQAは未確認"));
   const a=make("a","Actions・進行状況 #"+x.id);a.href=GH+"/actions/runs/"+x.id;a.rel="noopener noreferrer";card.append(a);liveArea.append(card);
  }
- more.hidden=rows.length>=filtered.length&&runRows.length<=visibleLimit;
+ more.hidden=rows.length>=eligible.length&&runRows.length<=visibleLimit;
  liveStatus.textContent=runRows.length+" 実行（表示 "+Math.min(runRows.length,visibleLimit)+"） / "+(runStamp||"未取得")+(runError?" / 取得失敗・前回分: "+runError:"");
  area.replaceChildren();
   for(const x of rows){
    const card=make("article","");card.className="tile";card.dataset.artifactId=String(x.id);
    card.style.overflowWrap="anywhere";card.append(make("h3",x.category),make("p",x.name),make("p","制作日時 "+new Date(x.created).toLocaleString("ja-JP")+" / HEAD "+x.head.slice(0,12)),make("p","未公開候補・内容／QA／採用未判定（公開メタデータ）"));
-   if(Number.isFinite(Date.parse(x.expires))){
-    const remaining=Date.parse(x.expires)-Date.now();
-    card.append(make("p","元Artifact期限 "+new Date(x.expires).toLocaleString("ja-JP")+(remaining<=48*3600000?" / 48時間以内または失効（保全状況は不明）":"")));
-   }
+   const expiry=expiryState(x,now),expiryLabel={urgent:"48時間以内",soon:"2〜7日以内",later:"7日超",elapsed:"期限経過・取得可否未確認",unknown:"期限不明"};
+   card.dataset.expiry=expiry;
+   card.append(make("p","元Artifact期限 "+(expiry==="unknown"?"不明":new Date(x.expires).toLocaleString("ja-JP"))+" / "+expiryLabel[expiry]+"（保全未確認）"));
+   if(expiry==="urgent"||expiry==="soon")card.append(make("p","必要な原本・成果物は担当PRで保全状況を確認してください。"));
+   const locator=make("button","復元情報JSONを保存");locator.type="button";
+   locator.addEventListener("click",()=>{
+    const receipt=recoveryLocator(x,lastObservedAt);
+    const url=URL.createObjectURL(new Blob([JSON.stringify(receipt,null,2)+"\n"],{type:"application/json"}));
+    const a=make("a","");a.href=url;a.download="two-artifact-"+x.id+"-locator.json";a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+   });card.append(locator);
    const link=make("a","GitHubで原Artifactを取得");link.href=GH+"/actions/runs/"+x.run+"/artifacts/"+x.id;link.rel="noopener noreferrer";card.append(link);
    const run=make("a","生成元Actions・実行結果");run.href=GH+"/actions/runs/"+x.run;run.rel="noopener noreferrer";card.append(run);
    if(!x.metadataOnly&&x.bytes<=128*1024*1024){
@@ -313,7 +363,7 @@ function renderRecent(){
    }else card.append(make("p",x.metadataOnly?"新規・未分類候補：公開メタデータのみ。内容と権利を確認後に画像登録。":"128 MiB超：GitHubで取得後、端末上で展開してください。"));
    area.append(card);
   }
- status.textContent=rows.length+" 件（直近100 Artifact中、期限内・同一制作元、表示 "+rows.length+" / "+filtered.length+"）／ "+lastSuccess+(rows.length?"":"。対象未検出の場合は担当PRを確認。")+(lastError?" / 更新失敗: "+lastError+"。前回取得分を保持。":"");
+ status.textContent=rows.length+" 件（直近100 Artifact中、API未失効フラグ・同一制作元、表示 "+rows.length+" / "+eligible.length+"）／ "+lastSuccess+(rows.length?"":"。対象未検出の場合は担当PRを確認。")+(lastError?" / 更新失敗: "+lastError+"。前回取得分を保持。":"");
 }
 categorySelect.addEventListener("change",()=>{visibleLimit=30;renderRecent();});
 search.addEventListener("input",()=>{visibleLimit=30;renderRecent();});
@@ -328,7 +378,7 @@ async function update(){
   const data=await publicJson("/actions/artifacts?per_page=100");
   if(g!==generation)return;
   selectRecentArtifacts(data); // Validate before replacing the prior snapshot.
-  snapshot=data;lastSuccess=new Date().toLocaleString("ja-JP");lastError="";
+  snapshot=data;lastObservedAt=new Date().toISOString();lastSuccess=new Date(lastObservedAt).toLocaleString("ja-JP");lastError="";
   success=true;
  }catch(e){if(g===generation){lastError=e.message;status.textContent="最新一覧取得失敗: "+lastError+"。前回取得分を保持。担当PRから確認できます。";}}
  finally{
