@@ -131,7 +131,7 @@ screencapture -x evidence/final-recovery-screen.png || true
 grep -qx NATIVE_REOPEN_REVIEW_REQUIRED evidence/reopen-status.txt
 
 grep -Fq 'Morwen-resume.vroid' evidence/resumed-editor.txt
-! grep -Fq 'Morwen-resume.vroid*' evidence/resumed-editor.txt
+if grep -Fq 'Morwen-resume.vroid*' evidence/resumed-editor.txt; then exit 1; fi
 cmp "$RUNNER_TEMP/Morwen-resume.vroid" "$HOME/Documents/Morwen-resume.vroid"
 cmp "$RUNNER_TEMP/Morwen-resume.vroid" evidence/input-model.vroid
 echo REOPENED_READONLY_SOURCE_UNCHANGED > evidence/recovery-result.txt

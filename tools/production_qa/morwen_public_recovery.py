@@ -137,6 +137,9 @@ def main():
     (restore if sys.argv[1]=='restore' else preserve)(request,env,root)
 if __name__=='__main__':
     try:main()
-    except Exception:
-        print('RECOVERY_BLOCKED_AT_'+STAGE,flush=True)
+    except Exception as exc:
+        # Report only a bounded numeric HTTP status, never exception content.
+        code=getattr(exc,'status',0)
+        suffix='_HTTP_'+str(code) if type(code) is int and 400<=code<=599 else ''
+        print('RECOVERY_BLOCKED_AT_'+STAGE+suffix,flush=True)
         raise SystemExit(1) from None
