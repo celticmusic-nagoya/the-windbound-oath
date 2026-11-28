@@ -1,0 +1,98 @@
+name: Morwen public runner private recovery
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/morwen-public-native-recovery.yml'
+      - 'tools/production_qa/morwen_public_recovery*'
+      - 'tools/production_qa/test_morwen_public_recovery.py'
+  push:
+    branches: [main]
+    paths: ['.github/workflows/morwen-public-native-recovery.yml']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: morwen-vroid-macos-probe
+  cancel-in-progress: false
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Validate isolated recovery without credentials
+        run: |
+          set -euo pipefail
+          bash -n tools/production_qa/morwen_public_recovery_startup.sh
+          python3 -m py_compile tools/production_qa/morwen_public_recovery.py
+          python3 tools/production_qa/test_morwen_public_recovery.py
+  recover:
+    if: github.repository == 'celticmusic-nagoya/the-windbound-oath' && github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor_id == '315379131' && github.run_attempt == 1 && vars.MORWEN_PRIVATE_TRANSFER_APPROVED == 'true'
+    runs-on: macos-15
+    timeout-minutes: 20
+    environment: two-private-preservation
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
+          path: qualified-vroid
+          persist-credentials: false
+      - name: Verify qualified controls and prepare private workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -m 700 "$RUNNER_TEMP/morwen-private-recovery"
+          mkdir -m 700 "$RUNNER_TEMP/morwen-private-recovery/evidence"
+          test "$(git -C qualified-vroid rev-parse HEAD)" = 3757fdd6ee6b41e4bc0aba12705ef1d431fea6fb
+          test "$(git -C qualified-vroid hash-object tools/production_qa/macos_gui.swift)" = 025f55ba45c67369f52d99f32be5b7b679b29f7c
+          test "$(git hash-object tools/private-preservation/release_transport.py)" = a9c2d1a28e649b76608129636b294f6e2b45c97a
+          bash -n tools/production_qa/morwen_public_recovery_startup.sh
+          python3 tools/production_qa/test_morwen_public_recovery.py
+          swiftc qualified-vroid/tools/production_qa/macos_gui.swift -o "$RUNNER_TEMP/two-gui"
+      - name: Restore exact private native without public output
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_public_recovery.py restore
+      - name: Install the previously qualified signed VRoid build
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          cd "$RUNNER_TEMP/morwen-private-recovery"
+          (
+            curl --fail --location --proto '=https' --max-time 420 --output "$RUNNER_TEMP/vroid.dmg" 'https://download.vroid.com/dist/2cbXSb76Bf/VRoidStudio-v2.16.0-mac.dmg'
+            echo "d3d8900b6397e9ed7cea640c679b07dfff011eb9fc393533e26419f5fcf546f6  $RUNNER_TEMP/vroid.dmg" | shasum -a 256 -c
+            hdiutil verify "$RUNNER_TEMP/vroid.dmg"
+            mkdir -p "$RUNNER_TEMP/vroid-mount"
+            hdiutil attach -readonly -nobrowse -mountpoint "$RUNNER_TEMP/vroid-mount" "$RUNNER_TEMP/vroid.dmg"
+            app="$(find "$RUNNER_TEMP/vroid-mount" -maxdepth 2 -name '*.app' -print -quit)"
+            test -n "$app"
+            codesign --verify --deep --strict "$app"
+            spctl --assess --type execute -vv "$app"
+            ditto "$app" "$RUNNER_TEMP/VRoidStudio.app"
+            hdiutil detach "$RUNNER_TEMP/vroid-mount"
+          ) > evidence/install.log 2>&1 || { echo SIGNED_INSTALL_BLOCKED; exit 1; }
+          echo SIGNED_INSTALL_PASS
+      - name: Reopen native read only with no credentials in the GUI step
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          cd "$RUNNER_TEMP/morwen-private-recovery"
+          bash "$GITHUB_WORKSPACE/tools/production_qa/morwen_public_recovery_startup.sh" > evidence/gui.log 2>&1 || { echo NATIVE_REOPEN_BLOCKED; exit 1; }
+          echo NATIVE_REOPEN_READONLY_PASS
+      - name: Preserve only in existing private Release transport and read back
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEST_TOKEN: ${{ secrets.TWO_HANDOFF_RELEASE_WRITE_TOKEN }}
+          MORWEN_PRIVATE_TRANSFER_APPROVED: ${{ vars.MORWEN_PRIVATE_TRANSFER_APPROVED }}
+        run: python3 tools/production_qa/morwen_public_recovery.py preserve
