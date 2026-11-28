@@ -1,4 +1,4 @@
-# W128 (Claude, face/hair lead): independent new Freehand guide G2 on the exact W108 work copy.
+# W128/W129 (Claude, face/hair lead): independent new Freehand guide G2 on the exact W108 work copy.
 # Mutates only the isolated Documents work copy. G1 (five W108 strands and its guide) is never
 # selected for editing. F06/F01 are drawn in G2 only when the measured G2 guide supports them
 # (r <= +2.0 px, W121A method). Every stroke is completion-audited; failed strokes are undone.
@@ -70,22 +70,68 @@ rows W128-g2-added
 read -r g1x g1y g2x g2y <<< "$("$py" "$w128" groups evidence/W128-g2-added-rows.json)"
 status G2_CREATED
 
-# 2. Select G2, brush mode, register camera on the invariant jacket, measure the new guide.
+# 2. Select G2, hide G1 temporarily (eye icon, pixel-verified), lift G2 crown handles with the
+#    W108-qualified bounded drags (left, center, right; measure after each, stop when F06+F01
+#    are eligible), then measure the unoccluded G2 guide in brush mode.
 "$gui" click "$g2x" "$g2y"
 sleep 2
-"$gui" vroid-shortcut hair-brush
+"$gui" move 0.70 0.10
+capture_state W128-g2-selected
+no_modal W128-g2-selected
+rows W128-g2-selected
+exy=$("$py" "$w128" eye evidence/W128-g2-selected.png evidence/W128-g2-selected-rows.json 1)
+read -r ex ey <<< "$exy"
+"$gui" click "$ex" "$ey"
 sleep 2
 "$gui" move 0.70 0.10
-capture_state W128-g2-brush
-no_modal W128-g2-brush
-rows W128-g2-brush
-"$py" tools/w110_camera_register.py register "$eye_reference" evidence/W128-g2-brush.png "$fixture/W108-face-registration.json" evidence/W128-registration.json
-draw=$("$py" "$w128" guide evidence/W128-g2-brush.png evidence/W128-g2-brush-rows.json evidence/W128-registration.json "$design" evidence/W128-g2-guide.json)
+capture_state W128-g1-hidden
+no_modal W128-g1-hidden
+"$py" "$w128" hidden evidence/W128-g2-selected.png evidence/W128-g1-hidden.png > evidence/W128-g1-hidden-check.txt
+status G1_TEMPORARILY_HIDDEN
+measure_g2() {
+  set -e
+  local tag="$1"
+  "$gui" vroid-shortcut hair-brush
+  sleep 2
+  "$gui" move 0.70 0.10
+  capture_state "$tag"
+  no_modal "$tag"
+  rows "$tag"
+  "$py" tools/w110_camera_register.py register "$eye_reference" "evidence/$tag.png" "$fixture/W108-face-registration.json" "evidence/$tag-registration.json"
+  "$py" "$w128" guide "evidence/$tag.png" "evidence/$tag-rows.json" "evidence/$tag-registration.json" "$design" "evidence/$tag-guide.json"
+}
+draw=$(measure_g2 W128-g2-initial)
+last=W128-g2-initial
+echo "initial $draw" > evidence/W128-guide-attempts.txt
+for which in left center right; do
+  test "$draw" = "F06 F01" && break
+  "$gui" vroid-shortcut hair-select
+  sleep 2
+  "$gui" move 0.70 0.10
+  capture_state "W128-h-$which-before"
+  no_modal "W128-h-$which-before"
+  rows "W128-h-$which-before"
+  "$py" tools/w110_camera_register.py register "$eye_reference" "evidence/W128-h-$which-before.png" "$fixture/W108-face-registration.json" "evidence/W128-h-$which-before-registration.json"
+  if ! drag=$("$py" "$w128" handle "evidence/W128-h-$which-before.png" "evidence/W128-h-$which-before-rows.json" "evidence/W128-h-$which-before-registration.json" "$which" 2>"evidence/W128-h-$which-error.txt"); then
+    echo "$which HANDLE_NOT_VERIFIED" >> evidence/W128-guide-attempts.txt
+    continue
+  fi
+  echo "$drag" > "evidence/W128-h-$which-drag.txt"
+  set -f; set -- $drag; set +f
+  "$gui" drag "$@"
+  sleep 2
+  draw=$(measure_g2 "W128-h-$which-after")
+  last="W128-h-$which-after"
+  echo "$which $draw" >> evidence/W128-guide-attempts.txt
+done
+cp "evidence/$last.png" evidence/W128-g2-brush.png
+cp "evidence/$last-guide.json" evidence/W128-g2-guide.json
+cp "evidence/$last-registration.json" evidence/W128-registration.json
 echo "$draw" > evidence/W128-draw-plan.txt
 status G2_GUIDE_MEASURED
 
 # 4. Draw only eligible lanes into G2, outermost first; audit; undo truncated strokes.
-prev=W128-g2-brush
+prev="$last"
 ndrawn=0
 for lane in $draw; do
   test "$lane" = NONE && break
@@ -97,7 +143,7 @@ for lane in $draw; do
   "$gui" move 0.70 0.10
   capture_state "W128-$lane-after"
   no_modal "W128-$lane-after"
-  "$py" "$w128" newlabel "evidence/$prev.txt" "evidence/W128-$lane-after.txt" > "evidence/W128-$lane-label.txt"
+  "$py" "$w128" newlabel "evidence/$prev.txt" "evidence/W128-$lane-after.txt" > "evidence/W128-$lane-label.txt" 2>&1 || echo LABEL_NOT_OBSERVED >> "evidence/W128-$lane-label.txt"
   if "$py" "$w128" complete "evidence/$prev.png" "evidence/W128-$lane-after.png" evidence/W128-registration.json "$design" "$lane" "evidence/W128-$lane-completion.json"; then
     ndrawn=$((ndrawn+1))
     echo "$lane DRAWN_COMPLETE_G2" >> evidence/W128-lanes.txt
@@ -108,9 +154,12 @@ for lane in $draw; do
     "$gui" move 0.70 0.10
     capture_state "W128-$lane-undone"
     "$py" - "$prev" "W128-$lane-undone" <<'PY'
-import collections,re,sys
-c=lambda t:collections.Counter(re.findall(r'\bHair \d+\b',open('evidence/'+t+'.txt').read()))
-assert c(sys.argv[1])==c(sys.argv[2]),'undo did not restore hair labels'
+import sys,numpy as np
+from PIL import Image
+a=np.asarray(Image.open('evidence/'+sys.argv[1]+'.png').convert('RGB'),int);b=np.asarray(Image.open('evidence/'+sys.argv[2]+'.png').convert('RGB'),int)
+d=int(np.abs(a[170:685,315:710]-b[170:685,315:710]).max())
+open('evidence/'+sys.argv[2]+'-viewport-diff.txt','w').write(str(d)+'\n')
+assert d<=8,'undo did not restore the viewport'
 PY
     echo "$lane UNDONE_NOT_COMPLETE" >> evidence/W128-lanes.txt
   fi
@@ -118,7 +167,17 @@ done
 touch evidence/W128-lanes.txt
 status "STROKES_$ndrawn"
 
-# 5. Pre-save views (G2 selected), then close editor and save the Front item once.
+# 5. Show G1 again (same verified eye point; G1 row is still unselected), verify restoration.
+"$gui" vroid-shortcut hair-select
+sleep 1
+"$gui" click "$ex" "$ey"
+sleep 2
+"$gui" move 0.70 0.10
+capture_state W128-g1-shown
+no_modal W128-g1-shown
+"$py" "$w128" shown evidence/W128-g2-selected.png evidence/W128-g1-shown.png > evidence/W128-g1-shown-check.txt
+status G1_VISIBLE_AGAIN
+# Pre-save views (G2 selected), then close editor and save the Front item once.
 "$gui" vroid-shortcut hair-select
 sleep 1
 "$gui" move 0.70 0.10
@@ -204,6 +263,7 @@ lanes=(p/'W128-lanes.txt').read_text().splitlines()
 (p/'W128-receipt.json').write_text(json.dumps(dict(
   status='NEW_INDEPENDENT_GUIDE_SAVED_REOPENED_NOT_ADOPTED',source_sha256=sha(p/'input-model.vroid'),
   candidate_sha256=sha(p/'W128-new-guide-not-adopted.vroid'),groups=['Freehand Group 1','Freehand Group 2'],
+  iteration='W129',guide_attempts=(p/'W128-guide-attempts.txt').read_text().splitlines(),
   lanes=lanes,draw_plan=(p/'W128-draw-plan.txt').read_text().split(),save_reopen=True,
   screenshots={q.name:sha(q) for q in sorted(p.glob('W128-*.png'))},
   limitations=['G2 guide measured as 2D front proxy; no D4','G1 untouched incl. truncated W108 F01 stub','independent G2/G3/G4 pending']),indent=2))

@@ -254,6 +254,79 @@ def newlabel(before, after):
     print(next(iter(diff)))
 
 
+# ---- W129 additions: temporary G1 visibility and W108-qualified crown handles on G2 ----
+FRINGE = (480, 318, 545, 380)  # x0, y0, x1, y1 fringe root box at the W108/W128 framing
+HANDLES = {"center": (511, 329, 0, -18), "left": (498, 332, 0, -17), "right": (525, 332, 0, -17)}
+BASE_CENTER, BASE_SCALE = (511.5, 385.5), 1.28
+
+
+def hair_px(a, box=FRINGE):
+    x0, y0, x1, y1 = box
+    r, g, b = a[y0:y1, x0:x1, 0], a[y0:y1, x0:x1, 1], a[y0:y1, x0:x1, 2]
+    return int(((r - g >= 20) & (b - g >= 20) & (np.abs(r - b) <= 20) & (r < 170)).sum())
+
+
+def eye(png, rows_path, group):
+    """Normalized click point of an unselected group's eye icon, verified on pixels."""
+    d = json.loads(Path(rows_path).read_text())
+    require(d["screenshot_sha256"] == sha(png), "stale row capture")
+    g1, g2 = groups(rows_path)
+    row = g1 if group == "1" else g2
+    a = rgb(png)
+    x, y = 275, int(round(row["y"])) + 8
+    patch = a[y - 6:y + 7, x - 8:x + 9].sum(2)
+    bg = float(np.median(patch))
+    require(bg >= 700, "eye row is selected or not on a white row")
+    dark = int((patch < bg - 60).sum())
+    require(25 <= dark <= 160, "eye icon not verified (%d)" % dark)
+    print(f"{x/1024:.8f} {y/768:.8f}")
+
+
+def hidden(before, after):
+    a, b = hair_px(rgb(before)), hair_px(rgb(after))
+    require(a >= 600 and b <= 0.4 * a, "G1 strands not hidden (%d -> %d)" % (a, b))
+    print(a, b)
+
+
+def shown(prehide, after):
+    a, b = hair_px(rgb(prehide)), hair_px(rgb(after))
+    require(b >= 0.9 * a, "G1 strands not restored (%d -> %d)" % (a, b))
+    print(a, b)
+
+
+def handle(png, rows_path, reg_path, which):
+    d = json.loads(Path(rows_path).read_text())
+    require(d["screenshot_sha256"] == sha(png), "stale row capture")
+    g1, g2 = groups(rows_path)
+    a = rgb(png)
+    y2 = int(round(g2["y"]))
+    require(blue_count(a, 51, 85, y2 - 10, y2 + 10) >= 420, "G2 selection not verified")
+    require(blue_count(a, 315, 348, 125, 150) >= 120, "select tool inactive")
+    f = json.loads(Path(reg_path).read_text())
+    require(f["screenshot_sha256"] == sha(png) and f.get("jacket_mae", 99) <= 8, "registration identity")
+    x, y, dx, dy = HANDLES[which]
+    cx, cy = f["center_px"]
+    ratio = f["scale"] / BASE_SCALE
+    x = round(cx + (x - BASE_CENTER[0]) * ratio)
+    y = round(cy + (y - BASE_CENTER[1]) * ratio)
+    require(460 <= x <= 565 and 280 <= y <= 365 and .75 <= ratio <= 1.5, "unqualified crown location")
+    white = a.min(2) >= 245
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    green = (g > 145) & (g - r > 60) & (g - b > 50)
+    cands = []
+    for yy in range(y - 4, y + 5):
+        for xx in range(x - 4, x + 5):
+            nw = int(white[yy - 1:yy + 2, xx - 1:xx + 2].sum())
+            ng = int(green[yy - 6:yy + 7, xx - 6:xx + 7].sum())
+            if nw >= 7 and ng >= 7:
+                cands.append((math.dist((x, y), (xx, yy)), -nw, -ng, xx, yy))
+    require(cands, "expected crown control point not visible")
+    _, _, _, hx, hy = min(cands)
+    tx, ty = round(hx + dx * ratio), round(hy + dy * ratio)
+    require(450 <= tx <= 575 and 250 <= ty <= 365 and 10 <= hy - ty <= 27, "bounded crown movement")
+    print(f"{hx/1024:.8f} {hy/768:.8f} {tx/1024:.8f} {ty/768:.8f} 0.65")
+
+
 def main(argv):
     cmd, *args = argv
     if cmd == "groups":
@@ -268,6 +341,14 @@ def main(argv):
             raise SystemExit(3)
     elif cmd == "newlabel":
         newlabel(*args)
+    elif cmd == "eye":
+        eye(*args)
+    elif cmd == "hidden":
+        hidden(*args)
+    elif cmd == "shown":
+        shown(*args)
+    elif cmd == "handle":
+        handle(*args)
     else:
         raise SystemExit(2)
 
